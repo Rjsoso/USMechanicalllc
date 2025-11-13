@@ -1,0 +1,138 @@
+import { useEffect, useState } from 'react'
+import { client } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
+import FadeInWhenVisible from './FadeInWhenVisible'
+
+export default function AboutAndSafety() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // Default content fallback
+  const defaultData = {
+    aboutTitle: 'About U.S. Mechanical',
+    aboutText: `U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. The U.S. Mechanical name was adopted 25 years ago and continues to represent our company owners and employees.
+
+We pursue projects in the Intermountain and Southwest regions via hard bid, design build, CMAR, and cost plus. Our team includes journeyman and apprentice plumbers, sheet metal installers, pipefitters, welders, and administrative staff—all with unmatched experience.
+
+We maintain offices in Pleasant Grove, Utah, and Las Vegas, Nevada, as well as Snyder Mechanical in Elko, Nevada, which serves the mining industry. U.S. Mechanical is fully licensed, bonded, and insured in Nevada, Utah, Arizona, California, and Wyoming.`,
+    safetyTitle: 'Safety & Risk Management',
+    safetyText: `U.S. Mechanical conducts all projects with safety as our top priority. We employ a company-wide safety program led by a full-time OSHA and MSHA accredited safety director. Our focus on safety ensures properly trained employees and a work environment that prioritizes everyone's well-being.
+
+Our experience modification rate (EMR) remains below the national average, qualifying us for self-insured insurance programs that reduce risk management costs. These savings, combined with our dedication to safety, provide added value on every project.
+
+Our goal is always simple: complete every project with zero safety issues.`,
+    photo1: null,
+    photo2: null,
+  }
+
+  // Fetch all content from Sanity (text and images)
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "aboutAndSafety"][0]{
+          aboutTitle,
+          aboutText,
+          safetyTitle,
+          safetyText,
+          photo1,
+          photo2
+        }`
+      )
+      .then(res => {
+        // Use Sanity data if available, otherwise use defaults
+        setData(res || defaultData)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error fetching from Sanity:', error)
+        // On error, use default data
+        setData(defaultData)
+        setLoading(false)
+      })
+  }, [])
+
+  // Use default data if still loading after a short delay (handles case where Sanity returns null)
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        if (!data) {
+          setData(defaultData)
+          setLoading(false)
+        }
+      }, 2000) // Wait 2 seconds for Sanity fetch
+      return () => clearTimeout(timer)
+    }
+  }, [loading, data])
+
+  if (loading || !data) {
+    return (
+      <div className="text-center py-20 text-gray-500">Loading content...</div>
+    )
+  }
+
+  return (
+    <section className="py-20 bg-white text-gray-800">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* ABOUT SECTION - Image + Text Horizontal (side-by-side on desktop, stacked on mobile) */}
+        {/* All content (text and images) comes from Sanity CMS */}
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-20">
+          {/* Image on left, text on right (or reverse on mobile) */}
+          {data.photo1 && (
+            <div className="md:w-1/2 order-2 md:order-1">
+          <FadeInWhenVisible>
+                <img
+                  src={urlFor(data.photo1).width(600).url()}
+                  alt="About US Mechanical"
+                  className="rounded-2xl shadow-lg w-full object-cover"
+                  loading="lazy"
+                />
+          </FadeInWhenVisible>
+            </div>
+          )}
+
+          <div className={`${data.photo1 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
+          <FadeInWhenVisible delay={0.1}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{data.aboutTitle}</h2>
+            </FadeInWhenVisible>
+            <FadeInWhenVisible delay={0.2}>
+              <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+              {data.aboutText}
+            </p>
+          </FadeInWhenVisible>
+          </div>
+        </div>
+
+        {/* SAFETY SECTION - Text + Image Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
+        {/* All content (text and images) comes from Sanity CMS */}
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          {/* Text on left, image on right */}
+          <div className={`${data.photo2 ? 'md:w-1/2' : 'w-full'}`}>
+            <FadeInWhenVisible delay={0.3}>
+              <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+              {data.safetyTitle}
+            </h3>
+          </FadeInWhenVisible>
+            <FadeInWhenVisible delay={0.4}>
+              <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+              {data.safetyText}
+            </p>
+          </FadeInWhenVisible>
+        </div>
+
+          {data.photo2 && (
+            <div className="md:w-1/2">
+              <FadeInWhenVisible delay={0.5}>
+              <img
+                src={urlFor(data.photo2).width(600).url()}
+                  alt="Safety & Risk Management"
+                  className="rounded-2xl shadow-lg w-full object-cover"
+                loading="lazy"
+              />
+            </FadeInWhenVisible>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}

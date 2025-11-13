@@ -1,0 +1,138 @@
+{
+  "navigation": {
+    "logo": "/images/us-mechanical-logo.png",
+    "companyName": "U.S. Mechanical, LLC",
+    "tagline": "Mechanical Contracting • Plumbing • HVAC • Hydronics",
+    "links": [
+      { "name": "About", "href": "#about" },
+      { "name": "Services", "href": "#services" },
+      { "name": "Projects", "href": "#portfolio" },
+      { "name": "Recognition", "href": "#recognition" },
+      { "name": "Contact", "href": "#contact" }
+    ]
+  },
+  "hero": {
+    "badge": "Excellence Since 1963",
+    "title": "Mechanical Contracting Excellence",
+    "subtitle": "Design, Engineering & Installation of Commercial HVAC, Hydronic, and Process Piping Systems",
+    "credentials": "Licensed, Bonded & Insured",
+    "description": "Serving Salt Lake City, Provo, Las Vegas",
+    "primaryCta": "Request a Bid",
+    "secondaryCta": "View Portfolio",
+    "safetyCommitment": "Committed to the highest safety standards on every project",
+    "backgroundImage": "/images/hero-background.jpg"
+  },
+  "services": {
+    "badge": "Our Services",
+    "title": "Comprehensive Mechanical Solutions",
+    "subtitle": "From design and engineering to installation and maintenance, we deliver complete mechanical contracting services",
+    "items": [
+      {
+        "id": 1,
+        "icon": "hvac",
+        "title": "HVAC Systems",
+        "description": "Complete heating, ventilation, and air conditioning design, installation, and maintenance for commercial and industrial facilities.",
+        "color": "blue"
+      },
+      {
+        "id": 2,
+        "icon": "hydronic",
+        "title": "Hydronic Piping",
+        "description": "Expert installation of hot water, chilled water, and steam distribution systems for heating and cooling applications.",
+        "color": "orange"
+      },
+      {
+        "id": 3,
+        "icon": "piping",
+        "title": "Process Piping",
+        "description": "Industrial process piping systems for manufacturing, pharmaceutical, food processing, and other specialized applications.",
+        "color": "blue"
+      }
+    ]
+  },
+  "about": {
+    "badge": "About U.S. Mechanical",
+    "title": "Building Excellence Since 1963",
+    "paragraph1": "Since 1963, U.S. Mechanical, LLC has delivered exceptional mechanical contracting solutions focused on plumbing, hydronic systems, HVAC, and industrial piping. Our comprehensive approach covers every stage—from initial design and engineering (2D/3D/BIM coordination) through full installation—with an unwavering commitment to quality, safety, and service.",
+    "paragraph2": "Our integrated approach combines cutting-edge design capabilities with proven installation expertise, ensuring seamless project delivery from concept to completion. We've built our reputation on reliability, technical excellence, and a genuine commitment to our clients' success.",
+    "highlights": [
+      "60+ years of experience in large-scale commercial & industrial projects",
+      "End-to-end capabilities: design, engineering, installation, and commissioning",
+      "Safety-first culture with top-tier risk management on every project"
+    ],
+    "images": [
+      "/images/welding-work.jpg",
+      "/images/saw-work.jpg",
+      "/images/electrical-work.jpg",
+      "/images/electronics-work.jpg"
+    ]
+  },
+  "recognition": {
+    "badge": "Recognition",
+    "title": "Recognition",
+    "awards": [
+      {
+        "id": 1,
+        "title": "LEED Silver Certification",
+        "description": "Utah County Convention Center — U.S. Mechanical assisted Okland Construction on this project to achieve LEED Silver certification.",
+        "type": "silver"
+      },
+      {
+        "id": 2,
+        "title": "LEED Gold Certification",
+        "description": "Greenspun Hall — Clark Construction recognized U.S. Mechanical for assisting the Greenspun Hall-UNLV project in achieving LEED Gold certification.",
+        "type": "gold"
+      },
+      {
+        "id": 3,
+        "title": "LEED Platinum Certification",
+        "description": "Nevada State Museum — Furnished and supplied HVAC systems at Desert Living Center, Origen Museum, and Nevada State Museum (Springs Preserve), assisting in achieving LEED Platinum certification.",
+        "type": "platinum"
+      },
+      {
+        "id": 4,
+        "title": "LEED Gold Certification",
+        "description": "Red Rock Canyon Visitors Center — U.S. Mechanical completed mechanical systems helping the project achieve LEED Gold certification.",
+        "type": "gold"
+      },
+      {
+        "id": 5,
+        "title": "Maple Mountain High School — Top Project",
+        "description": "Recognized by The Intermountain Contractor; U.S. Mechanical furnished and installed the HVAC systems to ensure low operations and maintenance costs.",
+        "type": "project"
+      },
+      {
+        "id": 6,
+        "title": "Certifications & Affiliations",
+        "description": "PHCC of NV • NFPA",
+        "type": "certification"
+      }
+    ]
+  },
+  "contact": {
+    "badge": "Contact Us",
+    "title": "Contact U.S. Mechanical",
+    "description": "Offices: Pleasant Grove, UT • Las Vegas, NV • Snyder Mechanical in Elko, NV",
+    "phone": "(801) 785-6028",
+    "email": "info@usmechanicalllc.com"
+  },
+  "footer": {
+    "companyName": "U.S. Mechanical, LLC",
+    "description": "Founded 1963 • Licensed, bonded & insured • Serving Intermountain & Southwest regions",
+    "services": [
+      "Commercial HVAC",
+      "Hydronics & Boilers",
+      "Process Piping",
+      "Commercial Plumbing"
+    ],
+    "contact": {
+      "locations": [
+        "Pleasant Grove, UT",
+        "Las Vegas, NV"
+      ],
+      "phone": "(801) 785-6028",
+      "email": "info@usmechanicalllc.com"
+    }
+  }
+}
+

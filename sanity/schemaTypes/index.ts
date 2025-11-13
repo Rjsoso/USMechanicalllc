@@ -1,0 +1,48 @@
+import ourServices from '../schemas/ourServices'
+import headerSection from './headerSection'
+import navLink from './navLink'
+import heroSection from './heroSection'
+import aboutAndSafety from './aboutAndSafety'
+// import contactSection from './contactSection' // Replaced by contact schema
+import service from './service'
+import serviceWithImage from './serviceWithImage'
+import serviceItem from './serviceItem'
+import serviceItemWithImage from './serviceItemWithImage'
+// import servicesSection from './servicesSection' // Replaced by ourServices
+import office from './office'
+import affiliate from './affiliate'
+import formSettings from './formSettings'
+import stat from './stat'
+import contact from '../schemas/pages/contact'
+import servicesPage from '../schemas/pages/services'
+// import companyInformation from './companyInformation' // Replaced by contact schema
+import companyStats from './companyStats'
+import portfolioProject from './portfolioProject'
+import recognitionProject from './recognitionProject'
+
+export const schema = {
+  types: [
+    ourServices,
+    navLink,
+    service,
+    serviceWithImage,
+    serviceItem,
+    serviceItemWithImage,
+    office,
+    affiliate,
+    formSettings,
+    stat,
+    headerSection,
+    heroSection,
+    aboutAndSafety,
+    // servicesSection, // Replaced by ourServices
+    // contactSection, // Replaced by contact schema
+    contact,
+    servicesPage,
+    // companyInformation, // Replaced by contact schema
+    companyStats,
+    portfolioProject,
+    recognitionProject,
+  ],
+}
+

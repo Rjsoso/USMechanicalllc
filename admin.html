@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U.S. Mechanical Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #e05a2a 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+        .testimonial-item, .project-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .testimonial-item:hover, .project-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+        .star-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin: 0.5rem 0;
+        }
+        .star {
+            color: #ff6b35;
+            font-size: 1.2rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .error-message {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                U.S. Mechanical Admin Panel
+            </h1>
+            <p class="text-xl text-gray-300">Manage testimonials and projects privately</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div id="message-container"></div>
+
+        <!-- Testimonials Management -->
+        <div class="card">
+            <h2 class="text-3xl font-bold mb-6 text-orange-400">Manage Testimonials</h2>
+            <div id="testimonials-list" class="space-y-4 mb-6">
+                <!-- Testimonials will be loaded here -->
+            </div>
+            <button class="btn-primary" onclick="showAddTestimonialForm()">Add New Testimonial</button>
+        </div>
+
+        <!-- Add Testimonial Form -->
+        <div id="add-testimonial-form" class="card hidden">
+            <h3 class="text-2xl font-bold mb-4 text-orange-400">Add New Testimonial</h3>
+            <form id="testimonial-form">
+                <input type="text" id="testimonial-name" class="input-field" placeholder="Client Name" required>
+                <input type="text" id="testimonial-title" class="input-field" placeholder="Client Title" required>
+                <input type="text" id="testimonial-company" class="input-field" placeholder="Company Name" required>
+                <textarea id="testimonial-quote" class="input-field" placeholder="Testimonial Quote" rows="4" required></textarea>
+                <input type="number" id="testimonial-rating" class="input-field" placeholder="Rating (1-5)" min="1" max="5" required>
+                <div class="flex gap-4">
+                    <button type="submit" class="btn-primary">Save Testimonial</button>
+                    <button type="button" class="btn-secondary" onclick="hideAddTestimonialForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Projects Management -->
+        <div class="card">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400">Manage Projects</h2>
+            <div id="projects-list" class="space-y-4 mb-6">
+                <!-- Projects will be loaded here -->
+            </div>
+            <button class="btn-primary" onclick="showAddProjectForm()">Add New Project</button>
+        </div>
+
+        <!-- Add Project Form -->
+        <div id="add-project-form" class="card hidden">
+            <h3 class="text-2xl font-bold mb-4 text-blue-400">Add New Project</h3>
+            <form id="project-form">
+                <input type="text" id="project-title" class="input-field" placeholder="Project Title" required>
+                <input type="text" id="project-client" class="input-field" placeholder="Client Name" required>
+                <input type="text" id="project-location" class="input-field" placeholder="Location" required>
+                <input type="text" id="project-type" class="input-field" placeholder="Project Type (e.g., HVAC, Hydronic)" required>
+                <textarea id="project-description" class="input-field" placeholder="Project Description" rows="4" required></textarea>
+                <input type="text" id="project-highlights" class="input-field" placeholder="Key Highlights (comma-separated)" required>
+                <input type="text" id="project-image" class="input-field" placeholder="Image URL (optional)">
+                <div class="flex gap-4">
+                    <button type="submit" class="btn-primary">Save Project</button>
+                    <button type="button" class="btn-secondary" onclick="hideAddProjectForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Image Management -->
+        <div class="card">
+            <h2 class="text-3xl font-bold mb-6 text-pink-400">Image Management</h2>
+            
+            <!-- Image Usage Guide -->
+            <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold mb-4 text-blue-800">📸 Where Images Can Be Used</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-bold text-blue-700 mb-2">🏠 Homepage Sections:</h4>
+                        <ul class="text-sm text-blue-600 space-y-1">
+                            <li>• Hero background image</li>
+                            <li>• About section photos</li>
+                            <li>• Services icons/illustrations</li>
+                            <li>• Project portfolio images</li>
+                            <li>• Team photos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-blue-700 mb-2">📄 Other Pages:</h4>
+                        <ul class="text-sm text-blue-600 space-y-1">
+                            <li>• About page team photos</li>
+                            <li>• HVAC service images</li>
+                            <li>• Hydronic system photos</li>
+                            <li>• Project case studies</li>
+                            <li>• Safety certification images</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 bg-blue-100 rounded">
+                    <p class="text-sm text-blue-700"><strong>💡 Tip:</strong> Upload high-quality images (1920x1080 or larger) for best results. Use descriptive filenames like "hero-background.jpg" or "team-photo-2024.png"</p>
+                </div>
+            </div>
+
+            <!-- Specific Upload Sections -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Hero Section Images -->
+                <div class="bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 class="font-bold text-orange-800 mb-3">🏠 Hero Section</h4>
+                    <p class="text-sm text-orange-700 mb-3">Background images for the main hero area</p>
+                    <input type="file" id="hero-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'hero')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('hero-upload').click()">
+                        📸 Upload Hero Images
+                    </button>
+                </div>
+
+                <!-- About Section Images -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border border-blue-200">
+                    <h4 class="font-bold text-blue-800 mb-3">👥 About Section</h4>
+                    <p class="text-sm text-blue-700 mb-3">Team photos, company images, office photos</p>
+                    <input type="file" id="about-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'about')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('about-upload').click()">
+                        📸 Upload About Images
+                    </button>
+                </div>
+
+                <!-- Services Images -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">🔧 Services</h4>
+                    <p class="text-sm text-green-700 mb-3">HVAC, hydronic, piping system photos</p>
+                    <input type="file" id="services-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'services')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('services-upload').click()">
+                        📸 Upload Service Images
+                    </button>
+                </div>
+
+                <!-- Portfolio Images -->
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
+                    <h4 class="font-bold text-purple-800 mb-3">🏗️ Portfolio</h4>
+                    <p class="text-sm text-purple-700 mb-3">Project photos, before/after shots, completed work</p>
+                    <input type="file" id="portfolio-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'portfolio')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('portfolio-upload').click()">
+                        📸 Upload Portfolio Images
+                    </button>
+                </div>
+
+                <!-- Safety/Certifications -->
+                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
+                    <h4 class="font-bold text-yellow-800 mb-3">🛡️ Safety & Certifications</h4>
+                    <p class="text-sm text-yellow-700 mb-3">Safety certificates, awards, recognition photos</p>
+                    <input type="file" id="safety-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'safety')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('safety-upload').click()">
+                        📸 Upload Safety Images
+                    </button>
+                </div>
+
+                <!-- General Images -->
+                <div class="bg-gradient-to-br from-gray-50 to-slate-50 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800 mb-3">📁 General</h4>
+                    <p class="text-sm text-gray-700 mb-3">Miscellaneous images, logos, icons</p>
+                    <input type="file" id="general-upload" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event, 'general')">
+                    <button class="btn-primary w-full text-sm" onclick="document.getElementById('general-upload').click()">
+                        📸 Upload General Images
+                    </button>
+                </div>
+            </div>
+
+            <!-- Image Gallery with Categories -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-pink-300">Image Gallery</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Category:</label>
+                        <select id="image-filter" class="w-full p-2 border border-gray-300 rounded-lg" onchange="filterImages()">
+                            <option value="all">All Images</option>
+                            <option value="hero">Hero Section</option>
+                            <option value="about">About Section</option>
+                            <option value="services">Services</option>
+                            <option value="portfolio">Portfolio</option>
+                            <option value="safety">Safety & Certifications</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <div id="image-gallery" class="grid grid-cols-2 gap-4 max-h-64 overflow-y-auto">
+                        <!-- Images will be loaded here -->
+                    </div>
+                    <div class="mt-4">
+                        <button class="btn-secondary w-full" onclick="clearAllImages()">🗑️ Clear All Images</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-pink-300">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button class="btn-primary w-full" onclick="exportImages()">📤 Export All Images</button>
+                        <button class="btn-secondary w-full" onclick="importImages()">📥 Import Images</button>
+                        <button class="bg-red-500 text-white w-full p-2 rounded" onclick="clearAllImages()">🗑️ Delete All Images</button>
+                    </div>
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold text-gray-800 mb-2">📊 Image Statistics</h4>
+                        <div id="image-stats" class="text-sm text-gray-600">
+                            <!-- Stats will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Website Content Management -->
+        <div class="card">
+            <h2 class="text-3xl font-bold mb-6 text-purple-400">Website Content Management</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-purple-300">Homepage Content</h3>
+                    <button class="btn-primary w-full mb-2" onclick="editHomepageContent()">Edit Homepage</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editHeroSection()">Edit Hero Section</button>
+                    <button class="bg-yellow-500 text-white w-full mb-2 p-2 rounded" onclick="testFunction()">Test JavaScript</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editAboutSection()">Edit About Section</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editServicesSection()">Edit Services</button>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-purple-300">Other Pages</h3>
+                    <button class="btn-primary w-full mb-2" onclick="editAboutPage()">Edit About Page</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editHVACPage()">Edit HVAC Page</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editHydronicPage()">Edit Hydronic Page</button>
+                    <button class="btn-secondary w-full mb-2" onclick="editContactInfo()">Edit Contact Info</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Editor Modal -->
+        <div id="content-editor-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="editor-title" class="text-2xl font-bold text-gray-800">Edit Content</h3>
+                        <button onclick="closeContentEditor()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                    <div id="editor-content">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                    <div class="flex gap-4 mt-6">
+                        <button class="btn-primary" onclick="saveContent()">Save Changes</button>
+                        <button class="btn-secondary" onclick="closeContentEditor()">Cancel</button>
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-lg" onclick="previewChanges()">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export/Import Section -->
+        <div class="card">
+            <h2 class="text-3xl font-bold mb-6 text-green-400">Data Management</h2>
+            <div class="flex gap-4">
+                <button class="btn-primary" onclick="exportData()">Export All Data</button>
+                <button class="btn-secondary" onclick="importData()">Import Data</button>
+                <input type="file" id="import-file" accept=".json" class="hidden" onchange="handleFileImport(event)">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test if JavaScript is loading
+        console.log('Admin panel JavaScript loading...');
+        
+        // Load data from localStorage or initialize with default data
+        let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [
+            {
+                id: 1,
+                name: "Michael Chen",
+                title: "Director of Facilities",
+                company: "Metro Properties LLC",
+                quote: "U.S. Mechanical exceeded our expectations on the downtown office retrofit. Their ability to complete complex HVAC work while keeping our tenants happy was impressive. The 35% energy savings they delivered will pay for the project in just five years.",
+                rating: 5
+            },
+            {
+                id: 2,
+                name: "Jennifer Martinez",
+                title: "Plant Manager",
+                company: "Mountain Foods Inc.",
+                quote: "Working with U.S. Mechanical on our new facility was a pleasure. Their understanding of sanitary piping requirements and attention to detail was exceptional. We passed FDA inspection on the first try, which is almost unheard of.",
+                rating: 5
+            },
+            {
+                id: 3,
+                name: "Dr. Robert Thompson",
+                title: "Director of Campus Planning",
+                company: "State University",
+                quote: "The science building project showcased U.S. Mechanical's engineering expertise and project management skills. They delivered a complex facility on time and on budget. Three years later, our lab systems continue to perform flawlessly.",
+                rating: 5
+            }
+        ];
+
+        let projects = JSON.parse(localStorage.getItem('projects')) || [
+            {
+                id: 1,
+                title: "Downtown Office Retrofit",
+                client: "Metro Properties LLC",
+                location: "Salt Lake City, UT",
+                type: "HVAC",
+                description: "Complete HVAC system retrofit for 50,000 sq ft office building with energy efficiency improvements.",
+                highlights: "35% energy savings, Zero tenant disruption, LEED Gold certification",
+                image: ""
+            },
+            {
+                id: 2,
+                title: "Food Processing Facility",
+                client: "Mountain Foods Inc.",
+                location: "Provo, UT",
+                type: "Process Piping",
+                description: "Sanitary piping installation for new food processing facility with FDA compliance requirements.",
+                highlights: "FDA inspection passed first try, Zero contamination incidents, 99.9% uptime",
+                image: ""
+            },
+            {
+                id: 3,
+                title: "University Science Building",
+                client: "State University",
+                location: "Las Vegas, NV",
+                type: "Hydronic Systems",
+                description: "Complex hydronic system installation for new science building with specialized lab requirements.",
+                highlights: "On-time delivery, On-budget completion, Zero system failures",
+                image: ""
+            }
+        ];
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('testimonials', JSON.stringify(testimonials));
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+
+        // Display testimonials
+        function displayTestimonials() {
+            const container = document.getElementById('testimonials-list');
+            container.innerHTML = '';
+
+            testimonials.forEach(testimonial => {
+                const testimonialDiv = document.createElement('div');
+                testimonialDiv.className = 'testimonial-item';
+                testimonialDiv.innerHTML = 
+                    '<div class="flex justify-between items-start mb-4">' +
+                        '<div>' +
+                            '<h4 class="text-xl font-bold text-orange-400">' + testimonial.name + '</h4>' +
+                            '<p class="text-gray-300">' + testimonial.title + ', ' + testimonial.company + '</p>' +
+                        '</div>' +
+                        '<div class="flex gap-2">' +
+                            '<button class="btn-secondary" onclick="editTestimonial(' + testimonial.id + ')">Edit</button>' +
+                            '<button class="btn-primary" onclick="deleteTestimonial(' + testimonial.id + ')">Delete</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="star-rating">' +
+                        '★'.repeat(testimonial.rating) + '☆'.repeat(5-testimonial.rating) +
+                    '</div>' +
+                    '<p class="text-gray-200 italic">"' + testimonial.quote + '"</p>';
+                container.appendChild(testimonialDiv);
+            });
+        }
+
+        // Display projects
+        function displayProjects() {
+            const container = document.getElementById('projects-list');
+            container.innerHTML = '';
+
+            projects.forEach(project => {
+                const projectDiv = document.createElement('div');
+                projectDiv.className = 'project-item';
+                projectDiv.innerHTML = 
+                    '<div class="flex justify-between items-start mb-4">' +
+                        '<div>' +
+                            '<h4 class="text-xl font-bold text-blue-400">' + project.title + '</h4>' +
+                            '<p class="text-gray-300">' + project.client + ' • ' + project.location + '</p>' +
+                            '<p class="text-orange-400 font-semibold">' + project.type + '</p>' +
+                        '</div>' +
+                        '<div class="flex gap-2">' +
+                            '<button class="btn-secondary" onclick="editProject(' + project.id + ')">Edit</button>' +
+                            '<button class="btn-primary" onclick="deleteProject(' + project.id + ')">Delete</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="text-gray-200 mb-2">' + project.description + '</p>' +
+                    '<p class="text-sm text-gray-400"><strong>Highlights:</strong> ' + project.highlights + '</p>';
+                container.appendChild(projectDiv);
+            });
+        }
+
+        // Show add testimonial form
+        function showAddTestimonialForm() {
+            document.getElementById('add-testimonial-form').classList.remove('hidden');
+        }
+
+        // Hide add testimonial form
+        function hideAddTestimonialForm() {
+            document.getElementById('add-testimonial-form').classList.add('hidden');
+            document.getElementById('testimonial-form').reset();
+            document.getElementById('testimonial-form').removeAttribute('data-edit-id');
+            const submitBtn = document.querySelector('#testimonial-form button[type="submit"]');
+            submitBtn.textContent = 'Save Testimonial';
+        }
+
+        // Show add project form
+        function showAddProjectForm() {
+            document.getElementById('add-project-form').classList.remove('hidden');
+        }
+
+        // Hide add project form
+        function hideAddProjectForm() {
+            document.getElementById('add-project-form').classList.add('hidden');
+            document.getElementById('project-form').reset();
+            document.getElementById('project-form').removeAttribute('data-edit-id');
+            const submitBtn = document.querySelector('#project-form button[type="submit"]');
+            submitBtn.textContent = 'Save Project';
+        }
+
+        // Add/Edit testimonial
+        document.getElementById('testimonial-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const editId = form.dataset.editId;
+            
+            const testimonialData = {
+                name: document.getElementById('testimonial-name').value,
+                title: document.getElementById('testimonial-title').value,
+                company: document.getElementById('testimonial-company').value,
+                quote: document.getElementById('testimonial-quote').value,
+                rating: parseInt(document.getElementById('testimonial-rating').value)
+            };
+
+            if (editId) {
+                // Edit existing testimonial
+                const testimonial = testimonials.find(t => t.id == editId);
+                if (testimonial) {
+                    Object.assign(testimonial, testimonialData);
+                    showMessage('Testimonial updated successfully!', 'success');
+                }
+            } else {
+                // Add new testimonial
+                const newTestimonial = {
+                    id: Date.now(),
+                    ...testimonialData
+                };
+                testimonials.push(newTestimonial);
+                showMessage('Testimonial added successfully!', 'success');
+            }
+
+            saveData();
+            displayTestimonials();
+            hideAddTestimonialForm();
+        });
+
+        // Add/Edit project
+        document.getElementById('project-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const editId = form.dataset.editId;
+            
+            const projectData = {
+                title: document.getElementById('project-title').value,
+                client: document.getElementById('project-client').value,
+                location: document.getElementById('project-location').value,
+                type: document.getElementById('project-type').value,
+                description: document.getElementById('project-description').value,
+                highlights: document.getElementById('project-highlights').value,
+                image: document.getElementById('project-image').value
+            };
+
+            if (editId) {
+                // Edit existing project
+                const project = projects.find(p => p.id == editId);
+                if (project) {
+                    Object.assign(project, projectData);
+                    showMessage('Project updated successfully!', 'success');
+                }
+            } else {
+                // Add new project
+                const newProject = {
+                    id: Date.now(),
+                    ...projectData
+                };
+                projects.push(newProject);
+                showMessage('Project added successfully!', 'success');
+            }
+
+            saveData();
+            displayProjects();
+            hideAddProjectForm();
+        });
+
+        // Delete testimonial
+        function deleteTestimonial(id) {
+            if (confirm('Are you sure you want to delete this testimonial?')) {
+                testimonials = testimonials.filter(t => t.id !== id);
+                saveData();
+                displayTestimonials();
+                showMessage('Testimonial deleted successfully!', 'success');
+            }
+        }
+
+        // Delete project
+        function deleteProject(id) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                projects = projects.filter(p => p.id !== id);
+                saveData();
+                displayProjects();
+                showMessage('Project deleted successfully!', 'success');
+            }
+        }
+
+        // Edit testimonial
+        function editTestimonial(id) {
+            const testimonial = testimonials.find(t => t.id === id);
+            if (testimonial) {
+                document.getElementById('testimonial-name').value = testimonial.name;
+                document.getElementById('testimonial-title').value = testimonial.title;
+                document.getElementById('testimonial-company').value = testimonial.company;
+                document.getElementById('testimonial-quote').value = testimonial.quote;
+                document.getElementById('testimonial-rating').value = testimonial.rating;
+                
+                // Show the form
+                document.getElementById('add-testimonial-form').classList.remove('hidden');
+                
+                // Update the form to edit mode
+                const form = document.getElementById('testimonial-form');
+                form.dataset.editId = id;
+                
+                // Change the submit button text
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Update Testimonial';
+                
+                showMessage('Edit the testimonial below and click Update', 'success');
+            }
+        }
+
+        // Edit project
+        function editProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (project) {
+                document.getElementById('project-title').value = project.title;
+                document.getElementById('project-client').value = project.client;
+                document.getElementById('project-location').value = project.location;
+                document.getElementById('project-type').value = project.type;
+                document.getElementById('project-description').value = project.description;
+                document.getElementById('project-highlights').value = project.highlights;
+                document.getElementById('project-image').value = project.image;
+                
+                // Show the form
+                document.getElementById('add-project-form').classList.remove('hidden');
+                
+                // Update the form to edit mode
+                const form = document.getElementById('project-form');
+                form.dataset.editId = id;
+                
+                // Change the submit button text
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Update Project';
+                
+                showMessage('Edit the project below and click Update', 'success');
+            }
+        }
+
+        // Export data
+        function exportData() {
+            const data = {
+                testimonials: testimonials,
+                projects: projects,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'us-mechanical-data-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showMessage('Data exported successfully!', 'success');
+        }
+
+        // Import data
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+
+        // Handle file import
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.testimonials) testimonials = data.testimonials;
+                        if (data.projects) projects = data.projects;
+                        saveData();
+                        displayTestimonials();
+                        displayProjects();
+                        showMessage('Data imported successfully!', 'success');
+                    } catch (error) {
+                        showMessage('Error importing data. Please check the file format.', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const container = document.getElementById('message-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Website content data
+        let websiteContent = JSON.parse(localStorage.getItem('websiteContent')) || {
+            homepage: {
+                hero: {
+                    title: "Mechanical Contracting Excellence Since 1963",
+                    subtitle: "Design. Engineering. Installation. Maintenance.",
+                    description: "Serving Salt Lake City • Provo • Las Vegas",
+                    credentials: "Licensed • Bonded • Insured"
+                },
+                about: {
+                    title: "About U.S. Mechanical",
+                    content: "Since 1963, U.S. Mechanical, LLC has delivered exceptional mechanical contracting solutions focused on plumbing, hydronic systems, HVAC, and industrial piping. From initial design and engineering (2D/3D/BIM coordination) through full installation, we manage every step with a commitment to quality, safety, and service.",
+                    highlights: [
+                        "Decades of experience in large-scale commercial & industrial projects",
+                        "End-to-end capabilities: design, build, commissioning",
+                        "Safety-first culture — all projects executed with top-tier risk management",
+                        "Fully licensed, bonded & insured professionals",
+                        "A track record of satisfied clients and successful project delivery"
+                    ]
+                },
+                services: {
+                    title: "Our Services",
+                    subtitle: "Comprehensive mechanical solutions for every project",
+                    items: [
+                        {
+                            title: "HVAC Systems",
+                            description: "Complete heating, ventilation, and air conditioning solutions for commercial and industrial facilities.",
+                            icon: "🌡️"
+                        },
+                        {
+                            title: "Hydronic Systems",
+                            description: "Advanced hydronic heating and cooling systems for optimal energy efficiency.",
+                            icon: "💧"
+                        },
+                        {
+                            title: "Process Piping",
+                            description: "Specialized piping systems for industrial and manufacturing applications.",
+                            icon: "🔧"
+                        },
+                        {
+                            title: "Design & Engineering",
+                            description: "2D/3D design, BIM coordination, and engineering services for complex projects.",
+                            icon: "📐"
+                        }
+                    ]
+                }
+            },
+            about: {
+                title: "About U.S. Mechanical",
+                subtitle: "Your trusted partner in mechanical contracting since 1963",
+                content: "U.S. Mechanical, LLC has been a cornerstone of mechanical contracting excellence for over six decades. Our commitment to quality, safety, and innovation has made us the preferred choice for commercial, industrial, and institutional projects across the Intermountain West.",
+                mission: "To deliver exceptional mechanical contracting solutions that exceed our clients' expectations while maintaining the highest standards of safety, quality, and professionalism.",
+                vision: "To be the leading mechanical contractor in the Intermountain West, known for our expertise, reliability, and commitment to client success.",
+                values: [
+                    "Safety First - Every project is executed with uncompromising safety standards",
+                    "Quality Excellence - We deliver work that meets or exceeds industry standards",
+                    "Client Focus - Our success is measured by our clients' satisfaction",
+                    "Innovation - We embrace new technologies and methods to improve our services",
+                    "Integrity - We conduct business with honesty, transparency, and ethical practices"
+                ]
+            },
+            contact: {
+                phone: "(801) 555-0123",
+                email: "info@usmechanicalllc.com",
+                address: "123 Industrial Way, Salt Lake City, UT 84101",
+                hours: "Monday - Friday: 7:00 AM - 5:00 PM"
+            }
+        };
+
+        // Content editing functions
+        let currentContentPath = '';
+
+        function editHomepageContent() {
+            currentContentPath = 'homepage';
+            showContentEditor('Homepage Content', 'homepage');
+        }
+
+        function editHeroSection() {
+            currentContentPath = 'homepage.hero';
+            showContentEditor('Hero Section', 'homepage.hero');
+        }
+
+        function editAboutSection() {
+            currentContentPath = 'homepage.about';
+            showContentEditor('About Section', 'homepage.about');
+        }
+
+        function editServicesSection() {
+            currentContentPath = 'homepage.services';
+            showContentEditor('Services Section', 'homepage.services');
+        }
+
+        function editAboutPage() {
+            currentContentPath = 'about';
+            showContentEditor('About Page', 'about');
+        }
+
+        function editHVACPage() {
+            currentContentPath = 'hvac';
+            showContentEditor('HVAC Services Page', 'hvac');
+        }
+
+        function editHydronicPage() {
+            currentContentPath = 'hydronic';
+            showContentEditor('Hydronic Services Page', 'hydronic');
+        }
+
+        function editContactInfo() {
+            currentContentPath = 'contact';
+            showContentEditor('Contact Information', 'contact');
+        }
+
+        function showContentEditor(title, contentPath) {
+            document.getElementById('editor-title').textContent = title;
+            const modal = document.getElementById('content-editor-modal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            modal.style.zIndex = '9999';
+            
+            const editorContent = document.getElementById('editor-content');
+            editorContent.innerHTML = generateContentEditor(contentPath);
+        }
+
+        function generateContentEditor(contentPath) {
+            const content = getContentByPath(websiteContent, contentPath);
+            let html = '';
+
+            if (contentPath === 'homepage.hero') {
+                html = 
+                    '<div class="space-y-4">' +
+                        '<div class="bg-blue-50 p-4 rounded-lg mb-4">' +
+                            '<h4 class="font-bold text-blue-800 mb-2">Current Hero Section Content:</h4>' +
+                            '<p class="text-sm text-blue-700"><strong>Title:</strong> ' + (content.title || 'Not set') + '</p>' +
+                            '<p class="text-sm text-blue-700"><strong>Subtitle:</strong> ' + (content.subtitle || 'Not set') + '</p>' +
+                            '<p class="text-sm text-blue-700"><strong>Description:</strong> ' + (content.description || 'Not set') + '</p>' +
+                            '<p class="text-sm text-blue-700"><strong>Credentials:</strong> ' + (content.credentials || 'Not set') + '</p>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Hero Title</label>' +
+                            '<input type="text" id="hero-title" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.title || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>' +
+                            '<input type="text" id="hero-subtitle" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.subtitle || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Description</label>' +
+                            '<input type="text" id="hero-description" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.description || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Credentials</label>' +
+                            '<input type="text" id="hero-credentials" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.credentials || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                    '</div>';
+            } else if (contentPath === 'homepage.about') {
+                html = 
+                    '<div class="space-y-4">' +
+                        '<div class="bg-green-50 p-4 rounded-lg mb-4">' +
+                            '<h4 class="font-bold text-green-800 mb-2">Current About Section Content:</h4>' +
+                            '<p class="text-sm text-green-700"><strong>Title:</strong> ' + (content.title || 'Not set') + '</p>' +
+                            '<p class="text-sm text-green-700"><strong>Content:</strong> ' + (content.content || 'Not set').substring(0, 100) + (content.content && content.content.length > 100 ? '...' : '') + '</p>' +
+                            '<p class="text-sm text-green-700"><strong>Highlights:</strong> ' + ((content.highlights || []).length > 0 ? (content.highlights || []).join(', ') : 'Not set') + '</p>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">About Title</label>' +
+                            '<input type="text" id="about-title" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.title || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">About Content</label>' +
+                            '<textarea id="about-content" class="w-full p-3 border border-gray-300 rounded-lg h-32 text-gray-900 bg-white">' + (content.content || '').replace(/"/g, '&quot;') + '</textarea>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Highlights (one per line)</label>' +
+                            '<textarea id="about-highlights" class="w-full p-3 border border-gray-300 rounded-lg h-32 text-gray-900 bg-white">' + ((content.highlights || []).join('\n')).replace(/"/g, '&quot;') + '</textarea>' +
+                        '</div>' +
+                    '</div>';
+            } else if (contentPath === 'contact') {
+                html = 
+                    '<div class="space-y-4">' +
+                        '<div class="bg-purple-50 p-4 rounded-lg mb-4">' +
+                            '<h4 class="font-bold text-purple-800 mb-2">Current Contact Information:</h4>' +
+                            '<p class="text-sm text-purple-700"><strong>Phone:</strong> ' + (content.phone || 'Not set') + '</p>' +
+                            '<p class="text-sm text-purple-700"><strong>Email:</strong> ' + (content.email || 'Not set') + '</p>' +
+                            '<p class="text-sm text-purple-700"><strong>Address:</strong> ' + (content.address || 'Not set') + '</p>' +
+                            '<p class="text-sm text-purple-700"><strong>Hours:</strong> ' + (content.hours || 'Not set') + '</p>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>' +
+                            '<input type="text" id="contact-phone" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.phone || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>' +
+                            '<input type="email" id="contact-email" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.email || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Address</label>' +
+                            '<textarea id="contact-address" class="w-full p-3 border border-gray-300 rounded-lg h-20 text-gray-900 bg-white">' + (content.address || '').replace(/"/g, '&quot;') + '</textarea>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Business Hours</label>' +
+                            '<input type="text" id="contact-hours" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 bg-white" value="' + (content.hours || '').replace(/"/g, '&quot;') + '">' +
+                        '</div>' +
+                    '</div>';
+            } else {
+                html = 
+                    '<div class="space-y-4">' +
+                        '<div class="bg-orange-50 p-4 rounded-lg mb-4">' +
+                            '<h4 class="font-bold text-orange-800 mb-2">Current Content:</h4>' +
+                            '<p class="text-sm text-orange-700"><strong>Title:</strong> ' + (content.title || 'Not set') + '</p>' +
+                            '<p class="text-sm text-orange-700"><strong>Content:</strong> ' + (content.content || 'Not set').substring(0, 100) + (content.content && content.content.length > 100 ? '...' : '') + '</p>' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Title</label>' +
+                            '<input type="text" id="content-title" class="w-full p-3 border border-gray-300 rounded-lg" value="' + (content.title || '') + '">' +
+                        '</div>' +
+                        '<div>' +
+                            '<label class="block text-sm font-medium text-gray-700 mb-2">Content</label>' +
+                            '<textarea id="content-text" class="w-full p-3 border border-gray-300 rounded-lg h-40">' + (content.content || '') + '</textarea>' +
+                        '</div>' +
+                    '</div>';
+            }
+
+            return html;
+        }
+
+        function getContentByPath(obj, path) {
+            return path.split('.').reduce((current, key) => current && current[key], obj);
+        }
+
+        function saveContent() {
+            const contentPath = currentContentPath;
+            
+            if (contentPath === 'homepage.hero') {
+                const heroData = {
+                    title: document.getElementById('hero-title')?.value || '',
+                    subtitle: document.getElementById('hero-subtitle')?.value || '',
+                    description: document.getElementById('hero-description')?.value || '',
+                    credentials: document.getElementById('hero-credentials')?.value || '',
+                    backgroundImage: document.getElementById('hero-image')?.value || ''
+                };
+                updateContentByPath(websiteContent, contentPath, heroData);
+            } else if (contentPath === 'homepage.about') {
+                const aboutData = {
+                    title: document.getElementById('about-title')?.value || '',
+                    content: document.getElementById('about-content')?.value || '',
+                    highlights: document.getElementById('about-highlights')?.value.split('\n').filter(h => h.trim()) || []
+                };
+                updateContentByPath(websiteContent, contentPath, aboutData);
+            } else if (contentPath === 'contact') {
+                const contactData = {
+                    phone: document.getElementById('contact-phone')?.value || '',
+                    email: document.getElementById('contact-email')?.value || '',
+                    address: document.getElementById('contact-address')?.value || '',
+                    hours: document.getElementById('contact-hours')?.value || ''
+                };
+                updateContentByPath(websiteContent, contentPath, contactData);
+            } else {
+                // Generic content saving
+                const titleValue = document.getElementById('content-title')?.value || '';
+                const contentValue = document.getElementById('content-text')?.value || '';
+                const genericData = { title: titleValue, content: contentValue };
+                updateContentByPath(websiteContent, contentPath, genericData);
+            }
+            
+            saveWebsiteContent();
+            showMessage('Content saved successfully!', 'success');
+            closeContentEditor();
+        }
+
+        function updateContentByPath(obj, path, data) {
+            const keys = path.split('.');
+            let current = obj;
+            for (let i = 0; i < keys.length - 1; i++) {
+                if (!current[keys[i]]) {
+                    current[keys[i]] = {};
+                }
+                current = current[keys[i]];
+            }
+            current[keys[keys.length - 1]] = { ...current[keys[keys.length - 1]], ...data };
+        }
+
+        function closeContentEditor() {
+            document.getElementById('content-editor-modal').classList.add('hidden');
+        }
+
+        function previewChanges() {
+            showMessage('Preview functionality coming soon!', 'error');
+        }
+
+        // Save website content to localStorage
+        function saveWebsiteContent() {
+            localStorage.setItem('websiteContent', JSON.stringify(websiteContent));
+        }
+
+        // Image management
+        let uploadedImages = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+
+        function handleImageUpload(event, category = 'general') {
+            const files = event.target.files;
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const imageData = {
+                                id: Date.now() + Math.random(),
+                                name: file.name,
+                                data: e.target.result,
+                                size: file.size,
+                                type: file.type,
+                                category: category,
+                                uploadDate: new Date().toISOString()
+                            };
+                            uploadedImages.push(imageData);
+                            saveImages();
+                            displayImageGallery();
+                            updateImageStats();
+                            showMessage('Image uploaded successfully to ' + category + ' category!', 'success');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        function saveImages() {
+            localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
+        }
+
+        function displayImageGallery(filter = 'all') {
+            const gallery = document.getElementById('image-gallery');
+            gallery.innerHTML = '';
+
+            const filteredImages = filter === 'all' ? uploadedImages : uploadedImages.filter(img => img.category === filter);
+
+            filteredImages.forEach(image => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'relative bg-gray-800 rounded-lg overflow-hidden';
+                imageDiv.innerHTML = 
+                    '<img src="' + image.data + '" alt="' + image.name + '" class="w-full h-24 object-cover">' +
+                    '<div class="p-2">' +
+                        '<p class="text-xs text-gray-300 truncate" title="' + image.name + '">' + image.name + '</p>' +
+                        '<p class="text-xs text-gray-500">' + formatFileSize(image.size) + '</p>' +
+                        '<p class="text-xs text-blue-400">Category: ' + (image.category || 'general') + '</p>' +
+                        '<div class="flex gap-1 mt-2">' +
+                            '<button class="text-xs bg-blue-500 text-white px-2 py-1 rounded" onclick="copyImageUrl(\'' + image.id + '\')">Copy URL</button>' +
+                            '<button class="text-xs bg-red-500 text-white px-2 py-1 rounded" onclick="deleteImage(\'' + image.id + '\')">Delete</button>' +
+                        '</div>' +
+                    '</div>';
+                gallery.appendChild(imageDiv);
+            });
+
+            if (filteredImages.length === 0) {
+                gallery.innerHTML = '<div class="col-span-2 text-center text-gray-400 py-8">No images in this category</div>';
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function copyImageUrl(imageId) {
+            const image = uploadedImages.find(img => img.id == imageId);
+            if (image) {
+                navigator.clipboard.writeText(image.data).then(() => {
+                    showMessage('Image URL copied to clipboard!', 'success');
+                }).catch(() => {
+                    showMessage('Failed to copy URL', 'error');
+                });
+            }
+        }
+
+        function deleteImage(imageId) {
+            if (confirm('Are you sure you want to delete this image?')) {
+                uploadedImages = uploadedImages.filter(img => img.id != imageId);
+                saveImages();
+                displayImageGallery();
+                showMessage('Image deleted successfully!', 'success');
+            }
+        }
+
+        function generateImageOptions() {
+            return uploadedImages.map(image => 
+                '<option value="' + image.data + '">' + image.name + ' (' + formatFileSize(image.size) + ')</option>'
+            ).join('');
+        }
+
+        function getImageById(imageId) {
+            return uploadedImages.find(img => img.id == imageId);
+        }
+
+        function getImageByData(data) {
+            return uploadedImages.find(img => img.data === data);
+        }
+
+        function clearAllImages() {
+            if (confirm('Are you sure you want to delete ALL images? This action cannot be undone.')) {
+                uploadedImages = [];
+                saveImages();
+                displayImageGallery();
+                updateImageStats();
+                showMessage('All images deleted successfully!', 'success');
+            }
+        }
+
+        function filterImages() {
+            const filter = document.getElementById('image-filter').value;
+            displayImageGallery(filter);
+        }
+
+        function updateImageStats() {
+            const stats = {
+                total: uploadedImages.length,
+                hero: uploadedImages.filter(img => img.category === 'hero').length,
+                about: uploadedImages.filter(img => img.category === 'about').length,
+                services: uploadedImages.filter(img => img.category === 'services').length,
+                portfolio: uploadedImages.filter(img => img.category === 'portfolio').length,
+                safety: uploadedImages.filter(img => img.category === 'safety').length,
+                general: uploadedImages.filter(img => img.category === 'general').length
+            };
+
+            const totalSize = uploadedImages.reduce((sum, img) => sum + img.size, 0);
+            const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+
+            document.getElementById('image-stats').innerHTML = 
+                '<div class="space-y-1">' +
+                    '<div>Total Images: <strong>' + stats.total + '</strong></div>' +
+                    '<div>Hero: <strong>' + stats.hero + '</strong></div>' +
+                    '<div>About: <strong>' + stats.about + '</strong></div>' +
+                    '<div>Services: <strong>' + stats.services + '</strong></div>' +
+                    '<div>Portfolio: <strong>' + stats.portfolio + '</strong></div>' +
+                    '<div>Safety: <strong>' + stats.safety + '</strong></div>' +
+                    '<div>General: <strong>' + stats.general + '</strong></div>' +
+                    '<div class="mt-2 pt-2 border-t">Total Size: <strong>' + sizeInMB + ' MB</strong></div>' +
+                '</div>';
+        }
+
+        function exportImages() {
+            const dataStr = JSON.stringify(uploadedImages, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'website-images-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showMessage('Images exported successfully!', 'success');
+        }
+
+        function importImages() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedImages = JSON.parse(e.target.result);
+                            uploadedImages = [...uploadedImages, ...importedImages];
+                            saveImages();
+                            displayImageGallery();
+                            updateImageStats();
+                            showMessage('Images imported successfully!', 'success');
+                        } catch (error) {
+                            showMessage('Error importing images. Please check the file format.', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Test function
+        function testFunction() {
+            alert('Test function works!');
+        }
+        
+        // Initialize the admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin panel initialized');
+            displayTestimonials();
+            displayProjects();
+            displayImageGallery();
+            updateImageStats();
+        });
+    </script>
+</body>
+</html>

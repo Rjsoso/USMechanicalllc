@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Mechanical - Cross-Browser Compatibility Test</title>
+    <link href="./dist/output.css" rel="stylesheet">
+    <style>
+        .test-section {
+            background: #f8f9fa;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-result {
+            background: #e9ecef;
+            border: 1px solid #6c757d;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        
+        .editable {
+            border: 2px dashed #ff6b35;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: rgba(255, 107, 53, 0.1);
+            display: inline-block;
+            min-height: 20px;
+        }
+        .editable:hover {
+            background: rgba(255, 107, 53, 0.2);
+        }
+        
+        .edit-interface {
+            background: #2d3748;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .edit-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ff6b35;
+            border-radius: 4px;
+            background: white;
+            color: #1a1a1a;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        
+        .control-group {
+            margin: 10px 0;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .compatibility-score {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .score-excellent { background: #d4edda; color: #155724; }
+        .score-good { background: #d1ecf1; color: #0c5460; }
+        .score-fair { background: #fff3cd; color: #856404; }
+        .score-poor { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">🌐 Cross-Browser Compatibility Test</h1>
+        
+        <!-- Compatibility Score -->
+        <div id="compatibility-score" class="compatibility-score">
+            <div>Testing compatibility...</div>
+        </div>
+        
+        <!-- Browser Detection -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🔍 Browser Detection</h2>
+            <div id="browser-info" class="test-result"></div>
+        </div>
+        
+        <!-- Feature Detection -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">⚙️ Feature Detection</h2>
+            <div id="feature-info" class="test-result"></div>
+        </div>
+        
+        <!-- CSS Support -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🎨 CSS Support</h2>
+            <div id="css-info" class="test-result"></div>
+            <div class="mt-4">
+                <div class="editable" onclick="testEdit(this)">Test CSS Styling</div>
+            </div>
+        </div>
+        
+        <!-- JavaScript Support -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">📜 JavaScript Support</h2>
+            <div id="js-info" class="test-result"></div>
+            <button class="test-button" onclick="testJavaScript()">Test JavaScript</button>
+        </div>
+        
+        <!-- Local Storage Test -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">💾 Local Storage Test</h2>
+            <div id="storage-info" class="test-result"></div>
+            <button class="test-button" onclick="testLocalStorage()">Test Local Storage</button>
+        </div>
+        
+        <!-- Event Handling Test -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🎯 Event Handling Test</h2>
+            <div id="event-info" class="test-result"></div>
+            <div class="mt-4">
+                <button id="test-click" class="test-button">Click Test</button>
+                <input id="test-input" type="text" placeholder="Type here" class="edit-input">
+                <select id="test-select" class="edit-input">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Mobile Responsiveness Test -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">📱 Mobile Responsiveness</h2>
+            <div id="mobile-info" class="test-result"></div>
+            <div class="mt-4">
+                <div class="editable" style="font-size: 16px; padding: 12px;">Mobile-friendly text</div>
+            </div>
+        </div>
+        
+        <!-- Performance Test -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">⚡ Performance Test</h2>
+            <div id="performance-info" class="test-result"></div>
+            <button class="test-button" onclick="testPerformance()">Run Performance Test</button>
+        </div>
+        
+        <!-- Recommendations -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">💡 Recommendations</h2>
+            <div id="recommendations" class="test-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Cross-browser compatibility layer
+        (function() {
+            'use strict';
+            
+            // Browser detection
+            window.BrowserInfo = {
+                userAgent: navigator.userAgent,
+                isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
+                isChrome: /chrome/i.test(navigator.userAgent),
+                isFirefox: /firefox/i.test(navigator.userAgent),
+                isEdge: /edge/i.test(navigator.userAgent),
+                isIE: /msie|trident/i.test(navigator.userAgent),
+                isMobile: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent),
+                version: (function() {
+                    var ua = navigator.userAgent;
+                    var match = ua.match(/(?:safari|chrome|firefox|edge|msie|trident)\/?\s*(\d+)/i);
+                    return match ? parseInt(match[1]) : 0;
+                })()
+            };
+            
+            // Feature detection
+            window.Features = {
+                localStorage: (function() {
+                    try {
+                        return 'localStorage' in window && window.localStorage !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                })(),
+                flexbox: (function() {
+                    var test = document.createElement('div');
+                    test.style.display = 'flex';
+                    return test.style.display === 'flex' || test.style.display === '-webkit-flex';
+                })(),
+                grid: (function() {
+                    var test = document.createElement('div');
+                    test.style.display = 'grid';
+                    return test.style.display === 'grid' || test.style.display === '-ms-grid';
+                })(),
+                transform: (function() {
+                    var test = document.createElement('div');
+                    return 'transform' in test.style || 'webkitTransform' in test.style || 'mozTransform' in test.style || 'msTransform' in test.style;
+                })(),
+                transition: (function() {
+                    var test = document.createElement('div');
+                    return 'transition' in test.style || 'webkitTransition' in test.style || 'mozTransition' in test.style || 'msTransition' in test.style;
+                })(),
+                addEventListener: !!window.addEventListener,
+                querySelector: !!document.querySelector,
+                classList: !!document.createElement('div').classList,
+                dataset: !!document.createElement('div').dataset
+            };
+            
+            // Polyfills
+            if (!window.Features.addEventListener) {
+                window.addEventListener = function(type, listener) {
+                    return document.attachEvent('on' + type, listener);
+                };
+            }
+            
+            if (!window.Features.localStorage) {
+                window.localStorage = {
+                    getItem: function(key) { return this[key] || null; },
+                    setItem: function(key, value) { this[key] = value; },
+                    removeItem: function(key) { delete this[key]; },
+                    clear: function() { for (var k in this) if (this.hasOwnProperty(k)) delete this[k]; }
+                };
+            }
+        })();
+        
+        let testResults = {};
+        let compatibilityScore = 0;
+        
+        function runAllTests() {
+            testBrowserDetection();
+            testFeatureDetection();
+            testCSSSupport();
+            testJavaScriptSupport();
+            testLocalStorage();
+            testEventHandling();
+            testMobileResponsiveness();
+            testPerformance();
+            calculateCompatibilityScore();
+            generateRecommendations();
+        }
+        
+        function testBrowserDetection() {
+            const info = document.getElementById('browser-info');
+            const browser = window.BrowserInfo;
+            
+            let result = `User Agent: ${browser.userAgent}\n\n`;
+            result += `Browser: `;
+            if (browser.isSafari) result += `Safari ${browser.version}`;
+            else if (browser.isChrome) result += `Chrome ${browser.version}`;
+            else if (browser.isFirefox) result += `Firefox ${browser.version}`;
+            else if (browser.isEdge) result += `Edge ${browser.version}`;
+            else if (browser.isIE) result += `Internet Explorer ${browser.version}`;
+            else result += `Unknown`;
+            
+            result += `\nMobile: ${browser.isMobile ? 'Yes' : 'No'}`;
+            result += `\nPlatform: ${navigator.platform}`;
+            result += `\nLanguage: ${navigator.language}`;
+            result += `\nOnline: ${navigator.onLine ? 'Yes' : 'No'}`;
+            
+            info.textContent = result;
+            info.className = 'test-result info';
+            testResults.browser = true;
+        }
+        
+        function testFeatureDetection() {
+            const info = document.getElementById('feature-info');
+            const features = window.Features;
+            
+            let result = `Feature Support:\n`;
+            result += `Local Storage: ${features.localStorage ? '✓' : '✗'}\n`;
+            result += `Flexbox: ${features.flexbox ? '✓' : '✗'}\n`;
+            result += `CSS Grid: ${features.grid ? '✓' : '✗'}\n`;
+            result += `CSS Transform: ${features.transform ? '✓' : '✗'}\n`;
+            result += `CSS Transition: ${features.transition ? '✓' : '✗'}\n`;
+            result += `Event Listeners: ${features.addEventListener ? '✓' : '✗'}\n`;
+            result += `Query Selector: ${features.querySelector ? '✓' : '✗'}\n`;
+            result += `Class List: ${features.classList ? '✓' : '✗'}\n`;
+            result += `Dataset: ${features.dataset ? '✓' : '✗'}`;
+            
+            info.textContent = result;
+            info.className = 'test-result info';
+            
+            const supportedFeatures = Object.values(features).filter(f => f).length;
+            testResults.features = supportedFeatures / Object.keys(features).length;
+        }
+        
+        function testCSSSupport() {
+            const info = document.getElementById('css-info');
+            const testElement = document.createElement('div');
+            
+            // Test various CSS properties
+            testElement.style.cssText = `
+                background: linear-gradient(45deg, #ff6b35, #e05a2a);
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                transform: rotate(5deg);
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            const computedStyle = window.getComputedStyle ? window.getComputedStyle(testElement) : testElement.currentStyle;
+            
+            let result = `CSS Support Test:\n`;
+            result += `Linear Gradient: ${testElement.style.background.includes('gradient') ? '✓' : '✗'}\n`;
+            result += `Border Radius: ${testElement.style.borderRadius ? '✓' : '✗'}\n`;
+            result += `Box Shadow: ${testElement.style.boxShadow ? '✓' : '✗'}\n`;
+            result += `Transform: ${testElement.style.transform ? '✓' : '✗'}\n`;
+            result += `Transition: ${testElement.style.transition ? '✓' : '✗'}\n`;
+            result += `Flexbox: ${testElement.style.display === 'flex' ? '✓' : '✗'}`;
+            
+            info.textContent = result;
+            info.className = 'test-result info';
+            testResults.css = true;
+        }
+        
+        function testJavaScript() {
+            const info = document.getElementById('js-info');
+            
+            try {
+                // Test various JavaScript features
+                const testArray = [1, 2, 3];
+                const testObject = {a: 1, b: 2};
+                const testFunction = function() { return 'test'; };
+                
+                let result = `JavaScript Support Test:\n`;
+                result += `Array Methods: ${testArray.map ? '✓' : '✗'}\n`;
+                result += `Object Methods: ${Object.keys ? '✓' : '✗'}\n`;
+                result += `JSON Support: ${JSON ? '✓' : '✗'}\n`;
+                result += `Date Object: ${Date ? '✓' : '✗'}\n`;
+                result += `Math Object: ${Math ? '✓' : '✗'}\n`;
+                result += `Function Support: ${typeof testFunction === 'function' ? '✓' : '✗'}`;
+                
+                info.textContent = result;
+                info.className = 'test-result success';
+                testResults.javascript = true;
+            } catch (e) {
+                info.textContent = `JavaScript Error: ${e.message}`;
+                info.className = 'test-result error';
+                testResults.javascript = false;
+            }
+        }
+        
+        function testLocalStorage() {
+            const info = document.getElementById('storage-info');
+            
+            try {
+                localStorage.setItem('test', 'value');
+                const retrieved = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                
+                if (retrieved === 'value') {
+                    info.textContent = 'Local Storage: ✓ Working correctly';
+                    info.className = 'test-result success';
+                    testResults.storage = true;
+                } else {
+                    info.textContent = 'Local Storage: ✗ Read/Write mismatch';
+                    info.className = 'test-result error';
+                    testResults.storage = false;
+                }
+            } catch (e) {
+                info.textContent = `Local Storage Error: ${e.message}`;
+                info.className = 'test-result error';
+                testResults.storage = false;
+            }
+        }
+        
+        function testEventHandling() {
+            const info = document.getElementById('event-info');
+            let eventResults = [];
+            
+            // Test click event
+            const clickBtn = document.getElementById('test-click');
+            clickBtn.addEventListener('click', function() {
+                eventResults.push('Click event: ✓');
+                updateEventResults();
+            });
+            
+            // Test input event
+            const input = document.getElementById('test-input');
+            input.addEventListener('input', function() {
+                eventResults.push('Input event: ✓');
+                updateEventResults();
+            });
+            
+            // Test change event
+            const select = document.getElementById('test-select');
+            select.addEventListener('change', function() {
+                eventResults.push('Change event: ✓');
+                updateEventResults();
+            });
+            
+            function updateEventResults() {
+                info.textContent = eventResults.join('\n');
+                info.className = 'test-result info';
+                testResults.events = eventResults.length > 0;
+            }
+            
+            info.textContent = 'Click buttons and type in inputs to test events...';
+            info.className = 'test-result info';
+        }
+        
+        function testMobileResponsiveness() {
+            const info = document.getElementById('mobile-info');
+            const browser = window.BrowserInfo;
+            
+            let result = `Mobile Responsiveness:\n`;
+            result += `Mobile Device: ${browser.isMobile ? '✓' : '✗'}\n`;
+            result += `Viewport Meta: ${document.querySelector('meta[name="viewport"]') ? '✓' : '✗'}\n`;
+            result += `Touch Events: ${'ontouchstart' in window ? '✓' : '✗'}\n`;
+            result += `Screen Width: ${window.screen.width}px\n`;
+            result += `Window Width: ${window.innerWidth}px\n`;
+            result += `Device Pixel Ratio: ${window.devicePixelRatio || 1}`;
+            
+            info.textContent = result;
+            info.className = 'test-result info';
+            testResults.mobile = true;
+        }
+        
+        function testPerformance() {
+            const info = document.getElementById('performance-info');
+            const startTime = performance.now();
+            
+            // Simple performance test
+            let sum = 0;
+            for (let i = 0; i < 100000; i++) {
+                sum += i;
+            }
+            
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            
+            let result = `Performance Test:\n`;
+            result += `Loop Duration: ${duration.toFixed(2)}ms\n`;
+            result += `Performance API: ${performance ? '✓' : '✗'}\n`;
+            result += `Memory: ${performance.memory ? 'Available' : 'Not Available'}\n`;
+            
+            if (performance.memory) {
+                result += `Used Memory: ${(performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2)}MB\n`;
+                result += `Total Memory: ${(performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(2)}MB`;
+            }
+            
+            info.textContent = result;
+            info.className = 'test-result info';
+            testResults.performance = duration < 100; // Good if under 100ms
+        }
+        
+        function calculateCompatibilityScore() {
+            const scoreElement = document.getElementById('compatibility-score');
+            let score = 0;
+            let total = 0;
+            
+            // Calculate score based on test results
+            for (const [test, result] of Object.entries(testResults)) {
+                if (typeof result === 'boolean') {
+                    score += result ? 1 : 0;
+                    total += 1;
+                } else if (typeof result === 'number') {
+                    score += result;
+                    total += 1;
+                }
+            }
+            
+            compatibilityScore = total > 0 ? (score / total) * 100 : 0;
+            
+            let scoreClass = 'score-poor';
+            let scoreText = 'Poor';
+            
+            if (compatibilityScore >= 90) {
+                scoreClass = 'score-excellent';
+                scoreText = 'Excellent';
+            } else if (compatibilityScore >= 75) {
+                scoreClass = 'score-good';
+                scoreText = 'Good';
+            } else if (compatibilityScore >= 60) {
+                scoreClass = 'score-fair';
+                scoreText = 'Fair';
+            }
+            
+            scoreElement.innerHTML = `
+                <div class="${scoreClass}">
+                    Compatibility Score: ${compatibilityScore.toFixed(1)}% - ${scoreText}
+                </div>
+            `;
+        }
+        
+        function generateRecommendations() {
+            const info = document.getElementById('recommendations');
+            const browser = window.BrowserInfo;
+            const features = window.Features;
+            let recommendations = [];
+            
+            if (!features.localStorage) {
+                recommendations.push('Enable Local Storage for data persistence');
+            }
+            
+            if (!features.flexbox) {
+                recommendations.push('Consider using CSS Grid or float layouts instead of Flexbox');
+            }
+            
+            if (browser.isIE && browser.version < 11) {
+                recommendations.push('Upgrade to Internet Explorer 11 or use a modern browser');
+            }
+            
+            if (browser.isSafari && browser.version < 10) {
+                recommendations.push('Update Safari to the latest version');
+            }
+            
+            if (!features.addEventListener) {
+                recommendations.push('Use attachEvent for older browsers');
+            }
+            
+            if (recommendations.length === 0) {
+                recommendations.push('Your browser has excellent compatibility!');
+            }
+            
+            info.textContent = recommendations.join('\n');
+            info.className = 'test-result info';
+        }
+        
+        function testEdit(element) {
+            element.innerHTML = `
+                <div class="edit-interface">
+                    <input type="text" class="edit-input" value="Test editing">
+                    <div class="control-group">
+                        <label>Color:</label>
+                        <input type="color" value="#ff6b35">
+                    </div>
+                    <div class="control-group">
+                        <label>Font:</label>
+                        <select>
+                            <option>Arial</option>
+                            <option>Times New Roman</option>
+                        </select>
+                    </div>
+                    <button class="test-button" onclick="saveEdit(this)">Save</button>
+                    <button class="test-button" onclick="cancelEdit(this)">Cancel</button>
+                </div>
+            `;
+        }
+        
+        function saveEdit(button) {
+            const element = button.closest('.editable');
+            const input = element.querySelector('input[type="text"]');
+            element.innerHTML = input.value;
+        }
+        
+        function cancelEdit(button) {
+            const element = button.closest('.editable');
+            element.innerHTML = 'Test CSS Styling';
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runAllTests);
+    </script>
+</body>
+</html>

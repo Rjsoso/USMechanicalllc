@@ -1,0 +1,86 @@
+.services-section {
+  padding: 5rem 1rem;
+  background-color: #f9fafb;
+  color: #1a1a1a;
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.services-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #004aad; /* U.S. Mechanical blue */
+  margin-bottom: 1rem;
+}
+
+.services-intro {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.services-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.service-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px) saturate(1.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.service-card:hover::after {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+.service-icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 1rem;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.08);
+}
+
+.service-details summary {
+  color: #004aad;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.service-details p {
+  margin-top: 0.5rem;
+  color: #333;
+}

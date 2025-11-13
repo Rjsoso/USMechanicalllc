@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>U.S. Mechanical, LLC — Building Excellence in Plumbing & HVAC Since 1963</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' ry='12' fill='%23ff6b35'/%3E%3Cpath d='M14 42h8l4-20 6 28 4-16 4 8h10' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <meta name="description" content="U.S. Mechanical — commercial and industrial mechanical contracting including HVAC, hydronics, process piping and plumbing. Founded 1963. Licensed, bonded & insured." />
+  <meta name="theme-color" content="#f6f7f8">
+
+  <!-- Tailwind via CDN -->
+  <link href="./dist/output.css" rel="stylesheet">
+  <style>
+    /* small customizations */
+    :root {
+      --accent-blue: #0b21d6;
+      --accent-red:  #ff6b35;
+      --accent-orange: #ff6b35;
+      --accent-black: #1a1a1a;
+      --muted: #6b7076;
+      --card: #ffffff;
+      --bg: #f7fafc;
+      --text-light: #ffffff;
+      --text-dark: #1a1a1a;
+      --hero-bg: #1a1a1a;
+    }
+    /* subtle scroll-behavior */
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+
+<body class="antialiased text-[color:var(--text-dark)] bg-[color:var(--bg)]">
+
+  <!-- NAV -->
+  <header class="sticky top-4 z-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-4 flex items-center gap-6 border border-white/20">
+        <!-- LOGO -->
+        <a href="#home" class="flex items-center gap-3">
+          <img src="images/us-mechanical-logo.png" alt="U.S. Mechanical logo" class="h-20 w-auto rounded-md object-contain"/>
+          <div class="hidden sm:block">
+            <div class="font-semibold text-2xl text-[color:var(--text-dark)]" data-field="company-name">U.S. Mechanical, LLC</div>
+            <div class="text-sm text-[color:var(--accent-orange)]" data-field="company-tagline">Mechanical Contracting • Plumbing • HVAC • Hydronics</div>
+          </div>
+        </a>
+
+        <!-- NAV LINKS -->
+        <nav class="ml-auto hidden md:flex gap-4 items-center">
+          <a href="#about" class="text-sm font-medium text-[color:var(--text-dark)] hover:text-[color:var(--accent-orange)]" data-field="nav-about">About</a>
+          <a href="#services" class="text-sm font-medium text-[color:var(--text-dark)] hover:text-[color:var(--accent-orange)]" data-field="nav-services">Services</a>
+          <a href="#portfolio" class="text-sm font-medium text-[color:var(--text-dark)] hover:text-[color:var(--accent-orange)]" data-field="nav-portfolio">Projects</a>
+          <a href="#recognition" class="text-sm font-medium text-[color:var(--text-dark)] hover:text-[color:var(--accent-orange)]" data-field="nav-recognition">Recognition</a>
+          <a href="#contact" class="text-sm font-medium text-[color:var(--text-dark)] hover:text-[color:var(--accent-orange)]" data-field="nav-contact">Contact</a>
+        </nav>
+
+        <!-- ACTIONS -->
+        <div class="ml-auto md:ml-0 flex items-center gap-3">
+          <a href="#portfolio" class="hidden sm:inline-block px-3 py-2 rounded-lg border border-[color:var(--accent-orange)] text-sm font-semibold text-[color:var(--accent-orange)] hover:bg-[color:var(--accent-orange)]/10" data-field="nav-view-portfolio">View Portfolio</a>
+          <a href="#contact" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold text-white bg-[color:var(--accent-orange)] hover:brightness-95 shadow" data-field="nav-request-quote">Request a Quote</a>
+
+          <!-- mobile menu button -->
+          <button aria-label="Open menu" id="mobileOpen" class="md:hidden ml-2 p-2 rounded-lg hover:bg-[color:var(--accent-orange)]/20 text-[color:var(--text-dark)]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobileMenu" class="hidden mt-3 max-w-7xl mx-auto px-4">
+      <div class="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow">
+        <nav class="flex flex-col gap-2">
+          <a href="#about" class="py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">About</a>
+          <a href="#services" class="py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">Services</a>
+          <a href="#portfolio" class="py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">Projects</a>
+          <a href="#recognition" class="py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">Recognition</a>
+          <a href="#contact" class="py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="home" class="pt-0 pb-0">
+    <div class="w-full">
+
+      <!-- HERO -->
+      <section class="relative py-32 md:py-40 lg:py-48" style="background-color: #0A192F;">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="max-w-4xl">
+            <!-- Badge -->
+            <div class="mb-8 inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm" data-field="hero-badge">
+              <span class="text-xs font-medium text-white/90 uppercase tracking-wider">Excellence Since 1963</span>
+            </div>
+            
+            <!-- Main Title -->
+            <h1 id="hero-title" class="mb-10 text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05] tracking-tight" data-preserve-html="true" data-field="hero-title">
+              Mechanical<br>
+              Contracting<br>
+              <span class="inline-block px-4 py-2 rounded-lg bg-[color:var(--accent-blue)]/20 text-[color:var(--accent-blue)] mt-3" style="background-color: rgba(11, 33, 214, 0.15); color: #6B9EFF;">Excellence</span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p id="hero-subtitle" class="mb-16 text-2xl md:text-3xl text-white/85 leading-relaxed max-w-3xl font-light" style="line-height: 1.6;" data-field="hero-subtitle">
+              Design, Engineering & Installation of Commercial HVAC, Hydronic, and Process Piping Systems
+            </p>
+            
+            <!-- Credentials -->
+            <div class="mb-16 flex flex-wrap items-center gap-8 text-white/90">
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6 text-[color:var(--accent-orange)]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="hero-credentials" class="text-lg font-medium" data-field="hero-credentials">Licensed, Bonded & Insured</span>
+              </div>
+              <span class="text-white/20">•</span>
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6 text-[color:var(--accent-blue)]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="hero-description" class="text-lg font-medium" data-field="hero-description">Serving Salt Lake City, Provo, Las Vegas</span>
+              </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="mb-12 flex items-center gap-5 flex-wrap">
+              <a href="#contact" class="group inline-flex items-center justify-center px-10 py-5 rounded-lg font-semibold text-lg text-white transition-all hover:scale-[1.02] hover:shadow-xl" style="background-color: var(--accent-orange);" data-field="hero-cta-primary">
+                Request a Bid
+                <svg class="ml-3 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+              <a href="#portfolio" class="inline-flex items-center justify-center px-10 py-5 rounded-lg font-semibold text-lg border-2 text-white transition-all hover:bg-white/10 hover:border-white/50" style="border-color: rgba(255, 255, 255, 0.3);" data-field="hero-cta-secondary">
+                View Portfolio
+              </a>
+            </div>
+
+            <!-- Safety Commitment -->
+            <div class="flex items-center gap-3 text-lg text-white/75" data-field="hero-safety">
+              <svg class="w-6 h-6 text-[color:var(--accent-orange)] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Committed to the highest safety standards on every project</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="py-24 md:py-32 lg:py-40 bg-white">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <!-- Badge -->
+          <div class="mb-8">
+            <div class="inline-block bg-[color:var(--accent-blue)]/10 text-[color:var(--accent-blue)] px-5 py-2 rounded-full text-sm font-semibold" style="background-color: rgba(11, 33, 214, 0.1);" data-field="about-badge">
+              About U.S. Mechanical
+            </div>
+          </div>
+          
+          <!-- Main Heading -->
+          <h2 id="about-title" class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-12 leading-tight" data-field="about-title">Building Excellence Since 1963</h2>
+
+          <!-- Content Grid: Text Left, Images Right -->
+          <div class="grid md:grid-cols-2 gap-16 md:gap-20 items-start">
+            <!-- Text Content (Left) -->
+            <div id="about-content" class="space-y-8">
+              <p class="text-xl text-[color:var(--text-dark)] leading-relaxed" style="line-height: 1.8;" data-field="about-para-1">
+                Since 1963, U.S. Mechanical, LLC has delivered exceptional mechanical contracting solutions focused on <strong>plumbing</strong>, <strong>hydronic systems</strong>, <strong>HVAC</strong>, and industrial piping. Our comprehensive approach covers every stage—from initial design and engineering (2D/3D/BIM coordination) through full installation—with an unwavering commitment to quality, safety, and service.
+              </p>
+              
+              <p class="text-xl text-[color:var(--text-dark)] leading-relaxed" style="line-height: 1.8;" data-field="about-para-2">
+                Our integrated approach combines cutting-edge design capabilities with proven installation expertise, ensuring seamless project delivery from concept to completion. We've built our reputation on reliability, technical excellence, and a genuine commitment to our clients' success.
+              </p>
+
+              <!-- Bulleted List with Checkmarks -->
+              <ul class="space-y-5 mt-8">
+                <li class="flex items-start gap-4">
+                  <div class="w-6 h-6 bg-[color:var(--accent-orange)] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="text-lg text-[color:var(--text-dark)]" data-field="about-bullet-1">60+ years of experience in large-scale commercial & industrial projects</span>
+                </li>
+                <li class="flex items-start gap-4">
+                  <div class="w-6 h-6 bg-[color:var(--accent-orange)] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="text-lg text-[color:var(--text-dark)]" data-field="about-bullet-2">End-to-end capabilities: design, engineering, installation, and commissioning</span>
+                </li>
+                <li class="flex items-start gap-4">
+                  <div class="w-6 h-6 bg-[color:var(--accent-orange)] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="text-lg text-[color:var(--text-dark)]" data-field="about-bullet-3">Safety-first culture with top-tier risk management on every project</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Image Grid (Right) -->
+            <div class="grid grid-cols-2 gap-5">
+              <!-- Top Left: Welding -->
+              <div class="rounded-xl overflow-hidden shadow-lg aspect-square">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2390a4ae' font-family='Arial' font-size='24'%3EWelding%3C/text%3E%3C/svg%3E" alt="Welding work" class="w-full h-full object-cover">
+              </div>
+              
+              <!-- Top Right: Saw Work -->
+              <div class="rounded-xl overflow-hidden shadow-lg aspect-square">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2390a4ae' font-family='Arial' font-size='24'%3ESaw Work%3C/text%3E%3C/svg%3E" alt="Construction saw work" class="w-full h-full object-cover">
+              </div>
+              
+              <!-- Bottom Left: Electrical Panel -->
+              <div class="rounded-xl overflow-hidden shadow-lg aspect-square">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2390a4ae' font-family='Arial' font-size='24'%3EElectrical%3C/text%3E%3C/svg%3E" alt="Electrical panel work" class="w-full h-full object-cover">
+              </div>
+              
+              <!-- Bottom Right: Circuit Board / Electronics -->
+              <div class="rounded-xl overflow-hidden shadow-lg aspect-square">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2390a4ae' font-family='Arial' font-size='24'%3EElectronics%3C/text%3E%3C/svg%3E" alt="Circuit board and electronics" class="w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section id="services" class="py-24 md:py-32 lg:py-40 bg-[color:var(--bg)]" style="background-color: #f7fafc;">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="text-center mb-16">
+            <div class="inline-block bg-[color:var(--accent-orange)] text-white px-5 py-2 rounded-full text-sm font-semibold mb-6" data-field="services-badge">
+              Our Services
+            </div>
+            <h3 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-6 leading-tight" data-field="services-title">Comprehensive Mechanical Solutions</h3>
+            <p class="text-xl md:text-2xl text-[color:var(--muted)] max-w-3xl mx-auto leading-relaxed" data-field="services-subtitle">From design and engineering to installation and maintenance, we deliver complete mechanical contracting services</p>
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-8">
+            <!-- HVAC Systems -->
+            <div class="bg-white p-10 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[color:var(--accent-blue)]/30 group">
+              <div class="w-20 h-20 bg-[color:var(--accent-blue)] rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-[color:var(--text-dark)] mb-5" data-field="service-hvac-title">HVAC Systems</h3>
+              <p class="text-lg text-[color:var(--muted)] mb-8 leading-relaxed" data-field="service-hvac-desc">Complete heating, ventilation, and air conditioning design, installation, and maintenance for commercial and industrial facilities.</p>
+              <a href="#" class="text-[color:var(--accent-blue)] font-semibold text-lg flex items-center gap-2 group-hover:gap-4 transition-all" data-field="service-hvac-link">
+                Learn More 
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Hydronic Piping -->
+            <div class="bg-white p-10 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[color:var(--accent-orange)]/30 group">
+              <div class="w-20 h-20 bg-[color:var(--accent-orange)] rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-[color:var(--text-dark)] mb-5" data-field="service-hydronic-title">Hydronic Piping</h3>
+              <p class="text-lg text-[color:var(--muted)] mb-8 leading-relaxed" data-field="service-hydronic-desc">Expert installation of hot water, chilled water, and steam distribution systems for heating and cooling applications.</p>
+              <a href="#" class="text-[color:var(--accent-orange)] font-semibold text-lg flex items-center gap-2 group-hover:gap-4 transition-all" data-field="service-hydronic-link">
+                Learn More 
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Process Piping -->
+            <div class="bg-white p-10 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[color:var(--accent-blue)]/30 group">
+              <div class="w-20 h-20 bg-[color:var(--accent-blue)] rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-[color:var(--text-dark)] mb-5" data-field="service-piping-title">Process Piping</h3>
+              <p class="text-lg text-[color:var(--muted)] mb-8 leading-relaxed" data-field="service-piping-desc">Industrial process piping systems for manufacturing, pharmaceutical, food processing, and other specialized applications.</p>
+              <a href="#" class="text-[color:var(--accent-blue)] font-semibold text-lg flex items-center gap-2 group-hover:gap-4 transition-all" data-field="service-piping-link">
+                Learn More 
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAFETY -->
+      <section id="safety" class="py-24 md:py-32 lg:py-40 bg-white">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="mb-8">
+            <div class="inline-block bg-[color:var(--accent-red)]/10 text-[color:var(--accent-red)] px-5 py-2 rounded-full text-sm font-semibold" style="background-color: rgba(255, 107, 53, 0.1);" data-field="safety-badge">
+              Safety & Risk Management
+            </div>
+          </div>
+          <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-16 leading-tight" data-field="safety-title">Safety & Risk Management</h2>
+          <div class="grid md:grid-cols-2 gap-16 items-start">
+            <div class="text-lg text-[color:var(--muted)] space-y-6 leading-relaxed" style="line-height: 1.8;" data-field="safety-content">
+              <p>U.S. Mechanical strives to conduct the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program, which ensures not only properly trained employees, but the appropriate focus on safety on all our projects. We also employ a full-time safety director, who is OSHA and MSHA accredited. Our safety director oversees safety at both U.S. Mechanical and Snyder Mechanical daily.</p>
+
+              <p>We employ some of the most competently skilled employees in the region. These same employees value the safety of their co-workers. The result of this commitment to safety is an experience modification rate (EMR) lower than the national average. This accomplishment has enabled U.S. Mechanical to qualify for self-insured insurance programs that lower the overall risk management costs associated with the general construction industry. These financial savings coupled with our continued commitment to safety provide our client-base added value on every project.</p>
+
+              <p>All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our goal.</p>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-gray-50 p-8 rounded-2xl border border-[color:var(--accent-red)]/20 hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-red)] mb-3" data-field="safety-director-title">Safety Director</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="safety-director">Full-time, OSHA & MSHA accredited — daily oversight of safety programs at U.S. Mechanical and Snyder Mechanical.</div>
+              </div>
+
+              <div class="bg-gray-50 p-8 rounded-2xl border border-[color:var(--accent-blue)]/20 hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-blue)] mb-3" data-field="safety-emr-title">EMR & Risk Management</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="safety-emr">Experience Modification Rate (EMR) below the national average; qualified for self-insured programs and reduced risk costs.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECOGNITION -->
+      <section id="recognition" class="py-24 md:py-32 lg:py-40 bg-[color:var(--bg)]" style="background-color: #f7fafc;">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="mb-8">
+            <div class="inline-block bg-[color:var(--accent-blue)]/10 text-[color:var(--accent-blue)] px-5 py-2 rounded-full text-sm font-semibold" style="background-color: rgba(11, 33, 214, 0.1);" data-field="recognition-badge">
+              Recognition
+            </div>
+          </div>
+          <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-16 leading-tight" data-field="recognition-title">Recognition</h2>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <div class="p-8 border border-[color:var(--accent-red)]/20 rounded-2xl bg-white hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-red)] mb-3" data-field="recognition-leed-silver-title">LEED Silver Certification</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="recognition-leed-silver">Utah County Convention Center — U.S. Mechanical assisted Okland Construction on this project to achieve LEED Silver certification.</div>
+              </div>
+
+              <div class="p-8 border border-[color:var(--accent-blue)]/20 rounded-2xl bg-white hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-blue)] mb-3" data-field="recognition-leed-gold-title">LEED Gold Certification</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="recognition-leed-gold">Greenspun Hall — Clark Construction recognized U.S. Mechanical for assisting the Greenspun Hall-UNLV project in achieving LEED Gold certification.</div>
+              </div>
+
+              <div class="p-8 border border-[color:var(--accent-blue)]/20 rounded-2xl bg-white hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-blue)] mb-3" data-field="recognition-leed-platinum-title">LEED Platinum Certification</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="recognition-leed-platinum">Nevada State Museum — Furnished and supplied HVAC systems at Desert Living Center, Origen Museum, and Nevada State Museum (Springs Preserve), assisting in achieving LEED Platinum certification.</div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="p-8 border border-[color:var(--accent-blue)]/20 rounded-2xl bg-white hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-blue)] mb-3" data-field="recognition-leed-gold-2-title">LEED Gold Certification</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed" data-field="recognition-leed-gold-2">Red Rock Canyon Visitors Center — U.S. Mechanical completed mechanical systems helping the project achieve LEED Gold certification.</div>
+              </div>
+
+              <div class="p-8 border border-[color:var(--accent-blue)]/20 rounded-2xl bg-white hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--accent-blue)] mb-3">Maple Mountain High School — Top Project</div>
+                <div class="text-base text-[color:var(--muted)] leading-relaxed">Recognized by The Intermountain Contractor; U.S. Mechanical furnished and installed the HVAC systems to ensure low operations and maintenance costs.</div>
+              </div>
+
+              <div class="p-8 rounded-2xl bg-white border-2 border-gray-200 hover:shadow-lg transition-shadow">
+                <div class="text-lg font-bold text-[color:var(--text-dark)] mb-3">Certifications & Affiliations</div>
+                <div class="text-base text-[color:var(--muted)]">PHCC of NV • NFPA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO (sample grid) -->
+      <section id="portfolio" class="mt-10">
+        <h3 class="text-xl font-bold mb-4 text-[color:var(--text-dark)]">Selected Projects</h3>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="rounded-2xl overflow-hidden shadow">
+            <img src="data:image/svg+xml;utf8,\
+%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='100%25' height='100%25' fill='%23222'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23aaa' font-family='Arial' font-size='48'%3EProject 1%3C/text%3E%3C/svg%3E" alt="Commercial HVAC Retrofit" class="w-full h-56 object-cover"/>
+            <div class="p-4 bg-white border-t border-[color:var(--accent-red)]/20">
+              <div class="font-semibold text-[color:var(--text-dark)]">Commercial HVAC Retrofit</div>
+              <div class="text-sm text-[color:var(--text-light)] mt-2">Full system replacement and controls upgrade in a large commercial facility.</div>
+            </div>
+          </div>
+          <div class="rounded-2xl overflow-hidden shadow">
+            <img src="data:image/svg+xml;utf8,\
+%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='100%25' height='100%25' fill='%23222'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23aaa' font-family='Arial' font-size='48'%3EProject 2%3C/text%3E%3C/svg%3E" alt="Hydronic Plant Installation" class="w-full h-56 object-cover"/>
+            <div class="p-4 bg-white border-t border-[color:var(--accent-blue)]/20">
+              <div class="font-semibold text-[color:var(--text-dark)]">Hydronic Plant Installation</div>
+              <div class="text-sm text-[color:var(--text-light)] mt-2">New boiler plant and hydronic distribution for multi-building campus.</div>
+            </div>
+          </div>
+          <div class="rounded-2xl overflow-hidden shadow">
+            <img src="data:image/svg+xml;utf8,\
+%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='100%25' height='100%25' fill='%23222'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23aaa' font-family='Arial' font-size='48'%3EProject 3%3C/text%3E%3C/svg%3E" alt="Process Piping & Fabrication" class="w-full h-56 object-cover"/>
+            <div class="p-4 bg-white border-t border-[color:var(--accent-blue)]/20">
+              <div class="font-semibold text-[color:var(--text-dark)]">Process Piping & Fabrication</div>
+              <div class="text-sm text-[color:var(--text-light)] mt-2">Stainless fabrication and high-precision piping for industrial client.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section class="py-24 md:py-32 lg:py-40 bg-[color:var(--bg)]" style="background-color: #f7fafc;">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="text-center mb-16">
+            <div class="inline-block bg-[color:var(--accent-orange)] text-white px-5 py-2 rounded-full text-sm font-semibold mb-6">
+              Client Testimonials
+            </div>
+            <h3 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-6 leading-tight">What Our Clients Say</h3>
+            <p class="text-xl md:text-2xl text-[color:var(--muted)] max-w-3xl mx-auto leading-relaxed">We're proud of the relationships we've built and the results we deliver</p>
+          </div>
+          
+          <div id="testimonials-container" class="grid md:grid-cols-3 gap-8">
+            <!-- Testimonials will be loaded dynamically from admin panel -->
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA STRIP -->
+      <section class="py-16 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="rounded-2xl p-12 bg-gradient-to-r from-[color:var(--accent-blue)]/5 to-[color:var(--accent-orange)]/5 border border-[color:var(--accent-orange)]/20 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h4 class="text-3xl md:text-4xl font-bold text-[color:var(--text-dark)] mb-4">Ready to discuss your next mechanical project?</h4>
+              <p class="text-lg text-[color:var(--muted)]">Tell us about your project and we'll respond promptly with next steps and an estimate.</p>
+            </div>
+            <div class="flex gap-4 flex-shrink-0">
+              <a href="#portfolio" class="px-8 py-4 rounded-lg border-2 border-[color:var(--accent-blue)] text-[color:var(--accent-blue)] font-semibold text-lg hover:bg-[color:var(--accent-blue)]/10 transition-all">View Projects</a>
+              <a href="#contact" class="px-8 py-4 rounded-lg bg-[color:var(--accent-orange)] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all">Request a Quote</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="py-24 md:py-32 lg:py-40 bg-white">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div class="mb-8">
+            <div class="inline-block bg-[color:var(--accent-orange)]/10 text-[color:var(--accent-orange)] px-5 py-2 rounded-full text-sm font-semibold" style="background-color: rgba(255, 107, 53, 0.1);">
+              Contact Us
+            </div>
+          </div>
+          <h3 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[color:var(--text-dark)] mb-16 leading-tight">Contact U.S. Mechanical</h3>
+          <div class="grid md:grid-cols-2 gap-16">
+            <div>
+              <p class="text-xl text-[color:var(--muted)] mb-8 leading-relaxed">Offices: Pleasant Grove, UT • Las Vegas, NV • Snyder Mechanical in Elko, NV</p>
+              <p class="text-xl font-semibold text-[color:var(--text-dark)] space-y-4"><span id="contact-phone" class="block mb-3">Phone: (801) 785-6028</span><span id="contact-email" class="block">Email: info@usmechanicalllc.com</span></p>
+            </div>
+
+            <form id="contactForm" class="space-y-5" onsubmit="handleSubmit(event)">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <input name="name" required placeholder="Name or Company" class="w-full px-6 py-4 rounded-xl border-2 border-gray-200 bg-white text-lg text-[color:var(--text-dark)] placeholder-[color:var(--muted)]/60 focus:border-[color:var(--accent-orange)] focus:outline-none transition-all" />
+                <input name="email" type="email" required placeholder="Email" class="w-full px-6 py-4 rounded-xl border-2 border-gray-200 bg-white text-lg text-[color:var(--text-dark)] placeholder-[color:var(--muted)]/60 focus:border-[color:var(--accent-orange)] focus:outline-none transition-all" />
+              </div>
+              <input name="phone" placeholder="Phone" class="w-full px-6 py-4 rounded-xl border-2 border-gray-200 bg-white text-lg text-[color:var(--text-dark)] placeholder-[color:var(--muted)]/60 focus:border-[color:var(--accent-blue)] focus:outline-none transition-all" />
+              <textarea name="message" rows="5" placeholder="Project details / scope" class="w-full px-6 py-4 rounded-xl border-2 border-gray-200 bg-white text-lg text-[color:var(--text-dark)] placeholder-[color:var(--muted)]/60 focus:border-[color:var(--accent-blue)] focus:outline-none transition-all"></textarea>
+              <div class="flex gap-4">
+                <button type="submit" class="px-8 py-4 rounded-xl bg-[color:var(--accent-orange)] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all">Send Request</button>
+                <a href="mailto:info@usmechanicalllc.com" class="px-8 py-4 rounded-xl border-2 border-[color:var(--accent-blue)] text-[color:var(--accent-blue)] font-semibold text-lg hover:bg-[color:var(--accent-blue)]/10 transition-all">Email</a>
+              </div>
+              <div id="formMsg" class="text-base text-[color:var(--muted)]"></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="mt-10">
+        <div class="bg-white p-8 rounded-2xl shadow border border-[color:var(--accent-orange)]/20">
+          <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-6 justify-between">
+            <div class="flex gap-4 items-start">
+              <img src="images/us-mechanical-logo.png" alt="U.S. Mechanical logo" class="h-16 w-auto rounded-md object-contain"/>
+              <div>
+                <div class="font-semibold text-xl text-[color:var(--text-dark)]">U.S. Mechanical, LLC</div>
+                <div class="text-base text-[color:var(--text-light)] mt-1">Founded 1963 • Licensed, bonded & insured • Serving Intermountain & Southwest regions</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <div class="font-semibold mb-2 text-[color:var(--text-dark)]">Services</div>
+                <ul class="text-sm text-[color:var(--text-light)] space-y-1">
+                  <li>Commercial HVAC</li>
+                  <li>Hydronics & Boilers</li>
+                  <li>Process Piping</li>
+                  <li>Commercial Plumbing</li>
+                </ul>
+              </div>
+
+              <div>
+                <div class="font-semibold mb-2 text-[color:var(--text-dark)]">Contact</div>
+                <div class="text-sm text-[color:var(--text-light)]">
+                  Pleasant Grove, UT<br>
+                  Las Vegas, NV<br>
+                  <span class="font-semibold mt-2 inline-block">Phone:</span> (801) 785-6028<br>
+                  <span class="font-semibold">Email:</span> info@usmechanicalllc.com
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center text-sm text-[color:var(--text-light)]">© <span id="year"></span> U.S. Mechanical, LLC — All rights reserved.</div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobileOpen').addEventListener('click', function(){
+      const m = document.getElementById('mobileMenu');
+      m.classList.toggle('hidden');
+    });
+
+    // Simple form handler stub - replace with real integration
+    function handleSubmit(e){
+      e.preventDefault();
+      const msg = document.getElementById('formMsg');
+      msg.textContent = 'Thank you — your request has been received. We will contact you shortly.';
+      e.target.reset();
+      setTimeout(()=> msg.textContent = '', 7000);
+
+      // Example: send to your endpoint
+      // const fd = new FormData(e.target);
+      // fetch('/api/contact', { method:'POST', body: fd })
+      //  .then(r=>r.json()).then(()=>{/* success handling */});
+    }
+
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Load content from admin panel data
+    function loadWebsiteContent() {
+      const websiteContent = JSON.parse(localStorage.getItem('websiteContent')) || {};
+
+      // Only load if there's actually saved content - don't override defaults
+      if (Object.keys(websiteContent).length === 0) {
+        return; // No saved content, keep original styling
+      }
+
+      // Load all editable content with colors, fonts, sizes, and bold states
+      // First check for elements with data-field attribute (admin panel style)
+      const editableElements = document.querySelectorAll('[data-field]');
+      editableElements.forEach(element => {
+        const field = element.dataset.field;
+        if (!field) return; // Skip if no field attribute
+        
+        // Update content if there's saved content for this field
+        if (websiteContent[field]) {
+          // Special handling for hero-title to preserve HTML structure
+          let skipContentUpdate = false;
+          if (field === 'hero-title' || element.dataset.preserveHtml === 'true') {
+            // Don't override if the element already has the proper HTML structure
+            const currentHTML = element.innerHTML.trim();
+            if (currentHTML.includes('<br>') || currentHTML.includes('<span')) {
+              // Keep the current HTML structure - don't override content
+              skipContentUpdate = true;
+            } else {
+              // If there's no structure, try to preserve it from saved content
+              const savedContent = websiteContent[field];
+              if (savedContent && savedContent.includes('<br>')) {
+                element.innerHTML = savedContent;
+                skipContentUpdate = true;
+              } else if (savedContent) {
+                // Convert plain text to HTML with line breaks if needed
+                element.innerHTML = savedContent.replace(/\n/g, '<br>');
+                skipContentUpdate = true;
+              }
+            }
+          }
+          
+          if (!skipContentUpdate) {
+            // Check if element has child elements that should be preserved (like SVG icons in links)
+            const hasImportantChildren = element.querySelector('svg') || element.querySelector('img') || element.querySelector('i');
+            if (hasImportantChildren) {
+              // For elements with important children, update only the text portion
+              // Find all text nodes and replace the first non-empty one
+              const textNodes = Array.from(element.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+              if (textNodes.length > 0) {
+                // Replace the first text node with the new content (preserve spacing if needed)
+                const firstTextNode = textNodes[0];
+                const originalText = firstTextNode.textContent;
+                // If original text had trailing space, preserve it
+                const trailingSpace = originalText.endsWith(' ') ? ' ' : '';
+                firstTextNode.textContent = websiteContent[field] + trailingSpace;
+              } else {
+                // No text nodes, prepend the content as text with space before child
+                const textNode = document.createTextNode(websiteContent[field] + ' ');
+                element.insertBefore(textNode, element.firstChild);
+              }
+            } else {
+              // Simple text update - replace all content
+              element.textContent = websiteContent[field];
+            }
+          }
+        }
+        
+        // Always apply saved styles if they exist (even if content wasn't updated)
+        if (websiteContent[field + '_color']) {
+          element.style.setProperty('color', websiteContent[field + '_color'], 'important');
+        }
+        if (websiteContent[field + '_backgroundColor']) {
+          const bgColor = websiteContent[field + '_backgroundColor'];
+          if (bgColor === 'transparent') {
+            element.style.setProperty('background-color', 'transparent', 'important');
+          } else {
+            element.style.setProperty('background-color', bgColor, 'important');
+          }
+        }
+        if (websiteContent[field + '_font']) {
+          element.style.setProperty('font-family', websiteContent[field + '_font'], 'important');
+        }
+        if (websiteContent[field + '_fontSize']) {
+          element.style.setProperty('font-size', websiteContent[field + '_fontSize'], 'important');
+        }
+        // Only apply bold if it's explicitly saved as true
+        if (websiteContent[field + '_bold'] === true) {
+          element.style.setProperty('font-weight', 'bold', 'important');
+        } else if (websiteContent[field + '_bold'] === false) {
+          // Only set normal if it was explicitly saved as false
+          element.style.setProperty('font-weight', 'normal', 'important');
+        }
+        // Otherwise don't touch font-weight, keep original Tailwind styles
+      });
+      
+      // Also check for elements with ID (backward compatibility)
+      const idElements = document.querySelectorAll('[id]');
+      idElements.forEach(element => {
+        const field = element.id;
+        // Skip if this element already has a data-field (already processed above)
+        if (element.dataset.field) return;
+        if (!field) return; // Skip if no id
+        
+        // Update content if there's saved content for this field
+        if (websiteContent[field]) {
+          // Special handling for hero-title to preserve HTML structure
+          if (field === 'hero-title' || element.getAttribute('data-preserve-html') === 'true') {
+            // Don't override if the element already has the proper HTML structure
+            const currentHTML = element.innerHTML.trim();
+            if (currentHTML.includes('<br>') || currentHTML.includes('<span')) {
+              // Keep the current HTML structure - don't override
+              // But still apply styles below
+              // Don't update content, just styles
+            } else {
+              // If there's no structure, try to preserve it from saved content
+              const savedContent = websiteContent[field];
+              if (savedContent && savedContent.includes('<br>')) {
+                element.innerHTML = savedContent;
+              } else if (savedContent) {
+                // Convert plain text to HTML with line breaks if needed
+                element.innerHTML = savedContent.replace(/\n/g, '<br>');
+              }
+            }
+          } else {
+            // Check if element has child elements that should be preserved (like SVG icons in links)
+            const hasImportantChildren = element.querySelector('svg') || element.querySelector('img') || element.querySelector('i');
+            if (hasImportantChildren) {
+              // For elements with important children, update only the text portion
+              const textNodes = Array.from(element.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+              if (textNodes.length > 0) {
+                const firstTextNode = textNodes[0];
+                const originalText = firstTextNode.textContent;
+                const trailingSpace = originalText.endsWith(' ') ? ' ' : '';
+                firstTextNode.textContent = websiteContent[field] + trailingSpace;
+              } else {
+                const textNode = document.createTextNode(websiteContent[field] + ' ');
+                element.insertBefore(textNode, element.firstChild);
+              }
+            } else {
+              element.textContent = websiteContent[field];
+            }
+          }
+        }
+        
+        // Always apply saved styles if they exist (even if content wasn't updated)
+        if (websiteContent[field + '_color']) {
+          element.style.setProperty('color', websiteContent[field + '_color'], 'important');
+        }
+        if (websiteContent[field + '_backgroundColor']) {
+          const bgColor = websiteContent[field + '_backgroundColor'];
+          if (bgColor === 'transparent') {
+            element.style.setProperty('background-color', 'transparent', 'important');
+          } else {
+            element.style.setProperty('background-color', bgColor, 'important');
+          }
+        }
+        if (websiteContent[field + '_font']) {
+          element.style.setProperty('font-family', websiteContent[field + '_font'], 'important');
+        }
+        if (websiteContent[field + '_fontSize']) {
+          element.style.setProperty('font-size', websiteContent[field + '_fontSize'], 'important');
+        }
+        // Only apply bold if it's explicitly saved as true
+        if (websiteContent[field + '_bold'] === true) {
+          element.style.setProperty('font-weight', 'bold', 'important');
+        } else if (websiteContent[field + '_bold'] === false) {
+          // Only set normal if it was explicitly saved as false
+          element.style.setProperty('font-weight', 'normal', 'important');
+        }
+        // Otherwise don't touch font-weight, keep original Tailwind styles
+      });
+
+      // Also load the structured content for backward compatibility
+      if (websiteContent.homepage) {
+        // Update hero section
+        const heroTitle = document.querySelector('#hero-title');
+        const heroSubtitle = document.querySelector('#hero-subtitle');
+        const heroDescription = document.querySelector('#hero-description');
+        const heroCredentials = document.querySelector('#hero-credentials');
+
+        // Preserve HTML structure for hero-title
+        if (heroTitle && websiteContent.homepage.hero?.title) {
+          const currentHTML = heroTitle.innerHTML.trim();
+          if (!currentHTML.includes('<br>') && !currentHTML.includes('<span')) {
+            // Only override if there's no existing structure
+            heroTitle.textContent = websiteContent.homepage.hero.title;
+          }
+        }
+        if (heroSubtitle && websiteContent.homepage.hero?.subtitle) heroSubtitle.textContent = websiteContent.homepage.hero.subtitle;
+        if (heroDescription && websiteContent.homepage.hero?.description) heroDescription.textContent = websiteContent.homepage.hero.description;
+        if (heroCredentials && websiteContent.homepage.hero?.credentials) heroCredentials.textContent = websiteContent.homepage.hero.credentials;
+
+        // Update about section
+        const aboutTitle = document.querySelector('#about-title');
+        const aboutContent = document.querySelector('#about-content');
+        const aboutHighlights = document.querySelector('#about-highlights');
+
+        if (aboutTitle && websiteContent.homepage.about?.title) aboutTitle.textContent = websiteContent.homepage.about.title;
+        if (aboutContent && websiteContent.homepage.about?.content) aboutContent.textContent = websiteContent.homepage.about.content;
+        if (aboutHighlights && websiteContent.homepage.about?.highlights) {
+          aboutHighlights.innerHTML = websiteContent.homepage.about.highlights.map(highlight => 
+            '<li class="flex items-center mb-2"><span class="text-[color:var(--accent-orange)] mr-2">✓</span>' + highlight + '</li>'
+          ).join('');
+        }
+      }
+
+      // Update contact information
+      if (websiteContent.contact) {
+        const contactPhone = document.querySelector('#contact-phone');
+        const contactEmail = document.querySelector('#contact-email');
+        const contactAddress = document.querySelector('#contact-address');
+        const contactHours = document.querySelector('#contact-hours');
+
+        if (contactPhone && websiteContent.contact.phone) contactPhone.textContent = websiteContent.contact.phone;
+        if (contactEmail && websiteContent.contact.email) contactEmail.textContent = websiteContent.contact.email;
+        if (contactAddress && websiteContent.contact.address) contactAddress.textContent = websiteContent.contact.address;
+        if (contactHours && websiteContent.contact.hours) contactHours.textContent = websiteContent.contact.hours;
+      }
+    }
+
+    // Load images from admin panel data
+    function loadImages() {
+      const images = JSON.parse(localStorage.getItem('images')) || {};
+      
+      // Load hero background image
+      if (images.hero && images.hero.length > 0) {
+        const heroImage = images.hero[0];
+        const heroBackground = document.getElementById('hero-background');
+        if (heroBackground) {
+          heroBackground.style.backgroundImage = `url(${heroImage.data})`;
+        }
+      }
+      
+      // Load other section images
+      // About section images
+      if (images.about && images.about.length > 0) {
+        // You can add about section image loading here
+        console.log('About images loaded:', images.about.length);
+      }
+      
+      // Services section images
+      if (images.services && images.services.length > 0) {
+        // You can add services section image loading here
+        console.log('Services images loaded:', images.services.length);
+      }
+      
+      // Portfolio section images
+      if (images.portfolio && images.portfolio.length > 0) {
+        // You can add portfolio section image loading here
+        console.log('Portfolio images loaded:', images.portfolio.length);
+      }
+      
+      // Safety section images
+      if (images.safety && images.safety.length > 0) {
+        // You can add safety section image loading here
+        console.log('Safety images loaded:', images.safety.length);
+      }
+      
+      // General images
+      if (images.general && images.general.length > 0) {
+        // You can add general image loading here
+        console.log('General images loaded:', images.general.length);
+      }
+    }
+
+    // Load testimonials from admin panel data
+    function loadTestimonials() {
+      const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [
+        {
+          id: 1,
+          name: "Michael Chen",
+          title: "Director of Facilities",
+          company: "Metro Properties LLC",
+          quote: "U.S. Mechanical exceeded our expectations on the downtown office retrofit. Their ability to complete complex HVAC work while keeping our tenants happy was impressive. The 35% energy savings they delivered will pay for the project in just five years.",
+          rating: 5
+        },
+        {
+          id: 2,
+          name: "Jennifer Martinez",
+          title: "Plant Manager",
+          company: "Mountain Foods Inc.",
+          quote: "Working with U.S. Mechanical on our new facility was a pleasure. Their understanding of sanitary piping requirements and attention to detail was exceptional. We passed FDA inspection on the first try, which is almost unheard of.",
+          rating: 5
+        },
+        {
+          id: 3,
+          name: "Dr. Robert Thompson",
+          title: "Director of Campus Planning",
+          company: "State University",
+          quote: "The science building project showcased U.S. Mechanical's engineering expertise and project management skills. They delivered a complex facility on time and on budget. Three years later, our lab systems continue to perform flawlessly.",
+          rating: 5
+        }
+      ];
+
+      const container = document.getElementById('testimonials-container');
+      if (container) {
+        container.innerHTML = '';
+
+        testimonials.forEach(testimonial => {
+          const testimonialDiv = document.createElement('div');
+          testimonialDiv.className = 'bg-white p-6 rounded-2xl shadow-lg';
+          testimonialDiv.innerHTML = 
+            '<div class="text-4xl text-blue-200 mb-4">"</div>' +
+            '<div class="flex mb-4">' +
+              '<div class="flex text-[color:var(--accent-orange)]">' +
+                '★'.repeat(testimonial.rating) + '☆'.repeat(5-testimonial.rating) +
+              '</div>' +
+            '</div>' +
+            '<blockquote class="text-[color:var(--text-light)] mb-4">' +
+              '"' + testimonial.quote + '"' +
+            '</blockquote>' +
+            '<div class="font-bold text-[color:var(--accent-blue)]">' + testimonial.name + '</div>' +
+            '<div class="text-sm text-[color:var(--text-light)]">' + testimonial.title + ', ' + testimonial.company + '</div>';
+          container.appendChild(testimonialDiv);
+        });
+      }
+    }
+
+    // Load content when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadWebsiteContent();
+      loadTestimonials();
+      loadImages();
+    });
+  </script>
+</body>
+</html>

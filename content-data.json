@@ -1,0 +1,48 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "quote": "U.S. Mechanical exceeded our expectations on the downtown office retrofit. Their ability to complete complex HVAC work while keeping our tenants happy was impressive. The 35% energy savings they delivered will pay for the project in just five years.",
+      "clientName": "Michael Chen",
+      "clientTitle": "Director of Facilities, Metro Properties LLC"
+    },
+    {
+      "id": 2,
+      "quote": "Working with U.S. Mechanical on our new facility was a pleasure. Their understanding of sanitary piping requirements and attention to detail was exceptional. We passed FDA inspection on the first try, which is almost unheard of.",
+      "clientName": "Jennifer Martinez",
+      "clientTitle": "Plant Manager, Mountain Foods Inc."
+    },
+    {
+      "id": 3,
+      "quote": "The science building project showcased U.S. Mechanical's engineering expertise and project management skills. They delivered a complex facility on time and on budget. Three years later, our lab systems continue to perform flawlessly.",
+      "clientName": "Dr. Robert Thompson",
+      "clientTitle": "Director of Campus Planning, State University"
+    }
+  ],
+  "featuredProjects": [
+    {
+      "id": 1,
+      "title": "Downtown Office Complex HVAC Retrofit",
+      "description": "Complete HVAC system upgrade for a 150,000 sq ft Class A office building, featuring energy-efficient equipment and smart controls.",
+      "category": "commercial",
+      "location": "Salt Lake City, UT",
+      "imageUrl": "https://via.placeholder.com/400x300?text=Office+Building"
+    },
+    {
+      "id": 2,
+      "title": "Food Processing Plant Process Piping",
+      "description": "Design and installation of sanitary process piping for a new 80,000 sq ft food processing facility with FDA compliance.",
+      "category": "industrial",
+      "location": "Provo, UT",
+      "imageUrl": "https://via.placeholder.com/400x300?text=Food+Processing"
+    },
+    {
+      "id": 3,
+      "title": "University Science Building HVAC & Lab Systems",
+      "description": "Complete mechanical systems for a new 100,000 sq ft science and research building with specialized lab ventilation.",
+      "category": "institutional",
+      "location": "Salt Lake City, UT",
+      "imageUrl": "https://via.placeholder.com/400x300?text=University+Building"
+    }
+  ]
+}

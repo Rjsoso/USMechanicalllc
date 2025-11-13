@@ -1,0 +1,78 @@
+.glass-header {
+  backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: all 0.5s ease;
+}
+
+/* When scrolled — fades to white */
+.glass-header.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.logo-glass {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem; /* makes the capsule fit the logo */
+  border-radius: 9999px; /* fully rounded capsule */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(2) brightness(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(2) brightness(1.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+
+/* Add a subtle reflective highlight shimmer */
+.logo-glass::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+  transform: rotate(25deg);
+  animation: glassShine 8s infinite linear;
+}
+
+@keyframes glassShine {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(25deg);
+  }
+}
+
+.logo-image {
+  height: 3.25rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-glass:hover {
+  transform: scale(1.05);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2),
+    0 8px 30px rgba(0, 0, 0, 0.25);
+}
+

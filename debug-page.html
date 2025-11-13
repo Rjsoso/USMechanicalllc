@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Mechanical - Debug Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .debug-section {
+            background: #f8f9fa;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .debug-result {
+            background: #e9ecef;
+            border: 1px solid #6c757d;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        
+        .editable {
+            border: 2px dashed #ff6b35;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: rgba(255, 107, 53, 0.1);
+        }
+        .editable:hover {
+            background: rgba(255, 107, 53, 0.2);
+        }
+        
+        .edit-interface {
+            background: #2d3748;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .edit-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ff6b35;
+            border-radius: 4px;
+            background: white;
+            color: #1a1a1a;
+            margin: 5px 0;
+        }
+        
+        .control-group {
+            margin: 10px 0;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">🔧 US Mechanical Debug Page</h1>
+        
+        <!-- Browser Detection -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">🌐 Browser Detection</h2>
+            <div id="browser-info" class="debug-result"></div>
+            <button class="test-button" onclick="detectBrowser()">Detect Browser</button>
+        </div>
+        
+        <!-- JavaScript Console Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">📝 JavaScript Console Test</h2>
+            <div id="console-test" class="debug-result"></div>
+            <button class="test-button" onclick="testConsole()">Test Console</button>
+        </div>
+        
+        <!-- Local Storage Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">💾 Local Storage Test</h2>
+            <div id="storage-test" class="debug-result"></div>
+            <button class="test-button" onclick="testLocalStorage()">Test Local Storage</button>
+            <button class="test-button" onclick="clearStorage()">Clear Storage</button>
+        </div>
+        
+        <!-- Event Listener Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">🎯 Event Listener Test</h2>
+            <div id="event-test" class="debug-result"></div>
+            <button class="test-button" onclick="testEventListeners()">Test Event Listeners</button>
+            <div class="mt-4">
+                <button id="test-click-btn" class="test-button">Click Me (Test Click Events)</button>
+                <input id="test-input" type="text" placeholder="Type here to test input events" class="edit-input">
+                <select id="test-select" class="edit-input">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Edit Interface Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">✏️ Edit Interface Test</h2>
+            <div id="edit-test" class="debug-result"></div>
+            <button class="test-button" onclick="testEditInterface()">Test Edit Interface</button>
+            
+            <!-- Test editable elements -->
+            <div class="mt-4">
+                <div class="editable" data-field="test-field" onclick="startEdit(this)">
+                    Click me to test editing (Original Text)
+                </div>
+            </div>
+        </div>
+        
+        <!-- CSS Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">🎨 CSS Test</h2>
+            <div id="css-test" class="debug-result"></div>
+            <button class="test-button" onclick="testCSS()">Test CSS</button>
+            <div class="mt-4">
+                <div id="css-test-element" class="editable">CSS Test Element</div>
+            </div>
+        </div>
+        
+        <!-- Real-time Debug Log -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">📊 Real-time Debug Log</h2>
+            <div id="debug-log" class="debug-result" style="max-height: 300px; overflow-y: auto;"></div>
+            <button class="test-button" onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <!-- Admin Panel Test -->
+        <div class="debug-section">
+            <h2 class="text-2xl font-bold mb-4">⚙️ Admin Panel Test</h2>
+            <div id="admin-test" class="debug-result"></div>
+            <button class="test-button" onclick="testAdminPanel()">Test Admin Panel</button>
+            <div class="mt-4">
+                <a href="admin-unified.html" class="test-button" target="_blank">Open Admin Panel</a>
+                <a href="index.html" class="test-button" target="_blank">Open Main Website</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug logging function
+        function debugLog(message, type = 'info') {
+            const log = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+        
+        function clearLog() {
+            document.getElementById('debug-log').innerHTML = '';
+        }
+        
+        // Browser detection
+        function detectBrowser() {
+            const info = document.getElementById('browser-info');
+            const userAgent = navigator.userAgent;
+            let browserName = 'Unknown';
+            let browserVersion = 'Unknown';
+            
+            if (userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') === -1) {
+                browserName = 'Safari';
+                const match = userAgent.match(/Version\/(\d+\.\d+)/);
+                browserVersion = match ? match[1] : 'Unknown';
+            } else if (userAgent.indexOf('Chrome') > -1) {
+                browserName = 'Chrome';
+                const match = userAgent.match(/Chrome\/(\d+\.\d+)/);
+                browserVersion = match ? match[1] : 'Unknown';
+            } else if (userAgent.indexOf('Firefox') > -1) {
+                browserName = 'Firefox';
+                const match = userAgent.match(/Firefox\/(\d+\.\d+)/);
+                browserVersion = match ? match[1] : 'Unknown';
+            }
+            
+            const result = `Browser: ${browserName} ${browserVersion}
+User Agent: ${userAgent}
+Platform: ${navigator.platform}
+Language: ${navigator.language}
+Cookies Enabled: ${navigator.cookieEnabled}
+Online: ${navigator.onLine}`;
+            
+            info.textContent = result;
+            info.className = 'debug-result success';
+            debugLog(`Browser detected: ${browserName} ${browserVersion}`, 'success');
+        }
+        
+        // Console test
+        function testConsole() {
+            const result = document.getElementById('console-test');
+            try {
+                console.log('Console test message');
+                console.warn('Console warning test');
+                console.error('Console error test');
+                result.textContent = 'Console test completed - check browser console for messages';
+                result.className = 'debug-result success';
+                debugLog('Console test passed', 'success');
+            } catch (e) {
+                result.textContent = 'Console test failed: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('Console test failed: ' + e.message, 'error');
+            }
+        }
+        
+        // Local storage test
+        function testLocalStorage() {
+            const result = document.getElementById('storage-test');
+            try {
+                // Test if localStorage is available
+                if (typeof(Storage) !== "undefined") {
+                    // Test write
+                    localStorage.setItem('debug_test', 'test_value');
+                    const readValue = localStorage.getItem('debug_test');
+                    
+                    if (readValue === 'test_value') {
+                        result.textContent = 'Local Storage: Working\nTest value: ' + readValue;
+                        result.className = 'debug-result success';
+                        debugLog('Local storage test passed', 'success');
+                    } else {
+                        result.textContent = 'Local Storage: Read/Write mismatch';
+                        result.className = 'debug-result error';
+                        debugLog('Local storage read/write mismatch', 'error');
+                    }
+                } else {
+                    result.textContent = 'Local Storage: Not supported';
+                    result.className = 'debug-result error';
+                    debugLog('Local storage not supported', 'error');
+                }
+            } catch (e) {
+                result.textContent = 'Local Storage Error: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('Local storage error: ' + e.message, 'error');
+            }
+        }
+        
+        function clearStorage() {
+            try {
+                localStorage.clear();
+                debugLog('Local storage cleared', 'info');
+            } catch (e) {
+                debugLog('Failed to clear storage: ' + e.message, 'error');
+            }
+        }
+        
+        // Event listener test
+        function testEventListeners() {
+            const result = document.getElementById('event-test');
+            let testResults = [];
+            
+            try {
+                // Test click event
+                const clickBtn = document.getElementById('test-click-btn');
+                clickBtn.addEventListener('click', function() {
+                    debugLog('Click event triggered', 'success');
+                });
+                testResults.push('Click events: Working');
+                
+                // Test input event
+                const input = document.getElementById('test-input');
+                input.addEventListener('input', function() {
+                    debugLog('Input event triggered: ' + this.value, 'info');
+                });
+                testResults.push('Input events: Working');
+                
+                // Test change event
+                const select = document.getElementById('test-select');
+                select.addEventListener('change', function() {
+                    debugLog('Change event triggered: ' + this.value, 'info');
+                });
+                testResults.push('Change events: Working');
+                
+                result.textContent = testResults.join('\n');
+                result.className = 'debug-result success';
+                debugLog('Event listeners test completed', 'success');
+                
+            } catch (e) {
+                result.textContent = 'Event Listener Error: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('Event listener test failed: ' + e.message, 'error');
+            }
+        }
+        
+        // Edit interface test
+        function testEditInterface() {
+            const result = document.getElementById('edit-test');
+            try {
+                // Test creating edit interface
+                const testElement = document.createElement('div');
+                testElement.innerHTML = `
+                    <div class="edit-interface">
+                        <input type="text" class="edit-input" value="Test Text">
+                        <div class="control-group">
+                            <label>Color:</label>
+                            <input type="color" value="#ff6b35">
+                        </div>
+                        <div class="control-group">
+                            <label>Font:</label>
+                            <select>
+                                <option>Arial</option>
+                                <option>Times New Roman</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Bold:</label>
+                            <input type="checkbox">
+                        </div>
+                        <button class="test-button">Save</button>
+                        <button class="test-button">Cancel</button>
+                    </div>
+                `;
+                
+                result.innerHTML = '';
+                result.appendChild(testElement);
+                result.className = 'debug-result success';
+                debugLog('Edit interface test completed', 'success');
+                
+            } catch (e) {
+                result.textContent = 'Edit Interface Error: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('Edit interface test failed: ' + e.message, 'error');
+            }
+        }
+        
+        // CSS test
+        function testCSS() {
+            const result = document.getElementById('css-test');
+            const element = document.getElementById('css-test-element');
+            
+            try {
+                // Test various CSS properties
+                element.style.color = '#ff0000';
+                element.style.fontSize = '20px';
+                element.style.fontWeight = 'bold';
+                element.style.backgroundColor = '#ffff00';
+                
+                const computedStyle = window.getComputedStyle(element);
+                const cssInfo = `Applied styles:
+Color: ${element.style.color}
+Font Size: ${element.style.fontSize}
+Font Weight: ${element.style.fontWeight}
+Background: ${element.style.backgroundColor}
+
+Computed styles:
+Color: ${computedStyle.color}
+Font Size: ${computedStyle.fontSize}
+Font Weight: ${computedStyle.fontWeight}`;
+                
+                result.textContent = cssInfo;
+                result.className = 'debug-result success';
+                debugLog('CSS test completed', 'success');
+                
+            } catch (e) {
+                result.textContent = 'CSS Test Error: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('CSS test failed: ' + e.message, 'error');
+            }
+        }
+        
+        // Admin panel test
+        function testAdminPanel() {
+            const result = document.getElementById('admin-test');
+            try {
+                // Test if admin panel files exist
+                fetch('admin-unified.html')
+                    .then(response => {
+                        if (response.ok) {
+                            result.textContent = 'Admin Panel: Accessible\nStatus: ' + response.status;
+                            result.className = 'debug-result success';
+                            debugLog('Admin panel accessible', 'success');
+                        } else {
+                            result.textContent = 'Admin Panel: Not accessible\nStatus: ' + response.status;
+                            result.className = 'debug-result error';
+                            debugLog('Admin panel not accessible: ' + response.status, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        result.textContent = 'Admin Panel Error: ' + error.message;
+                        result.className = 'debug-result error';
+                        debugLog('Admin panel error: ' + error.message, 'error');
+                    });
+            } catch (e) {
+                result.textContent = 'Admin Panel Test Error: ' + e.message;
+                result.className = 'debug-result error';
+                debugLog('Admin panel test failed: ' + e.message, 'error');
+            }
+        }
+        
+        // Simple edit function for testing
+        function startEdit(element) {
+            debugLog('Edit started on element: ' + element.textContent, 'info');
+            
+            const originalText = element.textContent;
+            element.innerHTML = `
+                <div class="edit-interface">
+                    <input type="text" class="edit-input" value="${originalText}">
+                    <div class="control-group">
+                        <label>Color:</label>
+                        <input type="color" id="test-color" value="#ff6b35">
+                    </div>
+                    <div class="control-group">
+                        <label>Font:</label>
+                        <select id="test-font">
+                            <option>Arial</option>
+                            <option>Times New Roman</option>
+                            <option>Georgia</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Size:</label>
+                        <select id="test-size">
+                            <option>12px</option>
+                            <option>14px</option>
+                            <option>16px</option>
+                            <option>18px</option>
+                            <option>20px</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Bold:</label>
+                        <input type="checkbox" id="test-bold">
+                    </div>
+                    <button class="test-button" onclick="saveEdit(this)">Save</button>
+                    <button class="test-button" onclick="cancelEdit(this)">Cancel</button>
+                </div>
+            `;
+            
+            // Add event listeners for real-time preview
+            const input = element.querySelector('input[type="text"]');
+            const colorPicker = element.querySelector('#test-color');
+            const fontSelect = element.querySelector('#test-font');
+            const sizeSelect = element.querySelector('#test-size');
+            const boldCheckbox = element.querySelector('#test-bold');
+            
+            function updatePreview() {
+                if (input) {
+                    input.style.color = colorPicker.value;
+                    input.style.fontFamily = fontSelect.value;
+                    input.style.fontSize = sizeSelect.value;
+                    input.style.fontWeight = boldCheckbox.checked ? 'bold' : 'normal';
+                    debugLog('Preview updated', 'info');
+                }
+            }
+            
+            if (colorPicker) colorPicker.addEventListener('change', updatePreview);
+            if (fontSelect) fontSelect.addEventListener('change', updatePreview);
+            if (sizeSelect) sizeSelect.addEventListener('change', updatePreview);
+            if (boldCheckbox) boldCheckbox.addEventListener('change', updatePreview);
+            
+            debugLog('Edit interface created with event listeners', 'success');
+        }
+        
+        function saveEdit(button) {
+            const element = button.closest('.editable');
+            const input = element.querySelector('input[type="text"]');
+            const colorPicker = element.querySelector('#test-color');
+            const fontSelect = element.querySelector('#test-font');
+            const sizeSelect = element.querySelector('#test-size');
+            const boldCheckbox = element.querySelector('#test-bold');
+            
+            if (input) {
+                element.innerHTML = input.value;
+                element.style.color = colorPicker.value;
+                element.style.fontFamily = fontSelect.value;
+                element.style.fontSize = sizeSelect.value;
+                element.style.fontWeight = boldCheckbox.checked ? 'bold' : 'normal';
+                debugLog('Edit saved successfully', 'success');
+            }
+        }
+        
+        function cancelEdit(button) {
+            const element = button.closest('.editable');
+            element.innerHTML = 'Click me to test editing (Original Text)';
+            element.style.color = '';
+            element.style.fontFamily = '';
+            element.style.fontSize = '';
+            element.style.fontWeight = '';
+            debugLog('Edit cancelled', 'info');
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('load', function() {
+            debugLog('Debug page loaded', 'info');
+            detectBrowser();
+            testConsole();
+            testLocalStorage();
+            testEventListeners();
+            testCSS();
+            testAdminPanel();
+        });
+    </script>
+</body>
+</html>

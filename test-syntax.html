@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Syntax Test</title>
+</head>
+<body>
+    <h1>JavaScript Syntax Test</h1>
+    <div id="result"></div>
+    
+    <script>
+        // Test the problematic structure
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded test');
+            
+            // Simulate the structure from admin-unified.html
+            document.querySelectorAll('.test').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    console.log('Click test');
+                });
+            });
+        });
+        
+        function testFunction() {
+            console.log('Function test');
+        }
+        
+        // Test if everything works
+        document.getElementById('result').textContent = 'JavaScript syntax is valid!';
+    </script>
+</body>
+</html>

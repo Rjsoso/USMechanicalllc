@@ -1,0 +1,20 @@
+{
+  "name": "us-mechanical-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "U.S. Mechanical website and content studio setup",
+  "workspaces": [
+    "react-site",
+    "sanity"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix react-site\" \"npm run dev --prefix sanity\"",
+    "dev:site": "npm run dev --prefix react-site",
+    "dev:studio": "npm run dev --prefix sanity",
+    "build": "npm run build --prefix react-site && npm run build --prefix sanity",
+    "install:all": "npm install --prefix react-site && npm install --prefix sanity"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

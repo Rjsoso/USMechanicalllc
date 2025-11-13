@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "headline": "Over 55 Years of Trusted Mechanical Contracting Excellence",
+    "subtext": "Providing top-quality plumbing, HVAC, and mechanical services across the Intermountain and Southwest regions.",
+    "buttonText": "Request a Quote",
+    "backgroundImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
+  },
+  "about": {
+    "title": "Our History",
+    "text": "U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. The U.S. Mechanical name was adopted 25 years ago, and continues to represent our company owners and employees. We pursue projects in the Intermountain and Southwest regions via hard bid, design build, CMAR, and cost plus. We employ journeyman and apprentice plumbers, sheet metal installers, pipefitters, welders, and administrative staff."
+  },
+  "safety": {
+    "title": "Safety & Risk Management",
+    "text": "U.S. Mechanical strives to conduct the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program, which ensures not only properly trained employees, but the appropriate focus on safety on all our projects. We also employ a full-time safety director, who is OSHA and MSHA accredited. Our safety director oversees safety at both U.S. Mechanical and Snyder Mechanical daily."
+  },
+  "recognition": [
+    {
+      "title": "Utah County Convention Center",
+      "award": "LEED Silver Certification"
+    },
+    {
+      "title": "Greenspun Hall - UNLV",
+      "award": "LEED Gold Certification"
+    },
+    {
+      "title": "Nevada State Museum",
+      "award": "LEED Platinum Certification"
+    },
+    {
+      "title": "Red Rock Canyon Visitors Center",
+      "award": "LEED Gold Certification"
+    },
+    {
+      "title": "Maple Mountain High School",
+      "award": "Top Project"
+    }
+  ],
+  "companyInfo": {
+    "name": "U.S. Mechanical, LLC",
+    "offices": [
+      "Provo, UT",
+      "Las Vegas, NV"
+    ]
+  }
+}

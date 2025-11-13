@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Enhanced glassmorphism for header */
+header {
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  transition: background-color 0.9s ease, color 0.9s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: transparent;
+}
+
+body {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: transparent;
+}
+
+/* Ensure no white bar appears above header - hero section extends to top */
+#root {
+  background: transparent;
+}
+
+/* Remove any white space above header */
+body > * {
+  background: transparent;
+}
+
+/* Ensure hero section starts at very top with no white space */
+#hero {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  top: 0 !important;
+  position: relative !important;
+}
+
+/* Make hero background extend to very top of viewport - fixed to cover header gap */
+#hero > div:first-child,
+#hero > div:nth-child(2) {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 100vh !important;
+  width: 100% !important;
+  position: fixed !important;
+  z-index: -2 !important;
+}
+
+/* Force no white background anywhere */
+html, body, #root {
+  background: transparent !important;
+}
+
+/* Ensure main element doesn't have white background */
+main {
+  background: transparent !important;
+}

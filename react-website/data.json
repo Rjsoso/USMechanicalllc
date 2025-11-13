@@ -1,0 +1,104 @@
+{
+  "company": {
+    "name": "U.S. Mechanical, LLC",
+    "tagline": "Mechanical Contracting • Plumbing • HVAC • Hydronics",
+    "logo": "/images/us-mechanical-logo.png"
+  },
+  "hero": {
+    "badge": "Excellence Since 1963",
+    "title": "Mechanical Contracting Excellence",
+    "subtitle": "Design, Engineering & Installation of Commercial HVAC, Hydronic, and Process Piping Systems",
+    "ctaPrimary": "Request a Bid",
+    "ctaSecondary": "View Portfolio",
+    "backgroundImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920"
+  },
+  "services": {
+    "badge": "Our Services",
+    "title": "Comprehensive Mechanical Solutions",
+    "subtitle": "From design and engineering to installation and maintenance, we deliver complete mechanical contracting services",
+    "items": [
+      {
+        "id": 1,
+        "icon": "wind",
+        "title": "HVAC Systems",
+        "description": "Complete heating, ventilation, and air conditioning design, installation, and maintenance for commercial and industrial facilities.",
+        "color": "blue"
+      },
+      {
+        "id": 2,
+        "icon": "droplet",
+        "title": "Hydronic Piping",
+        "description": "Expert installation of hot water, chilled water, and steam distribution systems for heating and cooling applications.",
+        "color": "orange"
+      },
+      {
+        "id": 3,
+        "icon": "settings",
+        "title": "Process Piping",
+        "description": "Industrial process piping systems for manufacturing, pharmaceutical, food processing, and other specialized applications.",
+        "color": "blue"
+      }
+    ]
+  },
+  "about": {
+    "badge": "About U.S. Mechanical",
+    "title": "Building Excellence Since 1963",
+    "content": [
+      "Since 1963, U.S. Mechanical, LLC has delivered exceptional mechanical contracting solutions focused on plumbing, hydronic systems, HVAC, and industrial piping. Our comprehensive approach covers every stage—from initial design and engineering (2D/3D/BIM coordination) through full installation—with an unwavering commitment to quality, safety, and service.",
+      "Our integrated approach combines cutting-edge design capabilities with proven installation expertise, ensuring seamless project delivery from concept to completion. We've built our reputation on reliability, technical excellence, and a genuine commitment to our clients' success."
+    ],
+    "highlights": [
+      "60+ years of experience in large-scale commercial & industrial projects",
+      "End-to-end capabilities: design, engineering, installation, and commissioning",
+      "Safety-first culture with top-tier risk management on every project"
+    ]
+  },
+  "recognition": {
+    "badge": "Recognition",
+    "title": "Awards & Certifications",
+    "items": [
+      {
+        "id": 1,
+        "title": "LEED Platinum Certification",
+        "description": "Nevada State Museum — Furnished and supplied HVAC systems at Desert Living Center, assisting in achieving LEED Platinum certification.",
+        "type": "certification"
+      },
+      {
+        "id": 2,
+        "title": "LEED Gold Certification",
+        "description": "Greenspun Hall — Clark Construction recognized U.S. Mechanical for assisting the Greenspun Hall-UNLV project in achieving LEED Gold certification.",
+        "type": "certification"
+      },
+      {
+        "id": 3,
+        "title": "LEED Silver Certification",
+        "description": "Utah County Convention Center — U.S. Mechanical assisted Okland Construction on this project to achieve LEED Silver certification.",
+        "type": "certification"
+      },
+      {
+        "id": 4,
+        "title": "Top Project Award",
+        "description": "Maple Mountain High School — Recognized by The Intermountain Contractor; U.S. Mechanical furnished and installed the HVAC systems.",
+        "type": "award"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact U.S. Mechanical",
+    "subtitle": "Ready to discuss your next mechanical project?",
+    "description": "Tell us about your project and we'll respond promptly with next steps and an estimate.",
+    "phone": "(801) 785-6028",
+    "email": "info@usmechanicalllc.com",
+    "address": "Pleasant Grove, UT • Las Vegas, NV • Snyder Mechanical in Elko, NV"
+  },
+  "navigation": {
+    "links": [
+      { "label": "About", "href": "#about" },
+      { "label": "Services", "href": "#services" },
+      { "label": "Projects", "href": "#projects" },
+      { "label": "Recognition", "href": "#recognition" },
+      { "label": "Contact", "href": "#contact" }
+    ]
+  }
+}
+
