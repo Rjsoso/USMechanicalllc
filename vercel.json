@@ -1,48 +1,12 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/admin-unified.html"
-    },
-    {
-      "source": "/services/:path*",
-      "destination": "/services/:path*"
+      "src": "react-site/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "react-site/dist" }
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    },
-    {
-      "source": "/admin-unified.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    }
+  "routes": [
+    { "src": "/(.*)", "dest": "react-site/dist/$1" }
   ]
 }
-
