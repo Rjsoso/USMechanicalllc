@@ -1,66 +1,66 @@
 // deskStructure.ts
-import { StructureBuilder } from '@sanity/structure'
+import { StructureBuilder } from 'sanity/structure'
 
-export default function deskStructure() {
-  return StructureBuilder.list()
+export default function deskStructure(S: StructureBuilder) {
+  return S.list()
     .title('Content')
     .items([
       // Singletons / single-doc types first:
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Header Section')
         .child(
-          StructureBuilder.document()
+          S.document()
             .schemaType('headerSection')
             .documentId('headerSection')
         ),
 
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Hero Section')
         .child(
-          StructureBuilder.document()
+          S.document()
             .schemaType('heroSection')
             .documentId('heroSection')
         ),
 
-      StructureBuilder.listItem()
+      S.listItem()
         .title('About & Safety Section')
         .child(
-          StructureBuilder.document()
+          S.document()
             .schemaType('aboutAndSafety')
             .documentId('aboutAndSafety')
         ),
 
       // Collections / repeating items
-      StructureBuilder.divider(),
+      S.divider(),
 
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Portfolio Projects')
         .child(
-          StructureBuilder.documentTypeList('portfolioProject')
+          S.documentTypeList('portfolioProject')
             .title('Portfolio Projects')
         ),
 
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Contact Section')
         .child(
-          StructureBuilder.document()
+          S.document()
             .schemaType('contactSection')
             .documentId('contactSection')
         ),
 
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Company Information')
         .child(
-          StructureBuilder.document()
+          S.document()
             .schemaType('companyInformation')
             .documentId('companyInformation')
         ),
 
       // Recognition projects
-      StructureBuilder.listItem()
+      S.listItem()
         .title('Recognition Projects')
         .child(
-          StructureBuilder.documentTypeList('recognitionProject')
+          S.documentTypeList('recognitionProject')
             .title('Recognition Projects')
         ),
     ])
