@@ -6,7 +6,7 @@ export default function ContactSection() {
 
   useEffect(() => {
     client
-      .fetch(`*[_type == "contactSection"][0]`)
+      .fetch(`*[_type == "contact"][0]`)
       .then(res => setContact(res))
       .catch(error => {
         console.warn('Sanity fetch failed for contact section:', error)
