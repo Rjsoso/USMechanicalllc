@@ -66,10 +66,10 @@ export async function createOrUpdateDocument(doc) {
 
 // Queries for different sections matching content.json structure
 export const queries = {
-  hero: `*[_type == "hero"][0]`,
-  about: `*[_type == "about"][0]`,
-  safety: `*[_type == "safety"][0]`,
-  recognition: `*[_type == "recognition"] | order(_createdAt asc)`,
-  companyInfo: `*[_type == "companyInfo"][0]`,
+  hero: `*[_type == "heroSection"][0]`,
+  about: `*[_type == "aboutAndSafety"][0]`,
+  safety: `*[_type == "aboutAndSafety"][0]`,
+  recognition: `*[_type == "recognitionProject"] | order(_createdAt asc)`,
+  companyInfo: `*[_type == "companyInformation"][0]`,
 }
 

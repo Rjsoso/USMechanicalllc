@@ -7,7 +7,7 @@ const ServicesSection = () => {
   useEffect(() => {
     client
       .fetch(
-        `*[_type == "ourServices"][0]{
+        `*[_type == "servicesPage"][0]{
           sectionTitle,
           services[] {
             title,

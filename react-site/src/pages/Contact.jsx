@@ -12,7 +12,7 @@ export default function Contact() {
     const fetchContact = async () => {
       try {
         setLoading(true);
-        const query = `*[_type == "contact"][0]`;
+        const query = `*[_type == "contactSection"][0]`;
         const data = await client.fetch(query);
         setContactData(data);
         if (!data) {
