@@ -1,20 +1,7 @@
 {
   "version": 2,
-  "ignoreCommand": "echo IGNORING ROOT",
   "buildCommand": "cd react-site && npm install && npm run build",
   "outputDirectory": "react-site/dist",
-  "builds": [
-    {
-      "src": "react-site/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "react-site/dist"
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "react-site/dist/$1" }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
