@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
+import { PortableText } from '@portabletext/react'
 import FadeInWhenVisible from './FadeInWhenVisible'
 
 export default function AboutAndSafety() {
@@ -27,20 +28,28 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   // Fetch all content from Sanity (text and images)
   useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "aboutAndSafety"][0]{
-          aboutTitle,
-          aboutText,
-          safetyTitle,
-          safetyText,
-          photo1,
-          photo2
-        }`
-      )
-      .then(res => {
-        // Use Sanity data if available, otherwise use defaults
-        setData(res || defaultData)
+    Promise.all([
+      client.fetch(`*[_type == "aboutAndSafety"][0]{
+        aboutTitle,
+        aboutText,
+        photo1
+      }`),
+      client.fetch(`*[_type == "safety"][0]{
+        title,
+        content,
+        images
+      }`)
+    ])
+      .then(([aboutData, safetyData]) => {
+        // Merge data from both queries
+        const mergedData = {
+          ...defaultData,
+          ...aboutData,
+          safetyTitle: safetyData?.title || defaultData.safetyTitle,
+          safetyText: safetyData?.content || defaultData.safetyText,
+          safetyImages: safetyData?.images || [],
+        }
+        setData(mergedData)
         setLoading(false)
       })
       .catch(error => {
@@ -106,29 +115,38 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Text on left, image on right */}
-          <div className={`${data.photo2 ? 'md:w-1/2' : 'w-full'}`}>
+          <div className={`${data.safetyImages && data.safetyImages.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
               <h3 className="text-2xl md:text-3xl font-semibold mb-4">
               {data.safetyTitle}
             </h3>
           </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.4}>
-              <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
-              {data.safetyText}
-            </p>
+              <div className="text-lg text-gray-700 leading-relaxed">
+                {Array.isArray(data.safetyText) ? (
+                  <PortableText value={data.safetyText} />
+                ) : (
+                  <p className="whitespace-pre-line">{data.safetyText}</p>
+                )}
+              </div>
           </FadeInWhenVisible>
-        </div>
+          </div>
 
-          {data.photo2 && (
+          {data.safetyImages && data.safetyImages.length > 0 && (
             <div className="md:w-1/2">
               <FadeInWhenVisible delay={0.5}>
-              <img
-                src={urlFor(data.photo2).width(600).url()}
-                  alt="Safety & Risk Management"
-                  className="rounded-2xl shadow-lg w-full object-cover"
-                loading="lazy"
-              />
-            </FadeInWhenVisible>
+                <div className="safety-images-grid">
+                  {data.safetyImages.map((img, index) => (
+                    <img
+                      key={index}
+                      src={urlFor(img).width(600).url()}
+                      className="safety-photo"
+                      alt={`Safety image ${index + 1}`}
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              </FadeInWhenVisible>
             </div>
           )}
         </div>

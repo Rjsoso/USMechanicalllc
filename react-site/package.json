@@ -20,6 +20,7 @@
     "@sanity/structure": "^2.36.2",
     "@sanity/vision": "^4.13.0",
     "framer-motion": "^10.18.0",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.553.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

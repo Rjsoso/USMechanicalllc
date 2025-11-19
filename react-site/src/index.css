@@ -70,3 +70,18 @@ html, body, #root {
 main {
   background: transparent !important;
 }
+
+/* Safety Images Grid */
+.safety-images-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 20px;
+}
+
+.safety-photo {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
