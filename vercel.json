@@ -1,9 +1,12 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "react-site/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "react-site/dist" }
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
