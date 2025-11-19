@@ -38,10 +38,12 @@ export default function Portfolio() {
     <section className="py-20 bg-gray-50 text-gray-800 relative">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-10">Portfolio Projects</h2>
-        <div style={{ height: '600px', position: 'relative' }}>
+        <div style={{ height: '700px', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <CardSwap
-            cardDistance={60}
-            verticalDistance={70}
+            width={600}
+            height={500}
+            cardDistance={80}
+            verticalDistance={90}
             delay={5000}
             pauseOnHover={false}
           >
