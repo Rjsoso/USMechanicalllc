@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "ignoreCommand": "echo IGNORING ROOT",
   "builds": [
     {
       "src": "react-site/package.json",
@@ -13,3 +14,4 @@
     { "src": "/(.*)", "dest": "react-site/dist/$1" }
   ]
 }
+
