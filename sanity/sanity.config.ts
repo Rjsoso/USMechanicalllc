@@ -6,8 +6,6 @@ import { visionTool } from '@sanity/vision';
 
 import { schemaTypes } from './schemas';
 
-import deskStructure from './deskStructure';
-
 
 
 export default defineConfig({
@@ -21,9 +19,7 @@ export default defineConfig({
   dataset: 'production',     // ✅ match what's in your Sanity project
 
   plugins: [
-    deskTool({
-      structure: deskStructure,
-    }),
+    deskTool(),
   ],
 
   schema: {
