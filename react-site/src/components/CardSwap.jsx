@@ -9,9 +9,9 @@ export const Card = forwardRef(({ customClass, ...rest }, ref) => (
 Card.displayName = 'Card';
 
 const makeSlot = (i, distX, distY, total) => ({
-  x: i * distX,
-  y: -i * distY,
-  z: -i * distX * 1.5,
+  x: (i - (total - 1) / 2) * distX, // Center cards horizontally
+  y: 0, // Keep cards level (no vertical offset)
+  z: 0, // No depth stacking
   zIndex: total - i
 });
 
@@ -22,7 +22,7 @@ const placeNow = (el, slot, skew) =>
     z: slot.z,
     xPercent: -50,
     yPercent: -50,
-    skewY: skew,
+    skewY: 0, // No skew - cards are level
     transformOrigin: 'center center',
     zIndex: slot.zIndex,
     force3D: true
@@ -82,14 +82,20 @@ const CardSwap = ({
       const tl = gsap.timeline();
       tlRef.current = tl;
 
+      const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
+      
+      // Move front card to the left (back position)
       tl.to(elFront, {
-        y: '+=500',
+        x: backSlot.x,
+        y: backSlot.y,
+        z: backSlot.z,
         duration: config.durDrop,
         ease: config.ease
       });
 
       tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
 
+      // Shift remaining cards to the right (toward front positions)
       rest.forEach((idx, i) => {
         const el = refs[idx].current;
         const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
@@ -108,27 +114,13 @@ const CardSwap = ({
         );
       });
 
-      const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
-      tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
-
+      // Set the front card's z-index to back position
       tl.call(
         () => {
           gsap.set(elFront, { zIndex: backSlot.zIndex });
         },
         undefined,
-        'return'
-      );
-
-      tl.to(
-        elFront,
-        {
-          x: backSlot.x,
-          y: backSlot.y,
-          z: backSlot.z,
-          duration: config.durReturn,
-          ease: config.ease
-        },
-        'return'
+        'promote'
       );
 
       tl.call(() => {

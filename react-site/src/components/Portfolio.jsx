@@ -43,7 +43,8 @@ export default function Portfolio() {
             width={600}
             height={500}
             cardDistance={80}
-            verticalDistance={90}
+            verticalDistance={0}
+            skewAmount={0}
             delay={5000}
             pauseOnHover={false}
           >
