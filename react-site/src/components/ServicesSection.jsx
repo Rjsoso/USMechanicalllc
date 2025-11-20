@@ -1,72 +1,44 @@
 import { useEffect, useState } from 'react'
-import { client } from '../utils/sanity'
 import CardSwap, { Card } from './CardSwap'
 
 export default function ServicesSection() {
-  const [servicesData, setServicesData] = useState(null)
   const [activeService, setActiveService] = useState(null)
 
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "servicesPage"][0]{
-          sectionTitle,
-          services[] {
-            title,
-            description,
-            "imageUrl": image.asset->url
-          }
-        }`
-      )
-      .then(setServicesData)
-      .catch(console.error)
-  }, [])
-
-  if (!servicesData?.services) return null
-
-  const { sectionTitle, services } = servicesData
+  // Services data - HVAC plus 2 placeholder cards
+  const services = [
+    {
+      title: 'HVAC',
+      description: 'Heating, Ventilation, and Air Conditioning services for residential and commercial properties.'
+    },
+    {
+      title: 'Service 2',
+      description: 'Add your service description here.'
+    },
+    {
+      title: 'Service 3',
+      description: 'Add your service description here.'
+    }
+  ]
 
   return (
     <section id="services" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold text-gray-800 mb-12">
-          {sectionTitle}
+          Our Services
         </h2>
 
-        <div
-          style={{
-            height: '600px',
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
+        <div style={{ height: '600px', position: 'relative' }}>
           <CardSwap
-            width={650}
-            height={480}
-            cardDistance={85}
-            verticalDistance={100}
-            enableHoverSpread={true}
+            cardDistance={60}
+            verticalDistance={70}
+            delay={5000}
+            pauseOnHover={false}
             onCardClick={(index) => setActiveService(services[index])}
           >
             {services.map((service, i) => (
-              <Card key={i} className="service-card">
-                {service.imageUrl && (
-                  <img
-                    src={service.imageUrl}
-                    alt={service.title}
-                    style={{
-                      width: '100%',
-                      height: '70%',
-                      borderRadius: '10px',
-                      objectFit: 'cover'
-                    }}
-                  />
-                )}
-                <h3 className="card-title text-xl font-semibold mt-3">
-                  {service.title}
-                </h3>
+              <Card key={i}>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
               </Card>
             ))}
           </CardSwap>

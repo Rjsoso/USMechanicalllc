@@ -1,9 +1,9 @@
 .card-swap-container {
-  position: relative;
-  margin: 0 auto;
-  transform: translate(0, 0);
-  transform-origin: center center;
-
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(5%, 20%);
+  transform-origin: bottom right;
   perspective: 900px;
   overflow: visible;
 }
@@ -12,40 +12,38 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  border-radius: 18px;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  overflow: hidden;
   background: #fff;
+  padding: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  pointer-events: auto;  /* <-- ADD THIS */
-  transition: transform 0.25s ease;
-
   transform-style: preserve-3d;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  cursor: pointer;
 }
 
-.card:hover {
-  transform: scale(1.05);
+.card h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #1f2937;
 }
 
-.card-img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+.card p {
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
   .card-swap-container {
-    transform: scale(0.75);
+    transform: scale(0.75) translate(25%, 25%);
   }
 }
 
 @media (max-width: 480px) {
   .card-swap-container {
-    transform: scale(0.6);
+    transform: scale(0.55) translate(25%, 25%);
   }
 }
-
