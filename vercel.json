@@ -1,12 +1,7 @@
 {
-  "version": 2,
   "buildCommand": "cd react-site && npm install && npm run build",
   "outputDirectory": "react-site/dist",
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
-

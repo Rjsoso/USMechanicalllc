@@ -1,90 +1,56 @@
 import { useEffect, useState } from 'react'
 import { client, urlFor } from '../utils/sanity'
-import CardSwap, { Card } from './CardSwap'
+import ProjectModal from './ProjectModal'
 
 export default function Portfolio() {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [openProject, setOpenProject] = useState(null)
 
   useEffect(() => {
     client
-      .fetch(`*[_type == "portfolioProject"] | order(year desc, _createdAt desc)`)
-      .then(res => {
-        setProjects(res || [])
-        setLoading(false)
-      })
+      .fetch(`*[_type == "portfolioProject"] | order(order asc)`)
+      .then(setProjects)
       .catch(error => {
         console.error('Error fetching portfolio projects:', error)
-        setProjects([])
-        setLoading(false)
       })
   }, [])
 
-  if (loading) {
-    return (
-      <section className="py-20 bg-gray-50 text-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center text-gray-500">Loading portfolio projects...</div>
-        </div>
-      </section>
-    )
-  }
-
-  if (!projects.length) {
-    return null
-  }
-
   return (
-    <section className="py-20 bg-gray-50 text-gray-800 relative">
+    <section className="py-20 bg-gray-50 text-gray-800">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-10">Portfolio Projects</h2>
-        <div style={{ height: '700px', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CardSwap
-            width={600}
-            height={500}
-            cardDistance={80}
-            verticalDistance={0}
-            skewAmount={0}
-            delay={5000}
-            pauseOnHover={false}
-          >
-            {projects.map(project => (
-              <Card 
-                key={project._id} 
-                className="bg-white overflow-hidden"
-                style={{ background: '#fff', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.15)' }}
-              >
-                <div className="p-6">
-                  {project.image && urlFor(project.image) && (
-                    <img
-                      src={urlFor(project.image).width(600).url()}
-                      alt={project.title || 'Project image'}
-                      className="w-full h-56 object-cover mb-4 rounded-lg"
-                    />
-                  )}
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">{project.title}</h3>
-                  {project.description && (
-                    <p className="text-gray-600 mb-4">{project.description}</p>
-                  )}
-                  <div className="flex flex-col gap-1 text-sm text-gray-500">
-                    {project.location && (
-                      <p>
-                        <span className="font-medium">Location:</span> {project.location}
-                      </p>
-                    )}
-                    {project.year && (
-                      <p>
-                        <span className="font-medium">Year:</span> {project.year}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </CardSwap>
+        <h2 className="text-4xl font-bold text-center mb-12">
+          Portfolio Projects
+        </h2>
+
+        {/* Grid Layout */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {projects.map((p, i) => (
+            <div
+              key={i}
+              onClick={() => setOpenProject(p)}
+              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden"
+            >
+              {p.image && (
+                <img
+                  src={urlFor(p.image).width(600).url()}
+                  alt={p.title}
+                  className="w-full h-48 object-cover"
+                />
+              )}
+              <div className="p-5">
+                <h3 className="text-xl font-semibold">{p.title}</h3>
+              </div>
+            </div>
+          ))}
         </div>
+
+        {openProject && (
+          <ProjectModal
+            project={openProject}
+            onClose={() => setOpenProject(null)}
+          />
+        )}
       </div>
     </section>
   )
 }
-

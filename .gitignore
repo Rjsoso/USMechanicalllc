@@ -56,3 +56,4 @@ security-logs/
 # Local development
 .local/
 .cache/
+.vercel

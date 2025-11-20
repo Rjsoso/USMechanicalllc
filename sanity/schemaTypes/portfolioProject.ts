@@ -31,6 +31,11 @@ export default defineType({
       title: 'Year Completed',
       type: 'string',
     },
+    {
+      name: 'order',
+      type: 'number',
+      title: 'Order',
+    },
   ],
 })
 
