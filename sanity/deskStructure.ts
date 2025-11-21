@@ -1,7 +1,7 @@
 // deskStructure.ts
 import { StructureBuilder } from 'sanity/structure'
 
-export default function deskStructure(S: StructureBuilder) {
+export default function deskStructure(S: StructureBuilder): ReturnType<StructureBuilder['list']> {
   return S.list()
     .title('Content')
     .items([
