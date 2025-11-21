@@ -128,22 +128,22 @@ const ServicesSection = () => {
 
         {/* RIGHT — THE CARD SWAP */}
 
-        <div className="w-1/2 flex justify-center">
+        <div className="w-1/2 flex justify-end items-start">
 
-          <div style={{ height: '600px', position: 'relative' }}>
+          <div style={{ height: '600px', width: '100%', position: 'relative' }}>
 
             {servicesData.services?.length > 0 ? (
-
-              <CardSwap
-                width={500}
-                height={400}
-                cardDistance={60}
-                verticalDistance={70}
-                delay={5000}
-                pauseOnHover={false}
-              >
-
-                {servicesData.services.map((item, i) => (
+              <>
+                {console.log(`🔧 CardSwap: Rendering ${servicesData.services.length} cards`)}
+                <CardSwap
+                  width={500}
+                  height={400}
+                  cardDistance={60}
+                  verticalDistance={70}
+                  delay={5000}
+                  pauseOnHover={false}
+                >
+                  {servicesData.services.map((item, i) => (
 
                   <Card key={i} className="service-card">
 
@@ -180,7 +180,7 @@ const ServicesSection = () => {
                 ))}
 
               </CardSwap>
-
+              </>
             ) : (
 
               <p className="text-gray-500">No gallery images found.</p>
