@@ -130,73 +130,65 @@ const ServicesSection = () => {
 
         <div className="w-1/2 flex justify-center">
 
-          <div className="flex flex-col items-center justify-center mt-10 relative">
+          <div style={{ height: '600px', position: 'relative' }}>
 
-            <div style={{ width: 650, height: 450, position: "relative" }}>
+            {servicesData.services?.length > 0 ? (
 
-              {servicesData.services?.length > 0 ? (
+              <CardSwap
 
-                <CardSwap
+                cardDistance={60}
 
-                  width={650}
+                verticalDistance={70}
 
-                  height={450}
+                delay={5000}
 
-                  cardDistance={85}
+                pauseOnHover={false}
 
-                  verticalDistance={95}
+              >
 
-                  delay={4500}
+                {servicesData.services.map((item, i) => (
 
-                  enableHoverSpread={true}
+                  <Card key={i} className="service-card">
 
-                >
+                    <img
 
-                  {servicesData.services.map((item, i) => (
+                      src={item.imageUrl}
 
-                    <Card key={i} className="service-card">
+                      alt={item.title}
 
-                      <img
+                      onLoad={() => console.log("img loaded")}
 
-                        src={item.imageUrl}
+                      style={{
 
-                        alt={item.title}
+                        width: "100%",
 
-                        onLoad={() => console.log("img loaded")}
+                        height: "70%",
 
-                        style={{
+                        borderRadius: "14px",
 
-                          width: "100%",
+                        objectFit: "cover",
 
-                          height: "70%",
+                      }}
 
-                          borderRadius: "14px",
+                    />
 
-                          objectFit: "cover",
+                    <h3 className="text-xl font-semibold mt-3 text-center">
 
-                        }}
+                      {item.title}
 
-                      />
+                    </h3>
 
-                      <h3 className="text-xl font-semibold mt-3 text-center">
+                  </Card>
 
-                        {item.title}
+                ))}
 
-                      </h3>
+              </CardSwap>
 
-                    </Card>
+            ) : (
 
-                  ))}
+              <p className="text-gray-500">No gallery images found.</p>
 
-                </CardSwap>
-
-              ) : (
-
-                <p className="text-gray-500">No gallery images found.</p>
-
-              )}
-
-            </div>
+            )}
 
           </div>
 
