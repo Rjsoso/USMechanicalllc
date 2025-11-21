@@ -1,7 +1,8 @@
 .card-swap-container {
-  position: relative;
-  margin: 0 auto;         /* Center horizontally */
-  top: -40px;             /* Move upward closer to title */
+  position: relative !important;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
   transform: none !important;
   perspective: 1000px;
   overflow: visible;
