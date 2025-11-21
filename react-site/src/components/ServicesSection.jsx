@@ -39,6 +39,7 @@ const ServicesSection = () => {
       .then((data) => {
         console.log('ServicesSection data:', data);
         console.log('Services count:', data?.services?.length);
+        console.log('Section title:', data?.sectionTitle);
         setServicesData(data);
         // Check service cards after render
         setTimeout(() => {
@@ -86,11 +87,9 @@ const ServicesSection = () => {
 
     <section id="services" className="py-20 bg-gray-50">
 
-      {servicesData.sectionTitle && (
-        <h2 className="text-4xl font-bold text-center mb-12">
-          {servicesData.sectionTitle}
-        </h2>
-      )}
+      <h2 className="text-4xl font-bold text-center mb-12">
+        {servicesData.sectionTitle || 'Our Services'}
+      </h2>
 
 
 
