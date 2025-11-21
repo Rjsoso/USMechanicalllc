@@ -1,112 +1,161 @@
-import { useState, useEffect } from 'react'
-import { client, urlFor } from '../utils/sanity'
-import CardSwap, { Card } from './CardSwap'
+import { useEffect, useState } from 'react';
 
-export default function ServicesSection() {
-  const [data, setData] = useState(null)
-  const [openBox, setOpenBox] = useState(null)
+import { client } from '../utils/sanity';
+
+import CardSwap, { Card } from './CardSwap';
+
+
+
+const ServicesSection = () => {
+
+  const [servicesData, setServicesData] = useState(null);
+
+
 
   useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "servicesSection"][0]{
-          sectionTitle,
-          serviceBoxes,
-          services[] {
-            title,
-            description,
-            "imageUrl": image.asset->url
-          }
-        }`
-      )
-      .then(setData)
-      .catch(console.error)
-  }, [])
 
-  if (!data) return null
+    client
+
+      .fetch(
+
+        `*[_type == "servicesPage"][0]{
+
+          sectionTitle,
+
+          services[] {
+
+            title,
+
+            description,
+
+            "imageUrl": image.asset->url
+
+          }
+
+        }`
+
+      )
+
+      .then(setServicesData)
+
+      .catch(console.error);
+
+  }, []);
+
+
+
+  if (!servicesData?.services) return null;
+
+
 
   return (
-    <section className="py-24 bg-gray-50" id="services">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-start">
-        {/* LEFT SIDE — CLICKABLE BOXES */}
-        <div>
-          <h2 className="text-4xl font-bold text-gray-800 mb-8">
-            {data.sectionTitle}
-          </h2>
 
-          <div className="space-y-6">
-            {data.serviceBoxes?.map((box, i) => (
-              <button
-                key={i}
-                onClick={() => setOpenBox(box)}
-                className="w-full text-left bg-white p-6 rounded-xl shadow-lg hover:-translate-y-1 transition"
-              >
-                <div className="flex items-center gap-4">
-                  {box.icon && (
-                    <img
-                      src={urlFor(box.icon).width(60).url()}
-                      className="w-14 h-14 object-contain"
-                    />
-                  )}
-                  <h3 className="text-2xl font-bold">{box.title}</h3>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
+    <section id="services" className="py-20 bg-gray-50">
 
-        {/* RIGHT SIDE — CARDSWAP GALLERY */}
-        <div
-          style={{
-            height: '500px',
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <CardSwap
-            cardDistance={65}
-            verticalDistance={80}
-            width={500}
-            height={380}
-            enableHoverSpread={true}
-          >
-            {data.services?.map((service, i) => (
-              <Card key={i} className="gallery-card">
-                <img
-                  src={service.imageUrl}
-                  alt={service.title || ''}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderRadius: '10px',
-                  }}
-                />
-              </Card>
-            ))}
-          </CardSwap>
-        </div>
-      </div>
+      <h2 className="text-4xl font-bold text-center mb-12">
 
-      {/* MODAL DESCRIPTION */}
-      {openBox && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-6 z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-xl">
-            <h2 className="text-3xl font-bold mb-4">{openBox.title}</h2>
-            <p className="text-gray-700 mb-6">{openBox.description}</p>
+        {servicesData.sectionTitle}
+
+      </h2>
+
+
+
+      <div className="flex gap-10 justify-center items-start max-w-7xl mx-auto px-6">
+
+
+
+        {/* LEFT — THE 3 CLICKABLE SERVICE BOXES */}
+
+        <div className="grid gap-6 w-1/2">
+
+          {servicesData.services.map((service, index) => (
 
             <button
-              onClick={() => setOpenBox(null)}
-              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg"
+
+              key={index}
+
+              className="bg-white shadow-lg rounded-xl p-6 text-left
+
+                         hover:-translate-y-1 transition"
+
             >
-              Close
+
+              <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
+
+              <p className="text-gray-600">{service.description}</p>
+
             </button>
-          </div>
+
+          ))}
+
         </div>
-      )}
+
+
+
+        {/* RIGHT — THE CARD SWAP */}
+
+        <div className="w-1/2 flex justify-center">
+
+          <div style={{ height: "520px", position: "relative" }}>
+
+            <CardSwap
+
+              cardDistance={80}
+
+              verticalDistance={80}
+
+              width={500}
+
+              height={350}
+
+              enableHoverSpread={true}
+
+            >
+
+              {servicesData.services.map((service, i) => (
+
+                <Card key={i}>
+
+                  {service.imageUrl && (
+
+                    <img
+
+                      src={service.imageUrl}
+
+                      style={{
+
+                        width: "100%",
+
+                        height: "100%",
+
+                        borderRadius: "12px",
+
+                        objectFit: "cover"
+
+                      }}
+
+                    />
+
+                  )}
+
+                </Card>
+
+              ))}
+
+            </CardSwap>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </section>
-  )
-}
+
+  );
+
+};
+
+
+
+export default ServicesSection;
