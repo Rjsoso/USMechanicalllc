@@ -43,9 +43,9 @@ export default function deskStructure(S: StructureBuilder) {
             .documentId('companyStats')
         ),
 
-      // 5. Our Services Section (CardSwap)
+      // 5. Our Services Section (CardSwap) - USE THIS FOR HOMEPAGE CARD SWAP
       S.listItem()
-        .title('Our Services Section (CardSwap)')
+        .title('Our Services Section (CardSwap) ⭐ USE THIS')
         .child(
           S.document()
             .schemaType('ourServices')
@@ -53,6 +53,15 @@ export default function deskStructure(S: StructureBuilder) {
         ),
 
       S.divider(),
+
+      // Services Page (unused - for future dedicated services page)
+      S.listItem()
+        .title('Services Page (Unused)')
+        .child(
+          S.document()
+            .schemaType('servicesPage')
+            .documentId('servicesPage')
+        ),
 
       // 6. Portfolio Projects
       S.listItem()
