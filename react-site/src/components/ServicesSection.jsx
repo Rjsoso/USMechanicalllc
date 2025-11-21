@@ -12,7 +12,11 @@ export default function ServicesSection() {
         `*[_type == "servicesSection"][0]{
           sectionTitle,
           serviceBoxes,
-          gallery
+          services[] {
+            title,
+            description,
+            "imageUrl": image.asset->url
+          }
         }`
       )
       .then(setData)
@@ -55,11 +59,11 @@ export default function ServicesSection() {
         <div
           style={{
             height: '500px',
+            width: '100%',
             position: 'relative',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'flex-start',
-            marginTop: '-20px'   // pulls it closer to the title
+            alignItems: 'center',
           }}
         >
           <CardSwap
@@ -69,11 +73,11 @@ export default function ServicesSection() {
             height={380}
             enableHoverSpread={true}
           >
-            {data.gallery?.map((img, i) => (
+            {data.services?.map((service, i) => (
               <Card key={i} className="gallery-card">
                 <img
-                  src={urlFor(img).width(600).url()}
-                  alt=""
+                  src={service.imageUrl}
+                  alt={service.title || ''}
                   style={{
                     width: '100%',
                     height: '100%',
