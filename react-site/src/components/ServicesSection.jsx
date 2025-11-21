@@ -23,7 +23,7 @@ export default function ServicesSection() {
 
   return (
     <section className="py-24 bg-gray-50" id="services">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-start">
         {/* LEFT SIDE — CLICKABLE BOXES */}
         <div>
           <h2 className="text-4xl font-bold text-gray-800 mb-8">
@@ -52,7 +52,16 @@ export default function ServicesSection() {
         </div>
 
         {/* RIGHT SIDE — CARDSWAP GALLERY */}
-        <div style={{ height: '600px', position: 'relative' }}>
+        <div
+          style={{
+            height: '500px',
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            marginTop: '-20px'   // pulls it closer to the title
+          }}
+        >
           <CardSwap
             cardDistance={65}
             verticalDistance={80}
