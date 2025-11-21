@@ -38,7 +38,13 @@ const ServicesSection = () => {
 
       .then((data) => {
         console.log('ServicesSection data:', data);
+        console.log('Services count:', data?.services?.length);
         setServicesData(data);
+        // Check service cards after render
+        setTimeout(() => {
+          const cardCount = document.querySelectorAll(".service-card").length;
+          console.log(`Service cards found in DOM: ${cardCount}`);
+        }, 1000);
       })
 
       .catch((error) => {
@@ -134,7 +140,9 @@ const ServicesSection = () => {
 
                 >
 
-                  {servicesData.services.map((item, i) => (
+                  {servicesData.services.map((item, i) => {
+                    console.log(`Rendering service card ${i}:`, item.title);
+                    return (
 
                     <Card key={i} className="service-card">
 
@@ -171,8 +179,8 @@ const ServicesSection = () => {
                       </h3>
 
                     </Card>
-
-                  ))}
+                    );
+                  })}
 
                 </CardSwap>
 

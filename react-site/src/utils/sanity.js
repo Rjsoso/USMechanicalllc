@@ -8,10 +8,11 @@ const SANITY_CONFIG = {
   apiVersion: '2023-05-03',
 }
 
-// Read-only client for public site (uses CDN)
+// Read-only client for public site
+// Use CDN in production, but disable for local development to avoid CORS issues
 export const client = createClient({
   ...SANITY_CONFIG,
-  useCdn: true, // faster, cached reads for the public site
+  useCdn: import.meta.env.PROD, // Only use CDN in production
 })
 
 // Write-capable client for admin operations (uses token)
