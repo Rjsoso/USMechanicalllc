@@ -17,6 +17,7 @@ import contact from '../schemas/pages/contact'
 import servicesPage from '../schemas/pages/services'
 // import companyInformation from './companyInformation' // Replaced by contact schema
 import companyStats from './companyStats'
+import companyInfo from './companyInfo'
 import portfolioProject from './portfolioProject'
 import recognitionProject from './recognitionProject'
 
@@ -39,8 +40,8 @@ export const schema = {
     // contactSection, // Replaced by contact schema
     contact,
     servicesPage,
-    // companyInformation, // Replaced by contact schema
     companyStats,
+    companyInfo,
     portfolioProject,
     recognitionProject,
   ],
