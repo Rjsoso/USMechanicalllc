@@ -8,7 +8,7 @@ import service from './service'
 import serviceWithImage from './serviceWithImage'
 import serviceItem from './serviceItem'
 import serviceItemWithImage from './serviceItemWithImage'
-// import servicesSection from './servicesSection' // Replaced by ourServices
+import servicesSection from './servicesSection'
 import office from './office'
 import affiliate from './affiliate'
 import formSettings from './formSettings'
@@ -35,7 +35,7 @@ export const schema = {
     headerSection,
     heroSection,
     aboutAndSafety,
-    // servicesSection, // Replaced by ourServices
+    servicesSection,
     // contactSection, // Replaced by contact schema
     contact,
     servicesPage,
