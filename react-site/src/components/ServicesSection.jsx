@@ -152,37 +152,31 @@ const ServicesSection = () => {
 
                 >
 
-                  {servicesData.services.map((item, i) => {
-                    console.log(`🔧 DEBUG: React rendering card ${i + 1}/${servicesData.services.length}:`, item.title);
-                    return (
+                  {servicesData.services.map((item, i) => (
 
                     <Card key={i} className="service-card">
 
-                      {item.imageUrl && (
+                      <img
 
-                        <img
+                        src={item.imageUrl}
 
-                          src={item.imageUrl}
+                        alt={item.title}
 
-                          alt={item.title}
+                        onLoad={() => console.log("img loaded")}
 
-                          onLoad={() => console.log("img loaded")}
+                        style={{
 
-                          style={{
+                          width: "100%",
 
-                            width: "100%",
+                          height: "70%",
 
-                            height: "70%",
+                          borderRadius: "14px",
 
-                            borderRadius: "14px",
+                          objectFit: "cover",
 
-                            objectFit: "cover",
+                        }}
 
-                          }}
-
-                        />
-
-                      )}
+                      />
 
                       <h3 className="text-xl font-semibold mt-3 text-center">
 
@@ -191,8 +185,8 @@ const ServicesSection = () => {
                       </h3>
 
                     </Card>
-                    );
-                  })}
+
+                  ))}
 
                 </CardSwap>
 
