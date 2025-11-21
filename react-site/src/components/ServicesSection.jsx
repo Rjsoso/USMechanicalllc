@@ -112,60 +112,77 @@ const ServicesSection = () => {
 
         <div className="w-1/2 flex justify-center">
 
-          <div style={{ 
-            height: "500px", 
-            width: "100%",
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }}>
+          <div className="flex flex-col items-center justify-center mt-10 relative">
 
-            <CardSwap
+            <div style={{ width: 650, height: 450, position: "relative" }}>
 
-              cardDistance={80}
+              {servicesData.services?.length > 0 ? (
 
-              verticalDistance={80}
+                <CardSwap
 
-              width={500}
+                  width={650}
 
-              height={350}
+                  height={450}
 
-              enableHoverSpread={true}
+                  cardDistance={85}
 
-            >
+                  verticalDistance={95}
 
-              {servicesData.services.map((service, i) => (
+                  delay={4500}
 
-                <Card key={i}>
+                  enableHoverSpread={true}
 
-                  {service.imageUrl && (
+                >
 
-                    <img
+                  {servicesData.services.map((item, i) => (
 
-                      src={service.imageUrl}
+                    <Card key={i} className="service-card">
 
-                      style={{
+                      {item.imageUrl && (
 
-                        width: "100%",
+                        <img
 
-                        height: "100%",
+                          src={item.imageUrl}
 
-                        borderRadius: "12px",
+                          alt={item.title}
 
-                        objectFit: "cover"
+                          onLoad={() => console.log("img loaded")}
 
-                      }}
+                          style={{
 
-                    />
+                            width: "100%",
 
-                  )}
+                            height: "70%",
 
-                </Card>
+                            borderRadius: "14px",
 
-              ))}
+                            objectFit: "cover",
 
-            </CardSwap>
+                          }}
+
+                        />
+
+                      )}
+
+                      <h3 className="text-xl font-semibold mt-3 text-center">
+
+                        {item.title}
+
+                      </h3>
+
+                    </Card>
+
+                  ))}
+
+                </CardSwap>
+
+              ) : (
+
+                <p className="text-gray-500">No gallery images found.</p>
+
+              )}
+
+            </div>
 
           </div>
 
