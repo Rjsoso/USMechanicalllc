@@ -55,6 +55,18 @@ const ServicesSection = () => {
 
 
 
+  useEffect(() => {
+    console.log("🔧 DEBUG: services data:", servicesData);
+    console.log("🔧 DEBUG: services count:", servicesData?.services?.length);
+    setTimeout(() => {
+      const cards = document.querySelectorAll(".service-card");
+      console.log("🔧 DEBUG: service cards found in DOM:", cards.length);
+      console.log("🔧 DEBUG: CardSwap receiving cards:", servicesData?.services?.length > 1 ? "YES (multiple cards)" : servicesData?.services?.length === 1 ? "YES (single card)" : "NO");
+    }, 1500);
+  }, [servicesData]);
+
+
+
   if (!servicesData) return <div className="py-20 bg-gray-50 text-center">Loading services...</div>;
 
   if (!servicesData?.services || servicesData.services.length === 0) {
@@ -141,7 +153,7 @@ const ServicesSection = () => {
                 >
 
                   {servicesData.services.map((item, i) => {
-                    console.log(`Rendering service card ${i}:`, item.title);
+                    console.log(`🔧 DEBUG: React rendering card ${i + 1}/${servicesData.services.length}:`, item.title);
                     return (
 
                     <Card key={i} className="service-card">
