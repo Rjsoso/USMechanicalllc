@@ -36,15 +36,31 @@ const ServicesSection = () => {
 
       )
 
-      .then(setServicesData)
+      .then((data) => {
+        console.log('ServicesSection data:', data);
+        setServicesData(data);
+      })
 
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error fetching services:', error);
+      });
 
   }, []);
 
 
 
-  if (!servicesData?.services) return null;
+  if (!servicesData) return <div className="py-20 bg-gray-50 text-center">Loading services...</div>;
+
+  if (!servicesData?.services || servicesData.services.length === 0) {
+    return (
+      <section id="services" className="py-20 bg-gray-50">
+        <h2 className="text-4xl font-bold text-center mb-12">
+          {servicesData.sectionTitle || 'Our Services'}
+        </h2>
+        <p className="text-center text-gray-600">No services available.</p>
+      </section>
+    );
+  }
 
 
 
@@ -52,11 +68,11 @@ const ServicesSection = () => {
 
     <section id="services" className="py-20 bg-gray-50">
 
-      <h2 className="text-4xl font-bold text-center mb-12">
-
-        {servicesData.sectionTitle}
-
-      </h2>
+      {servicesData.sectionTitle && (
+        <h2 className="text-4xl font-bold text-center mb-12">
+          {servicesData.sectionTitle}
+        </h2>
+      )}
 
 
 
@@ -96,7 +112,14 @@ const ServicesSection = () => {
 
         <div className="w-1/2 flex justify-center">
 
-          <div style={{ height: "520px", position: "relative" }}>
+          <div style={{ 
+            height: "500px", 
+            width: "100%",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
 
             <CardSwap
 
