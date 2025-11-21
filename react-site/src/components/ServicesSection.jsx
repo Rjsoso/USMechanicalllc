@@ -18,7 +18,7 @@ const ServicesSection = () => {
 
       .fetch(
 
-        `*[_type == "servicesPage"][0]{
+        `*[_type == "ourServices"][0]{
 
           sectionTitle,
 
