@@ -14,7 +14,7 @@ import affiliate from './affiliate'
 import formSettings from './formSettings'
 import stat from './stat'
 import contact from '../schemas/pages/contact'
-import servicesPage from '../schemas/pages/services'
+// import servicesPage from '../schemas/pages/services' // REMOVED: Unused
 // import companyInformation from './companyInformation' // Replaced by contact schema
 import companyStats from './companyStats'
 import companyInfo from './companyInfo'
@@ -39,7 +39,7 @@ export const schema = {
     // servicesSection, // REMOVED: Replaced by ourServices schema
     // contactSection, // Replaced by contact schema
     contact,
-    servicesPage,
+    // servicesPage, // REMOVED: Unused
     companyStats,
     companyInfo,
     portfolioProject,

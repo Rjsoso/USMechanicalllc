@@ -5,11 +5,11 @@ export default function deskStructure(S: StructureBuilder) {
   return S.list()
     .title('Content')
     .items([
-      // Website sections in order of appearance:
+      // Website sections in exact order of appearance (top to bottom):
       
       // 1. Header Section
       S.listItem()
-        .title('Header Section')
+        .title('1. Header Section')
         .child(
           S.document()
             .schemaType('headerSection')
@@ -18,7 +18,7 @@ export default function deskStructure(S: StructureBuilder) {
 
       // 2. Hero Section
       S.listItem()
-        .title('Hero Section')
+        .title('2. Hero Section')
         .child(
           S.document()
             .schemaType('heroSection')
@@ -27,7 +27,7 @@ export default function deskStructure(S: StructureBuilder) {
 
       // 3. About & Safety Section
       S.listItem()
-        .title('About & Safety Section')
+        .title('3. About & Safety Section')
         .child(
           S.document()
             .schemaType('aboutAndSafety')
@@ -36,36 +36,25 @@ export default function deskStructure(S: StructureBuilder) {
 
       // 4. Company Stats
       S.listItem()
-        .title('Company Stats')
+        .title('4. Company Stats')
         .child(
           S.document()
             .schemaType('companyStats')
             .documentId('companyStats')
         ),
 
-      // 5. Our Services Section (CardSwap) - USE THIS FOR HOMEPAGE CARD SWAP
+      // 5. Our Services Section (CardSwap)
       S.listItem()
-        .title('Our Services Section (CardSwap) ⭐ USE THIS')
+        .title('5. Our Services Section (CardSwap) ⭐')
         .child(
           S.document()
             .schemaType('ourServices')
             .documentId('ourServices')
         ),
 
-      S.divider(),
-
-      // Services Page (unused - for future dedicated services page)
-      S.listItem()
-        .title('Services Page (Unused)')
-        .child(
-          S.document()
-            .schemaType('servicesPage')
-            .documentId('servicesPage')
-        ),
-
       // 6. Portfolio Projects
       S.listItem()
-        .title('Portfolio Projects')
+        .title('6. Portfolio Projects')
         .child(
           S.documentTypeList('portfolioProject')
             .title('Portfolio Projects')
@@ -73,25 +62,25 @@ export default function deskStructure(S: StructureBuilder) {
 
       // 7. Contact Section
       S.listItem()
-        .title('Contact Section')
+        .title('7. Contact Section')
         .child(
           S.document()
             .schemaType('contact')
             .documentId('contact')
         ),
 
-      // Company Information (used by Footer)
+      // 8. Company Information (used by Footer)
       S.listItem()
-        .title('Company Information')
+        .title('8. Company Information (Footer)')
         .child(
           S.document()
             .schemaType('companyInfo')
             .documentId('companyInfo')
         ),
 
-      // 8. Recognition Projects
+      // 9. Recognition Projects
       S.listItem()
-        .title('Recognition Projects')
+        .title('9. Recognition Projects')
         .child(
           S.documentTypeList('recognitionProject')
             .title('Recognition Projects')
@@ -99,7 +88,7 @@ export default function deskStructure(S: StructureBuilder) {
 
       S.divider(),
 
-      // Additional content types
+      // Supporting content types
       S.listItem()
         .title('Navigation Links')
         .child(
