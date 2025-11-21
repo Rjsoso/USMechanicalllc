@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
 import CompanyStats from '../components/CompanyStats'
-import OurServices from '../components/OurServices'
+import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import Careers from '../components/Careers'
 import Contact from '../pages/Contact'
@@ -31,7 +31,7 @@ export default function Home() {
         <CompanyStats />
 
         <section id="services">
-          <OurServices />
+          <ServicesSection />
         </section>
 
         <section id="portfolio">
