@@ -10,9 +10,11 @@ const SANITY_CONFIG = {
 
 // Read-only client for public site
 // Use CDN in production, but disable for local development to avoid CORS issues
+// NOTE: CDN caching can delay updates. Set useCdn: false to bypass cache during development
 export const client = createClient({
   ...SANITY_CONFIG,
-  useCdn: import.meta.env.PROD, // Only use CDN in production
+  useCdn: false, // Temporarily disabled to bypass CDN cache - change back to import.meta.env.PROD after testing
+  // useCdn: import.meta.env.PROD, // Only use CDN in production
 })
 
 // Write-capable client for admin operations (uses token)

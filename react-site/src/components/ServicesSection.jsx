@@ -48,9 +48,23 @@ const ServicesSection = () => {
       )
 
       .then((data) => {
-        console.log('ServicesSection data:', data);
-        console.log('Services count:', data?.services?.length);
-        console.log('Section title:', data?.sectionTitle);
+        console.log('🔍 ServicesSection - Full data received:', data);
+        console.log('🔍 Services count:', data?.services?.length);
+        console.log('🔍 Section title:', data?.sectionTitle);
+        console.log('🔍 First box content:', data?.firstBoxContent ? 'EXISTS' : 'MISSING');
+        console.log('🔍 Expandable boxes:', data?.expandableBoxes?.length || 0);
+        console.log('🔍 Expandable boxes data:', data?.expandableBoxes);
+        
+        if (!data) {
+          console.error('❌ No data returned from Sanity query');
+        }
+        if (!data?.expandableBoxes || data.expandableBoxes.length === 0) {
+          console.warn('⚠️ No expandable boxes found. Make sure you added them in Sanity Studio and PUBLISHED the document.');
+        }
+        if (!data?.firstBoxContent) {
+          console.warn('⚠️ No first box content found. This is optional.');
+        }
+        
         setServicesData(data);
         // Check service cards after render
         setTimeout(() => {
@@ -60,7 +74,12 @@ const ServicesSection = () => {
       })
 
       .catch((error) => {
-        console.error('Error fetching services:', error);
+        console.error('❌ Error fetching services from Sanity:', error);
+        console.error('❌ Error details:', {
+          message: error.message,
+          stack: error.stack,
+          query: `*[_type == "ourServices"][0]{ sectionTitle, firstBoxContent, expandableBoxes[] { title, description }, services[] { title, description, "imageUrl": image.asset->url } }`
+        });
       });
 
   }, []);
