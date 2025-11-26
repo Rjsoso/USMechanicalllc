@@ -20,6 +20,7 @@ import companyStats from './companyStats'
 import companyInfo from './companyInfo'
 import portfolioProject from './portfolioProject'
 import recognitionProject from './recognitionProject'
+import expandableServiceBox from './expandableServiceBox'
 
 export const schema = {
   types: [
@@ -44,6 +45,7 @@ export const schema = {
     companyInfo,
     portfolioProject,
     recognitionProject,
+    expandableServiceBox,
   ],
 }
 

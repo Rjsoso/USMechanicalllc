@@ -20,6 +20,20 @@ export default defineType({
       of: [{ type: 'serviceItemWithImage' }],
       validation: (Rule) => Rule.min(1).error('At least 1 service is required'),
     },
+    {
+      name: 'firstBoxContent',
+      title: 'First Box Content',
+      type: 'text',
+      description: 'The content for the first large box on the left side (optional). If empty, the first service will be used.',
+    },
+    {
+      name: 'expandableBoxes',
+      title: 'Expandable Service Boxes',
+      type: 'array',
+      description: 'Add exactly 3 expandable service boxes that appear underneath the first box. Each box has a title and expandable description.',
+      of: [{ type: 'expandableServiceBox' }],
+      validation: (Rule) => Rule.max(3).error('Maximum 3 expandable boxes allowed'),
+    },
   ],
   preview: {
     select: {

@@ -9,6 +9,7 @@ import CardSwap, { Card } from './CardSwap';
 const ServicesSection = () => {
 
   const [servicesData, setServicesData] = useState(null);
+  const [expandedBox, setExpandedBox] = useState(null);
 
 
 
@@ -21,6 +22,16 @@ const ServicesSection = () => {
         `*[_type == "ourServices"][0]{
 
           sectionTitle,
+
+          firstBoxContent,
+
+          expandableBoxes[] {
+
+            title,
+
+            description
+
+          },
 
           services[] {
 
@@ -97,30 +108,49 @@ const ServicesSection = () => {
 
 
 
-        {/* LEFT — THE 3 CLICKABLE SERVICE BOXES */}
+        {/* LEFT — FIRST BOX + 3 EXPANDABLE BOXES */}
 
         <div className="grid gap-6 w-1/2">
 
-          {servicesData.services.map((service, index) => (
+          {/* First Large Box */}
+          {servicesData.firstBoxContent && (
+            <div className="bg-white shadow-lg rounded-xl p-6 text-left">
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                {servicesData.firstBoxContent}
+              </p>
+            </div>
+          )}
 
-            <button
-
-              key={index}
-
-              className="bg-white shadow-lg rounded-xl p-6 text-left
-
-                         hover:-translate-y-1 transition"
-
-            >
-
-              <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-
-              <p className="text-gray-600">{service.description}</p>
-
-            </button>
-
-          ))}
-
+          {/* Three Expandable Service Boxes */}
+          {servicesData.expandableBoxes && servicesData.expandableBoxes.length > 0 && (
+            <>
+              {servicesData.expandableBoxes.slice(0, 3).map((box, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-lg rounded-xl overflow-hidden transition-all duration-300"
+                >
+                  <button
+                    onClick={() => setExpandedBox(expandedBox === index ? null : index)}
+                    className="w-full p-6 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                  >
+                    <h3 className="text-xl font-semibold text-gray-900">{box.title}</h3>
+                    <span className="text-2xl text-gray-400 transition-transform duration-300" style={{
+                      transform: expandedBox === index ? 'rotate(180deg)' : 'rotate(0deg)'
+                    }}>
+                      ▼
+                    </span>
+                  </button>
+                  {expandedBox === index && (
+                    <div className="px-6 pb-6 pt-0 border-t border-gray-100">
+                      <p className="text-gray-600 leading-relaxed mt-4 whitespace-pre-line">
+                        {box.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
         </div>
 
 

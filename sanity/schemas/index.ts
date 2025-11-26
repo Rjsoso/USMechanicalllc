@@ -19,6 +19,7 @@ import contact from './pages/contact'
 import companyStats from '../schemaTypes/companyStats'
 import portfolioProject from '../schemaTypes/portfolioProject'
 import recognitionProject from '../schemaTypes/recognitionProject'
+import expandableServiceBox from '../schemaTypes/expandableServiceBox'
 
 export const schemaTypes = [
     ourServices,
@@ -42,4 +43,5 @@ export const schemaTypes = [
   companyStats,
     portfolioProject,
     recognitionProject,
+    expandableServiceBox,
 ]
