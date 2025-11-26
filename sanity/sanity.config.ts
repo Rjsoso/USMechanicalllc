@@ -24,6 +24,7 @@ export default defineConfig({
     deskTool({
       structure: deskStructure,
     }),
+    visionTool(), // Add Vision tool to query all documents
   ],
 
   schema: {
