@@ -176,69 +176,61 @@ const ServicesSection = () => {
 
         {/* RIGHT — THE CARD SWAP */}
 
-        <div className="w-1/2 flex justify-end items-start">
-
-          <div style={{ height: '600px', width: '100%', position: 'relative' }}>
-
-            {servicesData.services?.length > 0 ? (
-              <>
-                {(() => {
-                  // Ensure at least 2 cards for animation
-                  const services = [...servicesData.services];
-                  const neededCards = Math.max(0, 2 - services.length);
-                  
-                  // Add placeholder cards if needed
-                  for (let i = 0; i < neededCards; i++) {
-                    services.push({
-                      title: `Service ${services.length + 1}`,
-                      description: 'Coming soon',
-                      imageUrl: 'https://via.placeholder.com/500x400/cccccc/666666?text=Service+' + (services.length + 1)
-                    });
-                  }
-                  
-                  console.log(`🔧 CardSwap: Rendering ${services.length} cards (${servicesData.services.length} from Sanity + ${neededCards} placeholders)`);
-                  
-                  return (
-                    <CardSwap
-                      width={500}
-                      height={400}
-                      cardDistance={60}
-                      verticalDistance={70}
-                      delay={5000}
-                      pauseOnHover={false}
-                    >
-                      {services.map((item, i) => (
-                        <Card key={i} className="service-card">
-                          {item.imageUrl && (
-                            <img
-                              src={item.imageUrl}
-                              alt={item.title}
-                              onLoad={() => console.log(`img loaded: ${item.title}`)}
-                              style={{
-                                width: "100%",
-                                height: "70%",
-                                borderRadius: "14px",
-                                objectFit: "cover",
-                              }}
-                            />
-                          )}
-                          <h3 className="text-xl font-semibold mt-3 text-center">
-                            {item.title}
-                          </h3>
-                        </Card>
-                      ))}
-                    </CardSwap>
-                  );
-                })()}
-              </>
-            ) : (
-
-              <p className="text-gray-500">No gallery images found.</p>
-
-            )}
-
-          </div>
-
+        <div className="w-1/2 flex justify-center mt-16">
+          {servicesData.services?.length > 0 ? (
+            <>
+              {(() => {
+                // Ensure at least 2 cards for animation
+                const services = [...servicesData.services];
+                const neededCards = Math.max(0, 2 - services.length);
+                
+                // Add placeholder cards if needed
+                for (let i = 0; i < neededCards; i++) {
+                  services.push({
+                    title: `Service ${services.length + 1}`,
+                    description: 'Coming soon',
+                    imageUrl: 'https://via.placeholder.com/500x400/cccccc/666666?text=Service+' + (services.length + 1)
+                  });
+                }
+                
+                console.log(`🔧 CardSwap: Rendering ${services.length} cards (${servicesData.services.length} from Sanity + ${neededCards} placeholders)`);
+                
+                return (
+                  <CardSwap
+                    cardDistance={85}
+                    verticalDistance={90}
+                    width={650}
+                    height={450}
+                    delay={5000}
+                    pauseOnHover={false}
+                  >
+                    {services.map((item, i) => (
+                      <Card key={i} className="service-card">
+                        {item.imageUrl && (
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            onLoad={() => console.log(`img loaded: ${item.title}`)}
+                            style={{
+                              width: "100%",
+                              height: "70%",
+                              borderRadius: "14px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        )}
+                        <h3 className="text-xl font-semibold mt-3 text-center">
+                          {item.title}
+                        </h3>
+                      </Card>
+                    ))}
+                  </CardSwap>
+                );
+              })()}
+            </>
+          ) : (
+            <p className="text-gray-500">No gallery images found.</p>
+          )}
         </div>
 
       </div>
