@@ -128,37 +128,28 @@ const ServicesSection = () => {
 
 
         {/* LEFT — DESCRIPTION TEXT + 3 SERVICE BOXES */}
-        <div className="grid gap-6 w-1/2">
-          {/* Description Text Section */}
-          {servicesData.descriptionText && (
-            <div className="bg-white shadow-lg rounded-xl p-6 text-left">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                {servicesData.descriptionText}
-              </p>
-            </div>
-          )}
+        <div className="flex flex-col w-1/2 pr-10">
+          <p className="text-gray-700 text-lg mb-8">
+            {servicesData.descriptionText}
+          </p>
 
-          {/* Three Service Info Boxes (Clickable - Opens Modal) */}
-          {servicesData.servicesInfo && servicesData.servicesInfo.length > 0 && (
-            <>
-              {servicesData.servicesInfo.slice(0, 3).map((service, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedService(service)}
-                  className="bg-white shadow-lg rounded-xl p-6 text-left hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-                >
-                  <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
-                </button>
-              ))}
-            </>
-          )}
+          <div className="space-y-4">
+            {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedService(box)}
+                className="p-6 rounded-xl bg-white shadow cursor-pointer hover:-translate-y-1 transition-all"
+              >
+                <h3 className="text-xl font-semibold">{box.title}</h3>
+              </div>
+            ))}
+          </div>
         </div>
 
 
 
         {/* RIGHT — THE CARD SWAP */}
-
-        <div className="w-1/2 flex justify-center mt-16">
+        <div className="w-1/2 flex justify-center">
           {servicesData.services?.length > 0 ? (
             <>
               {(() => {
