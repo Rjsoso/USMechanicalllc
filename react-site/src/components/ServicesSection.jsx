@@ -9,7 +9,7 @@ import CardSwap, { Card } from './CardSwap';
 const ServicesSection = () => {
 
   const [servicesData, setServicesData] = useState(null);
-  const [expandedBox, setExpandedBox] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
 
 
 
@@ -23,9 +23,9 @@ const ServicesSection = () => {
 
           sectionTitle,
 
-          firstBoxContent,
+          descriptionText,
 
-          expandableBoxes[] {
+          servicesInfo[] {
 
             title,
 
@@ -51,18 +51,18 @@ const ServicesSection = () => {
         console.log('🔍 ServicesSection - Full data received:', data);
         console.log('🔍 Services count:', data?.services?.length);
         console.log('🔍 Section title:', data?.sectionTitle);
-        console.log('🔍 First box content:', data?.firstBoxContent ? 'EXISTS' : 'MISSING');
-        console.log('🔍 Expandable boxes:', data?.expandableBoxes?.length || 0);
-        console.log('🔍 Expandable boxes data:', data?.expandableBoxes);
+        console.log('🔍 Description text:', data?.descriptionText ? 'EXISTS' : 'MISSING');
+        console.log('🔍 Services info boxes:', data?.servicesInfo?.length || 0);
+        console.log('🔍 Services info data:', data?.servicesInfo);
         
         if (!data) {
           console.error('❌ No data returned from Sanity query');
         }
-        if (!data?.expandableBoxes || data.expandableBoxes.length === 0) {
-          console.warn('⚠️ No expandable boxes found. Make sure you added them in Sanity Studio and PUBLISHED the document.');
+        if (!data?.servicesInfo || data.servicesInfo.length === 0) {
+          console.warn('⚠️ No service info boxes found. Make sure you added them in Sanity Studio and PUBLISHED the document.');
         }
-        if (!data?.firstBoxContent) {
-          console.warn('⚠️ No first box content found. This is optional.');
+        if (!data?.descriptionText) {
+          console.warn('⚠️ No description text found. This is optional.');
         }
         
         setServicesData(data);
@@ -127,46 +127,28 @@ const ServicesSection = () => {
 
 
 
-        {/* LEFT — FIRST BOX + 3 EXPANDABLE BOXES */}
-
+        {/* LEFT — DESCRIPTION TEXT + 3 SERVICE BOXES */}
         <div className="grid gap-6 w-1/2">
-
-          {/* First Large Box */}
-          {servicesData.firstBoxContent && (
+          {/* Description Text Section */}
+          {servicesData.descriptionText && (
             <div className="bg-white shadow-lg rounded-xl p-6 text-left">
               <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                {servicesData.firstBoxContent}
+                {servicesData.descriptionText}
               </p>
             </div>
           )}
 
-          {/* Three Expandable Service Boxes */}
-          {servicesData.expandableBoxes && servicesData.expandableBoxes.length > 0 && (
+          {/* Three Service Info Boxes (Clickable - Opens Modal) */}
+          {servicesData.servicesInfo && servicesData.servicesInfo.length > 0 && (
             <>
-              {servicesData.expandableBoxes.slice(0, 3).map((box, index) => (
-                <div
+              {servicesData.servicesInfo.slice(0, 3).map((service, index) => (
+                <button
                   key={index}
-                  className="bg-white shadow-lg rounded-xl overflow-hidden transition-all duration-300"
+                  onClick={() => setSelectedService(service)}
+                  className="bg-white shadow-lg rounded-xl p-6 text-left hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
                 >
-                  <button
-                    onClick={() => setExpandedBox(expandedBox === index ? null : index)}
-                    className="w-full p-6 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
-                  >
-                    <h3 className="text-xl font-semibold text-gray-900">{box.title}</h3>
-                    <span className="text-2xl text-gray-400 transition-transform duration-300" style={{
-                      transform: expandedBox === index ? 'rotate(180deg)' : 'rotate(0deg)'
-                    }}>
-                      ▼
-                    </span>
-                  </button>
-                  {expandedBox === index && (
-                    <div className="px-6 pb-6 pt-0 border-t border-gray-100">
-                      <p className="text-gray-600 leading-relaxed mt-4 whitespace-pre-line">
-                        {box.description}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                  <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
+                </button>
               ))}
             </>
           )}
@@ -234,6 +216,33 @@ const ServicesSection = () => {
         </div>
 
       </div>
+
+      {/* Service Info Modal */}
+      {selectedService && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setSelectedService(null)}
+        >
+          <div 
+            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-8 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedService(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-bold"
+              aria-label="Close modal"
+            >
+              ×
+            </button>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4 pr-8">
+              {selectedService.title}
+            </h3>
+            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+              {selectedService.description}
+            </p>
+          </div>
+        </div>
+      )}
 
     </section>
 

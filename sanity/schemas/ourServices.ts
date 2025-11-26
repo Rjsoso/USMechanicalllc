@@ -27,12 +27,43 @@ export default defineType({
       description: 'The content for the first large box on the left side (optional). If empty, the first service will be used.',
     },
     {
-      name: 'expandableBoxes',
-      title: 'Expandable Service Boxes',
+      name: 'descriptionText',
+      title: 'Description Text',
+      type: 'text',
+      description: 'The large description text that appears at the top left, above the service boxes.',
+    },
+    {
+      name: 'servicesInfo',
+      title: 'Service Info Boxes',
       type: 'array',
-      description: 'Add exactly 3 expandable service boxes that appear underneath the first box. Each box has a title and expandable description.',
-      of: [{ type: 'expandableServiceBox' }],
-      validation: (Rule) => Rule.max(3).error('Maximum 3 expandable boxes allowed'),
+      description: 'Add 3 service boxes (HVAC, Plumbing, Process Piping). Each box opens a modal with description when clicked.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              type: 'string',
+              title: 'Title',
+              description: 'The title shown on the box (e.g., "HVAC", "Plumbing", "Process Piping")',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'description',
+              type: 'text',
+              title: 'Description',
+              description: 'The detailed description shown in the modal when the box is clicked',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+          preview: {
+            select: {
+              title: 'title',
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.max(3).error('Maximum 3 service boxes allowed'),
     },
   ],
   preview: {
