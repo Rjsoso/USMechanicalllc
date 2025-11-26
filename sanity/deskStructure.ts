@@ -14,7 +14,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('headerSection')
             .documentId('headerSection')
-            .initialValueTemplate('headerSection.default')
         ),
 
       // 2. Hero Section
@@ -24,7 +23,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('heroSection')
             .documentId('heroSection')
-            .initialValueTemplate('heroSection.default')
         ),
 
       // 3. About & Safety Section
@@ -34,7 +32,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('aboutAndSafety')
             .documentId('aboutAndSafety')
-            .initialValueTemplate('aboutAndSafety.default')
         ),
 
       // 4. Company Stats
@@ -44,7 +41,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('companyStats')
             .documentId('companyStats')
-            .initialValueTemplate('companyStats.default')
         ),
 
       // 5. Our Services Section (CardSwap)
@@ -54,7 +50,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('ourServices')
             .documentId('ourServices')
-            .initialValueTemplate('ourServices.default')
         ),
 
       // 6. Portfolio Projects
@@ -72,7 +67,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('contact')
             .documentId('contact')
-            .initialValueTemplate('contact.default')
         ),
 
       // 8. Company Information (used by Footer)
@@ -82,7 +76,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('companyInfo')
             .documentId('companyInfo')
-            .initialValueTemplate('companyInfo.default')
         ),
 
       // 9. Recognition Projects
@@ -116,7 +109,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
           S.document()
             .schemaType('formSettings')
             .documentId('formSettings')
-            .initialValueTemplate('formSettings.default')
         ),
     ])
 }
