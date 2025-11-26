@@ -20,6 +20,8 @@ export default defineConfig({
 
   dataset: 'production',     // ✅ match what's in your Sanity project
 
+  basePath: '/studio', // Add basePath for dashboard support
+
   plugins: [
     deskTool({
       structure: deskStructure,
