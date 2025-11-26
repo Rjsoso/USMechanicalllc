@@ -11,7 +11,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('1. Header Section')
         .child(
-          S.document()
+          S.editor()
+            .id('headerSection')
             .schemaType('headerSection')
             .documentId('headerSection')
         ),
@@ -20,7 +21,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('2. Hero Section')
         .child(
-          S.document()
+          S.editor()
+            .id('heroSection')
             .schemaType('heroSection')
             .documentId('heroSection')
         ),
@@ -29,7 +31,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('3. About & Safety Section')
         .child(
-          S.document()
+          S.editor()
+            .id('aboutAndSafety')
             .schemaType('aboutAndSafety')
             .documentId('aboutAndSafety')
         ),
@@ -38,7 +41,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('4. Company Stats')
         .child(
-          S.document()
+          S.editor()
+            .id('companyStats')
             .schemaType('companyStats')
             .documentId('companyStats')
         ),
@@ -47,7 +51,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('5. Our Services Section (CardSwap) ⭐')
         .child(
-          S.document()
+          S.editor()
+            .id('ourServices')
             .schemaType('ourServices')
             .documentId('ourServices')
         ),
@@ -64,7 +69,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('7. Contact Section')
         .child(
-          S.document()
+          S.editor()
+            .id('contact')
             .schemaType('contact')
             .documentId('contact')
         ),
@@ -73,7 +79,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('8. Company Information (Footer)')
         .child(
-          S.document()
+          S.editor()
+            .id('companyInfo')
             .schemaType('companyInfo')
             .documentId('companyInfo')
         ),
@@ -106,7 +113,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('Form Settings')
         .child(
-          S.document()
+          S.editor()
+            .id('formSettings')
             .schemaType('formSettings')
             .documentId('formSettings')
         ),
