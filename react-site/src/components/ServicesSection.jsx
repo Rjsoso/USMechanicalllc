@@ -149,7 +149,7 @@ const ServicesSection = () => {
 
 
         {/* RIGHT — THE CARD SWAP */}
-        <div className="w-1/2 flex justify-center">
+        <div className="w-1/2 flex justify-center items-start relative" style={{ minHeight: '450px' }}>
           {servicesData.services?.length > 0 ? (
             <>
               {(() => {
@@ -169,35 +169,41 @@ const ServicesSection = () => {
                 console.log(`🔧 CardSwap: Rendering ${services.length} cards (${servicesData.services.length} from Sanity + ${neededCards} placeholders)`);
                 
                 return (
-                  <CardSwap
-                    cardDistance={85}
-                    verticalDistance={90}
-                    width={650}
-                    height={450}
-                    delay={5000}
-                    pauseOnHover={false}
-                  >
-                    {services.map((item, i) => (
-                      <Card key={i} className="service-card">
-                        {item.imageUrl && (
-                          <img
-                            src={item.imageUrl}
-                            alt={item.title}
-                            onLoad={() => console.log(`img loaded: ${item.title}`)}
-                            style={{
-                              width: "100%",
-                              height: "70%",
-                              borderRadius: "14px",
-                              objectFit: "cover",
-                            }}
-                          />
-                        )}
-                        <h3 className="text-xl font-semibold mt-3 text-center">
-                          {item.title}
-                        </h3>
-                      </Card>
-                    ))}
-                  </CardSwap>
+                  <div className="relative" style={{ width: '650px', height: '450px' }}>
+                    <CardSwap
+                      cardDistance={85}
+                      verticalDistance={90}
+                      width={650}
+                      height={450}
+                      delay={5000}
+                      pauseOnHover={false}
+                    >
+                      {services.map((item, i) => (
+                        <Card key={i} className="service-card">
+                          {item.imageUrl && (
+                            <img
+                              src={`${item.imageUrl}?${new Date().getTime()}`}
+                              alt={item.title}
+                              onLoad={() => console.log(`img loaded: ${item.title}`)}
+                              onError={(e) => {
+                                console.error(`Failed to load image for ${item.title}:`, item.imageUrl);
+                                e.target.style.display = 'none';
+                              }}
+                              style={{
+                                width: "100%",
+                                height: "70%",
+                                borderRadius: "14px",
+                                objectFit: "cover",
+                              }}
+                            />
+                          )}
+                          <h3 className="text-xl font-semibold mt-3 text-center">
+                            {item.title}
+                          </h3>
+                        </Card>
+                      ))}
+                    </CardSwap>
+                  </div>
                 );
               })()}
             </>

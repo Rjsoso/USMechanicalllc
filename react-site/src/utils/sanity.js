@@ -9,12 +9,14 @@ const SANITY_CONFIG = {
 }
 
 // Read-only client for public site
-// Use CDN in production for better performance, but disable for local development to avoid CORS issues
+// Temporarily disable CDN to ensure fresh content after updates
 export const client = createClient({
   ...SANITY_CONFIG,
-  useCdn: import.meta.env.PROD, // Enable CDN in production, disable in development
+  useCdn: false, // Disable CDN temporarily to see updates immediately
   perspective: 'published', // Only fetch published content
-  // Add cache control: CDN will cache but Vercel will revalidate on rebuild
+  apiVersion: '2023-05-03',
+  // Add timestamp to force fresh fetches
+  withCredentials: false,
 })
 
 // Write-capable client for admin operations (uses token)
