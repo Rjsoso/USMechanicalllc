@@ -5,7 +5,8 @@ export const client = createClient({
   projectId: '3vpl3hho', // your actual project ID
   dataset: 'production',
   apiVersion: '2023-05-03',
-  useCdn: import.meta.env.PROD, // Only use CDN in production to avoid CORS issues in dev
+  useCdn: false, // Disable CDN to ensure fresh content after updates
+  perspective: 'published', // Only fetch published content
 });
 
 const builder = imageUrlBuilder(client);
