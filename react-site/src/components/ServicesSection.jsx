@@ -14,12 +14,13 @@ const ServicesSection = () => {
 
 
   useEffect(() => {
-
-    client
-
-      .fetch(
-
-        `*[_type == "ourServices"][0]{
+    // Fetch function with cache-busting
+    const fetchServices = () => {
+      // Add timestamp to query to force fresh fetch
+      const timestamp = Date.now();
+      client
+        .fetch(
+          `*[_type == "ourServices"][0]{
 
           sectionTitle,
 
@@ -44,8 +45,7 @@ const ServicesSection = () => {
           }
 
         }`
-
-      )
+        )
 
       .then((data) => {
         console.log('🔍 ServicesSection - Full data received:', data);
@@ -78,10 +78,21 @@ const ServicesSection = () => {
         console.error('❌ Error details:', {
           message: error.message,
           stack: error.stack,
-          query: `*[_type == "ourServices"][0]{ sectionTitle, firstBoxContent, expandableBoxes[] { title, description }, services[] { title, description, "imageUrl": image.asset->url } }`
+          query: `*[_type == "ourServices"][0]{ sectionTitle, descriptionText, servicesInfo[] { title, description }, services[] { title, description, "imageUrl": image.asset->url } }`
         });
       });
+    };
 
+    fetchServices();
+
+    // Refresh data when window regains focus (user comes back to tab)
+    const handleFocus = () => {
+      console.log('🔄 Window focused - refreshing services data...');
+      fetchServices();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
 

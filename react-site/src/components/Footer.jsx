@@ -5,13 +5,26 @@ export default function Footer() {
   const [info, setInfo] = useState(null)
 
   useEffect(() => {
-    client
-      .fetch(`*[_type == "companyInfo"][0]`)
-      .then(res => setInfo(res))
-      .catch(error => {
-        console.warn('Sanity fetch failed for footer info:', error)
-        // Component will return null if info is null, which is fine
-      })
+    const fetchInfo = () => {
+      client
+        .fetch(`*[_type == "companyInfo"][0]`)
+        .then(res => setInfo(res))
+        .catch(error => {
+          console.warn('Sanity fetch failed for footer info:', error)
+          // Component will return null if info is null, which is fine
+        })
+    };
+
+    fetchInfo();
+
+    // Refresh data when window regains focus
+    const handleFocus = () => {
+      console.log('🔄 Window focused - refreshing footer info...');
+      fetchInfo();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
   if (!info) return null

@@ -105,12 +105,21 @@ const CompanyStats = () => {
         }
       }`;
       const data = await client.fetch(query);
-      console.log("Fetched Company Stats:", data); // 👈 ADD THIS
+      console.log("Fetched Company Stats:", data);
       setStatsData(data);
       setLoading(false);
     };
 
     fetchData().catch(console.error);
+
+    // Refresh data when window regains focus
+    const handleFocus = () => {
+      console.log('🔄 Window focused - refreshing company stats...');
+      fetchData().catch(console.error);
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Watch when the section scrolls into view (only after data is loaded)

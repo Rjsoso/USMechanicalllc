@@ -17,9 +17,10 @@ export default function HeroSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "heroSection"][0]{
+    const fetchHero = () => {
+      client
+        .fetch(
+          `*[_type == "heroSection"][0]{
         backgroundImage,
         logo,
         headline,
@@ -27,22 +28,34 @@ export default function HeroSection() {
         buttonText,
         buttonLink
       }`
-      )
-      .then(data => {
-        if (data) {
-          setHeroData(data)
-        } else {
-          // Use default data if Sanity returns null
+        )
+        .then(data => {
+          if (data) {
+            setHeroData(data)
+          } else {
+            // Use default data if Sanity returns null
+            setHeroData(defaultHeroData)
+          }
+          setLoading(false)
+        })
+        .catch(error => {
+          console.warn('Sanity fetch failed, using default hero data:', error)
+          // On error, use default data
           setHeroData(defaultHeroData)
-        }
-        setLoading(false)
-      })
-      .catch(error => {
-        console.warn('Sanity fetch failed, using default hero data:', error)
-        // On error, use default data
-        setHeroData(defaultHeroData)
-        setLoading(false)
-      })
+          setLoading(false)
+        })
+    };
+
+    fetchHero();
+
+    // Refresh data when window regains focus
+    const handleFocus = () => {
+      console.log('🔄 Window focused - refreshing hero data...');
+      fetchHero();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
   return (
@@ -61,7 +74,7 @@ export default function HeroSection() {
         className="fixed bg-cover bg-center brightness-75"
         style={{
           backgroundImage: heroData.backgroundImage && urlFor(heroData.backgroundImage)
-            ? `url(${urlFor(heroData.backgroundImage).url()})`
+            ? `url(${urlFor(heroData.backgroundImage).url()}?t=${Date.now()})`
             : undefined,
           top: 0,
           left: 0,
@@ -90,7 +103,7 @@ export default function HeroSection() {
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
-            src={urlFor(heroData.logo).url()}
+            src={`${urlFor(heroData.logo).url()}?t=${Date.now()}`}
             alt="US Mechanical Logo"
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}

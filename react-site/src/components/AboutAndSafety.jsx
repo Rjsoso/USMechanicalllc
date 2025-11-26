@@ -28,36 +28,49 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   // Fetch all content from Sanity (text and images)
   useEffect(() => {
-    Promise.all([
-      client.fetch(`*[_type == "aboutAndSafety"][0]{
-        aboutTitle,
-        aboutText,
-        photo1
-      }`),
-      client.fetch(`*[_type == "safety"][0]{
-        title,
-        content,
-        images
-      }`)
-    ])
-      .then(([aboutData, safetyData]) => {
-        // Merge data from both queries
-        const mergedData = {
-          ...defaultData,
-          ...aboutData,
-          safetyTitle: safetyData?.title || defaultData.safetyTitle,
-          safetyText: safetyData?.content || defaultData.safetyText,
-          safetyImages: safetyData?.images || [],
-        }
-        setData(mergedData)
-        setLoading(false)
-      })
-      .catch(error => {
-        console.error('Error fetching from Sanity:', error)
-        // On error, use default data
-        setData(defaultData)
-        setLoading(false)
-      })
+    const fetchData = () => {
+      Promise.all([
+        client.fetch(`*[_type == "aboutAndSafety"][0]{
+          aboutTitle,
+          aboutText,
+          photo1
+        }`),
+        client.fetch(`*[_type == "safety"][0]{
+          title,
+          content,
+          images
+        }`)
+      ])
+        .then(([aboutData, safetyData]) => {
+          // Merge data from both queries
+          const mergedData = {
+            ...defaultData,
+            ...aboutData,
+            safetyTitle: safetyData?.title || defaultData.safetyTitle,
+            safetyText: safetyData?.content || defaultData.safetyText,
+            safetyImages: safetyData?.images || [],
+          }
+          setData(mergedData)
+          setLoading(false)
+        })
+        .catch(error => {
+          console.error('Error fetching from Sanity:', error)
+          // On error, use default data
+          setData(defaultData)
+          setLoading(false)
+        })
+    };
+
+    fetchData();
+
+    // Refresh data when window regains focus
+    const handleFocus = () => {
+      console.log('🔄 Window focused - refreshing about/safety data...');
+      fetchData();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
   // Use default data if still loading after a short delay (handles case where Sanity returns null)

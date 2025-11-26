@@ -9,13 +9,12 @@ const SANITY_CONFIG = {
 }
 
 // Read-only client for public site
-// Temporarily disable CDN to ensure fresh content after updates
+// Disable CDN to ensure fresh content after updates
 export const client = createClient({
   ...SANITY_CONFIG,
-  useCdn: false, // Disable CDN temporarily to see updates immediately
+  useCdn: false, // Disable CDN to bypass cache and see updates immediately
   perspective: 'published', // Only fetch published content
   apiVersion: '2023-05-03',
-  // Add timestamp to force fresh fetches
   withCredentials: false,
 })
 
@@ -38,10 +37,29 @@ export const urlFor = (source) => {
   }
 }
 
-// Helper function to fetch content from Sanity
+// Helper to add cache-busting to image URLs
+export const urlForWithCacheBust = (source) => {
+  if (!source) return null
+  try {
+    const imageBuilder = builder.image(source)
+    const url = imageBuilder.url()
+    return url ? `${url}?t=${Date.now()}` : null
+  } catch (error) {
+    console.error('Error building image URL:', error)
+    return null
+  }
+}
+
+// Helper function to fetch content from Sanity with cache-busting
 export async function fetchContent(query, params = {}) {
   try {
-    const data = await client.fetch(query, params)
+    // Add cache-busting timestamp to ensure fresh data
+    const cacheBust = `?t=${Date.now()}`
+    const data = await client.fetch(query, {
+      ...params,
+      // Force fresh fetch by including timestamp in query
+      _cacheBust: Date.now(),
+    })
     return data
   } catch (error) {
     console.error('Error fetching from Sanity:', error)
