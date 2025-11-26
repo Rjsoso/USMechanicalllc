@@ -73,6 +73,6 @@ export const queries = {
   about: `*[_type == "aboutAndSafety"][0]`,
   safety: `*[_type == "aboutAndSafety"][0]`,
   recognition: `*[_type == "recognitionProject"] | order(_createdAt asc)`,
-  companyInfo: `*[_type == "companyInformation"][0]`,
+  companyInfo: `*[_type == "companyInfo"][0]`, // Fixed: Changed from "companyInformation" to "companyInfo"
 }
 

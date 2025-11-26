@@ -68,7 +68,7 @@ export default function Admin() {
     { id: 'aboutAndSafety', title: 'About & Safety' },
     { id: 'recognitionProject', title: 'Recognition Projects' },
     { id: 'contactSection', title: 'Contact Section' },
-    { id: 'companyInformation', title: 'Footer Info' },
+    { id: 'companyInfo', title: 'Footer Info' },
   ]
 
   useEffect(() => {
@@ -469,18 +469,18 @@ export default function Admin() {
 
         {/* Footer */}
         <div
-          onMouseEnter={() => setHoveredSection('companyInformation')}
+          onMouseEnter={() => setHoveredSection('companyInfo')}
           onMouseLeave={() => setHoveredSection(null)}
-          onClick={() => setActiveSection('companyInformation')}
+          onClick={() => setActiveSection('companyInfo')}
           className={`relative cursor-pointer transition-all duration-200 ${
-            hoveredSection === 'companyInformation'
+            hoveredSection === 'companyInfo'
               ? 'ring-4 ring-blue-400 ring-opacity-50'
-              : activeSection === 'companyInformation'
+              : activeSection === 'companyInfo'
               ? 'ring-4 ring-blue-600 ring-opacity-70'
               : ''
           }`}
         >
-          {hoveredSection === 'companyInformation' && (
+          {hoveredSection === 'companyInfo' && (
             <div className="absolute top-0 left-0 bg-blue-600 text-white text-xs px-3 py-1 rounded-br-lg z-10">
               Click to edit: Footer Info
             </div>

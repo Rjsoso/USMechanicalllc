@@ -6,7 +6,7 @@ export default function Footer() {
 
   useEffect(() => {
     client
-      .fetch(`*[_type == "companyInformation"][0]`)
+      .fetch(`*[_type == "companyInfo"][0]`)
       .then(res => setInfo(res))
       .catch(error => {
         console.warn('Sanity fetch failed for footer info:', error)
