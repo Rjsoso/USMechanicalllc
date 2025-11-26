@@ -20,6 +20,8 @@ export default defineConfig({
 
   dataset: 'production',     // ✅ match what's in your Sanity project
 
+  apiVersion: '2023-05-03',  // ✅ Correct API version (not v2025-11-26)
+
   basePath: '/studio', // Add basePath for dashboard support
 
   plugins: [

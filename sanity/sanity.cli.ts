@@ -4,6 +4,7 @@ export default defineCliConfig({
   api: {
     projectId: '3vpl3hho',
     dataset: 'production',
+    apiVersion: '2023-05-03', // ✅ Correct API version
   },
 })
 
