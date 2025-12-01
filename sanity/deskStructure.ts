@@ -51,9 +51,8 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
       S.listItem()
         .title('5. Our Services Section (CardSwap) ⭐')
         .child(
-          S.document()
-            .schemaType('ourServices')
-            .documentId('ourServicesPage')
+          S.documentTypeList('ourServices')
+            .title('Our Services Section')
         ),
 
       // 6. Portfolio Projects
