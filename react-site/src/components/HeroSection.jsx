@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import Carousel from './Carousel'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -22,6 +23,12 @@ export default function HeroSection() {
         .fetch(
           `*[_type == "heroSection"][0]{
         backgroundImage,
+        carouselImages[] {
+          image,
+          title,
+          description,
+          "imageUrl": image.asset->url
+        },
         logo,
         headline,
         subtext,
@@ -100,6 +107,32 @@ export default function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
+        {/* Carousel */}
+        {heroData.carouselImages && heroData.carouselImages.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="mb-8 flex justify-center"
+          >
+            <div style={{ height: '600px', position: 'relative' }}>
+              <Carousel
+                items={heroData.carouselImages.map(item => ({
+                  image: item.imageUrl,
+                  title: item.title,
+                  description: item.description,
+                }))}
+                baseWidth={300}
+                autoplay={true}
+                autoplayDelay={3000}
+                pauseOnHover={true}
+                loop={true}
+                round={false}
+              />
+            </div>
+          </motion.div>
+        )}
+
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img

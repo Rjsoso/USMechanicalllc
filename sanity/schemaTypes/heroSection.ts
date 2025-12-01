@@ -12,6 +12,34 @@ export default defineType({
       options: { hotspot: true },
     },
     {
+      name: 'carouselImages',
+      title: 'Carousel Images',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+            },
+            {
+              name: 'title',
+              title: 'Title (optional)',
+              type: 'string',
+            },
+            {
+              name: 'description',
+              title: 'Description (optional)',
+              type: 'text',
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'logo',
       title: 'Logo Image',
       type: 'image',
