@@ -27,13 +27,16 @@ export default function Header() {
         />
       </div>
 
-      {/* Navigation Bar - Separate, centered/right-aligned */}
+      {/* Navigation Bar - Centered between logo and right edge */}
       <header
-        className={`fixed top-4 right-4 md:right-8 lg:right-12 rounded-3xl px-6 md:px-8 py-3 z-50 transition-all duration-500 shadow-lg ${
+        className={`fixed top-4 left-1/2 transform -translate-x-1/2 rounded-3xl px-6 md:px-8 py-3 z-50 transition-all duration-500 shadow-lg ${
           isScrolled
             ? "bg-white/90 backdrop-blur-none shadow-md"
             : "bg-white/10 backdrop-blur-lg border border-white/20"
         }`}
+        style={{ 
+          marginLeft: 'calc(160px + 1rem)' // Account for logo width + padding
+        }}
       >
         <nav>
           <ul
