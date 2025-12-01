@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,6 +13,10 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLinkClick = () => {
+    setIsDropdownOpen(false);
+  };
 
   return (
     <>
@@ -27,51 +32,126 @@ export default function Header() {
         />
       </div>
 
-      {/* Navigation Bar - Centered between logo and right edge */}
-      <header
-        className={`fixed top-4 left-1/2 transform -translate-x-1/2 rounded-3xl px-6 md:px-8 py-3 z-50 transition-all duration-500 shadow-lg ${
-          isScrolled
-            ? "bg-white/90 backdrop-blur-none shadow-md"
-            : "bg-white/10 backdrop-blur-lg border border-white/20"
-        }`}
+      {/* Navigation Bar - Dropdown Menu */}
+      <div
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
         style={{ 
           marginLeft: 'calc(160px + 1rem)' // Account for logo width + padding
         }}
       >
-        <nav>
-          <ul
-            className={`flex space-x-6 md:space-x-8 text-base md:text-lg font-medium transition-colors duration-500 ${
-              isScrolled ? "text-gray-900" : "text-white"
+        <button
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className={`rounded-3xl px-6 md:px-8 py-3 transition-all duration-500 shadow-lg ${
+            isScrolled
+              ? "bg-white/90 backdrop-blur-none shadow-md text-gray-900"
+              : "bg-white/10 backdrop-blur-lg border border-white/20 text-white"
+          }`}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isDropdownOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
+
+        {/* Dropdown Menu */}
+        {isDropdownOpen && (
+          <div
+            className={`absolute top-full mt-2 right-0 rounded-2xl shadow-xl min-w-[200px] overflow-hidden transition-all duration-300 ${
+              isScrolled
+                ? "bg-white/95 backdrop-blur-md border border-gray-200"
+                : "bg-white/10 backdrop-blur-lg border border-white/20"
             }`}
           >
-            <li>
-              <a href="#about" className="hover:text-blue-500 transition-colors duration-300">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#services" className="hover:text-blue-500 transition-colors duration-300">
-                Services
-              </a>
-            </li>
-            <li>
-              <a href="#portfolio" className="hover:text-blue-500 transition-colors duration-300">
-                Portfolio
-              </a>
-            </li>
-            <li>
-              <a href="#careers" className="hover:text-blue-500 transition-colors duration-300">
-                Careers
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="hover:text-blue-500 transition-colors duration-300">
-                Contact
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
+            <nav>
+              <ul className="py-2">
+                <li>
+                  <a
+                    href="#about"
+                    onClick={handleLinkClick}
+                    className={`block px-6 py-3 transition-colors duration-300 ${
+                      isScrolled
+                        ? "text-gray-900 hover:bg-gray-100"
+                        : "text-white hover:bg-white/20"
+                    }`}
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#services"
+                    onClick={handleLinkClick}
+                    className={`block px-6 py-3 transition-colors duration-300 ${
+                      isScrolled
+                        ? "text-gray-900 hover:bg-gray-100"
+                        : "text-white hover:bg-white/20"
+                    }`}
+                  >
+                    Services
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#portfolio"
+                    onClick={handleLinkClick}
+                    className={`block px-6 py-3 transition-colors duration-300 ${
+                      isScrolled
+                        ? "text-gray-900 hover:bg-gray-100"
+                        : "text-white hover:bg-white/20"
+                    }`}
+                  >
+                    Portfolio
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#careers"
+                    onClick={handleLinkClick}
+                    className={`block px-6 py-3 transition-colors duration-300 ${
+                      isScrolled
+                        ? "text-gray-900 hover:bg-gray-100"
+                        : "text-white hover:bg-white/20"
+                    }`}
+                  >
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#contact"
+                    onClick={handleLinkClick}
+                    className={`block px-6 py-3 transition-colors duration-300 ${
+                      isScrolled
+                        ? "text-gray-900 hover:bg-gray-100"
+                        : "text-white hover:bg-white/20"
+                    }`}
+                  >
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </div>
     </>
   );
 }
