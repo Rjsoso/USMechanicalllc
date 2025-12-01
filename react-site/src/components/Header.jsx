@@ -65,14 +65,17 @@ export default function Header() {
         </button>
 
         {/* Dropdown Menu */}
-        {isDropdownOpen && (
-          <div
-            className={`absolute top-full mt-2 right-0 rounded-2xl shadow-xl min-w-[200px] overflow-hidden transition-all duration-300 ${
-              isScrolled
-                ? "bg-white/95 backdrop-blur-md border border-gray-200"
-                : "bg-white/10 backdrop-blur-lg border border-white/20"
-            }`}
-          >
+        <div
+          className={`absolute top-full mt-2 right-0 rounded-2xl shadow-xl min-w-[200px] overflow-hidden transition-all duration-300 ease-out ${
+            isScrolled
+              ? "bg-white/95 backdrop-blur-md border border-gray-200"
+              : "bg-white/10 backdrop-blur-lg border border-white/20"
+          } ${
+            isDropdownOpen
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 -translate-y-2 pointer-events-none"
+          }`}
+        >
             <nav>
               <ul className="py-2">
                 <li>
@@ -142,8 +145,7 @@ export default function Header() {
                 </li>
               </ul>
             </nav>
-          </div>
-        )}
+        </div>
       </div>
     </>
   );
