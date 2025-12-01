@@ -30,19 +30,19 @@ export default function Contact() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 bg-black">
-        <p className="text-center text-lg text-white">Loading...</p>
+      <div className="flex items-center justify-center py-20">
+        <p className="text-center text-lg">Loading...</p>
       </div>
     );
   }
 
   if (error || !contactData) {
     return (
-      <div className="flex items-center justify-center py-20 bg-black">
+      <div className="flex items-center justify-center py-20">
         <div className="text-center max-w-2xl px-6">
-          <h1 className="text-2xl font-bold mb-4 text-red-400">Contact Page Not Found</h1>
-          <p className="text-gray-300 mb-4">{error || 'No contact page data found.'}</p>
-          <p className="text-sm text-gray-400">
+          <h1 className="text-2xl font-bold mb-4 text-red-600">Contact Page Not Found</h1>
+          <p className="text-gray-600 mb-4">{error || 'No contact page data found.'}</p>
+          <p className="text-sm text-gray-500">
             Please create a "Contact Page" document in Sanity Studio at{' '}
             <a href="http://localhost:3333" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
               http://localhost:3333
@@ -54,16 +54,16 @@ export default function Contact() {
   }
 
   return (
-    <section className="max-w-6xl mx-auto py-20 px-6 text-white bg-black">
+    <section className="max-w-6xl mx-auto py-20 px-6">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-center mb-8 text-white"
+          className="text-4xl font-bold text-center mb-8"
         >
           {contactData.heroTitle || 'Contact Us'}
         </motion.h1>
 
-        <p className="text-center text-white mb-12">{contactData.description}</p>
+        <p className="text-center text-gray-600 mb-12">{contactData.description}</p>
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* LEFT SIDE — OFFICE INFO */}
@@ -71,20 +71,20 @@ export default function Contact() {
             {contactData.offices && contactData.offices.length > 0 ? (
               contactData.offices.map((office, index) => (
                 <div key={index} className="mb-8">
-                  <h2 className="text-2xl font-semibold mb-4 text-white">{office.locationName}</h2>
-                  <p className="text-white">{office.address}</p>
-                  <p className="text-white">Phone: <span className="text-blue-300">{office.phone}</span></p>
-                  {office.fax && <p className="text-white">Fax: {office.fax}</p>}
+                  <h2 className="text-2xl font-semibold mb-4">{office.locationName}</h2>
+                  <p className="text-gray-700">{office.address}</p>
+                  <p className="text-gray-700">Phone: <span className="text-blue-600">{office.phone}</span></p>
+                  {office.fax && <p className="text-gray-700">Fax: {office.fax}</p>}
                 </div>
               ))
             ) : (
-              <p className="text-white">No office locations available.</p>
+              <p className="text-gray-700">No office locations available.</p>
             )}
 
             {/* AFFILIATES */}
             {contactData.affiliates && contactData.affiliates.length > 0 && (
               <div className="mt-8">
-                <h2 className="text-2xl font-semibold mb-4 text-white">Affiliate Companies</h2>
+                <h2 className="text-2xl font-semibold mb-4">Affiliate Companies</h2>
                 {contactData.affiliates.map((affiliate, i) => (
                   <div key={i} className="mb-6">
                     {affiliate.logo && urlFor(affiliate.logo) && (
@@ -94,8 +94,8 @@ export default function Contact() {
                         className="h-12 mb-2 object-contain"
                       />
                     )}
-                    <p className="font-semibold text-white">{affiliate.name}</p>
-                    {affiliate.description && <p className="text-white">{affiliate.description}</p>}
+                    <p className="font-semibold text-gray-800">{affiliate.name}</p>
+                    {affiliate.description && <p className="text-gray-700">{affiliate.description}</p>}
                   </div>
                 ))}
               </div>
@@ -103,8 +103,8 @@ export default function Contact() {
           </div>
 
           {/* RIGHT SIDE — FORM */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20">
-            <h3 className="text-2xl font-semibold mb-4 text-white">
+          <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
+            <h3 className="text-2xl font-semibold mb-4">
               {contactData.formSettings?.headline || 'Send Us a Message'}
             </h3>
             <form
@@ -112,10 +112,10 @@ export default function Contact() {
               method="POST"
               className="flex flex-col space-y-4"
             >
-              <input type="text" name="name" placeholder="Name" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <input type="email" name="email" placeholder="Email" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <input type="tel" name="phone" placeholder="Phone" className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <textarea name="message" placeholder="Message" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-white/50" />
+              <input type="text" name="name" placeholder="Name" required className="border border-gray-300 bg-white text-gray-900 placeholder-gray-500 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="email" name="email" placeholder="Email" required className="border border-gray-300 bg-white text-gray-900 placeholder-gray-500 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="tel" name="phone" placeholder="Phone" className="border border-gray-300 bg-white text-gray-900 placeholder-gray-500 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <textarea name="message" placeholder="Message" required className="border border-gray-300 bg-white text-gray-900 placeholder-gray-500 p-3 rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-blue-500" />
               <button
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
