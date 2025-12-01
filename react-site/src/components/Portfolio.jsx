@@ -16,7 +16,7 @@ export default function Portfolio() {
   }, [])
 
   return (
-    <section className="py-20 bg-gray-50 text-gray-800">
+    <section className="py-20 bg-gray-50 text-gray-800" style={{ paddingTop: '80px' }}>
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-12">
           Portfolio Projects

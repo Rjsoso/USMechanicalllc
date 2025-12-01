@@ -159,8 +159,8 @@ const ServicesSection = () => {
 
 
 
-        {/* RIGHT — THE CARD SWAP */}
-        <div className="w-1/2 flex justify-center items-start relative" style={{ minHeight: '450px' }}>
+        {/* RIGHT — THE CARD SWAP - Aligned with first service box */}
+        <div className="w-1/2 flex justify-center relative" style={{ minHeight: '450px', paddingTop: '32px' }}>
           {servicesData.services?.length > 0 ? (
             <>
               {(() => {
@@ -190,7 +190,7 @@ const ServicesSection = () => {
                       pauseOnHover={false}
                     >
                       {services.map((item, i) => (
-                        <Card key={i} className="service-card">
+                        <Card key={i} className="service-card" style={{ position: 'relative', overflow: 'hidden' }}>
                           {item.imageUrl && (
                             <img
                               src={`${item.imageUrl}?${new Date().getTime()}`}
@@ -202,15 +202,28 @@ const ServicesSection = () => {
                               }}
                               style={{
                                 width: "100%",
-                                height: "70%",
+                                height: "100%",
                                 borderRadius: "14px",
                                 objectFit: "cover",
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
                               }}
                             />
                           )}
-                          <h3 className="text-xl font-semibold mt-3 text-center">
-                            {item.title}
-                          </h3>
+                          <div style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+                            padding: "20px",
+                            borderRadius: "0 0 14px 14px",
+                          }}>
+                            <h3 className="text-xl font-semibold text-white text-center">
+                              {item.title}
+                            </h3>
+                          </div>
                         </Card>
                       ))}
                     </CardSwap>
