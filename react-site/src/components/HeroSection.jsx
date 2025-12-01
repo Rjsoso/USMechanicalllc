@@ -99,7 +99,7 @@ export default function HeroSection() {
         }}
       ></div>
 
-      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center -mt-20 md:-mt-32">
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
