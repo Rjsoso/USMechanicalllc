@@ -61,9 +61,9 @@ body > * {
   z-index: -2 !important;
 }
 
-/* Force black background */
+/* Force transparent background (hero image will show through) */
 html, body, #root {
-  background: #000000 !important;
+  background: transparent !important;
 }
 
 /* Ensure main element doesn't have white background */
