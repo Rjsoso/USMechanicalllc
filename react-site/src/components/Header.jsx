@@ -33,18 +33,11 @@ export default function Header() {
       </div>
 
       {/* Navigation Bar - Dropdown Menu */}
-      <div
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
-        style={{ 
-          marginLeft: 'calc(160px + 1rem)' // Account for logo width + padding
-        }}
-      >
+      <div className="fixed top-4 right-4 md:right-8 z-50">
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className={`rounded-3xl px-6 md:px-8 py-3 transition-all duration-500 shadow-lg ${
-            isScrolled
-              ? "bg-white/90 backdrop-blur-none shadow-md text-gray-900"
-              : "bg-white/10 backdrop-blur-lg border border-white/20 text-white"
+          className={`transition-colors duration-300 ${
+            isScrolled ? "text-gray-900" : "text-white"
           }`}
         >
           <svg
