@@ -196,40 +196,16 @@ const ServicesSection = () => {
                       pauseOnHover={false}
                     >
                       {services.map((item, i) => (
-                        <Card key={i} className="service-card" style={{ position: 'relative', overflow: 'hidden' }}>
-                          {item.imageUrl && (
-                            <img
-                              src={`${item.imageUrl}?${new Date().getTime()}`}
-                              alt={item.title}
-                              onLoad={() => console.log(`img loaded: ${item.title}`)}
-                              onError={(e) => {
-                                console.error(`Failed to load image for ${item.title}:`, item.imageUrl);
-                                e.target.style.display = 'none';
-                              }}
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                borderRadius: "14px",
-                                objectFit: "cover",
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                              }}
-                            />
-                          )}
-                          <div style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
-                            padding: "20px",
-                            borderRadius: "0 0 14px 14px",
-                          }}>
-                            <h3 className="text-xl font-semibold text-white text-center">
-                              {item.title}
-                            </h3>
-                          </div>
+                        <Card key={i} className="service-card">
+                          <img
+                            src={`${item.imageUrl}?${new Date().getTime()}`}
+                            alt={item.title}
+                            className="w-full h-full object-cover rounded-xl"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              console.error("Image failed:", item.imageUrl);
+                            }}
+                          />
                         </Card>
                       ))}
                     </CardSwap>
