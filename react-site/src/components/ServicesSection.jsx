@@ -184,8 +184,8 @@ const ServicesSection = () => {
                 
                 return (
                   <div
-                    className="relative mt-10 cardswap-wrapper"
-                    style={{ width: '650px', height: '450px' }}
+                    className="relative flex justify-center items-start"
+                    style={{ width: "650px", height: "500px", marginTop: "40px" }}
                   >
                     <CardSwap
                       cardDistance={85}
