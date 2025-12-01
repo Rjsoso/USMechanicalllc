@@ -200,3 +200,10 @@ main {
 .cardswap-wrapper {
   position: relative !important;
 }
+
+.service-card img {
+  width: 100% !important;
+  height: 70% !important;
+  object-fit: cover !important;
+  border-radius: 14px;
+}
