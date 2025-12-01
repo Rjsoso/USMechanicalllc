@@ -1,4 +1,4 @@
-import { defineType } from 'sanity'
+import { defineType } from "sanity";
 
 export default defineType({
   name: "ourServices",
@@ -17,32 +17,53 @@ export default defineType({
     },
     {
       name: "servicesInfo",
-      type: "array",
       title: "Service Info Boxes",
+      type: "array",
       of: [
         {
           type: "object",
           fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
+            {
+              name: "title",
+              type: "string",
+              title: "Title",
+            },
+            {
+              name: "description",
+              type: "text",
+              title: "Description",
+            },
           ],
         },
       ],
     },
     {
       name: "services",
-      type: "array",
       title: "CardSwap Images",
+      type: "array",
       of: [
         {
           type: "object",
           fields: [
-            { name: "title", type: "string", title: "Title" },
-            { name: "description", type: "text", title: "Description" },
-            { name: "image", type: "image", title: "Card Image" },
+            {
+              name: "title",
+              type: "string",
+              title: "Title",
+            },
+            {
+              name: "description",
+              type: "text",
+              title: "Description",
+            },
+            {
+              name: "image",
+              type: "image",
+              title: "Card Image",
+              options: { hotspot: true }, // IMPORTANT FIX
+            },
           ],
         },
       ],
     },
   ],
-})
+});
