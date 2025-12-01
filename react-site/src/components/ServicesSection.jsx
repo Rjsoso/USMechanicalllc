@@ -161,7 +161,7 @@ const ServicesSection = () => {
 
         {/* RIGHT — THE CARD SWAP - Aligned with first service box */}
         <div
-          className="w-1/2 flex justify-center items-start relative mb-24"
+          className="w-1/2 flex justify-center items-start relative mt-20 mb-24"
           style={{ minHeight: '450px' }}
         >
           {servicesData.services?.length > 0 ? (
