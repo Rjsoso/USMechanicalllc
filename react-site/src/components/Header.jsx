@@ -21,20 +21,29 @@ export default function Header() {
           : "bg-white/10 backdrop-blur-lg border border-white/20"
       }`}
     >
-      <nav className="flex justify-between items-center">
-        {/* Large Logo */}
-        <img
-          src="/logo.png"
-          alt="US Mechanical"
-          className="h-20 w-auto object-contain"
-          onError={(e) => {
-            e.target.style.display = "none";
-          }}
+      <nav className="flex items-center gap-8">
+        {/* Logo Section - Separate */}
+        <div className="flex-shrink-0">
+          <img
+            src="/logo.png"
+            alt="US Mechanical"
+            className="h-20 w-auto object-contain"
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        </div>
+
+        {/* Visual Separator */}
+        <div
+          className={`h-12 w-px transition-colors duration-500 ${
+            isScrolled ? "bg-gray-300" : "bg-white/30"
+          }`}
         />
 
-        {/* Navigation Links */}
+        {/* Navigation Links Section - Separate */}
         <ul
-          className={`flex space-x-8 text-lg font-medium transition-colors duration-500 ${
+          className={`flex space-x-8 text-lg font-medium transition-colors duration-500 flex-1 justify-end ${
             isScrolled ? "text-gray-900" : "text-white"
           }`}
         >
