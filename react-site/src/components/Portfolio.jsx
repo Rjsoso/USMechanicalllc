@@ -16,9 +16,9 @@ export default function Portfolio() {
   }, [])
 
   return (
-    <section className="py-20 bg-gray-50 text-gray-800" style={{ paddingTop: '80px' }}>
+    <section className="py-20 bg-black text-white" style={{ paddingTop: '80px' }}>
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12">
+        <h2 className="text-4xl font-bold text-center mb-12 text-white">
           Portfolio Projects
         </h2>
 
@@ -28,7 +28,7 @@ export default function Portfolio() {
             <div
               key={i}
               onClick={() => setOpenProject(p)}
-              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden"
+              className="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden"
             >
               {p.image && (
                 <img
@@ -38,7 +38,7 @@ export default function Portfolio() {
                 />
               )}
               <div className="p-5">
-                <h3 className="text-xl font-semibold">{p.title}</h3>
+                <h3 className="text-xl font-semibold text-white">{p.title}</h3>
               </div>
             </div>
           ))}

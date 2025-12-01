@@ -88,12 +88,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   if (loading || !data) {
     return (
-      <div className="text-center py-20 text-gray-500">Loading content...</div>
+      <div className="text-center py-20 text-gray-400 bg-black">Loading content...</div>
     )
   }
 
   return (
-    <section className="py-20 bg-white text-gray-800">
+    <section className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* ABOUT SECTION - Image + Text Horizontal (side-by-side on desktop, stacked on mobile) */}
         {/* All content (text and images) comes from Sanity CMS */}
@@ -114,10 +114,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
           <div className={`${data.photo1 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
           <FadeInWhenVisible delay={0.1}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">{data.aboutTitle}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">{data.aboutTitle}</h2>
             </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.2}>
-              <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+              <p className="text-lg text-gray-300 leading-relaxed whitespace-pre-line">
               {data.aboutText}
             </p>
           </FadeInWhenVisible>
@@ -130,12 +130,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {/* Text on left, image on right */}
           <div className={`${data.safetyImages && data.safetyImages.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
-              <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+              <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
               {data.safetyTitle}
             </h3>
           </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.4}>
-              <div className="text-lg text-gray-700 leading-relaxed">
+              <div className="text-lg text-gray-300 leading-relaxed">
                 {Array.isArray(data.safetyText) ? (
                   <PortableText value={data.safetyText} />
                 ) : (

@@ -21,8 +21,8 @@ export default function ProjectModal({ project, onClose }) {
             className="modal-img"
           />
         )}
-        <h2>{project.title}</h2>
-        {project.description && <p>{project.description}</p>}
+        <h2 className="text-white">{project.title}</h2>
+        {project.description && <p className="text-gray-300">{project.description}</p>}
       </motion.div>
     </div>
   )

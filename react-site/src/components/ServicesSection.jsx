@@ -109,15 +109,15 @@ const ServicesSection = () => {
 
 
 
-  if (!servicesData) return <div className="py-20 bg-gray-50 text-center">Loading services...</div>;
+  if (!servicesData) return <div className="py-20 bg-black text-white text-center">Loading services...</div>;
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="pt-20 pb-40 bg-gray-50">
-        <h2 className="text-4xl font-bold text-center mb-12">
+      <section id="services" className="pt-20 pb-40 bg-black">
+        <h2 className="text-4xl font-bold text-center mb-12 text-white">
           {servicesData.sectionTitle || 'Our Services'}
         </h2>
-        <p className="text-center text-gray-600">No services available.</p>
+        <p className="text-center text-gray-300">No services available.</p>
       </section>
     );
   }
@@ -126,9 +126,9 @@ const ServicesSection = () => {
 
   return (
 
-    <section id="services" className="pt-20 pb-40 bg-gray-50">
+    <section id="services" className="pt-20 pb-40 bg-black">
 
-      <h2 className="text-4xl font-bold text-center mb-12">
+      <h2 className="text-4xl font-bold text-center mb-12 text-white">
         {servicesData.sectionTitle || 'Our Services'}
       </h2>
 
@@ -140,7 +140,7 @@ const ServicesSection = () => {
 
         {/* LEFT — DESCRIPTION TEXT + 3 SERVICE BOXES */}
         <div className="flex flex-col w-1/2 pr-10">
-          <p className="text-gray-700 text-lg mb-8">
+          <p className="text-white text-lg mb-8">
             {servicesData.descriptionText}
           </p>
 
@@ -149,9 +149,9 @@ const ServicesSection = () => {
               <div
                 key={index}
                 onClick={() => setSelectedService(box)}
-                className="p-6 rounded-xl bg-white shadow cursor-pointer hover:-translate-y-1 transition-all"
+                className="p-6 rounded-xl bg-gray-800 shadow cursor-pointer hover:-translate-y-1 transition-all"
               >
-                <h3 className="text-xl font-semibold">{box.title}</h3>
+                <h3 className="text-xl font-semibold text-white">{box.title}</h3>
               </div>
             ))}
           </div>
@@ -215,7 +215,7 @@ const ServicesSection = () => {
               })()}
             </>
           ) : (
-            <p className="text-gray-500">No gallery images found.</p>
+              <p className="text-gray-400">No gallery images found.</p>
           )}
         </div>
 
@@ -227,24 +227,24 @@ const ServicesSection = () => {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={() => setSelectedService(null)}
         >
-          <div 
-            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-8 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedService(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-bold"
-              aria-label="Close modal"
-            >
-              ×
-            </button>
-            <h3 className="text-3xl font-bold text-gray-900 mb-4 pr-8">
-              {selectedService.title}
-            </h3>
-            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-              {selectedService.description}
-            </p>
-          </div>
+              <div
+                className="bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-8 relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold"
+                  aria-label="Close modal"
+                >
+                  ×
+                </button>
+                <h3 className="text-3xl font-bold text-white mb-4 pr-8">
+                  {selectedService.title}
+                </h3>
+                <p className="text-gray-300 leading-relaxed whitespace-pre-line">
+                  {selectedService.description}
+                </p>
+              </div>
         </div>
       )}
 

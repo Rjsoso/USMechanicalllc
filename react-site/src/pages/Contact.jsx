@@ -30,19 +30,19 @@ export default function Contact() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-center text-lg">Loading...</p>
+      <div className="flex items-center justify-center py-20 bg-black">
+        <p className="text-center text-lg text-white">Loading...</p>
       </div>
     );
   }
 
   if (error || !contactData) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex items-center justify-center py-20 bg-black">
         <div className="text-center max-w-2xl px-6">
-          <h1 className="text-2xl font-bold mb-4 text-red-600">Contact Page Not Found</h1>
-          <p className="text-gray-600 mb-4">{error || 'No contact page data found.'}</p>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold mb-4 text-red-400">Contact Page Not Found</h1>
+          <p className="text-gray-300 mb-4">{error || 'No contact page data found.'}</p>
+          <p className="text-sm text-gray-400">
             Please create a "Contact Page" document in Sanity Studio at{' '}
             <a href="http://localhost:3333" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
               http://localhost:3333
@@ -54,7 +54,7 @@ export default function Contact() {
   }
 
   return (
-    <section className="max-w-6xl mx-auto py-20 px-6 text-white">
+    <section className="max-w-6xl mx-auto py-20 px-6 text-white bg-black">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
