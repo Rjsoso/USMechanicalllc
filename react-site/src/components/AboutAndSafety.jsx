@@ -33,7 +33,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
         client.fetch(`*[_type == "aboutAndSafety"][0]{
           aboutTitle,
           aboutText,
-          photo1
+          photo1,
+          photo2
         }`),
         client.fetch(`*[_type == "safety"][0]{
           title,
@@ -43,12 +44,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
       ])
         .then(([aboutData, safetyData]) => {
           // Merge data from both queries
+          // Use safety images array if available, otherwise fall back to photo2
+          const safetyImages = safetyData?.images && safetyData.images.length > 0 
+            ? safetyData.images 
+            : (aboutData?.photo2 ? [aboutData.photo2] : []);
+          
           const mergedData = {
             ...defaultData,
             ...aboutData,
             safetyTitle: safetyData?.title || defaultData.safetyTitle,
             safetyText: safetyData?.content || defaultData.safetyText,
-            safetyImages: safetyData?.images || [],
+            safetyImages: safetyImages,
           }
           setData(mergedData)
           setLoading(false)
