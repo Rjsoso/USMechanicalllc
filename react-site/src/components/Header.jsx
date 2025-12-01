@@ -14,66 +14,61 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-6xl rounded-3xl px-8 py-3 z-50 transition-all duration-500 shadow-lg ${
-        isScrolled
-          ? "bg-white/90 backdrop-blur-none shadow-md"
-          : "bg-white/10 backdrop-blur-lg border border-white/20"
-      }`}
-    >
-      <nav className="flex items-center gap-8">
-        {/* Logo Section - Separate */}
-        <div className="flex-shrink-0">
-          <img
-            src="/logo.png"
-            alt="US Mechanical"
-            className="h-20 w-auto object-contain"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
-          />
-        </div>
-
-        {/* Visual Separator */}
-        <div
-          className={`h-12 w-px transition-colors duration-500 ${
-            isScrolled ? "bg-gray-300" : "bg-white/30"
-          }`}
+    <>
+      {/* Logo - Separate, positioned in top-left corner */}
+      <div className="fixed top-4 left-4 z-50">
+        <img
+          src="/logo.png"
+          alt="US Mechanical"
+          className="h-32 md:h-40 w-auto object-contain transition-all duration-500"
+          onError={(e) => {
+            e.target.style.display = "none";
+          }}
         />
+      </div>
 
-        {/* Navigation Links Section - Separate */}
-        <ul
-          className={`flex space-x-8 text-lg font-medium transition-colors duration-500 flex-1 justify-end ${
-            isScrolled ? "text-gray-900" : "text-white"
-          }`}
-        >
-          <li>
-            <a href="#about" className="hover:text-blue-500 transition-colors duration-300">
-              About
-            </a>
-          </li>
-          <li>
-            <a href="#services" className="hover:text-blue-500 transition-colors duration-300">
-              Services
-            </a>
-          </li>
-          <li>
-            <a href="#portfolio" className="hover:text-blue-500 transition-colors duration-300">
-              Portfolio
-            </a>
-          </li>
-          <li>
-            <a href="#careers" className="hover:text-blue-500 transition-colors duration-300">
-              Careers
-            </a>
-          </li>
-          <li>
-            <a href="#contact" className="hover:text-blue-500 transition-colors duration-300">
-              Contact
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </header>
+      {/* Navigation Bar - Separate, centered/right-aligned */}
+      <header
+        className={`fixed top-4 right-4 md:right-8 lg:right-12 rounded-3xl px-6 md:px-8 py-3 z-50 transition-all duration-500 shadow-lg ${
+          isScrolled
+            ? "bg-white/90 backdrop-blur-none shadow-md"
+            : "bg-white/10 backdrop-blur-lg border border-white/20"
+        }`}
+      >
+        <nav>
+          <ul
+            className={`flex space-x-6 md:space-x-8 text-base md:text-lg font-medium transition-colors duration-500 ${
+              isScrolled ? "text-gray-900" : "text-white"
+            }`}
+          >
+            <li>
+              <a href="#about" className="hover:text-blue-500 transition-colors duration-300">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="#services" className="hover:text-blue-500 transition-colors duration-300">
+                Services
+              </a>
+            </li>
+            <li>
+              <a href="#portfolio" className="hover:text-blue-500 transition-colors duration-300">
+                Portfolio
+              </a>
+            </li>
+            <li>
+              <a href="#careers" className="hover:text-blue-500 transition-colors duration-300">
+                Careers
+              </a>
+            </li>
+            <li>
+              <a href="#contact" className="hover:text-blue-500 transition-colors duration-300">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+    </>
   );
 }
