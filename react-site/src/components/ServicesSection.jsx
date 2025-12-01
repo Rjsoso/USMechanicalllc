@@ -188,8 +188,8 @@ const ServicesSection = () => {
                     style={{ width: "650px", height: "500px", marginTop: "40px" }}
                   >
                     <CardSwap
-                      cardDistance={85}
-                      verticalDistance={90}
+                      cardDistance={60}
+                      verticalDistance={70}
                       width={650}
                       height={450}
                       delay={5000}
