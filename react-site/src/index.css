@@ -196,3 +196,7 @@ main {
 .modal-content button:hover {
   background: #2563eb;
 }
+
+.cardswap-wrapper {
+  position: relative !important;
+}
