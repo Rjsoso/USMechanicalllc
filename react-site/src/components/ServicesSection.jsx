@@ -113,7 +113,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="py-20 bg-gray-50">
+      <section id="services" className="pt-20 pb-40 bg-gray-50">
         <h2 className="text-4xl font-bold text-center mb-12">
           {servicesData.sectionTitle || 'Our Services'}
         </h2>
@@ -126,7 +126,7 @@ const ServicesSection = () => {
 
   return (
 
-    <section id="services" className="py-20 bg-gray-50">
+    <section id="services" className="pt-20 pb-40 bg-gray-50">
 
       <h2 className="text-4xl font-bold text-center mb-12">
         {servicesData.sectionTitle || 'Our Services'}
