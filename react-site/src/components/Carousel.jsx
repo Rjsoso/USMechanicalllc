@@ -125,46 +125,44 @@ export default function Carousel({
         onAnimationComplete={handleAnimationComplete}
       >
         {carouselItems.map((item, index) => {
-          const CarouselItem = ({ item, index }) => {
-            const range = [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset];
-            const outputRange = [90, 0, -90];
-            const rotateY = useTransform(x, range, outputRange, { clamp: false });
+          const range = [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset];
+          const outputRange = [90, 0, -90];
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const rotateY = useTransform(x, range, outputRange, { clamp: false });
 
-            return (
-              <motion.div
-                className={`carousel-item ${round ? 'round' : ''}`}
-                style={{
-                  width: itemWidth,
-                  height: round ? itemWidth : '100%',
-                  rotateY: rotateY,
-                  ...(round && { borderRadius: '50%' })
-                }}
-                transition={effectiveTransition}
-              >
-                <div className={`carousel-item-header ${round ? 'round' : ''}`}>
-                  {item.image ? (
-                    <img 
-                      src={item.image} 
-                      alt={item.title || `Carousel image ${index + 1}`}
-                      className="carousel-image"
-                    />
-                  ) : (
-                    <span className="carousel-icon-container">{item.icon}</span>
+          return (
+            <motion.div
+              key={index}
+              className={`carousel-item ${round ? 'round' : ''}`}
+              style={{
+                width: itemWidth,
+                height: round ? itemWidth : '100%',
+                rotateY: rotateY,
+                ...(round && { borderRadius: '50%' })
+              }}
+              transition={effectiveTransition}
+            >
+              <div className={`carousel-item-header ${round ? 'round' : ''}`}>
+                {item.image ? (
+                  <img 
+                    src={item.image} 
+                    alt={item.title || `Carousel image ${index + 1}`}
+                    className="carousel-image"
+                  />
+                ) : (
+                  item.icon && <span className="carousel-icon-container">{item.icon}</span>
+                )}
+              </div>
+              {item.title && (
+                <div className="carousel-item-content">
+                  <div className="carousel-item-title">{item.title}</div>
+                  {item.description && (
+                    <p className="carousel-item-description">{item.description}</p>
                   )}
                 </div>
-                {item.title && (
-                  <div className="carousel-item-content">
-                    <div className="carousel-item-title">{item.title}</div>
-                    {item.description && (
-                      <p className="carousel-item-description">{item.description}</p>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            );
-          };
-
-          return <CarouselItem key={index} item={item} index={index} />;
+              )}
+            </motion.div>
+          );
         })}
       </motion.div>
       <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
