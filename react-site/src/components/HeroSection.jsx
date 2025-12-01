@@ -61,10 +61,10 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="hero-section relative w-full min-h-screen flex items-center justify-center text-center"
+      className="hero-section relative w-full min-h-screen flex items-start justify-center text-center"
       style={{
         marginTop: 0,
-        paddingTop: 0,
+        paddingTop: '20vh',
         position: 'relative',
         top: 0,
       }}
