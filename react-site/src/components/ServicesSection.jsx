@@ -191,9 +191,9 @@ const ServicesSection = () => {
                       cardDistance={60}
                       verticalDistance={70}
                       width={650}
-                      height={450}
+                      height={500}
                       delay={5000}
-                      pauseOnHover={false}
+                      pauseOnHover={true}
                     >
                       {services.map((item, i) => (
                         <Card key={i} className="service-card">

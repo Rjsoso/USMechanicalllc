@@ -201,9 +201,22 @@ main {
   position: relative !important;
 }
 
+.service-card {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.service-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25) !important;
+}
+
 .service-card img {
   width: 100% !important;
-  height: 70% !important;
+  height: 100% !important;
   object-fit: cover !important;
-  border-radius: 14px;
+  border-radius: 16px !important;
+  display: block !important;
 }
