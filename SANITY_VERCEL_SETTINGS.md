@@ -1,83 +1,64 @@
-# ✅ Correct Vercel Settings for Sanity Studio
+# Vercel Build Settings for Sanity Studio
 
-## Current Issues Found:
-1. ❌ **Output Directory**: Shows `react-site/dist` (WRONG - this is the React site's output)
-2. ⚠️ **Build Command**: Has redundant `--output dist` flag
-3. ✅ **Framework Preset**: "Sanity" is correct (Vercel auto-detects it)
+## Required Vercel Dashboard Settings
 
----
+Go to: https://vercel.com/rjsosos-projects/sanity/settings
 
-## ✅ Correct Settings for Sanity Project:
+### General Settings:
+- **Framework Preset**: `Other` (or leave blank/unset)
+- **Root Directory**: `.` (root level, or leave blank if deploying from sanity folder)
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
 
-### **Project Settings:**
+## Current vercel.json Configuration
 
-**Framework Preset:** 
-- ✅ **Sanity** (keep as-is, Vercel auto-detects this correctly)
+The `sanity/vercel.json` file is configured as:
 
-**Build Command:**
-- ✅ **`npm install && npm run build`** OR
-- ✅ **`sanity build`** (without `--output dist` flag)
-- The `vercel.json` already has: `npm install && npm run build`
-- This runs `sanity build` which outputs to `dist` by default
-
-**Output Directory:**
-- ✅ **`dist`** (NOT `react-site/dist`!)
-- This is relative to the Sanity project root (`/sanity` folder)
-- Sanity Studio builds to `dist` by default
-
-**Install Command:**
-- ✅ **Default** (leave as-is: `npm install`, `yarn install`, etc.)
-
-**Development Command:**
-- ✅ **`sanity dev`** OR **`sanity start --port $PORT`**
-- This is for local development, not critical for production
-
----
-
-## 🔧 How to Fix in Vercel Dashboard:
-
-1. Go to: **https://vercel.com/rjsosos-projects/us-mechanicalsanity/settings/build-and-deployment**
-
-2. **In "Project Settings" section:**
-
-   **Output Directory:**
-   - Click the "Override" toggle to **ON** (if not already)
-   - Change from: `react-site/dist` ❌
-   - Change to: `dist` ✅
-   - Click **Save**
-
-   **Build Command:**
-   - Click the "Override" toggle to **ON** (if not already)
-   - Change from: `sanity build --output dist`
-   - Change to: `npm install && npm run build` ✅
-   - OR keep: `sanity build` (remove the `--output dist` part)
-   - Click **Save**
-
-3. **Framework Preset:**
-   - Keep as **"Sanity"** ✅
-   - Vercel correctly detects Sanity Studio
-
----
-
-## 📝 Why This Matters:
-
-- **Wrong Output Directory** (`react-site/dist`) means Vercel is looking in the wrong place for built files
-- This could cause deployment failures or serve the wrong files
-- The correct `dist` folder is inside `/sanity/dist` (relative to repo root)
-
----
-
-## ✅ After Fixing:
-
-Your `vercel.json` already has the correct settings:
 ```json
 {
   "version": 2,
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
 ```
 
-But Vercel Dashboard overrides might be conflicting. Make sure the Dashboard settings match!
+## Sanity Build Process
 
+Sanity Studio uses:
+- **Build Command**: `sanity build` (runs via `npm run build`)
+- **Output Directory**: `dist` (created by `sanity build`)
+- **Framework**: Uses Vite internally, but Framework Preset should be "Other" or unset
+
+## Recommended Settings
+
+### Option 1: Separate Install and Build (Recommended)
+- **Install Command**: `npm install`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+
+### Option 2: Combined (Current)
+- **Build Command**: `npm install && npm run build`
+- **Output Directory**: `dist`
+
+Both options work, but Option 1 is cleaner and allows Vercel to cache dependencies better.
+
+## Important Notes
+
+1. **Root Directory**: Should be `.` (root) if deploying from the `sanity/` folder, or set to `sanity` if deploying from monorepo root
+2. **Output Directory**: Always `dist` for Sanity Studio
+3. **Framework**: Sanity uses Vite internally, but Vercel should detect it automatically or you can set to "Other"
+4. **Base Path**: The studio is configured with `basePath: '/studio'` in `sanity.config.ts`, so it will be accessible at `your-domain.com/studio`
+
+## Verification
+
+After deployment, Sanity Studio should be accessible at:
+- Production URL: `https://your-sanity-project.vercel.app/studio`
+- The `/studio` path comes from the `basePath` setting in `sanity.config.ts`
