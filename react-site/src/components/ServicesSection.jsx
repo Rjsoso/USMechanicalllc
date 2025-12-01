@@ -183,7 +183,10 @@ const ServicesSection = () => {
                 console.log(`🔧 CardSwap: Rendering ${services.length} cards (${servicesData.services.length} from Sanity + ${neededCards} placeholders)`);
                 
                 return (
-                  <div className="relative cardswap-wrapper" style={{ width: '650px', height: '450px' }}>
+                  <div
+                    className="relative mt-10 cardswap-wrapper"
+                    style={{ width: '650px', height: '450px' }}
+                  >
                     <CardSwap
                       cardDistance={85}
                       verticalDistance={90}
