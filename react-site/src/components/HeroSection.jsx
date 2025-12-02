@@ -107,6 +107,7 @@ export default function HeroSection() {
         top: 0,
       }}
     >
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '-5vh' }}>
       {/* Background - extends to very top of viewport, covering header gap */}
       {/* Use carousel images if available, otherwise fall back to backgroundImage */}
       {heroData.carouselImages && heroData.carouselImages.length > 0 ? (
@@ -166,7 +167,6 @@ export default function HeroSection() {
         }}
       ></div>
 
-      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
