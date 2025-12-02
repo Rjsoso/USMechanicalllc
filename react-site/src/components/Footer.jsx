@@ -9,8 +9,7 @@ export default function Footer() {
       client
         .fetch(`*[_type == "companyInfo"][0]`)
         .then(res => setInfo(res))
-        .catch(error => {
-          console.warn('Sanity fetch failed for footer info:', error)
+        .catch(() => {
           // Component will return null if info is null, which is fine
         })
     };
@@ -19,7 +18,6 @@ export default function Footer() {
 
     // Refresh data when window regains focus
     const handleFocus = () => {
-      console.log('🔄 Window focused - refreshing footer info...');
       fetchInfo();
     };
 

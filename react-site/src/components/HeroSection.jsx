@@ -42,18 +42,6 @@ export default function HeroSection() {
       }`
         )
         .then(data => {
-          console.log('🔍 HeroSection - Full data received:', data);
-          console.log('🔍 Carousel images:', data?.carouselImages);
-          if (data?.carouselImages) {
-            console.log('🔍 Carousel images count:', data.carouselImages.length);
-            data.carouselImages.forEach((img, idx) => {
-              console.log(`🔍 Image ${idx}:`, {
-                imageUrl: img.imageUrl,
-                title: img.title,
-                hasImage: !!img.image
-              });
-            });
-          }
           if (data) {
             setHeroData(data)
             // Reset to first image when new data loads
@@ -67,7 +55,6 @@ export default function HeroSection() {
           setLoading(false)
         })
         .catch(error => {
-          console.warn('Sanity fetch failed, using default hero data:', error)
           // On error, use default data
           setHeroData(defaultHeroData)
           setLoading(false)
@@ -78,7 +65,6 @@ export default function HeroSection() {
 
     // Refresh data when window regains focus
     const handleFocus = () => {
-      console.log('🔄 Window focused - refreshing hero data...');
       fetchHero();
     };
 
@@ -110,37 +96,50 @@ export default function HeroSection() {
       {/* Background - extends to very top of viewport, covering header gap */}
       {/* Use carousel images if available, otherwise fall back to backgroundImage */}
       {heroData.carouselImages && heroData.carouselImages.length > 0 ? (
-        heroData.carouselImages.map((item, index) => {
-          const imageUrl = item.imageUrl || (item.image?.asset?.url);
-          console.log(`🔍 Rendering background ${index}:`, { imageUrl, currentIndex: currentImageIndex, isActive: currentImageIndex === index });
-          return (
-            <motion.div
-              key={index}
-              className="fixed bg-cover bg-center brightness-75"
-              style={{
-                backgroundImage: imageUrl
-                  ? `url(${imageUrl}?t=${Date.now()})`
-                  : undefined,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: '100vh',
-                width: '100%',
-                zIndex: -2,
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
-              transition={{ duration: 1 }}
-            ></motion.div>
-          );
-        })
+        <>
+          {/* Only render current and next image for performance */}
+          {heroData.carouselImages.map((item, index) => {
+            const isCurrent = currentImageIndex === index;
+            const isNext = currentImageIndex === (index - 1 + heroData.carouselImages.length) % heroData.carouselImages.length;
+            
+            // Only render current image and preload next one
+            if (!isCurrent && !isNext) return null;
+            
+            const imageUrl = item.imageUrl || (item.image?.asset?.url);
+            // Optimize image: use Sanity CDN with width/quality params if available
+            const optimizedUrl = imageUrl 
+              ? (imageUrl.includes('cdn.sanity.io') 
+                  ? `${imageUrl}?w=1920&q=85&auto=format` 
+                  : imageUrl)
+              : undefined;
+            
+            return (
+              <motion.div
+                key={index}
+                className="fixed bg-cover bg-center brightness-75"
+                style={{
+                  backgroundImage: optimizedUrl ? `url(${optimizedUrl})` : undefined,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: '100vh',
+                  width: '100%',
+                  zIndex: isCurrent ? -2 : -3,
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isCurrent ? 1 : 0 }}
+                transition={{ duration: 1 }}
+              ></motion.div>
+            );
+          })}
+        </>
       ) : (
         <div
           className="fixed bg-cover bg-center brightness-75"
           style={{
             backgroundImage: heroData.backgroundImage && urlFor(heroData.backgroundImage)
-              ? `url(${urlFor(heroData.backgroundImage).url()}?t=${Date.now()})`
+              ? urlFor(heroData.backgroundImage).width(1920).quality(85).auto('format').url()
               : undefined,
             top: 0,
             left: 0,
@@ -170,12 +169,13 @@ export default function HeroSection() {
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
-            src={`${urlFor(heroData.logo).url()}?t=${Date.now()}`}
+            src={urlFor(heroData.logo).width(400).quality(90).auto('format').url()}
             alt="US Mechanical Logo"
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2 }}
+            loading="eager"
             onError={e => {
               e.target.style.display = 'none'
             }}

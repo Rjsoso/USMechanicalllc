@@ -59,8 +59,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           setData(mergedData)
           setLoading(false)
         })
-        .catch(error => {
-          console.error('Error fetching from Sanity:', error)
+        .catch(() => {
           // On error, use default data
           setData(defaultData)
           setLoading(false)
@@ -71,7 +70,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
     // Refresh data when window regains focus
     const handleFocus = () => {
-      console.log('🔄 Window focused - refreshing about/safety data...');
       fetchData();
     };
 

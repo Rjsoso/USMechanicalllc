@@ -48,38 +48,10 @@ const ServicesSection = () => {
         )
 
       .then((data) => {
-        console.log('🔍 ServicesSection - Full data received:', data);
-        console.log('🔍 Services count:', data?.services?.length);
-        console.log('🔍 Section title:', data?.sectionTitle);
-        console.log('🔍 Description text:', data?.descriptionText ? 'EXISTS' : 'MISSING');
-        console.log('🔍 Services info boxes:', data?.servicesInfo?.length || 0);
-        console.log('🔍 Services info data:', data?.servicesInfo);
-        
-        if (!data) {
-          console.error('❌ No data returned from Sanity query');
-        }
-        if (!data?.servicesInfo || data.servicesInfo.length === 0) {
-          console.warn('⚠️ No service info boxes found. Make sure you added them in Sanity Studio and PUBLISHED the document.');
-        }
-        if (!data?.descriptionText) {
-          console.warn('⚠️ No description text found. This is optional.');
-        }
-        
         setServicesData(data);
-        // Check service cards after render
-        setTimeout(() => {
-          const cardCount = document.querySelectorAll(".service-card").length;
-          console.log(`Service cards found in DOM: ${cardCount}`);
-        }, 1000);
       })
-
       .catch((error) => {
-        console.error('❌ Error fetching services from Sanity:', error);
-        console.error('❌ Error details:', {
-          message: error.message,
-          stack: error.stack,
-          query: `*[_type == "ourServices"][0]{ sectionTitle, descriptionText, servicesInfo[] { title, description }, services[] { title, description, "imageUrl": image.asset->url } }`
-        });
+        console.error('Error fetching services from Sanity:', error);
       });
     };
 
@@ -87,7 +59,6 @@ const ServicesSection = () => {
 
     // Refresh data when window regains focus (user comes back to tab)
     const handleFocus = () => {
-      console.log('🔄 Window focused - refreshing services data...');
       fetchServices();
     };
 
@@ -97,15 +68,6 @@ const ServicesSection = () => {
 
 
 
-  useEffect(() => {
-    console.log("🔧 DEBUG: services data:", servicesData);
-    console.log("🔧 DEBUG: services count:", servicesData?.services?.length);
-    setTimeout(() => {
-      const cards = document.querySelectorAll(".service-card");
-      console.log("🔧 DEBUG: service cards found in DOM:", cards.length);
-      console.log("🔧 DEBUG: CardSwap receiving cards:", servicesData?.services?.length > 1 ? "YES (multiple cards)" : servicesData?.services?.length === 1 ? "YES (single card)" : "NO");
-    }, 1500);
-  }, [servicesData]);
 
 
 
@@ -180,8 +142,6 @@ const ServicesSection = () => {
                   });
                 }
                 
-                console.log(`🔧 CardSwap: Rendering ${services.length} cards (${servicesData.services.length} from Sanity + ${neededCards} placeholders)`);
-                
                 return (
                   <div
                     className="relative flex justify-center items-start"
@@ -196,19 +156,26 @@ const ServicesSection = () => {
                       pauseOnHover={true}
                       skewAmount={0}
                     >
-                      {services.map((item, i) => (
-                        <Card key={i} className="service-card">
-                          <img
-                            src={`${item.imageUrl}?${new Date().getTime()}`}
-                            alt={item.title}
-                            className="w-full h-full object-cover rounded-xl"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              console.error("Image failed:", item.imageUrl);
-                            }}
-                          />
-                        </Card>
-                      ))}
+                      {services.map((item, i) => {
+                        // Optimize image URL if from Sanity CDN
+                        const optimizedUrl = item.imageUrl?.includes('cdn.sanity.io')
+                          ? `${item.imageUrl}?w=1300&q=85&auto=format`
+                          : item.imageUrl;
+                        
+                        return (
+                          <Card key={i} className="service-card">
+                            <img
+                              src={optimizedUrl}
+                              alt={item.title}
+                              className="w-full h-full object-cover rounded-xl"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </Card>
+                        );
+                      })}
                     </CardSwap>
                   </div>
                 );

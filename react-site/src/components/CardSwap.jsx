@@ -72,28 +72,21 @@ const CardSwap = ({
 
   useEffect(() => {
     const total = refs.length;
-    console.log(`🔧 CardSwap useEffect: total cards = ${total}, refs.length = ${refs.length}`);
     
     if (total < 2) {
-      console.warn(`⚠️ CardSwap needs at least 2 cards to animate. Currently has ${total} card(s).`);
       return;
     }
     
     refs.forEach((r, i) => {
       if (r.current) {
         placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
-      } else {
-        console.warn(`⚠️ CardSwap ref ${i} is null`);
       }
     });
 
     const swap = () => {
       if (order.current.length < 2) {
-        console.warn('⚠️ CardSwap swap: Not enough cards to animate');
         return;
       }
-      
-      console.log(`🔄 CardSwap: Starting animation, order:`, order.current);
 
       const [front, ...rest] = order.current;
       const elFront = refs[front].current;
@@ -156,7 +149,6 @@ const CardSwap = ({
     };
 
     swap();
-    console.log(`⏰ CardSwap: Setting interval with delay ${delay}ms`);
     intervalRef.current = window.setInterval(swap, delay);
 
     if (pauseOnHover) {
@@ -179,7 +171,6 @@ const CardSwap = ({
     }
 
     return () => {
-      console.log('🧹 CardSwap: Cleaning up interval');
       clearInterval(intervalRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

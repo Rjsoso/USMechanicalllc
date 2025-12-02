@@ -12,8 +12,6 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
   const numericValue = match ? parseFloat(match[1]) : null;
   const suffix = match && match[2] ? match[2].trim() : "";
 
-  console.log("Animating value:", { value, numericValue, suffix, inView });
-
   // If no numeric value, just return the value as-is
   if (!numericValue) return <span>{value}</span>;
 
@@ -32,7 +30,6 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
     // Don't restart if already animating
     if (startedRef.current) return;
 
-    console.log("Starting animation for:", numericValue);
     startedRef.current = true;
     setCount(0);
     
@@ -50,7 +47,6 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
       } else {
         setCount(numericValue); // Ensure final value
         animationRef.current = null;
-        console.log("Animation complete for:", numericValue);
       }
     };
     
@@ -84,17 +80,6 @@ const CompanyStats = () => {
   const [loading, setLoading] = useState(true);
   const sectionRef = useRef(null);
 
-  useEffect(() => {
-    const testFetch = async () => {
-      try {
-        const data = await client.fetch('*[_type == "companyStats"]');
-        console.log("Raw Sanity Data:", data);
-      } catch (err) {
-        console.error("Sanity fetch failed:", err);
-      }
-    };
-    testFetch();
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,17 +90,19 @@ const CompanyStats = () => {
         }
       }`;
       const data = await client.fetch(query);
-      console.log("Fetched Company Stats:", data);
       setStatsData(data);
       setLoading(false);
     };
 
-    fetchData().catch(console.error);
+    fetchData().catch((error) => {
+      console.error('Error fetching company stats:', error);
+    });
 
     // Refresh data when window regains focus
     const handleFocus = () => {
-      console.log('🔄 Window focused - refreshing company stats...');
-      fetchData().catch(console.error);
+      fetchData().catch((error) => {
+        console.error('Error fetching company stats:', error);
+      });
     };
 
     window.addEventListener('focus', handleFocus);
@@ -129,11 +116,8 @@ const CompanyStats = () => {
     // Reset inView to false initially to prevent auto-scroll
     setInView(false);
 
-    console.log("Observing section:", sectionRef.current);
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        console.log("In view:", entry.isIntersecting);
         // Only set inView when actually intersecting (user scrolled to it)
         setInView(entry.isIntersecting);
       },
@@ -168,12 +152,8 @@ const CompanyStats = () => {
   }
 
   if (!statsData || !statsData.stats || statsData.stats.length === 0) {
-    console.log('No stats data to display:', statsData);
     return null;
   }
-
-  console.log('Rendering CompanyStats with:', statsData);
-  console.log('Stats array:', statsData.stats);
 
   return (
     <section
@@ -188,9 +168,7 @@ const CompanyStats = () => {
           </h2>
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {statsData.stats?.map((item, idx) => {
-            console.log(`Rendering stat ${idx}:`, item);
-            return (
+          {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
                 <div className="text-5xl font-extrabold mb-2 text-[#003A70]">
                   <AnimatedNumber value={item.value} inView={inView} />
@@ -199,8 +177,7 @@ const CompanyStats = () => {
                   {item.label}
                 </p>
               </div>
-            );
-          })}
+            ))}
         </div>
       </div>
     </section>
