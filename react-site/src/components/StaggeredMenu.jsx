@@ -378,17 +378,19 @@ export const StaggeredMenu = ({
         <button
           ref={toggleBtnRef}
           className="
-            px-5 py-2
+            relative
+            px-5 py-2 
+            rounded-full 
+            text-white 
+            font-semibold
             backdrop-blur-xl
-            bg-white/20
-            border border-white/30
-            rounded-full
-            text-white
-            font-medium
-            shadow-[0_4px_20px_rgba(255,255,255,0.25)]
-            hover:bg-white/30
-            hover:shadow-[0_6px_28px_rgba(255,255,255,0.4)]
+            bg-white/10
+            border border-white/40
+            shadow-[0_4px_18px_rgba(255,255,255,0.25)]
+            hover:bg-white/20
+            hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]
             transition-all
+            overflow-hidden
             flex items-center gap-2
           "
           aria-label={open ? 'Close menu' : 'Open menu'}
@@ -397,7 +399,31 @@ export const StaggeredMenu = ({
           onClick={toggleMenu}
           type="button"
         >
-          <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
+          {/* Chrome shine overlay */}
+          <span
+            className="
+              pointer-events-none
+              absolute inset-0
+              rounded-full
+              bg-gradient-to-br from-white/70 to-white/5
+              opacity-30
+              mix-blend-screen
+            "
+          ></span>
+
+          {/* Top reflective streak */}
+          <span
+            className="
+              pointer-events-none
+              absolute top-0 left-0 right-0
+              h-[45%]
+              rounded-t-full
+              bg-gradient-to-b from-white/70 to-transparent
+              opacity-60
+            "
+          ></span>
+
+          <span ref={textWrapRef} className="sm-toggle-textWrap relative z-10" aria-hidden="true">
             <span ref={textInnerRef} className="sm-toggle-textInner">
               {textLines.map((l, i) => (
                 <span className="sm-toggle-line" key={i}>
@@ -406,7 +432,7 @@ export const StaggeredMenu = ({
               ))}
             </span>
           </span>
-          <span ref={iconRef} className="sm-icon" aria-hidden="true">
+          <span ref={iconRef} className="sm-icon relative z-10" aria-hidden="true">
             <span ref={plusHRef} className="sm-icon-line" />
             <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
           </span>
