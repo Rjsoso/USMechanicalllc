@@ -20,10 +20,10 @@ export default function Home() {
       <Header />
 
       <main>
-        <section id="hero" className="absolute top-0 left-0 w-full">
+        <section id="hero" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 0 }}>
           <HeroSection />
         </section>
-        <div className="pt-40 md:pt-48">
+        <div style={{ marginTop: '100vh', position: 'relative', zIndex: 1 }}>
 
           <section id="about">
             <AboutAndSafety />
