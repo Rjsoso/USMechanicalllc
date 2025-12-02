@@ -22,7 +22,12 @@ export default function HeroSection() {
       client
         .fetch(
           `*[_type == "heroSection"][0]{
-        backgroundImage,
+        backgroundImage {
+          asset-> {
+            _id,
+            url
+          }
+        },
         carouselImages[] {
           image {
             asset-> {
@@ -34,7 +39,12 @@ export default function HeroSection() {
           description,
           "imageUrl": image.asset->url
         },
-        logo,
+        logo {
+          asset-> {
+            _id,
+            url
+          }
+        },
         headline,
         subtext,
         buttonText,
@@ -43,6 +53,14 @@ export default function HeroSection() {
         )
         .then(data => {
           if (data) {
+            // Debug: log what we received
+            console.log('Hero data received:', {
+              hasBackgroundImage: !!data.backgroundImage,
+              backgroundImageUrl: data.backgroundImage?.asset?.url,
+              carouselImagesCount: data.carouselImages?.length || 0,
+              carouselImages: data.carouselImages
+            });
+            
             setHeroData(data)
             // Reset to first image when new data loads
             if (data.carouselImages && data.carouselImages.length > 0) {
@@ -95,7 +113,7 @@ export default function HeroSection() {
     >
       {/* Background - extends to very top of viewport, covering header gap */}
       {/* Use carousel images if available, otherwise fall back to backgroundImage */}
-      {heroData.carouselImages && heroData.carouselImages.length > 0 ? (
+      {heroData.carouselImages && Array.isArray(heroData.carouselImages) && heroData.carouselImages.length > 0 && heroData.carouselImages.some(img => img.imageUrl || img.image?.asset?.url) ? (
         <>
           {/* Only render current and next image for performance */}
           {heroData.carouselImages.map((item, index) => {
@@ -138,7 +156,9 @@ export default function HeroSection() {
         <div
           className="fixed bg-cover bg-center brightness-75"
           style={{
-            backgroundImage: heroData.backgroundImage && urlFor(heroData.backgroundImage)
+            backgroundImage: heroData.backgroundImage?.asset?.url
+              ? `url(${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
+              : heroData.backgroundImage && urlFor(heroData.backgroundImage)
               ? urlFor(heroData.backgroundImage).width(1920).quality(85).auto('format').url()
               : undefined,
             top: 0,
