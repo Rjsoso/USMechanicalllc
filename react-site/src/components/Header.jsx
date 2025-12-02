@@ -23,8 +23,8 @@ export default function Header() {
         />
       </div>
 
-      {/* StaggeredMenu - positioned fixed */}
-      <div className="fixed top-0 right-0 w-full h-screen z-50">
+      {/* StaggeredMenu - positioned fixed on right */}
+      <div className="fixed top-0 right-0 z-50" style={{ width: 'auto', height: '100vh' }}>
         <StaggeredMenu
           position="right"
           items={menuItems}
@@ -36,7 +36,7 @@ export default function Header() {
           colors={['#1e1e22', '#35353c']}
           logoUrl=""
           accentColor="#003A70"
-          isFixed={true}
+          isFixed={false}
           closeOnClickAway={true}
         />
       </div>

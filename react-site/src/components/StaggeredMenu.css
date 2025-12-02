@@ -1,6 +1,6 @@
 .staggered-menu-wrapper {
   position: relative;
-  width: 100%;
+  width: auto;
   height: 100%;
   z-index: 40;
 }
@@ -18,11 +18,11 @@
 .staggered-menu-header {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  right: 0;
+  width: auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 2em;
   background: transparent;
   pointer-events: none;
