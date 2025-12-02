@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
+import GlassSurface from './GlassSurface';
 
 export const StaggeredMenu = ({
   position = 'right',
@@ -389,66 +390,52 @@ export const StaggeredMenu = ({
           </div>
         )}
         <div className="flex justify-end px-6 pt-6">
-          <button
-            ref={toggleBtnRef}
-            className={`
-              relative
-              px-5 py-2
-              rounded-full
-              font-medium
-              ${isScrolled ? 'text-black' : 'text-white'}
-              backdrop-blur-xl
-              ${isScrolled ? 'bg-black/10' : 'bg-white/10'}
-              ${isScrolled ? 'border-black/30' : 'border-white/30'}
-              border
-              ${isScrolled ? 'shadow-[0_4px_12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.45)_inset]' : 'shadow-[0_4px_12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.45)_inset]'}
-              overflow-hidden
-              flex items-center gap-2
-            `}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            aria-controls="staggered-menu-panel"
-            onClick={toggleMenu}
-            type="button"
+          <GlassSurface
+            width={52}
+            height={52}
+            borderRadius={999}
+            blur={18}
+            brightness={65}
+            opacity={0.92}
+            backgroundOpacity={0.15}
+            saturation={1.4}
+            displace={4}
+            distortionScale={-220}
+            redOffset={6}
+            greenOffset={12}
+            blueOffset={22}
+            mixBlendMode="screen"
+            className="p-[2px]"
           >
-          {/* TOP GLOSS STRIPE — strong shine */}
-          <span
-            className={`
-              absolute top-0 left-0 right-0
-              h-[45%]
-              rounded-t-full
-              ${isScrolled ? 'bg-gradient-to-b from-black/60 to-transparent' : 'bg-gradient-to-b from-white/60 to-transparent'}
-              opacity-70
-              pointer-events-none
-            `}
-          />
-
-          {/* BOTTOM REFLECTIVE SHINE — chrome look */}
-          <span
-            className={`
-              absolute bottom-0 left-0 right-0
-              h-[35%]
-              rounded-b-full
-              ${isScrolled ? 'bg-gradient-to-t from-black/20 to-transparent' : 'bg-gradient-to-t from-white/20 to-transparent'}
-              opacity-50
-              pointer-events-none
-            `}
-          />
-
-          <span ref={textWrapRef} className="sm-toggle-textWrap relative z-10" aria-hidden="true">
-            <span ref={textInnerRef} className="sm-toggle-textInner">
-              {textLines.map((l, i) => (
-                <span className="sm-toggle-line" key={i}>
-                  {l}
+            <button
+              ref={toggleBtnRef}
+              className="
+                flex items-center justify-center
+                w-full h-full
+                text-white
+                text-3xl
+              "
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              aria-controls="staggered-menu-panel"
+              onClick={toggleMenu}
+              type="button"
+            >
+              <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
+                <span ref={textInnerRef} className="sm-toggle-textInner">
+                  {textLines.map((l, i) => (
+                    <span className="sm-toggle-line" key={i}>
+                      {l}
+                    </span>
+                  ))}
                 </span>
-              ))}
-            </span>
-          </span>
-          <span ref={iconRef} className="sm-icon relative z-10" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
-          </span>
-        </button>
+              </span>
+              <span ref={iconRef} className="sm-icon" aria-hidden="true">
+                <span ref={plusHRef} className="sm-icon-line" />
+                <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+              </span>
+            </button>
+          </GlassSurface>
         </div>
       </header>
 
