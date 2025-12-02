@@ -19,32 +19,34 @@ export default function Home() {
     <>
       <Header />
 
-      <main className="pt-40 md:pt-48">
-        <section id="hero">
+      <main>
+        <section id="hero" className="absolute top-0 left-0 w-full">
           <HeroSection />
         </section>
+        <div className="pt-40 md:pt-48">
 
-        <section id="about">
-          <AboutAndSafety />
-        </section>
+          <section id="about">
+            <AboutAndSafety />
+          </section>
 
-        <CompanyStats />
+          <CompanyStats />
 
-        <section id="services">
-          <ServicesSection />
-        </section>
+          <section id="services">
+            <ServicesSection />
+          </section>
 
-        <section id="portfolio">
-          <Portfolio />
-        </section>
+          <section id="portfolio">
+            <Portfolio />
+          </section>
 
-        <section id="careers">
-          <Careers />
-        </section>
+          <section id="careers">
+            <Careers />
+          </section>
 
-        <section id="contact">
-          <Contact />
-        </section>
+          <section id="contact">
+            <Contact />
+          </section>
+        </div>
       </main>
 
       <Footer />
