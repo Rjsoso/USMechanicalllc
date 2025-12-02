@@ -379,14 +379,15 @@ export const StaggeredMenu = ({
           ref={toggleBtnRef}
           className="
             px-5 py-2
-            backdrop-blur-2xl
-            bg-gradient-to-br from-white/25 to-white/5
+            backdrop-blur-xl
+            bg-white/20
+            border border-white/30
             rounded-full
             text-white
             font-medium
             shadow-[0_4px_20px_rgba(255,255,255,0.25)]
-            hover:from-white/35 hover:to-white/10
-            hover:shadow-[0_6px_25px_rgba(255,255,255,0.45)]
+            hover:bg-white/30
+            hover:shadow-[0_6px_28px_rgba(255,255,255,0.4)]
             transition-all
             flex items-center gap-2
           "

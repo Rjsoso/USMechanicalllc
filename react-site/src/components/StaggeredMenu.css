@@ -24,7 +24,10 @@
   align-items: center;
   justify-content: flex-end;
   padding: 2em;
-  background: transparent;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
   pointer-events: none;
   z-index: 20;
 }
