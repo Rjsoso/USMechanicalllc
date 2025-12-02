@@ -99,7 +99,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="hero-section relative w-full min-h-screen flex items-center justify-center text-center"
+      className="hero-section relative w-full h-screen flex items-center justify-center text-center"
       style={{
         marginTop: 0,
         paddingTop: 0,
@@ -166,7 +166,7 @@ export default function HeroSection() {
         }}
       ></div>
 
-      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '-5vh' }}>
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
