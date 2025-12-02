@@ -427,7 +427,7 @@ export const StaggeredMenu = ({
             className={`
               absolute top-0 left-[-120%]
               w-[200%] h-full
-              bg-gradient-to-r from-transparent via-white/30 to-transparent
+              ${isScrolled ? 'bg-gradient-to-r from-transparent via-black/30 to-transparent' : 'bg-gradient-to-r from-transparent via-white/30 to-transparent'}
               opacity-60
               rotate-12
               animate-shimmer
