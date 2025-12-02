@@ -391,21 +391,21 @@ export const StaggeredMenu = ({
         )}
         <div className="flex justify-end px-6 pt-6">
           <GlassSurface
-            width={52}
-            height={52}
+            width={76}
+            height={76}
             borderRadius={999}
-            blur={18}
-            brightness={65}
+            blur={20}
+            brightness={70}
             opacity={0.92}
-            backgroundOpacity={0.15}
-            saturation={1.4}
-            displace={4}
-            distortionScale={-220}
-            redOffset={6}
-            greenOffset={12}
-            blueOffset={22}
+            backgroundOpacity={0.18}
+            saturation={1.35}
+            displace={6}
+            distortionScale={-240}
+            redOffset={8}
+            greenOffset={14}
+            blueOffset={26}
             mixBlendMode="screen"
-            className="p-[2px]"
+            className="p-[4px]"
           >
             <button
               ref={toggleBtnRef}
@@ -413,7 +413,7 @@ export const StaggeredMenu = ({
                 flex items-center justify-center
                 w-full h-full
                 text-white
-                text-3xl
+                text-4xl
               "
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
