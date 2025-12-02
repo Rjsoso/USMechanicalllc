@@ -375,30 +375,31 @@ export const StaggeredMenu = ({
             />
           </div>
         )}
-        <button
-          ref={toggleBtnRef}
-          className="
-            relative
-            px-5 py-2 
-            rounded-full 
-            text-white 
-            font-semibold
-            backdrop-blur-xl
-            bg-white/10
-            border border-white/40
-            shadow-[0_4px_18px_rgba(255,255,255,0.25)]
-            hover:bg-white/20
-            hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]
-            transition-all
-            overflow-hidden
-            flex items-center gap-2
-          "
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          aria-controls="staggered-menu-panel"
-          onClick={toggleMenu}
-          type="button"
-        >
+        <div className="relative">
+          <button
+            ref={toggleBtnRef}
+            className="
+              relative
+              px-5 py-2 
+              rounded-full 
+              text-white 
+              font-semibold
+              backdrop-blur-xl
+              bg-white/10
+              border border-white/40
+              shadow-[0_4px_18px_rgba(255,255,255,0.25)]
+              hover:bg-white/20
+              hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]
+              transition-all
+              overflow-hidden
+              flex items-center gap-2
+            "
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="staggered-menu-panel"
+            onClick={toggleMenu}
+            type="button"
+          >
           {/* Chrome shine overlay */}
           <span
             className="
@@ -437,6 +438,7 @@ export const StaggeredMenu = ({
             <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
           </span>
         </button>
+        </div>
       </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
