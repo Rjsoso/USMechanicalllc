@@ -31,7 +31,7 @@ export default function Header() {
           displaySocials={false}
           displayItemNumbering={true}
           menuButtonColor="#fff"
-          openMenuButtonColor="#fff"
+          openMenuButtonColor="#000"
           changeMenuColorOnOpen={true}
           colors={['#1e1e22', '#35353c']}
           logoUrl=""
