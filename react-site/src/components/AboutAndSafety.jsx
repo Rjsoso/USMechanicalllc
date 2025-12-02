@@ -94,12 +94,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   if (loading || !data) {
     return (
-      <div className="text-center py-20 text-gray-200" style={{ backgroundColor: '#003A70' }}>Loading content...</div>
+      <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
     )
   }
 
   return (
-    <section className="py-20 text-white" style={{ backgroundColor: '#003A70' }}>
+    <section className="py-20 text-white bg-gray-700">
       <div className="max-w-7xl mx-auto px-6">
         {/* ABOUT SECTION - Image + Text Horizontal (side-by-side on desktop, stacked on mobile) */}
         {/* All content (text and images) comes from Sanity CMS */}
