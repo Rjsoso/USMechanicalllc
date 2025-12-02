@@ -397,11 +397,11 @@ export const StaggeredMenu = ({
               rounded-full
               font-medium
               ${isScrolled ? 'text-black' : 'text-white'}
-              ${isScrolled ? 'bg-black/10' : 'bg-white/10'}
               backdrop-blur-xl
-              ${isScrolled ? 'border-black/20' : 'border-white/20'}
+              ${isScrolled ? 'bg-black/10' : 'bg-white/10'}
+              ${isScrolled ? 'border-black/30' : 'border-white/30'}
               border
-              ${isScrolled ? 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.4)_inset]' : 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.4)_inset]'}
+              ${isScrolled ? 'shadow-[0_4px_12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.45)_inset]' : 'shadow-[0_4px_12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.45)_inset]'}
               overflow-hidden
               flex items-center gap-2
             `}
@@ -411,26 +411,26 @@ export const StaggeredMenu = ({
             onClick={toggleMenu}
             type="button"
           >
-          {/* Top glossy band (iOS) */}
+          {/* TOP GLOSS STRIPE — strong shine */}
           <span
             className={`
-              absolute inset-0
-              rounded-full
-              ${isScrolled ? 'bg-gradient-to-b from-black/40 to-transparent' : 'bg-gradient-to-b from-white/40 to-transparent'}
-              opacity-40
+              absolute top-0 left-0 right-0
+              h-[45%]
+              rounded-t-full
+              ${isScrolled ? 'bg-gradient-to-b from-black/60 to-transparent' : 'bg-gradient-to-b from-white/60 to-transparent'}
+              opacity-70
               pointer-events-none
             `}
           />
 
-          {/* React Bits shimmer sweep */}
+          {/* BOTTOM REFLECTIVE SHINE — chrome look */}
           <span
             className={`
-              absolute top-0 left-[-120%]
-              w-[200%] h-full
-              ${isScrolled ? 'bg-gradient-to-r from-transparent via-black/30 to-transparent' : 'bg-gradient-to-r from-transparent via-white/30 to-transparent'}
-              opacity-60
-              rotate-12
-              animate-shimmer
+              absolute bottom-0 left-0 right-0
+              h-[35%]
+              rounded-b-full
+              ${isScrolled ? 'bg-gradient-to-t from-black/20 to-transparent' : 'bg-gradient-to-t from-white/20 to-transparent'}
+              opacity-50
               pointer-events-none
             `}
           />
