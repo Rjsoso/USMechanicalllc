@@ -1,7 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
-import GlassSurface from './GlassSurface';
 
 export const StaggeredMenu = ({
   position = 'right',
@@ -376,47 +375,42 @@ export const StaggeredMenu = ({
             />
           </div>
         )}
-        <GlassSurface
-          width="auto"
-          height="auto"
-          borderRadius={24}
-          brightness={60}
-          opacity={0.8}
-          blur={11}
-          displace={15}
-          distortionScale={-150}
-          redOffset={5}
-          greenOffset={15}
-          blueOffset={25}
-          mixBlendMode="screen"
-          backgroundOpacity={0}
-          saturation={1}
-          className="sm-toggle-glass"
+        <button
+          ref={toggleBtnRef}
+          className="
+            px-5 py-2
+            backdrop-blur-xl
+            bg-white/20
+            border border-white/40
+            rounded-full
+            text-white
+            font-medium
+            shadow-[0_2px_10px_rgba(255,255,255,0.2)]
+            hover:bg-white/30
+            hover:shadow-[0_4px_20px_rgba(255,255,255,0.35)]
+            transition-all
+            flex items-center gap-2
+          "
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          aria-controls="staggered-menu-panel"
+          onClick={toggleMenu}
+          type="button"
         >
-          <button
-            ref={toggleBtnRef}
-            className="sm-toggle"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            aria-controls="staggered-menu-panel"
-            onClick={toggleMenu}
-            type="button"
-          >
-            <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
-              <span ref={textInnerRef} className="sm-toggle-textInner">
-                {textLines.map((l, i) => (
-                  <span className="sm-toggle-line" key={i}>
-                    {l}
-                  </span>
-                ))}
-              </span>
+          <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
+            <span ref={textInnerRef} className="sm-toggle-textInner">
+              {textLines.map((l, i) => (
+                <span className="sm-toggle-line" key={i}>
+                  {l}
+                </span>
+              ))}
             </span>
-            <span ref={iconRef} className="sm-icon" aria-hidden="true">
-              <span ref={plusHRef} className="sm-icon-line" />
-              <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
-            </span>
-          </button>
-        </GlassSurface>
+          </span>
+          <span ref={iconRef} className="sm-icon" aria-hidden="true">
+            <span ref={plusHRef} className="sm-icon-line" />
+            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+          </span>
+        </button>
       </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
