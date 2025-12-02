@@ -24,7 +24,12 @@ export default function HeroSection() {
           `*[_type == "heroSection"][0]{
         backgroundImage,
         carouselImages[] {
-          image,
+          image {
+            asset-> {
+              _id,
+              url
+            }
+          },
           title,
           description,
           "imageUrl": image.asset->url
@@ -39,6 +44,16 @@ export default function HeroSection() {
         .then(data => {
           console.log('🔍 HeroSection - Full data received:', data);
           console.log('🔍 Carousel images:', data?.carouselImages);
+          if (data?.carouselImages) {
+            console.log('🔍 Carousel images count:', data.carouselImages.length);
+            data.carouselImages.forEach((img, idx) => {
+              console.log(`🔍 Image ${idx}:`, {
+                imageUrl: img.imageUrl,
+                title: img.title,
+                hasImage: !!img.image
+              });
+            });
+          }
           if (data) {
             setHeroData(data)
             // Reset to first image when new data loads
@@ -95,27 +110,31 @@ export default function HeroSection() {
       {/* Background - extends to very top of viewport, covering header gap */}
       {/* Use carousel images if available, otherwise fall back to backgroundImage */}
       {heroData.carouselImages && heroData.carouselImages.length > 0 ? (
-        heroData.carouselImages.map((item, index) => (
-          <motion.div
-            key={index}
-            className="fixed bg-cover bg-center brightness-75"
-            style={{
-              backgroundImage: item.imageUrl
-                ? `url(${item.imageUrl}?t=${Date.now()})`
-                : undefined,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: '100vh',
-              width: '100%',
-              zIndex: -2,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
-            transition={{ duration: 1 }}
-          ></motion.div>
-        ))
+        heroData.carouselImages.map((item, index) => {
+          const imageUrl = item.imageUrl || (item.image?.asset?.url);
+          console.log(`🔍 Rendering background ${index}:`, { imageUrl, currentIndex: currentImageIndex, isActive: currentImageIndex === index });
+          return (
+            <motion.div
+              key={index}
+              className="fixed bg-cover bg-center brightness-75"
+              style={{
+                backgroundImage: imageUrl
+                  ? `url(${imageUrl}?t=${Date.now()})`
+                  : undefined,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '100vh',
+                width: '100%',
+                zIndex: -2,
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
+              transition={{ duration: 1 }}
+            ></motion.div>
+          );
+        })
       ) : (
         <div
           className="fixed bg-cover bg-center brightness-75"
