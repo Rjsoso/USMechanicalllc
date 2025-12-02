@@ -167,6 +167,7 @@ export default function HeroSection() {
         }}
       ></div>
 
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '-5vh' }}>
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
