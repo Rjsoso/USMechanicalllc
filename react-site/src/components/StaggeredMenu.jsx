@@ -21,6 +21,7 @@ export const StaggeredMenu = ({
   onMenuClose
 }) => {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const openRef = useRef(false);
   const panelRef = useRef(null);
   const preLayersRef = useRef(null);
@@ -39,6 +40,18 @@ export const StaggeredMenu = ({
   const toggleBtnRef = useRef(null);
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef(null);
+
+  // Scroll detection for color change
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroHeight = window.innerHeight * 0.8;
+      setIsScrolled(window.scrollY > heroHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -378,22 +391,21 @@ export const StaggeredMenu = ({
         <div className="relative">
           <button
             ref={toggleBtnRef}
-            className="
+            className={`
               relative
               px-5 py-2 
               rounded-full 
-              text-white 
+              ${isScrolled ? 'text-black' : 'text-white'}
               font-semibold
               backdrop-blur-xl
-              bg-white/10
-              border border-white/40
-              shadow-[0_4px_18px_rgba(255,255,255,0.25)]
-              hover:bg-white/20
-              hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]
+              ${isScrolled ? 'bg-black/10 border-black/40' : 'bg-white/10 border-white/40'}
+              border
+              ${isScrolled ? 'shadow-[0_4px_18px_rgba(0,0,0,0.25)]' : 'shadow-[0_4px_18px_rgba(255,255,255,0.25)]'}
+              ${isScrolled ? 'hover:bg-black/20 hover:shadow-[0_6px_28px_rgba(0,0,0,0.45)]' : 'hover:bg-white/20 hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]'}
               transition-all
               overflow-hidden
               flex items-center gap-2
-            "
+            `}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="staggered-menu-panel"
@@ -402,26 +414,26 @@ export const StaggeredMenu = ({
           >
           {/* Chrome shine overlay */}
           <span
-            className="
+            className={`
               pointer-events-none
               absolute inset-0
               rounded-full
-              bg-gradient-to-br from-white/70 to-white/5
+              ${isScrolled ? 'bg-gradient-to-br from-black/70 to-black/5' : 'bg-gradient-to-br from-white/70 to-white/5'}
               opacity-30
               mix-blend-screen
-            "
+            `}
           ></span>
 
           {/* Top reflective streak */}
           <span
-            className="
+            className={`
               pointer-events-none
               absolute top-0 left-0 right-0
               h-[45%]
               rounded-t-full
-              bg-gradient-to-b from-white/70 to-transparent
+              ${isScrolled ? 'bg-gradient-to-b from-black/70 to-transparent' : 'bg-gradient-to-b from-white/70 to-transparent'}
               opacity-60
-            "
+            `}
           ></span>
 
           <span ref={textWrapRef} className="sm-toggle-textWrap relative z-10" aria-hidden="true">
