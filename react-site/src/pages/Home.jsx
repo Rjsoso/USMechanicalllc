@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import Header from '../components/Header'
-import NavBar from '../components/NavBar'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
 import CompanyStats from '../components/CompanyStats'
@@ -19,7 +18,6 @@ export default function Home() {
   return (
     <>
       <Header />
-      <NavBar />
 
       <main>
         <section id="hero" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 0 }}>
