@@ -381,7 +381,6 @@ export const StaggeredMenu = ({
             px-5 py-2
             backdrop-blur-2xl
             bg-gradient-to-br from-white/25 to-white/5
-            border border-white/50
             rounded-full
             text-white
             font-medium
