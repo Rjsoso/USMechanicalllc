@@ -393,16 +393,15 @@ export const StaggeredMenu = ({
             ref={toggleBtnRef}
             className={`
               relative
-              px-5 py-2 
-              rounded-full 
+              px-5 py-2
+              rounded-full
+              font-medium
               ${isScrolled ? 'text-black' : 'text-white'}
-              font-semibold
+              ${isScrolled ? 'bg-black/10' : 'bg-white/10'}
               backdrop-blur-xl
-              ${isScrolled ? 'bg-black/10 border-black/40' : 'bg-white/10 border-white/40'}
+              ${isScrolled ? 'border-black/20' : 'border-white/20'}
               border
-              ${isScrolled ? 'shadow-[0_4px_18px_rgba(0,0,0,0.25)]' : 'shadow-[0_4px_18px_rgba(255,255,255,0.25)]'}
-              ${isScrolled ? 'hover:bg-black/20 hover:shadow-[0_6px_28px_rgba(0,0,0,0.45)]' : 'hover:bg-white/20 hover:shadow-[0_6px_28px_rgba(255,255,255,0.45)]'}
-              transition-all
+              ${isScrolled ? 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.4)_inset]' : 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.4)_inset]'}
               overflow-hidden
               flex items-center gap-2
             `}
@@ -412,29 +411,29 @@ export const StaggeredMenu = ({
             onClick={toggleMenu}
             type="button"
           >
-          {/* Chrome shine overlay */}
+          {/* iPhone top shine */}
           <span
             className={`
-              pointer-events-none
               absolute inset-0
               rounded-full
-              ${isScrolled ? 'bg-gradient-to-br from-black/70 to-black/5' : 'bg-gradient-to-br from-white/70 to-white/5'}
-              opacity-30
-              mix-blend-screen
+              ${isScrolled ? 'bg-gradient-to-b from-black/40 to-transparent' : 'bg-gradient-to-b from-white/40 to-transparent'}
+              opacity-40
+              pointer-events-none
             `}
-          ></span>
+          />
 
-          {/* Top reflective streak */}
+          {/* React Bits style chrome streak */}
           <span
             className={`
+              absolute left-[-20%] top-0
+              w-[140%] h-[120%]
+              rotate-12
+              ${isScrolled ? 'bg-gradient-to-r from-black/25 via-black/5 to-transparent' : 'bg-gradient-to-r from-white/25 via-white/5 to-transparent'}
+              opacity-40
+              mix-blend-screen
               pointer-events-none
-              absolute top-0 left-0 right-0
-              h-[45%]
-              rounded-t-full
-              ${isScrolled ? 'bg-gradient-to-b from-black/70 to-transparent' : 'bg-gradient-to-b from-white/70 to-transparent'}
-              opacity-60
             `}
-          ></span>
+          />
 
           <span ref={textWrapRef} className="sm-toggle-textWrap relative z-10" aria-hidden="true">
             <span ref={textInnerRef} className="sm-toggle-textInner">
