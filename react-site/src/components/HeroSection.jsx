@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import Carousel from './Carousel'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -16,6 +15,7 @@ const defaultHeroData = {
 export default function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [loading, setLoading] = useState(true)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     const fetchHero = () => {
@@ -37,8 +37,14 @@ export default function HeroSection() {
       }`
         )
         .then(data => {
+          console.log('🔍 HeroSection - Full data received:', data);
+          console.log('🔍 Carousel images:', data?.carouselImages);
           if (data) {
             setHeroData(data)
+            // Reset to first image when new data loads
+            if (data.carouselImages && data.carouselImages.length > 0) {
+              setCurrentImageIndex(0)
+            }
           } else {
             // Use default data if Sanity returns null
             setHeroData(defaultHeroData)
@@ -65,6 +71,16 @@ export default function HeroSection() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
+  // Auto-cycle through carousel images if available
+  useEffect(() => {
+    if (heroData.carouselImages && heroData.carouselImages.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex(prev => (prev + 1) % heroData.carouselImages.length)
+      }, 5000) // Change image every 5 seconds
+      return () => clearInterval(interval)
+    }
+  }, [heroData.carouselImages])
+
   return (
     <section
       id="hero"
@@ -77,21 +93,46 @@ export default function HeroSection() {
       }}
     >
       {/* Background - extends to very top of viewport, covering header gap */}
-      <div
-        className="fixed bg-cover bg-center brightness-75"
-        style={{
-          backgroundImage: heroData.backgroundImage && urlFor(heroData.backgroundImage)
-            ? `url(${urlFor(heroData.backgroundImage).url()}?t=${Date.now()})`
-            : undefined,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: '100vh',
-          width: '100%',
-          zIndex: -2,
-      }}
-      ></div>
+      {/* Use carousel images if available, otherwise fall back to backgroundImage */}
+      {heroData.carouselImages && heroData.carouselImages.length > 0 ? (
+        heroData.carouselImages.map((item, index) => (
+          <motion.div
+            key={index}
+            className="fixed bg-cover bg-center brightness-75"
+            style={{
+              backgroundImage: item.imageUrl
+                ? `url(${item.imageUrl}?t=${Date.now()})`
+                : undefined,
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: '100vh',
+              width: '100%',
+              zIndex: -2,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
+            transition={{ duration: 1 }}
+          ></motion.div>
+        ))
+      ) : (
+        <div
+          className="fixed bg-cover bg-center brightness-75"
+          style={{
+            backgroundImage: heroData.backgroundImage && urlFor(heroData.backgroundImage)
+              ? `url(${urlFor(heroData.backgroundImage).url()}?t=${Date.now()})`
+              : undefined,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: '100vh',
+            width: '100%',
+            zIndex: -2,
+          }}
+        ></div>
+      )}
 
       <div 
         className="fixed bg-gradient-to-b from-black/30 via-black/10 to-black/40"
@@ -107,32 +148,6 @@ export default function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
-        {/* Carousel */}
-        {heroData.carouselImages && heroData.carouselImages.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
-            className="mb-8 flex justify-center"
-          >
-            <div style={{ height: '600px', position: 'relative' }}>
-              <Carousel
-                items={heroData.carouselImages.map(item => ({
-                  image: item.imageUrl,
-                  title: item.title,
-                  description: item.description,
-                }))}
-                baseWidth={300}
-                autoplay={true}
-                autoplayDelay={3000}
-                pauseOnHover={true}
-                loop={true}
-                round={false}
-              />
-            </div>
-          </motion.div>
-        )}
-
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
