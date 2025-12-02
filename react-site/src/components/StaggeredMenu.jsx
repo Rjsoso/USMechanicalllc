@@ -379,14 +379,18 @@ export const StaggeredMenu = ({
         <GlassSurface
           width="auto"
           height="auto"
-          borderRadius={20}
-          brightness={80}
-          opacity={0.95}
-          blur={8}
-          displace={5}
-          distortionScale={-200}
-          backgroundOpacity={0.15}
-          saturation={1.5}
+          borderRadius={24}
+          brightness={60}
+          opacity={0.8}
+          blur={11}
+          displace={15}
+          distortionScale={-150}
+          redOffset={5}
+          greenOffset={15}
+          blueOffset={25}
+          mixBlendMode="screen"
+          backgroundOpacity={0}
+          saturation={1}
           className="sm-toggle-glass"
         >
           <button
