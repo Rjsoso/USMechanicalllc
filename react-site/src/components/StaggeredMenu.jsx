@@ -401,7 +401,7 @@ export const StaggeredMenu = ({
               backdrop-blur-xl
               ${isScrolled ? 'border-black/20' : 'border-white/20'}
               border
-              ${isScrolled ? 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.4)]' : 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)]'}
+              ${isScrolled ? 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.4)_inset]' : 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.4)_inset]'}
               overflow-hidden
               flex items-center gap-2
             `}
@@ -411,7 +411,7 @@ export const StaggeredMenu = ({
             onClick={toggleMenu}
             type="button"
           >
-          {/* iPhone top shine */}
+          {/* Top glossy band (iOS) */}
           <span
             className={`
               absolute inset-0
@@ -422,15 +422,15 @@ export const StaggeredMenu = ({
             `}
           />
 
-          {/* React Bits style chrome streak */}
+          {/* React Bits shimmer sweep */}
           <span
             className={`
-              absolute left-[-20%] top-0
-              w-[140%] h-[120%]
+              absolute top-0 left-[-120%]
+              w-[200%] h-full
+              bg-gradient-to-r from-transparent via-white/30 to-transparent
+              opacity-60
               rotate-12
-              ${isScrolled ? 'bg-gradient-to-r from-black/25 via-black/5 to-transparent' : 'bg-gradient-to-r from-white/25 via-white/5 to-transparent'}
-              opacity-40
-              mix-blend-screen
+              animate-shimmer
               pointer-events-none
             `}
           />
