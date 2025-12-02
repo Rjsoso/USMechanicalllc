@@ -388,7 +388,7 @@ export const StaggeredMenu = ({
             />
           </div>
         )}
-        <div className="relative">
+        <div className="flex justify-end px-6 pt-6">
           <button
             ref={toggleBtnRef}
             className={`
@@ -401,7 +401,7 @@ export const StaggeredMenu = ({
               backdrop-blur-xl
               ${isScrolled ? 'border-black/20' : 'border-white/20'}
               border
-              ${isScrolled ? 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.4)_inset]' : 'shadow-[0_1px_4px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.4)_inset]'}
+              ${isScrolled ? 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.4)]' : 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)]'}
               overflow-hidden
               flex items-center gap-2
             `}
