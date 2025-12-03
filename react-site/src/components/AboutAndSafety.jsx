@@ -23,7 +23,7 @@ Our experience modification rate (EMR) remains below the national average, quali
 
 Our goal is always simple: complete every project with zero safety issues.`,
     photo1: null,
-    photo2: null,
+    safetyImages: [],
   }
 
   // Fetch all content from Sanity (text and images)
@@ -33,28 +33,30 @@ Our goal is always simple: complete every project with zero safety issues.`,
         client.fetch(`*[_type == "aboutAndSafety"][0]{
           aboutTitle,
           aboutText,
-          photo1,
-          photo2
-        }`),
-        client.fetch(`*[_type == "safety"][0]{
-          title,
-          content,
-          images
+          photo1 {
+            asset-> {
+              _id,
+              url
+            },
+            alt
+          },
+          safetyTitle,
+          safetyText,
+          safetyImages[] {
+            asset-> {
+              _id,
+              url
+            },
+            alt,
+            caption
+          }
         }`)
       ])
-        .then(([aboutData, safetyData]) => {
-          // Merge data from both queries
-          // Use safety images array if available, otherwise fall back to photo2
-          const safetyImages = safetyData?.images && safetyData.images.length > 0 
-            ? safetyData.images 
-            : (aboutData?.photo2 ? [aboutData.photo2] : []);
-          
+        .then(([aboutData]) => {
           const mergedData = {
             ...defaultData,
             ...aboutData,
-            safetyTitle: safetyData?.title || defaultData.safetyTitle,
-            safetyText: safetyData?.content || defaultData.safetyText,
-            safetyImages: safetyImages,
+            safetyImages: aboutData?.safetyImages || [],
           }
           setData(mergedData)
           setLoading(false)
@@ -154,13 +156,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
               <FadeInWhenVisible delay={0.5}>
                 <div className="safety-images-grid">
                   {data.safetyImages.map((img, index) => (
-                    <img
-                      key={index}
-                      src={urlFor(img).width(600).url()}
-                      className="safety-photo"
-                      alt={`Safety image ${index + 1}`}
-                      loading="lazy"
-                    />
+                    <div key={index} className="relative">
+                      <img
+                        src={urlFor(img).width(600).quality(85).auto('format').url()}
+                        className="safety-photo"
+                        alt={img?.alt || `Safety image ${index + 1}`}
+                        loading="lazy"
+                      />
+                      {img?.caption && (
+                        <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                      )}
+                    </div>
                   ))}
                 </div>
               </FadeInWhenVisible>
