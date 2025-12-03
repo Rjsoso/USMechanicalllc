@@ -312,7 +312,12 @@ export const StaggeredMenu = ({
     textCycleAnimRef.current = gsap.to(inner, {
       yPercent: -finalShift,
       duration: 0.5 + lineCount * 0.07,
-      ease: 'power4.out'
+      ease: 'power4.out',
+      onComplete: () => {
+        // Ensure final state is set correctly
+        setTextLines([targetLabel, targetLabel]);
+        gsap.set(inner, { yPercent: 0 });
+      }
     });
   }, []);
 
