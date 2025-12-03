@@ -1,10 +1,11 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useState, useEffect } from "react";
 
 import GlassSurface from "./GlassSurface";
 
 const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...props }, ref) => {
   const containerRef = useRef(null);
   const shineRef = useRef(null);
+  const [isOverWhite, setIsOverWhite] = useState(false);
 
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
@@ -38,6 +39,66 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       shineRef.current.style.transform = "translate(0,0)";
     }
   };
+
+  // Detect when button is over white backgrounds
+  useEffect(() => {
+    const checkBackground = () => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+      const centerX = rect.left + rect.width / 2;
+      
+      // Get element at button position
+      const elementBelow = document.elementFromPoint(centerX, centerY);
+      if (!elementBelow) return;
+      
+      // Walk up the DOM tree to find section with background
+      let current = elementBelow;
+      let foundWhite = false;
+      
+      while (current && current !== document.body) {
+        const computedStyle = window.getComputedStyle(current);
+        const bgColor = computedStyle.backgroundColor;
+        const bgImage = computedStyle.backgroundImage;
+        
+        // Check if it's a white/gray background section
+        if (current.id === 'services' || current.id === 'portfolio' || current.id === 'contact') {
+          foundWhite = true;
+          break;
+        }
+        
+        // Check computed background color (white or light gray)
+        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+          const rgb = bgColor.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            const r = parseInt(rgb[0]);
+            const g = parseInt(rgb[1]);
+            const b = parseInt(rgb[2]);
+            // Check if it's a light color (white/light gray)
+            if (r > 200 && g > 200 && b > 200) {
+              foundWhite = true;
+              break;
+            }
+          }
+        }
+        
+        current = current.parentElement;
+      }
+      
+      setIsOverWhite(foundWhite);
+    };
+
+    // Check on scroll and resize
+    window.addEventListener('scroll', checkBackground);
+    window.addEventListener('resize', checkBackground);
+    checkBackground(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', checkBackground);
+      window.removeEventListener('resize', checkBackground);
+    };
+  }, []);
 
   return (
     <div
@@ -92,7 +153,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
         <button
           ref={ref}
           onClick={onClick}
-          className={`flex items-center justify-center gap-2 w-full h-full text-white font-semibold text-lg relative z-10 select-none ${className}`}
+          className={`flex items-center justify-center gap-2 w-full h-full font-semibold text-lg relative z-10 select-none transition-colors duration-300 ${isOverWhite ? 'text-black' : 'text-white'} ${className}`}
           {...props}
         >
           {children || (
