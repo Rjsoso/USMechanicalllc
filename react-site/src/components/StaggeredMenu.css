@@ -1,8 +1,8 @@
 .staggered-menu-wrapper {
   position: relative;
   width: auto;
-  height: 100%;
-  z-index: 40;
+  height: auto;
+  z-index: 50;
 }
 
 .staggered-menu-wrapper.fixed-wrapper {
@@ -27,7 +27,7 @@
   border: none !important;
   box-shadow: none !important;
   pointer-events: none;
-  z-index: 20;
+  z-index: 50;
 }
 
 .staggered-menu-header > * {
@@ -150,13 +150,12 @@
 
 .staggered-menu-panel {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.5rem);
   right: 0;
-  margin-top: 1rem;
   width: auto;
   min-width: 200px;
   max-width: 300px;
-  max-height: 80vh;
+  max-height: calc(100vh - 120px);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -165,7 +164,8 @@
   padding: 1.5em 1.5em;
   overflow-y: auto;
   border-radius: 12px;
-  z-index: 10;
+  z-index: 100;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 [data-position='left'] .staggered-menu-panel {
@@ -175,16 +175,15 @@
 
 .sm-prelayers {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.5rem);
   right: 0;
-  margin-top: 1rem;
   width: auto;
   min-width: 200px;
   max-width: 300px;
   height: auto;
-  max-height: 80vh;
+  max-height: calc(100vh - 120px);
   pointer-events: none;
-  z-index: 5;
+  z-index: 99;
   border-radius: 12px;
 }
 
