@@ -290,12 +290,22 @@ export const StaggeredMenu = ({
     }
   }, [changeMenuColorOnOpen, menuButtonColor, openMenuButtonColor]);
 
-  const animateText = useCallback(opening => {
+  const animateText = useCallback((opening, wasOpen) => {
     const inner = textInnerRef.current;
     if (!inner) return;
     textCycleAnimRef.current?.kill();
-    const currentLabel = opening ? 'Menu' : 'Close';
+    
+    // Use the previous state (wasOpen) to determine current label
+    const currentLabel = wasOpen ? 'Close' : 'Menu';
     const targetLabel = opening ? 'Close' : 'Menu';
+    
+    // If already at target, just set it immediately
+    if (currentLabel === targetLabel) {
+      setTextLines([targetLabel, targetLabel]);
+      gsap.set(inner, { yPercent: 0 });
+      return;
+    }
+    
     const cycles = 3;
     const seq = [currentLabel];
     let last = currentLabel;
@@ -322,7 +332,8 @@ export const StaggeredMenu = ({
   }, []);
 
   const toggleMenu = useCallback(() => {
-    const target = !openRef.current;
+    const wasOpen = openRef.current;
+    const target = !wasOpen;
     openRef.current = target;
     setOpen(target);
     if (target) {
@@ -334,18 +345,19 @@ export const StaggeredMenu = ({
     }
     animateIcon(target);
     animateColor(target);
-    animateText(target);
+    animateText(target, wasOpen);
   }, [playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose]);
 
   const closeMenu = useCallback(() => {
     if (openRef.current) {
+      const wasOpen = openRef.current;
       openRef.current = false;
       setOpen(false);
       onMenuClose?.();
       playClose();
       animateIcon(false);
       animateColor(false);
-      animateText(false);
+      animateText(false, wasOpen);
     }
   }, [playClose, animateIcon, animateColor, animateText, onMenuClose]);
 
