@@ -7,16 +7,16 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       width={150}
       height={65}
       borderRadius={45}
-      blur={30}
-      brightness={95}
-      opacity={0.98}
-      backgroundOpacity={0.35}
-      saturation={1.8}
-      displace={15}
-      distortionScale={-320}
-      redOffset={15}
-      greenOffset={22}
-      blueOffset={35}
+      blur={40}
+      brightness={100}
+      opacity={0.95}
+      backgroundOpacity={0.25}
+      saturation={2.2}
+      displace={30}
+      distortionScale={-550}
+      redOffset={20}
+      greenOffset={30}
+      blueOffset={45}
       mixBlendMode="screen"
       className="cursor-pointer"
     >
