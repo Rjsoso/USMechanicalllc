@@ -289,13 +289,15 @@
 
 .sm-panel-item {
   position: relative;
-  color: #000;
-  font-weight: 600;
+  color: #fff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 800; /* font-extrabold */
   font-size: 3.5rem;
   cursor: pointer;
   line-height: 1;
-  letter-spacing: -2px;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  text-transform: none;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2); /* drop-shadow-lg */
   transition:
     background 0.25s,
     color 0.25s;
@@ -329,7 +331,8 @@
 }
 
 .sm-panel-item:hover {
-  color: var(--sm-accent, #5227ff);
+  color: #fff;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .sm-panel-list[data-numbering] {
