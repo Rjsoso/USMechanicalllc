@@ -1,4 +1,4 @@
-import { useRef, forwardRef, useState, useEffect } from "react";
+import React, { useRef, forwardRef, useState, useEffect } from "react";
 
 import GlassSurface from "./GlassSurface";
 
@@ -174,12 +174,39 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
           ref={ref}
           onClick={onClick}
           className={`flex items-center justify-center gap-2 w-full h-full font-semibold text-lg relative z-10 select-none transition-colors duration-300 ${isOverWhite ? 'text-black' : 'text-white'} ${className}`}
+          style={{
+            color: isOverWhite ? '#000000' : '#ffffff',
+            ...props.style
+          }}
           {...props}
         >
-          {children || (
+          {children ? (
+            <div 
+              style={{ 
+                color: isOverWhite ? '#000000' : '#ffffff',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              {React.Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                  return React.cloneElement(child, {
+                    style: {
+                      color: isOverWhite ? '#000000' : '#ffffff',
+                      ...(child.props.style || {})
+                    }
+                  });
+                }
+                return child;
+              })}
+            </div>
+          ) : (
             <>
-              <span>Menu</span>
-              <span className="text-xl">+</span>
+              <span style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>Menu</span>
+              <span className="text-xl" style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>+</span>
             </>
           )}
         </button>
