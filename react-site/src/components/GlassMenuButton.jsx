@@ -111,37 +111,47 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
         width={165}
         height={70}
         borderRadius={40}
-        blur={20}
-        brightness={95}
-        opacity={0.88}
-        saturation={1.1}
-        backgroundOpacity={0.12}
-        displace={4}
-        distortionScale={-180}
-        redOffset={5}
-        greenOffset={8}
-        blueOffset={12}
+        blur={24}
+        brightness={100}
+        opacity={0.92}
+        saturation={1.5}
+        backgroundOpacity={0.25}
+        displace={6}
+        distortionScale={-220}
+        redOffset={10}
+        greenOffset={15}
+        blueOffset={22}
         mixBlendMode="screen"
         className="cursor-pointer relative overflow-hidden"
       >
-        {/* iOS-style subtle shine */}
+        {/* Shiny reflective layer */}
         <div
           ref={shineRef}
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
+              "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)",
             mixBlendMode: "overlay",
             transition: "transform 0.15s ease-out",
           }}
         />
 
-        {/* iOS-style top highlight */}
+        {/* Top glossy highlight */}
         <div
-          className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none rounded-t-[40px]"
+          className="absolute top-0 left-0 right-0 h-2/5 pointer-events-none rounded-t-[40px]"
           style={{
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)",
+              "linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 50%, transparent 100%)",
+            mixBlendMode: "screen",
+          }}
+        />
+
+        {/* Bottom reflective edge */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none rounded-b-[40px]"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(255,255,255,0.2) 0%, transparent 100%)",
             mixBlendMode: "overlay",
           }}
         />
