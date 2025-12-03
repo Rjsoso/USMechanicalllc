@@ -174,7 +174,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
         <button
           ref={ref}
           onClick={onClick}
-          className={`flex items-center justify-center gap-2 w-full h-full font-semibold text-lg relative z-10 select-none transition-colors duration-300 ${isOverWhite ? 'text-black' : 'text-white'} ${className}`}
+          className={`flex items-center justify-center gap-2 w-full h-full font-semibold text-2xl relative z-10 select-none transition-colors duration-300 ${isOverWhite ? 'text-black' : 'text-white'} ${className}`}
           style={{
             color: isOverWhite ? '#000000' : '#ffffff',
             ...props.style
@@ -206,8 +206,8 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
             </div>
           ) : (
             <>
-              <span style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>Menu</span>
-              <span className="text-xl" style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>+</span>
+              <span className="text-2xl" style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>Menu</span>
+              <span className="text-3xl" style={{ color: isOverWhite ? '#000000' : '#ffffff' }}>+</span>
             </>
           )}
         </button>
