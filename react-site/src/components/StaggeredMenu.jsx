@@ -71,8 +71,8 @@ export const StaggeredMenu = ({
       }
       preLayerElsRef.current = preLayers;
 
-      // Use yPercent for vertical dropdown instead of xPercent
-      gsap.set([panel, ...preLayers], { yPercent: -100, opacity: 0 });
+      const offscreen = position === 'left' ? -100 : 100;
+      gsap.set([panel, ...preLayers], { xPercent: offscreen });
       gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
       gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
@@ -101,9 +101,8 @@ export const StaggeredMenu = ({
     const socialTitle = panel.querySelector('.sm-socials-title');
     const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link'));
 
-    const layerStates = layers.map(el => ({ el, start: Number(gsap.getProperty(el, 'yPercent')) || -100, opacity: Number(gsap.getProperty(el, 'opacity')) || 0 }));
-    const panelStart = Number(gsap.getProperty(panel, 'yPercent')) || -100;
-    const panelOpacity = Number(gsap.getProperty(panel, 'opacity')) || 0;
+    const layerStates = layers.map(el => ({ el, start: Number(gsap.getProperty(el, 'xPercent')) }));
+    const panelStart = Number(gsap.getProperty(panel, 'xPercent'));
 
     if (itemEls.length) {
       gsap.set(itemEls, { yPercent: 140, rotate: 10 });
@@ -121,12 +120,7 @@ export const StaggeredMenu = ({
     const tl = gsap.timeline({ paused: true });
 
     layerStates.forEach((ls, i) => {
-      tl.fromTo(
-        ls.el,
-        { yPercent: ls.start, opacity: ls.opacity },
-        { yPercent: 0, opacity: 1, duration: 0.5, ease: 'power4.out' },
-        i * 0.07
-      );
+      tl.fromTo(ls.el, { xPercent: ls.start }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
     });
 
     const lastTime = layerStates.length ? (layerStates.length - 1) * 0.07 : 0;
@@ -135,8 +129,8 @@ export const StaggeredMenu = ({
 
     tl.fromTo(
       panel,
-      { yPercent: panelStart, opacity: panelOpacity },
-      { yPercent: 0, opacity: 1, duration: panelDuration, ease: 'power4.out' },
+      { xPercent: panelStart },
+      { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
       panelInsertTime
     );
 
@@ -230,9 +224,9 @@ export const StaggeredMenu = ({
     const all = [...layers, panel];
     closeTweenRef.current?.kill();
 
+    const offscreen = position === 'left' ? -100 : 100;
     closeTweenRef.current = gsap.to(all, {
-      yPercent: -100,
-      opacity: 0,
+      xPercent: offscreen,
       duration: 0.32,
       ease: 'power3.in',
       overwrite: 'auto',
@@ -252,7 +246,7 @@ export const StaggeredMenu = ({
         busyRef.current = false;
       }
     });
-  }, []);
+  }, [position]);
 
   const animateIcon = useCallback(opening => {
     const icon = iconRef.current;
