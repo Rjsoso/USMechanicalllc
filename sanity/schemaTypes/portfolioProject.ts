@@ -12,14 +12,12 @@ export default defineType({
       type: 'string',
       description: 'Name of the project (e.g., "Downtown Office Complex", "Regional Hospital Expansion")',
       validation: (Rule) => Rule.required().max(150),
-      placeholder: 'e.g., Downtown Office Complex',
     },
     {
       name: 'description',
       title: 'Project Description',
       type: 'text',
       description: 'Detailed description of the project. Explain what was done, key features, challenges overcome, etc. This appears in the project modal.',
-      rows: 5,
     },
     {
       name: 'images',
@@ -62,14 +60,12 @@ export default defineType({
       title: 'Location',
       type: 'string',
       description: 'Project location (e.g., "Salt Lake City, UT", "Phoenix, AZ")',
-      placeholder: 'e.g., Salt Lake City, UT',
     },
     {
       name: 'year',
       title: 'Year Completed',
       type: 'string',
       description: 'Year the project was completed (e.g., "2023", "2022-2023")',
-      placeholder: 'e.g., 2023',
     },
     {
       name: 'order',
@@ -77,21 +73,18 @@ export default defineType({
       type: 'number',
       description: 'Controls the order this project appears within its category. Lower numbers appear first. Leave blank or use 0 for default order.',
       validation: (Rule) => Rule.min(0).integer(),
-      initialValue: 0,
     },
     {
       name: 'client',
       title: 'Client Name',
       type: 'string',
       description: 'Optional: Name of the client or company',
-      placeholder: 'e.g., ABC Corporation',
     },
     {
       name: 'projectType',
       title: 'Project Type',
       type: 'string',
       description: 'Optional: More specific type of project (e.g., "New Construction", "Renovation", "HVAC Upgrade")',
-      placeholder: 'e.g., New Construction',
     },
   ],
   preview: {

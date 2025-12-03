@@ -12,14 +12,12 @@ export default defineType({
       type: 'string',
       description: 'Name of the category (e.g., "Office Buildings", "Hospitals", "Schools", "Retail Spaces")',
       validation: (Rule) => Rule.required().max(100),
-      placeholder: 'e.g., Office Buildings',
     },
     {
       name: 'description',
       title: 'Category Description',
       type: 'text',
       description: 'Brief description explaining what types of projects are in this category. This appears on the category card.',
-      rows: 3,
     },
     {
       name: 'image',
@@ -42,7 +40,6 @@ export default defineType({
       type: 'number',
       description: 'Controls the order categories appear on the website. Lower numbers appear first. Leave blank or use 0 for default order.',
       validation: (Rule) => Rule.min(0).integer(),
-      initialValue: 0,
     },
     {
       name: 'projects',
