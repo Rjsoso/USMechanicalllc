@@ -53,12 +53,26 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
         .schemaType('ourServices')
         .child(S.documentTypeList('ourServices')),
 
-      // 6. Portfolio Projects
+      // 6. Portfolio
       S.listItem()
-        .title('6. Portfolio Projects')
+        .title('6. Portfolio')
         .child(
-          S.documentTypeList('portfolioProject')
-            .title('Portfolio Projects')
+          S.list()
+            .title('Portfolio')
+            .items([
+              S.listItem()
+                .title('Categories')
+                .child(
+                  S.documentTypeList('portfolioCategory')
+                    .title('Portfolio Categories')
+                ),
+              S.listItem()
+                .title('Projects')
+                .child(
+                  S.documentTypeList('portfolioProject')
+                    .title('Portfolio Projects')
+                ),
+            ])
         ),
 
       // 7. Contact Section
