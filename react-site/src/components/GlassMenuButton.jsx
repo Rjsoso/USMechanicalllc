@@ -111,41 +111,38 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
         width={165}
         height={70}
         borderRadius={40}
-        blur={26}
-        brightness={81}
-        opacity={0.92}
-        saturation={1.65}
-        backgroundOpacity={0.08}
-        displace={10}
-        distortionScale={-310}
-        redOffset={18}
-        greenOffset={28}
-        blueOffset={40}
+        blur={20}
+        brightness={95}
+        opacity={0.88}
+        saturation={1.1}
+        backgroundOpacity={0.12}
+        displace={4}
+        distortionScale={-180}
+        redOffset={5}
+        greenOffset={8}
+        blueOffset={12}
         mixBlendMode="screen"
         className="cursor-pointer relative overflow-hidden"
       >
-        {/* LIQUID METAL REFLECTION LAYER */}
+        {/* iOS-style subtle shine */}
         <div
           ref={shineRef}
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle at 30% 10%, rgba(255,255,255,0.65), rgba(255,255,255,0.0) 60%)",
-            filter: "blur(18px)",
-            mixBlendMode: "soft-light",
+              "linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
+            mixBlendMode: "overlay",
             transition: "transform 0.15s ease-out",
           }}
         />
 
-        {/* SPECTRAL REFRACTION MICRO-EDGES */}
+        {/* iOS-style top highlight */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none rounded-t-[40px]"
           style={{
             background:
-              "conic-gradient(from 180deg at 50% 50%, rgba(255,0,0,0.35), rgba(0,255,255,0.22), rgba(255,0,255,0.28), rgba(255,0,0,0.35))",
-            opacity: 0.25,
-            mixBlendMode: "color-dodge",
-            filter: "blur(10px)",
+              "linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)",
+            mixBlendMode: "overlay",
           }}
         />
 
