@@ -4,8 +4,8 @@ import './GlassSurface.css';
 
 const GlassSurface = ({
   children,
-  width = 'auto',
-  height = 'auto',
+  width = 200,
+  height = 80,
   borderRadius = 20,
   borderWidth = 0.07,
   brightness = 50,
@@ -21,7 +21,6 @@ const GlassSurface = ({
   xChannel = 'R',
   yChannel = 'G',
   mixBlendMode = 'difference',
-  forceFallback = false,
   className = '',
   style = {}
 }) => {
@@ -66,20 +65,17 @@ const GlassSurface = ({
   };
 
   const updateDisplacementMap = () => {
-    if (feImageRef.current) {
-      feImageRef.current.setAttribute('href', generateDisplacementMap());
-    }
+    feImageRef.current?.setAttribute('href', generateDisplacementMap());
   };
 
   useEffect(() => {
     updateDisplacementMap();
 
-    const channels = [
+    [
       { ref: redChannelRef, offset: redOffset },
       { ref: greenChannelRef, offset: greenOffset },
       { ref: blueChannelRef, offset: blueOffset }
-    ];
-    channels.forEach(({ ref, offset }) => {
+    ].forEach(({ ref, offset }) => {
       if (ref.current) {
         ref.current.setAttribute('scale', (distortionScale + offset).toString());
         ref.current.setAttribute('xChannelSelector', xChannel);
@@ -87,11 +83,11 @@ const GlassSurface = ({
       }
     });
 
-    if (gaussianBlurRef.current) {
-      gaussianBlurRef.current.setAttribute('stdDeviation', displace.toString());
-    }
+    gaussianBlurRef.current?.setAttribute('stdDeviation', displace.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    width,
+    height,
     borderRadius,
     borderWidth,
     brightness,
@@ -111,7 +107,6 @@ const GlassSurface = ({
     if (!containerRef.current) return;
 
     const resizeObserver = new ResizeObserver(() => {
-      // Give layout a tick so CSS applied sizes settle
       setTimeout(updateDisplacementMap, 0);
     });
 
@@ -124,24 +119,17 @@ const GlassSurface = ({
   }, []);
 
   useEffect(() => {
-    // ensure initial generation after mount + props change
     setTimeout(updateDisplacementMap, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, height]);
 
   const supportsSVGFilters = () => {
-    // Force fallback if requested
-    if (forceFallback) {
-      return false;
-    }
-    // Basic heuristics for Safari / Firefox fallback - keep fallback robust
     const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     const isFirefox = /Firefox/.test(navigator.userAgent);
     if (isWebkit || isFirefox) {
       return false;
     }
     const div = document.createElement('div');
-    // browsers may not accept url() via CSS variable; we'll prefer inline style if needed
     div.style.backdropFilter = `url(#${filterId})`;
     return div.style.backdropFilter !== '';
   };
