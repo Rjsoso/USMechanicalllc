@@ -60,10 +60,21 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       while (current && current !== document.body) {
         const computedStyle = window.getComputedStyle(current);
         const bgColor = computedStyle.backgroundColor;
-        const bgImage = computedStyle.backgroundImage;
+        const classes = current.className || '';
         
-        // Check if it's a white/gray background section
-        if (current.id === 'services' || current.id === 'portfolio' || current.id === 'contact') {
+        // Check if it's a white/gray background section by ID
+        if (current.id === 'services' || current.id === 'portfolio' || current.id === 'contact' || current.id === 'about') {
+          foundWhite = true;
+          break;
+        }
+        
+        // Check for Tailwind white/light gray background classes
+        if (typeof classes === 'string' && (
+          classes.includes('bg-gray-50') || 
+          classes.includes('bg-white') || 
+          classes.includes('bg-gray-100') ||
+          classes.includes('bg-gray-200')
+        )) {
           foundWhite = true;
           break;
         }
@@ -75,8 +86,8 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
             const r = parseInt(rgb[0]);
             const g = parseInt(rgb[1]);
             const b = parseInt(rgb[2]);
-            // Check if it's a light color (white/light gray)
-            if (r > 200 && g > 200 && b > 200) {
+            // Check if it's a light color (white/light gray) - lowered threshold for better detection
+            if (r > 180 && g > 180 && b > 180) {
               foundWhite = true;
               break;
             }
@@ -89,12 +100,14 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       setIsOverWhite(foundWhite);
     };
 
-    // Check on scroll and resize
-    window.addEventListener('scroll', checkBackground);
+    // Check on scroll, resize, and with a small delay for initial render
+    const timeoutId = setTimeout(checkBackground, 100);
+    window.addEventListener('scroll', checkBackground, { passive: true });
     window.addEventListener('resize', checkBackground);
     checkBackground(); // Initial check
     
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('scroll', checkBackground);
       window.removeEventListener('resize', checkBackground);
     };
