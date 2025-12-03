@@ -124,6 +124,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
         width={165}
         height={70}
         borderRadius={50}
+        borderWidth={0.008}
         blur={11}
         brightness={51}
         opacity={0.92}

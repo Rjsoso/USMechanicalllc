@@ -139,6 +139,9 @@ const GlassSurface = ({
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
+    borderWidth: typeof borderWidth === 'number' ? `${borderWidth}px` : borderWidth,
+    borderStyle: 'solid',
+    borderColor: borderWidth > 0 ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
     '--glass-frost': backgroundOpacity,
     '--glass-saturation': saturation,
     '--filter-id': `url(#${filterId})`
