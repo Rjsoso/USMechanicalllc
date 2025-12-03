@@ -33,23 +33,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
         client.fetch(`*[_type == "aboutAndSafety"][0]{
           aboutTitle,
           aboutText,
-          photo1 {
-            asset-> {
-              _id,
-              url
-            },
-            alt
-          },
+          photo1,
           safetyTitle,
           safetyText,
-          safetyImages[] {
-            asset-> {
-              _id,
-              url
-            },
-            alt,
-            caption
-          }
+          safetyImages
         }`)
       ])
         .then(([aboutData]) => {
