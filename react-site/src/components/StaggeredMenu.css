@@ -16,9 +16,7 @@
 }
 
 .staggered-menu-header {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: relative;
   width: auto;
   display: flex;
   align-items: center;
@@ -152,17 +150,21 @@
 
 .staggered-menu-panel {
   position: absolute;
-  top: 0;
+  top: 100%;
   right: 0;
-  width: clamp(320px, 45vw, 550px);
-  height: 100%;
+  margin-top: 1rem;
+  width: auto;
+  min-width: 200px;
+  max-width: 300px;
+  max-height: 80vh;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
-  padding: 6em 2em 2em 2em;
+  padding: 1.5em 1.5em;
   overflow-y: auto;
+  border-radius: 12px;
   z-index: 10;
 }
 
@@ -173,12 +175,17 @@
 
 .sm-prelayers {
   position: absolute;
-  top: 0;
+  top: 100%;
   right: 0;
-  bottom: 0;
-  width: clamp(320px, 45vw, 550px);
+  margin-top: 1rem;
+  width: auto;
+  min-width: 200px;
+  max-width: 300px;
+  height: auto;
+  max-height: 80vh;
   pointer-events: none;
   z-index: 5;
+  border-radius: 12px;
 }
 
 [data-position='left'] .sm-prelayers {
@@ -292,18 +299,18 @@
   color: #fff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 800; /* font-extrabold */
-  font-size: 3.5rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: normal;
   text-transform: none;
   text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2); /* drop-shadow-lg */
   transition:
     background 0.25s,
     color 0.25s;
-  display: inline-block;
+  display: block;
   text-decoration: none;
-  padding-right: 1.4em;
+  padding: 0.75em 0;
 }
 
 .staggered-menu-panel .sm-socials-list .sm-socials-link {
