@@ -18,6 +18,7 @@ import contact from './pages/contact'
 // import companyInformation from '../schemaTypes/companyInformation' // Replaced by contact schema
 import companyStats from '../schemaTypes/companyStats'
 import companyInfo from '../schemaTypes/companyInfo' // Added: Missing from exports
+import portfolioCategory from '../schemaTypes/portfolioCategory'
 import portfolioProject from '../schemaTypes/portfolioProject'
 import recognitionProject from '../schemaTypes/recognitionProject'
 import expandableServiceBox from '../schemaTypes/expandableServiceBox'
@@ -43,6 +44,7 @@ export const schemaTypes = [
     // companyInformation, // Replaced by contact schema
     companyStats,
     companyInfo, // Added: Missing from exports
+    portfolioCategory,
     portfolioProject,
     recognitionProject,
     expandableServiceBox,

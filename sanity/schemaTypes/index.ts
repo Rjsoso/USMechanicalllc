@@ -18,6 +18,7 @@ import contact from '../schemas/pages/contact'
 // import companyInformation from './companyInformation' // Replaced by contact schema
 import companyStats from './companyStats'
 import companyInfo from './companyInfo'
+import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
 import recognitionProject from './recognitionProject'
 import expandableServiceBox from './expandableServiceBox'
@@ -43,6 +44,7 @@ export const schema = {
     // servicesPage, // REMOVED: Unused
     companyStats,
     companyInfo,
+    portfolioCategory,
     portfolioProject,
     recognitionProject,
     expandableServiceBox,
