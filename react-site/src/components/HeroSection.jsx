@@ -204,7 +204,16 @@ export default function HeroSection() {
         )}
 
         {/* Industrial Metal Title - Replaces headline */}
-        <IndustrialMetalTitle />
+        <div
+          style={{
+            background: "rgba(0,0,0,0.25)",
+            backdropFilter: "blur(3px)",
+            borderRadius: "20px",
+            padding: "20px 40px"
+          }}
+        >
+          <IndustrialMetalTitle />
+        </div>
 
         <motion.p
           className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8"
