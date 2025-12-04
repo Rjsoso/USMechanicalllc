@@ -9,6 +9,14 @@ export default defineType({
       name: "sectionTitle",
       type: "string",
       title: "Section Title",
+      description: "Static title (used if rotatingText is empty)",
+    },
+    {
+      name: "rotatingText",
+      type: "array",
+      title: "Rotating Text",
+      description: "Array of text strings that will rotate in the title. Leave empty to use static sectionTitle.",
+      of: [{ type: "string" }],
     },
     {
       name: "descriptionText",

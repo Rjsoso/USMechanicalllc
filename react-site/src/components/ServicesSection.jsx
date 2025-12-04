@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { client } from '../utils/sanity';
 
 import CardSwap, { Card } from './CardSwap';
+import RotatingText from './RotatingText';
 
 
 
@@ -25,6 +26,8 @@ const ServicesSection = () => {
           sectionTitle,
 
           descriptionText,
+
+          rotatingText,
 
           servicesInfo[] {
 
@@ -76,9 +79,24 @@ const ServicesSection = () => {
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
-        <h2 className="text-4xl font-bold text-center mb-12">
-          {servicesData.sectionTitle || 'Our Services'}
-        </h2>
+        <div className="text-4xl font-bold text-center mb-12">
+          {servicesData.rotatingText && servicesData.rotatingText.length > 0 ? (
+            <RotatingText
+              texts={servicesData.rotatingText}
+              mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+              staggerFrom={"last"}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2000}
+            />
+          ) : (
+            <h2>{servicesData.sectionTitle || 'Our Services'}</h2>
+          )}
+        </div>
         <p className="text-center text-gray-600">No services available.</p>
       </section>
     );
@@ -90,9 +108,24 @@ const ServicesSection = () => {
 
     <section id="services" className="pt-20 pb-40 bg-gray-50">
 
-      <h2 className="text-4xl font-bold text-center mb-12">
-        {servicesData.sectionTitle || 'Our Services'}
-      </h2>
+      <div className="text-4xl font-bold text-center mb-12">
+        {servicesData.rotatingText && servicesData.rotatingText.length > 0 ? (
+          <RotatingText
+            texts={servicesData.rotatingText}
+            mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+            staggerFrom={"last"}
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-120%" }}
+            staggerDuration={0.025}
+            splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2000}
+          />
+        ) : (
+          <h2>{servicesData.sectionTitle || 'Our Services'}</h2>
+        )}
+      </div>
 
 
 
