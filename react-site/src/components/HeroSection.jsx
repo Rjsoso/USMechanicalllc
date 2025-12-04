@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import MetalTitle from './MetalTitle'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -186,6 +187,15 @@ export default function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
+        {/* Metal Title */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.1 }}
+        >
+          <MetalTitle />
+        </motion.div>
+
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
@@ -194,7 +204,7 @@ export default function HeroSection() {
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
+            transition={{ duration: 1.2, delay: 0.2 }}
             loading="eager"
             onError={e => {
               e.target.style.display = 'none'
