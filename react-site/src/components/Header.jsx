@@ -16,7 +16,7 @@ export default function Header() {
         <img
           src="/logo.png"
           alt="US Mechanical"
-          className="h-32 md:h-40 w-auto object-contain transition-all duration-500"
+          className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
           onError={(e) => {
             e.target.style.display = "none";
           }}
