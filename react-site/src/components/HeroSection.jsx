@@ -187,15 +187,6 @@ export default function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center">
-        {/* Metal Title */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.1 }}
-        >
-          <MetalTitle />
-        </motion.div>
-
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
@@ -204,7 +195,7 @@ export default function HeroSection() {
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.2 }}
+            transition={{ duration: 1.2 }}
             loading="eager"
             onError={e => {
               e.target.style.display = 'none'
@@ -212,14 +203,8 @@ export default function HeroSection() {
           />
         )}
 
-        <motion.h1
-          className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg mx-auto"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.3 }}
-        >
-          {heroData.headline}
-        </motion.h1>
+        {/* Metal Title - Replaces headline */}
+        <MetalTitle />
 
         <motion.p
           className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8"
