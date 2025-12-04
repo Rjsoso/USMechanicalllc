@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import MetalTitle from './MetalTitle'
+import IndustrialMetalTitle from './IndustrialMetalTitle'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -203,8 +203,8 @@ export default function HeroSection() {
           />
         )}
 
-        {/* Metal Title - Replaces headline */}
-        <MetalTitle />
+        {/* Industrial Metal Title - Replaces headline */}
+        <IndustrialMetalTitle />
 
         <motion.p
           className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8"
