@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { motion } from 'framer-motion';
+
 import { client } from '../utils/sanity';
 
 import CardSwap, { Card } from './CardSwap';
@@ -80,7 +82,18 @@ const ServicesSection = () => {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
       <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
-        <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
+        <motion.h2 
+          className="text-4xl font-bold"
+          layout
+          transition={{
+            type: "spring",
+            damping: 40,
+            stiffness: 300,
+            duration: 0.4
+          }}
+        >
+          {servicesData.sectionTitle || 'Our Services'}
+        </motion.h2>
           {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
             <RotatingText
               texts={servicesData.rotatingText}
@@ -113,7 +126,18 @@ const ServicesSection = () => {
     <section id="services" className="pt-20 pb-40 bg-gray-50">
 
       <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
-        <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
+        <motion.h2 
+          className="text-4xl font-bold"
+          layout
+          transition={{
+            type: "spring",
+            damping: 40,
+            stiffness: 300,
+            duration: 0.4
+          }}
+        >
+          {servicesData.sectionTitle || 'Our Services'}
+        </motion.h2>
         {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
           <RotatingText
             texts={servicesData.rotatingText}
