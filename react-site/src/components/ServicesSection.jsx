@@ -123,7 +123,7 @@ const ServicesSection = () => {
                 duration: 0.6
               }}
               rotationInterval={5000}
-            animatePresenceMode="sync"
+            animatePresenceMode="wait"
             />
           )}
       </motion.div>
@@ -180,7 +180,7 @@ const ServicesSection = () => {
               duration: 0.6
             }}
             rotationInterval={5000}
-            animatePresenceMode="sync"
+            animatePresenceMode="wait"
           />
         )}
       </motion.div>
