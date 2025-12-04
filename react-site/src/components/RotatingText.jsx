@@ -153,7 +153,6 @@ const RotatingText = forwardRef((props, ref) => {
         <motion.span
           key={currentTextIndex}
           className={cn(splitBy === 'lines' ? 'text-rotate-lines' : 'text-rotate')}
-          layout
           aria-hidden="true"
         >
           {elements.map((wordObj, wordIndex, array) => {
