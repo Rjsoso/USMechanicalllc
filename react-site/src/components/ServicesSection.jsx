@@ -82,7 +82,7 @@ const ServicesSection = () => {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
       <motion.div 
-        className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
+        className="text-6xl md:text-7xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
         layout
         transition={{
           layout: {
@@ -94,7 +94,7 @@ const ServicesSection = () => {
         }}
       >
         <motion.h2 
-          className="text-4xl font-bold"
+          className="text-6xl md:text-7xl font-bold"
           layout
           transition={{
             type: "spring",
@@ -108,7 +108,7 @@ const ServicesSection = () => {
           {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
             <RotatingText
               texts={servicesData.rotatingText}
-              mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+              mainClassName="px-3 sm:px-4 md:px-5 bg-cyan-300 text-black overflow-hidden py-1 sm:py-2 md:py-3 justify-center rounded-lg text-6xl md:text-7xl font-bold"
               staggerFrom={"last"}
               initial={{ y: "50%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -117,12 +117,12 @@ const ServicesSection = () => {
               splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
               transition={{ 
                 type: "spring", 
-                damping: 50, 
-                stiffness: 100,
-                mass: 1.2,
-                duration: 0.6
+                damping: 45, 
+                stiffness: 150,
+                mass: 1.0,
+                duration: 0.4
               }}
-              rotationInterval={5000}
+              rotationInterval={3500}
             animatePresenceMode="wait"
             />
           )}
@@ -139,7 +139,7 @@ const ServicesSection = () => {
     <section id="services" className="pt-20 pb-40 bg-gray-50">
 
       <motion.div 
-        className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
+        className="text-6xl md:text-7xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
         layout
         transition={{
           layout: {
@@ -151,7 +151,7 @@ const ServicesSection = () => {
         }}
       >
         <motion.h2 
-          className="text-4xl font-bold"
+          className="text-6xl md:text-7xl font-bold"
           layout
           transition={{
             type: "spring",
