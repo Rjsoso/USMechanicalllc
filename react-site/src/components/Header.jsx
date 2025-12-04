@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { client, urlFor } from '../utils/sanity';
 import StaggeredMenu from './StaggeredMenu';
 
 const menuItems = [
@@ -9,19 +11,40 @@ const menuItems = [
 ];
 
 export default function Header() {
+  const [logo, setLogo] = useState(null);
+
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "headerSection"][0]{
+          logo
+        }`
+      )
+      .then((data) => {
+        if (data?.logo) {
+          setLogo(data.logo);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching header logo:', error);
+      });
+  }, []);
+
   return (
     <>
       {/* Logo - Separate, positioned in top-left corner */}
-      <div className="fixed top-4 left-4 z-50">
-        <img
-          src="/logo.png"
-          alt="US Mechanical"
-          className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
-          onError={(e) => {
-            e.target.style.display = "none";
-          }}
-        />
-      </div>
+      {logo && (
+        <div className="fixed top-4 left-4 z-50">
+          <img
+            src={urlFor(logo).width(200).quality(90).auto('format').url()}
+            alt="US Mechanical"
+            className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        </div>
+      )}
 
       {/* StaggeredMenu - positioned fixed on right */}
       <div className="fixed top-0 right-0 z-50" style={{ width: 'auto', height: '100vh' }}>
