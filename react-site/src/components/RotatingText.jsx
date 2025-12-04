@@ -156,9 +156,9 @@ const RotatingText = forwardRef((props, ref) => {
         ...transition,
         layout: { 
           type: "spring", 
-          damping: 40, 
-          stiffness: 300,
-          duration: 0.4
+          damping: 50, 
+          stiffness: 150,
+          duration: 0.8
         }
       }}
       style={{
@@ -176,9 +176,9 @@ const RotatingText = forwardRef((props, ref) => {
           transition={{
             layout: {
               type: "spring",
-              damping: 40,
-              stiffness: 300,
-              duration: 0.4
+              damping: 50,
+              stiffness: 150,
+              duration: 0.8
             }
           }}
           aria-hidden="true"
