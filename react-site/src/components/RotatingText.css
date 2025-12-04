@@ -3,8 +3,6 @@
   flex-wrap: wrap;
   white-space: pre-wrap;
   position: relative;
-  will-change: transform, width;
-  transform: translateZ(0);
 }
 
 .text-rotate-sr-only {
