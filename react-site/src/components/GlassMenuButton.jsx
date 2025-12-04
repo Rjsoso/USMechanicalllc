@@ -123,7 +123,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       <GlassSurface
         width={165}
         height={70}
-        borderRadius={50}
+        borderRadius={8}
         borderWidth={0.008}
         blur={11}
         brightness={51}
@@ -152,7 +152,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
 
         {/* Top glossy highlight */}
         <div
-          className="absolute top-0 left-0 right-0 h-2/5 pointer-events-none rounded-t-[40px]"
+          className="absolute top-0 left-0 right-0 h-2/5 pointer-events-none rounded-t-[8px]"
           style={{
             background:
               "linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 50%, transparent 100%)",
@@ -162,7 +162,7 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
 
         {/* Bottom reflective edge */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none rounded-b-[40px]"
+          className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none rounded-b-[8px]"
           style={{
             background:
               "linear-gradient(0deg, rgba(255,255,255,0.2) 0%, transparent 100%)",
