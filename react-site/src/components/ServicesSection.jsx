@@ -79,23 +79,28 @@ const ServicesSection = () => {
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
-        <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
-          <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
+      <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
+        <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
           {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
             <RotatingText
               texts={servicesData.rotatingText}
               mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
               staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "-100%", opacity: 0 }}
+              staggerDuration={0.01}
               splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              transition={{ 
+                type: "spring", 
+                damping: 35, 
+                stiffness: 200,
+                mass: 0.8
+              }}
               rotationInterval={2000}
             />
           )}
-        </div>
+      </div>
         <p className="text-center text-gray-600">No services available.</p>
       </section>
     );
@@ -114,12 +119,17 @@ const ServicesSection = () => {
             texts={servicesData.rotatingText}
             mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
             staggerFrom={"last"}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-120%" }}
-            staggerDuration={0.025}
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "-100%", opacity: 0 }}
+            staggerDuration={0.01}
             splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            transition={{ 
+              type: "spring", 
+              damping: 35, 
+              stiffness: 200,
+              mass: 0.8
+            }}
             rotationInterval={2000}
           />
         )}
