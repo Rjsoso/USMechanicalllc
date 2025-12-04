@@ -150,7 +150,8 @@ const RotatingText = forwardRef((props, ref) => {
     <motion.span 
       className={cn('text-rotate', mainClassName)} 
       {...rest} 
-      layout 
+      layout
+      layoutId="rotating-text-container"
       transition={{
         ...transition,
         layout: { 
@@ -160,6 +161,10 @@ const RotatingText = forwardRef((props, ref) => {
           duration: 0.4
         }
       }}
+      style={{
+        ...rest.style,
+        willChange: 'transform',
+      }}
     >
       <span className="text-rotate-sr-only">{texts[currentTextIndex]}</span>
       <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
@@ -167,6 +172,15 @@ const RotatingText = forwardRef((props, ref) => {
           key={currentTextIndex}
           className={cn(splitBy === 'lines' ? 'text-rotate-lines' : 'text-rotate')}
           layout
+          layoutId="rotating-text-content"
+          transition={{
+            layout: {
+              type: "spring",
+              damping: 40,
+              stiffness: 300,
+              duration: 0.4
+            }
+          }}
           aria-hidden="true"
         >
           {elements.map((wordObj, wordIndex, array) => {

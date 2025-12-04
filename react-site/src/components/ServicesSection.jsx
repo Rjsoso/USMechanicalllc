@@ -81,7 +81,18 @@ const ServicesSection = () => {
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
-      <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
+      <motion.div 
+        className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
+        layout
+        transition={{
+          layout: {
+            type: "spring",
+            damping: 40,
+            stiffness: 300,
+            duration: 0.4
+          }
+        }}
+      >
         <motion.h2 
           className="text-4xl font-bold"
           layout
@@ -113,7 +124,7 @@ const ServicesSection = () => {
               rotationInterval={2000}
             />
           )}
-      </div>
+      </motion.div>
         <p className="text-center text-gray-600">No services available.</p>
       </section>
     );
@@ -125,7 +136,18 @@ const ServicesSection = () => {
 
     <section id="services" className="pt-20 pb-40 bg-gray-50">
 
-      <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
+      <motion.div 
+        className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
+        layout
+        transition={{
+          layout: {
+            type: "spring",
+            damping: 40,
+            stiffness: 300,
+            duration: 0.4
+          }
+        }}
+      >
         <motion.h2 
           className="text-4xl font-bold"
           layout
@@ -157,7 +179,7 @@ const ServicesSection = () => {
             rotationInterval={2000}
           />
         )}
-      </div>
+      </motion.div>
 
 
 
