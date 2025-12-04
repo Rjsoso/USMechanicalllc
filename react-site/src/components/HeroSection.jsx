@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import IndustrialMetalTitle from './IndustrialMetalTitle'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -203,17 +202,14 @@ export default function HeroSection() {
           />
         )}
 
-        {/* Industrial Metal Title - Replaces headline */}
-        <div
-          style={{
-            background: "rgba(0,0,0,0.25)",
-            backdropFilter: "blur(3px)",
-            borderRadius: "20px",
-            padding: "20px 40px"
-          }}
+        <motion.h1
+          className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.3 }}
         >
-          <IndustrialMetalTitle />
-        </div>
+          {heroData.headline}
+        </motion.h1>
 
         <motion.p
           className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8"
