@@ -79,8 +79,9 @@ const ServicesSection = () => {
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
       <section id="services" className="pt-20 pb-40 bg-gray-50">
-        <div className="text-4xl font-bold text-center mb-12">
-          {servicesData.rotatingText && servicesData.rotatingText.length > 0 ? (
+        <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
+          <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
+          {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
             <RotatingText
               texts={servicesData.rotatingText}
               mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
@@ -93,8 +94,6 @@ const ServicesSection = () => {
               transition={{ type: "spring", damping: 30, stiffness: 400 }}
               rotationInterval={2000}
             />
-          ) : (
-            <h2>{servicesData.sectionTitle || 'Our Services'}</h2>
           )}
         </div>
         <p className="text-center text-gray-600">No services available.</p>
@@ -108,8 +107,9 @@ const ServicesSection = () => {
 
     <section id="services" className="pt-20 pb-40 bg-gray-50">
 
-      <div className="text-4xl font-bold text-center mb-12">
-        {servicesData.rotatingText && servicesData.rotatingText.length > 0 ? (
+      <div className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap">
+        <h2 className="text-4xl font-bold">{servicesData.sectionTitle || 'Our Services'}</h2>
+        {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
           <RotatingText
             texts={servicesData.rotatingText}
             mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
@@ -122,8 +122,6 @@ const ServicesSection = () => {
             transition={{ type: "spring", damping: 30, stiffness: 400 }}
             rotationInterval={2000}
           />
-        ) : (
-          <h2>{servicesData.sectionTitle || 'Our Services'}</h2>
         )}
       </div>
 
