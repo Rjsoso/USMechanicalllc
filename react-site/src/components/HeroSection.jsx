@@ -205,12 +205,12 @@ export default function HeroSection() {
         <motion.h1
           className="hero-3d-text"
           data-text={heroData.headline}
-          initial={{ opacity: 0, y: -150 }}
+          initial={{ opacity: 0, y: -300 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ 
             type: "tween",
-            ease: [0.25, 0.46, 0.45, 0.94],
-            duration: 0.6,
+            ease: [0.5, 0, 0.75, 0],
+            duration: 0.4,
             delay: 0.3 
           }}
         >
