@@ -36,7 +36,13 @@ export default function Header() {
       {logo && (
         <div className="fixed top-4 left-4 z-50">
           <img
-            src={urlFor(logo).width(200).quality(90).auto('format').url()}
+            src={urlFor(logo).width(640).quality(95).auto('format').fit('max').url()}
+            srcSet={`
+              ${urlFor(logo).width(320).quality(95).auto('format').fit('max').url()} 320w,
+              ${urlFor(logo).width(640).quality(95).auto('format').fit('max').url()} 640w,
+              ${urlFor(logo).width(1280).quality(95).auto('format').fit('max').url()} 1280w
+            `}
+            sizes="(max-width: 768px) 128px, 160px"
             alt="US Mechanical"
             className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
             onError={(e) => {
