@@ -120,24 +120,25 @@ const GlassMenuButton = forwardRef(({ onClick, children, className = "", ...prop
       onMouseLeave={resetTilt}
       className="transition-transform duration-200 ease-out"
     >
-      <GlassSurface
-        width={165}
-        height={70}
-        borderRadius={8}
-        borderWidth={0.008}
-        blur={11}
-        brightness={51}
-        opacity={0.92}
-        saturation={1.3}
-        backgroundOpacity={0.15}
-        displace={0.5}
-        distortionScale={-180}
-        redOffset={0}
-        greenOffset={10}
-        blueOffset={20}
-        mixBlendMode="screen"
-        className="cursor-pointer relative overflow-hidden"
-      >
+      <div style={{ backgroundColor: '#000000', borderRadius: '8px', width: '165px', height: '70px', position: 'relative' }}>
+        <GlassSurface
+          width={165}
+          height={70}
+          borderRadius={8}
+          borderWidth={0.008}
+          blur={11}
+          brightness={51}
+          opacity={0.92}
+          saturation={1.3}
+          backgroundOpacity={0}
+          displace={0.5}
+          distortionScale={-180}
+          redOffset={0}
+          greenOffset={10}
+          blueOffset={20}
+          mixBlendMode="screen"
+          className="cursor-pointer relative overflow-hidden"
+        >
         {/* Shiny reflective layer */}
         <div
           ref={shineRef}

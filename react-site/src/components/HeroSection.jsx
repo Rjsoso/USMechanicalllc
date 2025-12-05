@@ -228,7 +228,7 @@ export default function HeroSection() {
 
         <motion.a
           href={heroData.buttonLink || '#contact'}
-          className="inline-block bg-black hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-none shadow-lg transition transform hover:scale-105"
+          className="inline-block bg-black hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition transform hover:scale-105"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.9 }}
