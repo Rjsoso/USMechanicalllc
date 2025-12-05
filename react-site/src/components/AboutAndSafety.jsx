@@ -53,6 +53,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
         }`)
       ])
         .then(([aboutData]) => {
+          console.log('AboutAndSafety data fetched from Sanity:', aboutData);
+          console.log('Safety images:', aboutData?.safetyImages);
+          console.log('Photo1:', aboutData?.photo1);
+          
           const mergedData = {
             ...defaultData,
             ...aboutData,
@@ -105,14 +109,18 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-20">
           {/* Image on left, text on right (or reverse on mobile) */}
-          {data.photo1 && (
+          {data.photo1 && data.photo1.asset && (
             <div className="md:w-1/2 order-2 md:order-1">
           <FadeInWhenVisible>
                 <img
-                  src={urlFor(data.photo1).width(600).url()}
-                  alt="About US Mechanical"
+                  src={data.photo1.asset.url ? `${data.photo1.asset.url}?w=600&q=85&auto=format` : urlFor(data.photo1).width(600).url()}
+                  alt={data.photo1.alt || "About US Mechanical"}
                   className="rounded-2xl shadow-lg w-full object-cover"
                   loading="lazy"
+                  onError={(e) => {
+                    console.error('Failed to load about photo:', data.photo1);
+                    e.target.style.display = 'none';
+                  }}
                 />
           </FadeInWhenVisible>
             </div>
@@ -155,19 +163,49 @@ Our goal is always simple: complete every project with zero safety issues.`,
             <div className="md:w-1/2">
               <FadeInWhenVisible delay={0.5}>
                 <div className="safety-images-grid">
-                  {data.safetyImages.map((img, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={urlFor(img).width(600).quality(85).auto('format').url()}
-                        className="safety-photo"
-                        alt={img?.alt || `Safety image ${index + 1}`}
-                        loading="lazy"
-                      />
-                      {img?.caption && (
-                        <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                      )}
-                    </div>
-                  ))}
+                  {data.safetyImages.map((img, index) => {
+                    // Check if image has valid asset data
+                    if (!img || !img.asset) {
+                      console.warn(`Safety image ${index + 1} is missing asset data:`, img);
+                      return null;
+                    }
+                    
+                    // Build image URL - handle both expanded asset and reference
+                    let imageUrl;
+                    try {
+                      if (img.asset.url) {
+                        // If asset is expanded with URL, use it directly with optimization
+                        imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
+                      } else if (img.asset._id || img.asset._ref) {
+                        // If asset is a reference, use urlFor
+                        imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
+                      } else {
+                        console.warn(`Safety image ${index + 1} has invalid asset structure:`, img);
+                        return null;
+                      }
+                    } catch (error) {
+                      console.error(`Error generating URL for safety image ${index + 1}:`, error, img);
+                      return null;
+                    }
+                    
+                    return (
+                      <div key={index} className="relative">
+                        <img
+                          src={imageUrl}
+                          className="safety-photo"
+                          alt={img?.alt || `Safety image ${index + 1}`}
+                          loading="lazy"
+                          onError={(e) => {
+                            console.error(`Failed to load safety image ${index + 1}:`, imageUrl);
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                        {img?.caption && (
+                          <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </FadeInWhenVisible>
             </div>
