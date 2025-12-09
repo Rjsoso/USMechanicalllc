@@ -41,6 +41,12 @@ body > * {
   background: transparent;
 }
 
+/* Exception: sections should be able to have their own backgrounds */
+body > main > div > section,
+body > main section {
+  background: inherit;
+}
+
 /* Ensure hero section starts at very top with no white space */
 #hero {
   margin-top: 0 !important;
@@ -76,6 +82,7 @@ main {
 #portfolio,
 #careers {
   background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 /* Safety Images Grid */
