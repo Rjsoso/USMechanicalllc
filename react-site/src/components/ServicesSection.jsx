@@ -77,7 +77,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="pt-20 pb-40 bg-gray-50" style={{ backgroundColor: '#f9fafb' }}>
+      <section id="services" className="pt-20 pb-40 bg-gray-50">
       <motion.div 
         className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
         layout
@@ -112,7 +112,7 @@ const ServicesSection = () => {
 
   return (
 
-    <section id="services" className="pt-20 pb-40 bg-gray-50" style={{ backgroundColor: '#f9fafb' }}>
+    <section id="services" className="pt-20 pb-40 bg-gray-50">
 
       <motion.div 
         className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-4 flex-wrap"
