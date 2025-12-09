@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CRITICAL: Override Tailwind Preflight white backgrounds immediately after utilities */
+/* Tailwind Preflight sets background-color: white on body and other elements */
+/* We need to override this BEFORE our section-specific rules */
+
 /* Enhanced glassmorphism for header */
 header {
   backdrop-filter: blur(20px) saturate(1.8);
@@ -87,11 +91,16 @@ body > main > div {
 /* Set grey background starting right after CompanyStats */
 /* Target Services (3rd child), Portfolio (4th child), and Careers (5th child) */
 /* Exclude Contact (6th/last child) which should have its own background image */
+/* Use maximum specificity to override Tailwind base and any white backgrounds */
 body > main > div > section:nth-child(3),
 body > main > div > section:nth-child(4),
-body > main > div > section:nth-child(5) {
+body > main > div > section:nth-child(5),
+html body main div section:nth-child(3),
+html body main div section:nth-child(4),
+html body main div section:nth-child(5) {
   background: #f9fafb !important;
   background-color: #f9fafb !important;
+  background-image: none !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -329,6 +338,43 @@ html > body > main > div > section#careers {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
   background-image: none !important;
+}
+
+/* CRITICAL: Override Tailwind base that might set white backgrounds */
+/* Target all possible white background sources */
+section#services[class*="bg-"],
+section#portfolio[class*="bg-"],
+section#careers[class*="bg-"] {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+}
+
+/* Override any white backgrounds that might be coming from Tailwind utilities */
+section#services.bg-white,
+section#portfolio.bg-white,
+section#careers.bg-white {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+}
+
+/* CRITICAL FIX: Override Tailwind Preflight that might set white backgrounds */
+/* Tailwind's @tailwind base includes Preflight which can reset backgrounds */
+/* Force sections to be grey - override everything including Tailwind Preflight */
+section#services,
+section#portfolio,
+section#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
+}
+
+/* Override Tailwind base styles that might set white backgrounds */
+/* Target sections even if Tailwind Preflight sets background-color: white */
+html body section#services,
+html body section#portfolio,
+html body section#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 /* DIAGNOSTIC: Temporary test to verify CSS is loading - remove after verification */
