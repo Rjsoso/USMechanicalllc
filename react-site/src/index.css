@@ -71,14 +71,19 @@ main {
   background: transparent !important;
 }
 
-/* Exception: sections should be able to have their own backgrounds - don't inherit transparent */
-body > main > div > section[id],
-body > main section[id] {
-  background: unset !important;
+/* Ensure wrapper div doesn't show white background */
+body > main > div {
+  background: transparent;
 }
 
 /* Force grey background on Services, Portfolio, and Careers sections */
-/* Must come AFTER the unset rule to override it - higher specificity */
+/* Using maximum specificity to ensure these rules override everything */
+body > main > div > section#services,
+body > main > div > section#portfolio,
+body > main > div > section#careers,
+section#services,
+section#portfolio,
+section#careers,
 #services,
 #portfolio,
 #careers {
