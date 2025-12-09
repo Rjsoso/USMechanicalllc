@@ -73,8 +73,9 @@ main {
 }
 
 /* Ensure wrapper div doesn't show white background */
+/* Set grey background on wrapper to prevent white showing through */
 body > main > div {
-  background: transparent;
+  background: #f9fafb;
 }
 
 
