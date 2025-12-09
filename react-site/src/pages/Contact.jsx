@@ -12,15 +12,7 @@ export default function Contact() {
     const fetchContact = async () => {
       try {
         setLoading(true);
-        const query = `*[_type == "contact"][0]{
-          ...,
-          backgroundImage {
-            asset-> {
-              _id,
-              url
-            }
-          }
-        }`;
+        const query = `*[_type == "contact"][0]`;
         const data = await client.fetch(query);
         setContactData(data);
         if (!data) {
@@ -62,18 +54,7 @@ export default function Contact() {
   }
 
   return (
-    <section 
-      className="max-w-6xl mx-auto py-20 px-6 relative bg-cover bg-center"
-      style={{
-        backgroundImage: contactData?.backgroundImage?.asset?.url 
-          ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
-          : undefined,
-      }}
-    >
-      {contactData?.backgroundImage?.asset?.url && (
-        <div className="absolute inset-0 bg-black/60 -z-10"></div>
-      )}
-      <div className="relative z-10">
+    <section className="max-w-6xl mx-auto py-20 px-6">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -144,7 +125,6 @@ export default function Contact() {
             </form>
           </div>
         </div>
-      </div>
     </section>
   );
 }

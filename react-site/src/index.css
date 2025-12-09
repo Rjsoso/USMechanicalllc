@@ -80,10 +80,18 @@ main {
 }
 
 /* Ensure wrapper div doesn't show white background */
-/* Set default grey background to prevent browser white from showing through */
 body > main > div {
-  background: #f9fafb;
-  background-color: #f9fafb;
+  background: transparent;
+}
+
+/* Set grey background starting right after CompanyStats */
+/* Target Services (3rd child), Portfolio (4th child), and Careers (5th child) */
+/* Exclude Contact (6th/last child) which should have its own background */
+body > main > div > section:nth-child(3),
+body > main > div > section:nth-child(4),
+body > main > div > section:nth-child(5) {
+  background: #f9fafb !important;
+  background-color: #f9fafb !important;
 }
 
 
