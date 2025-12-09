@@ -18,6 +18,8 @@ header {
 html {
   scroll-behavior: smooth;
   background: transparent;
+  /* Prevent browser default white background */
+  background-color: transparent !important;
 }
 
 body {
@@ -29,6 +31,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: transparent;
+  /* Prevent browser default white background */
+  background-color: transparent !important;
 }
 
 /* Ensure no white bar appears above header - hero section extends to top */
@@ -65,17 +69,21 @@ body > *:not(section) {
 /* Force transparent background (hero image will show through) */
 html, body, #root {
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Ensure main element doesn't have white background */
+/* But allow wrapper div to have grey background */
 main {
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Ensure wrapper div doesn't show white background */
 /* Set grey background on wrapper to prevent white showing through */
 body > main > div {
-  background: #f9fafb;
+  background: #f9fafb !important;
+  background-color: #f9fafb !important;
 }
 
 
