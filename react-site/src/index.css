@@ -80,8 +80,10 @@ main {
 }
 
 /* Ensure wrapper div doesn't show white background */
+/* Set default grey background to prevent browser white from showing through */
 body > main > div {
-  background: transparent;
+  background: #f9fafb;
+  background-color: #f9fafb;
 }
 
 
@@ -271,7 +273,8 @@ body > main > div {
    to ensure they override everything
    ============================================ */
 
-/* Override Tailwind's bg-gray-50 utility class on our target sections */
+/* Override Tailwind's base styles and bg-gray-50 utility class on our target sections */
+/* These rules override Tailwind base which might reset backgrounds */
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
 section#careers.bg-gray-50,
@@ -285,7 +288,7 @@ body > main > div > section#careers.bg-gray-50 {
 
 /* Force grey background on Services, Portfolio, and Careers sections */
 /* Using maximum specificity to ensure these rules override everything */
-/* These rules come LAST to override Tailwind utilities */
+/* These rules come LAST to override Tailwind utilities and base styles */
 body > main > div > section#services,
 body > main > div > section#portfolio,
 body > main > div > section#careers,
@@ -299,3 +302,27 @@ section#careers,
   background: #f9fafb !important;
   background-image: none !important;
 }
+
+/* Additional override for Tailwind base styles that might reset backgrounds */
+/* Target sections even if Tailwind base sets background to white or transparent */
+/* Maximum specificity selectors - these come absolutely last */
+html body main div section#services,
+html body main div section#portfolio,
+html body main div section#careers,
+html > body > main > div > section#services,
+html > body > main > div > section#portfolio,
+html > body > main > div > section#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
+}
+
+/* DIAGNOSTIC: Temporary test to verify CSS is loading - remove after verification */
+/* If you see red backgrounds, CSS is loading. If still white, CSS isn't applying. */
+/* Uncomment below to test:
+#services,
+#portfolio,
+#careers {
+  background-color: #ff0000 !important;
+}
+*/
