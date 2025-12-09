@@ -37,7 +37,8 @@ body {
 }
 
 /* Remove any white space above header */
-body > * {
+/* Exclude sections so they can have their own backgrounds */
+body > *:not(section) {
   background: transparent;
 }
 
@@ -76,21 +77,6 @@ body > main > div {
   background: transparent;
 }
 
-/* Force grey background on Services, Portfolio, and Careers sections */
-/* Using maximum specificity to ensure these rules override everything */
-body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers,
-section#services,
-section#portfolio,
-section#careers,
-#services,
-#portfolio,
-#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-}
 
 /* Safety Images Grid */
 .safety-images-grid {
@@ -270,4 +256,39 @@ section#careers,
   .hero-3d-text {
     font-size: 4.5rem;
   }
+}
+
+/* ============================================
+   SECTION BACKGROUND RULES - MUST BE LAST
+   These rules must come after all Tailwind utilities
+   to ensure they override everything
+   ============================================ */
+
+/* Override Tailwind's bg-gray-50 utility class on our target sections */
+section#services.bg-gray-50,
+section#portfolio.bg-gray-50,
+section#careers.bg-gray-50,
+body > main > div > section#services.bg-gray-50,
+body > main > div > section#portfolio.bg-gray-50,
+body > main > div > section#careers.bg-gray-50 {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
+}
+
+/* Force grey background on Services, Portfolio, and Careers sections */
+/* Using maximum specificity to ensure these rules override everything */
+/* These rules come LAST to override Tailwind utilities */
+body > main > div > section#services,
+body > main > div > section#portfolio,
+body > main > div > section#careers,
+section#services,
+section#portfolio,
+section#careers,
+#services,
+#portfolio,
+#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
 }
