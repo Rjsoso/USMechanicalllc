@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { client } from '../utils/sanity';
 
 import CardSwap, { Card } from './CardSwap';
-import RotatingText from './RotatingText';
 
 
 
@@ -28,8 +27,6 @@ const ServicesSection = () => {
           sectionTitle,
 
           descriptionText,
-
-          rotatingText,
 
           servicesInfo[] {
 
@@ -105,20 +102,6 @@ const ServicesSection = () => {
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
-          {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
-            <RotatingText
-              texts={servicesData.rotatingText}
-              mainClassName="px-2 sm:px-2 md:px-3 bg-black text-white overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-              staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
-              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              rotationInterval={2000}
-            />
-          )}
       </motion.div>
         <p className="text-center text-gray-600">No services available.</p>
       </section>
@@ -155,20 +138,6 @@ const ServicesSection = () => {
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
-        {servicesData.rotatingText && servicesData.rotatingText.length > 0 && (
-          <RotatingText
-            texts={servicesData.rotatingText}
-            mainClassName="px-2 sm:px-2 md:px-3 bg-black text-white overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-            staggerFrom={"last"}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-120%" }}
-            staggerDuration={0.025}
-            splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
-        )}
       </motion.div>
 
 
