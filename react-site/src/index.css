@@ -86,12 +86,18 @@ body > main > div {
 
 /* Set grey background starting right after CompanyStats */
 /* Target Services (3rd child), Portfolio (4th child), and Careers (5th child) */
-/* Exclude Contact (6th/last child) which should have its own background */
+/* Exclude Contact (6th/last child) which should have its own background image */
 body > main > div > section:nth-child(3),
 body > main > div > section:nth-child(4),
 body > main > div > section:nth-child(5) {
   background: #f9fafb !important;
   background-color: #f9fafb !important;
+}
+
+/* Ensure Contact section (last child) can have its background image */
+body > main > div > section:last-child {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 
