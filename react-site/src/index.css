@@ -71,6 +71,13 @@ main {
   background: transparent !important;
 }
 
+/* Force grey background on Services, Portfolio, and Careers sections */
+#services,
+#portfolio,
+#careers {
+  background-color: #f9fafb !important;
+}
+
 /* Safety Images Grid */
 .safety-images-grid {
   display: grid;
