@@ -25,27 +25,17 @@ export default function Home() {
         </section>
         <div style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
 
-          <section id="about">
-            <AboutAndSafety />
-          </section>
+          <AboutAndSafety />
 
           <CompanyStats />
 
-          <section id="services">
-            <ServicesSection />
-          </section>
+          <ServicesSection />
 
-          <section id="portfolio">
-            <Portfolio />
-          </section>
+          <Portfolio />
 
-          <section id="careers">
-            <Careers />
-          </section>
+          <Careers />
 
-          <section id="contact">
-            <Contact />
-          </section>
+          <Contact />
         </div>
       </main>
 
