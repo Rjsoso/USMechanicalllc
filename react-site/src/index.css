@@ -80,17 +80,8 @@ main {
 }
 
 /* Ensure wrapper div doesn't show white background */
-/* Set grey background on wrapper, but allow sections with their own backgrounds to override */
 body > main > div {
-  background: #f9fafb !important;
-  background-color: #f9fafb !important;
-}
-
-/* Allow contact section (last child) to have transparent background so its background image shows */
-/* Contact section uses white text, indicating it should have a dark background image */
-body > main > div > section:last-child {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: transparent;
 }
 
 
