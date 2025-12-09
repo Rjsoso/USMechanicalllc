@@ -41,12 +41,6 @@ body > * {
   background: transparent;
 }
 
-/* Exception: sections should be able to have their own backgrounds */
-body > main > div > section,
-body > main section {
-  background: inherit;
-}
-
 /* Ensure hero section starts at very top with no white space */
 #hero {
   margin-top: 0 !important;
@@ -77,12 +71,20 @@ main {
   background: transparent !important;
 }
 
+/* Exception: sections should be able to have their own backgrounds - don't inherit transparent */
+body > main > div > section[id],
+body > main section[id] {
+  background: unset !important;
+}
+
 /* Force grey background on Services, Portfolio, and Careers sections */
+/* Must come AFTER the unset rule to override it - higher specificity */
 #services,
 #portfolio,
 #careers {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
+  background-image: none !important;
 }
 
 /* Safety Images Grid */
