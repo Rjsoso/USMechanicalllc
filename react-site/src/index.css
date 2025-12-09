@@ -6,6 +6,29 @@
 /* Tailwind Preflight sets background-color: white on body and other elements */
 /* We need to override this BEFORE our section-specific rules */
 
+/* IMMEDIATE OVERRIDE: Prevent Tailwind Preflight from setting white backgrounds */
+/* Tailwind Preflight includes: body { background-color: white; } */
+/* We must override this immediately to prevent white backgrounds */
+body {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Override any white backgrounds Tailwind Preflight might set on sections */
+section {
+  /* Don't set default - let individual sections control their backgrounds */
+}
+
+/* CRITICAL: Force grey backgrounds on target sections immediately */
+/* This must come before other rules to ensure it takes precedence */
+section#services,
+section#portfolio,
+section#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
+}
+
 /* Enhanced glassmorphism for header */
 header {
   backdrop-filter: blur(20px) saturate(1.8);
