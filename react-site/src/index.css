@@ -400,12 +400,24 @@ html body section#careers {
   background: #f9fafb !important;
 }
 
-/* DIAGNOSTIC: Temporary test to verify CSS is loading - remove after verification */
-/* If you see red backgrounds, CSS is loading. If still white, CSS isn't applying. */
-/* Uncomment below to test:
-#services,
-#portfolio,
-#careers {
-  background-color: #ff0000 !important;
+/* FINAL OVERRIDE: Ensure grey backgrounds are applied with absolute maximum specificity */
+/* This rule targets sections by ID with every possible selector combination */
+html > body > main > div > section#services,
+html > body > main > div > section#portfolio,
+html > body > main > div > section#careers,
+body > main > div > section#services,
+body > main > div > section#portfolio,
+body > main > div > section#careers,
+main > div > section#services,
+main > div > section#portfolio,
+main > div > section#careers,
+div > section#services,
+div > section#portfolio,
+div > section#careers,
+section#services,
+section#portfolio,
+section#careers {
+  background-color: #f9fafb !important;
+  background: #f9fafb !important;
+  background-image: none !important;
 }
-*/
