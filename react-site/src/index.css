@@ -106,11 +106,11 @@ main {
   background-color: transparent !important;
 }
 
-/* Ensure wrapper div doesn't show white background */
-/* Keep transparent so Contact section background image can show */
+/* Set wrapper div to grey for scrollable content area */
+/* This fills in any white gaps between sections */
 body > main > div {
-  background: transparent;
-  background-color: transparent;
+  background: #f9fafb;
+  background-color: #f9fafb;
 }
 
 /* Set grey background starting right after CompanyStats */
@@ -129,9 +129,11 @@ html body main div section:nth-child(5) {
 }
 
 /* Ensure Contact section (last child) can have its background image */
-body > main > div > section:last-child {
-  background: transparent !important;
+/* Override wrapper grey background so Contact image shows through */
+body > main > div > section:last-child,
+section#contact {
   background-color: transparent !important;
+  background: transparent !important;
 }
 
 

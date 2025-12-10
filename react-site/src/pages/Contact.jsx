@@ -68,6 +68,10 @@ export default function Contact() {
         backgroundImage: contactData?.backgroundImage?.asset?.url 
           ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
           : undefined,
+        backgroundColor: 'transparent',
+        background: contactData?.backgroundImage?.asset?.url 
+          ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
+          : 'transparent',
       }}
     >
       {contactData?.backgroundImage?.asset?.url && (
