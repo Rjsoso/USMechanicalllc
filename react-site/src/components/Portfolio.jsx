@@ -69,7 +69,7 @@ export default function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 bg-gray-50 text-gray-800" style={{ paddingTop: '80px', backgroundColor: '#f9fafb' }}>
+      <section id="portfolio" className="py-20 text-gray-800" style={{ paddingTop: '80px', backgroundColor: '#f9fafb' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -78,7 +78,7 @@ export default function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="py-20 bg-gray-50 text-gray-800" style={{ paddingTop: '80px', backgroundColor: '#f9fafb' }}>
+    <section id="portfolio" className="py-20 text-gray-800" style={{ paddingTop: '80px', backgroundColor: '#f9fafb' }}>
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>
