@@ -63,15 +63,13 @@ export default function Contact() {
 
   return (
     <section 
+      id="contact"
       className="max-w-6xl mx-auto py-20 px-6 relative bg-cover bg-center"
       style={{
         backgroundImage: contactData?.backgroundImage?.asset?.url 
           ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
           : undefined,
-        backgroundColor: 'transparent',
-        background: contactData?.backgroundImage?.asset?.url 
-          ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
-          : 'transparent',
+        backgroundColor: contactData?.backgroundImage?.asset?.url ? 'transparent' : '#f9fafb',
       }}
     >
       {contactData?.backgroundImage?.asset?.url && (
