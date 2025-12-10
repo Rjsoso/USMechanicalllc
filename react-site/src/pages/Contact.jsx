@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function Contact() {
   const [contactData, setContactData] = useState(null);
+  const [heroBackgroundImage, setHeroBackgroundImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,7 +13,8 @@ export default function Contact() {
     const fetchContact = async () => {
       try {
         setLoading(true);
-        const query = `*[_type == "contact"][0]{
+        // Fetch contact data
+        const contactQuery = `*[_type == "contact"][0]{
           ...,
           backgroundImage {
             asset-> {
@@ -21,9 +23,36 @@ export default function Contact() {
             }
           }
         }`;
-        const data = await client.fetch(query);
-        setContactData(data);
-        if (!data) {
+        const contactData = await client.fetch(contactQuery);
+        setContactData(contactData);
+        
+        // Fetch hero background image as fallback
+        const heroQuery = `*[_type == "heroSection"][0]{
+          backgroundImage {
+            asset-> {
+              _id,
+              url
+            }
+          },
+          carouselImages[0] {
+            image {
+              asset-> {
+                _id,
+                url
+              }
+            },
+            "imageUrl": image.asset->url
+          }
+        }`;
+        const heroData = await client.fetch(heroQuery);
+        
+        // Use carousel image if available, otherwise use backgroundImage
+        const heroImageUrl = heroData?.carouselImages?.imageUrl || 
+                            heroData?.carouselImages?.image?.asset?.url ||
+                            heroData?.backgroundImage?.asset?.url;
+        setHeroBackgroundImage(heroImageUrl);
+        
+        if (!contactData) {
           setError('No contact page data found. Please create a Contact Page document in Sanity Studio.');
         }
       } catch (err) {
@@ -61,24 +90,40 @@ export default function Contact() {
     );
   }
 
+  // Determine which background image to use (contact's own or hero's as fallback)
+  const backgroundImageUrl = contactData?.backgroundImage?.asset?.url || heroBackgroundImage;
+  
   return (
     <section 
       id="contact"
-      className="max-w-6xl mx-auto py-20 px-6 relative bg-cover bg-center"
+      className="relative py-20 px-6 w-full"
       style={{
-        backgroundImage: contactData?.backgroundImage?.asset?.url 
-          ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
-          : undefined,
         backgroundColor: 'transparent',
-        background: contactData?.backgroundImage?.asset?.url 
-          ? `url(${contactData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
-          : 'transparent',
+        minHeight: '100vh',
       }}
     >
-      {contactData?.backgroundImage?.asset?.url && (
-        <div className="absolute inset-0 bg-black/60 -z-10"></div>
+      {/* Background Image - absolute position relative to section */}
+      {backgroundImageUrl && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center brightness-75"
+            style={{
+              backgroundImage: `url(${backgroundImageUrl}?w=1920&q=85&auto=format)`,
+              zIndex: 0,
+              width: '100%',
+            }}
+          />
+          {/* Dark overlay for readability */}
+          <div 
+            className="absolute inset-0 bg-black/60"
+            style={{
+              zIndex: 1,
+              width: '100%',
+            }}
+          />
+        </>
       )}
-      <div className="relative z-10">
+      <div className="relative z-10 max-w-6xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

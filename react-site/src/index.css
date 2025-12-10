@@ -138,6 +138,13 @@ section#contact {
   background: transparent !important;
   /* Ensure background-image can show through */
   background-image: inherit !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Ensure Contact section background elements display properly */
+section#contact > div[class*="absolute"] {
+  position: absolute !important;
 }
 
 
