@@ -114,12 +114,16 @@ body > main > div {
 /* Ensure sections maintain their grey backgrounds */
 body > main > div > section#services.bg-gray-50,
 body > main > div > section#portfolio.bg-gray-50,
-body > main > div > section#careers.bg-gray-50,
 body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers {
+body > main > div > section#portfolio {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
+}
+
+/* TEST: Careers section with darker grey to see if it works */
+body > main > div > section#careers {
+  background-color: #e5e7eb !important;
+  background: #e5e7eb !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
