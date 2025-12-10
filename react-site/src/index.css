@@ -98,8 +98,8 @@ main {
 /* This fills in any white gaps between sections */
 body > main > div.bg-gray-50,
 body > main > div {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
+  background-color: #f3f4f6 !important;
+  background: #f3f4f6 !important;
 }
 
 /* These rules are now handled by the comprehensive rule below */
@@ -121,8 +121,8 @@ main > div > section#careers,
 section#services,
 section#portfolio,
 section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
+  background-color: #f3f4f6 !important;
+  background: #f3f4f6 !important;
   background-image: none !important;
   position: relative !important;
   z-index: 1 !important;
@@ -345,7 +345,7 @@ body > main > div > section#careers,
 section#services,
 section#portfolio,
 section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
+  background-color: #f3f4f6 !important;
+  background: #f3f4f6 !important;
   background-image: none !important;
 }
