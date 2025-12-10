@@ -120,14 +120,16 @@ body > main > div > section#portfolio {
   background: #f9fafb !important;
 }
 
-/* TEST: Careers section with darker grey to see if it works */
+/* TEST: Careers section with VERY OBVIOUS grey (#9ca3af = gray-400) to see if it works */
 /* Using maximum specificity to override everything */
 html body main div section#careers,
 body > main > div > section#careers,
 section#careers {
-  background-color: #e5e7eb !important;
-  background: #e5e7eb !important;
+  background-color: #9ca3af !important;
+  background: #9ca3af !important;
   background-image: none !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
