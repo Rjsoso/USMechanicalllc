@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react'
-import { client, urlFor } from '../utils/sanity'
-import ProjectModal from './ProjectModal'
+import { useEffect, useState } from 'react';
+import { client, urlFor } from '../utils/sanity';
+import ProjectModal from './ProjectModal';
 
 export default function Portfolio() {
-  const [categories, setCategories] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState(null)
-  const [projects, setProjects] = useState([])
-  const [openProject, setOpenProject] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [openProject, setOpenProject] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch categories with their projects
     client
       .fetch(
         `*[_type == "portfolioCategory"] | order(order asc) {
@@ -46,39 +45,38 @@ export default function Portfolio() {
         }`
       )
       .then((data) => {
-        setCategories(data)
-        setLoading(false)
+        setCategories(data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching portfolio categories:', error)
-        setLoading(false)
-      })
-  }, [])
+        console.error('Error fetching portfolio categories:', error);
+        setLoading(false);
+      });
+  }, []);
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category)
-    // Sort projects by order
-    const sortedProjects = [...(category.projects || [])].sort((a, b) => (a.order || 0) - (b.order || 0))
-    setProjects(sortedProjects)
-  }
+    setSelectedCategory(category);
+    const sortedProjects = [...(category.projects || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+    setProjects(sortedProjects);
+  };
 
   const handleBackToCategories = () => {
-    setSelectedCategory(null)
-    setProjects([])
-  }
+    setSelectedCategory(null);
+    setProjects([]);
+  };
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 text-gray-800 bg-gray-50" style={{ paddingTop: '80px', backgroundColor: '#f9fafb', background: '#f9fafb' }}>
+      <section id="portfolio" className="py-20 bg-gray-50 text-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
-    <section id="portfolio" className="py-20 text-gray-800 bg-gray-50" style={{ paddingTop: '80px', backgroundColor: '#f9fafb', background: '#f9fafb' }}>
+    <section id="portfolio" className="py-20 bg-gray-50 text-gray-800">
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>
@@ -240,5 +238,5 @@ export default function Portfolio() {
         )}
       </div>
     </section>
-  )
+  );
 }

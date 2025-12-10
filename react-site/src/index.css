@@ -14,21 +14,12 @@ body {
   background: transparent !important;
 }
 
-/* Override any white backgrounds Tailwind Preflight might set on sections */
-section {
-  /* Don't set default - let individual sections control their backgrounds */
-}
 
-/* CRITICAL: Force grey backgrounds on target sections immediately */
-/* This must come before other rules to ensure it takes precedence */
-section#services,
-section#portfolio,
-section#careers {
+/* Ensure sections with bg-gray-50 class display properly */
+section#services.bg-gray-50,
+section#portfolio.bg-gray-50,
+section#careers.bg-gray-50 {
   background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-  /* Ensure sections are not transparent - force opaque background */
-  opacity: 1 !important;
 }
 
 /* Enhanced glassmorphism for header */
@@ -115,19 +106,11 @@ body > main > div {
   background-color: #f9fafb;
 }
 
-/* Set grey background starting right after CompanyStats */
-/* Target Services (3rd child), Portfolio (4th child), and Careers (5th child) */
-/* Exclude Contact (6th/last child) which should have its own background image */
-/* Use maximum specificity to override Tailwind base and any white backgrounds */
-body > main > div > section:nth-child(3),
-body > main > div > section:nth-child(4),
-body > main > div > section:nth-child(5),
-html body main div section:nth-child(3),
-html body main div section:nth-child(4),
-html body main div section:nth-child(5) {
-  background: #f9fafb !important;
+/* Ensure sections maintain their grey backgrounds */
+body > main > div > section#services.bg-gray-50,
+body > main > div > section#portfolio.bg-gray-50,
+body > main > div > section#careers.bg-gray-50 {
   background-color: #f9fafb !important;
-  background-image: none !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -331,110 +314,12 @@ section#contact > div[class*="absolute"] {
 }
 
 /* ============================================
-   SECTION BACKGROUND RULES - MUST BE LAST
-   These rules must come after all Tailwind utilities
-   to ensure they override everything
+   SECTION BACKGROUND RULES
+   Ensure sections with bg-gray-50 maintain their background
    ============================================ */
 
-/* Override Tailwind's base styles and bg-gray-50 utility class on our target sections */
-/* These rules override Tailwind base which might reset backgrounds */
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
-section#careers.bg-gray-50,
-body > main > div > section#services.bg-gray-50,
-body > main > div > section#portfolio.bg-gray-50,
-body > main > div > section#careers.bg-gray-50 {
+section#careers.bg-gray-50 {
   background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-}
-
-/* Force grey background on Services, Portfolio, and Careers sections */
-/* Using maximum specificity to ensure these rules override everything */
-/* These rules come LAST to override Tailwind utilities and base styles */
-body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers,
-section#services,
-section#portfolio,
-section#careers,
-#services,
-#portfolio,
-#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-}
-
-/* Additional override for Tailwind base styles that might reset backgrounds */
-/* Target sections even if Tailwind base sets background to white or transparent */
-/* Maximum specificity selectors - these come absolutely last */
-html body main div section#services,
-html body main div section#portfolio,
-html body main div section#careers,
-html > body > main > div > section#services,
-html > body > main > div > section#portfolio,
-html > body > main > div > section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-}
-
-/* CRITICAL: Override Tailwind base that might set white backgrounds */
-/* Target all possible white background sources */
-section#services[class*="bg-"],
-section#portfolio[class*="bg-"],
-section#careers[class*="bg-"] {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-}
-
-/* Override any white backgrounds that might be coming from Tailwind utilities */
-section#services.bg-white,
-section#portfolio.bg-white,
-section#careers.bg-white {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-}
-
-/* CRITICAL FIX: Override Tailwind Preflight that might set white backgrounds */
-/* Tailwind's @tailwind base includes Preflight which can reset backgrounds */
-/* Force sections to be grey - override everything including Tailwind Preflight */
-section#services,
-section#portfolio,
-section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
-}
-
-/* Override Tailwind base styles that might set white backgrounds */
-/* Target sections even if Tailwind Preflight sets background-color: white */
-html body section#services,
-html body section#portfolio,
-html body section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-}
-
-/* FINAL OVERRIDE: Ensure grey backgrounds are applied with absolute maximum specificity */
-/* This rule targets sections by ID with every possible selector combination */
-html > body > main > div > section#services,
-html > body > main > div > section#portfolio,
-html > body > main > div > section#careers,
-body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers,
-main > div > section#services,
-main > div > section#portfolio,
-main > div > section#careers,
-div > section#services,
-div > section#portfolio,
-div > section#careers,
-section#services,
-section#portfolio,
-section#careers {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-  background-image: none !important;
 }
