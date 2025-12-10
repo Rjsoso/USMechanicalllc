@@ -107,8 +107,10 @@ main {
 }
 
 /* Ensure wrapper div doesn't show white background */
+/* Keep transparent so Contact section background image can show */
 body > main > div {
   background: transparent;
+  background-color: transparent;
 }
 
 /* Set grey background starting right after CompanyStats */
