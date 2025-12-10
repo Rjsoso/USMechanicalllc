@@ -1,6 +1,6 @@
 export default function Careers() {
   return (
-    <section id="careers" className="py-24" style={{ backgroundColor: '#9ca3af', background: '#9ca3af', minHeight: '100vh', width: '100%', position: 'relative', zIndex: 1 }}>
+    <section id="careers" className="py-24" style={{ backgroundColor: '#f9fafb', background: '#f9fafb', width: '100%', position: 'relative', zIndex: 1 }}>
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold text-gray-800 mb-6">Careers at U.S. Mechanical</h2>
         <p className="text-gray-700 mb-10">

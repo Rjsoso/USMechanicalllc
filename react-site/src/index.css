@@ -111,22 +111,21 @@ body > main > div {
   background: #f9fafb !important;
 }
 
-/* Ensure sections maintain their grey backgrounds */
-body > main > div > section#services.bg-gray-50,
-body > main > div > section#portfolio.bg-gray-50,
+/* These rules are now handled by the comprehensive rule below */
+
+/* Ensure sections have grey backgrounds */
+/* Using maximum specificity to override everything */
+html body main div section#services,
+html body main div section#portfolio,
+html body main div section#careers,
 body > main > div > section#services,
-body > main > div > section#portfolio {
+body > main > div > section#portfolio,
+body > main > div > section#careers,
+section#services,
+section#portfolio,
+section#careers {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
-}
-
-/* TEST: Careers section with VERY OBVIOUS grey (#9ca3af = gray-400) to see if it works */
-/* Using maximum specificity to override everything */
-html body main div section#careers,
-body > main > div > section#careers,
-section#careers {
-  background-color: #9ca3af !important;
-  background: #9ca3af !important;
   background-image: none !important;
   position: relative !important;
   z-index: 1 !important;
