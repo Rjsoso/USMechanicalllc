@@ -101,9 +101,8 @@ main {
 
 /* Set wrapper div to grey for scrollable content area */
 /* This fills in any white gaps between sections */
-body > main > div {
-  background: #f9fafb;
-  background-color: #f9fafb;
+body > main > div.bg-gray-50 {
+  background-color: #f9fafb !important;
 }
 
 /* Ensure sections maintain their grey backgrounds */
