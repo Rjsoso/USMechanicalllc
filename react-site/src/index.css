@@ -15,16 +15,7 @@ body {
 }
 
 
-/* Ensure sections with bg-gray-50 class display properly */
-section#services.bg-gray-50,
-section#portfolio.bg-gray-50,
-section#services,
-section#portfolio {
-  background-color: #f9fafb !important;
-  background: #f9fafb !important;
-}
-
-/* TEST: Exclude careers from this rule - it has its own rule below */
+/* Removed - handled by comprehensive rule below */
 
 /* Enhanced glassmorphism for header */
 header {
@@ -113,14 +104,20 @@ body > main > div {
 
 /* These rules are now handled by the comprehensive rule below */
 
-/* Ensure sections have grey backgrounds */
-/* Using maximum specificity to override everything */
+/* CRITICAL: Ensure sections have grey backgrounds - MUST override everything */
+/* Using maximum specificity to override everything including Tailwind resets */
+html > body > main > div > section#services,
+html > body > main > div > section#portfolio,
+html > body > main > div > section#careers,
 html body main div section#services,
 html body main div section#portfolio,
 html body main div section#careers,
 body > main > div > section#services,
 body > main > div > section#portfolio,
 body > main > div > section#careers,
+main > div > section#services,
+main > div > section#portfolio,
+main > div > section#careers,
 section#services,
 section#portfolio,
 section#careers {
@@ -129,6 +126,8 @@ section#careers {
   background-image: none !important;
   position: relative !important;
   z-index: 1 !important;
+  /* Ensure sections are opaque, not transparent */
+  opacity: 1 !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -332,16 +331,21 @@ section#contact > div[class*="absolute"] {
 }
 
 /* ============================================
-   SECTION BACKGROUND RULES
-   Ensure sections with bg-gray-50 maintain their background
+   SECTION BACKGROUND RULES - FINAL OVERRIDE
+   These rules come last to ensure they override everything
    ============================================ */
 
-section#services.bg-gray-50,
-section#portfolio.bg-gray-50,
+/* CRITICAL: Force grey backgrounds on all three sections */
+html > body > main > div > section#services,
+html > body > main > div > section#portfolio,
+html > body > main > div > section#careers,
+body > main > div > section#services,
+body > main > div > section#portfolio,
+body > main > div > section#careers,
 section#services,
-section#portfolio {
+section#portfolio,
+section#careers {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
+  background-image: none !important;
 }
-
-/* Careers has its own rule above - don't override it here */
