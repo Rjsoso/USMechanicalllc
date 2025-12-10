@@ -63,6 +63,7 @@ export default function Contact() {
 
   return (
     <section 
+      id="contact"
       className="max-w-6xl mx-auto py-20 px-6 relative bg-cover bg-center"
       style={{
         backgroundImage: contactData?.backgroundImage?.asset?.url 

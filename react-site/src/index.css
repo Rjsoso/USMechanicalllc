@@ -130,9 +130,14 @@ html body main div section:nth-child(5) {
 
 /* Ensure Contact section (last child) can have its background image */
 /* Override wrapper grey background so Contact image shows through */
-body > main > div > section:last-child {
+/* Use maximum specificity to override wrapper div's inline style */
+body > main > div > section:last-child,
+body > main > div > section#contact,
+section#contact {
   background-color: transparent !important;
   background: transparent !important;
+  /* Ensure background-image can show through */
+  background-image: inherit !important;
 }
 
 
