@@ -18,13 +18,13 @@ body {
 /* Ensure sections with bg-gray-50 class display properly */
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
-section#careers.bg-gray-50,
 section#services,
-section#portfolio,
-section#careers {
+section#portfolio {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
 }
+
+/* TEST: Exclude careers from this rule - it has its own rule below */
 
 /* Enhanced glassmorphism for header */
 header {
@@ -121,9 +121,13 @@ body > main > div > section#portfolio {
 }
 
 /* TEST: Careers section with darker grey to see if it works */
-body > main > div > section#careers {
+/* Using maximum specificity to override everything */
+html body main div section#careers,
+body > main > div > section#careers,
+section#careers {
   background-color: #e5e7eb !important;
   background: #e5e7eb !important;
+  background-image: none !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -333,10 +337,10 @@ section#contact > div[class*="absolute"] {
 
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
-section#careers.bg-gray-50,
 section#services,
-section#portfolio,
-section#careers {
+section#portfolio {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
 }
+
+/* Careers has its own rule above - don't override it here */
