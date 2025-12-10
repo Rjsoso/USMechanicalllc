@@ -18,8 +18,12 @@ body {
 /* Ensure sections with bg-gray-50 class display properly */
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
-section#careers.bg-gray-50 {
+section#careers.bg-gray-50,
+section#services,
+section#portfolio,
+section#careers {
   background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 /* Enhanced glassmorphism for header */
@@ -101,15 +105,21 @@ main {
 
 /* Set wrapper div to grey for scrollable content area */
 /* This fills in any white gaps between sections */
-body > main > div.bg-gray-50 {
+body > main > div.bg-gray-50,
+body > main > div {
   background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 /* Ensure sections maintain their grey backgrounds */
 body > main > div > section#services.bg-gray-50,
 body > main > div > section#portfolio.bg-gray-50,
-body > main > div > section#careers.bg-gray-50 {
+body > main > div > section#careers.bg-gray-50,
+body > main > div > section#services,
+body > main > div > section#portfolio,
+body > main > div > section#careers {
   background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -319,6 +329,10 @@ section#contact > div[class*="absolute"] {
 
 section#services.bg-gray-50,
 section#portfolio.bg-gray-50,
-section#careers.bg-gray-50 {
+section#careers.bg-gray-50,
+section#services,
+section#portfolio,
+section#careers {
   background-color: #f9fafb !important;
+  background: #f9fafb !important;
 }

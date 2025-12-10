@@ -45,7 +45,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="py-20 bg-gray-50 text-center">
+      <section id="services" className="py-20 bg-gray-50 text-center" style={{ backgroundColor: '#f9fafb' }}>
         <p>Loading services...</p>
       </section>
     );
@@ -53,7 +53,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="py-20 bg-gray-50">
+      <section id="services" className="py-20 bg-gray-50" style={{ backgroundColor: '#f9fafb' }}>
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="text-4xl font-bold text-center mb-12"
@@ -69,7 +69,7 @@ const ServicesSection = () => {
   }
 
   return (
-    <section id="services" className="py-20 bg-gray-50">
+    <section id="services" className="py-20 bg-gray-50" style={{ backgroundColor: '#f9fafb' }}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
           className="text-4xl font-bold text-center mb-12"
