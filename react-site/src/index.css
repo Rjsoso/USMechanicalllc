@@ -27,6 +27,8 @@ section#careers {
   background-color: #f9fafb !important;
   background: #f9fafb !important;
   background-image: none !important;
+  /* Ensure sections are not transparent - force opaque background */
+  opacity: 1 !important;
 }
 
 /* Enhanced glassmorphism for header */
