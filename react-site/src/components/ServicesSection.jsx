@@ -45,7 +45,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="py-20 text-center" style={{ backgroundColor: '#f3f4f6', background: '#f3f4f6', width: '100%', position: 'relative', zIndex: 1, opacity: 1 }}>
+      <section id="services" className="py-20 bg-gray-700 text-white text-center">
         <p>Loading services...</p>
       </section>
     );
@@ -53,26 +53,26 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="py-20" style={{ backgroundColor: '#f3f4f6', background: '#f3f4f6', width: '100%', position: 'relative', zIndex: 1, opacity: 1 }}>
+      <section id="services" className="py-20 bg-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
-            className="text-4xl font-bold text-center mb-12"
+            className="text-4xl font-bold text-center mb-12 text-white"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             {servicesData.sectionTitle || 'Our Services'}
           </motion.h2>
-          <p className="text-center text-gray-600">No services available.</p>
+          <p className="text-center text-gray-200">No services available.</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="services" className="py-20" style={{ backgroundColor: '#f9fafb', background: '#f9fafb', width: '100%', position: 'relative', zIndex: 1 }}>
+    <section id="services" className="py-20 bg-gray-700 text-white">
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
-          className="text-4xl font-bold text-center mb-12"
+          className="text-4xl font-bold text-center mb-12 text-white"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -82,7 +82,7 @@ const ServicesSection = () => {
         <div className="flex gap-10 justify-center items-start">
           {/* LEFT — DESCRIPTION TEXT + 3 SERVICE BOXES */}
           <div className="flex flex-col w-1/2 pr-10">
-            <p className="text-gray-700 text-lg mb-8">
+            <p className="text-gray-200 text-lg mb-8">
               {servicesData.descriptionText}
             </p>
 
@@ -140,7 +140,7 @@ const ServicesSection = () => {
                 </CardSwap>
               </div>
             ) : (
-              <p className="text-gray-500">No gallery images found.</p>
+              <p className="text-gray-300">No gallery images found.</p>
             )}
           </div>
         </div>

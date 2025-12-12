@@ -23,7 +23,7 @@ export default function Home() {
         <section id="hero" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 0 }}>
           <HeroSection />
         </section>
-        <div className="bg-gray-50" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1, backgroundColor: '#f3f4f6' }}>
+        <div className="bg-gray-700" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
 
           <AboutAndSafety />
 

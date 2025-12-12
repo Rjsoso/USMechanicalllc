@@ -67,7 +67,7 @@ export default function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 text-gray-800" style={{ backgroundColor: '#f3f4f6', background: '#f3f4f6', width: '100%', position: 'relative', zIndex: 1, opacity: 1 }}>
+      <section id="portfolio" className="py-20 bg-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -76,14 +76,14 @@ export default function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="py-20 text-gray-800" style={{ backgroundColor: '#f9fafb', background: '#f9fafb', width: '100%', position: 'relative', zIndex: 1 }}>
+    <section id="portfolio" className="py-20 bg-gray-700 text-white">
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>
-            <h2 className="text-4xl font-bold text-center mb-4">
+            <h2 className="text-4xl font-bold text-center mb-4 text-white">
               Our Portfolio
             </h2>
-            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-gray-200 mb-12 max-w-2xl mx-auto">
               Explore our completed projects by category
             </p>
 
@@ -138,7 +138,7 @@ export default function Portfolio() {
 
             {categories.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-600">No portfolio categories available yet.</p>
+                <p className="text-gray-200">No portfolio categories available yet.</p>
               </div>
             )}
           </>
@@ -167,7 +167,7 @@ export default function Portfolio() {
               </button>
               <h2 className="text-4xl font-bold mb-2">{selectedCategory.title}</h2>
               {selectedCategory.description && (
-                <p className="text-gray-600 max-w-2xl">{selectedCategory.description}</p>
+                <p className="text-gray-200 max-w-2xl">{selectedCategory.description}</p>
               )}
             </div>
 
@@ -224,7 +224,7 @@ export default function Portfolio() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-600">No projects in this category yet.</p>
+                <p className="text-gray-200">No projects in this category yet.</p>
               </div>
             )}
           </>

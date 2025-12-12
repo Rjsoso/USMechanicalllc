@@ -98,36 +98,17 @@ main {
 /* This fills in any white gaps between sections */
 body > main > div.bg-gray-50,
 body > main > div {
-  background-color: #f3f4f6 !important;
-  background: #f3f4f6 !important;
+  background-color: #374151 !important;
+  background: #374151 !important;
 }
 
 /* These rules are now handled by the comprehensive rule below */
 
-/* CRITICAL: Ensure sections have grey backgrounds - MUST override everything */
-/* Using maximum specificity to override everything including Tailwind resets */
-html > body > main > div > section#services,
-html > body > main > div > section#portfolio,
-html > body > main > div > section#careers,
-html body main div section#services,
-html body main div section#portfolio,
-html body main div section#careers,
-body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers,
-main > div > section#services,
-main > div > section#portfolio,
-main > div > section#careers,
-section#services,
-section#portfolio,
-section#careers {
-  background-color: #f3f4f6 !important;
-  background: #f3f4f6 !important;
-  background-image: none !important;
-  position: relative !important;
-  z-index: 1 !important;
-  /* Ensure sections are opaque, not transparent */
-  opacity: 1 !important;
+/* Ensure sections with bg-gray-700 maintain their background */
+section#services.bg-gray-700,
+section#portfolio.bg-gray-700,
+section#careers.bg-gray-700 {
+  background-color: #374151 !important;
 }
 
 /* Ensure Contact section (last child) can have its background image */
@@ -335,17 +316,9 @@ section#contact > div[class*="absolute"] {
    These rules come last to ensure they override everything
    ============================================ */
 
-/* CRITICAL: Force grey backgrounds on all three sections */
-html > body > main > div > section#services,
-html > body > main > div > section#portfolio,
-html > body > main > div > section#careers,
-body > main > div > section#services,
-body > main > div > section#portfolio,
-body > main > div > section#careers,
-section#services,
-section#portfolio,
-section#careers {
-  background-color: #f3f4f6 !important;
-  background: #f3f4f6 !important;
-  background-image: none !important;
+/* Ensure sections with bg-gray-700 maintain their background */
+section#services.bg-gray-700,
+section#portfolio.bg-gray-700,
+section#careers.bg-gray-700 {
+  background-color: #374151 !important;
 }
