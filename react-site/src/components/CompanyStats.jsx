@@ -146,7 +146,7 @@ const CompanyStats = () => {
 
   if (loading) {
     return (
-      <section className="w-full py-16 bg-gray-700 border-t border-gray-600">
+      <section className="w-full py-16 bg-gray-700">
         <div className="max-w-6xl mx-auto text-center">
           <div className="text-gray-300">Loading stats...</div>
         </div>
@@ -161,7 +161,7 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-gray-700 border-t border-gray-600 transition-opacity duration-700 ease-out"
+      className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
       style={{ opacity: inView ? 1 : 0.3 }}
     >
       <div className="max-w-6xl mx-auto text-center">
