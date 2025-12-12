@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { client } from "../utils/sanity";
 
-// Animate only when visible in viewport
+// Animate only when visible in viewport - only once per page visit
 const AnimatedNumber = ({ value, duration = 2000, inView }) => {
   const [count, setCount] = useState(0);
   const animationRef = useRef(null);
   const startedRef = useRef(false);
+  const completedRef = useRef(false);
 
   // Extract numeric part and suffix (e.g., "150M", "62 Years", "150 M" → 150/62 and "M"/"Years"/" M")
   const match = String(value).trim().match(/^(\d+)\s*(.*)$/);
@@ -16,14 +17,15 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
   if (!numericValue) return <span>{value}</span>;
 
   useEffect(() => {
-    // Reset when not in view
+    // If animation already completed, don't restart
+    if (completedRef.current) {
+      setCount(numericValue);
+      return;
+    }
+
+    // Only start animation when in view
     if (!inView || !numericValue) {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-      setCount(0);
-      startedRef.current = false;
+      // If not in view and not completed, keep current count (don't reset)
       return;
     }
 
@@ -46,6 +48,7 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setCount(numericValue); // Ensure final value
+        completedRef.current = true; // Mark as completed
         animationRef.current = null;
       }
     };
