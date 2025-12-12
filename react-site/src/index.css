@@ -126,14 +126,8 @@ section#contact {
 }
 
 /* Ensure Contact section background elements display properly */
-section#contact > div[class*="absolute"],
-section#contact > div[class*="fixed"] {
+section#contact > div[class*="absolute"] {
   position: absolute !important;
-}
-
-/* Allow fixed positioning for contact background elements */
-section#contact > div.fixed {
-  position: fixed !important;
 }
 
 

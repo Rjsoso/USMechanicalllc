@@ -102,29 +102,23 @@ export default function Contact() {
         minHeight: '100vh',
       }}
     >
-      {/* Background Image - fixed position so grey content scrolls over it */}
+      {/* Background Image - absolute position relative to section */}
       {backgroundImageUrl && (
         <>
           <div
-            className="fixed inset-0 bg-cover bg-center brightness-75"
+            className="absolute inset-0 bg-cover bg-center brightness-75"
             style={{
               backgroundImage: `url(${backgroundImageUrl}?w=1920&q=85&auto=format)`,
               zIndex: 0,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              width: '100%',
             }}
           />
           {/* Dark overlay for readability */}
           <div 
-            className="fixed inset-0 bg-black/60"
+            className="absolute inset-0 bg-black/60"
             style={{
               zIndex: 1,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              width: '100%',
             }}
           />
         </>
