@@ -288,7 +288,7 @@ section#contact > div[class*="absolute"] {
   display: block !important;
 }
 
-/* Hero Text Effect - Light Grey with Black Border */
+/* Hero Text Effect - Light Grey */
 .hero-3d-text {
   text-transform: uppercase;
   margin-bottom: 0.5em;
@@ -298,11 +298,6 @@ section#contact > div[class*="absolute"] {
   position: relative;
   display: inline-block;
   color: #d1d5db; /* Light grey */
-  padding: 0.75rem 1.5rem;
-  border: 3px solid #000000; /* Black border */
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.3); /* Slight dark background for contrast */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
