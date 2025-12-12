@@ -56,7 +56,7 @@ const ServicesSection = () => {
       <section id="services" className="py-20 bg-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
-            className="section-title text-4xl text-center mb-12 text-white"
+            className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -72,7 +72,7 @@ const ServicesSection = () => {
     <section id="services" className="py-20 bg-gray-700 text-white">
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
-          className="section-title text-4xl text-center mb-12 text-white"
+          className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >

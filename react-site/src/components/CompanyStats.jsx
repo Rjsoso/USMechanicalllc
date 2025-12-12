@@ -166,7 +166,7 @@ const CompanyStats = () => {
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
-          <h2 className="section-title text-3xl text-white mb-10">
+          <h2 className="section-title text-5xl md:text-6xl text-white mb-10">
             {statsData.title}
           </h2>
         )}
