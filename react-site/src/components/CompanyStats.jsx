@@ -143,9 +143,9 @@ const CompanyStats = () => {
 
   if (loading) {
     return (
-      <section className="w-full py-16 bg-gray-50 border-t border-gray-200">
+      <section className="w-full py-16 bg-gray-700 border-t border-gray-600">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="text-gray-500">Loading stats...</div>
+          <div className="text-gray-300">Loading stats...</div>
         </div>
       </section>
     );
@@ -158,22 +158,22 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-gray-50 border-t border-gray-200 transition-opacity duration-700 ease-out"
+      className="w-full py-16 bg-gray-700 border-t border-gray-600 transition-opacity duration-700 ease-out"
       style={{ opacity: inView ? 1 : 0.3 }}
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
-          <h2 className="text-3xl font-bold text-[#003A70] mb-10">
+          <h2 className="text-3xl font-bold text-white mb-10">
             {statsData.title}
           </h2>
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <div className="text-5xl font-extrabold mb-2 text-[#003A70]">
+                <div className="text-5xl font-extrabold mb-2 text-white">
                   <AnimatedNumber value={item.value} inView={inView} />
                 </div>
-                <p className="text-lg font-medium text-[#003A70]">
+                <p className="text-lg font-medium text-gray-300">
                   {item.label}
                 </p>
               </div>
