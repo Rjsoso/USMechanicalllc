@@ -93,7 +93,7 @@ export default function Portfolio() {
                 <div
                   key={category._id}
                   onClick={() => handleCategoryClick(category)}
-                  className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
+                  className="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
                 >
                   {category.image && (
                     <div className="relative overflow-hidden">
@@ -106,11 +106,11 @@ export default function Portfolio() {
                     </div>
                   )}
                   <div className="p-6">
-                    <h3 className="text-2xl font-semibold mb-2">{category.title}</h3>
+                    <h3 className="text-2xl font-semibold mb-2 text-white">{category.title}</h3>
                     {category.description && (
-                      <p className="text-gray-600 mb-4 line-clamp-2">{category.description}</p>
+                      <p className="text-gray-300 mb-4 line-clamp-2">{category.description}</p>
                     )}
-                    <div className="flex items-center text-blue-600 font-medium">
+                    <div className="flex items-center text-blue-400 font-medium">
                       <span>View Projects</span>
                       <svg
                         className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
@@ -127,7 +127,7 @@ export default function Portfolio() {
                       </svg>
                     </div>
                     {category.projects && category.projects.length > 0 && (
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="text-sm text-gray-400 mt-2">
                         {category.projects.length} {category.projects.length === 1 ? 'project' : 'projects'}
                       </p>
                     )}
@@ -178,7 +178,7 @@ export default function Portfolio() {
                   <div
                     key={project._id}
                     onClick={() => setOpenProject(project)}
-                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden group"
+                    className="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden group"
                   >
                     {project.images && project.images.length > 0 && (
                       <div className="relative overflow-hidden">
@@ -195,11 +195,11 @@ export default function Portfolio() {
                       </div>
                     )}
                     <div className="p-5">
-                      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                      <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>
                       {project.description && (
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{project.description}</p>
+                        <p className="text-gray-300 text-sm mb-3 line-clamp-2">{project.description}</p>
                       )}
-                      <div className="flex flex-wrap gap-2 text-sm text-gray-500">
+                      <div className="flex flex-wrap gap-2 text-sm text-gray-400">
                         {project.location && (
                           <span className="flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
