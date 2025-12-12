@@ -90,7 +90,7 @@ export default function ProjectModal({ project, onClose }) {
 
                 {/* Thumbnail Strip */}
                 {hasMultipleImages && images.length <= 6 && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2 flex gap-2 overflow-x-auto">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gray-800 p-2 flex gap-2 overflow-x-auto">
                     {images.map((img, index) => (
                       <button
                         key={index}
