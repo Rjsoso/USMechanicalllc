@@ -80,7 +80,7 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>
-            <h2 className="text-4xl font-bold text-center mb-4 text-white">
+            <h2 className="section-title text-4xl text-center mb-4 text-white">
               Our Portfolio
             </h2>
             <p className="text-center text-gray-200 mb-12 max-w-2xl mx-auto">
@@ -165,7 +165,7 @@ export default function Portfolio() {
                 </svg>
                 Back to Categories
               </button>
-              <h2 className="text-4xl font-bold mb-2">{selectedCategory.title}</h2>
+              <h2 className="section-title text-4xl mb-2 text-white">{selectedCategory.title}</h2>
               {selectedCategory.description && (
                 <p className="text-gray-200 max-w-2xl">{selectedCategory.description}</p>
               )}

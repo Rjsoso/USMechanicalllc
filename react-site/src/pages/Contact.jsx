@@ -127,7 +127,7 @@ export default function Contact() {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-center mb-8 text-white"
+          className="section-title text-4xl text-center mb-8 text-white"
         >
           {contactData.heroTitle || 'Contact Us'}
         </motion.h1>

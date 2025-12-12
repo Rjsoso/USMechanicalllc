@@ -311,6 +311,13 @@ section#contact > div[class*="absolute"] {
   }
 }
 
+/* Section Titles - Same font as hero */
+.section-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 /* ============================================
    SECTION BACKGROUND RULES - FINAL OVERRIDE
    These rules come last to ensure they override everything
