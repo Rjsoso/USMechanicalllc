@@ -34,11 +34,11 @@ export default function Menu({ items = [] }) {
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-transparent border-2 border-black rounded-lg transition-all duration-200 hover:border-gray-800 overflow-visible"
+        className="fixed top-4 right-4 z-50 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-transparent transition-all duration-200 overflow-visible"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <div className="scale-[0.45] md:scale-[0.42] origin-center">
+        <div className="scale-[0.45] md:scale-[0.42] origin-center toolbox-border">
           <ToolboxAnimation isOpen={isOpen} />
         </div>
       </button>
@@ -114,6 +114,24 @@ export default function Menu({ items = [] }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Border styling for toolbox shape */}
+      <style>{`
+        .toolbox-border img {
+          filter: drop-shadow(2px 0 0 black)
+                  drop-shadow(-2px 0 0 black)
+                  drop-shadow(0 2px 0 black)
+                  drop-shadow(0 -2px 0 black)
+                  drop-shadow(2px 2px 0 black)
+                  drop-shadow(-2px -2px 0 black)
+                  drop-shadow(2px -2px 0 black)
+                  drop-shadow(-2px 2px 0 black)
+                  drop-shadow(1px 0 0 black)
+                  drop-shadow(-1px 0 0 black)
+                  drop-shadow(0 1px 0 black)
+                  drop-shadow(0 -1px 0 black);
+        }
+      `}</style>
     </>
   )
 }
