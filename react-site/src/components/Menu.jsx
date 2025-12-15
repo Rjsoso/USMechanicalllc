@@ -1,85 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { client, urlFor } from '../utils/sanity'
-
-// SVG Fallback Icon Component
-const MenuIconSVG = ({ isOpen }) => (
-  <svg
-    width="32"
-    height="32"
-    viewBox="0 0 32 32"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="transition-transform duration-200"
-    style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
-  >
-    {isOpen ? (
-      // X icon when open
-      <>
-        <line x1="8" y1="8" x2="24" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="24" y1="8" x2="8" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      </>
-    ) : (
-      // Hamburger icon when closed
-      <>
-        <line x1="6" y1="10" x2="26" y2="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="6" y1="16" x2="26" y2="16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="6" y1="22" x2="26" y2="22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      </>
-    )}
-  </svg>
-)
+import ToolboxAnimation from './ToolboxAnimation'
 
 export default function Menu({ items = [] }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [menuIcon, setMenuIcon] = useState(null)
-  const [iconSource, setIconSource] = useState(null) // 'sanity', 'local', or 'svg'
-
-  // Fetch menu icon from Sanity CMS
-  useEffect(() => {
-    const fetchMenuIcon = async () => {
-      try {
-        const data = await client.fetch(
-          `*[_type == "headerSection"][0]{
-            menuIcon
-          }`
-        )
-        if (data?.menuIcon) {
-          setMenuIcon(data.menuIcon)
-          setIconSource('sanity')
-          return
-        }
-      } catch (error) {
-        console.error('Error fetching menu icon from Sanity:', error)
-      }
-
-      // Try local image asset (check both .png and .svg)
-      const checkLocalIcon = (path) => {
-        return new Promise((resolve) => {
-          const img = new Image()
-          img.onload = () => resolve(path)
-          img.onerror = () => resolve(null)
-          img.src = path
-        })
-      }
-
-      const pngIcon = await checkLocalIcon('/menu-icon.png')
-      if (pngIcon) {
-        setMenuIcon(pngIcon)
-        setIconSource('local')
-      } else {
-        const svgIcon = await checkLocalIcon('/menu-icon.svg')
-        if (svgIcon) {
-          setMenuIcon(svgIcon)
-          setIconSource('local')
-        } else {
-          setIconSource('svg')
-        }
-      }
-    }
-
-    fetchMenuIcon()
-  }, [])
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -105,43 +29,18 @@ export default function Menu({ items = [] }) {
     }
   }
 
-  // Render menu icon based on source
-  const renderMenuIcon = () => {
-    if (iconSource === 'sanity' && menuIcon) {
-      return (
-        <motion.img
-          src={urlFor(menuIcon).width(64).quality(90).auto('format').url()}
-          alt="Menu"
-          className="w-8 h-8 object-contain"
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{ duration: 0.2 }}
-        />
-      )
-    } else if (iconSource === 'local' && menuIcon) {
-      return (
-        <motion.img
-          src={menuIcon}
-          alt="Menu"
-          className="w-8 h-8 object-contain"
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{ duration: 0.2 }}
-        />
-      )
-    } else {
-      return <MenuIconSVG isOpen={isOpen} />
-    }
-  }
-
   return (
     <>
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 w-12 h-12 flex items-center justify-center bg-black/80 hover:bg-black rounded-lg transition-colors duration-200 text-white"
+        className="fixed top-4 right-4 z-50 w-16 h-16 flex items-center justify-center bg-black/80 hover:bg-black rounded-lg transition-colors duration-200 text-white overflow-hidden"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        {renderMenuIcon()}
+        <div className="scale-50 origin-center">
+          <ToolboxAnimation isOpen={isOpen} />
+        </div>
       </button>
 
       {/* Backdrop */}
