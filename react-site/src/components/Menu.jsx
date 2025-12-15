@@ -34,7 +34,7 @@ export default function Menu({ items = [] }) {
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-black/80 hover:bg-black rounded-lg transition-colors duration-200 text-white overflow-hidden"
+        className="fixed top-4 right-4 z-50 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-transparent border-2 border-black rounded-lg transition-all duration-200 hover:border-gray-800 overflow-visible"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
