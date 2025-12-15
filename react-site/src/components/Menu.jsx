@@ -34,11 +34,11 @@ export default function Menu({ items = [] }) {
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 w-16 h-16 flex items-center justify-center bg-black/80 hover:bg-black rounded-lg transition-colors duration-200 text-white overflow-hidden"
+        className="fixed top-4 right-4 z-50 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-black/80 hover:bg-black rounded-lg transition-colors duration-200 text-white overflow-hidden"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <div className="scale-50 origin-center">
+        <div className="scale-[0.4] md:scale-[0.35] origin-center">
           <ToolboxAnimation isOpen={isOpen} />
         </div>
       </button>
