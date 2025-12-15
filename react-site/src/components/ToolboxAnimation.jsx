@@ -16,6 +16,9 @@ export default function ToolboxAnimation({ isOpen, className = "" }) {
         decoding="async"
       />
 
+      {/* White background overlay for speech bubble area */}
+      <div className="absolute top-[8%] left-[12%] w-[28%] h-[12%] bg-white rounded-2xl opacity-90 animate-bubble pointer-events-none"></div>
+
       {/* Animations */}
       <style>{`
         .animate-float {
@@ -24,6 +27,10 @@ export default function ToolboxAnimation({ isOpen, className = "" }) {
 
         .animate-shadow {
           animation: shadow 3.5s ease-in-out infinite;
+        }
+
+        .animate-bubble {
+          animation: bubble 3.5s ease-in-out infinite;
         }
 
         @keyframes float {
@@ -47,9 +54,16 @@ export default function ToolboxAnimation({ isOpen, className = "" }) {
           }
         }
 
+        @keyframes bubble {
+          0% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-6px) scale(1.03); }
+          100% { transform: translateY(0px) scale(1); }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .animate-float,
-          .animate-shadow {
+          .animate-shadow,
+          .animate-bubble {
             animation: none;
           }
         }
