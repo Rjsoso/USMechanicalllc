@@ -38,7 +38,7 @@ export default function Menu({ items = [] }) {
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <div className="scale-[0.4] md:scale-[0.35] origin-center">
+        <div className="scale-[0.32] md:scale-[0.30] origin-center">
           <ToolboxAnimation isOpen={isOpen} />
         </div>
       </button>

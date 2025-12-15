@@ -1,20 +1,16 @@
 export default function ToolboxAnimation({ isOpen, className = "" }) {
   // isOpen prop accepted for compatibility but ignored - lid intentionally stays closed
   return (
-    <div className={`relative w-[260px] h-[260px] mx-auto ${className}`}>
-      {/* Word Bubble */}
-      <div className="absolute top-4 left-8 animate-bubble">
-        <svg width="120" height="46" viewBox="0 0 120 46">
+    <div className={`relative w-[280px] h-[280px] mx-auto ${className}`}>
+      {/* Speech Bubble with MENU text */}
+      <div className="absolute top-0 left-12 animate-bubble">
+        <svg width="100" height="50" viewBox="0 0 100 50">
           <defs>
-            <linearGradient id="bubbleGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#4f46e5" />
-              <stop offset="100%" stopColor="#3b82f6" />
-            </linearGradient>
-            <filter id="bubbleShadow">
-              <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-              <feOffset dx="0" dy="2" result="offsetblur" />
+            <filter id="bubbleGlow">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
+              <feOffset dx="0" dy="1" result="offsetblur" />
               <feComponentTransfer>
-                <feFuncA type="linear" slope="0.3" />
+                <feFuncA type="linear" slope="0.4" />
               </feComponentTransfer>
               <feMerge>
                 <feMergeNode />
@@ -22,203 +18,205 @@ export default function ToolboxAnimation({ isOpen, className = "" }) {
               </feMerge>
             </filter>
           </defs>
-          <rect x="0" y="0" rx="20" ry="20" width="120" height="36" fill="url(#bubbleGrad)" filter="url(#bubbleShadow)" />
-          <polygon points="22,36 34,36 28,44" fill="#3b82f6" />
-          <text x="60" y="24" textAnchor="middle" fill="#ffffff" fontSize="14" fontWeight="600" filter="url(#bubbleShadow)">
-            Menu
+          {/* Speech bubble shape */}
+          <path
+            d="M 10 10 Q 10 5 15 5 L 75 5 Q 80 5 80 10 L 80 30 Q 80 35 75 35 L 50 35 L 45 42 L 40 35 L 15 35 Q 10 35 10 30 Z"
+            fill="#222222"
+            stroke="#ffffff"
+            strokeWidth="1.5"
+            filter="url(#bubbleGlow)"
+          />
+          {/* Burst lines */}
+          <line x1="5" y1="8" x2="8" y2="5" stroke="#ffffff" strokeWidth="1" opacity="0.8" />
+          <line x1="85" y1="8" x2="88" y2="5" stroke="#ffffff" strokeWidth="1" opacity="0.8" />
+          {/* MENU text */}
+          <text x="50" y="25" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700" fontFamily="Arial, sans-serif">
+            MENU
           </text>
         </svg>
       </div>
 
       {/* Toolbox */}
       <svg
-        viewBox="0 0 260 260"
+        viewBox="0 0 280 280"
         className="absolute inset-0 animate-float"
       >
         <defs>
-          {/* Lighting Gradients */}
-          <linearGradient id="rightFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#6366f1" />
-            <stop offset="50%" stopColor="#4f46e5" />
-            <stop offset="100%" stopColor="#3730a3" />
+          {/* Red Toolbox Gradients */}
+          <linearGradient id="redBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#f54c4e" />
+            <stop offset="50%" stopColor="#e62b2e" />
+            <stop offset="100%" stopColor="#c22123" />
           </linearGradient>
           
-          <linearGradient id="leftFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#5b21b6" />
-            <stop offset="50%" stopColor="#4338ca" />
-            <stop offset="100%" stopColor="#312e81" />
+          <linearGradient id="redLidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#f54c4e" />
+            <stop offset="50%" stopColor="#e62b2e" />
+            <stop offset="100%" stopColor="#c22123" />
           </linearGradient>
           
-          <linearGradient id="frontFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4338ca" />
-            <stop offset="50%" stopColor="#3730a3" />
-            <stop offset="100%" stopColor="#1e1b4b" />
-          </linearGradient>
-          
-          <linearGradient id="lidTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="30%" stopColor="#f59e0b" />
-            <stop offset="70%" stopColor="#d97706" />
-            <stop offset="100%" stopColor="#b45309" />
-          </linearGradient>
-          
-          <linearGradient id="lidRimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f9fafb" />
-            <stop offset="50%" stopColor="#e5e7eb" />
-            <stop offset="100%" stopColor="#d1d5db" />
-          </linearGradient>
-          
-          {/* Metallic Gradients */}
-          <linearGradient id="handleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#e5e7eb" />
-            <stop offset="30%" stopColor="#d1d5db" />
-            <stop offset="70%" stopColor="#9ca3af" />
-            <stop offset="100%" stopColor="#6b7280" />
-          </linearGradient>
-          
-          <linearGradient id="handleBarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#f3f4f6" />
-            <stop offset="50%" stopColor="#e5e7eb" />
-            <stop offset="100%" stopColor="#d1d5db" />
-          </linearGradient>
-          
-          <linearGradient id="latchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fcd34d" />
-            <stop offset="50%" stopColor="#fbbf24" />
-            <stop offset="100%" stopColor="#f59e0b" />
-          </linearGradient>
-          
-          <linearGradient id="wrenchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fb923c" />
-            <stop offset="50%" stopColor="#f97316" />
-            <stop offset="100%" stopColor="#ea580c" />
+          {/* Grey Handle/Latch Gradients */}
+          <linearGradient id="greyHandleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#b0b0b0" />
+            <stop offset="50%" stopColor="#8c8c8c" />
+            <stop offset="100%" stopColor="#6b6b6b" />
           </linearGradient>
           
           {/* Shadow Filters */}
-          <filter id="shadowBlur">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+          <filter id="toolboxShadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
             <feOffset dx="0" dy="2" result="offsetblur" />
             <feComponentTransfer>
-              <feFuncA type="linear" slope="0.4" />
+              <feFuncA type="linear" slope="0.5" />
             </feComponentTransfer>
             <feMerge>
               <feMergeNode />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          
-          <filter id="innerShadow">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-            <feOffset dx="0" dy="1" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.2" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          
-          {/* Texture Pattern */}
-          <pattern id="texturePattern" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="0.5" fill="#000000" opacity="0.05" />
-          </pattern>
         </defs>
 
-        {/* Multiple Shadow Layers */}
-        <ellipse cx="140" cy="212" rx="58" ry="12" fill="rgba(0,0,0,0.25)" opacity="0.6" />
-        <ellipse cx="140" cy="210" rx="60" ry="14" fill="rgba(0,0,0,0.18)" />
-        <ellipse cx="140" cy="208" rx="55" ry="10" fill="rgba(0,0,0,0.12)" />
-
-        {/* Right Face with gradient and highlight */}
-        <polygon points="110,100 190,140 190,210 110,170" fill="url(#rightFaceGrad)" filter="url(#shadowBlur)" />
-        <polygon points="110,100 190,140 190,210 110,170" fill="url(#texturePattern)" opacity="0.3" />
-        {/* Edge highlight */}
-        <line x1="110" y1="100" x2="190" y2="140" stroke="#818cf8" strokeWidth="0.5" opacity="0.6" />
-
-        {/* Left Face with gradient */}
-        <polygon points="70,130 110,100 110,170 70,210" fill="url(#leftFaceGrad)" filter="url(#shadowBlur)" />
-        <polygon points="70,130 110,100 110,170 70,210" fill="url(#texturePattern)" opacity="0.3" />
-        {/* Edge highlight */}
-        <line x1="70" y1="130" x2="110" y2="100" stroke="#6366f1" strokeWidth="0.5" opacity="0.5" />
-
-        {/* Front Face with gradient */}
-        <polygon points="110,170 190,210 150,240 70,210" fill="url(#frontFaceGrad)" filter="url(#shadowBlur)" />
-        <polygon points="110,170 190,210 150,240 70,210" fill="url(#texturePattern)" opacity="0.3" />
-        {/* Edge highlight */}
-        <line x1="110" y1="170" x2="190" y2="210" stroke="#6366f1" strokeWidth="0.5" opacity="0.4" />
-
-        {/* Lid Rim with gradient */}
-        <polygon points="70,130 110,100 190,140 150,170" fill="url(#lidRimGrad)" filter="url(#innerShadow)" />
-        {/* Rim highlight */}
-        <line x1="70" y1="130" x2="110" y2="100" stroke="#ffffff" strokeWidth="1" opacity="0.4" />
-        <line x1="110" y1="100" x2="190" y2="140" stroke="#ffffff" strokeWidth="1" opacity="0.4" />
-
-        {/* Lid Top with gradient */}
-        <polygon points="78,132 110,110 182,144 150,164" fill="url(#lidTopGrad)" filter="url(#shadowBlur)" />
-        <polygon points="78,132 110,110 182,144 150,164" fill="url(#texturePattern)" opacity="0.2" />
-        {/* Lid highlight */}
-        <line x1="78" y1="132" x2="110" y2="110" stroke="#fcd34d" strokeWidth="0.8" opacity="0.6" />
-        <line x1="110" y1="110" x2="182" y2="144" stroke="#fcd34d" strokeWidth="0.8" opacity="0.6" />
-
-        {/* Handle with metallic gradient */}
-        <rect x="118" y="108" width="10" height="28" rx="3" fill="url(#handleGrad)" filter="url(#shadowBlur)" />
-        <rect x="152" y="120" width="10" height="28" rx="3" fill="url(#handleGrad)" filter="url(#shadowBlur)" />
-        <rect x="118" y="104" width="44" height="10" rx="4" fill="url(#handleBarGrad)" filter="url(#shadowBlur)" />
-        {/* Handle highlights */}
-        <line x1="118" y1="108" x2="128" y2="108" stroke="#ffffff" strokeWidth="0.5" opacity="0.5" />
-        <line x1="118" y1="104" x2="162" y2="104" stroke="#ffffff" strokeWidth="0.8" opacity="0.6" />
-
-        {/* Sparkles with glow */}
-        <polygon points="128,138 132,144 126,144" fill="#22c55e" opacity="0.9" filter="url(#shadowBlur)" />
-        <polygon points="148,148 152,154 146,154" fill="#22c55e" opacity="0.9" filter="url(#shadowBlur)" />
-        {/* Sparkle highlights */}
-        <circle cx="130" cy="141" r="1" fill="#ffffff" opacity="0.8" />
-        <circle cx="150" cy="151" r="1" fill="#ffffff" opacity="0.8" />
-
-        {/* Latches with metallic gradient */}
-        <rect x="132" y="158" width="10" height="12" rx="2" fill="url(#latchGrad)" filter="url(#shadowBlur)" />
-        <rect x="152" y="166" width="10" height="12" rx="2" fill="url(#latchGrad)" filter="url(#shadowBlur)" />
-        {/* Latch highlights */}
-        <line x1="132" y1="158" x2="142" y2="158" stroke="#fcd34d" strokeWidth="0.5" opacity="0.7" />
-        <line x1="152" y1="166" x2="162" y2="166" stroke="#fcd34d" strokeWidth="0.5" opacity="0.7" />
-
-        {/* Wrench with gradient */}
-        <polygon
-          points="150,225 200,240 190,250 140,235"
-          fill="url(#wrenchGrad)"
-          filter="url(#shadowBlur)"
-        />
-        <polygon
-          points="150,225 200,240 190,250 140,235"
-          fill="url(#texturePattern)"
-          opacity="0.2"
-        />
-        {/* Wrench highlight */}
-        <line x1="150" y1="225" x2="200" y2="240" stroke="#fb923c" strokeWidth="0.8" opacity="0.6" />
-      </svg>
-
-      {/* Dynamic Shadow */}
-      <svg
-        viewBox="0 0 260 260"
-        className="absolute inset-0 pointer-events-none"
-        style={{ zIndex: -1 }}
-      >
-        <defs>
-          <radialGradient id="shadowGrad" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="rgba(0,0,0,0.3)" />
-            <stop offset="50%" stopColor="rgba(0,0,0,0.15)" />
-            <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-          </radialGradient>
-        </defs>
+        {/* Shadow - animates with toolbox */}
         <ellipse 
           cx="140" 
-          cy="210" 
-          rx="62" 
+          cy="230" 
+          rx="70" 
           ry="16" 
-          fill="url(#shadowGrad)"
+          fill="rgba(0,0,0,0.25)"
           className="animate-shadow"
         />
+
+        {/* Toolbox Body - Right Face */}
+        <polygon 
+          points="100,120 200,160 200,220 100,180" 
+          fill="url(#redBodyGrad)" 
+          stroke="#222222" 
+          strokeWidth="3"
+          filter="url(#toolboxShadow)"
+        />
+        
+        {/* Toolbox Body - Left Face */}
+        <polygon 
+          points="60,150 100,120 100,180 60,220" 
+          fill="url(#redBodyGrad)" 
+          stroke="#222222" 
+          strokeWidth="3"
+          filter="url(#toolboxShadow)"
+        />
+        
+        {/* Toolbox Body - Front Face */}
+        <polygon 
+          points="100,180 200,220 160,250 60,220" 
+          fill="url(#redBodyGrad)" 
+          stroke="#222222" 
+          strokeWidth="3"
+          filter="url(#toolboxShadow)"
+        />
+        
+        {/* Black Band/Seam (horizontal) */}
+        <polygon 
+          points="65,175 100,155 195,195 160,215" 
+          fill="#222222" 
+          stroke="#222222" 
+          strokeWidth="2"
+        />
+        
+        {/* Lid - Top Face */}
+        <polygon 
+          points="70,150 100,130 190,170 160,190" 
+          fill="url(#redLidGrad)" 
+          stroke="#222222" 
+          strokeWidth="3"
+          filter="url(#toolboxShadow)"
+        />
+        
+        {/* Lid - Front Edge */}
+        <polygon 
+          points="70,150 100,130 100,155 70,175" 
+          fill="#c22123" 
+          stroke="#222222" 
+          strokeWidth="2"
+        />
+        
+        {/* Grey Handle - U-shaped */}
+        <path
+          d="M 120 135 L 120 125 Q 120 120 125 120 L 155 120 Q 160 120 160 125 L 160 135 L 155 135 L 155 125 L 125 125 L 125 135 Z"
+          fill="url(#greyHandleGrad)"
+          stroke="#222222"
+          strokeWidth="2.5"
+          filter="url(#toolboxShadow)"
+        />
+        {/* Handle highlight */}
+        <line x1="120" y1="120" x2="160" y2="120" stroke="#d1d5db" strokeWidth="1" opacity="0.6" />
+        
+        {/* Grey Latches - Left */}
+        <rect 
+          x="110" 
+          y="185" 
+          width="18" 
+          height="12" 
+          rx="2" 
+          fill="url(#greyHandleGrad)" 
+          stroke="#222222" 
+          strokeWidth="2"
+          filter="url(#toolboxShadow)"
+        />
+        {/* Latch highlight */}
+        <line x1="110" y1="185" x2="128" y2="185" stroke="#d1d5db" strokeWidth="1" opacity="0.5" />
+        
+        {/* Grey Latches - Right */}
+        <rect 
+          x="170" 
+          y="195" 
+          width="18" 
+          height="12" 
+          rx="2" 
+          fill="url(#greyHandleGrad)" 
+          stroke="#222222" 
+          strokeWidth="2"
+          filter="url(#toolboxShadow)"
+        />
+        {/* Latch highlight */}
+        <line x1="170" y1="195" x2="188" y2="195" stroke="#d1d5db" strokeWidth="1" opacity="0.5" />
+        
+        {/* Black Badge on Lid with MENU */}
+        <rect 
+          x="75" 
+          y="140" 
+          width="35" 
+          height="18" 
+          rx="2" 
+          fill="#222222" 
+          stroke="#ffffff" 
+          strokeWidth="1"
+        />
+        <text 
+          x="92.5" 
+          y="152" 
+          textAnchor="middle" 
+          fill="#ffffff" 
+          fontSize="9" 
+          fontWeight="700" 
+          fontFamily="Arial, sans-serif"
+        >
+          MENU
+        </text>
+        
+        {/* US MECHANICAL Text on Front Face */}
+        <text 
+          x="130" 
+          y="215" 
+          textAnchor="middle" 
+          fill="#ffffff" 
+          fontSize="16" 
+          fontWeight="700" 
+          fontFamily="Arial, sans-serif"
+          stroke="#222222"
+          strokeWidth="0.5"
+          paintOrder="stroke fill"
+        >
+          US MECHANICAL
+        </text>
       </svg>
 
       {/* Animations */}
@@ -250,15 +248,15 @@ export default function ToolboxAnimation({ isOpen, className = "" }) {
         @keyframes shadow {
           0% { 
             transform: translateY(0px) scale(1);
-            opacity: 0.6;
+            opacity: 0.25;
           }
           50% { 
             transform: translateY(2px) scale(0.95);
-            opacity: 0.4;
+            opacity: 0.15;
           }
           100% { 
             transform: translateY(0px) scale(1);
-            opacity: 0.6;
+            opacity: 0.25;
           }
         }
 
