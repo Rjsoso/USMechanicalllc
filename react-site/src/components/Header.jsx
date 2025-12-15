@@ -47,7 +47,7 @@ function Header() {
     <>
       {/* Logo - Separate, positioned in top-left corner */}
       {logoUrls && (
-        <div className="fixed top-4 left-4 z-50 logo-border">
+        <div className="fixed top-4 left-4 z-50">
           <img
             src={logoUrls.src}
             srcSet={logoUrls.srcSet}
@@ -63,24 +63,6 @@ function Header() {
           />
         </div>
       )}
-
-      {/* Border styling for logo */}
-      <style>{`
-        .logo-border img {
-          filter: drop-shadow(2px 0 0 black)
-                  drop-shadow(-2px 0 0 black)
-                  drop-shadow(0 2px 0 black)
-                  drop-shadow(0 -2px 0 black)
-                  drop-shadow(2px 2px 0 black)
-                  drop-shadow(-2px -2px 0 black)
-                  drop-shadow(2px -2px 0 black)
-                  drop-shadow(-2px 2px 0 black)
-                  drop-shadow(1px 0 0 black)
-                  drop-shadow(-1px 0 0 black)
-                  drop-shadow(0 1px 0 black)
-                  drop-shadow(0 -1px 0 black);
-        }
-      `}</style>
 
       {/* Menu - positioned fixed on right */}
       <Menu items={menuItems} />
