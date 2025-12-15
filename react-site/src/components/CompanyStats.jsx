@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { client } from "../utils/sanity";
 
 // Animate only when visible in viewport - only once per page visit
-const AnimatedNumber = ({ value, duration = 2000, inView }) => {
+const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
   const [count, setCount] = useState(0);
   const animationRef = useRef(null);
   const startedRef = useRef(false);
@@ -75,7 +75,7 @@ const AnimatedNumber = ({ value, duration = 2000, inView }) => {
   }
   
   return <span>{value}</span>;
-};
+});
 
 const CompanyStats = () => {
   const [statsData, setStatsData] = useState(null);
@@ -100,16 +100,6 @@ const CompanyStats = () => {
     fetchData().catch((error) => {
       console.error('Error fetching company stats:', error);
     });
-
-    // Refresh data when window regains focus
-    const handleFocus = () => {
-      fetchData().catch((error) => {
-        console.error('Error fetching company stats:', error);
-      });
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Watch when the section scrolls into view (only after data is loaded)
@@ -125,8 +115,9 @@ const CompanyStats = () => {
         setInView(entry.isIntersecting);
       },
       { 
-        threshold: 0.1, // Lower threshold - trigger earlier
-        rootMargin: '0px' // No margin
+        threshold: 0.15, // Optimized threshold for better performance
+        rootMargin: '50px 0px', // Small margin for smoother triggering
+        // Use passive observation for better scroll performance
       }
     );
 
@@ -136,10 +127,13 @@ const CompanyStats = () => {
       if (sectionRef.current) {
         observer.observe(sectionRef.current);
       }
-    }, 500); // Increased delay to prevent auto-scroll
+    }, 300); // Reduced delay for better UX while maintaining performance
 
     return () => {
       clearTimeout(timeoutId);
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
       observer.disconnect();
     };
   }, [statsData]);
@@ -187,4 +181,4 @@ const CompanyStats = () => {
   );
 };
 
-export default CompanyStats;
+export default memo(CompanyStats);

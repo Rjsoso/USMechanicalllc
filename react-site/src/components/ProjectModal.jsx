@@ -50,6 +50,8 @@ export default function ProjectModal({ project, onClose }) {
                     src={urlFor(images[currentImageIndex]).width(1200).quality(90).auto('format').url()}
                     alt={images[currentImageIndex]?.alt || project.title || `Project image ${currentImageIndex + 1}`}
                     className="w-full h-full object-contain"
+                    loading="eager"
+                    decoding="async"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -103,6 +105,8 @@ export default function ProjectModal({ project, onClose }) {
                           src={urlFor(img).width(100).height(100).quality(80).auto('format').url()}
                           alt={img?.alt || `Thumbnail ${index + 1}`}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </button>
                     ))}

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import FadeInWhenVisible from './FadeInWhenVisible'
 
-export default function AboutAndSafety() {
+function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -73,14 +73,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
     };
 
     fetchData();
-
-    // Refresh data when window regains focus
-    const handleFocus = () => {
-      fetchData();
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
   // Use default data if still loading after a short delay (handles case where Sanity returns null)
@@ -117,6 +109,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   alt={data.photo1.alt || "About US Mechanical"}
                   className="rounded-2xl shadow-lg w-full object-cover"
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     console.error('Failed to load about photo:', data.photo1);
                     e.target.style.display = 'none';
@@ -195,6 +188,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           className="safety-photo"
                           alt={img?.alt || `Safety image ${index + 1}`}
                           loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             console.error(`Failed to load safety image ${index + 1}:`, imageUrl);
                             e.target.style.display = 'none';
@@ -215,3 +209,5 @@ Our goal is always simple: complete every project with zero safety issues.`,
     </section>
   )
 }
+
+export default memo(AboutAndSafety)

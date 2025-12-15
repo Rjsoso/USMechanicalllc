@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { client } from '../utils/sanity'
 
-export default function Footer() {
+function Footer() {
   const [info, setInfo] = useState(null)
 
   useEffect(() => {
@@ -43,3 +43,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+export default memo(Footer)

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 
@@ -12,7 +12,7 @@ const defaultHeroData = {
   logo: null,
 }
 
-export default function HeroSection() {
+function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -80,14 +80,6 @@ export default function HeroSection() {
     };
 
     fetchHero();
-
-    // Refresh data when window regains focus
-    const handleFocus = () => {
-      fetchHero();
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
   // Auto-cycle through carousel images if available
@@ -189,13 +181,15 @@ export default function HeroSection() {
         {/* Logo */}
         {heroData.logo && urlFor(heroData.logo) && (
           <motion.img
-            src={urlFor(heroData.logo).width(400).quality(90).auto('format').url()}
+            src={useMemo(() => urlFor(heroData.logo).width(400).quality(90).auto('format').url(), [heroData.logo])}
             alt="US Mechanical Logo"
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2 }}
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
             onError={e => {
               e.target.style.display = 'none'
             }}
@@ -239,4 +233,6 @@ export default function HeroSection() {
     </section>
   )
 }
+
+export default memo(HeroSection)
 

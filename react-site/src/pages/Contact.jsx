@@ -161,6 +161,8 @@ export default function Contact() {
                         src={urlFor(affiliate.logo).width(200).url()}
                         alt={affiliate.name}
                         className="h-12 mb-2 object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     )}
                     <p className="font-semibold text-white">{affiliate.name}</p>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo, memo } from 'react';
 import { client, urlFor } from '../utils/sanity';
 import ProjectModal from './ProjectModal';
 
-export default function Portfolio() {
+function Portfolio() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -54,16 +54,22 @@ export default function Portfolio() {
       });
   }, []);
 
-  const handleCategoryClick = (category) => {
+  const handleCategoryClick = useCallback((category) => {
     setSelectedCategory(category);
     const sortedProjects = [...(category.projects || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
     setProjects(sortedProjects);
-  };
+  }, []);
 
-  const handleBackToCategories = () => {
+  const handleBackToCategories = useCallback(() => {
     setSelectedCategory(null);
     setProjects([]);
-  };
+  }, []);
+
+  // Memoize sorted projects to avoid recalculation
+  const sortedProjects = useMemo(() => {
+    if (!selectedCategory?.projects) return [];
+    return [...selectedCategory.projects].sort((a, b) => (a.order || 0) - (b.order || 0));
+  }, [selectedCategory]);
 
   if (loading) {
     return (
@@ -101,6 +107,8 @@ export default function Portfolio() {
                         src={urlFor(category.image).width(600).quality(85).auto('format').url()}
                         alt={category.title}
                         className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
@@ -172,9 +180,9 @@ export default function Portfolio() {
             </div>
 
             {/* Projects Grid */}
-            {projects.length > 0 ? (
+            {sortedProjects.length > 0 ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                {projects.map((project) => (
+                {sortedProjects.map((project) => (
                   <div
                     key={project._id}
                     onClick={() => setOpenProject(project)}
@@ -186,6 +194,8 @@ export default function Portfolio() {
                           src={urlFor(project.images[0]).width(600).quality(85).auto('format').url()}
                           alt={project.images[0]?.alt || project.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          decoding="async"
                         />
                         {project.images.length > 1 && (
                           <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
@@ -240,3 +250,5 @@ export default function Portfolio() {
     </section>
   );
 }
+
+export default memo(Portfolio);

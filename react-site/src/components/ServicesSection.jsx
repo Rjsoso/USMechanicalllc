@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { client } from '../utils/sanity';
 import CardSwap, { Card } from './CardSwap';
@@ -34,13 +34,14 @@ const ServicesSection = () => {
     };
 
     fetchServices();
+  }, []);
 
-    const handleFocus = () => {
-      fetchServices();
-    };
+  const handleServiceClick = useCallback((service) => {
+    setSelectedService(service);
+  }, []);
 
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+  const handleCloseModal = useCallback(() => {
+    setSelectedService(null);
   }, []);
 
   if (!servicesData) {
@@ -90,7 +91,7 @@ const ServicesSection = () => {
               {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => (
                 <div
                   key={index}
-                  onClick={() => setSelectedService(box)}
+                  onClick={() => handleServiceClick(box)}
                   className="p-6 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all"
                 >
                   <h3 className="text-xl font-semibold text-white">{box.title}</h3>
@@ -130,6 +131,7 @@ const ServicesSection = () => {
                           alt={item.title}
                           className="w-full h-full object-cover rounded-xl"
                           loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.target.style.display = 'none';
                           }}
@@ -149,14 +151,14 @@ const ServicesSection = () => {
         {selectedService && (
           <div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-            onClick={() => setSelectedService(null)}
+            onClick={handleCloseModal}
           >
             <div
               className="bg-black rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-8 relative"
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                onClick={() => setSelectedService(null)}
+                onClick={handleCloseModal}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold"
                 aria-label="Close modal"
               >
@@ -176,4 +178,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default memo(ServicesSection);
