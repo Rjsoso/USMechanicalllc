@@ -92,6 +92,12 @@ function HeroSection() {
     }
   }, [heroData.carouselImages])
 
+  // Memoize logo URL to prevent recalculation
+  const logoUrl = useMemo(() => {
+    if (!heroData.logo || !urlFor(heroData.logo)) return null;
+    return urlFor(heroData.logo).width(400).quality(90).auto('format').url();
+  }, [heroData.logo]);
+
   return (
     <section
       id="hero"
@@ -179,9 +185,9 @@ function HeroSection() {
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '80px' }}>
         {/* Logo */}
-        {heroData.logo && urlFor(heroData.logo) && (
+        {logoUrl && (
           <motion.img
-            src={useMemo(() => urlFor(heroData.logo).width(400).quality(90).auto('format').url(), [heroData.logo])}
+            src={logoUrl}
             alt="US Mechanical Logo"
             className="mx-auto mb-6 w-52 md:w-64"
             initial={{ opacity: 0, y: -30 }}
