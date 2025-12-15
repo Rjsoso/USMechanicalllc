@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react';
 import { client, urlFor } from '../utils/sanity';
-import StaggeredMenu from './StaggeredMenu';
+import Menu from './Menu';
 
 const menuItems = [
   { label: 'About', ariaLabel: 'Learn about us', link: '#about' },
@@ -64,23 +64,8 @@ function Header() {
         </div>
       )}
 
-      {/* StaggeredMenu - positioned fixed on right */}
-      <div className="fixed top-0 right-0 z-50" style={{ width: 'auto', height: '100vh' }}>
-        <StaggeredMenu
-          position="right"
-          items={menuItems}
-          displaySocials={false}
-          displayItemNumbering={true}
-          menuButtonColor="#fff"
-          openMenuButtonColor="#000"
-          changeMenuColorOnOpen={true}
-          colors={['#1e1e22', '#35353c']}
-          logoUrl=""
-          accentColor="#003A70"
-          isFixed={false}
-          closeOnClickAway={true}
-        />
-      </div>
+      {/* Menu - positioned fixed on right */}
+      <Menu items={menuItems} />
     </>
   );
 }
