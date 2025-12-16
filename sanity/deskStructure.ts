@@ -7,9 +7,19 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
     .items([
       // Website sections in exact order of appearance (top to bottom):
       
-      // 1. Header Section
+      // 1. Card Navigation
       S.listItem()
-        .title('1. Header Section')
+        .title('1. Card Navigation')
+        .child(
+          S.editor()
+            .id('cardNav')
+            .schemaType('cardNav')
+            .documentId('cardNav')
+        ),
+
+      // 2. Header Section
+      S.listItem()
+        .title('2. Header Section')
         .child(
           S.editor()
             .id('headerSection')
@@ -17,9 +27,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('headerSection')
         ),
 
-      // 2. Hero Section
+      // 3. Hero Section
       S.listItem()
-        .title('2. Hero Section')
+        .title('3. Hero Section')
         .child(
           S.editor()
             .id('heroSection')
@@ -27,9 +37,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('heroSection')
         ),
 
-      // 3. About & Safety Section
+      // 4. About & Safety Section
       S.listItem()
-        .title('3. About & Safety Section')
+        .title('4. About & Safety Section')
         .child(
           S.editor()
             .id('aboutAndSafety')
@@ -37,9 +47,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('aboutAndSafety')
         ),
 
-      // 4. Company Stats
+      // 5. Company Stats
       S.listItem()
-        .title('4. Company Stats')
+        .title('5. Company Stats')
         .child(
           S.editor()
             .id('companyStats')
@@ -47,15 +57,15 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('companyStats')
         ),
 
-      // 5. Our Services Section (CardSwap)
+      // 6. Our Services Section (CardSwap)
       S.listItem()
-        .title('5. Our Services Section (CardSwap) ⭐')
+        .title('6. Our Services Section (CardSwap) ⭐')
         .schemaType('ourServices')
         .child(S.documentTypeList('ourServices')),
 
-      // 6. Portfolio
+      // 7. Portfolio
       S.listItem()
-        .title('6. Portfolio')
+        .title('7. Portfolio')
         .child(
           S.list()
             .title('Portfolio')
@@ -75,9 +85,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             ])
         ),
 
-      // 7. Contact Section
+      // 8. Contact Section
       S.listItem()
-        .title('7. Contact Section')
+        .title('8. Contact Section')
         .child(
           S.editor()
             .id('contact')
@@ -85,9 +95,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('contact')
         ),
 
-      // 8. Company Information (used by Footer)
+      // 9. Company Information (used by Footer)
       S.listItem()
-        .title('8. Company Information (Footer)')
+        .title('9. Company Information (Footer)')
         .child(
           S.editor()
             .id('companyInfo')
@@ -95,9 +105,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('companyInfo')
         ),
 
-      // 9. Recognition Projects
+      // 10. Recognition Projects
       S.listItem()
-        .title('9. Recognition Projects')
+        .title('10. Recognition Projects')
         .child(
           S.documentTypeList('recognitionProject')
             .title('Recognition Projects')
