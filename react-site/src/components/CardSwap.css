@@ -18,7 +18,6 @@
   -webkit-backface-visibility: hidden;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border: 4px solid black;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
 }
