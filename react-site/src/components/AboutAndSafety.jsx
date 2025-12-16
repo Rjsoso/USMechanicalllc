@@ -145,7 +145,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Text on left, image on right */}
-          <div className={`${data.safetyImage && data.safetyImage.asset ? 'md:w-1/2' : 'w-full'}`}>
+          <div className={`${data.safetyImage && data.safetyImage.asset ? 'md:w-1/2' : 'w-full'} order-1 md:order-1`}>
             <FadeInWhenVisible delay={0.3}>
               <h3 className="section-title text-5xl md:text-6xl mb-4 text-white">
               {data.safetyTitle}
@@ -162,67 +162,62 @@ Our goal is always simple: complete every project with zero safety issues.`,
           </FadeInWhenVisible>
           </div>
 
-          {data.safetyImage && data.safetyImage.asset && (
-            <div className="md:w-1/2">
-              <FadeInWhenVisible delay={0.5}>
-                <div className="relative">
-                  {(() => {
-                    const img = data.safetyImage;
-                    // Build image URL using urlFor helper with cache-busting
-                    let imageUrl;
-                    try {
-                      // Ensure we have a valid image object for urlFor
-                      if (!img.asset) {
-                        console.error('Safety image has no asset:', img);
-                        return null;
-                      }
-                      
-                      // urlFor expects the image object with asset reference
-                      imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
-                      
-                      if (!imageUrl) {
-                        console.error('Safety image generated empty URL. Image object:', JSON.stringify(img, null, 2));
-                        return null;
-                      }
-                      
-                      // Add cache-busting parameter using asset reference
-                      if (img.asset?._ref) {
-                        const cacheBuster = img.asset._ref.split('-').pop() || Date.now();
-                        imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
-                      } else if (img.asset?._id) {
-                        // Fallback to _id if _ref not available
-                        const cacheBuster = img.asset._id.split('-').pop() || Date.now();
-                        imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
-                      }
-                      
-                      return (
-                        <>
-                          <img
-                            src={imageUrl}
-                            className="safety-photo rounded-2xl shadow-lg w-full object-cover"
-                            alt={img?.alt || 'Safety & Risk Management'}
-                            loading="lazy"
-                            decoding="async"
-                            onError={(e) => {
-                              console.error('Failed to load safety image:', imageUrl);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                          {img?.caption && (
-                            <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                          )}
-                        </>
-                      );
-                    } catch (error) {
-                      console.error('Error generating URL for safety image:', error);
-                      console.error('Image object:', JSON.stringify(img, null, 2));
-                      return null;
-                    }
-                  })()}
+          {data.safetyImage && data.safetyImage.asset && (() => {
+            const img = data.safetyImage;
+            // Build image URL using urlFor helper with cache-busting
+            let imageUrl;
+            try {
+              // Ensure we have a valid image object for urlFor
+              if (!img.asset) {
+                console.error('Safety image has no asset:', img);
+                return null;
+              }
+              
+              // urlFor expects the image object with asset reference
+              imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
+              
+              if (!imageUrl) {
+                console.error('Safety image generated empty URL. Image object:', JSON.stringify(img, null, 2));
+                return null;
+              }
+              
+              // Add cache-busting parameter using asset reference
+              if (img.asset?._ref) {
+                const cacheBuster = img.asset._ref.split('-').pop() || Date.now();
+                imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
+              } else if (img.asset?._id) {
+                // Fallback to _id if _ref not available
+                const cacheBuster = img.asset._id.split('-').pop() || Date.now();
+                imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
+              }
+              
+              return (
+                <div className="md:w-1/2 order-2 md:order-2" key="safety-image">
+                  <FadeInWhenVisible delay={0.5}>
+                    <img
+                      src={imageUrl}
+                      className="safety-photo rounded-2xl shadow-lg w-full object-cover"
+                      alt={img?.alt || 'Safety & Risk Management'}
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        console.error('Failed to load safety image:', imageUrl);
+                        console.error('Image object:', JSON.stringify(img, null, 2));
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    {img?.caption && (
+                      <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                    )}
+                  </FadeInWhenVisible>
                 </div>
-              </FadeInWhenVisible>
-            </div>
-          )}
+              );
+            } catch (error) {
+              console.error('Error generating URL for safety image:', error);
+              console.error('Image object:', JSON.stringify(img, null, 2));
+              return null;
+            }
+          })()}
         </div>
       </div>
     </section>
