@@ -23,7 +23,7 @@ Our experience modification rate (EMR) remains below the national average, quali
 
 Our goal is always simple: complete every project with zero safety issues.`,
     photo1: null,
-    safetyImages: [],
+    safetyImage: null,
   }
 
   // Fetch all content from Sanity (text and images)
@@ -32,14 +32,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
       // First, test a direct query to see raw structure
       client.fetch(`*[_type == "aboutAndSafety"][0]{
         _id,
-        safetyImages
+        safetyImage
       }`)
         .then(testData => {
           console.log('=== DIRECT TEST QUERY ===');
           console.log('Document ID:', testData?._id);
-          console.log('Raw safetyImages:', testData?.safetyImages);
-          console.log('safetyImages type:', typeof testData?.safetyImages);
-          console.log('safetyImages is array?', Array.isArray(testData?.safetyImages));
+          console.log('Raw safetyImage:', testData?.safetyImage);
+          console.log('safetyImage type:', typeof testData?.safetyImage);
         })
         .catch(err => console.error('Test query error:', err));
       
@@ -55,7 +54,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         },
         safetyTitle,
         safetyText,
-        safetyImages[] {
+        safetyImage {
           asset-> {
             _id,
             _ref,
@@ -83,50 +82,42 @@ Our goal is always simple: complete every project with zero safety issues.`,
           
           console.log('=== FULL DATA OBJECT ===');
           console.log(JSON.stringify(aboutData, null, 2));
-          console.log('Safety images:', aboutData?.safetyImages);
-          console.log('Safety images type:', typeof aboutData?.safetyImages);
-          console.log('Is array?', Array.isArray(aboutData?.safetyImages));
-          console.log('Safety images count:', aboutData?.safetyImages?.length ?? 'null/undefined');
+          console.log('Safety image:', aboutData?.safetyImage);
+          console.log('Safety image type:', typeof aboutData?.safetyImage);
           
-          // Handle null/undefined/array - GROQ returns null when field is null
-          const safetyImages = Array.isArray(aboutData?.safetyImages) 
-            ? aboutData.safetyImages 
-            : [];
+          // Handle single image (not array)
+          const safetyImage = aboutData?.safetyImage || null;
           
-          console.log('=== PROCESSED SAFETY IMAGES ===');
-          console.log('Processed array length:', safetyImages.length);
-          console.log('Processed array:', safetyImages);
+          console.log('=== PROCESSED SAFETY IMAGE ===');
+          console.log('Safety image:', safetyImage);
+          console.log('Has image?', !!safetyImage);
           
-          if (safetyImages.length === 0) {
-            if (aboutData?.safetyImages === null) {
-              console.warn('⚠️ safetyImages field is NULL in Sanity (no images added yet)');
-            } else if (aboutData?.safetyImages === undefined) {
-              console.warn('⚠️ safetyImages field is UNDEFINED');
-            } else {
-              console.warn('⚠️ safetyImages array is empty');
+          if (!safetyImage) {
+            if (aboutData?.safetyImage === null) {
+              console.warn('⚠️ safetyImage field is NULL in Sanity (no image added yet)');
+            } else if (aboutData?.safetyImage === undefined) {
+              console.warn('⚠️ safetyImage field is UNDEFINED');
             }
-            console.warn('📝 To add safety images:');
+            console.warn('📝 To add safety image:');
             console.warn('1. Go to: https://sanity-henna.vercel.app/structure');
             console.warn('2. Open "About & Safety Section" document');
-            console.warn('3. Scroll to "Safety Photos" field');
-            console.warn('4. Click the "+" button to add an image');
-            console.warn('5. Upload your image and fill in "Alternative Text"');
+            console.warn('3. Scroll to "Safety Photo" field');
+            console.warn('4. Click to upload an image');
+            console.warn('5. Fill in "Alternative Text"');
             console.warn('6. Click "Publish" button (top right, NOT "Save Draft")');
             console.warn('7. Wait for Vercel deployment to complete (check deployments page)');
           } else {
-            console.log('✅ Found', safetyImages.length, 'safety image(s)');
-            safetyImages.forEach((img, idx) => {
-              console.log(`=== Image ${idx + 1} Details ===`);
-              console.log('Full image object:', JSON.stringify(img, null, 2));
-              console.log('Has asset?', !!img?.asset);
-              console.log('Asset object:', img?.asset);
-              console.log('Asset ID:', img?.asset?._id);
-              console.log('Asset URL:', img?.asset?.url);
-              console.log('Asset ref:', img?.asset?._ref);
-              console.log('Asset type:', img?.asset?._type);
-              console.log('Alt text:', img?.alt);
-              console.log('Caption:', img?.caption);
-            });
+            console.log('✅ Found safety image');
+            console.log('=== Safety Image Details ===');
+            console.log('Full image object:', JSON.stringify(safetyImage, null, 2));
+            console.log('Has asset?', !!safetyImage?.asset);
+            console.log('Asset object:', safetyImage?.asset);
+            console.log('Asset ID:', safetyImage?.asset?._id);
+            console.log('Asset URL:', safetyImage?.asset?.url);
+            console.log('Asset ref:', safetyImage?.asset?._ref);
+            console.log('Asset type:', safetyImage?.asset?._type);
+            console.log('Alt text:', safetyImage?.alt);
+            console.log('Caption:', safetyImage?.caption);
           }
           
           console.log('Photo1:', aboutData?.photo1);
@@ -134,7 +125,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           const mergedData = {
             ...defaultData,
             ...aboutData,
-            safetyImages: safetyImages,
+            safetyImage: safetyImage,
           }
           setData(mergedData)
           setLoading(false)
@@ -218,7 +209,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Text on left, image on right */}
-          <div className={`${data.safetyImages && data.safetyImages.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
+          <div className={`${data.safetyImage && data.safetyImage.asset ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
               <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
               {data.safetyTitle}
@@ -238,33 +229,28 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {/* Debug info */}
           {process.env.NODE_ENV === 'development' && (
             <div className="mb-4 p-4 bg-yellow-900 text-yellow-200 text-xs rounded">
-              <strong>DEBUG:</strong> safetyImages length: {data.safetyImages?.length ?? 'null'}, 
-              Type: {typeof data.safetyImages}, 
-              Is Array: {Array.isArray(data.safetyImages) ? 'yes' : 'no'}
+              <strong>DEBUG:</strong> safetyImage: {data.safetyImage ? 'exists' : 'null'}, 
+              Has asset: {data.safetyImage?.asset ? 'yes' : 'no'}
             </div>
           )}
 
-          {data.safetyImages && data.safetyImages.length > 0 ? (
+          {data.safetyImage && data.safetyImage.asset ? (
             <div className="md:w-1/2">
               <FadeInWhenVisible delay={0.5}>
-                <div className="safety-images-grid">
-                  {data.safetyImages.map((img, index) => {
-                    console.log(`=== RENDERING Safety Image ${index + 1} ===`);
+                <div className="relative">
+                  {(() => {
+                    const img = data.safetyImage;
+                    console.log('=== RENDERING Safety Image ===');
                     console.log('Image object:', img);
                     
                     // Check if image has valid asset data
-                    if (!img) {
-                      console.warn(`❌ Safety image ${index + 1} is null or undefined`);
-                      return null;
-                    }
-                    
-                    if (!img.asset) {
-                      console.warn(`❌ Safety image ${index + 1} is missing asset data:`, img);
+                    if (!img || !img.asset) {
+                      console.warn('❌ Safety image is missing asset data:', img);
                       return null;
                     }
                     
                     // Log the image structure for debugging
-                    console.log(`Safety image ${index + 1} structure:`, {
+                    console.log('Safety image structure:', {
                       hasAsset: !!img.asset,
                       assetType: img.asset?._type,
                       assetRef: img.asset?._ref,
@@ -279,69 +265,69 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       // If asset is expanded with URL, use it directly with optimization
                       if (img.asset?.url) {
                         imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                        console.log(`✅ Safety image ${index + 1} URL from expanded asset:`, imageUrl);
+                        console.log('✅ Safety image URL from expanded asset:', imageUrl);
                       } 
                       // Otherwise, use urlFor to generate URL from reference
                       else if (img.asset?._ref || img.asset?._id) {
-                        console.log(`🔧 Using urlFor for image ${index + 1}, asset ref/id:`, img.asset?._ref || img.asset?._id);
+                        console.log('🔧 Using urlFor, asset ref/id:', img.asset?._ref || img.asset?._id);
                         const urlBuilder = urlFor(img);
                         if (!urlBuilder) {
-                          console.error(`❌ Safety image ${index + 1}: urlFor returned null/undefined`);
+                          console.error('❌ urlFor returned null/undefined');
                           return null;
                         }
                         imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
-                        console.log(`✅ Safety image ${index + 1} URL from urlFor:`, imageUrl);
+                        console.log('✅ Safety image URL from urlFor:', imageUrl);
                       } else {
-                        console.error(`❌ Safety image ${index + 1} has invalid asset structure. Asset:`, img.asset);
+                        console.error('❌ Invalid asset structure. Asset:', img.asset);
                         return null;
                       }
                       
                       if (!imageUrl) {
-                        console.error(`❌ Safety image ${index + 1} generated empty URL. Image object:`, JSON.stringify(img, null, 2));
+                        console.error('❌ Generated empty URL. Image object:', JSON.stringify(img, null, 2));
                         return null;
                       }
+                      
+                      console.log('✅ Rendering image with URL:', imageUrl);
+                      
+                      return (
+                        <>
+                          <img
+                            src={imageUrl}
+                            className="safety-photo"
+                            alt={img?.alt || 'Safety image'}
+                            loading="lazy"
+                            style={{ height: 'auto', minHeight: '200px' }}
+                            onLoad={() => {
+                              console.log('✅ Safety image loaded successfully:', imageUrl);
+                            }}
+                            onError={(e) => {
+                              console.error('❌ Failed to load safety image:', imageUrl);
+                              console.error('Image object:', JSON.stringify(img, null, 2));
+                              console.error('Error event:', e);
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                          {img?.caption && (
+                            <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                          )}
+                        </>
+                      );
                     } catch (error) {
-                      console.error(`❌ Error generating URL for safety image ${index + 1}:`, error);
+                      console.error('❌ Error generating URL for safety image:', error);
                       console.error('Error details:', error.message, error.stack);
                       console.error('Image object:', JSON.stringify(img, null, 2));
                       return null;
                     }
-                    
-                    console.log(`✅ Rendering image ${index + 1} with URL:`, imageUrl);
-                    
-                    return (
-                      <div key={index} className="relative">
-                        <img
-                          src={imageUrl}
-                          className="safety-photo"
-                          alt={img?.alt || `Safety image ${index + 1}`}
-                          loading="lazy"
-                          style={{ height: 'auto', minHeight: '200px' }}
-                          onLoad={() => {
-                            console.log(`✅ Safety image ${index + 1} loaded successfully:`, imageUrl);
-                          }}
-                          onError={(e) => {
-                            console.error(`❌ Failed to load safety image ${index + 1}:`, imageUrl);
-                            console.error('Image object:', JSON.stringify(img, null, 2));
-                            console.error('Error event:', e);
-                            e.target.style.display = 'none';
-                          }}
-                        />
-                        {img?.caption && (
-                          <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                        )}
-                      </div>
-                    );
-                  })}
+                  })()}
                 </div>
               </FadeInWhenVisible>
             </div>
           ) : (
             <div className="md:w-1/2">
               <div className="p-4 bg-gray-600 rounded text-center">
-                <p className="text-gray-300">No safety images found.</p>
+                <p className="text-gray-300">No safety image found.</p>
                 <p className="text-sm text-gray-400 mt-2">
-                  Check console for details. Make sure images are published in Sanity Studio.
+                  Check console for details. Make sure image is published in Sanity Studio.
                 </p>
               </div>
             </div>
