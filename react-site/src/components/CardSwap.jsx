@@ -25,7 +25,8 @@ const placeNow = (el, slot, skew) =>
     skewY: skew,
     transformOrigin: 'center center',
     zIndex: slot.zIndex,
-    force3D: true
+    force3D: true,
+    transformPerspective: 900
   });
 
 const CardSwap = ({
@@ -43,20 +44,20 @@ const CardSwap = ({
   const config =
     easing === 'elastic'
       ? {
-          ease: 'elastic.out(0.6,0.9)',
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
-          promoteOverlap: 0.9,
-          returnDelay: 0.05
+          ease: 'power2.out',
+          durDrop: 1.2,
+          durMove: 1.2,
+          durReturn: 1.2,
+          promoteOverlap: 0.7,
+          returnDelay: 0.1
         }
       : {
           ease: 'power1.inOut',
-          durDrop: 0.8,
-          durMove: 0.8,
-          durReturn: 0.8,
+          durDrop: 0.6,
+          durMove: 0.6,
+          durReturn: 0.6,
           promoteOverlap: 0.45,
-          returnDelay: 0.2
+          returnDelay: 0.15
         };
 
   const childArr = useMemo(() => Children.toArray(children), [children]);
