@@ -7,6 +7,8 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
   const animationRef = useRef(null);
   const startedRef = useRef(false);
   const completedRef = useRef(false);
+  const cancelledRef = useRef(false);
+  const targetValueRef = useRef(null);
 
   // Extract numeric part and suffix (e.g., "150M", "62 Years", "150 M" → 150/62 and "M"/"Years"/" M")
   const match = String(value).trim().match(/^(\d+)\s*(.*)$/);
@@ -29,26 +31,44 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
       return;
     }
 
-    // Don't restart if already animating
-    if (startedRef.current) return;
+    // If target value changed and animation was started, cancel old animation
+    if (startedRef.current && targetValueRef.current !== numericValue) {
+      if (animationRef.current) {
+        cancelledRef.current = true;
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+      startedRef.current = false;
+      completedRef.current = false;
+    }
+
+    // Don't restart if already animating the same value
+    if (startedRef.current && targetValueRef.current === numericValue) return;
 
     startedRef.current = true;
+    cancelledRef.current = false;
+    targetValueRef.current = numericValue;
     setCount(0);
     
     const startTime = Date.now();
+    const targetValue = numericValue; // Capture value at start
     
     const animate = () => {
+      // Don't continue if cancelled
+      if (cancelledRef.current) return;
+      
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const currentValue = Math.floor(numericValue * progress);
+      const currentValue = Math.floor(targetValue * progress);
       
       setCount(currentValue);
       
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        setCount(numericValue); // Ensure final value
-        completedRef.current = true; // Mark as completed
+        // Ensure we reach the exact final value
+        setCount(targetValue);
+        completedRef.current = true;
         animationRef.current = null;
       }
     };
@@ -56,10 +76,9 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
     animationRef.current = requestAnimationFrame(animate);
     
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
+      // Don't cancel animation in cleanup - let it complete naturally
+      // Cleanup only runs on unmount or when dependencies change
+      // If dependencies change, the effect will handle cancellation above
     };
   }, [inView, numericValue, duration]);
 
