@@ -45,25 +45,30 @@ export default defineType({
       description: 'Text content for the Safety & Risk Management section',
     },
     {
-      name: 'safetyImage',
-      title: 'Safety Photo',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Photo displayed with the Safety & Risk Management section',
-      fields: [
+      name: 'safetyImages',
+      title: 'Safety Photos',
+      type: 'array',
+      of: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description: 'Important for accessibility. Describe what is shown in the image.',
-        },
-        {
-          name: 'caption',
-          type: 'string',
-          title: 'Caption',
-          description: 'Optional caption for the image',
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              description: 'Important for accessibility. Describe what is shown in the image.',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: 'Optional caption for the image',
+            },
+          ],
         },
       ],
+      description: 'Add multiple photos for the Safety section. These will be displayed in a grid layout.',
     },
   ],
 })
