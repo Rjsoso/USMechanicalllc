@@ -22,6 +22,7 @@ import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
 import recognitionProject from './recognitionProject'
 import expandableServiceBox from './expandableServiceBox'
+import cardNav from './cardNav'
 
 export const schema = {
   types: [
@@ -48,6 +49,7 @@ export const schema = {
     portfolioProject,
     recognitionProject,
     expandableServiceBox,
+    cardNav,
   ],
 }
 

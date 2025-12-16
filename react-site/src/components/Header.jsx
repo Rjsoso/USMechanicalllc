@@ -1,14 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react';
 import { client, urlFor } from '../utils/sanity';
-import Menu from './Menu';
-
-const menuItems = [
-  { label: 'About', ariaLabel: 'Learn about us', link: '#about' },
-  { label: 'Services', ariaLabel: 'View our services', link: '#services' },
-  { label: 'Portfolio', ariaLabel: 'View our portfolio', link: '#portfolio' },
-  { label: 'Careers', ariaLabel: 'View careers', link: '#careers' },
-  { label: 'Contact', ariaLabel: 'Get in touch', link: '#contact' }
-];
+import CardNav from './CardNav';
 
 function Header() {
   const [logo, setLogo] = useState(null);
@@ -64,8 +56,8 @@ function Header() {
         </div>
       )}
 
-      {/* Menu - positioned fixed on right */}
-      <Menu items={menuItems} />
+      {/* CardNav - positioned fixed on right */}
+      <CardNav />
     </>
   );
 }
