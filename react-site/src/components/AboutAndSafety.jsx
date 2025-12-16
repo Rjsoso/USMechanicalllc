@@ -99,35 +99,116 @@ Our goal is always simple: complete every project with zero safety issues.`,
         });
       
       // Main query with proper asset expansion
-      client.fetch(`*[_type == "aboutAndSafety"][0]{
-        _id,
-        _rev,
-        aboutTitle,
-        aboutText,
-        photo1 {
-          asset-> {
+      // Query for document with safetyImage first, or fallback to document with _id "aboutAndSafety", or first document
+      Promise.resolve()
+        .then(() => {
+          // First try: Get document that has safetyImage
+          return client.fetch(`*[_type == "aboutAndSafety" && defined(safetyImage) && safetyImage != null] | order(_updatedAt desc)[0]{
             _id,
-            url,
-            originalFilename
-          },
-          alt
-        },
-        safetyTitle,
-        safetyText,
-        safetyImage {
-          asset-> {
+            _rev,
+            aboutTitle,
+            aboutText,
+            photo1 {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt
+            },
+            safetyTitle,
+            safetyText,
+            safetyImage {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
+            "safetyImageExists": defined(safetyImage),
+            "safetyImageHasAsset": defined(safetyImage.asset)
+          }`)
+        })
+        .then(data => {
+          // If found document with safetyImage, use it
+          if (data && data.safetyImage) {
+            console.log('✅ Found document with safetyImage:', data._id);
+            return Promise.resolve(data);
+          }
+          // Second try: Get document with specific ID "aboutAndSafety"
+          console.log('⚠️ No document with safetyImage found, trying _id "aboutAndSafety"');
+          return client.fetch(`*[_type == "aboutAndSafety" && _id == "aboutAndSafety"][0]{
             _id,
-            url,
-            originalFilename,
-            size,
-            mimeType
-          },
-          alt,
-          caption
-        },
-        "safetyImageExists": defined(safetyImage),
-        "safetyImageHasAsset": defined(safetyImage.asset)
-      }`)
+            _rev,
+            aboutTitle,
+            aboutText,
+            photo1 {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt
+            },
+            safetyTitle,
+            safetyText,
+            safetyImage {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
+            "safetyImageExists": defined(safetyImage),
+            "safetyImageHasAsset": defined(safetyImage.asset)
+          }`)
+        })
+        .then(data => {
+          // If found document with specific ID, use it
+          if (data) {
+            console.log('✅ Found document with _id "aboutAndSafety":', data._id);
+            return Promise.resolve(data);
+          }
+          // Final fallback: Get first document
+          console.log('⚠️ Document with _id "aboutAndSafety" not found, using first document');
+          return client.fetch(`*[_type == "aboutAndSafety"][0]{
+            _id,
+            _rev,
+            aboutTitle,
+            aboutText,
+            photo1 {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt
+            },
+            safetyTitle,
+            safetyText,
+            safetyImage {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
+            "safetyImageExists": defined(safetyImage),
+            "safetyImageHasAsset": defined(safetyImage.asset)
+          }`)
+        })
         .then((aboutData) => {
           console.log('=== AboutAndSafety Data Fetched ===');
           
