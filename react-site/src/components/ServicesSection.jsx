@@ -92,9 +92,14 @@ const ServicesSection = () => {
                 <div
                   key={index}
                   onClick={() => handleServiceClick(box)}
-                  className="p-6 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all"
+                  className="p-8 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all"
                 >
-                  <h3 className="text-xl font-semibold text-white">{box.title}</h3>
+                  <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
+                  {box.description && (
+                    <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed">
+                      {box.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
