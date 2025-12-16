@@ -44,11 +44,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyTitle,
           safetyText,
           safetyImages[] {
-            asset-> {
-              _id,
-              _ref,
-              url
-            },
+            asset,
             alt,
             caption
           }
@@ -169,13 +165,20 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       return null;
                     }
                     
-                    // Build image URL using urlFor helper (works with both expanded assets and references)
+                    // Build image URL using urlFor helper
                     let imageUrl;
                     try {
-                      // Always use urlFor to properly generate CDN URLs from Sanity assets
+                      // urlFor expects the image object with asset reference
+                      // Pass the entire image object to urlFor
                       imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
+                      
+                      if (!imageUrl) {
+                        console.warn(`Safety image ${index + 1} generated empty URL:`, img);
+                        return null;
+                      }
                     } catch (error) {
                       console.error(`Error generating URL for safety image ${index + 1}:`, error, img);
+                      console.error('Image object structure:', JSON.stringify(img, null, 2));
                       return null;
                     }
                     
