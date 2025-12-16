@@ -29,52 +29,81 @@ Our goal is always simple: complete every project with zero safety issues.`,
   // Fetch all content from Sanity (text and images)
   useEffect(() => {
     const fetchData = () => {
-      Promise.all([
-        client.fetch(`*[_type == "aboutAndSafety"][0]{
-          aboutTitle,
-          aboutText,
-          photo1 {
-            asset-> {
-              _id,
-              url
-            },
-            alt
+      client.fetch(`*[_type == "aboutAndSafety"][0]{
+        aboutTitle,
+        aboutText,
+        photo1 {
+          asset-> {
+            _id,
+            url
           },
-          safetyTitle,
-          safetyText,
-          safetyImages[] {
-            asset-> {
-              _id,
-              _ref,
-              _type,
-              url
-            },
-            alt,
-            caption
-          }
-        }`)
-      ])
-        .then(([aboutData]) => {
+          alt
+        },
+        safetyTitle,
+        safetyText,
+        safetyImages[] {
+          asset-> {
+            _id,
+            _ref,
+            _type,
+            url
+          },
+          alt,
+          caption
+        }
+      }`)
+        .then((aboutData) => {
           console.log('=== AboutAndSafety Data Fetched ===');
-          console.log('Full data object:', aboutData);
-          console.log('Safety images array:', aboutData?.safetyImages);
-          console.log('Safety images count:', aboutData?.safetyImages?.length || 0);
           
-          if (aboutData?.safetyImages && aboutData.safetyImages.length > 0) {
-            console.log('Safety images details:');
-            aboutData.safetyImages.forEach((img, idx) => {
+          // Check if document exists
+          if (!aboutData) {
+            console.error('❌ No "About & Safety Section" document found in Sanity!');
+            console.error('Please create a document in Sanity Studio:');
+            console.error('1. Go to Sanity Studio');
+            console.error('2. Create "About & Safety Section" document');
+            console.error('3. Add content and publish');
+            setData(defaultData);
+            setLoading(false);
+            return;
+          }
+          
+          console.log('Full data object:', aboutData);
+          console.log('Safety images:', aboutData?.safetyImages);
+          console.log('Safety images type:', typeof aboutData?.safetyImages);
+          console.log('Is array?', Array.isArray(aboutData?.safetyImages));
+          console.log('Safety images count:', aboutData?.safetyImages?.length ?? 'null/undefined');
+          
+          // Handle null/undefined/array - GROQ returns null when field is null
+          const safetyImages = Array.isArray(aboutData?.safetyImages) 
+            ? aboutData.safetyImages 
+            : [];
+          
+          if (safetyImages.length === 0) {
+            if (aboutData?.safetyImages === null) {
+              console.warn('⚠️ safetyImages field is NULL in Sanity (no images added yet)');
+            } else if (aboutData?.safetyImages === undefined) {
+              console.warn('⚠️ safetyImages field is UNDEFINED');
+            } else {
+              console.warn('⚠️ safetyImages array is empty');
+            }
+            console.warn('📝 To add safety images:');
+            console.warn('1. Go to: https://sanity-henna.vercel.app/structure');
+            console.warn('2. Open "About & Safety Section" document');
+            console.warn('3. Scroll to "Safety Photos" field');
+            console.warn('4. Click the "+" button to add an image');
+            console.warn('5. Upload your image and fill in "Alternative Text"');
+            console.warn('6. Click "Publish" button (top right, NOT "Save Draft")');
+          } else {
+            console.log('✅ Found', safetyImages.length, 'safety image(s)');
+            safetyImages.forEach((img, idx) => {
               console.log(`  Image ${idx + 1}:`, {
                 hasAsset: !!img?.asset,
                 assetId: img?.asset?._id,
-                assetRef: img?.asset?._ref,
                 assetUrl: img?.asset?.url,
                 alt: img?.alt,
                 caption: img?.caption
               });
             });
-          } else {
-            console.warn('⚠️ No safety images found in Sanity data!');
-            console.warn('Make sure you have published images in the "About & Safety Section" document in Sanity Studio.');
           }
           
           console.log('Photo1:', aboutData?.photo1);
@@ -82,7 +111,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           const mergedData = {
             ...defaultData,
             ...aboutData,
-            safetyImages: aboutData?.safetyImages || [],
+            safetyImages: safetyImages,
           }
           setData(mergedData)
           setLoading(false)
