@@ -57,8 +57,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
         safetyImage {
           asset-> {
             _id,
-            _ref,
-            _type,
             url
           },
           alt,
@@ -86,17 +84,27 @@ Our goal is always simple: complete every project with zero safety issues.`,
           console.log('Safety image type:', typeof aboutData?.safetyImage);
           
           // Handle single image (not array)
-          const safetyImage = aboutData?.safetyImage || null;
+          // Check if safetyImage exists and has valid asset data
+          let safetyImage = aboutData?.safetyImage || null;
+          
+          // Validate that safetyImage has an asset
+          if (safetyImage && (!safetyImage.asset || (!safetyImage.asset.url && !safetyImage.asset._id))) {
+            console.warn('⚠️ safetyImage exists but has invalid asset structure:', safetyImage);
+            safetyImage = null; // Treat as null if asset is invalid
+          }
           
           console.log('=== PROCESSED SAFETY IMAGE ===');
           console.log('Safety image:', safetyImage);
           console.log('Has image?', !!safetyImage);
+          console.log('Has asset?', !!safetyImage?.asset);
+          console.log('Has asset URL?', !!safetyImage?.asset?.url);
+          console.log('Has asset ID?', !!safetyImage?.asset?._id);
           
-          if (!safetyImage) {
-            if (aboutData?.safetyImage === null) {
-              console.warn('⚠️ safetyImage field is NULL in Sanity (no image added yet)');
-            } else if (aboutData?.safetyImage === undefined) {
-              console.warn('⚠️ safetyImage field is UNDEFINED');
+          if (!safetyImage || !safetyImage.asset) {
+            if (aboutData?.safetyImage === null || !aboutData?.safetyImage) {
+              console.warn('⚠️ safetyImage field is NULL or missing in Sanity (no image added yet)');
+            } else if (aboutData?.safetyImage && !aboutData.safetyImage.asset) {
+              console.warn('⚠️ safetyImage exists but has no asset - image may not be fully uploaded');
             }
             console.warn('📝 To add safety image:');
             console.warn('1. Go to: https://sanity-henna.vercel.app/structure');
@@ -106,6 +114,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
             console.warn('5. Fill in "Alternative Text"');
             console.warn('6. Click "Publish" button (top right, NOT "Save Draft")');
             console.warn('7. Wait for Vercel deployment to complete (check deployments page)');
+            console.warn('8. Refresh this page after deployment completes');
           } else {
             console.log('✅ Found safety image');
             console.log('=== Safety Image Details ===');
@@ -114,8 +123,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
             console.log('Asset object:', safetyImage?.asset);
             console.log('Asset ID:', safetyImage?.asset?._id);
             console.log('Asset URL:', safetyImage?.asset?.url);
-            console.log('Asset ref:', safetyImage?.asset?._ref);
-            console.log('Asset type:', safetyImage?.asset?._type);
             console.log('Alt text:', safetyImage?.alt);
             console.log('Caption:', safetyImage?.caption);
           }
@@ -262,23 +269,27 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     // Build image URL - handle both expanded asset and urlFor
                     let imageUrl;
                     try {
-                      // If asset is expanded with URL, use it directly with optimization
-                      if (img.asset?.url) {
+                      // First, try to use urlFor - it handles most cases including references
+                      if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
+                        console.log('🔧 Using urlFor to generate image URL');
+                        const urlBuilder = urlFor(img);
+                        if (urlBuilder) {
+                          imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
+                          console.log('✅ Safety image URL from urlFor:', imageUrl);
+                        } else {
+                          console.warn('⚠️ urlFor returned null, trying direct URL');
+                        }
+                      }
+                      
+                      // Fallback: If asset is expanded with URL, use it directly with optimization
+                      if (!imageUrl && img.asset?.url) {
                         imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
                         console.log('✅ Safety image URL from expanded asset:', imageUrl);
-                      } 
-                      // Otherwise, use urlFor to generate URL from reference
-                      else if (img.asset?._ref || img.asset?._id) {
-                        console.log('🔧 Using urlFor, asset ref/id:', img.asset?._ref || img.asset?._id);
-                        const urlBuilder = urlFor(img);
-                        if (!urlBuilder) {
-                          console.error('❌ urlFor returned null/undefined');
-                          return null;
-                        }
-                        imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
-                        console.log('✅ Safety image URL from urlFor:', imageUrl);
-                      } else {
-                        console.error('❌ Invalid asset structure. Asset:', img.asset);
+                      }
+                      
+                      // If still no URL, there's an issue
+                      if (!imageUrl) {
+                        console.error('❌ Could not generate image URL. Image structure:', JSON.stringify(img, null, 2));
                         return null;
                       }
                       
