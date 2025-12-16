@@ -43,15 +43,40 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyTitle,
           safetyText,
           safetyImages[] {
-            asset,
+            asset-> {
+              _id,
+              _ref,
+              _type,
+              url
+            },
             alt,
             caption
           }
         }`)
       ])
         .then(([aboutData]) => {
-          console.log('AboutAndSafety data fetched from Sanity:', aboutData);
-          console.log('Safety images:', aboutData?.safetyImages);
+          console.log('=== AboutAndSafety Data Fetched ===');
+          console.log('Full data object:', aboutData);
+          console.log('Safety images array:', aboutData?.safetyImages);
+          console.log('Safety images count:', aboutData?.safetyImages?.length || 0);
+          
+          if (aboutData?.safetyImages && aboutData.safetyImages.length > 0) {
+            console.log('Safety images details:');
+            aboutData.safetyImages.forEach((img, idx) => {
+              console.log(`  Image ${idx + 1}:`, {
+                hasAsset: !!img?.asset,
+                assetId: img?.asset?._id,
+                assetRef: img?.asset?._ref,
+                assetUrl: img?.asset?.url,
+                alt: img?.alt,
+                caption: img?.caption
+              });
+            });
+          } else {
+            console.warn('⚠️ No safety images found in Sanity data!');
+            console.warn('Make sure you have published images in the "About & Safety Section" document in Sanity Studio.');
+          }
+          
           console.log('Photo1:', aboutData?.photo1);
           
           const mergedData = {
@@ -62,7 +87,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
           setData(mergedData)
           setLoading(false)
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('❌ Error fetching AboutAndSafety data:', error);
+          console.error('Error details:', error.message, error.stack);
           // On error, use default data
           setData(defaultData)
           setLoading(false)
@@ -182,25 +209,32 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       fullImage: img
                     });
                     
-                    // Build image URL - always use urlFor for reliable URL generation
+                    // Build image URL - handle both expanded asset and urlFor
                     let imageUrl;
                     try {
-                      // urlFor works with the image object directly
-                      // It handles both expanded assets and references correctly
-                      const urlBuilder = urlFor(img);
-                      if (!urlBuilder) {
-                        console.error(`Safety image ${index + 1}: urlFor returned null/undefined`);
+                      // If asset is expanded with URL, use it directly with optimization
+                      if (img.asset?.url) {
+                        imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
+                        console.log(`Safety image ${index + 1} URL from expanded asset:`, imageUrl);
+                      } 
+                      // Otherwise, use urlFor to generate URL from reference
+                      else if (img.asset?._ref || img.asset?._id) {
+                        const urlBuilder = urlFor(img);
+                        if (!urlBuilder) {
+                          console.error(`Safety image ${index + 1}: urlFor returned null/undefined`);
+                          return null;
+                        }
+                        imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
+                        console.log(`Safety image ${index + 1} URL from urlFor:`, imageUrl);
+                      } else {
+                        console.error(`Safety image ${index + 1} has invalid asset structure. Asset:`, img.asset);
                         return null;
                       }
-                      
-                      imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
                       
                       if (!imageUrl) {
                         console.error(`Safety image ${index + 1} generated empty URL. Image object:`, JSON.stringify(img, null, 2));
                         return null;
                       }
-                      
-                      console.log(`Safety image ${index + 1} URL generated successfully:`, imageUrl);
                     } catch (error) {
                       console.error(`Error generating URL for safety image ${index + 1}:`, error);
                       console.error('Error details:', error.message, error.stack);
