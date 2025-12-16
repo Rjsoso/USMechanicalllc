@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Menu({ items = [] }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLightBackground, setIsLightBackground] = useState(false)
+  const menuButtonRef = useRef(null)
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -28,17 +30,94 @@ export default function Menu({ items = [] }) {
     }
   }
 
+  // Detect background color behind menu button
+  useEffect(() => {
+    const checkBackground = () => {
+      if (!menuButtonRef.current) return
+
+      const buttonRect = menuButtonRef.current.getBoundingClientRect()
+      const buttonCenterY = buttonRect.top + buttonRect.height / 2
+      const buttonCenterX = buttonRect.left + buttonRect.width / 2
+
+      // Get element at button position
+      const elementBelow = document.elementFromPoint(buttonCenterX, buttonCenterY)
+      
+      if (!elementBelow) {
+        setIsLightBackground(false)
+        return
+      }
+
+      // Walk up the DOM tree to find section or element with background
+      let currentElement = elementBelow
+      let foundBackground = false
+      let isLight = false
+
+      while (currentElement && currentElement !== document.body) {
+        const computedStyle = window.getComputedStyle(currentElement)
+        const bgColor = computedStyle.backgroundColor
+        const bgImage = computedStyle.backgroundImage
+
+        // Check if element has a background color or image
+        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+          // Parse RGB values
+          const rgbMatch = bgColor.match(/\d+/g)
+          if (rgbMatch && rgbMatch.length >= 3) {
+            const r = parseInt(rgbMatch[0])
+            const g = parseInt(rgbMatch[1])
+            const b = parseInt(rgbMatch[2])
+            // Calculate luminance to determine if light or dark
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+            isLight = luminance > 0.5
+            foundBackground = true
+            break
+          }
+        }
+
+        // Check for common background classes
+        if (currentElement.classList) {
+          const classes = Array.from(currentElement.classList)
+          if (classes.some(cls => cls.includes('bg-gray-200') || cls.includes('bg-white') || cls.includes('bg-gray-100'))) {
+            isLight = true
+            foundBackground = true
+            break
+          }
+          if (classes.some(cls => cls.includes('bg-gray-700') || cls.includes('bg-gray-800') || cls.includes('bg-gray-900') || cls.includes('bg-black'))) {
+            isLight = false
+            foundBackground = true
+            break
+          }
+        }
+
+        currentElement = currentElement.parentElement
+      }
+
+      // Default to dark if no background found (assumes dark hero/background)
+      setIsLightBackground(foundBackground ? isLight : false)
+    }
+
+    // Check on mount and scroll
+    checkBackground()
+    window.addEventListener('scroll', checkBackground, { passive: true })
+    window.addEventListener('resize', checkBackground, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', checkBackground)
+      window.removeEventListener('resize', checkBackground)
+    }
+  }, [])
+
   return (
     <>
       {/* Menu Button - Fixed Floating */}
       <button
+        ref={menuButtonRef}
         onClick={toggleMenu}
-        className="fixed top-6 right-6 z-50 px-6 py-3 flex items-center justify-center transition-all duration-200 overflow-hidden menu-glass relative"
+        className={`fixed top-6 right-6 z-50 px-6 py-3 flex items-center justify-center transition-all duration-300 overflow-hidden menu-glass relative ${isLightBackground ? 'menu-glass-light' : 'menu-glass-dark'}`}
         style={{ position: 'fixed' }}
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <span className="text-xl md:text-2xl font-bold text-white tracking-wide relative z-10">
+        <span className={`text-xl md:text-2xl font-bold tracking-wide relative z-10 transition-colors duration-300 ${isLightBackground ? 'text-gray-900' : 'text-white'}`}>
           MENU
         </span>
       </button>
@@ -115,23 +194,28 @@ export default function Menu({ items = [] }) {
         )}
       </AnimatePresence>
 
-      {/* Glass surface styling for menu button - Floating Effect */}
+      {/* Glass surface styling for menu button - Floating Effect with Adaptive Colors */}
       <style>{`
         .menu-glass {
+          position: fixed !important;
+          top: 24px !important;
+          right: 24px !important;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+        }
+        
+        /* Dark background variant (default - for dark sections) */
+        .menu-glass-dark {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
           -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 12px;
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
                       0 4px 16px 0 rgba(0, 0, 0, 0.2),
                       inset 0 1px 1px rgba(255, 255, 255, 0.3);
-          position: fixed !important;
-          top: 24px !important;
-          right: 24px !important;
         }
         
-        .menu-glass:hover {
+        .menu-glass-dark:hover {
           background: rgba(255, 255, 255, 0.15);
           border-color: rgba(255, 255, 255, 0.3);
           box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45),
@@ -140,7 +224,7 @@ export default function Menu({ items = [] }) {
           transform: translateY(-2px);
         }
         
-        .menu-glass::before {
+        .menu-glass-dark::before {
           content: '';
           position: absolute;
           top: 0;
@@ -157,7 +241,48 @@ export default function Menu({ items = [] }) {
           pointer-events: none;
         }
         
-        .menu-glass:hover::before {
+        .menu-glass-dark:hover::before {
+          left: 100%;
+        }
+        
+        /* Light background variant (for light sections like Company Stats) */
+        .menu-glass-light {
+          background: rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(20px) saturate(1.8) brightness(0.9);
+          -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(0.9);
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
+                      0 4px 16px 0 rgba(0, 0, 0, 0.15),
+                      inset 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-glass-light:hover {
+          background: rgba(0, 0, 0, 0.2);
+          border-color: rgba(0, 0, 0, 0.3);
+          box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25),
+                      0 6px 20px 0 rgba(0, 0, 0, 0.2),
+                      inset 0 1px 1px rgba(0, 0, 0, 0.15);
+          transform: translateY(-2px);
+        }
+        
+        .menu-glass-light::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 0, 0, 0.15),
+            transparent
+          );
+          transition: left 0.5s;
+          pointer-events: none;
+        }
+        
+        .menu-glass-light:hover::before {
           left: 100%;
         }
       `}</style>
