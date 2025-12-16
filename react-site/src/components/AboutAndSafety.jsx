@@ -31,6 +31,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
     const fetchData = () => {
       Promise.all([
         client.fetch(`*[_type == "aboutAndSafety"][0]{
+          _updatedAt,
           aboutTitle,
           aboutText,
           photo1 {
@@ -44,18 +45,34 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyTitle,
           safetyText,
           safetyImages[] {
-            asset,
+            asset {
+              _ref,
+              _type,
+              _updatedAt
+            },
             alt,
-            caption
+            caption,
+            _key
           }
         }`)
       ])
         .then(([aboutData]) => {
           console.log('AboutAndSafety data fetched from Sanity:', aboutData);
+          console.log('Document updated at:', aboutData?._updatedAt);
           console.log('Safety images:', aboutData?.safetyImages);
           console.log('Safety images count:', aboutData?.safetyImages?.length);
           if (aboutData?.safetyImages?.length > 0) {
-            console.log('First safety image structure:', JSON.stringify(aboutData.safetyImages[0], null, 2));
+            aboutData.safetyImages.forEach((img, idx) => {
+              console.log(`Safety image ${idx + 1}:`, {
+                hasAsset: !!img?.asset,
+                assetRef: img?.asset?._ref,
+                assetType: img?.asset?._type,
+                assetUpdated: img?.asset?._updatedAt,
+                alt: img?.alt,
+                caption: img?.caption
+              });
+            });
+            console.log('First safety image full structure:', JSON.stringify(aboutData.safetyImages[0], null, 2));
           }
           console.log('Photo1:', aboutData?.photo1);
           
@@ -165,12 +182,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       return null;
                     }
                     
-                    // Build image URL using urlFor helper
+                    // Build image URL using urlFor helper with cache-busting
                     let imageUrl;
                     try {
                       // urlFor expects the image object with asset reference
                       // Pass the entire image object to urlFor
                       imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
+                      
+                      // Add cache-busting parameter using asset reference or updated timestamp
+                      if (imageUrl && img.asset?._ref) {
+                        // Use asset reference as cache-busting parameter
+                        const cacheBuster = img.asset._ref.split('-').pop() || Date.now();
+                        imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
+                      }
                       
                       if (!imageUrl) {
                         console.warn(`Safety image ${index + 1} generated empty URL:`, img);
@@ -182,14 +206,18 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       return null;
                     }
                     
+                    // Use _key or index for React key to ensure proper re-rendering
+                    const imageKey = img._key || `safety-img-${index}`;
+                    
                     return (
-                      <div key={index} className="relative">
+                      <div key={imageKey} className="relative">
                         <img
                           src={imageUrl}
                           className="safety-photo"
                           alt={img?.alt || `Safety image ${index + 1}`}
                           loading="lazy"
                           decoding="async"
+                          key={`img-${imageKey}`}
                           onError={(e) => {
                             console.error(`Failed to load safety image ${index + 1}:`, imageUrl);
                             e.target.style.display = 'none';
