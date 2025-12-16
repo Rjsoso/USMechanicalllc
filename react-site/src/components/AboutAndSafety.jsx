@@ -427,7 +427,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {data.safetyImage && data.safetyImage.asset ? (
             <div className="md:w-1/2">
               <FadeInWhenVisible delay={0.5}>
-                <div className="relative">
+                <div className="relative bg-black rounded-2xl overflow-hidden p-4">
                   {(() => {
                     const img = data.safetyImage;
                     console.log('=== RENDERING Safety Image ===');
