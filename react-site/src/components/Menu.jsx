@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import ToolboxAnimation from './ToolboxAnimation'
 
 export default function Menu({ items = [] }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -34,13 +33,13 @@ export default function Menu({ items = [] }) {
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 w-40 h-40 md:w-44 md:h-44 flex items-center justify-center bg-transparent transition-all duration-200 overflow-visible"
+        className="fixed top-4 right-4 z-50 px-6 py-3 flex items-center justify-center transition-all duration-200 overflow-hidden menu-glass relative"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <div className="scale-[0.65] md:scale-[0.62] origin-center toolbox-border">
-          <ToolboxAnimation isOpen={isOpen} />
-        </div>
+        <span className="text-xl md:text-2xl font-bold text-white tracking-wide relative z-10">
+          MENU
+        </span>
       </button>
 
       {/* Backdrop */}
@@ -115,21 +114,43 @@ export default function Menu({ items = [] }) {
         )}
       </AnimatePresence>
 
-      {/* Border styling for toolbox shape */}
+      {/* Glass surface styling for menu button */}
       <style>{`
-        .toolbox-border img {
-          filter: drop-shadow(2px 0 0 black)
-                  drop-shadow(-2px 0 0 black)
-                  drop-shadow(0 2px 0 black)
-                  drop-shadow(0 -2px 0 black)
-                  drop-shadow(2px 2px 0 black)
-                  drop-shadow(-2px -2px 0 black)
-                  drop-shadow(2px -2px 0 black)
-                  drop-shadow(-2px 2px 0 black)
-                  drop-shadow(1px 0 0 black)
-                  drop-shadow(-1px 0 0 black)
-                  drop-shadow(0 1px 0 black)
-                  drop-shadow(0 -1px 0 black);
+        .menu-glass {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
+          -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+        
+        .menu-glass:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+        
+        .menu-glass::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: left 0.5s;
+        }
+        
+        .menu-glass:hover::before {
+          left: 100%;
         }
       `}</style>
     </>
