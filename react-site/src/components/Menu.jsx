@@ -30,72 +30,8 @@ export default function Menu({ items = [] }) {
     }
   }
 
-  // Detect background color behind menu button with improved accuracy
+  // Simple detection: check if background is white/light, change text to black
   useEffect(() => {
-    let timeoutId = null
-    let rafId = null
-    let lastState = false
-    
-    const getBackgroundLuminance = (element) => {
-      if (!element) return null
-      
-      let currentElement = element
-      let maxDepth = 10 // Limit depth to prevent infinite loops
-      let depth = 0
-
-      while (currentElement && currentElement !== document.body && depth < maxDepth) {
-        depth++
-        const computedStyle = window.getComputedStyle(currentElement)
-        const bgColor = computedStyle.backgroundColor
-        
-        // Check for background classes first (more reliable)
-        if (currentElement.classList) {
-          const classes = Array.from(currentElement.classList)
-          if (classes.some(cls => cls.includes('bg-gray-200') || cls.includes('bg-white') || cls.includes('bg-gray-100') || cls.includes('bg-gray-50'))) {
-            return 0.8 // Light background
-          }
-          if (classes.some(cls => cls.includes('bg-gray-700') || cls.includes('bg-gray-800') || cls.includes('bg-gray-900') || cls.includes('bg-black'))) {
-            return 0.2 // Dark background
-          }
-        }
-
-        // Check computed background color
-        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
-          const rgbMatch = bgColor.match(/\d+/g)
-          if (rgbMatch && rgbMatch.length >= 3) {
-            const r = parseInt(rgbMatch[0])
-            const g = parseInt(rgbMatch[1])
-            const b = parseInt(rgbMatch[2])
-            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-            // Only return if luminance is clearly light or dark (avoid mid-tones)
-            if (luminance > 0.6) return luminance // Clearly light
-            if (luminance < 0.4) return luminance // Clearly dark
-          }
-        }
-
-        // Check if it's a section element
-        if (currentElement.tagName === 'SECTION') {
-          const sectionStyle = window.getComputedStyle(currentElement)
-          const sectionBg = sectionStyle.backgroundColor
-          if (sectionBg && sectionBg !== 'rgba(0, 0, 0, 0)' && sectionBg !== 'transparent') {
-            const rgbMatch = sectionBg.match(/\d+/g)
-            if (rgbMatch && rgbMatch.length >= 3) {
-              const r = parseInt(rgbMatch[0])
-              const g = parseInt(rgbMatch[1])
-              const b = parseInt(rgbMatch[2])
-              const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-              if (luminance > 0.5) return luminance
-              if (luminance < 0.5) return luminance
-            }
-          }
-        }
-
-        currentElement = currentElement.parentElement
-      }
-      
-      return null
-    }
-
     const checkBackground = () => {
       if (!menuButtonRef.current) return
 
@@ -103,79 +39,69 @@ export default function Menu({ items = [] }) {
       const buttonCenterY = buttonRect.top + buttonRect.height / 2
       const buttonCenterX = buttonRect.left + buttonRect.width / 2
 
-      // Sample multiple points for more accurate detection
-      const samplePoints = [
-        { x: buttonCenterX, y: buttonCenterY },
-        { x: buttonRect.left + 5, y: buttonRect.top + 5 },
-        { x: buttonRect.right - 5, y: buttonRect.bottom - 5 },
-      ]
+      const elementBelow = document.elementFromPoint(buttonCenterX, buttonCenterY)
+      
+      if (!elementBelow) {
+        setIsLightBackground(false)
+        return
+      }
 
-      const luminances = []
-      for (const point of samplePoints) {
-        const elementBelow = document.elementFromPoint(point.x, point.y)
-        if (elementBelow) {
-          const luminance = getBackgroundLuminance(elementBelow)
-          if (luminance !== null) {
-            luminances.push(luminance)
+      // Walk up DOM tree to find background
+      let currentElement = elementBelow
+      let isLight = false
+
+      while (currentElement && currentElement !== document.body) {
+        // Check for light background classes
+        if (currentElement.classList) {
+          const classes = Array.from(currentElement.classList)
+          if (classes.some(cls => cls.includes('bg-gray-200') || cls.includes('bg-white') || cls.includes('bg-gray-100') || cls.includes('bg-gray-50'))) {
+            isLight = true
+            break
           }
         }
+
+        // Check computed background color
+        const computedStyle = window.getComputedStyle(currentElement)
+        const bgColor = computedStyle.backgroundColor
+        
+        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+          const rgbMatch = bgColor.match(/\d+/g)
+          if (rgbMatch && rgbMatch.length >= 3) {
+            const r = parseInt(rgbMatch[0])
+            const g = parseInt(rgbMatch[1])
+            const b = parseInt(rgbMatch[2])
+            // Check if it's a light color (white/light gray)
+            if (r > 200 && g > 200 && b > 200) {
+              isLight = true
+              break
+            }
+          }
+        }
+
+        currentElement = currentElement.parentElement
       }
 
-      // Determine if light or dark based on average luminance
-      let isLight = false
-      if (luminances.length > 0) {
-        const avgLuminance = luminances.reduce((a, b) => a + b, 0) / luminances.length
-        isLight = avgLuminance > 0.5
-      } else {
-        // Default to dark if no background detected
-        isLight = false
-      }
-
-      // Use hysteresis to prevent flickering - only change if significantly different
-      const threshold = 0.15 // Require 15% difference to change state
-      const shouldChange = lastState 
-        ? (isLight && !lastState) // Changing to light
-        : (!isLight && lastState) // Changing to dark
-      
-      // Only update if change is significant or if we're confident
-      if (shouldChange || luminances.length >= 2) {
-        setIsLightBackground(isLight)
-        lastState = isLight
-      }
+      setIsLightBackground(isLight)
     }
 
-    // Throttled check function
+    // Throttle scroll events
+    let rafId = null
     const throttledCheck = () => {
       if (rafId) return
-      
       rafId = requestAnimationFrame(() => {
         checkBackground()
         rafId = null
       })
     }
 
-    // Debounced check for scroll end
-    const debouncedCheck = () => {
-      if (timeoutId) clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => {
-        checkBackground()
-      }, 100)
-    }
-
-    // Initial check
     checkBackground()
-
-    // Use throttled check for scroll, debounced for scroll end
     window.addEventListener('scroll', throttledCheck, { passive: true })
-    window.addEventListener('scroll', debouncedCheck, { passive: true })
-    window.addEventListener('resize', debouncedCheck, { passive: true })
+    window.addEventListener('resize', throttledCheck, { passive: true })
 
     return () => {
-      if (timeoutId) clearTimeout(timeoutId)
       if (rafId) cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', throttledCheck)
-      window.removeEventListener('scroll', debouncedCheck)
-      window.removeEventListener('resize', debouncedCheck)
+      window.removeEventListener('resize', throttledCheck)
     }
   }, [])
 
@@ -185,12 +111,12 @@ export default function Menu({ items = [] }) {
       <button
         ref={menuButtonRef}
         onClick={toggleMenu}
-        className={`fixed top-6 right-6 z-50 px-6 py-3 flex items-center justify-center transition-all duration-300 overflow-hidden menu-glass relative ${isLightBackground ? 'menu-glass-light' : 'menu-glass-dark'}`}
+        className="fixed top-6 right-6 z-50 px-6 py-3 flex items-center justify-center transition-all duration-200 overflow-hidden menu-glass relative"
         style={{ position: 'fixed' }}
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
-        <span className={`text-xl md:text-2xl font-bold tracking-wide relative z-10 transition-colors duration-300 ${isLightBackground ? 'text-gray-900' : 'text-white'}`}>
+        <span className={`text-xl md:text-2xl font-bold tracking-wide relative z-10 transition-colors duration-200 ${isLightBackground ? 'text-gray-900' : 'text-white'}`}>
           MENU
         </span>
       </button>
@@ -267,28 +193,23 @@ export default function Menu({ items = [] }) {
         )}
       </AnimatePresence>
 
-      {/* Glass surface styling for menu button - Floating Effect with Adaptive Colors */}
+      {/* Glass surface styling for menu button - Floating Effect */}
       <style>{`
         .menu-glass {
-          position: fixed !important;
-          top: 24px !important;
-          right: 24px !important;
-          border-radius: 12px;
-          transition: all 0.3s ease;
-        }
-        
-        /* Dark background variant (default - for dark sections) */
-        .menu-glass-dark {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
           -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25);
           border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
                       0 4px 16px 0 rgba(0, 0, 0, 0.2),
                       inset 0 1px 1px rgba(255, 255, 255, 0.3);
+          position: fixed !important;
+          top: 24px !important;
+          right: 24px !important;
         }
         
-        .menu-glass-dark:hover {
+        .menu-glass:hover {
           background: rgba(255, 255, 255, 0.15);
           border-color: rgba(255, 255, 255, 0.3);
           box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45),
@@ -297,7 +218,7 @@ export default function Menu({ items = [] }) {
           transform: translateY(-2px);
         }
         
-        .menu-glass-dark::before {
+        .menu-glass::before {
           content: '';
           position: absolute;
           top: 0;
@@ -314,48 +235,7 @@ export default function Menu({ items = [] }) {
           pointer-events: none;
         }
         
-        .menu-glass-dark:hover::before {
-          left: 100%;
-        }
-        
-        /* Light background variant (for light sections like Company Stats) */
-        .menu-glass-light {
-          background: rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(20px) saturate(1.8) brightness(0.9);
-          -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(0.9);
-          border: 1px solid rgba(0, 0, 0, 0.2);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
-                      0 4px 16px 0 rgba(0, 0, 0, 0.15),
-                      inset 0 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        
-        .menu-glass-light:hover {
-          background: rgba(0, 0, 0, 0.2);
-          border-color: rgba(0, 0, 0, 0.3);
-          box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25),
-                      0 6px 20px 0 rgba(0, 0, 0, 0.2),
-                      inset 0 1px 1px rgba(0, 0, 0, 0.15);
-          transform: translateY(-2px);
-        }
-        
-        .menu-glass-light::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(0, 0, 0, 0.15),
-            transparent
-          );
-          transition: left 0.5s;
-          pointer-events: none;
-        }
-        
-        .menu-glass-light:hover::before {
+        .menu-glass:hover::before {
           left: 100%;
         }
       `}</style>
