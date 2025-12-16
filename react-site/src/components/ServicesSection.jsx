@@ -117,7 +117,7 @@ const ServicesSection = () => {
                   height={500}
                   delay={5000}
                   pauseOnHover={true}
-                  skewAmount={1}
+                  skewAmount={0}
                 >
                   {servicesData.services.map((item, i) => {
                     const optimizedUrl = item.imageUrl?.includes('cdn.sanity.io')
