@@ -36,6 +36,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           photo1 {
             asset-> {
               _id,
+              _ref,
               url
             },
             alt
@@ -45,6 +46,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyImages[] {
             asset-> {
               _id,
+              _ref,
               url
             },
             alt,
@@ -55,6 +57,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
         .then(([aboutData]) => {
           console.log('AboutAndSafety data fetched from Sanity:', aboutData);
           console.log('Safety images:', aboutData?.safetyImages);
+          console.log('Safety images count:', aboutData?.safetyImages?.length);
+          if (aboutData?.safetyImages?.length > 0) {
+            console.log('First safety image structure:', JSON.stringify(aboutData.safetyImages[0], null, 2));
+          }
           console.log('Photo1:', aboutData?.photo1);
           
           const mergedData = {
@@ -163,19 +169,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       return null;
                     }
                     
-                    // Build image URL - handle both expanded asset and reference
+                    // Build image URL using urlFor helper (works with both expanded assets and references)
                     let imageUrl;
                     try {
-                      if (img.asset.url) {
-                        // If asset is expanded with URL, use it directly with optimization
-                        imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                      } else if (img.asset._id || img.asset._ref) {
-                        // If asset is a reference, use urlFor
-                        imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
-                      } else {
-                        console.warn(`Safety image ${index + 1} has invalid asset structure:`, img);
-                        return null;
-                      }
+                      // Always use urlFor to properly generate CDN URLs from Sanity assets
+                      imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
                     } catch (error) {
                       console.error(`Error generating URL for safety image ${index + 1}:`, error, img);
                       return null;
