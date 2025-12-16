@@ -29,26 +29,86 @@ Our goal is always simple: complete every project with zero safety issues.`,
   // Fetch all content from Sanity (text and images)
   useEffect(() => {
     const fetchData = () => {
-      // First, test a direct query to see raw structure
+      // First, comprehensive diagnostic query to see raw structure
+      Promise.all([
+        // Check all documents (including drafts)
+        client.fetch(`*[_type == "aboutAndSafety"]{
+          _id,
+          _rev,
+          safetyImage,
+          "safetyImageExpanded": safetyImage {
+            asset-> {
+              _id,
+              _type,
+              url,
+              originalFilename
+            },
+            alt,
+            caption
+          }
+        }`),
+        // Check raw safetyImage without expansion
+        client.fetch(`*[_type == "aboutAndSafety"][0]{
+          _id,
+          safetyImage,
+          "safetyImageRaw": safetyImage
+        }`),
+        // Check if image exists as a reference
+        client.fetch(`*[_type == "aboutAndSafety"][0]{
+          _id,
+          safetyImage {
+            asset-> {
+              _id,
+              _type,
+              url,
+              originalFilename,
+              size,
+              mimeType
+            },
+            alt,
+            caption,
+            "hasAsset": defined(asset)
+          }
+        }`)
+      ])
+        .then(([allDocs, rawData, expandedData]) => {
+          console.log('=== COMPREHENSIVE DIAGNOSTIC QUERY ===');
+          console.log('Total documents found:', allDocs?.length);
+          console.log('All documents:', JSON.stringify(allDocs, null, 2));
+          console.log('---');
+          console.log('Raw data (no expansion):', JSON.stringify(rawData, null, 2));
+          console.log('---');
+          console.log('Expanded data:', JSON.stringify(expandedData, null, 2));
+          console.log('---');
+          console.log('Raw safetyImage value:', rawData?.safetyImage);
+          console.log('Raw safetyImage type:', typeof rawData?.safetyImage);
+          console.log('Expanded safetyImage:', expandedData?.safetyImage);
+          console.log('Has asset in expanded?', !!expandedData?.safetyImage?.asset);
+          if (expandedData?.safetyImage?.asset) {
+            console.log('Asset details:', {
+              id: expandedData.safetyImage.asset._id,
+              url: expandedData.safetyImage.asset.url,
+              type: expandedData.safetyImage.asset._type,
+              filename: expandedData.safetyImage.asset.originalFilename
+            });
+          }
+        })
+        .catch(err => {
+          console.error('❌ Diagnostic query error:', err);
+          console.error('Error details:', err.message, err.stack);
+        });
+      
+      // Main query with proper asset expansion
       client.fetch(`*[_type == "aboutAndSafety"][0]{
         _id,
-        safetyImage
-      }`)
-        .then(testData => {
-          console.log('=== DIRECT TEST QUERY ===');
-          console.log('Document ID:', testData?._id);
-          console.log('Raw safetyImage:', testData?.safetyImage);
-          console.log('safetyImage type:', typeof testData?.safetyImage);
-        })
-        .catch(err => console.error('Test query error:', err));
-      
-      client.fetch(`*[_type == "aboutAndSafety"][0]{
+        _rev,
         aboutTitle,
         aboutText,
         photo1 {
           asset-> {
             _id,
-            url
+            url,
+            originalFilename
           },
           alt
         },
@@ -57,11 +117,16 @@ Our goal is always simple: complete every project with zero safety issues.`,
         safetyImage {
           asset-> {
             _id,
-            url
+            url,
+            originalFilename,
+            size,
+            mimeType
           },
           alt,
           caption
-        }
+        },
+        "safetyImageExists": defined(safetyImage),
+        "safetyImageHasAsset": defined(safetyImage.asset)
       }`)
         .then((aboutData) => {
           console.log('=== AboutAndSafety Data Fetched ===');
@@ -80,6 +145,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
           
           console.log('=== FULL DATA OBJECT ===');
           console.log(JSON.stringify(aboutData, null, 2));
+          console.log('Document ID:', aboutData?._id);
+          console.log('Document revision:', aboutData?._rev);
+          console.log('Safety image exists check:', aboutData?.safetyImageExists);
+          console.log('Safety image has asset check:', aboutData?.safetyImageHasAsset);
           console.log('Safety image:', aboutData?.safetyImage);
           console.log('Safety image type:', typeof aboutData?.safetyImage);
           
@@ -87,10 +156,28 @@ Our goal is always simple: complete every project with zero safety issues.`,
           // Check if safetyImage exists and has valid asset data
           let safetyImage = aboutData?.safetyImage || null;
           
-          // Validate that safetyImage has an asset
-          if (safetyImage && (!safetyImage.asset || (!safetyImage.asset.url && !safetyImage.asset._id))) {
-            console.warn('⚠️ safetyImage exists but has invalid asset structure:', safetyImage);
-            safetyImage = null; // Treat as null if asset is invalid
+          // Check for various edge cases
+          if (safetyImage) {
+            console.log('🔍 Analyzing safetyImage structure...');
+            console.log('safetyImage keys:', Object.keys(safetyImage));
+            console.log('safetyImage.asset:', safetyImage.asset);
+            console.log('safetyImage.asset type:', typeof safetyImage.asset);
+            
+            // If safetyImage exists but asset is missing or invalid
+            if (!safetyImage.asset) {
+              console.error('❌ safetyImage object exists but has NO asset property');
+              console.error('This usually means:');
+              console.error('1. Image was uploaded but document was not saved/published');
+              console.error('2. Image reference is broken or incomplete');
+              console.error('3. Image needs to be re-uploaded in Sanity Studio');
+              safetyImage = null;
+            } else if (!safetyImage.asset.url && !safetyImage.asset._id) {
+              console.error('❌ safetyImage.asset exists but has no URL or ID');
+              console.error('Asset structure:', JSON.stringify(safetyImage.asset, null, 2));
+              safetyImage = null;
+            } else {
+              console.log('✅ safetyImage has valid asset structure');
+            }
           }
           
           console.log('=== PROCESSED SAFETY IMAGE ===');
@@ -101,20 +188,35 @@ Our goal is always simple: complete every project with zero safety issues.`,
           console.log('Has asset ID?', !!safetyImage?.asset?._id);
           
           if (!safetyImage || !safetyImage.asset) {
+            console.warn('⚠️ ===== SAFETY IMAGE DIAGNOSIS =====');
             if (aboutData?.safetyImage === null || !aboutData?.safetyImage) {
-              console.warn('⚠️ safetyImage field is NULL or missing in Sanity (no image added yet)');
+              console.warn('⚠️ safetyImage field is NULL or missing in Sanity');
+              console.warn('Possible causes:');
+              console.warn('  - Image was never uploaded');
+              console.warn('  - Image was uploaded but document was not saved');
+              console.warn('  - Image was uploaded to wrong document');
             } else if (aboutData?.safetyImage && !aboutData.safetyImage.asset) {
-              console.warn('⚠️ safetyImage exists but has no asset - image may not be fully uploaded');
+              console.warn('⚠️ safetyImage object exists but has NO asset property');
+              console.warn('This indicates the image upload did not complete properly.');
+              console.warn('Possible causes:');
+              console.warn('  - Image upload was interrupted');
+              console.warn('  - Document was saved before image finished uploading');
+              console.warn('  - Image reference is broken');
+              console.warn('SOLUTION: Delete the image field and re-upload the image');
             }
-            console.warn('📝 To add safety image:');
+            console.warn('');
+            console.warn('📝 Step-by-step fix:');
             console.warn('1. Go to: https://sanity-henna.vercel.app/structure');
-            console.warn('2. Open "About & Safety Section" document');
+            console.warn('2. Open "About & Safety Section" document (ID: ' + aboutData?._id + ')');
             console.warn('3. Scroll to "Safety Photo" field');
-            console.warn('4. Click to upload an image');
-            console.warn('5. Fill in "Alternative Text"');
-            console.warn('6. Click "Publish" button (top right, NOT "Save Draft")');
-            console.warn('7. Wait for Vercel deployment to complete (check deployments page)');
-            console.warn('8. Refresh this page after deployment completes');
+            console.warn('4. If there\'s already an image there, DELETE it first');
+            console.warn('5. Click to upload a NEW image');
+            console.warn('6. Wait for upload to complete (you should see the image preview)');
+            console.warn('7. Fill in "Alternative Text" field');
+            console.warn('8. Click "Publish" button (top right, NOT "Save Draft")');
+            console.warn('9. Wait for Vercel deployment to complete');
+            console.warn('10. Hard refresh this page (Cmd+Shift+R or Ctrl+Shift+R)');
+            console.warn('⚠️ ====================================');
           } else {
             console.log('✅ Found safety image');
             console.log('=== Safety Image Details ===');
