@@ -385,7 +385,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
           <div className={`${data.photo1 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
           <FadeInWhenVisible delay={0.1}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">{data.aboutTitle}</h2>
+              <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">{data.aboutTitle}</h2>
             </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.2}>
               <p className="text-lg text-gray-300 leading-relaxed whitespace-pre-line">
@@ -401,7 +401,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {/* Text on left, image on right */}
           <div className={`${data.safetyImage && data.safetyImage.asset ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
-              <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
+              <h3 className="section-title text-5xl md:text-6xl mb-4 text-white">
               {data.safetyTitle}
             </h3>
           </FadeInWhenVisible>
