@@ -65,13 +65,13 @@ export default function Menu({ items = [] }) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed top-0 right-0 h-full w-full md:w-96 bg-gray-900 z-50 shadow-2xl overflow-y-auto"
+            className="fixed top-0 right-0 h-full w-full md:w-96 bg-white z-50 shadow-2xl overflow-y-auto"
           >
             {/* Close Button */}
             <div className="flex justify-end p-4">
               <button
                 onClick={closeMenu}
-                className="w-10 h-10 flex items-center justify-center text-white hover:bg-gray-800 rounded-lg transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
                 aria-label="Close menu"
               >
                 <svg
@@ -102,7 +102,7 @@ export default function Menu({ items = [] }) {
                   >
                     <button
                       onClick={() => handleMenuItemClick(item.link)}
-                      className="text-2xl md:text-3xl font-semibold text-white hover:text-blue-400 transition-colors duration-200 w-full text-left"
+                      className="text-2xl md:text-3xl font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 w-full text-left"
                       aria-label={item.ariaLabel || item.label}
                     >
                       {item.label}
