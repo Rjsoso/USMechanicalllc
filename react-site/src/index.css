@@ -141,9 +141,11 @@ section#contact > div[class*="absolute"] {
 
 .safety-photo {
   width: 100%;
+  height: auto;
   border-radius: 12px;
   object-fit: cover;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: block;
 }
 
 /* Portfolio Modal */

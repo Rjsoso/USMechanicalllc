@@ -43,10 +43,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyTitle,
           safetyText,
           safetyImages[] {
-            asset-> {
-              _id,
-              url
-            },
+            asset,
             alt,
             caption
           }
@@ -165,26 +162,49 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 <div className="safety-images-grid">
                   {data.safetyImages.map((img, index) => {
                     // Check if image has valid asset data
-                    if (!img || !img.asset) {
+                    if (!img) {
+                      console.warn(`Safety image ${index + 1} is null or undefined`);
+                      return null;
+                    }
+                    
+                    if (!img.asset) {
                       console.warn(`Safety image ${index + 1} is missing asset data:`, img);
                       return null;
                     }
                     
-                    // Build image URL - handle both expanded asset and reference
+                    // Log the image structure for debugging
+                    console.log(`Safety image ${index + 1} structure:`, {
+                      hasAsset: !!img.asset,
+                      assetType: img.asset?._type,
+                      assetRef: img.asset?._ref,
+                      assetId: img.asset?._id,
+                      assetUrl: img.asset?.url,
+                      fullImage: img
+                    });
+                    
+                    // Build image URL - always use urlFor for reliable URL generation
                     let imageUrl;
                     try {
-                      if (img.asset.url) {
-                        // If asset is expanded with URL, use it directly with optimization
-                        imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                      } else if (img.asset._id || img.asset._ref) {
-                        // If asset is a reference, use urlFor
-                        imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
-                      } else {
-                        console.warn(`Safety image ${index + 1} has invalid asset structure:`, img);
+                      // urlFor works with the image object directly
+                      // It handles both expanded assets and references correctly
+                      const urlBuilder = urlFor(img);
+                      if (!urlBuilder) {
+                        console.error(`Safety image ${index + 1}: urlFor returned null/undefined`);
                         return null;
                       }
+                      
+                      imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
+                      
+                      if (!imageUrl) {
+                        console.error(`Safety image ${index + 1} generated empty URL. Image object:`, JSON.stringify(img, null, 2));
+                        return null;
+                      }
+                      
+                      console.log(`Safety image ${index + 1} URL generated successfully:`, imageUrl);
                     } catch (error) {
-                      console.error(`Error generating URL for safety image ${index + 1}:`, error, img);
+                      console.error(`Error generating URL for safety image ${index + 1}:`, error);
+                      console.error('Error details:', error.message, error.stack);
+                      console.error('Image object:', JSON.stringify(img, null, 2));
                       return null;
                     }
                     
@@ -195,8 +215,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           className="safety-photo"
                           alt={img?.alt || `Safety image ${index + 1}`}
                           loading="lazy"
+                          style={{ height: 'auto', minHeight: '200px' }}
                           onError={(e) => {
                             console.error(`Failed to load safety image ${index + 1}:`, imageUrl);
+                            console.error('Image object:', JSON.stringify(img, null, 2));
                             e.target.style.display = 'none';
                           }}
                         />
