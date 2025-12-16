@@ -129,6 +129,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
               alt,
               caption
             },
+            safetyImage2 {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
             "safetyImageExists": defined(safetyImage),
             "safetyImageHasAsset": defined(safetyImage.asset)
           }`)
@@ -167,6 +178,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
               alt,
               caption
             },
+            safetyImage2 {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
             "safetyImageExists": defined(safetyImage),
             "safetyImageHasAsset": defined(safetyImage.asset)
           }`)
@@ -195,6 +217,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
             safetyTitle,
             safetyText,
             safetyImage {
+              asset-> {
+                _id,
+                url,
+                originalFilename,
+                size,
+                mimeType
+              },
+              alt,
+              caption
+            },
+            safetyImage2 {
               asset-> {
                 _id,
                 url,
@@ -399,7 +432,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Text on left, image on right */}
-          <div className={`${data.safetyImage && data.safetyImage.asset ? 'md:w-1/2' : 'w-full'}`}>
+          <div className={`${(data.safetyImage && data.safetyImage.asset) || (data.safetyImage2 && data.safetyImage2.asset) ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
               <h3 className="section-title text-5xl md:text-6xl mb-4 text-white">
               {data.safetyTitle}
@@ -424,97 +457,134 @@ Our goal is always simple: complete every project with zero safety issues.`,
             </div>
           )}
 
-          {data.safetyImage && data.safetyImage.asset ? (
+          {(data.safetyImage && data.safetyImage.asset) || (data.safetyImage2 && data.safetyImage2.asset) ? (
             <div className="md:w-1/2">
-              <FadeInWhenVisible delay={0.5}>
-                <div className="relative bg-black rounded-2xl overflow-hidden p-4">
-                  {(() => {
-                    const img = data.safetyImage;
-                    console.log('=== RENDERING Safety Image ===');
-                    console.log('Image object:', img);
-                    
-                    // Check if image has valid asset data
-                    if (!img || !img.asset) {
-                      console.warn('❌ Safety image is missing asset data:', img);
-                      return null;
-                    }
-                    
-                    // Log the image structure for debugging
-                    console.log('Safety image structure:', {
-                      hasAsset: !!img.asset,
-                      assetType: img.asset?._type,
-                      assetRef: img.asset?._ref,
-                      assetId: img.asset?._id,
-                      assetUrl: img.asset?.url,
-                      fullImage: img
-                    });
-                    
-                    // Build image URL - handle both expanded asset and urlFor
-                    let imageUrl;
-                    try {
-                      // First, try to use urlFor - it handles most cases including references
-                      if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
-                        console.log('🔧 Using urlFor to generate image URL');
-                        const urlBuilder = urlFor(img);
-                        if (urlBuilder) {
-                          imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
-                          console.log('✅ Safety image URL from urlFor:', imageUrl);
-                        } else {
-                          console.warn('⚠️ urlFor returned null, trying direct URL');
+              <div className="space-y-4">
+                {/* First Safety Image */}
+                {data.safetyImage && data.safetyImage.asset && (
+                  <FadeInWhenVisible delay={0.5}>
+                    <div className="relative bg-black rounded-2xl overflow-hidden p-4">
+                      {(() => {
+                        const img = data.safetyImage;
+                        console.log('=== RENDERING Safety Image ===');
+                        console.log('Image object:', img);
+                        
+                        // Check if image has valid asset data
+                        if (!img || !img.asset) {
+                          console.warn('❌ Safety image is missing asset data:', img);
+                          return null;
                         }
-                      }
-                      
-                      // Fallback: If asset is expanded with URL, use it directly with optimization
-                      if (!imageUrl && img.asset?.url) {
-                        imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                        console.log('✅ Safety image URL from expanded asset:', imageUrl);
-                      }
-                      
-                      // If still no URL, there's an issue
-                      if (!imageUrl) {
-                        console.error('❌ Could not generate image URL. Image structure:', JSON.stringify(img, null, 2));
-                        return null;
-                      }
-                      
-                      if (!imageUrl) {
-                        console.error('❌ Generated empty URL. Image object:', JSON.stringify(img, null, 2));
-                        return null;
-                      }
-                      
-                      console.log('✅ Rendering image with URL:', imageUrl);
-                      
-                      return (
-                        <>
-                          <img
-                            src={imageUrl}
-                            className="safety-photo"
-                            alt={img?.alt || 'Safety image'}
-                            loading="lazy"
-                            style={{ height: 'auto', minHeight: '200px' }}
-                            onLoad={() => {
-                              console.log('✅ Safety image loaded successfully:', imageUrl);
-                            }}
-                            onError={(e) => {
-                              console.error('❌ Failed to load safety image:', imageUrl);
-                              console.error('Image object:', JSON.stringify(img, null, 2));
-                              console.error('Error event:', e);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                          {img?.caption && (
-                            <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                          )}
-                        </>
-                      );
-                    } catch (error) {
-                      console.error('❌ Error generating URL for safety image:', error);
-                      console.error('Error details:', error.message, error.stack);
-                      console.error('Image object:', JSON.stringify(img, null, 2));
-                      return null;
-                    }
-                  })()}
-                </div>
-              </FadeInWhenVisible>
+                        
+                        // Build image URL - handle both expanded asset and urlFor
+                        let imageUrl;
+                        try {
+                          // First, try to use urlFor - it handles most cases including references
+                          if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
+                            const urlBuilder = urlFor(img);
+                            if (urlBuilder) {
+                              imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
+                            }
+                          }
+                          
+                          // Fallback: If asset is expanded with URL, use it directly with optimization
+                          if (!imageUrl && img.asset?.url) {
+                            imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
+                          }
+                          
+                          if (!imageUrl) {
+                            console.error('❌ Could not generate image URL. Image structure:', JSON.stringify(img, null, 2));
+                            return null;
+                          }
+                          
+                          return (
+                            <>
+                              <img
+                                src={imageUrl}
+                                className="safety-photo w-full"
+                                alt={img?.alt || 'Safety image'}
+                                loading="lazy"
+                                style={{ height: 'auto', minHeight: '200px' }}
+                                onError={(e) => {
+                                  console.error('❌ Failed to load safety image:', imageUrl);
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                              {img?.caption && (
+                                <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                              )}
+                            </>
+                          );
+                        } catch (error) {
+                          console.error('❌ Error generating URL for safety image:', error);
+                          return null;
+                        }
+                      })()}
+                    </div>
+                  </FadeInWhenVisible>
+                )}
+                
+                {/* Second Safety Image */}
+                {data.safetyImage2 && data.safetyImage2.asset && (
+                  <FadeInWhenVisible delay={0.6}>
+                    <div className="relative bg-black rounded-2xl overflow-hidden p-4">
+                      {(() => {
+                        const img = data.safetyImage2;
+                        console.log('=== RENDERING Safety Image 2 ===');
+                        
+                        // Check if image has valid asset data
+                        if (!img || !img.asset) {
+                          console.warn('❌ Safety image 2 is missing asset data:', img);
+                          return null;
+                        }
+                        
+                        // Build image URL - handle both expanded asset and urlFor
+                        let imageUrl;
+                        try {
+                          // First, try to use urlFor - it handles most cases including references
+                          if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
+                            const urlBuilder = urlFor(img);
+                            if (urlBuilder) {
+                              imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
+                            }
+                          }
+                          
+                          // Fallback: If asset is expanded with URL, use it directly with optimization
+                          if (!imageUrl && img.asset?.url) {
+                            imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
+                          }
+                          
+                          if (!imageUrl) {
+                            console.error('❌ Could not generate image URL for safety image 2');
+                            return null;
+                          }
+                          
+                          return (
+                            <>
+                              <img
+                                src={imageUrl}
+                                className="safety-photo w-full"
+                                alt={img?.alt || 'Safety image 2'}
+                                loading="lazy"
+                                style={{ height: 'auto', minHeight: '200px' }}
+                                onError={(e) => {
+                                  console.error('❌ Failed to load safety image 2:', imageUrl);
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                              {img?.caption && (
+                                <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
+                              )}
+                            </>
+                          );
+                        } catch (error) {
+                          console.error('❌ Error generating URL for safety image 2:', error);
+                          return null;
+                        }
+                      })()}
+                    </div>
+                  </FadeInWhenVisible>
+                )}
+              </div>
             </div>
           ) : (
             <div className="md:w-1/2">

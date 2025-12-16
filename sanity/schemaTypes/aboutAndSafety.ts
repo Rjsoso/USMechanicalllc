@@ -49,7 +49,28 @@ export default defineType({
       title: 'Safety Photo',
       type: 'image',
       options: { hotspot: true },
-      description: 'Single photo displayed with the Safety & Risk Management section',
+      description: 'First photo displayed with the Safety & Risk Management section',
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description: 'Important for accessibility. Describe what is shown in the image.',
+        },
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          description: 'Optional caption for the image',
+        },
+      ],
+    },
+    {
+      name: 'safetyImage2',
+      title: 'Safety Photo 2',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Second photo displayed below the first Safety photo',
       fields: [
         {
           name: 'alt',
