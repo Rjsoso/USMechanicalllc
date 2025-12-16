@@ -111,13 +111,13 @@ const ServicesSection = () => {
                 style={{ width: "650px", height: "500px", marginTop: "40px" }}
               >
                 <CardSwap
-                  cardDistance={60}
-                  verticalDistance={70}
+                  cardDistance={30}
+                  verticalDistance={40}
                   width={650}
                   height={500}
                   delay={5000}
                   pauseOnHover={true}
-                  skewAmount={0}
+                  skewAmount={1}
                 >
                   {servicesData.services.map((item, i) => {
                     const optimizedUrl = item.imageUrl?.includes('cdn.sanity.io')
