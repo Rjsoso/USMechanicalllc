@@ -30,10 +30,11 @@ export default function Menu({ items = [] }) {
 
   return (
     <>
-      {/* Menu Button */}
+      {/* Menu Button - Fixed Floating */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 px-6 py-3 flex items-center justify-center transition-all duration-200 overflow-hidden menu-glass relative"
+        className="fixed top-6 right-6 z-50 px-6 py-3 flex items-center justify-center transition-all duration-200 overflow-hidden menu-glass relative"
+        style={{ position: 'fixed' }}
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
@@ -114,7 +115,7 @@ export default function Menu({ items = [] }) {
         )}
       </AnimatePresence>
 
-      {/* Glass surface styling for menu button */}
+      {/* Glass surface styling for menu button - Floating Effect */}
       <style>{`
         .menu-glass {
           background: rgba(255, 255, 255, 0.1);
@@ -123,14 +124,20 @@ export default function Menu({ items = [] }) {
           border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 12px;
           box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                      0 4px 16px 0 rgba(0, 0, 0, 0.2),
                       inset 0 1px 1px rgba(255, 255, 255, 0.3);
+          position: fixed !important;
+          top: 24px !important;
+          right: 24px !important;
         }
         
         .menu-glass:hover {
           background: rgba(255, 255, 255, 0.15);
           border-color: rgba(255, 255, 255, 0.3);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
+          box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45),
+                      0 6px 20px 0 rgba(0, 0, 0, 0.3),
                       inset 0 1px 1px rgba(255, 255, 255, 0.4);
+          transform: translateY(-2px);
         }
         
         .menu-glass::before {
@@ -147,6 +154,7 @@ export default function Menu({ items = [] }) {
             transparent
           );
           transition: left 0.5s;
+          pointer-events: none;
         }
         
         .menu-glass:hover::before {
