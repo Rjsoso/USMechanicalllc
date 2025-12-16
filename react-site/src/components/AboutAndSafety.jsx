@@ -45,11 +45,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           safetyTitle,
           safetyText,
           safetyImages[] {
-            asset {
-              _ref,
-              _type,
-              _updatedAt
-            },
+            asset,
             alt,
             caption,
             _key
@@ -185,24 +181,35 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     // Build image URL using urlFor helper with cache-busting
                     let imageUrl;
                     try {
+                      // Ensure we have a valid image object for urlFor
+                      // urlFor can handle both asset references and expanded assets
+                      if (!img.asset) {
+                        console.error(`Safety image ${index + 1} has no asset:`, img);
+                        return null;
+                      }
+                      
                       // urlFor expects the image object with asset reference
                       // Pass the entire image object to urlFor
                       imageUrl = urlFor(img).width(600).quality(85).auto('format').url();
                       
-                      // Add cache-busting parameter using asset reference or updated timestamp
-                      if (imageUrl && img.asset?._ref) {
-                        // Use asset reference as cache-busting parameter
+                      if (!imageUrl) {
+                        console.error(`Safety image ${index + 1} generated empty URL. Image object:`, JSON.stringify(img, null, 2));
+                        return null;
+                      }
+                      
+                      // Add cache-busting parameter using asset reference
+                      if (img.asset?._ref) {
                         const cacheBuster = img.asset._ref.split('-').pop() || Date.now();
+                        imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
+                      } else if (img.asset?._id) {
+                        // Fallback to _id if _ref not available
+                        const cacheBuster = img.asset._id.split('-').pop() || Date.now();
                         imageUrl = `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${cacheBuster}`;
                       }
                       
-                      if (!imageUrl) {
-                        console.warn(`Safety image ${index + 1} generated empty URL:`, img);
-                        return null;
-                      }
                     } catch (error) {
-                      console.error(`Error generating URL for safety image ${index + 1}:`, error, img);
-                      console.error('Image object structure:', JSON.stringify(img, null, 2));
+                      console.error(`Error generating URL for safety image ${index + 1}:`, error);
+                      console.error('Image object:', JSON.stringify(img, null, 2));
                       return null;
                     }
                     
