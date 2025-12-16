@@ -129,7 +129,7 @@ const ServicesSection = () => {
                         <img
                           src={optimizedUrl}
                           alt={item.title}
-                          className="w-full h-full object-cover rounded-xl"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"
                           onError={(e) => {

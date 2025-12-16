@@ -275,7 +275,7 @@ section#contact > div[class*="absolute"] {
 }
 
 .service-card {
-  border-radius: 16px !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
@@ -284,7 +284,7 @@ section#contact > div[class*="absolute"] {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  border-radius: 16px !important;
+  border-radius: 0 !important;
   display: block !important;
 }
 
