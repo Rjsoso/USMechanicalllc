@@ -393,7 +393,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
   }
 
   return (
-    <section className="py-20 text-white bg-gray-700">
+    <section id="about" className="py-20 text-white bg-gray-700">
       <div className="max-w-7xl mx-auto px-6">
         {/* ABOUT SECTION - Image + Text Horizontal (side-by-side on desktop, stacked on mobile) */}
         {/* All content (text and images) comes from Sanity CMS */}

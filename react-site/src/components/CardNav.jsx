@@ -48,20 +48,36 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     menuColor: '#000000',           // Hamburger icon color
   };
 
-  // Fetch navigation data from Sanity
+  // Website sections - automatically generated from actual website sections
+  const websiteSections = [
+    {
+      label: 'About & Services',
+      links: [
+        { label: 'About', href: '#about', ariaLabel: 'Scroll to About section' },
+        { label: 'Services', href: '#services', ariaLabel: 'Scroll to Services section' },
+      ]
+    },
+    {
+      label: 'Portfolio & Careers',
+      links: [
+        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'Scroll to Portfolio section' },
+        { label: 'Careers', href: '#careers', ariaLabel: 'Scroll to Careers section' },
+      ]
+    },
+    {
+      label: 'Contact',
+      links: [
+        { label: 'Contact', href: '#contact', ariaLabel: 'Scroll to Contact section' },
+      ]
+    }
+  ];
+
+  // Fetch navigation data from Sanity (only buttonText now)
   useEffect(() => {
     const fetchNavData = async () => {
       try {
         const data = await client.fetch(
           `*[_type == "cardNav"][0]{
-            sections[] {
-              label,
-              links[] {
-                label,
-                href,
-                ariaLabel
-              }
-            },
             buttonText
           }`
         );
@@ -130,8 +146,6 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
   };
 
   useLayoutEffect(() => {
-    if (!navData) return;
-
     const tl = createTimeline();
     tlRef.current = tl;
 
@@ -140,11 +154,9 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
       tlRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ease, navData]);
+  }, [ease]);
 
   useLayoutEffect(() => {
-    if (!navData) return;
-
     const handleResize = () => {
       if (!tlRef.current) return;
 
@@ -170,7 +182,7 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExpanded, navData]);
+  }, [isExpanded]);
 
   const toggleMenu = () => {
     const tl = tlRef.current;
@@ -203,16 +215,14 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     if (el) cardsRef.current[i] = el;
   };
 
-  if (!navData) {
-    return null; // Don't render until data is loaded
-  }
-
-  const sections = (navData.sections || []).map((section, index) => ({
+  // Map website sections to navigation cards with colors
+  const sections = websiteSections.map((section, index) => ({
     ...section,
     bgColor: defaultColors.sections[index]?.bgColor || defaultColors.sections[0].bgColor,
     textColor: defaultColors.sections[index]?.textColor || defaultColors.sections[0].textColor,
   }));
-  const buttonText = navData.buttonText || 'Get Started';
+
+  const buttonText = navData?.buttonText || 'Get Started';
   const buttonBgColor = defaultColors.buttonBgColor;
   const buttonTextColor = defaultColors.buttonTextColor;
   const baseColor = defaultColors.baseColor;
