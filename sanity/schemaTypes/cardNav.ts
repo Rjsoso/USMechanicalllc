@@ -24,26 +24,6 @@ export default defineType({
               validation: (Rule) => Rule.required(),
             },
             {
-              name: 'bgColor',
-              title: 'Background Color',
-              type: 'string',
-              description: 'Hex color code for the card background (e.g., #0D0716)',
-              validation: (Rule) => Rule.required().regex(/^#[0-9A-Fa-f]{6}$/, {
-                name: 'hex color',
-                invert: false,
-              }).error('Must be a valid hex color code (e.g., #0D0716)'),
-            },
-            {
-              name: 'textColor',
-              title: 'Text Color',
-              type: 'string',
-              description: 'Hex color code for the card text (e.g., #fff)',
-              validation: (Rule) => Rule.required().regex(/^#[0-9A-Fa-f]{6}$/, {
-                name: 'hex color',
-                invert: false,
-              }).error('Must be a valid hex color code (e.g., #fff)'),
-            },
-            {
               name: 'links',
               title: 'Links',
               type: 'array',
@@ -80,7 +60,6 @@ export default defineType({
           preview: {
             select: {
               title: 'label',
-              subtitle: 'bgColor',
             },
           },
         },
@@ -92,50 +71,6 @@ export default defineType({
       type: 'string',
       description: 'Text displayed on the CTA button (e.g., "Get Started", "Contact Us")',
       initialValue: 'Get Started',
-    },
-    {
-      name: 'buttonBgColor',
-      title: 'Button Background Color',
-      type: 'string',
-      description: 'Hex color code for button background',
-      validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/, {
-        name: 'hex color',
-        invert: false,
-      }).error('Must be a valid hex color code'),
-      initialValue: '#111',
-    },
-    {
-      name: 'buttonTextColor',
-      title: 'Button Text Color',
-      type: 'string',
-      description: 'Hex color code for button text',
-      validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/, {
-        name: 'hex color',
-        invert: false,
-      }).error('Must be a valid hex color code'),
-      initialValue: '#fff',
-    },
-    {
-      name: 'baseColor',
-      title: 'Navigation Bar Base Color',
-      type: 'string',
-      description: 'Hex color code for the navigation bar background',
-      validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/, {
-        name: 'hex color',
-        invert: false,
-      }).error('Must be a valid hex color code'),
-      initialValue: '#fff',
-    },
-    {
-      name: 'menuColor',
-      title: 'Hamburger Icon Color',
-      type: 'string',
-      description: 'Hex color code for the hamburger menu icon',
-      validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/, {
-        name: 'hex color',
-        invert: false,
-      }).error('Must be a valid hex color code'),
-      initialValue: '#000',
     },
   ],
   preview: {

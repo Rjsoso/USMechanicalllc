@@ -32,6 +32,22 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
   const cardsRef = useRef([]);
   const tlRef = useRef(null);
 
+  // ============================================
+  // DEFAULT COLORS - Edit colors here in code
+  // ============================================
+  const defaultColors = {
+    // Colors for each navigation card (up to 3 sections)
+    sections: [
+      { bgColor: '#0D0716', textColor: '#ffffff' }, // Section 1: Dark purple background, white text
+      { bgColor: '#170D27', textColor: '#ffffff' }, // Section 2: Darker purple background, white text
+      { bgColor: '#271E37', textColor: '#ffffff' }, // Section 3: Darkest purple background, white text
+    ],
+    buttonBgColor: '#111111',      // CTA button background color
+    buttonTextColor: '#ffffff',    // CTA button text color
+    baseColor: '#ffffff',           // Navigation bar background color
+    menuColor: '#000000',           // Hamburger icon color
+  };
+
   // Fetch navigation data from Sanity
   useEffect(() => {
     const fetchNavData = async () => {
@@ -40,19 +56,13 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
           `*[_type == "cardNav"][0]{
             sections[] {
               label,
-              bgColor,
-              textColor,
               links[] {
                 label,
                 href,
                 ariaLabel
               }
             },
-            buttonText,
-            buttonBgColor,
-            buttonTextColor,
-            baseColor,
-            menuColor
+            buttonText
           }`
         );
         setNavData(data);
@@ -197,12 +207,16 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     return null; // Don't render until data is loaded
   }
 
-  const sections = navData.sections || [];
+  const sections = (navData.sections || []).map((section, index) => ({
+    ...section,
+    bgColor: defaultColors.sections[index]?.bgColor || defaultColors.sections[0].bgColor,
+    textColor: defaultColors.sections[index]?.textColor || defaultColors.sections[0].textColor,
+  }));
   const buttonText = navData.buttonText || 'Get Started';
-  const buttonBgColor = navData.buttonBgColor || '#111';
-  const buttonTextColor = navData.buttonTextColor || '#fff';
-  const baseColor = navData.baseColor || '#fff';
-  const menuColor = navData.menuColor || '#000';
+  const buttonBgColor = defaultColors.buttonBgColor;
+  const buttonTextColor = defaultColors.buttonTextColor;
+  const baseColor = defaultColors.baseColor;
+  const menuColor = defaultColors.menuColor;
 
   return (
     <div className={`card-nav-container ${className}`}>
