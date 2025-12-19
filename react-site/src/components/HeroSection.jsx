@@ -14,125 +14,106 @@ const defaultHeroData = {
 
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
-  const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     const fetchHero = () => {
-      // Try to get document with specific ID first, then fallback to first document
-      Promise.resolve()
-        .then(() => {
-          // First try: Get document with specific ID "heroSection"
-          return client.fetch(
-            `*[_type == "heroSection" && _id == "heroSection"][0]{
-              _id,
-              backgroundImage {
+      // Simplified query matching the pattern used in ServicesSection (which works)
+      // Try document with _id "heroSection" first, fallback to first document
+      client
+        .fetch(
+          `*[_type == "heroSection" && _id == "heroSection"][0]{
+            _id,
+            backgroundImage {
+              asset-> {
+                _id,
+                url
+              }
+            },
+            carouselImages[] {
+              image {
                 asset-> {
                   _id,
                   url
                 }
               },
-              carouselImages[] {
-                image {
-                  asset-> {
-                    _id,
-                    url
-                  }
-                },
-                title,
-                description,
-                "imageUrl": image.asset->url
-              },
-              logo {
-                asset-> {
-                  _id,
-                  url
-                }
-              },
-              headline,
-              subtext,
-              buttonText,
-              buttonLink
-            }`
-          )
-        })
+              "imageUrl": image.asset->url
+            },
+            logo {
+              asset-> {
+                _id,
+                url
+              }
+            },
+            headline,
+            subtext,
+            buttonText,
+            buttonLink
+          }`
+        )
         .then(data => {
-          // If found document with specific ID, use it
-          if (data && data._id) {
-            console.log('✅ Found heroSection document with _id "heroSection":', data._id);
-            console.log('Button text:', data.buttonText);
-            console.log('Button link:', data.buttonLink);
-            return Promise.resolve(data);
-          }
-          // Second try: Get first document
-          console.log('⚠️ Document with _id "heroSection" not found, using first document');
-          return client.fetch(
-            `*[_type == "heroSection"][0]{
-              _id,
-              backgroundImage {
-                asset-> {
-                  _id,
-                  url
-                }
-              },
-              carouselImages[] {
-                image {
+          // If document with specific ID not found, try first document
+          if (!data || !data._id) {
+            return client.fetch(
+              `*[_type == "heroSection"][0]{
+                _id,
+                backgroundImage {
                   asset-> {
                     _id,
                     url
                   }
                 },
-                title,
-                description,
-                "imageUrl": image.asset->url
-              },
-              logo {
-                asset-> {
-                  _id,
-                  url
-                }
-              },
-              headline,
-              subtext,
-              buttonText,
-              buttonLink
-            }`
-          )
+                carouselImages[] {
+                  image {
+                    asset-> {
+                      _id,
+                      url
+                    }
+                  },
+                  title,
+                  description,
+                  "imageUrl": image.asset->url
+                },
+                logo {
+                  asset-> {
+                    _id,
+                    url
+                  }
+                },
+                headline,
+                subtext,
+                buttonText,
+                buttonLink
+              }`
+            )
+          }
+          return Promise.resolve(data);
         })
         .then(data => {
           if (data) {
-            // Debug: log what we received
-            console.log('=== HERO SECTION DATA ===');
-            console.log('Document ID:', data._id);
-            console.log('Button Text:', data.buttonText);
-            console.log('Button Link:', data.buttonLink);
-            console.log('Full data:', JSON.stringify(data, null, 2));
-            
-            // Ensure buttonText and buttonLink are set
+            // Ensure buttonText and buttonLink are set with fallbacks
             const heroDataWithDefaults = {
               ...data,
-              buttonText: data.buttonText || defaultHeroData.buttonText,
+              buttonText: (data.buttonText && typeof data.buttonText === 'string' && data.buttonText.trim() !== '') 
+                ? data.buttonText 
+                : defaultHeroData.buttonText,
               buttonLink: data.buttonLink || defaultHeroData.buttonLink,
             };
             
-            console.log('Setting hero data with buttonText:', heroDataWithDefaults.buttonText);
             setHeroData(heroDataWithDefaults)
             // Reset to first image when new data loads
             if (data.carouselImages && data.carouselImages.length > 0) {
               setCurrentImageIndex(0)
             }
           } else {
-            console.warn('⚠️ No heroSection document found, using default data');
             // Use default data if Sanity returns null
             setHeroData(defaultHeroData)
           }
-          setLoading(false)
         })
         .catch(error => {
-          console.error('❌ Error fetching hero section:', error);
+          console.error('Error fetching hero section:', error);
           // On error, use default data
           setHeroData(defaultHeroData)
-          setLoading(false)
         })
     };
 
@@ -249,13 +230,6 @@ function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '80px' }}>
-        {/* Debug: Log button text being rendered */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="fixed bottom-4 left-4 bg-black/80 text-white p-2 text-xs rounded z-50">
-            Button Text: {heroData.buttonText || 'NOT SET'}
-          </div>
-        )}
-        
         {/* Logo */}
         {logoUrl && (
           <motion.img
@@ -315,6 +289,7 @@ function HeroSection() {
               }
             }
           }}
+          data-button-text={heroData.buttonText || defaultHeroData.buttonText}
           >
           {heroData.buttonText || defaultHeroData.buttonText}
         </motion.a>
