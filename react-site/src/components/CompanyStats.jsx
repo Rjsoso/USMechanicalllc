@@ -218,7 +218,7 @@ const CompanyStats = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <div className="text-5xl font-extrabold mb-2 text-white">
+                <div className="text-5xl font-extrabold mb-2 text-[#c43821]">
                   <AnimatedNumber value={item.value} inView={inView} />
                 </div>
                 <p className="text-lg font-medium text-gray-300">
