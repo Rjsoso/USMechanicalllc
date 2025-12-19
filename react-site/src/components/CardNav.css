@@ -2,8 +2,10 @@
   position: fixed;
   top: 24px;
   right: 24px;
-  width: auto;
-  max-width: 800px;
+  left: auto;
+  width: calc(100% - 200px);
+  max-width: 1200px;
+  min-width: 600px;
   z-index: 99;
   box-sizing: border-box;
 }
@@ -19,7 +21,7 @@
   position: relative;
   overflow: hidden;
   will-change: height;
-  min-width: 200px;
+  width: 100%;
 }
 
 .card-nav-top {
