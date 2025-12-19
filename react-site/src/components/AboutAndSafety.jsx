@@ -623,7 +623,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       gap={40}
                       fadeOut={true}
                       fadeOutColor="#374151"
-                      className="logoloop--fade-left"
                       hoverSpeed={20}
                       externalHoverState={isLoopsHovered}
                       scaleOnHover={true}
@@ -641,7 +640,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       gap={40}
                       fadeOut={true}
                       fadeOutColor="#374151"
-                      className="logoloop--fade-left"
                       hoverSpeed={20}
                       externalHoverState={isLoopsHovered}
                       scaleOnHover={true}
