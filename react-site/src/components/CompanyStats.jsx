@@ -105,26 +105,52 @@ const CompanyStats = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Explicitly exclude drafts and fetch only published content
-      const query = `*[_type == "companyStats" && !(_id in path("drafts.**"))][0]{
-        _id,
-        _updatedAt,
-        title,
-        stats[]{
-          label,
-          value
+      try {
+        // Fetch by specific document ID (matching deskStructure.ts)
+        // First try: Get document with specific ID "companyStats"
+        let query = `*[_type == "companyStats" && _id == "companyStats"][0]{
+          _id,
+          _updatedAt,
+          title,
+          stats[]{
+            label,
+            value
+          }
+        }`;
+        
+        let data = await client.fetch(query);
+        
+        // Fallback: Get first published document if specific ID not found
+        if (!data) {
+          query = `*[_type == "companyStats" && !(_id in path("drafts.**"))][0]{
+            _id,
+            _updatedAt,
+            title,
+            stats[]{
+              label,
+              value
+            }
+          }`;
+          data = await client.fetch(query);
         }
-      }`;
-      // useCdn: false is set in sanity.js, so this fetches fresh data from API
-      const data = await client.fetch(query);
-      setStatsData(data);
-      setLoading(false);
+        
+        setStatsData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching company stats:', error);
+        setLoading(false);
+      }
     };
 
-    fetchData().catch((error) => {
-      console.error('Error fetching company stats:', error);
-      setLoading(false);
-    });
+    fetchData();
+
+    // Refresh data when window regains focus (helps catch updates)
+    const handleFocus = () => {
+      fetchData();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Watch when the section scrolls into view (only after data is loaded)
