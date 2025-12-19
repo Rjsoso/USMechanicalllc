@@ -1,9 +1,10 @@
 .card-nav-container {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  width: auto;
-  max-width: 400px;
+  position: absolute;
+  top: 2em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
   z-index: 99;
   box-sizing: border-box;
 }
@@ -33,6 +34,19 @@
   justify-content: space-between;
   padding: 0.5rem 0.45rem 0.55rem 1.1rem;
   z-index: 2;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo {
+  height: 28px;
 }
 
 .hamburger-menu {
@@ -159,10 +173,7 @@
 @media (max-width: 768px) {
   .card-nav-container {
     width: 90%;
-    max-width: none;
     top: 1.2em;
-    right: 5%;
-    left: auto;
   }
 
   .card-nav {
@@ -176,13 +187,17 @@
   }
 
   .hamburger-menu {
+    order: 2;
+  }
+
+  .logo-container {
+    position: static;
+    transform: none;
     order: 1;
   }
 
   .card-nav-cta-button {
-    order: 2;
-    font-size: 14px;
-    padding: 0 0.75rem;
+    display: none;
   }
 
   .card-nav-content {

@@ -1,6 +1,6 @@
-import { useLayoutEffect, useRef, useState, useEffect } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect, useMemo } from 'react';
 import { gsap } from 'gsap';
-import { client } from '../utils/sanity';
+import { client, urlFor } from '../utils/sanity';
 import './CardNav.css';
 
 // SVG Arrow Icon Component (replaces react-icons)
@@ -48,36 +48,26 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     menuColor: '#000000',           // Hamburger icon color
   };
 
-  // Website sections - automatically generated from actual website sections
-  const websiteSections = [
-    {
-      label: 'About & Services',
-      links: [
-        { label: 'About', href: '#about', ariaLabel: 'Scroll to About section' },
-        { label: 'Services', href: '#services', ariaLabel: 'Scroll to Services section' },
-      ]
-    },
-    {
-      label: 'Portfolio & Careers',
-      links: [
-        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'Scroll to Portfolio section' },
-        { label: 'Careers', href: '#careers', ariaLabel: 'Scroll to Careers section' },
-      ]
-    },
-    {
-      label: 'Contact',
-      links: [
-        { label: 'Contact', href: '#contact', ariaLabel: 'Scroll to Contact section' },
-      ]
-    }
-  ];
-
-  // Fetch navigation data from Sanity (only buttonText now)
+  // Fetch navigation data from Sanity (logo, sections, buttonText)
   useEffect(() => {
     const fetchNavData = async () => {
       try {
         const data = await client.fetch(
           `*[_type == "cardNav"][0]{
+            logo {
+              asset-> {
+                _id,
+                url
+              }
+            },
+            sections[] {
+              label,
+              links[] {
+                label,
+                href,
+                ariaLabel
+              }
+            },
             buttonText
           }`
         );
@@ -215,8 +205,14 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     if (el) cardsRef.current[i] = el;
   };
 
-  // Map website sections to navigation cards with colors
-  const sections = websiteSections.map((section, index) => ({
+  // Memoize logo URL to prevent recalculation
+  const logoUrl = useMemo(() => {
+    if (!navData?.logo || !urlFor(navData.logo)) return null;
+    return urlFor(navData.logo).width(400).quality(90).auto('format').url();
+  }, [navData?.logo]);
+
+  // Map Sanity sections to navigation cards with hardcoded colors
+  const sections = (navData?.sections || []).slice(0, 3).map((section, index) => ({
     ...section,
     bgColor: defaultColors.sections[index]?.bgColor || defaultColors.sections[0].bgColor,
     textColor: defaultColors.sections[index]?.textColor || defaultColors.sections[0].textColor,
@@ -248,6 +244,22 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
             <div className="hamburger-line" />
           </div>
 
+          <div className="logo-container">
+            {logoUrl && (
+              <img 
+                src={logoUrl} 
+                alt="Company Logo" 
+                className="logo"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            )}
+          </div>
+
           <button
             type="button"
             className="card-nav-cta-button"
@@ -259,7 +271,7 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>
-          {sections.slice(0, 3).map((item, idx) => (
+          {sections.map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
               className="nav-card"
