@@ -105,12 +105,17 @@ const CompanyStats = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const query = `*[_type == "companyStats"][0]{
+      // Explicitly exclude drafts and fetch only published content
+      const query = `*[_type == "companyStats" && !(_id in path("drafts.**"))][0]{
+        _id,
+        _updatedAt,
+        title,
         stats[]{
           label,
           value
         }
       }`;
+      // useCdn: false is set in sanity.js, so this fetches fresh data from API
       const data = await client.fetch(query);
       setStatsData(data);
       setLoading(false);
@@ -118,6 +123,7 @@ const CompanyStats = () => {
 
     fetchData().catch((error) => {
       console.error('Error fetching company stats:', error);
+      setLoading(false);
     });
   }, []);
 
