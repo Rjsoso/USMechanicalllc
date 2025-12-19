@@ -75,15 +75,31 @@ export default function ServiceDetail() {
   }, [slug]);
 
   const handleRequestQuote = () => {
-    // Navigate to home page and scroll to contact section
-    navigate('/#contact');
-    // Small delay to ensure navigation completes before scrolling
-    setTimeout(() => {
+    // Store that we want to scroll to contact
+    sessionStorage.setItem('scrollTo', 'contact');
+    navigate('/');
+    // Wait for navigation, then scroll with retry mechanism
+    let retryCount = 0;
+    const maxRetries = 20;
+    const scrollToContact = () => {
       const contactElement = document.querySelector('#contact');
       if (contactElement) {
-        contactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Calculate offset to account for fixed header
+        const headerOffset = 180;
+        const elementPosition = contactElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        sessionStorage.removeItem('scrollTo');
+      } else if (retryCount < maxRetries) {
+        retryCount++;
+        setTimeout(scrollToContact, 150);
       }
-    }, 100);
+    };
+    setTimeout(scrollToContact, 300);
   };
 
   if (loading) {
