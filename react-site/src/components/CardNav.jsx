@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState, useEffect, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { client, urlFor } from '../utils/sanity';
 import './CardNav.css';
@@ -31,6 +32,8 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
   const navRef = useRef(null);
   const cardsRef = useRef([]);
   const tlRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // ============================================
   // DEFAULT COLORS - Edit colors here in code
@@ -194,10 +197,22 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
       toggleMenu();
     }
     
-    // Smooth scroll to section
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // If we're on a different page, navigate to home first
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } else {
+      // Already on home page, just scroll
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 

@@ -1,9 +1,12 @@
 import { useEffect, useState, useMemo, memo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import CardNav from './CardNav';
 
 function Header() {
   const [logo, setLogo] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     client
@@ -35,17 +38,52 @@ function Header() {
     };
   }, [logo]);
 
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
+      // If already on home page, scroll to hero section
+      const heroElement = document.querySelector('#hero');
+      if (heroElement) {
+        heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to home page and scroll to hero
+      navigate('/');
+      setTimeout(() => {
+        const heroElement = document.querySelector('#hero');
+        if (heroElement) {
+          heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <>
       {/* Logo - Separate, positioned in top-left corner */}
       {logoUrls && (
-        <div className="fixed top-4 left-4 z-50">
+        <div 
+          className="fixed top-4 left-4 z-50 cursor-pointer"
+          onClick={handleLogoClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleLogoClick();
+            }
+          }}
+          aria-label="Go to home page"
+        >
           <img
             src={logoUrls.src}
             srcSet={logoUrls.srcSet}
             sizes="(max-width: 768px) 128px, 160px"
             alt="US Mechanical"
-            className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
+            className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500 hover:opacity-80"
             loading="eager"
             fetchPriority="high"
             decoding="async"

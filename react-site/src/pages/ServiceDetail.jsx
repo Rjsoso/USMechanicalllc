@@ -90,7 +90,7 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center">
+        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <p>Loading service...</p>
         </div>
         <Footer />
@@ -102,7 +102,7 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center">
+        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-4">Service Not Found</h1>
             <p className="text-gray-300 mb-8">The service you're looking for doesn't exist.</p>
@@ -122,7 +122,7 @@ export default function ServiceDetail() {
   return (
     <>
       <Header />
-      <main className="bg-gray-700 text-white min-h-screen">
+      <main className="bg-gray-700 text-white min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
