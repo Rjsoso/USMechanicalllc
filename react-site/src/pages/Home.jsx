@@ -12,9 +12,12 @@ const Careers = lazy(() => import('../components/Careers'))
 const Contact = lazy(() => import('../pages/Contact'))
 
 export default function Home() {
-  // Ensure page starts at top on load
+  // Ensure page starts at top on load, unless we're scrolling to a specific section
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const scrollTo = sessionStorage.getItem('scrollTo');
+    if (!scrollTo) {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (

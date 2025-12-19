@@ -127,18 +127,31 @@ export default function ServiceDetail() {
           {/* Back Button */}
           <button
             onClick={() => {
+              // Store that we want to scroll to services
+              sessionStorage.setItem('scrollTo', 'services');
               navigate('/');
               // Wait for navigation, then scroll with retry mechanism
+              let retryCount = 0;
+              const maxRetries = 20;
               const scrollToServices = () => {
                 const servicesElement = document.querySelector('#services');
                 if (servicesElement) {
-                  servicesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                  // Retry if element not found yet
-                  setTimeout(scrollToServices, 100);
+                  // Calculate offset to account for fixed header
+                  const headerOffset = 180;
+                  const elementPosition = servicesElement.getBoundingClientRect().top;
+                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                  
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                  });
+                  sessionStorage.removeItem('scrollTo');
+                } else if (retryCount < maxRetries) {
+                  retryCount++;
+                  setTimeout(scrollToServices, 150);
                 }
               };
-              setTimeout(scrollToServices, 200);
+              setTimeout(scrollToServices, 300);
             }}
             className="mb-8 text-gray-300 hover:text-white transition-colors flex items-center gap-2"
           >
