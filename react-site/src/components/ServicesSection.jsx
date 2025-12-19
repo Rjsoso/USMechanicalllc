@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { client } from '../utils/sanity';
 import CardSwap, { Card } from './CardSwap';
 
 const ServicesSection = () => {
   const [servicesData, setServicesData] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServices = () => {
@@ -16,7 +18,23 @@ const ServicesSection = () => {
             descriptionText,
             servicesInfo[] {
               title,
-              description
+              description,
+              slug {
+                current
+              },
+              fullDescription,
+              images[] {
+                asset-> {
+                  _id,
+                  url
+                },
+                alt,
+                caption
+              },
+              features[] {
+                title,
+                description
+              }
             },
             services[] {
               title,
@@ -43,6 +61,12 @@ const ServicesSection = () => {
   const handleCloseModal = useCallback(() => {
     setSelectedService(null);
   }, []);
+
+  const handleLearnMore = useCallback((service) => {
+    if (service?.slug?.current) {
+      navigate(`/services/${service.slug.current}`);
+    }
+  }, [navigate]);
 
   if (!servicesData) {
     return (
@@ -92,14 +116,23 @@ const ServicesSection = () => {
                 <div
                   key={index}
                   onClick={() => handleServiceClick(box)}
-                  className="p-8 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all"
+                  className="p-8 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all relative"
                 >
                   <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
                   {box.description && (
-                    <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed mb-4">
                       {box.description}
                     </p>
                   )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLearnMore(box);
+                    }}
+                    className="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors"
+                  >
+                    Learn More
+                  </button>
                 </div>
               ))}
             </div>

@@ -35,13 +35,101 @@ export default defineType({
               name: "title",
               type: "string",
               title: "Title",
+              validation: (Rule) => Rule.required(),
             },
             {
               name: "description",
               type: "text",
               title: "Description",
+              description: "Preview text shown in the service box (truncated to 2 lines)",
+            },
+            {
+              name: "slug",
+              type: "slug",
+              title: "URL Slug",
+              description: "URL-friendly identifier for this service (e.g., 'plumbing-services')",
+              options: {
+                source: "title",
+                maxLength: 96,
+              },
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "fullDescription",
+              type: "array",
+              title: "Full Description",
+              description: "Rich text content displayed on the service detail page",
+              of: [
+                {
+                  type: "block",
+                },
+                {
+                  type: "image",
+                  options: { hotspot: true },
+                  fields: [
+                    {
+                      name: "alt",
+                      type: "string",
+                      title: "Alternative Text",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: "images",
+              type: "array",
+              title: "Images",
+              description: "Additional images for the service detail page",
+              of: [
+                {
+                  type: "image",
+                  options: { hotspot: true },
+                  fields: [
+                    {
+                      name: "alt",
+                      type: "string",
+                      title: "Alternative Text",
+                    },
+                    {
+                      name: "caption",
+                      type: "string",
+                      title: "Caption",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: "features",
+              type: "array",
+              title: "Features",
+              description: "List of key features or benefits for this service",
+              of: [
+                {
+                  type: "object",
+                  fields: [
+                    {
+                      name: "title",
+                      type: "string",
+                      title: "Feature Title",
+                    },
+                    {
+                      name: "description",
+                      type: "text",
+                      title: "Feature Description",
+                    },
+                  ],
+                },
+              ],
             },
           ],
+          preview: {
+            select: {
+              title: "title",
+              subtitle: "description",
+            },
+          },
         },
       ],
     },

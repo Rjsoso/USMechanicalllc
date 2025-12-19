@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 const Admin = lazy(() => import('./pages/Admin'))
 const AdminLogin = lazy(() => import('./pages/AdminLogin'))
 const Home = lazy(() => import('./pages/Home'))
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = localStorage.getItem('adminAuthenticated') === 'true'
@@ -30,6 +31,7 @@ function App() {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route
             path="/admin"
