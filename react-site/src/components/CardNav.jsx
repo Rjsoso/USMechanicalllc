@@ -199,25 +199,44 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     
     // If we're on a different page, navigate to home first
     if (location.pathname !== '/') {
+      // Store the target section to prevent Home from scrolling to top
+      const sectionName = href.replace('#', '');
+      sessionStorage.setItem('scrollTo', sectionName);
       navigate('/');
       // Wait for navigation to complete, then scroll with retry mechanism
       let retryCount = 0;
-      const maxRetries = 15; // 1.5 seconds max wait time
+      const maxRetries = 20;
       const scrollToElement = () => {
         const element = document.querySelector(href);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Calculate offset to account for fixed header
+          const headerOffset = 180;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+          sessionStorage.removeItem('scrollTo');
         } else if (retryCount < maxRetries) {
           retryCount++;
-          setTimeout(scrollToElement, 100);
+          setTimeout(scrollToElement, 150);
         }
       };
-      setTimeout(scrollToElement, 200);
+      setTimeout(scrollToElement, 300);
     } else {
-      // Already on home page, just scroll
+      // Already on home page, just scroll with offset
       const element = document.querySelector(href);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const headerOffset = 180;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     }
   };
