@@ -131,7 +131,8 @@ export const LogoLoop = memo(
     renderItem,
     ariaLabel = 'Partner logos',
     className,
-    style
+    style,
+    externalHoverState
   }) => {
     const containerRef = useRef(null);
     const trackRef = useRef(null);
@@ -141,6 +142,10 @@ export const LogoLoop = memo(
     const [seqHeight, setSeqHeight] = useState(0);
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES);
     const [isHovered, setIsHovered] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+
+    // Use external hover state if provided, otherwise use internal state
+    const effectiveHovered = externalHoverState !== undefined ? externalHoverState : isHovered;
 
     const effectiveHoverSpeed = useMemo(() => {
       if (hoverSpeed !== undefined) return hoverSpeed;
@@ -180,11 +185,13 @@ export const LogoLoop = memo(
           const viewport = containerRef.current?.clientHeight ?? parentHeight ?? sequenceHeight;
           const copiesNeeded = Math.ceil(viewport / sequenceHeight) + ANIMATION_CONFIG.COPY_HEADROOM;
           setCopyCount(Math.max(ANIMATION_CONFIG.MIN_COPIES, copiesNeeded));
+          setIsReady(true);
         }
       } else if (sequenceWidth > 0) {
         setSeqWidth(Math.ceil(sequenceWidth));
         const copiesNeeded = Math.ceil(containerWidth / sequenceWidth) + ANIMATION_CONFIG.COPY_HEADROOM;
         setCopyCount(Math.max(ANIMATION_CONFIG.MIN_COPIES, copiesNeeded));
+        setIsReady(true);
       }
     }, [isVertical]);
 
@@ -192,7 +199,7 @@ export const LogoLoop = memo(
 
     useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical]);
 
-    useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, isHovered, effectiveHoverSpeed, isVertical);
+    useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, effectiveHovered, effectiveHoverSpeed, isVertical);
 
     const cssVariables = useMemo(
       () => ({
@@ -218,11 +225,17 @@ export const LogoLoop = memo(
     );
 
     const handleMouseEnter = useCallback(() => {
-      if (effectiveHoverSpeed !== undefined) setIsHovered(true);
-    }, [effectiveHoverSpeed]);
+      // Only handle hover internally if externalHoverState is not provided
+      if (externalHoverState === undefined && effectiveHoverSpeed !== undefined) {
+        setIsHovered(true);
+      }
+    }, [effectiveHoverSpeed, externalHoverState]);
     const handleMouseLeave = useCallback(() => {
-      if (effectiveHoverSpeed !== undefined) setIsHovered(false);
-    }, [effectiveHoverSpeed]);
+      // Only handle hover internally if externalHoverState is not provided
+      if (externalHoverState === undefined && effectiveHoverSpeed !== undefined) {
+        setIsHovered(false);
+      }
+    }, [effectiveHoverSpeed, externalHoverState]);
 
     const renderLogoItem = useCallback(
       (item, key) => {
@@ -298,10 +311,12 @@ export const LogoLoop = memo(
             ? undefined
             : toCssLength(width)
           : (toCssLength(width) ?? '100%'),
+        opacity: isReady ? 1 : 0,
+        transition: 'opacity 0.5s ease-in',
         ...cssVariables,
         ...style
       }),
-      [width, cssVariables, style, isVertical]
+      [width, cssVariables, style, isVertical, isReady]
     );
 
     return (

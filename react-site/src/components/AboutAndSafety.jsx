@@ -9,6 +9,7 @@ import LogoLoop from './LogoLoop'
 export default function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isLoopsHovered, setIsLoopsHovered] = useState(false)
 
   // Default content fallback
   const defaultData = {
@@ -584,7 +585,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
         {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
         {/* All content (text and logos) comes from Sanity CMS */}
-        <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12 relative">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
           {/* Text on left */}
           <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
@@ -603,46 +604,48 @@ Our goal is always simple: complete every project with zero safety issues.`,
             </FadeInWhenVisible>
           </div>
 
-          {/* LogoLoops on right - extends to page edge */}
+          {/* LogoLoops on right - extends to page edge, centered vertically */}
           {safetyLogoItems.length > 0 && (
-            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative`}>
-              <div className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[calc(50vw-50%)] max-w-none">
+            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
+              <div 
+                className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[calc(50vw-50%)] max-w-none"
+                onMouseEnter={() => setIsLoopsHovered(true)}
+                onMouseLeave={() => setIsLoopsHovered(false)}
+              >
                 <div className="space-y-8">
                   {/* Top loop - scrolls left */}
-                  <FadeInWhenVisible delay={0.5}>
-                    <div style={{ height: '120px', position: 'relative' }}>
-                      <LogoLoop
-                        logos={safetyLogoItems}
-                        speed={120}
-                        direction="left"
-                        logoHeight={80}
-                        gap={40}
-                        fadeOut={true}
-                        fadeOutColor="#374151"
-                        pauseOnHover={true}
-                        scaleOnHover={true}
-                        ariaLabel="Safety logos and certifications"
-                      />
-                    </div>
-                  </FadeInWhenVisible>
+                  <div style={{ height: '160px', position: 'relative' }}>
+                    <LogoLoop
+                      logos={safetyLogoItems}
+                      speed={120}
+                      direction="left"
+                      logoHeight={120}
+                      gap={40}
+                      fadeOut={true}
+                      fadeOutColor="#374151"
+                      hoverSpeed={20}
+                      externalHoverState={isLoopsHovered}
+                      scaleOnHover={true}
+                      ariaLabel="Safety logos and certifications"
+                    />
+                  </div>
                   
                   {/* Bottom loop - scrolls right */}
-                  <FadeInWhenVisible delay={0.6}>
-                    <div style={{ height: '120px', position: 'relative' }}>
-                      <LogoLoop
-                        logos={safetyLogoItems}
-                        speed={120}
-                        direction="right"
-                        logoHeight={80}
-                        gap={40}
-                        fadeOut={true}
-                        fadeOutColor="#374151"
-                        pauseOnHover={true}
-                        scaleOnHover={true}
-                        ariaLabel="Safety logos and certifications"
-                      />
-                    </div>
-                  </FadeInWhenVisible>
+                  <div style={{ height: '160px', position: 'relative' }}>
+                    <LogoLoop
+                      logos={safetyLogoItems}
+                      speed={120}
+                      direction="right"
+                      logoHeight={120}
+                      gap={40}
+                      fadeOut={true}
+                      fadeOutColor="#374151"
+                      hoverSpeed={20}
+                      externalHoverState={isLoopsHovered}
+                      scaleOnHover={true}
+                      ariaLabel="Safety logos and certifications"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
