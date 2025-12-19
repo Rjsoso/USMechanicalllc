@@ -462,10 +462,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {carouselItems.length > 0 && (
             <div className="md:w-1/2 w-full order-2 md:order-1 flex justify-center">
               <FadeInWhenVisible>
-                <div className="w-full" style={{ height: '600px', position: 'relative', maxWidth: '700px' }}>
+                <div className="w-full" style={{ height: '500px', position: 'relative', maxWidth: '550px' }}>
                   <Carousel
                     items={carouselItems}
-                    baseWidth={700}
+                    baseWidth={550}
                     autoplay={true}
                     autoplayDelay={4000}
                     pauseOnHover={true}
