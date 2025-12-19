@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { FiArrowRight } from 'react-icons/fi';
 import { client } from '../utils/sanity';
 import CardSwap, { Card } from './CardSwap';
 
@@ -116,7 +117,7 @@ const ServicesSection = () => {
                 <div
                   key={index}
                   onClick={() => handleServiceClick(box)}
-                  className="p-8 rounded-xl bg-black shadow cursor-pointer hover:-translate-y-1 transition-all relative"
+                  className="p-8 rounded-xl bg-black shadow cursor-pointer relative group"
                 >
                   <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
                   {box.description && (
@@ -129,9 +130,10 @@ const ServicesSection = () => {
                       e.stopPropagation();
                       handleLearnMore(box);
                     }}
-                    className="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors"
+                    className="absolute bottom-4 right-4 bg-transparent text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
                   >
                     Learn More
+                    <FiArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               ))}
