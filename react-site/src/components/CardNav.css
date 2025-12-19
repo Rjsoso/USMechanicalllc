@@ -1,19 +1,20 @@
 .card-nav-container {
   position: fixed;
   top: 16px;
-  left: 50%;
-  right: 0;
-  width: 50%;
+  right: 24px;
+  left: auto;
+  width: calc(100% - 200px);
+  max-width: 1200px;
+  min-width: 600px;
   z-index: 99;
   box-sizing: border-box;
-  padding-right: 24px;
 }
 
 .card-nav {
   display: block;
   height: 60px;
   padding: 0;
-  background-color: #374151;
+  background-color: #7C7C7C;
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -175,10 +176,8 @@
     width: 90%;
     max-width: none;
     top: 16px;
-    left: 50%;
-    right: 0;
-    transform: translateX(-50%);
-    padding-right: 0;
+    right: 5%;
+    left: auto;
   }
 
   .card-nav {
