@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { client, urlFor } from '../utils/sanity';
 import { PortableText } from '@portabletext/react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Carousel from '../components/Carousel';
 
 export default function ServiceDetail() {
   const { slug } = useParams();
@@ -101,6 +102,25 @@ export default function ServiceDetail() {
     };
     setTimeout(scrollToContact, 300);
   };
+
+  // Convert images to carousel items format
+  const carouselItems = useMemo(() => {
+    if (!serviceData?.images || !Array.isArray(serviceData.images) || serviceData.images.length === 0) {
+      return [];
+    }
+    return serviceData.images
+      .filter(img => img.asset)
+      .map((img) => {
+        const imageUrl = img.asset.url
+          ? `${img.asset.url}?w=800&q=85&auto=format`
+          : urlFor(img).width(800).quality(85).auto('format').url();
+        return {
+          src: imageUrl,
+          alt: img.alt || `${serviceData.title} image`,
+          caption: img.caption || ''
+        };
+      });
+  }, [serviceData?.images, serviceData?.title]);
 
   if (loading) {
     return (
@@ -220,69 +240,55 @@ export default function ServiceDetail() {
             </motion.div>
           )}
 
-          {/* Images Gallery */}
-          {serviceData.images && serviceData.images.length > 0 && (
+          {/* Images Carousel and Features Side by Side */}
+          {(serviceData.images && serviceData.images.length > 0) || (serviceData.features && serviceData.features.length > 0) ? (
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
+              className="flex flex-col md:flex-row gap-8 mb-12 items-start"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              {serviceData.images.map((img, index) => {
-                if (!img.asset) return null;
-                const imageUrl = img.asset.url
-                  ? `${img.asset.url}?w=800&q=85&auto=format`
-                  : urlFor(img).width(800).quality(85).auto('format').url();
-                
-                return (
-                  <div key={index} className="rounded-xl overflow-hidden">
-                    <img
-                      src={imageUrl}
-                      alt={img.alt || `${serviceData.title} image ${index + 1}`}
-                      className="w-full h-auto object-cover"
-                      loading="lazy"
-                    />
-                    {img.caption && (
-                      <p className="text-sm text-gray-400 mt-2 text-center">
-                        {img.caption}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </motion.div>
-          )}
+              {/* Carousel on Left */}
+              {carouselItems.length > 0 && (
+                <div className="w-full md:w-1/2 flex justify-center">
+                  <Carousel
+                    items={carouselItems}
+                    baseWidth={550}
+                    autoplay={true}
+                    autoplayDelay={4000}
+                    pauseOnHover={true}
+                    loop={true}
+                  />
+                </div>
+              )}
 
-          {/* Features List */}
-          {serviceData.features && serviceData.features.length > 0 && (
-            <motion.div
-              className="mb-12"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <h2 className="text-3xl font-bold mb-6 text-white">Key Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {serviceData.features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="p-6 rounded-xl bg-black border border-gray-600"
-                  >
-                    {feature.title && (
-                      <h3 className="text-xl font-semibold text-white mb-2">
-                        {feature.title}
-                      </h3>
-                    )}
-                    {feature.description && (
-                      <p className="text-gray-300 leading-relaxed">
-                        {feature.description}
-                      </p>
-                    )}
+              {/* Features List on Right */}
+              {serviceData.features && serviceData.features.length > 0 && (
+                <div className={`w-full ${serviceData.images && serviceData.images.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
+                  <h2 className="text-3xl font-bold mb-6 text-white">Key Features</h2>
+                  <div className="space-y-4">
+                    {serviceData.features.map((feature, index) => (
+                      <div
+                        key={index}
+                        className="p-6 rounded-xl bg-black border border-gray-600"
+                      >
+                        {feature.title && (
+                          <h3 className="text-xl font-semibold text-white mb-2">
+                            {feature.title}
+                          </h3>
+                        )}
+                        {feature.description && (
+                          <p className="text-gray-300 leading-relaxed">
+                            {feature.description}
+                          </p>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </motion.div>
-          )}
+          ) : null}
 
           {/* Request a Quote Button */}
           <motion.div
