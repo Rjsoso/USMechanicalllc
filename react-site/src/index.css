@@ -315,6 +315,51 @@ section#contact > div[class*="absolute"] {
   text-transform: uppercase;
 }
 
+/* Ensure prose content sections have grey backgrounds instead of white */
+.prose,
+.prose * {
+  background-color: transparent !important;
+}
+
+.prose pre,
+.prose code,
+.prose blockquote,
+.prose table,
+.prose thead,
+.prose tbody,
+.prose tr,
+.prose td,
+.prose th {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+}
+
+.prose blockquote {
+  border-left-color: #4b5563 !important;
+}
+
+.prose a {
+  color: #60a5fa !important;
+}
+
+.prose a:hover {
+  color: #93c5fd !important;
+}
+
+/* Ensure service detail pages and all content sections have grey backgrounds */
+main.bg-gray-700,
+main.bg-gray-700 *:not(button):not(.bg-white):not(.bg-black) {
+  background-color: #374151 !important;
+}
+
+/* Override any white backgrounds in service detail content */
+main.bg-gray-700 .prose p,
+main.bg-gray-700 .prose div,
+main.bg-gray-700 .prose section,
+main.bg-gray-700 .prose article {
+  background-color: transparent !important;
+}
+
 /* ============================================
    SECTION BACKGROUND RULES - FINAL OVERRIDE
    These rules come last to ensure they override everything
