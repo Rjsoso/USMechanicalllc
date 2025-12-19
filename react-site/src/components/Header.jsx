@@ -45,7 +45,7 @@ function Header() {
             srcSet={logoUrls.srcSet}
             sizes="(max-width: 768px) 128px, 160px"
             alt="US Mechanical"
-            className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500"
+            className="h-32 md:h-40 w-auto object-contain transition-all duration-500"
             loading="eager"
             fetchPriority="high"
             decoding="async"
