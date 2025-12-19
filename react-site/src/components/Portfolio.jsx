@@ -87,7 +87,7 @@ function Portfolio() {
         {!selectedCategory ? (
           <>
             <h2 className="section-title text-5xl md:text-6xl text-center mb-4 text-white">
-              Our Portfolio
+              Our Projects
             </h2>
             <p className="text-center text-gray-200 mb-12 max-w-2xl mx-auto">
               Explore our completed projects by category
