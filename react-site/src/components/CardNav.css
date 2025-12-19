@@ -1,9 +1,8 @@
 .card-nav-container {
-  position: absolute;
-  top: 2em;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: auto;
   max-width: 800px;
   z-index: 99;
   box-sizing: border-box;
@@ -173,7 +172,10 @@
 @media (max-width: 768px) {
   .card-nav-container {
     width: 90%;
+    max-width: none;
     top: 1.2em;
+    right: 5%;
+    left: auto;
   }
 
   .card-nav {
