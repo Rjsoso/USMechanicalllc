@@ -1,6 +1,6 @@
 .card-nav-container {
   position: fixed;
-  top: 24px;
+  top: 16px;
   right: 24px;
   left: auto;
   width: calc(100% - 200px);
@@ -14,7 +14,7 @@
   display: block;
   height: 60px;
   padding: 0;
-  background-color: white;
+  background-color: #374151;
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -175,7 +175,7 @@
   .card-nav-container {
     width: 90%;
     max-width: none;
-    top: 1.2em;
+    top: 16px;
     right: 5%;
     left: auto;
   }

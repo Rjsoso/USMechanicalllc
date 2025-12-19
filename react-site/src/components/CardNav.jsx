@@ -44,8 +44,8 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     ],
     buttonBgColor: '#111111',      // CTA button background color
     buttonTextColor: '#ffffff',    // CTA button text color
-    baseColor: '#ffffff',           // Navigation bar background color
-    menuColor: '#000000',           // Hamburger icon color
+    baseColor: '#374151',           // Navigation bar background color (grey-700 to match logo)
+    menuColor: '#ffffff',           // Hamburger icon color (white for visibility on grey)
   };
 
   // Fetch navigation data from Sanity (logo, sections, buttonText)
