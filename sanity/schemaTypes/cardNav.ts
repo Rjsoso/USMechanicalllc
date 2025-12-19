@@ -12,7 +12,6 @@ export default defineType({
       description: 'Company logo displayed in the center of the navigation bar',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
     },
     {
       name: 'sections',
@@ -54,7 +53,10 @@ export default defineType({
                       validation: (Rule) => 
                         Rule.required()
                           .custom((href) => {
-                            if (href && !href.startsWith('#')) {
+                            if (!href || href.trim() === '') {
+                              return 'Section ID is required'
+                            }
+                            if (!href.startsWith('#')) {
                               return 'Must start with # (e.g., #about)'
                             }
                             if (href === '#hero') {
@@ -78,7 +80,7 @@ export default defineType({
                   },
                 },
               ],
-              validation: (Rule) => Rule.min(1).max(5),
+              validation: (Rule) => Rule.min(1).max(5).error('Each section must have at least 1 link and no more than 5 links'),
             },
           ],
           preview: {
