@@ -7,6 +7,10 @@
   --logoloop-fadeColorAuto: #ffffff;
 }
 
+.logoloop--fade-left.logoloop--fade::after {
+  display: none;
+}
+
 .logoloop--vertical {
   height: 100%;
   display: inline-block;
