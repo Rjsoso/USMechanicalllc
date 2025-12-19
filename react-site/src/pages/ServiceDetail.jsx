@@ -126,7 +126,20 @@ export default function ServiceDetail() {
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              navigate('/');
+              // Wait for navigation, then scroll with retry mechanism
+              const scrollToServices = () => {
+                const servicesElement = document.querySelector('#services');
+                if (servicesElement) {
+                  servicesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                  // Retry if element not found yet
+                  setTimeout(scrollToServices, 100);
+                }
+              };
+              setTimeout(scrollToServices, 200);
+            }}
             className="mb-8 text-gray-300 hover:text-white transition-colors flex items-center gap-2"
           >
             <svg

@@ -200,13 +200,19 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     // If we're on a different page, navigate to home first
     if (location.pathname !== '/') {
       navigate('/');
-      // Wait for navigation to complete, then scroll
-      setTimeout(() => {
+      // Wait for navigation to complete, then scroll with retry mechanism
+      let retryCount = 0;
+      const maxRetries = 15; // 1.5 seconds max wait time
+      const scrollToElement = () => {
         const element = document.querySelector(href);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(scrollToElement, 100);
         }
-      }, 100);
+      };
+      setTimeout(scrollToElement, 200);
     } else {
       // Already on home page, just scroll
       const element = document.querySelector(href);
