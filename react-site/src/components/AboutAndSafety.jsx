@@ -608,7 +608,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {safetyLogoItems.length > 0 && (
             <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
               <div
-                className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[45vw] max-w-none overflow-hidden"
+                className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[48vw] max-w-none overflow-hidden"
                 onMouseEnter={() => setIsLoopsHovered(true)}
                 onMouseLeave={() => setIsLoopsHovered(false)}
               >
