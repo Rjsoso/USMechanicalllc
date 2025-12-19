@@ -2,8 +2,8 @@
   position: fixed;
   top: 16px;
   right: 24px;
-  left: auto;
-  width: calc(100% - 200px);
+  left: 200px;
+  width: auto;
   max-width: 1200px;
   min-width: 600px;
   z-index: 99;
@@ -14,7 +14,7 @@
   display: block;
   height: 60px;
   padding: 0;
-  background-color: #7B7F84;
+  background-color: #7B7F85;
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
