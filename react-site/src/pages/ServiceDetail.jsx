@@ -6,6 +6,7 @@ import { PortableText } from '@portabletext/react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
+import FadeInWhenVisible from '../components/FadeInWhenVisible';
 
 export default function ServiceDetail() {
   const { slug } = useParams();
@@ -103,23 +104,24 @@ export default function ServiceDetail() {
     setTimeout(scrollToContact, 300);
   };
 
-  // Convert images to carousel items format
+  // Map images to carousel items format (exact same as AboutAndSafety)
   const carouselItems = useMemo(() => {
     if (!serviceData?.images || !Array.isArray(serviceData.images) || serviceData.images.length === 0) {
       return [];
     }
-    return serviceData.images
-      .filter(img => img.asset)
-      .map((img) => {
-        const imageUrl = img.asset.url
-          ? `${img.asset.url}?w=800&q=85&auto=format`
-          : urlFor(img).width(800).quality(85).auto('format').url();
-        return {
-          src: imageUrl,
-          alt: img.alt || `${serviceData.title} image`,
-          caption: img.caption || ''
-        };
-      });
+    
+    return serviceData.images.map((photo, index) => {
+      if (!photo || !photo.asset) return null;
+      const imageUrl = photo.asset.url
+        ? `${photo.asset.url}?w=800&q=85&auto=format`
+        : urlFor(photo).width(800).quality(85).auto('format').url();
+      return {
+        id: `service-photo-${index}`,
+        src: imageUrl,
+        alt: photo.alt || `${serviceData.title} ${index + 1}`,
+        caption: photo.caption || null
+      };
+    }).filter(Boolean);
   }, [serviceData?.images, serviceData?.title]);
 
   if (loading) {
@@ -243,48 +245,57 @@ export default function ServiceDetail() {
           {/* Images Carousel and Features Side by Side */}
           {(serviceData.images && serviceData.images.length > 0) || (serviceData.features && serviceData.features.length > 0) ? (
             <motion.div
-              className="flex flex-col md:flex-row gap-8 mb-12 items-start"
+              className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              {/* Carousel on Left */}
+              {/* Carousel on left, features on right (or reverse on mobile) */}
               {carouselItems.length > 0 && (
-                <div className="w-full md:w-1/2 flex justify-center">
-                  <Carousel
-                    items={carouselItems}
-                    baseWidth={550}
-                    autoplay={true}
-                    autoplayDelay={4000}
-                    pauseOnHover={true}
-                    loop={true}
-                  />
+                <div className="md:w-1/2 w-full order-2 md:order-1 flex justify-center">
+                  <FadeInWhenVisible>
+                    <div className="w-full" style={{ height: '500px', position: 'relative', maxWidth: '550px' }}>
+                      <Carousel
+                        items={carouselItems}
+                        baseWidth={550}
+                        autoplay={true}
+                        autoplayDelay={4000}
+                        pauseOnHover={true}
+                        loop={true}
+                        round={false}
+                      />
+                    </div>
+                  </FadeInWhenVisible>
                 </div>
               )}
 
               {/* Features List on Right */}
               {serviceData.features && serviceData.features.length > 0 && (
-                <div className={`w-full ${serviceData.images && serviceData.images.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
-                  <h2 className="text-3xl font-bold mb-6 text-white">Key Features</h2>
-                  <div className="space-y-4">
-                    {serviceData.features.map((feature, index) => (
-                      <div
-                        key={index}
-                        className="p-6 rounded-xl bg-black border border-gray-600"
-                      >
-                        {feature.title && (
-                          <h3 className="text-xl font-semibold text-white mb-2">
-                            {feature.title}
-                          </h3>
-                        )}
-                        {feature.description && (
-                          <p className="text-gray-300 leading-relaxed">
-                            {feature.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                <div className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
+                  <FadeInWhenVisible delay={0.1}>
+                    <h2 className="text-3xl font-bold mb-6 text-white">Key Features</h2>
+                  </FadeInWhenVisible>
+                  <FadeInWhenVisible delay={0.2}>
+                    <div className="space-y-4">
+                      {serviceData.features.map((feature, index) => (
+                        <div
+                          key={index}
+                          className="p-6 rounded-xl bg-black border border-gray-600"
+                        >
+                          {feature.title && (
+                            <h3 className="text-xl font-semibold text-white mb-2">
+                              {feature.title}
+                            </h3>
+                          )}
+                          {feature.description && (
+                            <p className="text-gray-300 leading-relaxed">
+                              {feature.description}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </FadeInWhenVisible>
                 </div>
               )}
             </motion.div>
