@@ -78,6 +78,7 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
       description: 'First photo displayed with the Safety & Risk Management section',
+      hidden: true, // Hidden for backward compatibility
       fields: [
         {
           name: 'alt',
@@ -99,6 +100,7 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
       description: 'Second photo displayed below the first Safety photo',
+      hidden: true, // Hidden for backward compatibility
       fields: [
         {
           name: 'alt',
@@ -113,6 +115,60 @@ export default defineType({
           description: 'Optional caption for the image',
         },
       ],
+    },
+    {
+      name: 'safetyLogos',
+      title: 'Safety Logos & Images',
+      description: 'Logos and images displayed in rotating loops in the Safety section. Items cycle seamlessly between the two loops.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+              description: 'Upload an image/logo',
+              fields: [
+                {
+                  name: 'alt',
+                  type: 'string',
+                  title: 'Alternative Text',
+                  description: 'Important for accessibility',
+                },
+              ],
+            },
+            {
+              name: 'icon',
+              title: 'Icon Name',
+              type: 'string',
+              description: 'Optional: Icon name from react-icons (e.g., "SiReact", "SiNextdotjs"). Leave empty if using image.',
+            },
+            {
+              name: 'title',
+              title: 'Title',
+              type: 'string',
+              description: 'Title/name for this logo/item',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'href',
+              title: 'Link URL',
+              type: 'url',
+              description: 'Optional: Link URL for this logo/item',
+            },
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              media: 'image',
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.min(1).max(20),
     },
   ],
 })

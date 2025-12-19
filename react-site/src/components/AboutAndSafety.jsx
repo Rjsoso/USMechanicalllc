@@ -4,6 +4,7 @@ import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import FadeInWhenVisible from './FadeInWhenVisible'
 import Carousel from './Carousel'
+import LogoLoop from './LogoLoop'
 
 export default function AboutAndSafety() {
   const [data, setData] = useState(null)
@@ -150,6 +151,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
               alt,
               caption
             },
+            safetyLogos[] {
+              image {
+                asset-> {
+                  _id,
+                  url,
+                  originalFilename
+                },
+                alt
+              },
+              icon,
+              title,
+              href
+            },
             "safetyImageExists": defined(safetyImage),
             "safetyImageHasAsset": defined(safetyImage.asset)
           }`)
@@ -208,6 +222,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
               alt,
               caption
             },
+            safetyLogos[] {
+              image {
+                asset-> {
+                  _id,
+                  url,
+                  originalFilename
+                },
+                alt
+              },
+              icon,
+              title,
+              href
+            },
             "safetyImageExists": defined(safetyImage),
             "safetyImageHasAsset": defined(safetyImage.asset)
           }`)
@@ -265,6 +292,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
               },
               alt,
               caption
+            },
+            safetyLogos[] {
+              image {
+                asset-> {
+                  _id,
+                  url,
+                  originalFilename
+                },
+                alt
+              },
+              icon,
+              title,
+              href
             },
             "safetyImageExists": defined(safetyImage),
             "safetyImageHasAsset": defined(safetyImage.asset)
@@ -446,6 +486,59 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.aboutPhotos, data?.photo1]);
 
+  // Transform safetyLogos to LogoLoop format
+  const safetyLogoItems = useMemo(() => {
+    if (!data?.safetyLogos || !Array.isArray(data.safetyLogos) || data.safetyLogos.length === 0) {
+      // Fallback to safetyImage and safetyImage2 if safetyLogos is empty
+      const fallbackItems = [];
+      if (data?.safetyImage && data.safetyImage.asset) {
+        const imageUrl = data.safetyImage.asset.url
+          ? `${data.safetyImage.asset.url}?w=200&q=85&auto=format`
+          : urlFor(data.safetyImage).width(200).quality(85).auto('format').url();
+        fallbackItems.push({
+          src: imageUrl,
+          alt: data.safetyImage.alt || 'Safety image',
+          title: data.safetyImage.caption || 'Safety image',
+          href: undefined
+        });
+      }
+      if (data?.safetyImage2 && data.safetyImage2.asset) {
+        const imageUrl = data.safetyImage2.asset.url
+          ? `${data.safetyImage2.asset.url}?w=200&q=85&auto=format`
+          : urlFor(data.safetyImage2).width(200).quality(85).auto('format').url();
+        fallbackItems.push({
+          src: imageUrl,
+          alt: data.safetyImage2.alt || 'Safety image 2',
+          title: data.safetyImage2.caption || 'Safety image 2',
+          href: undefined
+        });
+      }
+      return fallbackItems;
+    }
+
+    return data.safetyLogos.map((item, index) => {
+      if (!item) return null;
+      
+      // Handle image-based items
+      if (item.image && item.image.asset) {
+        const imageUrl = item.image.asset.url
+          ? `${item.image.asset.url}?w=200&q=85&auto=format`
+          : urlFor(item.image).width(200).quality(85).auto('format').url();
+        return {
+          src: imageUrl,
+          alt: item.image.alt || item.title || `Safety logo ${index + 1}`,
+          title: item.title || item.image.alt || `Safety logo ${index + 1}`,
+          href: item.href || undefined
+        };
+      }
+      
+      // Handle icon-based items (for future use with react-icons)
+      // For now, skip icon items if no image is provided
+      // This can be extended later to support icon components
+      return null;
+    }).filter(Boolean);
+  }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
+
   if (loading || !data) {
     return (
       <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
@@ -489,16 +582,16 @@ Our goal is always simple: complete every project with zero safety issues.`,
           </div>
         </div>
 
-        {/* SAFETY SECTION - Text + Image Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
-        {/* All content (text and images) comes from Sanity CMS */}
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          {/* Text on left, image on right */}
-          <div className={`${(data.safetyImage && data.safetyImage.asset) || (data.safetyImage2 && data.safetyImage2.asset) ? 'md:w-1/2' : 'w-full'}`}>
+        {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
+        {/* All content (text and logos) comes from Sanity CMS */}
+        <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12 relative">
+          {/* Text on left */}
+          <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
             <FadeInWhenVisible delay={0.3}>
               <h3 className="section-title text-5xl md:text-6xl mb-4 text-white">
-              {data.safetyTitle}
-            </h3>
-          </FadeInWhenVisible>
+                {data.safetyTitle}
+              </h3>
+            </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.4}>
               <div className="text-lg text-gray-300 leading-relaxed">
                 {Array.isArray(data.safetyText) ? (
@@ -507,153 +600,50 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   <p className="whitespace-pre-line">{data.safetyText}</p>
                 )}
               </div>
-          </FadeInWhenVisible>
+            </FadeInWhenVisible>
           </div>
 
-          {/* Debug info */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="mb-4 p-4 bg-yellow-900 text-yellow-200 text-xs rounded">
-              <strong>DEBUG:</strong> safetyImage: {data.safetyImage ? 'exists' : 'null'}, 
-              Has asset: {data.safetyImage?.asset ? 'yes' : 'no'}
-            </div>
-          )}
-
-          {(data.safetyImage && data.safetyImage.asset) || (data.safetyImage2 && data.safetyImage2.asset) ? (
-            <div className="md:w-1/2">
-              <div className="space-y-4">
-                {/* First Safety Image */}
-                {data.safetyImage && data.safetyImage.asset && (
+          {/* LogoLoops on right - extends to page edge */}
+          {safetyLogoItems.length > 0 && (
+            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative`}>
+              <div className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[calc(50vw-50%)] max-w-none">
+                <div className="space-y-8">
+                  {/* Top loop - scrolls left */}
                   <FadeInWhenVisible delay={0.5}>
-                    <div className="relative bg-black rounded-2xl overflow-hidden p-4">
-                      {(() => {
-                        const img = data.safetyImage;
-                        console.log('=== RENDERING Safety Image ===');
-                        console.log('Image object:', img);
-                        
-                        // Check if image has valid asset data
-                        if (!img || !img.asset) {
-                          console.warn('❌ Safety image is missing asset data:', img);
-                          return null;
-                        }
-                        
-                        // Build image URL - handle both expanded asset and urlFor
-                        let imageUrl;
-                        try {
-                          // First, try to use urlFor - it handles most cases including references
-                          if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
-                            const urlBuilder = urlFor(img);
-                            if (urlBuilder) {
-                              imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
-                            }
-                          }
-                          
-                          // Fallback: If asset is expanded with URL, use it directly with optimization
-                          if (!imageUrl && img.asset?.url) {
-                            imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                          }
-                          
-                          if (!imageUrl) {
-                            console.error('❌ Could not generate image URL. Image structure:', JSON.stringify(img, null, 2));
-                            return null;
-                          }
-                          
-                          return (
-                            <>
-                              <img
-                                src={imageUrl}
-                                className="safety-photo w-full"
-                                alt={img?.alt || 'Safety image'}
-                                loading="lazy"
-                                style={{ height: 'auto', minHeight: '200px' }}
-                                onError={(e) => {
-                                  console.error('❌ Failed to load safety image:', imageUrl);
-                                  e.target.style.display = 'none';
-                                }}
-                              />
-                              {img?.caption && (
-                                <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                              )}
-                            </>
-                          );
-                        } catch (error) {
-                          console.error('❌ Error generating URL for safety image:', error);
-                          return null;
-                        }
-                      })()}
+                    <div style={{ height: '120px', position: 'relative' }}>
+                      <LogoLoop
+                        logos={safetyLogoItems}
+                        speed={120}
+                        direction="left"
+                        logoHeight={80}
+                        gap={40}
+                        fadeOut={true}
+                        fadeOutColor="#374151"
+                        pauseOnHover={true}
+                        scaleOnHover={true}
+                        ariaLabel="Safety logos and certifications"
+                      />
                     </div>
                   </FadeInWhenVisible>
-                )}
-                
-                {/* Second Safety Image */}
-                {data.safetyImage2 && data.safetyImage2.asset && (
+                  
+                  {/* Bottom loop - scrolls right */}
                   <FadeInWhenVisible delay={0.6}>
-                    <div className="relative bg-black rounded-2xl overflow-hidden p-4">
-                      {(() => {
-                        const img = data.safetyImage2;
-                        console.log('=== RENDERING Safety Image 2 ===');
-                        
-                        // Check if image has valid asset data
-                        if (!img || !img.asset) {
-                          console.warn('❌ Safety image 2 is missing asset data:', img);
-                          return null;
-                        }
-                        
-                        // Build image URL - handle both expanded asset and urlFor
-                        let imageUrl;
-                        try {
-                          // First, try to use urlFor - it handles most cases including references
-                          if (img && (img.asset?._ref || img.asset?._id || img.asset?.url)) {
-                            const urlBuilder = urlFor(img);
-                            if (urlBuilder) {
-                              imageUrl = urlBuilder.width(600).quality(85).auto('format').url();
-                            }
-                          }
-                          
-                          // Fallback: If asset is expanded with URL, use it directly with optimization
-                          if (!imageUrl && img.asset?.url) {
-                            imageUrl = `${img.asset.url}?w=600&q=85&auto=format`;
-                          }
-                          
-                          if (!imageUrl) {
-                            console.error('❌ Could not generate image URL for safety image 2');
-                            return null;
-                          }
-                          
-                          return (
-                            <>
-                              <img
-                                src={imageUrl}
-                                className="safety-photo w-full"
-                                alt={img?.alt || 'Safety image 2'}
-                                loading="lazy"
-                                style={{ height: 'auto', minHeight: '200px' }}
-                                onError={(e) => {
-                                  console.error('❌ Failed to load safety image 2:', imageUrl);
-                                  e.target.style.display = 'none';
-                                }}
-                              />
-                              {img?.caption && (
-                                <p className="text-sm text-gray-400 mt-2 text-center">{img.caption}</p>
-                              )}
-                            </>
-                          );
-                        } catch (error) {
-                          console.error('❌ Error generating URL for safety image 2:', error);
-                          return null;
-                        }
-                      })()}
+                    <div style={{ height: '120px', position: 'relative' }}>
+                      <LogoLoop
+                        logos={safetyLogoItems}
+                        speed={120}
+                        direction="right"
+                        logoHeight={80}
+                        gap={40}
+                        fadeOut={true}
+                        fadeOutColor="#374151"
+                        pauseOnHover={true}
+                        scaleOnHover={true}
+                        ariaLabel="Safety logos and certifications"
+                      />
                     </div>
                   </FadeInWhenVisible>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="md:w-1/2">
-              <div className="p-4 bg-gray-600 rounded text-center">
-                <p className="text-gray-300">No safety image found.</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Check console for details. Make sure image is published in Sanity Studio.
-                </p>
+                </div>
               </div>
             </div>
           )}
