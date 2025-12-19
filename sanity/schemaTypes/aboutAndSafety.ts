@@ -18,11 +18,39 @@ export default defineType({
       description: 'Text content for the About section',
     },
     {
+      name: 'aboutPhotos',
+      title: 'About Photos',
+      description: 'Multiple photos displayed in a carousel with the About section',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              description: 'Important for accessibility. Describe what is shown in the image.',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: 'Optional caption for the image',
+            },
+          ],
+        },
+      ],
+      validation: (Rule) => Rule.min(1).max(10),
+    },
+    {
       name: 'photo1',
-      title: 'About Photo',
+      title: 'About Photo (Legacy)',
       type: 'image',
       options: { hotspot: true },
-      description: 'Photo displayed with the About section',
+      description: 'Legacy single photo field. Use About Photos array instead.',
+      hidden: true,
       fields: [
         {
           name: 'alt',

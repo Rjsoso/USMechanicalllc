@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import FadeInWhenVisible from './FadeInWhenVisible'
+import Carousel from './Carousel'
 
 export default function AboutAndSafety() {
   const [data, setData] = useState(null)
@@ -108,6 +109,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
             _rev,
             aboutTitle,
             aboutText,
+            aboutPhotos[] {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt,
+              caption
+            },
             photo1 {
               asset-> {
                 _id,
@@ -157,6 +167,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
             _rev,
             aboutTitle,
             aboutText,
+            aboutPhotos[] {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt,
+              caption
+            },
             photo1 {
               asset-> {
                 _id,
@@ -206,6 +225,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
             _rev,
             aboutTitle,
             aboutText,
+            aboutPhotos[] {
+              asset-> {
+                _id,
+                url,
+                originalFilename
+              },
+              alt,
+              caption
+            },
             photo1 {
               asset-> {
                 _id,
@@ -386,6 +414,38 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }
   }, [loading, data])
 
+  // Map aboutPhotos to carousel items format
+  const carouselItems = useMemo(() => {
+    if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
+      // Fallback to photo1 if aboutPhotos is empty
+      if (data?.photo1 && data.photo1.asset) {
+        const imageUrl = data.photo1.asset.url 
+          ? `${data.photo1.asset.url}?w=800&q=85&auto=format`
+          : urlFor(data.photo1).width(800).quality(85).auto('format').url();
+        return [{
+          id: 'photo1',
+          src: imageUrl,
+          alt: data.photo1.alt || "About US Mechanical",
+          caption: null
+        }];
+      }
+      return [];
+    }
+    
+    return data.aboutPhotos.map((photo, index) => {
+      if (!photo || !photo.asset) return null;
+      const imageUrl = photo.asset.url
+        ? `${photo.asset.url}?w=800&q=85&auto=format`
+        : urlFor(photo).width(800).quality(85).auto('format').url();
+      return {
+        id: `about-photo-${index}`,
+        src: imageUrl,
+        alt: photo.alt || `About US Mechanical ${index + 1}`,
+        caption: photo.caption || null
+      };
+    }).filter(Boolean);
+  }, [data?.aboutPhotos, data?.photo1]);
+
   if (loading || !data) {
     return (
       <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
@@ -398,25 +458,26 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* ABOUT SECTION - Image + Text Horizontal (side-by-side on desktop, stacked on mobile) */}
         {/* All content (text and images) comes from Sanity CMS */}
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-20">
-          {/* Image on left, text on right (or reverse on mobile) */}
-          {data.photo1 && data.photo1.asset && (
-            <div className="md:w-1/2 order-2 md:order-1">
-          <FadeInWhenVisible>
-                <img
-                  src={data.photo1.asset.url ? `${data.photo1.asset.url}?w=600&q=85&auto=format` : urlFor(data.photo1).width(600).url()}
-                  alt={data.photo1.alt || "About US Mechanical"}
-                  className="rounded-2xl shadow-lg w-full object-cover"
-                  loading="lazy"
-                  onError={(e) => {
-                    console.error('Failed to load about photo:', data.photo1);
-                    e.target.style.display = 'none';
-                  }}
-                />
-          </FadeInWhenVisible>
+          {/* Carousel on left, text on right (or reverse on mobile) */}
+          {carouselItems.length > 0 && (
+            <div className="md:w-1/2 w-full order-2 md:order-1 flex justify-center">
+              <FadeInWhenVisible>
+                <div className="w-full" style={{ height: '600px', position: 'relative', maxWidth: '700px' }}>
+                  <Carousel
+                    items={carouselItems}
+                    baseWidth={700}
+                    autoplay={true}
+                    autoplayDelay={4000}
+                    pauseOnHover={true}
+                    loop={true}
+                    round={false}
+                  />
+                </div>
+              </FadeInWhenVisible>
             </div>
           )}
 
-          <div className={`${data.photo1 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
+          <div className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
           <FadeInWhenVisible delay={0.1}>
               <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">{data.aboutTitle}</h2>
             </FadeInWhenVisible>
