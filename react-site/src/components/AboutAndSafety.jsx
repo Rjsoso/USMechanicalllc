@@ -565,18 +565,20 @@ Our goal is always simple: complete every project with zero safety issues.`,
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/60 to-transparent pointer-events-none" />
             <div className="absolute inset-0 flex items-center">
-              <div className="max-w-5xl mx-auto px-6">
-                <div className="space-y-4 md:space-y-6 bg-black/0">
-                  <FadeInWhenVisible delay={0.1}>
-                    <h2 className="section-title text-5xl md:text-6xl text-white">
-                      {data.aboutTitle}
-                    </h2>
-                  </FadeInWhenVisible>
-                  <FadeInWhenVisible delay={0.2}>
-                    <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line max-w-3xl">
-                      {data.aboutText}
-                    </p>
-                  </FadeInWhenVisible>
+              <div className="w-full">
+                <div className="max-w-6xl mx-auto px-6 flex justify-end">
+                  <div className="space-y-4 md:space-y-6 bg-black/0 max-w-3xl text-right">
+                    <FadeInWhenVisible delay={0.1}>
+                      <h2 className="section-title text-5xl md:text-6xl text-white">
+                        {data.aboutTitle}
+                      </h2>
+                    </FadeInWhenVisible>
+                    <FadeInWhenVisible delay={0.2}>
+                      <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line">
+                        {data.aboutText}
+                      </p>
+                    </FadeInWhenVisible>
+                  </div>
                 </div>
               </div>
             </div>
