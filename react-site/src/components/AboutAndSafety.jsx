@@ -476,8 +476,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
     return data.aboutPhotos.map((photo, index) => {
       if (!photo || !photo.asset) return null;
       const imageUrl = photo.asset.url
-        ? `${photo.asset.url}?w=800&q=85&auto=format`
-        : urlFor(photo).width(800).quality(85).auto('format').url();
+        ? `${photo.asset.url}?w=1400&q=92&auto=format`
+        : urlFor(photo).width(1400).quality(92).auto('format').url();
       return {
         id: `about-photo-${index}`,
         src: imageUrl,
@@ -563,7 +563,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 round={false}
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/60 to-transparent pointer-events-none" />
             <div className="absolute inset-0 flex items-center">
               <div className="w-full">
                 <div className="max-w-6xl mx-auto px-6 flex justify-end">
