@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
@@ -10,6 +10,8 @@ export default function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
+  const safetySectionRef = useRef(null)
+  const [safetySlide, setSafetySlide] = useState(0)
 
   // Default content fallback
   const defaultData = {
@@ -540,6 +542,29 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
+  // Lightweight scroll-driven slide effect for Safety section
+  useEffect(() => {
+    const updateSlide = () => {
+      const node = safetySectionRef.current
+      if (!node) return
+      const rect = node.getBoundingClientRect()
+      const triggerStart = window.innerHeight * 0.3
+      const triggerEnd = window.innerHeight * 0.8
+      const rawProgress = 1 - (rect.top - triggerStart) / (triggerEnd - triggerStart)
+      const progress = Math.min(1, Math.max(0, rawProgress))
+      const translate = -80 * progress // up to -80px lift
+      setSafetySlide(translate)
+    }
+
+    updateSlide()
+    window.addEventListener('scroll', updateSlide, { passive: true })
+    window.addEventListener('resize', updateSlide)
+    return () => {
+      window.removeEventListener('scroll', updateSlide)
+      window.removeEventListener('resize', updateSlide)
+    }
+  }, [])
+
   if (loading || !data) {
     return (
       <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
@@ -587,7 +612,16 @@ Our goal is always simple: complete every project with zero safety issues.`,
         </div>
       </section>
 
-      <section id="safety" className="py-20 bg-white text-gray-900 relative z-10 -mt-10">
+      <section
+        id="safety"
+        ref={safetySectionRef}
+        className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
+        style={{
+          transform: `translateY(${safetySlide}px)`,
+          transition: 'transform 80ms linear',
+          willChange: 'transform'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-6">
           {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
           {/* All content (text and logos) comes from Sanity CMS */}
