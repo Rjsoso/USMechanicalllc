@@ -548,7 +548,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   return (
     <>
-      <section id="about" className="py-20 text-white bg-gray-700">
+      <section id="about" className="py-20 text-white bg-gray-700 relative z-0">
         <div className="max-w-7xl mx-auto px-6">
           {/* ABOUT SECTION - Full-width carousel with overlay text */}
           {carouselItems.length > 0 && (
@@ -567,19 +567,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
             <div className="absolute inset-0 flex items-center">
               <div className="w-full">
                 <div className="max-w-6xl mx-auto px-6 flex justify-end">
-                  <div className="bg-black/55 backdrop-blur-[1px] rounded-lg p-5 md:p-6 lg:p-7 max-w-3xl text-right shadow-xl">
-                    <div className="space-y-4 md:space-y-6">
-                      <FadeInWhenVisible delay={0.1}>
-                        <h2 className="section-title text-5xl md:text-6xl text-white">
-                          {data.aboutTitle}
-                        </h2>
-                      </FadeInWhenVisible>
-                      <FadeInWhenVisible delay={0.2}>
-                        <p className="text-lg text-gray-100 leading-relaxed whitespace-pre-line">
-                          {data.aboutText}
-                        </p>
-                      </FadeInWhenVisible>
-                    </div>
+                  <div className="space-y-4 md:space-y-6 max-w-3xl text-right">
+                    <FadeInWhenVisible delay={0.1}>
+                      <h2 className="section-title text-5xl md:text-6xl text-white">
+                        {data.aboutTitle}
+                      </h2>
+                    </FadeInWhenVisible>
+                    <FadeInWhenVisible delay={0.2}>
+                      <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line">
+                        {data.aboutText}
+                      </p>
+                    </FadeInWhenVisible>
                   </div>
                 </div>
               </div>
@@ -589,10 +587,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         </div>
       </section>
 
-      <div className="relative">
-        <div className="pointer-events-none absolute left-0 right-0 top-0 -mt-10 h-16 bg-gradient-to-b from-gray-700 via-gray-700/60 to-white/0" />
-      </div>
-      <section id="safety" className="py-20 bg-white text-gray-900">
+      <section id="safety" className="py-20 bg-white text-gray-900 relative z-10 -mt-10">
         <div className="max-w-7xl mx-auto px-6">
           {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
           {/* All content (text and logos) comes from Sanity CMS */}
