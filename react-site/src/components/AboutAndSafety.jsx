@@ -547,112 +547,118 @@ Our goal is always simple: complete every project with zero safety issues.`,
   }
 
   return (
-    <section id="about" className="py-20 text-white bg-gray-700">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* ABOUT SECTION - Full-width carousel with overlay text */}
-        {carouselItems.length > 0 && (
-          <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-20">
-            <div className="h-[420px] md:h-[520px] lg:h-[620px]">
-              <Carousel
-                items={carouselItems}
-                baseWidth={1100}
-                autoplay={true}
-                autoplayDelay={4000}
-                pauseOnHover={true}
-                loop={true}
-                round={false}
-              />
-            </div>
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full">
-                <div className="max-w-6xl mx-auto px-6 flex justify-end">
-                  <div className="space-y-4 md:space-y-6 bg-black/0 max-w-3xl text-right">
-                    <FadeInWhenVisible delay={0.1}>
-                      <h2 className="section-title text-5xl md:text-6xl text-white">
-                        {data.aboutTitle}
-                      </h2>
-                    </FadeInWhenVisible>
-                    <FadeInWhenVisible delay={0.2}>
-                      <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line">
-                        {data.aboutText}
-                      </p>
-                    </FadeInWhenVisible>
-                  </div>
-                </div>
+    <>
+      <section id="about" className="py-20 text-white bg-gray-700">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* ABOUT SECTION - Full-width carousel with overlay text */}
+          {carouselItems.length > 0 && (
+            <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden mb-20">
+              <div className="h-[420px] md:h-[520px] lg:h-[620px]">
+                <Carousel
+                  items={carouselItems}
+                  baseWidth={1100}
+                  autoplay={true}
+                  autoplayDelay={4000}
+                  pauseOnHover={true}
+                  loop={true}
+                  round={false}
+                />
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
-        {/* All content (text and logos) comes from Sanity CMS */}
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
-          {/* Text on left */}
-          <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
-            <FadeInWhenVisible delay={0.3}>
-              <h3 className="section-title text-5xl md:text-6xl mb-4 text-white">
-                {data.safetyTitle}
-              </h3>
-            </FadeInWhenVisible>
-            <FadeInWhenVisible delay={0.4}>
-              <div className="text-lg text-gray-300 leading-relaxed">
-                {Array.isArray(data.safetyText) ? (
-                  <PortableText value={data.safetyText} />
-                ) : (
-                  <p className="whitespace-pre-line">{data.safetyText}</p>
-                )}
-              </div>
-            </FadeInWhenVisible>
-          </div>
-
-          {/* LogoLoops on right - extends to page edge, centered vertically */}
-          {safetyLogoItems.length > 0 && (
-            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
-              <div
-                className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[48vw] max-w-none overflow-hidden"
-                onMouseEnter={() => setIsLoopsHovered(true)}
-                onMouseLeave={() => setIsLoopsHovered(false)}
-              >
-                <div className="space-y-8">
-                  {/* Top loop - scrolls left */}
-                  <div style={{ height: '160px', position: 'relative' }}>
-                    <LogoLoop
-                      logos={safetyLogoItems}
-                      speed={120}
-                      direction="left"
-                      logoHeight={120}
-                      gap={40}
-                      fadeOut={true}
-                      fadeOutColor="#374151"
-                      hoverSpeed={20}
-                      externalHoverState={isLoopsHovered}
-                      scaleOnHover={true}
-                      ariaLabel="Safety logos and certifications"
-                    />
-                  </div>
-                  
-                  {/* Bottom loop - scrolls right */}
-                  <div style={{ height: '160px', position: 'relative' }}>
-                    <LogoLoop
-                      logos={safetyLogoItems}
-                      speed={120}
-                      direction="right"
-                      logoHeight={120}
-                      gap={40}
-                      fadeOut={true}
-                      fadeOutColor="#374151"
-                      hoverSpeed={20}
-                      externalHoverState={isLoopsHovered}
-                      scaleOnHover={true}
-                      ariaLabel="Safety logos and certifications"
-                    />
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full">
+                  <div className="max-w-6xl mx-auto px-6 flex justify-end">
+                    <div className="space-y-4 md:space-y-6 bg-black/0 max-w-3xl text-right">
+                      <FadeInWhenVisible delay={0.1}>
+                        <h2 className="section-title text-5xl md:text-6xl text-white">
+                          {data.aboutTitle}
+                        </h2>
+                      </FadeInWhenVisible>
+                      <FadeInWhenVisible delay={0.2}>
+                        <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line">
+                          {data.aboutText}
+                        </p>
+                      </FadeInWhenVisible>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="safety" className="py-20 bg-white text-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
+          {/* All content (text and logos) comes from Sanity CMS */}
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
+            {/* Text on left */}
+            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
+              <FadeInWhenVisible delay={0.3}>
+                <h3 className="section-title text-5xl md:text-6xl mb-4 text-gray-900">
+                  {data.safetyTitle}
+                </h3>
+              </FadeInWhenVisible>
+              <FadeInWhenVisible delay={0.4}>
+                <div className="text-lg text-gray-700 leading-relaxed">
+                  {Array.isArray(data.safetyText) ? (
+                    <PortableText value={data.safetyText} />
+                  ) : (
+                    <p className="whitespace-pre-line">{data.safetyText}</p>
+                  )}
+                </div>
+              </FadeInWhenVisible>
+            </div>
+
+            {/* LogoLoops on right - extends to page edge, centered vertically */}
+            {safetyLogoItems.length > 0 && (
+              <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
+                <div
+                  className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[48vw] max-w-none overflow-hidden"
+                  onMouseEnter={() => setIsLoopsHovered(true)}
+                  onMouseLeave={() => setIsLoopsHovered(false)}
+                >
+                  <div className="space-y-8">
+                    {/* Top loop - scrolls left */}
+                    <div style={{ height: '160px', position: 'relative' }}>
+                      <LogoLoop
+                        logos={safetyLogoItems}
+                        speed={120}
+                        direction="left"
+                        logoHeight={120}
+                        gap={40}
+                        fadeOut={true}
+                        fadeOutColor="#ffffff"
+                        hoverSpeed={20}
+                        externalHoverState={isLoopsHovered}
+                        scaleOnHover={true}
+                        ariaLabel="Safety logos and certifications"
+                      />
+                    </div>
+                    
+                    {/* Bottom loop - scrolls right */}
+                    <div style={{ height: '160px', position: 'relative' }}>
+                      <LogoLoop
+                        logos={safetyLogoItems}
+                        speed={120}
+                        direction="right"
+                        logoHeight={120}
+                        gap={40}
+                        fadeOut={true}
+                        fadeOutColor="#ffffff"
+                        hoverSpeed={20}
+                        externalHoverState={isLoopsHovered}
+                        scaleOnHover={true}
+                        ariaLabel="Safety logos and certifications"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
