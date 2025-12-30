@@ -590,19 +590,27 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 />
               </div>
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full">
+              {/* Dark gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/40 to-transparent pointer-events-none"></div>
+              
+              <div className="w-full relative z-10">
                 <div className="max-w-6xl mx-auto px-6 flex justify-end">
-                  <div className="space-y-4 md:space-y-6 max-w-3xl text-right">
-                    <FadeInWhenVisible delay={0.1}>
-                      <h2 className="section-title text-5xl md:text-6xl text-white">
-                        {data.aboutTitle}
-                      </h2>
-                    </FadeInWhenVisible>
-                    <FadeInWhenVisible delay={0.2}>
-                      <p className="text-lg text-gray-200 leading-relaxed whitespace-pre-line">
-                        {data.aboutText}
-                      </p>
-                    </FadeInWhenVisible>
+                  <div className="space-y-4 md:space-y-6 max-w-3xl text-right relative">
+                    {/* Backdrop blur container */}
+                    <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-lg -m-4 pointer-events-none"></div>
+                    
+                    <div className="relative z-10 px-4 py-2">
+                      <FadeInWhenVisible delay={0.1}>
+                        <h2 className="section-title text-5xl md:text-6xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                          {data.aboutTitle}
+                        </h2>
+                      </FadeInWhenVisible>
+                      <FadeInWhenVisible delay={0.2}>
+                        <p className="text-lg text-gray-100 leading-relaxed whitespace-pre-line drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                          {data.aboutText}
+                        </p>
+                      </FadeInWhenVisible>
+                    </div>
                   </div>
                 </div>
               </div>
