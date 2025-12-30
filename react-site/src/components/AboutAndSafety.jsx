@@ -636,12 +636,14 @@ Our goal is always simple: complete every project with zero safety issues.`,
       <section
         id="safety"
         ref={safetySectionRef}
-        className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
+        className="py-20 bg-white text-gray-900 relative z-20 -mt-10"
         style={{
           transform: `translateY(${safetySlide}px)`,
           transition: 'transform 120ms linear, opacity 200ms ease',
           opacity: 1 - 0.06 * Math.min(1, Math.abs(safetySlide) / 220),
-          willChange: 'transform, opacity'
+          willChange: 'transform, opacity',
+          marginBottom: '-220px', // overlap stats initially
+          paddingBottom: '220px', // preserve internal spacing while overlapping
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
