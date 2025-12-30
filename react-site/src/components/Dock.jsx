@@ -87,8 +87,8 @@ export default function Dock({
   return (
     <motion.div style={{ width: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
-        onMouseMove={({ pageY }) => {
-          mouseY.set(pageY);
+        onMouseMove={({ clientY }) => {
+          mouseY.set(clientY);
         }}
         onMouseLeave={() => {
           mouseY.set(Infinity);
