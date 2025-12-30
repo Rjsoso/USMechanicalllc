@@ -11,7 +11,7 @@ export default function AboutAndSafety() {
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const safetySectionRef = useRef(null)
-  const [safetySlide, setSafetySlide] = useState(0)
+  const [safetyRevealed, setSafetyRevealed] = useState(false)
 
   // Default content fallback
   const defaultData = {
@@ -542,28 +542,28 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
-  // Lightweight scroll-driven slide effect for Safety section
+  // One-time slide-up reveal for Safety section (triggers after ~55% viewport)
   useEffect(() => {
-    const updateSlide = () => {
+    const handleScroll = () => {
       const node = safetySectionRef.current
-      if (!node) return
+      if (!node || safetyRevealed) return
+
       const rect = node.getBoundingClientRect()
-      const triggerStart = window.innerHeight * 0.3
-      const triggerEnd = window.innerHeight * 0.8
-      const rawProgress = 1 - (rect.top - triggerStart) / (triggerEnd - triggerStart)
-      const progress = Math.min(1, Math.max(0, rawProgress))
-      const translate = -80 * progress // up to -80px lift
-      setSafetySlide(translate)
+      const triggerPoint = window.innerHeight * 0.55
+
+      if (rect.top <= triggerPoint) {
+        setSafetyRevealed(true)
+      }
     }
 
-    updateSlide()
-    window.addEventListener('scroll', updateSlide, { passive: true })
-    window.addEventListener('resize', updateSlide)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
     return () => {
-      window.removeEventListener('scroll', updateSlide)
-      window.removeEventListener('resize', updateSlide)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
     }
-  }, [])
+  }, [safetyRevealed])
 
   if (loading || !data) {
     return (
@@ -625,9 +625,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
         ref={safetySectionRef}
         className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
         style={{
-          transform: `translateY(${safetySlide}px)`,
-          transition: 'transform 80ms linear',
-          willChange: 'transform'
+          transform: `translateY(${safetyRevealed ? -120 : 0}px)`,
+          transition: 'transform 420ms ease, opacity 420ms ease',
+          opacity: safetyRevealed ? 0.97 : 1,
+          willChange: 'transform, opacity'
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
