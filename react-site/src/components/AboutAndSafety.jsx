@@ -542,26 +542,47 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
-  // One-time slide-up reveal for Safety section (triggered by intersection)
+  // One-time slide-up reveal for Safety section with dual trigger (observer + scroll fallback)
   useEffect(() => {
     const node = safetySectionRef.current
     if (!node || safetyRevealed) return
 
+    const triggerReveal = () => setSafetyRevealed(true)
+
+    // IntersectionObserver primary trigger
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setSafetyRevealed(true)
+          triggerReveal()
           observer.disconnect()
         }
       },
       {
-        threshold: 0.35,
-        rootMargin: '0px 0px -10% 0px', // fire a bit before fully in view
+        threshold: 0.3,
+        rootMargin: '0px 0px -15% 0px', // start a bit before fully in view
       }
     )
 
+    // Scroll fallback (e.g., older Safari / reduced motion)
+    const handleScroll = () => {
+      if (safetyRevealed) return
+      const rect = node.getBoundingClientRect()
+      const triggerPoint = window.innerHeight * 0.65
+      if (rect.top <= triggerPoint) {
+        triggerReveal()
+      }
+    }
+
     observer.observe(node)
-    return () => observer.disconnect()
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [safetyRevealed])
 
   if (loading || !data) {
@@ -624,9 +645,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
         ref={safetySectionRef}
         className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
         style={{
-          transform: `translateY(${safetyRevealed ? -120 : 0}px)`,
-          transition: 'transform 420ms ease, opacity 420ms ease',
-          opacity: safetyRevealed ? 0.97 : 1,
+          transform: `translateY(${safetyRevealed ? -140 : 0}px)`,
+          transition: 'transform 450ms ease, opacity 450ms ease',
+          opacity: safetyRevealed ? 0.96 : 1,
           willChange: 'transform, opacity'
         }}
       >
