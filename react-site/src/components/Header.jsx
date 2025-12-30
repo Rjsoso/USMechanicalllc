@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react';
-import { VscAccount, VscArchive, VscHome, VscSettingsGear } from 'react-icons/vsc';
+import { VscAccount, VscShield, VscFolder, VscSettingsGear } from 'react-icons/vsc';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -101,9 +101,9 @@ function Header() {
   };
 
   const dockItems = [
-    { icon: <VscHome size={18} />, label: 'Home', onClick: () => scrollToSection('#hero') },
-    { icon: <VscArchive size={18} />, label: 'Services', onClick: () => scrollToSection('#services') },
     { icon: <VscAccount size={18} />, label: 'About', onClick: () => scrollToSection('#about') },
+    { icon: <VscShield size={18} />, label: 'Safety', onClick: () => scrollToSection('#safety') },
+    { icon: <VscFolder size={18} />, label: 'Projects', onClick: () => scrollToSection('#portfolio') },
     { icon: <VscSettingsGear size={18} />, label: 'Contact', onClick: () => scrollToSection('#contact') }
   ];
 
