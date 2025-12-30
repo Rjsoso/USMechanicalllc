@@ -102,14 +102,14 @@ const ServicesSection = () => {
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
-        <p className="text-gray-200 text-lg mb-8 text-left">
-          {servicesData.descriptionText}
-        </p>
       </div>
 
       <div className="flex flex-col md:flex-row justify-center items-start gap-10 md:gap-12">
         {/* LEFT — DESCRIPTION TEXT + SERVICE BOXES (full-bleed to the left edge) */}
         <div className="flex-1 md:w-1/2 pr-6 md:pr-10">
+          <p className="text-gray-200 text-lg mb-8 text-left">
+            {servicesData.descriptionText}
+          </p>
           <div className="space-y-4">
             {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => {
               const backgroundImageUrl = box.backgroundImage?.asset?.url
