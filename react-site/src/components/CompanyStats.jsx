@@ -219,10 +219,11 @@ const CompanyStats = () => {
       ref={sectionRef}
       className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
       style={{
-        // Blend intersection with safety progress: whichever is further along
-        opacity: Math.max(inView ? 1 : 0.35, 0.35 + 0.65 * safetyProgress),
-        transform: `translateY(${Math.max(inView ? 0 : 80, 80 * (1 - safetyProgress))}px)`,
-        transition: 'opacity 450ms ease, transform 450ms ease',
+        // Drop-out effect: stats start tucked up (-120px) and drop to 0 as safety reveals
+        // Use safety progress primarily; intersection ensures visibility if observer fires first
+        opacity: 0.08 + 0.92 * Math.max(safetyProgress, inView ? 0.4 : 0),
+        transform: `translateY(${(-120 * (1 - Math.max(safetyProgress, inView ? 0.4 : 0))).toFixed(1)}px)`,
+        transition: 'opacity 420ms ease, transform 420ms ease',
         willChange: 'opacity, transform',
       }}
     >
