@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react';
-import { VscAccount, VscShield } from 'react-icons/vsc';
+import { VscShield } from 'react-icons/vsc';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -101,7 +101,11 @@ function Header() {
   };
 
   const dockItems = [
-    { icon: <VscAccount size={18} />, label: 'About', onClick: () => scrollToSection('#about') },
+    { icon: (
+      <svg className="text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 6H5m2 3H5m2 3H5m2 3H5m2 3H5m11-1a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2M7 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm8 7a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+      </svg>
+    ), label: 'About', onClick: () => scrollToSection('#about') },
     { icon: <VscShield size={18} />, label: 'Safety', onClick: () => scrollToSection('#safety') },
     { icon: (
       <svg className="text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
