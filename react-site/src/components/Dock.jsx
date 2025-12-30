@@ -3,16 +3,16 @@ import { Children, cloneElement, useEffect, useRef, useState } from 'react';
 
 import './Dock.css';
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }) {
+function DockItem({ children, className = '', onClick, mouseY, spring, distance, magnification, baseItemSize }) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
 
-  const mouseDistance = useTransform(mouseX, (val) => {
+  const mouseDistance = useTransform(mouseY, (val) => {
     const rect = ref.current?.getBoundingClientRect() ?? {
-      x: 0,
-      width: baseItemSize,
+      y: 0,
+      height: baseItemSize,
     };
-    return val - rect.x - baseItemSize / 2;
+    return val - rect.y - baseItemSize / 2;
   });
 
   const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
@@ -55,13 +55,12 @@ function DockLabel({ children, className = '', ...rest }) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 10 }}
-          exit={{ opacity: 0, y: 0 }}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 10 }}
           transition={{ duration: 0.2 }}
           className={`dock-label ${className}`}
           role="tooltip"
-          style={{ x: '-50%' }}
         >
           {children}
         </motion.div>
@@ -83,19 +82,19 @@ export default function Dock({
   panelHeight = 70,
   baseItemSize = 50,
 }) {
-  const mouseX = useMotionValue(Infinity);
+  const mouseY = useMotionValue(Infinity);
 
   return (
-    <motion.div style={{ height: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
+    <motion.div style={{ width: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
-        onMouseMove={({ pageX }) => {
-          mouseX.set(pageX);
+        onMouseMove={({ pageY }) => {
+          mouseY.set(pageY);
         }}
         onMouseLeave={() => {
-          mouseX.set(Infinity);
+          mouseY.set(Infinity);
         }}
         className={`dock-panel ${className}`}
-        style={{ height: panelHeight }}
+        style={{ width: panelHeight }}
         role="toolbar"
         aria-label="Application dock"
       >
@@ -104,7 +103,7 @@ export default function Dock({
             key={index}
             onClick={item.onClick}
             className={item.className}
-            mouseX={mouseX}
+            mouseY={mouseY}
             spring={spring}
             distance={distance}
             magnification={magnification}
