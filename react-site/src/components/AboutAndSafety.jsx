@@ -556,7 +556,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
       const start = viewport * 0.9   // begin lifting when top is near bottom
       const end = viewport * 0.35    // finish lift by mid-section
       const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
-      const slide = -220 * progress
+      const slide = -Math.min(180, Math.max(0, start - rect.top))
       setSafetySlide(slide)
       // Expose progress to other components (e.g., CompanyStats reveal)
       document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
