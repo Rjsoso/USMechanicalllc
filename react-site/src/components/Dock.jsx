@@ -83,16 +83,38 @@ export default function Dock({
   baseItemSize = 50,
 }) {
   const mouseY = useMotionValue(Infinity);
+  const dockPanelRef = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      mouseY.set(e.pageY);
+    };
+
+    const handleMouseLeave = () => {
+      mouseY.set(Infinity);
+    };
+
+    // Track mouse movement globally on the window
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // When mouse leaves the dock area, reset
+    const dockPanel = dockPanelRef.current;
+    if (dockPanel) {
+      dockPanel.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (dockPanel) {
+        dockPanel.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, [mouseY]);
 
   return (
     <motion.div style={{ width: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
-        onMouseMove={({ pageY }) => {
-          mouseY.set(pageY);
-        }}
-        onMouseLeave={() => {
-          mouseY.set(Infinity);
-        }}
+        ref={dockPanelRef}
         className={`dock-panel ${className}`}
         style={{ width: panelHeight }}
         role="toolbar"
