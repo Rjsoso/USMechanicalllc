@@ -542,27 +542,26 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
-  // One-time slide-up reveal for Safety section (triggers after ~55% viewport)
+  // One-time slide-up reveal for Safety section (triggered by intersection)
   useEffect(() => {
-    const handleScroll = () => {
-      const node = safetySectionRef.current
-      if (!node || safetyRevealed) return
+    const node = safetySectionRef.current
+    if (!node || safetyRevealed) return
 
-      const rect = node.getBoundingClientRect()
-      const triggerPoint = window.innerHeight * 0.55
-
-      if (rect.top <= triggerPoint) {
-        setSafetyRevealed(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSafetyRevealed(true)
+          observer.disconnect()
+        }
+      },
+      {
+        threshold: 0.35,
+        rootMargin: '0px 0px -10% 0px', // fire a bit before fully in view
       }
-    }
+    )
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-    }
+    observer.observe(node)
+    return () => observer.disconnect()
   }, [safetyRevealed])
 
   if (loading || !data) {
