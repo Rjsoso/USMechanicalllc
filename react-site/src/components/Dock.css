@@ -1,8 +1,7 @@
 .dock-outer {
   position: fixed;
-  top: 50%;
+  top: 16px;
   right: 24px;
-  transform: translateY(-50%);
   margin: 0 0.5rem;
   display: flex;
   align-items: center;
@@ -66,5 +65,12 @@
   font-size: 0.75rem;
   color: #fff;
   transform: translateX(-50%);
+}
+
+@media (max-width: 768px) {
+  .dock-outer {
+    top: 12px;
+    right: 12px;
+  }
 }
 
