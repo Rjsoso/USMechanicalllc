@@ -100,7 +100,7 @@ const CompanyStats = () => {
   const [statsData, setStatsData] = useState(null);
   const [inView, setInView] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [servicesProgress, setServicesProgress] = useState(0);
+  const [safetyProgress, setSafetyProgress] = useState(0);
   const sectionRef = useRef(null);
 
 
@@ -190,14 +190,14 @@ const CompanyStats = () => {
     };
   }, [statsData]);
 
-  // Listen to Services section progress to drive the cover/reveal animation
+  // Listen to safety section progress to tie reveal timing
   useEffect(() => {
     const handleProgress = (evt) => {
       const val = typeof evt.detail === 'number' ? evt.detail : 0;
-      setServicesProgress(Math.min(1, Math.max(0, val)));
+      setSafetyProgress(Math.min(1, Math.max(0, val)));
     };
-    window.addEventListener('servicesProgress', handleProgress);
-    return () => window.removeEventListener('servicesProgress', handleProgress);
+    window.addEventListener('safetyProgress', handleProgress);
+    return () => window.removeEventListener('safetyProgress', handleProgress);
   }, []);
 
   if (loading) {
@@ -214,21 +214,21 @@ const CompanyStats = () => {
     return null;
   }
 
-  const reveal = Math.max(servicesProgress, inView ? 0.35 : 0);
+  const reveal = Math.max(safetyProgress, inView ? 0.4 : 0);
 
   return (
     <section
       ref={sectionRef}
       className="w-full py-16 transition-opacity duration-700 ease-out"
       style={{
-        // Reveal from under Services as user scrolls past
-        opacity: 0.08 + 0.92 * reveal,
-        transform: `translateY(${(50 * (1 - reveal)).toFixed(1)}px)`,
+        // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
+        opacity: 0.04 + 0.96 * reveal,
+        transform: `translateY(${(-220 * (1 - reveal)).toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 420ms ease',
         willChange: 'opacity, transform',
         background: 'transparent',
-        marginTop: '-180px',
-        paddingTop: '180px',
+        marginTop: '-220px',
+        paddingTop: '220px',
         position: 'relative',
         zIndex: 10,
       }}

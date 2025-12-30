@@ -32,9 +32,11 @@ export default function Home() {
 
           <div className="relative overflow-hidden" style={{ zIndex: 2 }}>
             <AboutAndSafety />
-            <ServicesSection />
+
             <CompanyStats />
           </div>
+
+          <ServicesSection />
 
           <Suspense fallback={<div className="py-20 bg-gray-700 text-center text-white">Loading...</div>}>
             <Portfolio />

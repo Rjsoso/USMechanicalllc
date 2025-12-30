@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
@@ -10,6 +10,8 @@ export default function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
+  const safetySectionRef = useRef(null)
+  const [safetySlide, setSafetySlide] = useState(0)
 
   // Default content fallback
   const defaultData = {
@@ -540,6 +542,45 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
+  // Bidirectional slide for Safety section linked to scroll (covers and reveals stats)
+  useEffect(() => {
+    if (loading) return
+    const node = safetySectionRef.current
+    if (!node) return
+
+    let ticking = false
+
+    const updateSlide = () => {
+      const rect = node.getBoundingClientRect()
+      const viewport = window.innerHeight || 1
+      const start = viewport * 0.9   // begin lifting when top is near bottom
+      const end = viewport * 0.35    // finish lift by mid-section
+      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
+      const slide = -220 * progress
+      setSafetySlide(slide)
+      // Expose progress to other components (e.g., CompanyStats reveal)
+      document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
+      window.dispatchEvent(new CustomEvent('safetyProgress', { detail: progress }))
+      ticking = false
+    }
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(updateSlide)
+      }
+    }
+
+    updateSlide()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [loading])
+
   if (loading || !data) {
     return (
       <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
@@ -597,12 +638,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
       <section
         id="safety"
+        ref={safetySectionRef}
         className="py-20 bg-white text-gray-900 relative z-20 -mt-10"
         style={{
-          transform: 'none',
-          transition: 'opacity 200ms ease',
-          opacity: 1,
-          willChange: 'opacity',
+          transform: `translateY(${safetySlide}px)`,
+          transition: 'transform 120ms linear, opacity 200ms ease',
+          opacity: 1 - 0.06 * Math.min(1, Math.abs(safetySlide) / 220),
+          willChange: 'transform, opacity',
+          marginBottom: '-220px', // overlap stats initially
+          paddingBottom: '220px', // preserve internal spacing while overlapping
         }}
       >
         <div className="max-w-7xl mx-auto px-6">

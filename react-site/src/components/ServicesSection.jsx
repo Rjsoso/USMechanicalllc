@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, memo } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
@@ -7,7 +7,6 @@ import CardSwap, { Card } from './CardSwap';
 
 const ServicesSection = () => {
   const [servicesData, setServicesData] = useState(null);
-  const sectionRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,43 +61,6 @@ const ServicesSection = () => {
     fetchServices();
   }, []);
 
-  // Emit scroll progress so downstream sections (e.g., CompanyStats) can reveal smoothly
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    let frame = null;
-
-    const updateProgress = () => {
-      frame = null;
-      const rect = node.getBoundingClientRect();
-      const viewport = window.innerHeight || 1;
-      const progress = Math.min(
-        1,
-        Math.max(0, (viewport - rect.top) / (viewport + rect.height))
-      );
-      window.dispatchEvent(new CustomEvent('servicesProgress', { detail: progress }));
-    };
-
-    const handleScroll = () => {
-      if (frame === null) {
-        frame = requestAnimationFrame(updateProgress);
-      }
-    };
-
-    updateProgress();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-      if (frame !== null) {
-        cancelAnimationFrame(frame);
-      }
-    };
-  }, [servicesData]);
-
   const handleLearnMore = useCallback((service) => {
     if (service?.slug?.current) {
       navigate(`/services/${service.slug.current}`);
@@ -107,12 +69,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section
-        id="services"
-        ref={sectionRef}
-        className="py-20 bg-gray-700 text-white text-center"
-        style={{ zIndex: 15 }}
-      >
+      <section id="services" className="py-20 bg-gray-700 text-white text-center">
         <p>Loading services...</p>
       </section>
     );
@@ -120,12 +77,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section
-        id="services"
-        ref={sectionRef}
-        className="py-20 bg-gray-700 text-white"
-        style={{ zIndex: 15 }}
-      >
+      <section id="services" className="py-20 bg-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
@@ -141,16 +93,7 @@ const ServicesSection = () => {
   }
 
   return (
-    <section
-      id="services"
-      ref={sectionRef}
-      className="py-20 bg-gray-700 text-white relative"
-      style={{
-        zIndex: 15,
-        marginBottom: '-180px',
-        paddingBottom: '220px',
-      }}
-    >
+    <section id="services" className="py-20 bg-gray-700 text-white">
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
           className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
