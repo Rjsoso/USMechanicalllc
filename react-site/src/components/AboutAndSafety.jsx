@@ -544,8 +544,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   // One-time slide-up reveal for Safety section with dual trigger (observer + scroll fallback)
   useEffect(() => {
+    // Wait until content is loaded and the section is mounted
+    if (loading || safetyRevealed) return
+
     const node = safetySectionRef.current
-    if (!node || safetyRevealed) return
+    if (!node) return
 
     const triggerReveal = () => setSafetyRevealed(true)
 
@@ -573,8 +576,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
       }
     }
 
+    // Initial checks so if user is already near the section it triggers immediately
     observer.observe(node)
     handleScroll()
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll)
 
@@ -583,7 +588,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
     }
-  }, [safetyRevealed])
+  }, [loading, safetyRevealed])
 
   if (loading || !data) {
     return (
