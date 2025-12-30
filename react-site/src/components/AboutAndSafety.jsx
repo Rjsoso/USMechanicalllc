@@ -554,16 +554,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
       const rect = node.getBoundingClientRect()
       const viewport = window.innerHeight || 1
       const start = viewport * 0.9   // begin lifting when top is near bottom
-      const end = viewport * 0.35    // finish stats progress by mid-section
-      const clampedProgress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
-      // Slide continues upward beyond the clamped progress for safety visuals
-      const uncappedOffset = Math.max(0, start - rect.top)
-      const slide = -uncappedOffset
-
+      const end = viewport * 0.35    // finish lift by mid-section
+      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
+      const slide = -220 * progress
       setSafetySlide(slide)
       // Expose progress to other components (e.g., CompanyStats reveal)
-      document.documentElement.style.setProperty('--safety-progress', clampedProgress.toFixed(3))
-      window.dispatchEvent(new CustomEvent('safetyProgress', { detail: clampedProgress }))
+      document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
+      window.dispatchEvent(new CustomEvent('safetyProgress', { detail: progress }))
       ticking = false
     }
 
@@ -645,9 +642,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
         className="py-20 bg-white text-gray-900 relative z-20 -mt-10"
         style={{
           transform: `translateY(${safetySlide}px)`,
-          transition: 'transform 120ms linear',
-          opacity: 1,
-          willChange: 'transform',
+          transition: 'transform 120ms linear, opacity 200ms ease',
+          opacity: 1 - 0.06 * Math.min(1, Math.abs(safetySlide) / 220),
+          willChange: 'transform, opacity',
           marginBottom: '-220px', // overlap stats initially
           paddingBottom: '220px', // preserve internal spacing while overlapping
         }}
