@@ -78,9 +78,9 @@ export default function Dock({
   items,
   className = '',
   spring = { mass: 0.1, stiffness: 150, damping: 12 },
-  magnification = 70,
+  magnification = 69,
   distance = 200,
-  panelHeight = 68,
+  panelHeight = 70,
   baseItemSize = 50,
 }) {
   const mouseX = useMotionValue(Infinity);
