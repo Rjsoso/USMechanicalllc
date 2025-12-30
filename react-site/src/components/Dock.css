@@ -20,7 +20,7 @@
   border-radius: 1rem;
   background-color: #060010;
   border: 1px solid #222;
-  padding: 0 0.75rem 0.75rem;
+  padding: 0.75rem 0.75rem 0.75rem;
   pointer-events: auto;
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.35),
@@ -54,7 +54,7 @@
 
 .dock-label {
   position: absolute;
-  top: -1.5rem;
+  bottom: -1.5rem;
   left: 50%;
   width: fit-content;
   white-space: pre;
