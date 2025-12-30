@@ -207,7 +207,12 @@ const CompanyStats = () => {
     <section
       ref={sectionRef}
       className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
-      style={{ opacity: inView ? 1 : 0.3 }}
+      style={{
+        opacity: inView ? 1 : 0.35,
+        transform: `translateY(${inView ? 0 : 80}px)`,
+        transition: 'opacity 600ms ease, transform 650ms ease',
+        willChange: 'opacity, transform',
+      }}
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
