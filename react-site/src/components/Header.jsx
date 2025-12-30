@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react';
-import { VscAccount, VscShield, VscSettingsGear } from 'react-icons/vsc';
+import { VscAccount, VscShield } from 'react-icons/vsc';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -109,7 +109,11 @@ function Header() {
         <path fillRule="evenodd" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12c0 .556-.227 1.06-.593 1.422A.999.999 0 0 1 20.5 20H4a2.002 2.002 0 0 1-2-2V6Zm6.892 12 3.833-5.356-3.99-4.322a1 1 0 0 0-1.549.097L4 12.879V6h16v9.95l-3.257-3.619a1 1 0 0 0-1.557.088L11.2 18H8.892Z" clipRule="evenodd"/>
       </svg>
     ), label: 'Projects', onClick: () => scrollToSection('#portfolio') },
-    { icon: <VscSettingsGear size={18} />, label: 'Contact', onClick: () => scrollToSection('#contact') }
+    { icon: (
+      <svg className="text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+      </svg>
+    ), label: 'Contact', onClick: () => scrollToSection('#contact') }
   ];
 
   return (
