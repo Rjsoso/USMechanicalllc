@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo, memo } from 'react';
+import { VscAccount, VscArchive, VscHome, VscSettingsGear } from 'react-icons/vsc';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
-import CardNav from './CardNav';
+import Dock from './Dock';
 
 function Header() {
   const [logo, setLogo] = useState(null);
@@ -61,6 +62,51 @@ function Header() {
     }
   };
 
+  const scrollToSection = (href) => {
+    const scrollWithOffset = () => {
+      const element = document.querySelector(href);
+      if (element) {
+        const headerOffset = 180;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        return true;
+      }
+      return false;
+    };
+
+    if (location.pathname !== '/') {
+      const sectionName = href.replace('#', '');
+      sessionStorage.setItem('scrollTo', sectionName);
+      navigate('/');
+
+      let retryCount = 0;
+      const maxRetries = 20;
+      const attemptScroll = () => {
+        if (scrollWithOffset()) {
+          sessionStorage.removeItem('scrollTo');
+        } else if (retryCount < maxRetries) {
+          retryCount += 1;
+          setTimeout(attemptScroll, 150);
+        }
+      };
+      setTimeout(attemptScroll, 300);
+    } else {
+      scrollWithOffset();
+    }
+  };
+
+  const dockItems = [
+    { icon: <VscHome size={18} />, label: 'Home', onClick: () => scrollToSection('#hero') },
+    { icon: <VscArchive size={18} />, label: 'Services', onClick: () => scrollToSection('#services') },
+    { icon: <VscAccount size={18} />, label: 'About', onClick: () => scrollToSection('#about') },
+    { icon: <VscSettingsGear size={18} />, label: 'Contact', onClick: () => scrollToSection('#contact') }
+  ];
+
   return (
     <>
       {/* Logo - Separate, positioned in top-left corner */}
@@ -94,8 +140,8 @@ function Header() {
         </div>
       )}
 
-      {/* CardNav - positioned on right */}
-      <CardNav />
+      {/* Dock - positioned on right */}
+      <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
     </>
   );
 }
