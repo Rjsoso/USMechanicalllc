@@ -595,7 +595,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
               
               <div className="w-full relative z-10">
                 <div className="w-full px-6">
-                  <div className="space-y-4 md:space-y-6 max-w-3xl text-right relative" style={{ marginLeft: 'auto', marginRight: '15%' }}>
+                  <div className="space-y-4 md:space-y-6 max-w-3xl text-right relative" style={{ marginLeft: 'auto', marginRight: '3%' }}>
                     {/* Backdrop blur container */}
                     <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-lg -m-4 pointer-events-none"></div>
                     
