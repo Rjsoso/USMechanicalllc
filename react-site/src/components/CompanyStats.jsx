@@ -214,17 +214,23 @@ const CompanyStats = () => {
     return null;
   }
 
+  const reveal = Math.max(safetyProgress, inView ? 0.4 : 0);
+
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
+      className="w-full py-16 transition-opacity duration-700 ease-out"
       style={{
-        // Drop-out effect: stats start tucked up (-120px) and drop to 0 as safety reveals
-        // Use safety progress primarily; intersection ensures visibility if observer fires first
-        opacity: 0.08 + 0.92 * Math.max(safetyProgress, inView ? 0.4 : 0),
-        transform: `translateY(${(-120 * (1 - Math.max(safetyProgress, inView ? 0.4 : 0))).toFixed(1)}px)`,
+        // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
+        opacity: 0.04 + 0.96 * reveal,
+        transform: `translateY(${(-220 * (1 - reveal)).toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 420ms ease',
         willChange: 'opacity, transform',
+        background: 'transparent',
+        marginTop: '-220px',
+        paddingTop: '220px',
+        position: 'relative',
+        zIndex: 10,
       }}
     >
       <div className="max-w-6xl mx-auto text-center">
