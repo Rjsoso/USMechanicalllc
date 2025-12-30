@@ -20,6 +20,13 @@ const ServicesSection = () => {
             servicesInfo[] {
               title,
               description,
+              backgroundImage {
+                asset-> {
+                  _id,
+                  url
+                },
+                alt
+              },
               slug {
                 current
               },
@@ -113,30 +120,46 @@ const ServicesSection = () => {
             </p>
 
             <div className="space-y-4">
-              {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleServiceClick(box)}
-                  className="p-8 rounded-xl bg-black shadow cursor-pointer relative group"
-                >
-                  <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
-                  {box.description && (
-                    <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed mb-4">
-                      {box.description}
-                    </p>
-                  )}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLearnMore(box);
-                    }}
-                    className="absolute bottom-4 right-4 bg-transparent text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
+              {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => {
+                const backgroundImageUrl = box.backgroundImage?.asset?.url
+                  ? `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`
+                  : null;
+
+                const backgroundStyle = backgroundImageUrl
+                  ? {
+                      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.85)), url(${backgroundImageUrl})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                    }
+                  : undefined;
+
+                return (
+                  <div
+                    key={index}
+                    onClick={() => handleServiceClick(box)}
+                    className="p-8 rounded-xl bg-black shadow cursor-pointer relative group overflow-hidden"
+                    style={backgroundStyle}
                   >
-                    Learn More
-                    <FiArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
+                    <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
+                    {box.description && (
+                      <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed mb-4">
+                        {box.description}
+                      </p>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLearnMore(box);
+                      }}
+                      className="absolute bottom-4 right-4 bg-transparent text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
+                    >
+                      Learn More
+                      <FiArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

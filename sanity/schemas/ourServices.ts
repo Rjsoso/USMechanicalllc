@@ -44,6 +44,20 @@ export default defineType({
               description: "Preview text shown in the service box (truncated to 2 lines)",
             },
             {
+              name: "backgroundImage",
+              type: "image",
+              title: "Box Background Image",
+              description: "Optional background image displayed behind this service box",
+              options: { hotspot: true },
+              fields: [
+                {
+                  name: "alt",
+                  type: "string",
+                  title: "Alternative Text",
+                },
+              ],
+            },
+            {
               name: "slug",
               type: "slug",
               title: "URL Slug",
