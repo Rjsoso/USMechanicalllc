@@ -11,7 +11,7 @@ export default function AboutAndSafety() {
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const safetySectionRef = useRef(null)
-  const [safetyRevealed, setSafetyRevealed] = useState(false)
+  const [safetySlide, setSafetySlide] = useState(0)
 
   // Default content fallback
   const defaultData = {
@@ -542,53 +542,41 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
-  // One-time slide-up reveal for Safety section with dual trigger (observer + scroll fallback)
+  // Bidirectional slide for Safety section linked to scroll (covers and reveals stats)
   useEffect(() => {
-    // Wait until content is loaded and the section is mounted
-    if (loading || safetyRevealed) return
-
+    if (loading) return
     const node = safetySectionRef.current
     if (!node) return
 
-    const triggerReveal = () => setSafetyRevealed(true)
+    let ticking = false
 
-    // IntersectionObserver primary trigger
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          triggerReveal()
-          observer.disconnect()
-        }
-      },
-      {
-        threshold: 0.25,
-        rootMargin: '0px 0px -25% 0px', // start earlier and finish by mid-section
-      }
-    )
-
-    // Scroll fallback (e.g., older Safari / reduced motion)
-    const handleScroll = () => {
-      if (safetyRevealed) return
+    const updateSlide = () => {
       const rect = node.getBoundingClientRect()
-      const triggerPoint = window.innerHeight * 0.8
-      if (rect.top <= triggerPoint) {
-        triggerReveal()
+      const viewport = window.innerHeight || 1
+      const start = viewport * 0.9   // begin lifting when top is near bottom
+      const end = viewport * 0.35    // finish lift by mid-section
+      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
+      const slide = -220 * progress
+      setSafetySlide(slide)
+      ticking = false
+    }
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(updateSlide)
       }
     }
 
-    // Initial checks so if user is already near the section it triggers immediately
-    observer.observe(node)
-    handleScroll()
-
+    updateSlide()
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll)
 
     return () => {
-      observer.disconnect()
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
     }
-  }, [loading, safetyRevealed])
+  }, [loading])
 
   if (loading || !data) {
     return (
@@ -650,9 +638,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
         ref={safetySectionRef}
         className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
         style={{
-          transform: `translateY(${safetyRevealed ? -220 : 0}px)`,
-          transition: 'transform 650ms ease, opacity 650ms ease',
-          opacity: safetyRevealed ? 0.94 : 1,
+          transform: `translateY(${safetySlide}px)`,
+          transition: 'transform 120ms linear, opacity 200ms ease',
+          opacity: 1 - 0.06 * Math.min(1, Math.abs(safetySlide) / 220),
           willChange: 'transform, opacity'
         }}
       >
