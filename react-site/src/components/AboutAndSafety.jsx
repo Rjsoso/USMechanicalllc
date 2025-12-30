@@ -558,6 +558,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
       const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
       const slide = -220 * progress
       setSafetySlide(slide)
+      // Expose progress to other components (e.g., CompanyStats reveal)
+      document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
+      window.dispatchEvent(new CustomEvent('safetyProgress', { detail: progress }))
       ticking = false
     }
 

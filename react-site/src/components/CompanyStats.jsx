@@ -100,6 +100,7 @@ const CompanyStats = () => {
   const [statsData, setStatsData] = useState(null);
   const [inView, setInView] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [safetyProgress, setSafetyProgress] = useState(0);
   const sectionRef = useRef(null);
 
 
@@ -189,6 +190,16 @@ const CompanyStats = () => {
     };
   }, [statsData]);
 
+  // Listen to safety section progress to tie reveal timing
+  useEffect(() => {
+    const handleProgress = (evt) => {
+      const val = typeof evt.detail === 'number' ? evt.detail : 0;
+      setSafetyProgress(Math.min(1, Math.max(0, val)));
+    };
+    window.addEventListener('safetyProgress', handleProgress);
+    return () => window.removeEventListener('safetyProgress', handleProgress);
+  }, []);
+
   if (loading) {
     return (
       <section className="w-full py-16 bg-gray-700">
@@ -208,9 +219,10 @@ const CompanyStats = () => {
       ref={sectionRef}
       className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
       style={{
-        opacity: inView ? 1 : 0.35,
-        transform: `translateY(${inView ? 0 : 80}px)`,
-        transition: 'opacity 600ms ease, transform 650ms ease',
+        // Blend intersection with safety progress: whichever is further along
+        opacity: Math.max(inView ? 1 : 0.35, 0.35 + 0.65 * safetyProgress),
+        transform: `translateY(${Math.max(inView ? 0 : 80, 80 * (1 - safetyProgress))}px)`,
+        transition: 'opacity 450ms ease, transform 450ms ease',
         willChange: 'opacity, transform',
       }}
     >
