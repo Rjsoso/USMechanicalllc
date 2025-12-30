@@ -7,7 +7,6 @@ import CardSwap, { Card } from './CardSwap';
 
 const ServicesSection = () => {
   const [servicesData, setServicesData] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,14 +59,6 @@ const ServicesSection = () => {
     };
 
     fetchServices();
-  }, []);
-
-  const handleServiceClick = useCallback((service) => {
-    setSelectedService(service);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedService(null);
   }, []);
 
   const handleLearnMore = useCallback((service) => {
@@ -137,8 +128,7 @@ const ServicesSection = () => {
                 return (
                   <div
                     key={index}
-                    onClick={() => handleServiceClick(box)}
-                    className="p-8 rounded-xl bg-black shadow cursor-pointer relative group overflow-hidden"
+                    className="p-8 rounded-xl bg-black shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105"
                     style={backgroundStyle}
                   >
                     <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
@@ -148,10 +138,7 @@ const ServicesSection = () => {
                       </p>
                     )}
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLearnMore(box);
-                      }}
+                      onClick={() => handleLearnMore(box)}
                       className="absolute bottom-4 right-4 bg-transparent text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
                     >
                       Learn More
@@ -210,32 +197,6 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* Service Info Modal */}
-        {selectedService && (
-          <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-            onClick={handleCloseModal}
-          >
-            <div
-              className="bg-black rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-8 relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={handleCloseModal}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold"
-                aria-label="Close modal"
-              >
-                ×
-              </button>
-              <h3 className="text-3xl font-bold text-white mb-4 pr-8">
-                {selectedService.title}
-              </h3>
-              <p className="text-gray-300 leading-relaxed whitespace-pre-line">
-                {selectedService.description}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
