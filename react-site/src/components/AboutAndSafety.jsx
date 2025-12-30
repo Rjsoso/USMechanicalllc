@@ -561,8 +561,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
         }
       },
       {
-        threshold: 0.3,
-        rootMargin: '0px 0px -15% 0px', // start a bit before fully in view
+        threshold: 0.25,
+        rootMargin: '0px 0px -25% 0px', // start earlier and finish by mid-section
       }
     )
 
@@ -570,7 +570,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
     const handleScroll = () => {
       if (safetyRevealed) return
       const rect = node.getBoundingClientRect()
-      const triggerPoint = window.innerHeight * 0.65
+      const triggerPoint = window.innerHeight * 0.8
       if (rect.top <= triggerPoint) {
         triggerReveal()
       }
@@ -650,9 +650,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
         ref={safetySectionRef}
         className="py-20 bg-white text-gray-900 relative z-10 -mt-10"
         style={{
-          transform: `translateY(${safetyRevealed ? -140 : 0}px)`,
-          transition: 'transform 450ms ease, opacity 450ms ease',
-          opacity: safetyRevealed ? 0.96 : 1,
+          transform: `translateY(${safetyRevealed ? -220 : 0}px)`,
+          transition: 'transform 650ms ease, opacity 650ms ease',
+          opacity: safetyRevealed ? 0.94 : 1,
           willChange: 'transform, opacity'
         }}
       >
