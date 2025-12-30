@@ -1,7 +1,7 @@
 .dock-outer {
   position: fixed;
   top: 16px;
-  right: 12px;
+  right: 6px;
   margin: 0 0.5rem;
   display: flex;
   align-items: center;
