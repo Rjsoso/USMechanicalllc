@@ -1,8 +1,7 @@
 .dock-outer {
   position: fixed;
-  top: 50%;
+  top: 16px;
   right: 24px;
-  transform: translateY(-50%);
   margin: 0 0.5rem;
   display: flex;
   align-items: center;
@@ -71,9 +70,8 @@
 
 @media (max-width: 768px) {
   .dock-outer {
-    top: 50%;
+    top: 12px;
     right: 12px;
-    transform: translateY(-50%);
   }
 }
 
