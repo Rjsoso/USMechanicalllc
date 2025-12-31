@@ -112,8 +112,8 @@ function Header() {
     ), label: 'Safety', onClick: () => scrollToSection('#safety') },
     { icon: (
       <svg className="text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.5 3.75a3.75 3.75 0 0 0-3.167 5.75L7 14.833a1.75 1.75 0 1 0 2.475 2.475L14.75 12.5A3.75 3.75 0 1 0 15.5 3.75Z"/>
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 15.75 8.25 15"/>
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.9 3.25a5 5 0 0 0-6.36 6.36l-4.04 4.04a2.1 2.1 0 0 0 2.97 2.97l4.04-4.04a5 5 0 0 0 6.35-6.35l-2.07 2.07a2.25 2.25 0 0 1-3.18-3.18Z"/>
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 15.5 8.25 14.75"/>
       </svg>
     ), label: 'Services', onClick: () => scrollToSection('#services') },
     { icon: (
