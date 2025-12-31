@@ -263,8 +263,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         id="safety"
         className="py-20 bg-white text-gray-900 -mt-10"
         style={{
-          position: 'sticky',
-          top: '0',
+          position: 'relative',
           zIndex: 10,
         }}
       >
