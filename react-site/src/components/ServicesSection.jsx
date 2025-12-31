@@ -302,7 +302,7 @@ const ServicesSection = () => {
 
       {/* Delivery Methods Slice */}
       {servicesData.deliveryMethods?.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 mt-6 md:mt-0">
+        <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-14">
           <div className="flex flex-col gap-4 mb-8">
             {servicesData.deliveryMethodsAccent && (
               <span className="inline-flex items-center w-fit rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gray-200">
