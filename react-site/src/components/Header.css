@@ -1,20 +1,21 @@
-/* Logo wrapper with 3D shadow effect */
+/* Logo wrapper with 3D shadow effect - dark black shadows */
 .logo-wrapper {
   display: inline-block;
   cursor: pointer;
   /* Multi-layer shadow for 3D depth effect */
-  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.3))
-          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.2))
-          drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
+          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
+          drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.7));
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-/* Hover effect - slide and adjust shadow */
+/* Hover effect - lift and glow */
 .logo-wrapper:hover {
-  transform: translateX(4px);
-  filter: drop-shadow(4px 8px 0px rgba(0, 0, 0, 0.3))
-          drop-shadow(12px 16px 8px rgba(0, 0, 0, 0.2))
-          drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
+          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
+          drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))
+          drop-shadow(0 0 40px rgba(200, 200, 255, 0.2));
+  transform: translateY(-2px);
 }
 
 /* Logo image */
@@ -33,18 +34,18 @@
   }
 }
 
-/* Mobile - reduce shadow intensity */
+/* Mobile - dark shadows maintained */
 @media (max-width: 768px) {
   .logo-wrapper {
-    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.3))
-            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.2))
-            drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
+            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.5))
+            drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.65));
   }
   
   .logo-wrapper:hover {
-    transform: translateX(3px);
-    filter: drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.3))
-            drop-shadow(6px 8px 6px rgba(0, 0, 0, 0.2))
-            drop-shadow(1px 2px 8px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
+            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 0 15px rgba(255, 255, 255, 0.25));
+    transform: translateY(-1px);
   }
 }
