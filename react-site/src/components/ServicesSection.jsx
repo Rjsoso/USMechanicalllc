@@ -417,12 +417,6 @@ const ServicesSection = () => {
                                 {String(activeTab + 1).padStart(2, '0')}
                               </span>
                             </div>
-                            <button
-                              onClick={handleClose}
-                              className="text-gray-300 hover:text-white text-sm font-semibold"
-                            >
-                              Close
-                            </button>
                           </div>
 
                           {!method.isQuote && (
