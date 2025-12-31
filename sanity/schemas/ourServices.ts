@@ -175,5 +175,108 @@ export default defineType({
         },
       ],
     },
+    {
+      name: "deliveryMethodsHeading",
+      type: "string",
+      title: "Delivery Methods Heading",
+      description: "Title shown above the delivery methods slice (e.g., “Delivery Methods”).",
+    },
+    {
+      name: "deliveryMethodsIntro",
+      type: "text",
+      rows: 3,
+      title: "Delivery Methods Intro",
+      description: "Short supporting copy that sets context for how you deliver projects.",
+    },
+    {
+      name: "deliveryMethodsAccent",
+      type: "string",
+      title: "Accent Label",
+      description: "Optional short label that appears above the heading (e.g., “Project Delivery”).",
+    },
+    {
+      name: "deliveryMethods",
+      title: "Delivery Methods",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              type: "string",
+              title: "Method Title",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "summary",
+              type: "text",
+              rows: 3,
+              title: "Method Summary",
+              description: "Concise, energetic description that sells the approach.",
+            },
+            {
+              name: "body",
+              type: "array",
+              title: "Method Body",
+              description: "Optional richer copy. Keep it tight—first block is shown in the card.",
+              of: [
+                { type: "block" },
+                { type: "image", options: { hotspot: true } },
+              ],
+            },
+            {
+              name: "badge",
+              type: "string",
+              title: "Badge Text",
+              description: "Short punchy tag (e.g., “Fast”, “Collaborative”).",
+            },
+            {
+              name: "badgeTone",
+              type: "string",
+              title: "Badge Tone",
+              description: "Sets badge color accent.",
+              options: {
+                list: [
+                  { title: "Sky", value: "sky" },
+                  { title: "Amber", value: "amber" },
+                  { title: "Emerald", value: "emerald" },
+                  { title: "Pink", value: "pink" },
+                  { title: "Slate", value: "slate" },
+                ],
+                layout: "radio",
+                direction: "horizontal",
+              },
+            },
+            {
+              name: "ctaLabel",
+              type: "string",
+              title: "CTA Label",
+              description: "Optional call-to-action label (e.g., “See how it works”).",
+            },
+            {
+              name: "ctaUrl",
+              type: "url",
+              title: "CTA URL",
+              description: "External link for the CTA (or use a deep link).",
+            },
+          ],
+          preview: {
+            select: {
+              title: "title",
+              subtitle: "summary",
+            },
+            prepare({ title, subtitle }) {
+              return {
+                title: title || "Untitled method",
+                subtitle: subtitle
+                  ? `${subtitle.substring(0, 80)}${subtitle.length > 80 ? "..." : ""}`
+                  : "No summary yet",
+              };
+            },
+          },
+        },
+      ],
+    },
   ],
 });
