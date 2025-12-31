@@ -310,7 +310,7 @@ const ServicesSection = () => {
               </span>
             )}
             <motion.h3
-              className="text-4xl md:text-5xl font-semibold text-white"
+              className="section-title text-5xl md:text-6xl text-white"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}

@@ -102,7 +102,7 @@ const CompanyStats = () => {
   const [loading, setLoading] = useState(true);
   const [safetyProgress, setSafetyProgress] = useState(0);
   const sectionRef = useRef(null);
-  const STATS_OVERLAP_PX = 260;
+  const STATS_OVERLAP_PX = 150;
 
 
   useEffect(() => {
