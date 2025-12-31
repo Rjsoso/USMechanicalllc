@@ -172,7 +172,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="py-20 bg-gray-700 text-white text-center">
+      <section id="services" className="py-20 bg-black text-white text-center">
         <p>Loading services...</p>
       </section>
     );
@@ -180,7 +180,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="py-20 bg-gray-700 text-white">
+      <section id="services" className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
@@ -189,7 +189,7 @@ const ServicesSection = () => {
           >
             {servicesData.sectionTitle || 'Our Services'}
           </motion.h2>
-          <p className="text-center text-gray-200">No services available.</p>
+          <p className="text-center text-white">No services available.</p>
         </div>
       </section>
     );
@@ -198,7 +198,7 @@ const ServicesSection = () => {
   return (
     <section 
       id="services" 
-      className="py-20 bg-gray-700 text-white"
+      className="py-20 bg-black text-white"
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
@@ -208,7 +208,7 @@ const ServicesSection = () => {
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
-        <p className="text-gray-200 text-lg mb-8 text-left">
+        <p className="text-white text-lg mb-8 text-left">
           {servicesData.descriptionText}
         </p>
       </div>
@@ -239,7 +239,7 @@ const ServicesSection = () => {
                 >
                   <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
                   {box.description && (
-                    <p className="text-sm text-gray-400 opacity-75 line-clamp-2 leading-relaxed mb-4">
+                    <p className="text-sm text-gray-300 opacity-75 line-clamp-2 leading-relaxed mb-4">
                       {box.description}
                     </p>
                   )}
@@ -298,7 +298,7 @@ const ServicesSection = () => {
               </CardSwap>
             </div>
           ) : (
-            <p className="text-gray-300">No gallery images found.</p>
+            <p className="text-white">No gallery images found.</p>
           )}
         </div>
       </div>
@@ -308,7 +308,7 @@ const ServicesSection = () => {
         <div className="max-w-7xl mx-auto px-6 mt-20 md:mt-24">
           <div className="flex flex-col items-center text-center gap-4 mb-10">
             {servicesData.deliveryMethodsAccent && (
-              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gray-200">
+              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white">
                 {servicesData.deliveryMethodsAccent}
               </span>
             )}
@@ -320,7 +320,7 @@ const ServicesSection = () => {
             >
               {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
             </motion.h3>
-            <p className="text-gray-200 text-lg max-w-3xl mx-auto">
+            <p className="text-white text-lg max-w-3xl mx-auto">
               {servicesData.deliveryMethodsIntro ||
                 'Predictable delivery, tailored engagement, and clear ownership at every step.'}
             </p>
@@ -347,7 +347,7 @@ const ServicesSection = () => {
                     >
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-400 font-semibold">
+                          <span className="text-sm text-gray-300 font-semibold">
                             {String(idx + 1).padStart(2, '0')}
                           </span>
                           {!method.isQuote && method.badge && (
@@ -363,13 +363,13 @@ const ServicesSection = () => {
                           )}
                         </span>
                         {!method.isQuote && method.summary && (
-                          <span className="text-gray-300 text-sm line-clamp-2">{method.summary}</span>
+                          <span className="text-white text-sm line-clamp-2">{method.summary}</span>
                         )}
                         {method.isQuote && (
-                          <span className="text-gray-300 text-sm">Share your project details and we’ll respond quickly.</span>
+                          <span className="text-white text-sm">Share your project details and we'll respond quickly.</span>
                         )}
                       </div>
-                      <FiArrowRight className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                      <FiArrowRight className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-300'}`} />
                       {!method.isQuote && bgUrl && (
                         <span
                           className="hidden md:block ml-auto h-10 w-16 rounded-lg border border-white/10 bg-cover bg-center"
@@ -416,7 +416,7 @@ const ServicesSection = () => {
                                   {method.badge}
                                 </span>
                               )}
-                              <span className="text-sm text-gray-300 font-semibold">
+                              <span className="text-sm text-white font-semibold">
                                 {String(activeTab + 1).padStart(2, '0')}
                               </span>
                             </div>
@@ -424,17 +424,17 @@ const ServicesSection = () => {
 
                           {!method.isQuote && (
                             <div className="space-y-3">
-                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
+                              <p className="text-xs uppercase tracking-[0.25em] text-gray-300">Delivery Method</p>
                               <h4 className="text-3xl md:text-4xl font-semibold text-white">
                                 {method.title}
                               </h4>
                               {method.summary && (
-                                <p className="text-gray-200 leading-relaxed">
+                                <p className="text-white leading-relaxed">
                                   {method.summary}
                                 </p>
                               )}
                               {bodyPreview && (
-                                <p className="text-gray-300 leading-relaxed">
+                                <p className="text-white leading-relaxed">
                                   {bodyPreview}
                                 </p>
                               )}
@@ -444,13 +444,13 @@ const ServicesSection = () => {
                           {method.isQuote ? (
                             <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
                               <div className="mb-4">
-                                <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
+                                <p className="text-xs uppercase tracking-[0.25em] text-gray-300 mb-1">
                                   Request a Quote
                                 </p>
                                 <h5 className="text-2xl font-semibold text-white">
                                   {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
                                 </h5>
-                                <p className="text-gray-300 mt-2 text-sm">
+                                <p className="text-white mt-2 text-sm">
                                   {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
                                 </p>
                               </div>
@@ -522,11 +522,11 @@ const ServicesSection = () => {
                           ) : (
                             <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
                               <div className="mb-1 flex items-center justify-between">
-                                <p className="text-xs uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs uppercase tracking-[0.25em] text-gray-300">
                                   Delivery Method Details
                                 </p>
                               </div>
-                              <div className="text-gray-300 text-sm">
+                              <div className="text-white text-sm">
                                 <p>Click “Request a Quote” tab to inquire about this method.</p>
                               </div>
                             </div>

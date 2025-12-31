@@ -206,13 +206,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   if (loading || !data) {
     return (
-      <div className="text-center py-20 text-gray-200 bg-gray-700">Loading content...</div>
+      <div className="text-center py-20 text-white bg-black">Loading content...</div>
     )
   }
 
   return (
     <>
-      <section id="about" className="py-20 text-white bg-gray-700 relative z-0">
+      <section id="about" className="py-20 text-white bg-black relative z-0">
         <div className="max-w-7xl mx-auto px-6">
           {/* ABOUT SECTION - Full-width carousel with overlay text */}
           {carouselItems.length > 0 && (

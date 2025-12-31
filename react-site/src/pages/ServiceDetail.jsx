@@ -128,7 +128,7 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div className="min-h-screen bg-black text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <p>Loading service...</p>
         </div>
         <Footer />
@@ -140,13 +140,13 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gray-700 text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div className="min-h-screen bg-black text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-4">Service Not Found</h1>
-            <p className="text-gray-300 mb-8">The service you're looking for doesn't exist.</p>
+            <p className="text-white mb-8">The service you're looking for doesn't exist.</p>
             <button
               onClick={() => navigate('/')}
-              className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
               Go Back Home
             </button>
@@ -160,7 +160,7 @@ export default function ServiceDetail() {
   return (
     <>
       <Header />
-      <main className="bg-gray-700 text-white min-h-screen" style={{ paddingTop: '180px' }}>
+      <main className="bg-black text-white min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
@@ -191,7 +191,7 @@ export default function ServiceDetail() {
               };
               setTimeout(scrollToServices, 300);
             }}
-            className="mb-8 text-gray-300 hover:text-white transition-colors flex items-center gap-2"
+            className="mb-8 text-white hover:text-gray-100 transition-colors flex items-center gap-2"
           >
             <svg
               className="w-5 h-5"
@@ -221,7 +221,7 @@ export default function ServiceDetail() {
           {/* Preview Description */}
           {serviceData.description && (
             <motion.p
-              className="text-xl text-gray-300 mb-12 leading-relaxed"
+              className="text-xl text-white mb-12 leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -288,7 +288,7 @@ export default function ServiceDetail() {
                             </h3>
                           )}
                           {feature.description && (
-                            <p className="text-gray-300 leading-relaxed">
+                            <p className="text-white leading-relaxed">
                               {feature.description}
                             </p>
                           )}
@@ -310,7 +310,7 @@ export default function ServiceDetail() {
           >
             <button
               onClick={handleRequestQuote}
-              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
+              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
             >
               Request a Quote
             </button>

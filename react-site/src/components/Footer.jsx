@@ -28,7 +28,7 @@ function Footer() {
   if (!info) return null
 
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10 text-center">
+    <footer className="bg-black text-gray-300 py-10 text-center">
       <div className="max-w-6xl mx-auto space-y-3">
         <p>{info.address}</p>
         <p>

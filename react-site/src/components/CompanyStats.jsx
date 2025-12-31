@@ -192,9 +192,9 @@ const CompanyStats = () => {
 
   if (loading) {
     return (
-      <section className="w-full py-16 bg-gray-700">
+      <section className="w-full py-16 bg-black">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="text-gray-300">Loading stats...</div>
+          <div className="text-white">Loading stats...</div>
         </div>
       </section>
     );
@@ -207,7 +207,7 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-gray-700"
+      className="w-full py-16 bg-black"
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
@@ -221,7 +221,7 @@ const CompanyStats = () => {
                 <div className="text-5xl font-extrabold mb-2 text-[#c43821]">
                   <AnimatedNumber value={item.value} inView={inView} />
                 </div>
-                <p className="text-lg font-medium text-gray-300">
+                <p className="text-lg font-medium text-white">
                   {item.label}
                 </p>
               </div>

@@ -73,7 +73,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 bg-gray-700 text-white">
+      <section id="portfolio" className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -82,14 +82,14 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="py-20 bg-gray-700 text-white">
+    <section id="portfolio" className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>
             <h2 className="section-title text-5xl md:text-6xl text-center mb-4 text-white">
               Our Projects
             </h2>
-            <p className="text-center text-gray-200 mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-white mb-12 max-w-2xl mx-auto">
               Explore our completed projects by category
             </p>
 
@@ -99,7 +99,7 @@ function Portfolio() {
                 <div
                   key={category._id}
                   onClick={() => handleCategoryClick(category)}
-                  className="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
+                  className="bg-zinc-900 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
                 >
                   {category.image && (
                     <div className="relative overflow-hidden">
@@ -116,7 +116,7 @@ function Portfolio() {
                   <div className="p-6">
                     <h3 className="text-2xl font-semibold mb-2 text-white">{category.title}</h3>
                     {category.description && (
-                      <p className="text-gray-300 mb-4 line-clamp-2">{category.description}</p>
+                      <p className="text-white mb-4 line-clamp-2">{category.description}</p>
                     )}
                     <div className="flex items-center text-blue-400 font-medium">
                       <span>View Projects</span>
@@ -135,7 +135,7 @@ function Portfolio() {
                       </svg>
                     </div>
                     {category.projects && category.projects.length > 0 && (
-                      <p className="text-sm text-gray-400 mt-2">
+                      <p className="text-sm text-gray-300 mt-2">
                         {category.projects.length} {category.projects.length === 1 ? 'project' : 'projects'}
                       </p>
                     )}
@@ -146,7 +146,7 @@ function Portfolio() {
 
             {categories.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-200">No portfolio categories available yet.</p>
+                <p className="text-white">No portfolio categories available yet.</p>
               </div>
             )}
           </>
@@ -175,7 +175,7 @@ function Portfolio() {
               </button>
               <h2 className="section-title text-5xl md:text-6xl mb-2 text-white">{selectedCategory.title}</h2>
               {selectedCategory.description && (
-                <p className="text-gray-200 max-w-2xl">{selectedCategory.description}</p>
+                <p className="text-white max-w-2xl">{selectedCategory.description}</p>
               )}
             </div>
 
@@ -186,7 +186,7 @@ function Portfolio() {
                   <div
                     key={project._id}
                     onClick={() => setOpenProject(project)}
-                    className="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden group"
+                    className="bg-zinc-900 rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer overflow-hidden group"
                   >
                     {project.images && project.images.length > 0 && (
                       <div className="relative overflow-hidden">
@@ -207,9 +207,9 @@ function Portfolio() {
                     <div className="p-5">
                       <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>
                       {project.description && (
-                        <p className="text-gray-300 text-sm mb-3 line-clamp-2">{project.description}</p>
+                        <p className="text-white text-sm mb-3 line-clamp-2">{project.description}</p>
                       )}
-                      <div className="flex flex-wrap gap-2 text-sm text-gray-400">
+                      <div className="flex flex-wrap gap-2 text-sm text-gray-300">
                         {project.location && (
                           <span className="flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +234,7 @@ function Portfolio() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-200">No projects in this category yet.</p>
+                <p className="text-white">No projects in this category yet.</p>
               </div>
             )}
           </>

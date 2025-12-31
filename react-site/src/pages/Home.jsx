@@ -68,7 +68,7 @@ export default function Home() {
         <section id="hero" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 0 }}>
           <HeroSection />
         </section>
-        <div className="bg-gray-700" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
+        <div className="bg-black" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
 
           <AboutAndSafety />
 
@@ -85,11 +85,11 @@ export default function Home() {
             <ServicesSection />
           </div>
 
-          <Suspense fallback={<div className="py-20 bg-gray-700 text-center text-white">Loading...</div>}>
+          <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
             <Portfolio />
           </Suspense>
 
-          <Suspense fallback={<div className="py-20 bg-gray-700 text-center text-white">Loading...</div>}>
+          <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
             <Careers />
           </Suspense>
 
@@ -97,7 +97,7 @@ export default function Home() {
             fallback={
               <section
                 id="contact"
-                className="py-20 bg-gray-700 text-center text-white"
+                className="py-20 bg-black text-center text-white"
                 style={{ minHeight: '60vh' }}
               >
                 Loading contact...

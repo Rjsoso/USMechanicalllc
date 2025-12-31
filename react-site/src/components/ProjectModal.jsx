@@ -43,7 +43,7 @@ export default function ProjectModal({ project, onClose }) {
           {/* Image Gallery */}
           {images.length > 0 && (
             <div className="relative mb-6">
-              <div className="relative w-full h-96 md:h-[500px] bg-gray-900 rounded-t-lg overflow-hidden">
+              <div className="relative w-full h-96 md:h-[500px] bg-black rounded-t-lg overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={currentImageIndex}
@@ -92,7 +92,7 @@ export default function ProjectModal({ project, onClose }) {
 
                 {/* Thumbnail Strip */}
                 {hasMultipleImages && images.length <= 6 && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gray-800 p-2 flex gap-2 overflow-x-auto">
+                  <div className="absolute bottom-0 left-0 right-0 bg-zinc-900 p-2 flex gap-2 overflow-x-auto">
                     {images.map((img, index) => (
                       <button
                         key={index}
@@ -121,7 +121,7 @@ export default function ProjectModal({ project, onClose }) {
             <h2 className="text-3xl font-bold text-white mb-4">{project.title}</h2>
             
             {project.description && (
-              <p className="text-gray-300 mb-6 leading-relaxed">{project.description}</p>
+              <p className="text-white mb-6 leading-relaxed">{project.description}</p>
             )}
 
             {/* Project Metadata */}
@@ -133,7 +133,7 @@ export default function ProjectModal({ project, onClose }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <div>
-                    <p className="text-gray-400 text-sm">Location</p>
+                    <p className="text-gray-300 text-sm">Location</p>
                     <p className="text-white">{project.location}</p>
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default function ProjectModal({ project, onClose }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   <div>
-                    <p className="text-gray-400 text-sm">Year Completed</p>
+                    <p className="text-gray-300 text-sm">Year Completed</p>
                     <p className="text-white">{project.year}</p>
                   </div>
                 </div>
@@ -157,7 +157,7 @@ export default function ProjectModal({ project, onClose }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   <div>
-                    <p className="text-gray-400 text-sm">Client</p>
+                    <p className="text-gray-300 text-sm">Client</p>
                     <p className="text-white">{project.client}</p>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function ProjectModal({ project, onClose }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                   <div>
-                    <p className="text-gray-400 text-sm">Project Type</p>
+                    <p className="text-gray-300 text-sm">Project Type</p>
                     <p className="text-white">{project.projectType}</p>
                   </div>
                 </div>
