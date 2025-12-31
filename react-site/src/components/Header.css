@@ -1,84 +1,78 @@
 /* 3D Plaque Perspective Container */
 .plaque-perspective {
-  perspective: 1500px;
+  perspective: 1000px;
 }
 
-/* 3D Logo Plaque - Professional metallic design with beveled edge */
+/* 3D Logo Plaque - Sits nearly flat like a real mounted plaque */
 .logo-3d-card {
   position: relative;
   width: 200px;
   height: 124px;
-  /* Gradient fallback for metallic appearance */
-  background: linear-gradient(135deg, #8e9399 0%, #63676c 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 10px;
   
-  /* PERMANENT 3D ROTATION: Stronger tilt for dramatic depth */
-  transform: rotateY(-12deg) rotateX(7deg);
+  /* MINIMAL ROTATION: Sits nearly flat against the background */
+  transform: rotateY(-2deg) rotateX(1deg);
   transform-style: preserve-3d;
   
-  /* PROFESSIONAL 3D EDGE STACKING */
+  /* ENHANCED LIGHTING & CONTRAST */
   box-shadow: 
-    /* Beveled highlight on top edge */
-    0 -1px 1px rgba(255,255,255,0.3) inset,
-    /* Solid thickness layers */
-    1px 1px 0px #4a4e52,
-    2px 2px 0px #4a4e52,
-    3px 3px 0px #4a4e52,
-    4px 4px 0px #4a4e52,
-    5px 5px 0px #4a4e52,
-    6px 6px 0px #4a4e52,
-    /* Ambient occlusion (dark contact shadow) */
-    7px 7px 2px rgba(0,0,0,0.4),
-    /* Soft floor shadow */
-    8px 10px 16px rgba(0,0,0,0.2);
+    /* Inner Rim Light - Makes the front face pop */
+    0px 2px 2px rgba(255, 255, 255, 0.4) inset,
+    /* The 3D Thickness (Darker for better contrast) */
+    1px 1px 0px #3a3e42,
+    2px 2px 0px #3a3e42,
+    3px 3px 0px #3a3e42,
+    4px 4px 0px #3a3e42,
+    5px 5px 0px #3a3e42,
+    /* Ambient Occlusion - Dark "crack" shadow behind the box */
+    6px 6px 4px rgba(0, 0, 0, 0.6),
+    /* Soft Floor Shadow */
+    5px 6px 10px rgba(0,0,0,0.2);
   
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
   cursor: pointer;
   overflow: hidden;
 }
 
-/* The "Glint" Overlay - Sweeping shine effect */
+/* Light Beam Shine Effect */
 .logo-3d-card::after {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
-    45deg, 
-    transparent 45%, 
-    rgba(255, 255, 255, 0.15) 50%, 
-    transparent 55%
+    120deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
   );
-  transform: translateX(-100%);
-  transition: transform 0.8s;
+  transition: all 0.8s;
   pointer-events: none;
 }
 
-/* The Pop Effect: Straightens and lifts dramatically */
+/* The Pop Effect: Stays flat but lifts forward */
 .plaque-perspective:hover .logo-3d-card {
-  /* Large movement, straightens to nearly flat */
-  transform: translate(-8px, -8px) rotateY(-5deg) rotateX(2deg);
+  /* Straightens completely and pops out */
+  transform: translate(-6px, -6px) rotateY(0deg) rotateX(0deg);
   
-  /* Extended depth and enhanced shadows */
+  /* Shadow softens and expands as it lifts */
   box-shadow: 
-    0 -1px 1px rgba(255,255,255,0.3) inset,
-    1px 1px 0px #4a4e52,
-    2px 2px 0px #4a4e52,
-    3px 3px 0px #4a4e52,
-    /* Edge grows as it "lifts" */
-    8px 8px 0px #4a4e52,
-    /* Stronger floor shadow when lifted */
-    16px 20px 28px rgba(0,0,0,0.35);
+    0px 2px 2px rgba(255, 255, 255, 0.4) inset,
+    1px 1px 0px #3a3e42,
+    2px 2px 0px #3a3e42,
+    3px 3px 0px #3a3e42,
+    /* Much softer, larger shadow when lifted */
+    14px 14px 24px rgba(0,0,0,0.4);
 }
 
-/* Trigger Glint on Hover */
+/* Trigger Light Beam on Hover */
 .plaque-perspective:hover .logo-3d-card::after {
-  transform: translateX(100%);
+  left: 150%;
 }
 
 /* Image will be applied via inline style as background */
@@ -89,40 +83,37 @@
     width: 250px;
     height: 155px;
     border-radius: 12px;
-    /* Permanent tilt remains the same */
-    transform: rotateY(-12deg) rotateX(7deg);
+    /* Minimal rotation - sits nearly flat */
+    transform: rotateY(-2deg) rotateX(1deg);
     
-    /* Enhanced professional edge for desktop */
+    /* Enhanced lighting and contrast for desktop */
     box-shadow: 
-      /* Beveled highlight */
-      0 -1px 1px rgba(255,255,255,0.3) inset,
+      /* Inner Rim Light */
+      0px 2px 2px rgba(255, 255, 255, 0.4) inset,
       /* Thicker solid edge layers */
-      1px 1px 0px #4a4e52,
-      2px 2px 0px #4a4e52,
-      3px 3px 0px #4a4e52,
-      4px 4px 0px #4a4e52,
-      5px 5px 0px #4a4e52,
-      6px 6px 0px #4a4e52,
-      7px 7px 0px #4a4e52,
-      /* Ambient occlusion */
-      8px 8px 2px rgba(0,0,0,0.4),
-      /* Softer, larger floor shadow */
-      10px 12px 20px rgba(0,0,0,0.2);
+      1px 1px 0px #3a3e42,
+      2px 2px 0px #3a3e42,
+      3px 3px 0px #3a3e42,
+      4px 4px 0px #3a3e42,
+      5px 5px 0px #3a3e42,
+      6px 6px 0px #3a3e42,
+      /* Ambient Occlusion */
+      7px 7px 5px rgba(0, 0, 0, 0.6),
+      /* Softer floor shadow */
+      6px 7px 12px rgba(0,0,0,0.2);
   }
   
   .plaque-perspective:hover .logo-3d-card {
-    /* More dramatic lift on desktop */
-    transform: translate(-10px, -10px) rotateY(-5deg) rotateX(2deg);
+    /* More dramatic lift on desktop, straightens completely */
+    transform: translate(-8px, -8px) rotateY(0deg) rotateX(0deg);
     
     box-shadow: 
-      0 -1px 1px rgba(255,255,255,0.3) inset,
-      1px 1px 0px #4a4e52,
-      2px 2px 0px #4a4e52,
-      3px 3px 0px #4a4e52,
-      /* Extended edge when lifted */
-      10px 10px 0px #4a4e52,
-      /* Enhanced floor shadow */
-      20px 25px 35px rgba(0,0,0,0.35);
+      0px 2px 2px rgba(255, 255, 255, 0.4) inset,
+      1px 1px 0px #3a3e42,
+      2px 2px 0px #3a3e42,
+      3px 3px 0px #3a3e42,
+      /* Simplified to just soft shadow when fully lifted */
+      18px 18px 30px rgba(0,0,0,0.4);
   }
   
   /* Image applied via inline style as background */
