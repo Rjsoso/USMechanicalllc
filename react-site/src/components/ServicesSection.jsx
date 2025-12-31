@@ -1,12 +1,16 @@
 import { useEffect, useState, useCallback, memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 import { client } from '../utils/sanity';
 import CardSwap, { Card } from './CardSwap';
 
 const ServicesSection = () => {
+  const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody';
   const [servicesData, setServicesData] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('idle'); // idle | loading | success | error
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +24,9 @@ const ServicesSection = () => {
             deliveryMethodsHeading,
             deliveryMethodsIntro,
             deliveryMethodsAccent,
+            deliveryMethodsFormHeadline,
+            deliveryMethodsFormCopy,
+            deliveryMethodsEmail,
             deliveryMethods[] {
               title,
               summary,
@@ -80,6 +87,30 @@ const ServicesSection = () => {
     }
   }, [navigate]);
 
+  const handleExpand = useCallback((index) => {
+    setExpandedIndex(index);
+    setSubmitStatus('idle');
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setExpandedIndex(null);
+    setSubmitStatus('idle');
+    setSubmitting(false);
+  }, []);
+
+  useEffect(() => {
+    if (expandedIndex === null) return undefined;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [expandedIndex, handleClose]);
+
   const badgeToneClasses = {
     sky: 'bg-sky-500/15 text-sky-50 border-sky-500/40',
     amber: 'bg-amber-400/15 text-amber-50 border-amber-400/40',
@@ -95,6 +126,39 @@ const ServicesSection = () => {
       .map((block) => block.children.map((child) => child.text || '').join(''))
       .join(' ')
       .trim();
+  };
+
+  const handleQuoteSubmit = async (event, methodTitle = '') => {
+    event.preventDefault();
+    if (!servicesData) return;
+
+    const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
+    setSubmitting(true);
+    setSubmitStatus('loading');
+
+    try {
+      const formData = new FormData(event.target);
+      formData.set('deliveryMethod', methodTitle);
+      formData.set('targetEmail', emailTarget);
+
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      setSubmitStatus('success');
+      event.target.reset();
+    } catch (error) {
+      console.error('Quote request failed:', error);
+      setSubmitStatus('error');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!servicesData) {
@@ -250,58 +314,214 @@ const ServicesSection = () => {
             </p>
           </div>
 
-          <div className="grid gap-6 md:gap-8 md:grid-cols-2">
-            {servicesData.deliveryMethods.map((method, idx) => {
-              const bodyPreview = extractPlainText(method.body);
-              const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
+          <div className="relative">
+            <div className="grid gap-6 md:gap-8 md:grid-cols-2">
+              {servicesData.deliveryMethods.map((method, idx) => {
+                const bodyPreview = extractPlainText(method.body);
+                const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
 
-              return (
-                <motion.div
-                  key={idx}
-                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900/80 p-6 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:border-white/20"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ delay: idx * 0.05 }}
-                >
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
-                  <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
-                    {method.badge && (
-                      <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
-                        {method.badge}
+                return (
+                  <motion.div
+                    layout
+                    layoutId={`delivery-card-${idx}`}
+                    key={idx}
+                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900/80 p-6 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:border-white/20"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ delay: idx * 0.05 }}
+                  >
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
+                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
+                      {method.badge && (
+                        <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
+                          {method.badge}
+                        </span>
+                      )}
+                      <span className="text-sm text-gray-400 font-semibold">
+                        {String(idx + 1).padStart(2, '0')}
                       </span>
+                    </div>
+                    <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
+                      {method.title}
+                    </h4>
+                    {method.summary && (
+                      <p className="text-gray-200 leading-relaxed mb-3 relative z-10">
+                        {method.summary}
+                      </p>
                     )}
-                    <span className="text-sm text-gray-400 font-semibold">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-                  <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
-                    {method.title}
-                  </h4>
-                  {method.summary && (
-                    <p className="text-gray-200 leading-relaxed mb-3 relative z-10">
-                      {method.summary}
-                    </p>
-                  )}
-                  {bodyPreview && (
-                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 relative z-10">
-                      {bodyPreview}
-                    </p>
-                  )}
-                  {(method.ctaLabel || method.ctaUrl) && (
-                    <a
-                      href={method.ctaUrl || '#'}
-                      target={method.ctaUrl ? "_blank" : undefined}
-                      rel="noreferrer"
-                      className="relative z-10 mt-5 inline-flex items-center gap-2 text-sky-200 font-semibold hover:text-white transition-colors"
-                    >
-                      {method.ctaLabel || 'Learn more'}
-                      <FiArrowRight className="w-4 h-4" />
-                    </a>
-                  )}
-                </motion.div>
-              );
-            })}
+                    {bodyPreview && (
+                      <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 relative z-10">
+                        {bodyPreview}
+                      </p>
+                    )}
+                    <div className="relative z-10 mt-5 flex flex-wrap gap-3 items-center">
+                      <button
+                        onClick={() => handleExpand(idx)}
+                        className="inline-flex items-center gap-2 bg-blue-600/90 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+                      >
+                        Get a Quote
+                        <FiArrowRight className="w-4 h-4" />
+                      </button>
+                      {(method.ctaLabel || method.ctaUrl) && (
+                        <a
+                          href={method.ctaUrl || '#'}
+                          target={method.ctaUrl ? "_blank" : undefined}
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 text-sky-200 font-semibold hover:text-white transition-colors text-sm"
+                        >
+                          {method.ctaLabel || 'Learn more'}
+                          <FiArrowRight className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <AnimatePresence>
+              {expandedIndex !== null && servicesData.deliveryMethods?.[expandedIndex] && (
+                <>
+                  <motion.div
+                    className="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={handleClose}
+                  />
+                  <motion.div
+                    layoutId={`delivery-card-${expandedIndex}`}
+                    className="absolute inset-0 z-20 overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 p-6 md:p-10 shadow-2xl"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {(() => {
+                      const method = servicesData.deliveryMethods[expandedIndex];
+                      const bodyPreview = extractPlainText(method.body);
+                      const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
+                      const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
+                      return (
+                        <div className="flex flex-col h-full gap-6 md:gap-8">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                              {method.badge && (
+                                <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
+                                  {method.badge}
+                                </span>
+                              )}
+                              <span className="text-sm text-gray-400 font-semibold">
+                                {String(expandedIndex + 1).padStart(2, '0')}
+                              </span>
+                            </div>
+                            <button
+                              onClick={handleClose}
+                              className="text-gray-300 hover:text-white text-sm font-semibold"
+                            >
+                              Close
+                            </button>
+                          </div>
+
+                          <div className="grid md:grid-cols-5 gap-6 md:gap-10 items-start">
+                            <div className="md:col-span-2 space-y-3">
+                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
+                              <h4 className="text-3xl md:text-4xl font-semibold text-white">
+                                {method.title}
+                              </h4>
+                              {method.summary && (
+                                <p className="text-gray-200 leading-relaxed">
+                                  {method.summary}
+                                </p>
+                              )}
+                              {bodyPreview && (
+                                <p className="text-gray-400 leading-relaxed">
+                                  {bodyPreview}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="md:col-span-3">
+                              <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
+                                <div className="mb-4">
+                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
+                                    Request a Quote
+                                  </p>
+                                  <h5 className="text-2xl font-semibold text-white">
+                                    {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
+                                  </h5>
+                                  <p className="text-gray-300 mt-2 text-sm">
+                                    {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
+                                  </p>
+                                </div>
+                                <form
+                                  onSubmit={(e) => handleQuoteSubmit(e, method.title)}
+                                  className="grid gap-3 md:gap-4"
+                                >
+                                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                    <input
+                                      name="name"
+                                      type="text"
+                                      required
+                                      placeholder="Name"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                    />
+                                    <input
+                                      name="email"
+                                      type="email"
+                                      required
+                                      placeholder="Email"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                    />
+                                  </div>
+                                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                    <input
+                                      name="phone"
+                                      type="tel"
+                                      placeholder="Phone"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                    />
+                                    <input
+                                      name="deliveryMethod"
+                                      readOnly
+                                      value={method.title}
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                    />
+                                  </div>
+                                  <textarea
+                                    name="message"
+                                    required
+                                    rows="4"
+                                    placeholder="Project details, timelines, and any specifics"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                  />
+                                  <input type="hidden" name="targetEmail" value={emailTarget} />
+                                  <div className="flex items-center gap-3 flex-wrap">
+                                    <button
+                                      type="submit"
+                                      disabled={submitting}
+                                      className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
+                                    >
+                                      {submitting ? 'Sending...' : 'Send Request'}
+                                    </button>
+                                    {submitStatus === 'success' && (
+                                      <span className="text-emerald-300 text-sm font-semibold">Sent! We’ll respond shortly.</span>
+                                    )}
+                                    {submitStatus === 'error' && (
+                                      <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
+                                    )}
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}

@@ -189,6 +189,25 @@ export default defineType({
       description: "Short supporting copy that sets context for how you deliver projects.",
     },
     {
+      name: "deliveryMethodsFormHeadline",
+      type: "string",
+      title: "Quote Form Headline",
+      description: "Optional headline shown when a delivery method expands (e.g., “Request a Quote”).",
+    },
+    {
+      name: "deliveryMethodsFormCopy",
+      type: "text",
+      rows: 3,
+      title: "Quote Form Supporting Copy",
+      description: "Short blurb that appears above the form in the expanded state.",
+    },
+    {
+      name: "deliveryMethodsEmail",
+      type: "string",
+      title: "Quote Request Email",
+      description: "Email to receive Delivery Method quote requests (fallback is info@usmechanicalllc.com).",
+    },
+    {
       name: "deliveryMethodsAccent",
       type: "string",
       title: "Accent Label",
