@@ -314,7 +314,7 @@ const ServicesSection = () => {
             </p>
           </div>
 
-          <div className="relative">
+          <div className="relative min-h-[640px] md:min-h-[720px]">
             <div className="grid gap-6 md:gap-8 md:grid-cols-2">
               {servicesData.deliveryMethods.map((method, idx) => {
                 const bodyPreview = extractPlainText(method.body);
@@ -331,30 +331,30 @@ const ServicesSection = () => {
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ delay: idx * 0.05 }}
                   >
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
-                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
-                      {method.badge && (
-                        <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
-                          {method.badge}
-                        </span>
-                      )}
-                      <span className="text-sm text-gray-400 font-semibold">
-                        {String(idx + 1).padStart(2, '0')}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
+                  <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
+                    {method.badge && (
+                      <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
+                        {method.badge}
                       </span>
-                    </div>
-                    <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
-                      {method.title}
-                    </h4>
-                    {method.summary && (
-                      <p className="text-gray-200 leading-relaxed mb-3 relative z-10">
-                        {method.summary}
-                      </p>
                     )}
-                    {bodyPreview && (
-                      <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 relative z-10">
-                        {bodyPreview}
-                      </p>
-                    )}
+                    <span className="text-sm text-gray-400 font-semibold">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
+                    {method.title}
+                  </h4>
+                  {method.summary && (
+                    <p className="text-gray-200 leading-relaxed mb-3 relative z-10">
+                      {method.summary}
+                    </p>
+                  )}
+                  {bodyPreview && (
+                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 relative z-10">
+                      {bodyPreview}
+                    </p>
+                  )}
                     <div className="relative z-10 mt-5 flex flex-wrap gap-3 items-center">
                       <button
                         onClick={() => handleExpand(idx)}
@@ -363,17 +363,6 @@ const ServicesSection = () => {
                         Get a Quote
                         <FiArrowRight className="w-4 h-4" />
                       </button>
-                      {(method.ctaLabel || method.ctaUrl) && (
-                        <a
-                          href={method.ctaUrl || '#'}
-                          target={method.ctaUrl ? "_blank" : undefined}
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 text-sky-200 font-semibold hover:text-white transition-colors text-sm"
-                        >
-                          {method.ctaLabel || 'Learn more'}
-                          <FiArrowRight className="w-4 h-4" />
-                        </a>
-                      )}
                     </div>
                   </motion.div>
                 );
@@ -392,7 +381,7 @@ const ServicesSection = () => {
                   />
                   <motion.div
                     layoutId={`delivery-card-${expandedIndex}`}
-                    className="absolute inset-0 z-20 overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 p-6 md:p-10 shadow-2xl"
+                    className="absolute inset-0 z-20 overflow-hidden rounded-2xl md:rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 p-6 md:p-10 shadow-2xl overflow-y-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -403,7 +392,7 @@ const ServicesSection = () => {
                       const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
                       const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
                       return (
-                        <div className="flex flex-col h-full gap-6 md:gap-8">
+                        <div className="flex flex-col h-full gap-6 md:gap-8 pb-4 md:pb-6">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3">
                               {method.badge && (
