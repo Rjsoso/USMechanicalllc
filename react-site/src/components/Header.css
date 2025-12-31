@@ -157,18 +157,9 @@
   pointer-events: none;
 }
 
-/* Top side - flared outward, visible */
+/* Top side - hidden for right/bottom protrusion effect */
 .logo-side-top {
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--logo-depth);
-  transform-origin: center top;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-10px) rotateX(-65deg);
-  background: linear-gradient(180deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
-  opacity: 1;
-  display: block;
-  border-radius: 1rem 1rem 0 0;
+  display: none;
 }
 
 /* Bottom side - metallic gray beveled frame extends from bottom edge */
@@ -184,23 +175,23 @@
   border-radius: 0 0 1rem 1rem;
 }
 
-/* Left side - flared outward, visible */
+/* Left side - hidden for right/bottom protrusion effect */
 .logo-side-left {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: var(--logo-depth);
-  transform-origin: left center;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-10px) rotateY(65deg);
-  background: linear-gradient(270deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
-  opacity: 1;
-  display: block;
-  border-radius: 1rem 0 0 1rem;
+  display: none;
 }
 
-/* Right side - hidden to emphasize protrusion up/left */
+/* Right side - visible metallic frame for forward protrusion */
 .logo-side-right {
-  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--logo-depth);
+  transform-origin: right center;
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(10px) rotateY(-65deg);
+  background: linear-gradient(90deg, rgba(60, 60, 60, 0.92), rgba(100, 100, 100, 0.95), rgba(150, 150, 150, 0.95));
+  opacity: 1;
+  display: block;
+  border-radius: 0 1rem 1rem 0;
 }
 
 /* Shimmer animation keyframes */
@@ -227,7 +218,7 @@
 
 /* Brighten metallic frame on hover for visible sides */
 .logo-3d-wrapper:hover .logo-side-right {
-  display: none;
+  background: linear-gradient(90deg, rgba(80, 80, 80, 0.92), rgba(120, 120, 120, 0.98), rgba(170, 170, 170, 0.98));
 }
 
 .logo-3d-wrapper:hover .logo-side-bottom {
@@ -252,13 +243,13 @@
   }
 
   .logo-side-top {
-    height: var(--logo-depth);
-    transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-6px) rotateX(-70deg);
-    background: linear-gradient(180deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+    display: none;
   }
 
   .logo-side-right {
-    display: none;
+    width: var(--logo-depth);
+    transform: translateZ(calc(var(--logo-depth) * -1)) translateX(6px) rotateY(-70deg);
+    background: linear-gradient(90deg, rgba(50, 50, 50, 0.9), rgba(80, 80, 80, 0.95), rgba(120, 120, 120, 0.95));
   }
   
   .logo-side-bottom {
@@ -268,9 +259,7 @@
   }
 
   .logo-side-left {
-    width: var(--logo-depth);
-    transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-6px) rotateY(70deg);
-    background: linear-gradient(270deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+    display: none;
   }
 }
 
