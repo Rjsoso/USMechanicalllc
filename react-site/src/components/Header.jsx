@@ -146,7 +146,7 @@ function Header() {
           }}
           aria-label="Go to home page"
         >
-          <div className="logo-3d-box square-logo">
+          <div className="logo-3d-box">
             {/* Side panels for 3D box effect */}
             <div className="logo-side logo-side-top"></div>
             <div className="logo-side logo-side-right"></div>
