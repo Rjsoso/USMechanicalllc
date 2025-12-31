@@ -87,7 +87,7 @@
   position: relative;
   display: inline-block;
   transform-style: preserve-3d;
-  transform: rotateX(-5deg) rotateY(5deg);
+  transform: rotateX(-10deg) rotateY(10deg);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
 }
@@ -102,6 +102,27 @@
     0 15px 35px rgba(0, 0, 0, 0.25),
     0 5px 15px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.4s ease, transform 0.4s ease;
+  overflow: hidden;
+}
+
+/* Shimmer effect overlay */
+.logo-front-face::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0s;
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* Base styles for all side panels */
@@ -130,11 +151,12 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 30px;
+  width: 40px;
   transform-origin: right center;
   transform: translateZ(30px) rotateY(-90deg);
-  background: linear-gradient(90deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
+  background: linear-gradient(90deg, rgba(25, 25, 25, 1), rgba(45, 45, 45, 0.75));
   opacity: 1;
+  border-radius: 0 0 1rem 0;
 }
 
 /* Bottom side - extends from bottom edge backward */
@@ -142,11 +164,12 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 30px;
+  height: 40px;
   transform-origin: center bottom;
   transform: translateZ(30px) rotateX(90deg);
-  background: linear-gradient(0deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
+  background: linear-gradient(0deg, rgba(25, 25, 25, 1), rgba(55, 55, 55, 0.75));
   opacity: 1;
+  border-radius: 0 0 1rem 1rem;
 }
 
 /* Left side - hidden for isometric view */
@@ -162,27 +185,35 @@
   display: none;
 }
 
-/* Hover effect - tilt the entire box more dramatically */
-.logo-3d-wrapper:hover .logo-3d-box {
-  transform: rotateX(-12deg) rotateY(12deg);
+/* Shimmer animation keyframes */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+/* Hover effect - trigger shimmer and brighten sides */
+.logo-3d-wrapper:hover .logo-front-face::before {
+  animation: shimmer 1s ease-in-out;
 }
 
 /* Adjust front face shadow on hover */
 .logo-3d-wrapper:hover .logo-front-face {
   box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.3),
-    0 15px 25px rgba(0, 0, 0, 0.2);
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Make visible sides more prominent on hover */
+/* Brighten visible sides on hover */
 .logo-3d-wrapper:hover .logo-side-right {
-  opacity: 1;
-  background: linear-gradient(90deg, rgba(15, 15, 15, 1), rgba(35, 35, 35, 0.85));
+  background: linear-gradient(90deg, rgba(35, 35, 35, 1), rgba(55, 55, 55, 0.8));
 }
 
 .logo-3d-wrapper:hover .logo-side-bottom {
-  opacity: 1;
-  background: linear-gradient(0deg, rgba(15, 15, 15, 1), rgba(35, 35, 35, 0.85));
+  background: linear-gradient(0deg, rgba(35, 35, 35, 1), rgba(65, 65, 65, 0.8));
 }
 
 /* Mobile optimization - reduce effect on small screens */
@@ -192,11 +223,7 @@
   }
   
   .logo-3d-box {
-    transform: rotateX(-3deg) rotateY(3deg);
-  }
-  
-  .logo-3d-wrapper:hover .logo-3d-box {
-    transform: rotateX(-8deg) rotateY(8deg);
+    transform: rotateX(-6deg) rotateY(6deg);
   }
   
   .logo-front-face {
@@ -208,12 +235,12 @@
   }
   
   .logo-side-right {
-    width: 20px;
+    width: 25px;
     transform: translateZ(20px) rotateY(-90deg);
   }
   
   .logo-side-bottom {
-    height: 20px;
+    height: 25px;
     transform: translateZ(20px) rotateX(90deg);
   }
 }
