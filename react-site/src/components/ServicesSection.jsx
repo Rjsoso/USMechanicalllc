@@ -509,6 +509,7 @@ const ServicesSection = () => {
                       );
                     })()}
                   </motion.div>
+                  </div>
                 </>
               )}
             </AnimatePresence>
