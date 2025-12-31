@@ -327,7 +327,7 @@ const ServicesSection = () => {
           <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl overflow-hidden">
             <div className="flex flex-col md:flex-row md:divide-x md:divide-white/10 divide-y divide-white/10">
               <div className="md:w-1/3 bg-white/3">
-                {servicesData.deliveryMethods.map((method, idx) => {
+                {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
                   const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
                   const bgUrl = method.backgroundImage?.asset?.url
@@ -347,19 +347,27 @@ const ServicesSection = () => {
                           <span className="text-sm text-gray-400 font-semibold">
                             {String(idx + 1).padStart(2, '0')}
                           </span>
-                          {method.badge && (
+                          {!method.isQuote && method.badge && (
                             <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}>
                               {method.badge}
                             </span>
                           )}
                         </div>
-                        <span className="text-white font-semibold text-base sm:text-lg">{method.title}</span>
-                        {method.summary && (
+                        <span className="text-white font-semibold text-base sm:text-lg flex items-center gap-2">
+                          {method.title}
+                          {method.isQuote && (
+                            <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-xs font-bold">→</span>
+                          )}
+                        </span>
+                        {!method.isQuote && method.summary && (
                           <span className="text-gray-300 text-sm line-clamp-2">{method.summary}</span>
+                        )}
+                        {method.isQuote && (
+                          <span className="text-gray-300 text-sm">Share your project details and we’ll respond quickly.</span>
                         )}
                       </div>
                       <FiArrowRight className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
-                      {bgUrl && (
+                      {!method.isQuote && bgUrl && (
                         <span
                           className="hidden md:block ml-auto h-10 w-16 rounded-lg border border-white/10 bg-cover bg-center"
                           style={{ backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.35), rgba(5,7,12,0.65)), url(${bgUrl})` }}
@@ -372,8 +380,8 @@ const ServicesSection = () => {
 
               <div className="md:w-2/3 relative">
                 <AnimatePresence mode="wait">
-                  {servicesData.deliveryMethods[activeTab] && (() => {
-                    const method = servicesData.deliveryMethods[activeTab];
+                  {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }][activeTab] && (() => {
+                    const method = [...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }][activeTab];
                     const bodyPreview = extractPlainText(method.body);
                     const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
                     const bgUrl = method.backgroundImage?.asset?.url
@@ -417,94 +425,109 @@ const ServicesSection = () => {
                             </button>
                           </div>
 
-                          <div className="space-y-3">
-                            <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
-                            <h4 className="text-3xl md:text-4xl font-semibold text-white">
-                              {method.title}
-                            </h4>
-                            {method.summary && (
-                              <p className="text-gray-200 leading-relaxed">
-                                {method.summary}
-                              </p>
-                            )}
-                            {bodyPreview && (
-                              <p className="text-gray-300 leading-relaxed">
-                                {bodyPreview}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
-                            <div className="mb-4">
-                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
-                                Request a Quote
-                              </p>
-                              <h5 className="text-2xl font-semibold text-white">
-                                {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
-                              </h5>
-                              <p className="text-gray-300 mt-2 text-sm">
-                                {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
-                              </p>
+                          {!method.isQuote && (
+                            <div className="space-y-3">
+                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
+                              <h4 className="text-3xl md:text-4xl font-semibold text-white">
+                                {method.title}
+                              </h4>
+                              {method.summary && (
+                                <p className="text-gray-200 leading-relaxed">
+                                  {method.summary}
+                                </p>
+                              )}
+                              {bodyPreview && (
+                                <p className="text-gray-300 leading-relaxed">
+                                  {bodyPreview}
+                                </p>
+                              )}
                             </div>
-                            <form
-                              onSubmit={(e) => handleQuoteSubmit(e, method.title)}
-                              className="grid gap-3 md:gap-4"
-                            >
-                              <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                                <input
-                                  name="name"
-                                  type="text"
+                          )}
+
+                          {method.isQuote ? (
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
+                              <div className="mb-4">
+                                <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
+                                  Request a Quote
+                                </p>
+                                <h5 className="text-2xl font-semibold text-white">
+                                  {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
+                                </h5>
+                                <p className="text-gray-300 mt-2 text-sm">
+                                  {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
+                                </p>
+                              </div>
+                              <form
+                                onSubmit={(e) => handleQuoteSubmit(e, 'Request a Quote')}
+                                className="grid gap-3 md:gap-4"
+                              >
+                                <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                  <input
+                                    name="name"
+                                    type="text"
+                                    required
+                                    placeholder="Name"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                  />
+                                  <input
+                                    name="email"
+                                    type="email"
+                                    required
+                                    placeholder="Email"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                  />
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                  <input
+                                    name="phone"
+                                    type="tel"
+                                    placeholder="Phone"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                  />
+                                  <input
+                                    name="deliveryMethod"
+                                    readOnly
+                                    value="General Inquiry"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                  />
+                                </div>
+                                <textarea
+                                  name="message"
                                   required
-                                  placeholder="Name"
+                                  rows="4"
+                                  placeholder="Project details, timelines, and any specifics"
                                   className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                                 />
-                                <input
-                                  name="email"
-                                  type="email"
-                                  required
-                                  placeholder="Email"
-                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                />
+                                <input type="hidden" name="targetEmail" value={emailTarget} />
+                                <div className="flex items-center gap-3 flex-wrap">
+                                  <button
+                                    type="submit"
+                                    disabled={submitting}
+                                    className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
+                                  >
+                                    {submitting ? 'Sending...' : 'Send Request'}
+                                  </button>
+                                  {submitStatus === 'success' && (
+                                    <span className="text-emerald-300 text-sm font-semibold">Sent! We’ll respond shortly.</span>
+                                  )}
+                                  {submitStatus === 'error' && (
+                                    <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
+                                  )}
+                                </div>
+                              </form>
+                            </div>
+                          ) : (
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
+                              <div className="mb-1 flex items-center justify-between">
+                                <p className="text-xs uppercase tracking-[0.25em] text-gray-400">
+                                  Delivery Method Details
+                                </p>
                               </div>
-                              <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                                <input
-                                  name="phone"
-                                  type="tel"
-                                  placeholder="Phone"
-                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                />
-                                <input
-                                  name="deliveryMethod"
-                                  readOnly
-                                  value={method.title}
-                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                />
+                              <div className="text-gray-300 text-sm">
+                                <p>Click “Request a Quote” tab to inquire about this method.</p>
                               </div>
-                              <textarea
-                                name="message"
-                                required
-                                rows="4"
-                                placeholder="Project details, timelines, and any specifics"
-                                className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                              />
-                              <input type="hidden" name="targetEmail" value={emailTarget} />
-                              <div className="flex items-center gap-3 flex-wrap">
-                                <button
-                                  type="submit"
-                                  disabled={submitting}
-                                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
-                                >
-                                  {submitting ? 'Sending...' : 'Send Request'}
-                                </button>
-                                {submitStatus === 'success' && (
-                                  <span className="text-emerald-300 text-sm font-semibold">Sent! We’ll respond shortly.</span>
-                                )}
-                                {submitStatus === 'error' && (
-                                  <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
-                                )}
-                              </div>
-                            </form>
-                          </div>
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     );
