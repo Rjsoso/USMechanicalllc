@@ -302,10 +302,10 @@ const ServicesSection = () => {
 
       {/* Delivery Methods Slice */}
       {servicesData.deliveryMethods?.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-14">
-          <div className="flex flex-col gap-4 mb-8">
+        <div className="max-w-7xl mx-auto px-6 mt-20 md:mt-24">
+          <div className="flex flex-col items-center text-center gap-4 mb-10">
             {servicesData.deliveryMethodsAccent && (
-              <span className="inline-flex items-center w-fit rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gray-200">
+              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gray-200">
                 {servicesData.deliveryMethodsAccent}
               </span>
             )}
@@ -317,7 +317,7 @@ const ServicesSection = () => {
             >
               {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
             </motion.h3>
-            <p className="text-gray-200 text-lg max-w-3xl">
+            <p className="text-gray-200 text-lg max-w-3xl mx-auto">
               {servicesData.deliveryMethodsIntro ||
                 'Predictable delivery, tailored engagement, and clear ownership at every step.'}
             </p>
