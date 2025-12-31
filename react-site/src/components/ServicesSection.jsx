@@ -199,12 +199,6 @@ const ServicesSection = () => {
     <section 
       id="services" 
       className="py-20 bg-gray-700 text-white"
-      style={{
-        position: 'relative',
-        zIndex: 10,
-        marginTop: '0', // No overlap with Company Stats
-        paddingTop: '80px',
-      }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
