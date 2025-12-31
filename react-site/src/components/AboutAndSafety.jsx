@@ -266,7 +266,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           position: 'sticky',
           top: '0',
           zIndex: 30,
-          marginBottom: '-100px', // Allow Services to scroll underneath
+          marginBottom: '0', // Proper spacing for Company Stats
           paddingBottom: '60px',
         }}
       >

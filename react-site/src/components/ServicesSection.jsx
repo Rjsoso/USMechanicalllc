@@ -202,8 +202,8 @@ const ServicesSection = () => {
       style={{
         position: 'relative',
         zIndex: 10,
-        marginTop: '-100px',
-        paddingTop: '120px',
+        marginTop: '0', // No overlap with Company Stats
+        paddingTop: '80px',
       }}
     >
       <div className="max-w-7xl mx-auto px-6">

@@ -225,22 +225,21 @@ const CompanyStats = () => {
     return null;
   }
 
-  const reveal = inView ? 1 : 0;
+  const reveal = inView ? 1 : 0.8; // Start more visible
   const scrollTranslate = -120 * scrollFade;
 
   return (
     <section
       ref={sectionRef}
-      className="w-full py-8 transition-opacity duration-700 ease-out"
+      className="w-full py-16 bg-gray-700 transition-opacity duration-700 ease-out"
       style={{
-        // Stats appear below the sticky safety section
-        opacity: Math.min(1, 0.3 + 0.7 * reveal),
+        // Stats appear below the sticky safety section, above services
+        opacity: 1, // Always fully visible
         transform: `translateY(${scrollTranslate.toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 380ms ease-out',
         willChange: 'opacity, transform',
-        background: 'transparent',
-        marginTop: `-${STATS_OVERLAP_PX}px`,
-        paddingTop: `${STATS_OVERLAP_PX}px`,
+        marginTop: '0', // Remove negative margin overlap
+        paddingTop: '0',
         position: 'relative',
         zIndex: 20,
       }}
