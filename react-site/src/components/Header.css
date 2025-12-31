@@ -85,6 +85,7 @@
 
 .logo-3d-box {
   position: relative;
+  display: inline-block;
   transform-style: preserve-3d;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
@@ -93,6 +94,7 @@
 /* Front face containing the logo */
 .logo-front-face {
   position: relative;
+  display: block;
   transform: translateZ(30px);
   transform-style: preserve-3d;
   padding: 0.5rem;
@@ -111,91 +113,90 @@
 .logo-side {
   position: absolute;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15));
-  transition: opacity 0.4s ease;
-  backface-visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
 }
 
-/* Top side */
+/* Top side - extends from top edge backward */
 .logo-side-top {
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
   height: 30px;
-  transform-origin: top center;
-  transform: rotateX(90deg) translateZ(-15px);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-  border-radius: 1rem 1rem 0 0;
-  opacity: 0.9;
+  transform-origin: center top;
+  transform: translateZ(15px) rotateX(90deg);
+  background: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
+  opacity: 1;
 }
 
-/* Right side */
+/* Right side - extends from right edge backward */
 .logo-side-right {
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
   width: 30px;
   transform-origin: right center;
-  transform: rotateY(90deg) translateZ(-15px);
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-  border-radius: 0 1rem 1rem 0;
-  opacity: 0.9;
+  transform: translateZ(15px) rotateY(90deg);
+  background: linear-gradient(90deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
+  opacity: 1;
 }
 
-/* Bottom side */
+/* Bottom side - extends from bottom edge backward */
 .logo-side-bottom {
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
   height: 30px;
-  transform-origin: bottom center;
-  transform: rotateX(-90deg) translateZ(-15px);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-  border-radius: 0 0 1rem 1rem;
-  opacity: 0.6;
+  transform-origin: center bottom;
+  transform: translateZ(15px) rotateX(-90deg);
+  background: linear-gradient(0deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
+  opacity: 1;
 }
 
-/* Left side */
+/* Left side - extends from left edge backward */
 .logo-side-left {
-  top: 0;
-  left: 0;
-  bottom: 0;
+  top: 0.5rem;
+  left: 0.5rem;
+  bottom: 0.5rem;
   width: 30px;
   transform-origin: left center;
-  transform: rotateY(-90deg) translateZ(-15px);
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-  border-radius: 1rem 0 0 1rem;
-  opacity: 0.6;
+  transform: translateZ(15px) rotateY(-90deg);
+  background: linear-gradient(270deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
+  opacity: 1;
 }
 
 /* Hover effect - tilt the entire box */
 .logo-3d-wrapper:hover .logo-3d-box {
-  transform: rotateX(-8deg) rotateY(8deg);
+  transform: rotateX(-10deg) rotateY(10deg);
 }
 
 /* Adjust front face shadow on hover */
 .logo-3d-wrapper:hover .logo-front-face {
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.25),
-    0 10px 20px rgba(0, 0, 0, 0.15),
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 15px 25px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-/* Dynamic side visibility on hover - top and right more visible */
+/* Make sides more visible on hover to emphasize the 3D effect */
 .logo-3d-wrapper:hover .logo-side-top {
   opacity: 1;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 1), rgba(50, 50, 50, 0.8));
 }
 
 .logo-3d-wrapper:hover .logo-side-right {
   opacity: 1;
+  background: linear-gradient(90deg, rgba(20, 20, 20, 1), rgba(40, 40, 40, 0.8));
 }
 
-/* Bottom and left less visible on hover */
 .logo-3d-wrapper:hover .logo-side-bottom {
-  opacity: 0.3;
+  opacity: 0.8;
+  background: linear-gradient(0deg, rgba(40, 40, 40, 0.9), rgba(70, 70, 70, 0.6));
 }
 
 .logo-3d-wrapper:hover .logo-side-left {
-  opacity: 0.3;
+  opacity: 0.8;
+  background: linear-gradient(270deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.6));
 }
 
 /* Mobile optimization - reduce effect on small screens */
@@ -205,7 +206,7 @@
   }
   
   .logo-3d-wrapper:hover .logo-3d-box {
-    transform: rotateX(-5deg) rotateY(5deg);
+    transform: rotateX(-6deg) rotateY(6deg);
   }
   
   .logo-front-face {
@@ -213,27 +214,27 @@
   }
   
   .logo-side {
-    opacity: 0.7;
+    opacity: 0.8;
   }
   
   .logo-side-top {
     height: 20px;
-    transform: rotateX(90deg) translateZ(-10px);
+    transform: translateZ(10px) rotateX(90deg);
   }
   
   .logo-side-right {
     width: 20px;
-    transform: rotateY(90deg) translateZ(-10px);
+    transform: translateZ(10px) rotateY(90deg);
   }
   
   .logo-side-bottom {
     height: 20px;
-    transform: rotateX(-90deg) translateZ(-10px);
+    transform: translateZ(10px) rotateX(-90deg);
   }
   
   .logo-side-left {
     width: 20px;
-    transform: rotateY(-90deg) translateZ(-10px);
+    transform: translateZ(10px) rotateY(-90deg);
   }
 }
 
