@@ -100,28 +100,30 @@ function Header() {
 
   return (
     <>
-      {/* Logo - Custom 3D box design */}
-      <div 
-        className="fixed top-4 left-4 z-50 logo-box"
-        onClick={handleLogoClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleLogoClick();
-          }
-        }}
-        aria-label="Go to home page"
-      >
-        <div className="logo-content">
-          <div className="us-text">
-            <span className="u">U</span>
-            <span className="s">S</span>
+      {/* Logo - 3D plaque design with perspective */}
+      <div className="fixed top-4 left-4 z-50 plaque-perspective">
+        <div 
+          className="logo-3d-card"
+          onClick={handleLogoClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleLogoClick();
+            }
+          }}
+          aria-label="Go to home page"
+        >
+          <div className="logo-content">
+            <div className="us-text">
+              <span className="u">U</span>
+              <span className="s">S</span>
+            </div>
+            <div className="mechanical-text">Mechanical</div>
           </div>
-          <div className="mechanical-text">Mechanical</div>
+          <div className="underline"></div>
         </div>
-        <div className="underline"></div>
       </div>
 
       {/* Dock - positioned on right */}
