@@ -314,7 +314,7 @@ const ServicesSection = () => {
             </p>
           </div>
 
-          <div className="relative min-h-[640px] md:min-h-[720px]">
+          <div className="relative min-h-[620px] md:min-h-[700px]">
             <div className="grid gap-6 md:gap-8 md:grid-cols-2">
               {servicesData.deliveryMethods.map((method, idx) => {
                 const bodyPreview = extractPlainText(method.body);
@@ -373,19 +373,20 @@ const ServicesSection = () => {
               {expandedIndex !== null && servicesData.deliveryMethods?.[expandedIndex] && (
                 <>
                   <motion.div
-                    className="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm"
+                    className="absolute inset-0 z-10 rounded-3xl bg-black/65 backdrop-blur-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={handleClose}
                   />
-                  <motion.div
-                    layoutId={`delivery-card-${expandedIndex}`}
-                    className="absolute inset-0 z-20 overflow-hidden rounded-2xl md:rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 p-6 md:p-10 shadow-2xl overflow-y-auto"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
+                  <div className="absolute inset-0 flex items-stretch justify-center p-3 md:p-6">
+                    <motion.div
+                      layoutId={`delivery-card-${expandedIndex}`}
+                      className="relative z-20 overflow-hidden rounded-2xl md:rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl w-full max-w-5xl max-h-[90vh] md:max-h-[82vh] overflow-y-auto p-5 md:p-8"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                    >
                     {(() => {
                       const method = servicesData.deliveryMethods[expandedIndex];
                       const bodyPreview = extractPlainText(method.body);
