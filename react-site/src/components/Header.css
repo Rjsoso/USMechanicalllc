@@ -1,3 +1,12 @@
+.logo-3d-box {
+  --logo-depth: 80px;
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
 .glass-header {
   backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
   -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
@@ -142,17 +151,18 @@
   pointer-events: none;
 }
 
-/* Right side - metallic gray beveled frame extends from right edge */
-.logo-side-right {
+/* Top side - flared outward, visible */
+.logo-side-top {
   top: 0;
+  left: 0;
   right: 0;
-  bottom: 0;
-  width: var(--logo-depth);
-  transform-origin: right center;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(8px) rotateY(-70deg);
-  background: linear-gradient(90deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  height: var(--logo-depth);
+  transform-origin: center top;
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-8px) rotateX(-70deg);
+  background: linear-gradient(180deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
   opacity: 1;
-  border-radius: 0 0 1rem 0;
+  display: block;
+  border-radius: 1rem 1rem 0 0;
 }
 
 /* Bottom side - metallic gray beveled frame extends from bottom edge */
@@ -168,16 +178,22 @@
   border-radius: 0 0 1rem 1rem;
 }
 
-/* Left side - hidden for clean isometric look */
+/* Left side - flared outward, visible */
 .logo-side-left {
   top: 0;
   left: 0;
   bottom: 0;
   width: var(--logo-depth);
   transform-origin: left center;
-  transform: translateZ(calc(var(--logo-depth) * -1)) rotateY(78deg);
-  background: linear-gradient(270deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  opacity: 0;
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-8px) rotateY(70deg);
+  background: linear-gradient(270deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  opacity: 1;
+  display: block;
+  border-radius: 1rem 0 0 1rem;
+}
+
+/* Right side - hidden to emphasize protrusion up/left */
+.logo-side-right {
   display: none;
 }
 
@@ -229,16 +245,26 @@
       0 4px 10px rgba(0, 0, 0, 0.15);
   }
 
+  .logo-side-top {
+    height: var(--logo-depth);
+    transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-6px) rotateX(-70deg);
+    background: linear-gradient(180deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  }
+
   .logo-side-right {
-    width: var(--logo-depth);
-    transform: translateZ(calc(var(--logo-depth) * -1)) translateX(6px) rotateY(-70deg);
-    background: linear-gradient(90deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+    display: none;
   }
   
   .logo-side-bottom {
     height: var(--logo-depth);
     transform: translateZ(calc(var(--logo-depth) * -1)) translateY(6px) rotateX(70deg);
     background: linear-gradient(0deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  }
+
+  .logo-side-left {
+    width: var(--logo-depth);
+    transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-6px) rotateY(70deg);
+    background: linear-gradient(270deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
   }
 }
 
