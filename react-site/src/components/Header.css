@@ -87,6 +87,7 @@
   position: relative;
   display: inline-block;
   transform-style: preserve-3d;
+  transform: rotateX(-5deg) rotateY(5deg);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
 }
@@ -111,7 +112,7 @@
   pointer-events: none;
 }
 
-/* Top side - extends from top edge backward */
+/* Top side - hidden for isometric view */
 .logo-side-top {
   top: 0;
   left: 0;
@@ -120,7 +121,8 @@
   transform-origin: center top;
   transform: translateZ(30px) rotateX(-90deg);
   background: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
-  opacity: 1;
+  opacity: 0;
+  display: none;
 }
 
 /* Right side - extends from right edge backward */
@@ -147,7 +149,7 @@
   opacity: 1;
 }
 
-/* Left side - extends from left edge backward */
+/* Left side - hidden for isometric view */
 .logo-side-left {
   top: 0;
   left: 0;
@@ -156,12 +158,13 @@
   transform-origin: left center;
   transform: translateZ(30px) rotateY(90deg);
   background: linear-gradient(270deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
-  opacity: 1;
+  opacity: 0;
+  display: none;
 }
 
-/* Hover effect - tilt the entire box */
+/* Hover effect - tilt the entire box more dramatically */
 .logo-3d-wrapper:hover .logo-3d-box {
-  transform: rotateX(-10deg) rotateY(10deg);
+  transform: rotateX(-12deg) rotateY(12deg);
 }
 
 /* Adjust front face shadow on hover */
@@ -171,25 +174,15 @@
     0 15px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Make sides more visible on hover to emphasize the 3D effect */
-.logo-3d-wrapper:hover .logo-side-top {
-  opacity: 1;
-  background: linear-gradient(180deg, rgba(20, 20, 20, 1), rgba(50, 50, 50, 0.8));
-}
-
+/* Make visible sides more prominent on hover */
 .logo-3d-wrapper:hover .logo-side-right {
   opacity: 1;
-  background: linear-gradient(90deg, rgba(20, 20, 20, 1), rgba(40, 40, 40, 0.8));
+  background: linear-gradient(90deg, rgba(15, 15, 15, 1), rgba(35, 35, 35, 0.85));
 }
 
 .logo-3d-wrapper:hover .logo-side-bottom {
-  opacity: 0.8;
-  background: linear-gradient(0deg, rgba(40, 40, 40, 0.9), rgba(70, 70, 70, 0.6));
-}
-
-.logo-3d-wrapper:hover .logo-side-left {
-  opacity: 0.8;
-  background: linear-gradient(270deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.6));
+  opacity: 1;
+  background: linear-gradient(0deg, rgba(15, 15, 15, 1), rgba(35, 35, 35, 0.85));
 }
 
 /* Mobile optimization - reduce effect on small screens */
@@ -198,8 +191,12 @@
     perspective: 500px;
   }
   
+  .logo-3d-box {
+    transform: rotateX(-3deg) rotateY(3deg);
+  }
+  
   .logo-3d-wrapper:hover .logo-3d-box {
-    transform: rotateX(-6deg) rotateY(6deg);
+    transform: rotateX(-8deg) rotateY(8deg);
   }
   
   .logo-front-face {
@@ -207,12 +204,7 @@
   }
   
   .logo-side {
-    opacity: 0.8;
-  }
-  
-  .logo-side-top {
-    height: 20px;
-    transform: translateZ(20px) rotateX(-90deg);
+    opacity: 0.9;
   }
   
   .logo-side-right {
@@ -223,11 +215,6 @@
   .logo-side-bottom {
     height: 20px;
     transform: translateZ(20px) rotateX(90deg);
-  }
-  
-  .logo-side-left {
-    width: 20px;
-    transform: translateZ(20px) rotateY(90deg);
   }
 }
 
