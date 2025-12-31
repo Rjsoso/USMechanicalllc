@@ -30,11 +30,9 @@ export default function Home() {
         </section>
         <div className="bg-gray-700" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
 
-          <div className="relative overflow-hidden" style={{ zIndex: 2 }}>
-            <AboutAndSafety />
+          <AboutAndSafety />
 
-            <CompanyStats />
-          </div>
+          <CompanyStats />
 
           <ServicesSection />
 

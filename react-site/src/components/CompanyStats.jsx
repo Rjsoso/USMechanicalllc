@@ -100,7 +100,6 @@ const CompanyStats = () => {
   const [statsData, setStatsData] = useState(null);
   const [inView, setInView] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [scrollFade, setScrollFade] = useState(0);
   const sectionRef = useRef(null);
   const STATS_OVERLAP_PX = 60;
 
@@ -191,34 +190,6 @@ const CompanyStats = () => {
     };
   }, [statsData]);
 
-
-  // Track scroll position to fade out stats as it reaches 90% to the top (10% from top)
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const viewport = window.innerHeight || 1;
-      const fadeThreshold = viewport * 0.1; // 10% from top = 90% to top
-      
-      // Calculate opacity: 1 when below threshold, 0 when at/above threshold
-      if (rect.top > fadeThreshold) {
-        setScrollFade(0); // Fully visible
-      } else {
-        // Fade from 1 to 0 as it crosses the threshold
-        const fadeProgress = Math.min(1, Math.max(0, 1 - (rect.top / fadeThreshold)));
-        setScrollFade(fadeProgress);
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, []);
-
   if (loading) {
     return (
       <section className="w-full py-16 bg-gray-700">
@@ -233,19 +204,10 @@ const CompanyStats = () => {
     return null;
   }
 
-  const reveal = inView ? 1 : 0.8; // Start more visible
-  const fadeOpacity = 1 - scrollFade; // Fade out as scrollFade increases
-
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-gray-700 transition-opacity duration-300 ease-out"
-      style={{
-        // Stats scroll with services, fade out at 90% to top
-        opacity: fadeOpacity,
-        transition: 'opacity 200ms ease-out',
-        willChange: 'opacity',
-      }}
+      className="w-full py-16 bg-gray-700"
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
