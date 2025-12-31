@@ -131,10 +131,10 @@ function Header() {
 
   return (
     <>
-      {/* Logo - Separate, positioned in top-left corner with 3D extruded box effect */}
+      {/* Logo - Separate, positioned in top-left corner with 3D shadow effect */}
       {logoUrls && (
         <div 
-          className="fixed top-4 left-4 z-50 cursor-pointer logo-3d-wrapper"
+          className="fixed top-4 left-4 z-50 logo-wrapper"
           onClick={handleLogoClick}
           role="button"
           tabIndex={0}
@@ -146,30 +146,19 @@ function Header() {
           }}
           aria-label="Go to home page"
         >
-          <div className="logo-3d-box">
-            {/* Side panels for 3D box effect */}
-            <div className="logo-side logo-side-top"></div>
-            <div className="logo-side logo-side-right"></div>
-            <div className="logo-side logo-side-bottom"></div>
-            <div className="logo-side logo-side-left"></div>
-            
-            {/* Front face with logo image */}
-            <div className="logo-front-face">
-              <img
-                src={logoUrls.src}
-                srcSet={logoUrls.srcSet}
-                sizes="(max-width: 768px) 128px, 160px"
-                alt="US Mechanical"
-                className="logo-face-image"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                onError={(e) => {
-                  e.target.style.display = "none";
-                }}
-              />
-            </div>
-          </div>
+          <img
+            src={logoUrls.src}
+            srcSet={logoUrls.srcSet}
+            sizes="(max-width: 768px) 128px, 160px"
+            alt="US Mechanical"
+            className="logo-image"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
         </div>
       )}
 

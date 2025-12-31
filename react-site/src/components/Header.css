@@ -1,285 +1,51 @@
-.logo-3d-box {
-  --logo-depth: 80px;
-  position: relative;
+/* Logo wrapper with 3D shadow effect */
+.logo-wrapper {
   display: inline-block;
-  transform-style: preserve-3d;
-  transform: rotateX(0deg) rotateY(0deg);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-}
-.glass-header {
-  backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.25) contrast(1.05);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
-    0 8px 32px rgba(0, 0, 0, 0.25);
-  transition: all 0.5s ease;
+  cursor: pointer;
+  /* Multi-layer shadow for 3D depth effect */
+  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.3))
+          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.2))
+          drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.4));
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-/* When scrolled — fades to white */
-.glass-header.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px) saturate(1.4);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+/* Hover effect - lift and glow */
+.logo-wrapper:hover {
+  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.3))
+          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.2))
+          drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))
+          drop-shadow(0 0 40px rgba(200, 200, 255, 0.2));
+  transform: translateY(-2px);
 }
 
-.logo-glass {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1.25rem; /* makes the capsule fit the logo */
-  border-radius: 9999px; /* fully rounded capsule */
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px) saturate(2) brightness(1.3);
-  -webkit-backdrop-filter: blur(20px) saturate(2) brightness(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.25),
-    0 6px 20px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.3s ease;
-}
-
-/* Add a subtle reflective highlight shimmer */
-.logo-glass::before {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.4) 0%, transparent 80%);
-  transform: rotate(25deg);
-  animation: glassShine 8s infinite linear;
-}
-
-@keyframes glassShine {
-  0% {
-    transform: translateX(-100%) rotate(25deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(25deg);
-  }
-}
-
+/* Logo image */
 .logo-image {
-  height: 3.25rem;
-  width: auto;
-  object-fit: contain;
-}
-
-.logo-glass:hover {
-  transform: scale(1.05);
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.5),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.2),
-    0 8px 30px rgba(0, 0, 0, 0.25);
-}
-
-/* 3D Extruded Box Logo Effect */
-.logo-3d-wrapper {
-  perspective: 930px;
-  perspective-origin: 50% 50%;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  overflow: visible !important;
-}
-
-.logo-3d-box {
-  --logo-depth: 90px;
-  position: relative;
-  display: inline-block;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  transform: rotateX(0deg) rotateY(0deg);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
-  overflow: visible !important;
-}
-
-/* Front face containing the logo */
-.logo-front-face {
-  position: relative;
-  display: inline-block;
-  transform: translateZ(0px);
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.25),
-    0 5px 15px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
-  overflow: visible;
-  z-index: 2;
-}
-
-/* Shimmer effect overlay */
-.logo-front-face::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -100%;
-  width: 50%;
-  height: 200%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-20deg);
-  transition: left 0s;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Logo image sized naturally; container wraps it */
-.logo-face-image {
   display: block;
-  height: 8rem; /* revert to original ~128px height */
+  height: 8rem; /* 128px on mobile */
   width: auto;
   object-fit: contain;
   border-radius: 0.75rem;
-  position: relative;
-  z-index: 1;
 }
 
+/* Desktop size */
 @media (min-width: 768px) {
-  .logo-face-image {
-    height: 10rem; /* revert to original ~160px height on desktop */
+  .logo-image {
+    height: 10rem; /* 160px on desktop */
   }
 }
 
-/* Base styles for all side panels */
-.logo-side {
-  position: absolute;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Top side - hidden for right/bottom protrusion effect */
-.logo-side-top {
-  display: none;
-}
-
-/* Bottom side - metallic gray beveled frame extends from bottom edge */
-.logo-side-bottom {
-  bottom: 0;
-  left: 0;
-  width: auto;
-  height: var(--logo-depth);
-  transform-origin: center bottom;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(10px) rotateX(65deg);
-  background: linear-gradient(0deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
-  opacity: 1;
-  border-radius: 0 0 1rem 1rem;
-  /* Match the image width */
-  min-width: 100%;
-}
-
-/* Left side - hidden for right/bottom protrusion effect */
-.logo-side-left {
-  display: none;
-}
-
-/* Right side - visible metallic frame for forward protrusion */
-.logo-side-right {
-  top: 0;
-  right: 0;
-  height: 8rem;
-  width: var(--logo-depth);
-  transform-origin: right center;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(10px) rotateY(-65deg);
-  background: linear-gradient(90deg, rgba(60, 60, 60, 0.92), rgba(100, 100, 100, 0.95), rgba(150, 150, 150, 0.95));
-  opacity: 1;
-  display: block;
-  border-radius: 0 1rem 1rem 0;
-}
-
-@media (min-width: 768px) {
-  .logo-side-right {
-    height: 10rem;
-  }
-}
-
-/* Shimmer animation keyframes */
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 200%;
-  }
-}
-
-/* Hover effect - trigger shimmer and brighten sides */
-.logo-3d-wrapper:hover .logo-front-face::before {
-  animation: shimmer 1s ease-in-out;
-}
-
-/* Adjust front face shadow on hover */
-.logo-3d-wrapper:hover .logo-front-face {
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Brighten metallic frame on hover for visible sides */
-.logo-3d-wrapper:hover .logo-side-right {
-  background: linear-gradient(90deg, rgba(80, 80, 80, 0.92), rgba(120, 120, 120, 0.98), rgba(170, 170, 170, 0.98));
-}
-
-.logo-3d-wrapper:hover .logo-side-bottom {
-  background: linear-gradient(0deg, rgba(170, 170, 170, 0.98), rgba(120, 120, 120, 0.98), rgba(80, 80, 80, 0.92));
-}
-
-/* Mobile optimization - reduce effect on small screens */
+/* Mobile - reduce shadow intensity */
 @media (max-width: 768px) {
-  .logo-3d-box {
-    --logo-depth: 55px;
-  }
-
-  .logo-3d-wrapper {
-    perspective: 920px;
-    perspective-origin: 50% 50%;
-  }
-
-  .logo-front-face {
-    box-shadow: 
-      0 12px 28px rgba(0, 0, 0, 0.22),
-      0 4px 10px rgba(0, 0, 0, 0.15);
-  }
-
-  .logo-side-top {
-    display: none;
-  }
-
-  .logo-side-right {
-    height: 8rem;
-    width: var(--logo-depth);
-    transform: translateZ(calc(var(--logo-depth) * -1)) translateX(6px) rotateY(-70deg);
-    background: linear-gradient(90deg, rgba(50, 50, 50, 0.9), rgba(80, 80, 80, 0.95), rgba(120, 120, 120, 0.95));
+  .logo-wrapper {
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.3))
+            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.2))
+            drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.35));
   }
   
-  .logo-side-bottom {
-    height: var(--logo-depth);
-    transform: translateZ(calc(var(--logo-depth) * -1)) translateY(6px) rotateX(70deg);
-    background: linear-gradient(0deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
-  }
-
-  .logo-side-left {
-    display: none;
+  .logo-wrapper:hover {
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.3))
+            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.2))
+            drop-shadow(0 0 15px rgba(255, 255, 255, 0.25));
+    transform: translateY(-1px);
   }
 }
-
