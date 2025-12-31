@@ -3,16 +3,16 @@ import { Children, cloneElement, useEffect, useRef, useState } from 'react';
 
 import './Dock.css';
 
-function DockItem({ children, className = '', onClick, mouseY, spring, distance, magnification, baseItemSize }) {
+function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
 
-  const mouseDistance = useTransform(mouseY, (val) => {
+  const mouseDistance = useTransform(mouseX, (val) => {
     const rect = ref.current?.getBoundingClientRect() ?? {
-      y: 0,
-      height: baseItemSize,
+      x: 0,
+      width: baseItemSize,
     };
-    return val - rect.y - baseItemSize / 2;
+    return val - rect.x - (rect.width ?? baseItemSize) / 2;
   });
 
   const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
@@ -82,19 +82,19 @@ export default function Dock({
   panelHeight = 70,
   baseItemSize = 50,
 }) {
-  const mouseY = useMotionValue(Infinity);
+  const mouseX = useMotionValue(Infinity);
 
   return (
-    <motion.div style={{ width: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
+    <motion.div style={{ height: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
-        onMouseMove={({ clientY }) => {
-          mouseY.set(clientY);
+        onMouseMove={({ clientX }) => {
+          mouseX.set(clientX);
         }}
         onMouseLeave={() => {
-          mouseY.set(Infinity);
+          mouseX.set(Infinity);
         }}
         className={`dock-panel ${className}`}
-        style={{ width: panelHeight }}
+        style={{ height: panelHeight }}
         role="toolbar"
         aria-label="Application dock"
       >
@@ -103,7 +103,7 @@ export default function Dock({
             key={index}
             onClick={item.onClick}
             className={item.className}
-            mouseY={mouseY}
+            mouseX={mouseX}
             spring={spring}
             distance={distance}
             magnification={magnification}
