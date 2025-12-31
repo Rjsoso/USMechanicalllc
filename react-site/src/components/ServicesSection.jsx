@@ -9,6 +9,7 @@ const ServicesSection = () => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody';
   const [servicesData, setServicesData] = useState(null);
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('idle'); // idle | loading | success | error
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const ServicesSection = () => {
   }, [navigate]);
 
   const handleExpand = useCallback((index) => {
+    setActiveTab(index);
     setExpandedIndex(index);
     setSubmitStatus('idle');
   }, []);
@@ -321,145 +323,81 @@ const ServicesSection = () => {
             </p>
           </div>
 
-          <div className="relative min-h-[620px] md:min-h-[700px]">
-            <div className="grid gap-6 md:gap-8 md:grid-cols-2 relative">
-              {/* SVG connectors for desktop */}
-              <svg
-                className="hidden md:block absolute inset-0 pointer-events-none"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                    <path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.35)" />
-                  </marker>
-                  <filter id="squiggle">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" result="noise" />
-                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
-                  </filter>
-                </defs>
-                <path
-                  d="M 35% 22% C 45% 30%, 55% 30%, 65% 22%"
-                  stroke="rgba(255,255,255,0.35)"
-                  strokeWidth="2.5"
-                  fill="none"
-                  markerEnd="url(#arrowhead)"
-                  filter="url(#squiggle)"
-                />
-                <path
-                  d="M 35% 70% C 45% 62%, 55% 62%, 65% 70%"
-                  stroke="rgba(255,255,255,0.35)"
-                  strokeWidth="2.5"
-                  fill="none"
-                  markerEnd="url(#arrowhead)"
-                  filter="url(#squiggle)"
-                />
-                <path
-                  d="M 15% 45% C 25% 55%, 25% 65%, 15% 75%"
-                  stroke="rgba(255,255,255,0.35)"
-                  strokeWidth="2.5"
-                  fill="none"
-                  markerEnd="url(#arrowhead)"
-                  filter="url(#squiggle)"
-                />
-              </svg>
+          {/* Single Rectangle Tabs / Accordion */}
+          <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl overflow-hidden">
+            <div className="flex flex-col md:flex-row md:divide-x md:divide-white/10 divide-y divide-white/10">
+              <div className="md:w-1/3 bg-white/3">
+                {servicesData.deliveryMethods.map((method, idx) => {
+                  const isActive = activeTab === idx;
+                  const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
+                  const bgUrl = method.backgroundImage?.asset?.url
+                    ? `${method.backgroundImage.asset.url}?w=900&q=80&auto=format`
+                    : null;
 
-              {[0,1,3,2].map((mappedIdx, displayIdx) => {
-                const method = servicesData.deliveryMethods[mappedIdx];
-                const bodyPreview = extractPlainText(method.body);
-                const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
-                const bgUrl = method.backgroundImage?.asset?.url
-                  ? `${method.backgroundImage.asset.url}?w=1600&q=85&auto=format`
-                  : null;
-
-                return (
-                  <motion.div
-                    layout
-                    layoutId={`delivery-card-${mappedIdx}`}
-                    key={mappedIdx}
-                    className="group relative overflow-hidden rounded-2xl border border-white/10 p-6 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:border-white/20"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ delay: displayIdx * 0.05 }}
-                    style={bgUrl ? {
-                      backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.82), rgba(5,7,12,0.94)), url(${bgUrl})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    } : undefined}
-                  >
-                    {!bgUrl && (
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
-                    )}
-                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
-                    {method.badge && (
-                      <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
-                        {method.badge}
-                      </span>
-                    )}
-                      <span className="text-sm text-gray-400 font-semibold">
-                        {String(
-                          displayIdx === 2
-                            ? 4
-                            : displayIdx === 3
-                              ? 3
-                              : displayIdx + 1
-                        ).padStart(2, '0')}
-                      </span>
-                  </div>
-                  <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
-                    {method.title}
-                  </h4>
-                  {method.summary && (
-                    <p className="text-gray-200 leading-relaxed mb-3 relative z-10">
-                      {method.summary}
-                    </p>
-                  )}
-                  {bodyPreview && (
-                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 relative z-10">
-                      {bodyPreview}
-                    </p>
-                  )}
-                    <div className="relative z-10 mt-5 flex flex-wrap gap-3 items-center">
-                      <button
-                        onClick={() => handleExpand(mappedIdx)}
-                        className="inline-flex items-center gap-2 bg-blue-600/90 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
-                      >
-                        Get a Quote
-                        <FiArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            <AnimatePresence>
-              {expandedIndex !== null && servicesData.deliveryMethods?.[expandedIndex] && (
-                <>
-                  <motion.div
-                    className="absolute inset-0 z-10 rounded-3xl bg-black/65 backdrop-blur-sm"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={handleClose}
-                  />
-                  <div className="absolute inset-0 flex items-stretch justify-center p-3 md:p-6">
-                    <motion.div
-                      layoutId={`delivery-card-${expandedIndex}`}
-                      className="relative z-20 overflow-hidden rounded-2xl md:rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl w-full max-w-5xl max-h-[90vh] md:max-h-[82vh] overflow-y-auto p-5 md:p-8"
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleExpand(idx)}
+                      className={`w-full text-left px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 transition ${
+                        isActive ? 'bg-white/10' : 'hover:bg-white/5'
+                      }`}
                     >
-                    {(() => {
-                      const method = servicesData.deliveryMethods[expandedIndex];
-                      const bodyPreview = extractPlainText(method.body);
-                      const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
-                      const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
-                      return (
-                        <div className="flex flex-col h-full gap-6 md:gap-8 pb-4 md:pb-6">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-400 font-semibold">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          {method.badge && (
+                            <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}>
+                              {method.badge}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-white font-semibold text-base sm:text-lg">{method.title}</span>
+                        {method.summary && (
+                          <span className="text-gray-300 text-sm line-clamp-2">{method.summary}</span>
+                        )}
+                      </div>
+                      <FiArrowRight className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                      {bgUrl && (
+                        <span
+                          className="hidden md:block ml-auto h-10 w-16 rounded-lg border border-white/10 bg-cover bg-center"
+                          style={{ backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.35), rgba(5,7,12,0.65)), url(${bgUrl})` }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="md:w-2/3 relative">
+                <AnimatePresence mode="wait">
+                  {servicesData.deliveryMethods[activeTab] && (() => {
+                    const method = servicesData.deliveryMethods[activeTab];
+                    const bodyPreview = extractPlainText(method.body);
+                    const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
+                    const bgUrl = method.backgroundImage?.asset?.url
+                      ? `${method.backgroundImage.asset.url}?w=1600&q=85&auto=format`
+                      : null;
+                    const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
+
+                    return (
+                      <motion.div
+                        key={activeTab}
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full"
+                      >
+                        <div
+                          className="h-full flex flex-col gap-6 md:gap-8 p-6 md:p-8"
+                          style={bgUrl ? {
+                            backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.82), rgba(5,7,12,0.94)), url(${bgUrl})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                          } : undefined}
+                        >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3">
                               {method.badge && (
@@ -467,8 +405,8 @@ const ServicesSection = () => {
                                   {method.badge}
                                 </span>
                               )}
-                              <span className="text-sm text-gray-400 font-semibold">
-                                {String(expandedIndex + 1).padStart(2, '0')}
+                              <span className="text-sm text-gray-300 font-semibold">
+                                {String(activeTab + 1).padStart(2, '0')}
                               </span>
                             </div>
                             <button
@@ -479,106 +417,101 @@ const ServicesSection = () => {
                             </button>
                           </div>
 
-                          <div className="grid md:grid-cols-5 gap-6 md:gap-10 items-start">
-                            <div className="md:col-span-2 space-y-3">
-                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
-                              <h4 className="text-3xl md:text-4xl font-semibold text-white">
-                                {method.title}
-                              </h4>
-                              {method.summary && (
-                                <p className="text-gray-200 leading-relaxed">
-                                  {method.summary}
-                                </p>
-                              )}
-                              {bodyPreview && (
-                                <p className="text-gray-400 leading-relaxed">
-                                  {bodyPreview}
-                                </p>
-                              )}
-                            </div>
+                          <div className="space-y-3">
+                            <p className="text-xs uppercase tracking-[0.25em] text-gray-400">Delivery Method</p>
+                            <h4 className="text-3xl md:text-4xl font-semibold text-white">
+                              {method.title}
+                            </h4>
+                            {method.summary && (
+                              <p className="text-gray-200 leading-relaxed">
+                                {method.summary}
+                              </p>
+                            )}
+                            {bodyPreview && (
+                              <p className="text-gray-300 leading-relaxed">
+                                {bodyPreview}
+                              </p>
+                            )}
+                          </div>
 
-                            <div className="md:col-span-3">
-                              <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
-                                <div className="mb-4">
-                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
-                                    Request a Quote
-                                  </p>
-                                  <h5 className="text-2xl font-semibold text-white">
-                                    {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
-                                  </h5>
-                                  <p className="text-gray-300 mt-2 text-sm">
-                                    {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
-                                  </p>
-                                </div>
-                                <form
-                                  onSubmit={(e) => handleQuoteSubmit(e, method.title)}
-                                  className="grid gap-3 md:gap-4"
-                                >
-                                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                                    <input
-                                      name="name"
-                                      type="text"
-                                      required
-                                      placeholder="Name"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                    />
-                                    <input
-                                      name="email"
-                                      type="email"
-                                      required
-                                      placeholder="Email"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                    />
-                                  </div>
-                                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                                    <input
-                                      name="phone"
-                                      type="tel"
-                                      placeholder="Phone"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                    />
-                                    <input
-                                      name="deliveryMethod"
-                                      readOnly
-                                      value={method.title}
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                    />
-                                  </div>
-                                  <textarea
-                                    name="message"
-                                    required
-                                    rows="4"
-                                    placeholder="Project details, timelines, and any specifics"
-                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                  />
-                                  <input type="hidden" name="targetEmail" value={emailTarget} />
-                                  <div className="flex items-center gap-3 flex-wrap">
-                                    <button
-                                      type="submit"
-                                      disabled={submitting}
-                                      className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
-                                    >
-                                      {submitting ? 'Sending...' : 'Send Request'}
-                                    </button>
-                                    {submitStatus === 'success' && (
-                                      <span className="text-emerald-300 text-sm font-semibold">Sent! We’ll respond shortly.</span>
-                                    )}
-                                    {submitStatus === 'error' && (
-                                      <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
-                                    )}
-                                  </div>
-                                </form>
-                              </div>
+                          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 shadow-lg">
+                            <div className="mb-4">
+                              <p className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-1">
+                                Request a Quote
+                              </p>
+                              <h5 className="text-2xl font-semibold text-white">
+                                {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
+                              </h5>
+                              <p className="text-gray-300 mt-2 text-sm">
+                                {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
+                              </p>
                             </div>
+                            <form
+                              onSubmit={(e) => handleQuoteSubmit(e, method.title)}
+                              className="grid gap-3 md:gap-4"
+                            >
+                              <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                <input
+                                  name="name"
+                                  type="text"
+                                  required
+                                  placeholder="Name"
+                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                />
+                                <input
+                                  name="email"
+                                  type="email"
+                                  required
+                                  placeholder="Email"
+                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                />
+                              </div>
+                              <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                <input
+                                  name="phone"
+                                  type="tel"
+                                  placeholder="Phone"
+                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                />
+                                <input
+                                  name="deliveryMethod"
+                                  readOnly
+                                  value={method.title}
+                                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                />
+                              </div>
+                              <textarea
+                                name="message"
+                                required
+                                rows="4"
+                                placeholder="Project details, timelines, and any specifics"
+                                className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                              />
+                              <input type="hidden" name="targetEmail" value={emailTarget} />
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <button
+                                  type="submit"
+                                  disabled={submitting}
+                                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
+                                >
+                                  {submitting ? 'Sending...' : 'Send Request'}
+                                </button>
+                                {submitStatus === 'success' && (
+                                  <span className="text-emerald-300 text-sm font-semibold">Sent! We’ll respond shortly.</span>
+                                )}
+                                {submitStatus === 'error' && (
+                                  <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
+                                )}
+                              </div>
+                            </form>
                           </div>
                         </div>
-                      );
-                    })()}
-                  </motion.div>
-                  </div>
-                </>
-              )}
-            </AnimatePresence>
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
         </div>
       )}
