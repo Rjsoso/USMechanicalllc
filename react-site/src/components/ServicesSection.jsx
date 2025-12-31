@@ -398,9 +398,15 @@ const ServicesSection = () => {
                         {method.badge}
                       </span>
                     )}
-                    <span className="text-sm text-gray-400 font-semibold">
-                        {String(displayIdx + 1).padStart(2, '0')}
-                    </span>
+                      <span className="text-sm text-gray-400 font-semibold">
+                        {String(
+                          displayIdx === 2
+                            ? 4
+                            : displayIdx === 3
+                              ? 3
+                              : displayIdx + 1
+                        ).padStart(2, '0')}
+                      </span>
                   </div>
                   <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
                     {method.title}
