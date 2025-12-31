@@ -1,68 +1,53 @@
 /* 3D Plaque Perspective Container */
 .plaque-perspective {
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
-/* 3D Logo Plaque - Premium metallic design with layered depth */
+/* 3D Logo Plaque - Permanently tilted to show depth */
 .logo-3d-card {
   position: relative;
   width: 200px;
   height: 124px;
-  background: linear-gradient(145deg, #8b9198, #63686d);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 10px;
   
-  /* Layered box-shadow creates physical 3D thickness */
-  box-shadow: 
-    0 1px 0 #999,
-    0 2px 0 #888,
-    0 3px 0 #777,
-    0 4px 0 #666,
-    0 5px 0 #555,
-    0 6px 1px rgba(0,0,0,.1),
-    0 0 5px rgba(0,0,0,.1),
-    0 1px 3px rgba(0,0,0,.3),
-    0 3px 5px rgba(0,0,0,.2),
-    0 5px 10px rgba(0,0,0,.25),
-    0 10px 10px rgba(0,0,0,.2),
-    0 20px 20px rgba(0,0,0,.15);
+  /* PERMANENT 3D ROTATION: Shows the right edge depth at all times */
+  transform: rotateY(-10deg) rotateX(5deg);
+  transform-style: preserve-3d;
   
-  display: flex;
-  padding: 12px 16px;
-  box-sizing: border-box;
-  transition: all 0.4s ease-out;
-  cursor: pointer;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Brushed metal texture overlay */
-.logo-3d-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.03) 0px,
-    rgba(255, 255, 255, 0.03) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events: none;
-}
-
-/* The Pop Effect: Moves up/left with 3D rotation */
-.plaque-perspective:hover .logo-3d-card {
-  transform: translate(-5px, -5px) rotateX(1deg) rotateY(-1deg);
+  /* SOLID 3D EDGE: Consistent color creates uniform thick edge */
   box-shadow: 
-    0 1px 0 #999,
-    1px 2px 0 #888,
-    2px 3px 0 #777,
-    3px 4px 0 #666,
-    4px 5px 0 #555,
-    8px 8px 15px rgba(0,0,0,0.4);
+    1px 1px 0px #5a5e63,
+    2px 2px 0px #5a5e63,
+    3px 3px 0px #5a5e63,
+    4px 4px 0px #5a5e63,
+    5px 5px 0px #5a5e63,
+    6px 6px 0px #5a5e63,
+    /* Soft floor shadow */
+    6px 6px 10px rgba(0,0,0,0.3);
+  
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+
+/* The Pop Effect: Straightens and lifts */
+.plaque-perspective:hover .logo-3d-card {
+  /* Moves left/up and straightens slightly */
+  transform: translate(-6px, -6px) rotateY(-5deg) rotateX(2deg);
+  
+  /* Increase depth and floor shadow on hover */
+  box-shadow: 
+    1px 1px 0px #5a5e63,
+    2px 2px 0px #5a5e63,
+    3px 3px 0px #5a5e63,
+    4px 4px 0px #5a5e63,
+    5px 5px 0px #5a5e63,
+    6px 6px 0px #5a5e63,
+    7px 7px 0px #5a5e63,
+    8px 8px 0px #5a5e63,
+    12px 12px 20px rgba(0,0,0,0.4);
 }
 
 /* Image will be applied via inline style as background */
@@ -72,36 +57,39 @@
   .logo-3d-card {
     width: 250px;
     height: 155px;
-    padding: 15px 20px;
     border-radius: 12px;
-    /* Enhanced layered shadows for desktop */
+    /* Permanent tilt remains the same */
+    transform: rotateY(-10deg) rotateX(5deg);
+    
+    /* Enhanced solid edge for desktop */
     box-shadow: 
-      0 1px 0 #aaa,
-      0 2px 0 #999,
-      0 3px 0 #888,
-      0 4px 0 #777,
-      0 5px 0 #666,
-      0 6px 0 #555,
-      0 7px 1px rgba(0,0,0,.1),
-      0 0 5px rgba(0,0,0,.1),
-      0 1px 3px rgba(0,0,0,.3),
-      0 3px 5px rgba(0,0,0,.2),
-      0 5px 10px rgba(0,0,0,.25),
-      0 10px 10px rgba(0,0,0,.2),
-      0 20px 20px rgba(0,0,0,.15);
+      1px 1px 0px #5a5e63,
+      2px 2px 0px #5a5e63,
+      3px 3px 0px #5a5e63,
+      4px 4px 0px #5a5e63,
+      5px 5px 0px #5a5e63,
+      6px 6px 0px #5a5e63,
+      7px 7px 0px #5a5e63,
+      /* Soft floor shadow */
+      8px 8px 12px rgba(0,0,0,0.3);
   }
   
   .plaque-perspective:hover .logo-3d-card {
-    transform: translate(-6px, -6px) rotateX(1.5deg) rotateY(-1.5deg);
+    /* Larger movement and straightening on desktop */
+    transform: translate(-8px, -8px) rotateY(-5deg) rotateX(2deg);
+    
     box-shadow: 
-      0 1px 0 #aaa,
-      1px 2px 0 #999,
-      2px 3px 0 #888,
-      3px 4px 0 #777,
-      4px 5px 0 #666,
-      5px 6px 0 #555,
-      10px 10px 20px rgba(0,0,0,0.4);
+      1px 1px 0px #5a5e63,
+      2px 2px 0px #5a5e63,
+      3px 3px 0px #5a5e63,
+      4px 4px 0px #5a5e63,
+      5px 5px 0px #5a5e63,
+      6px 6px 0px #5a5e63,
+      7px 7px 0px #5a5e63,
+      8px 8px 0px #5a5e63,
+      9px 9px 0px #5a5e63,
+      15px 15px 25px rgba(0,0,0,0.4);
   }
   
-  /* Image sizing handled by background properties */
+  /* Image applied via inline style as background */
 }
