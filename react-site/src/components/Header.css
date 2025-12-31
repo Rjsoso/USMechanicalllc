@@ -133,7 +133,7 @@
   pointer-events: none;
 }
 
-/* Top side - black beveled frame extends from top edge */
+/* Top side - hidden for clean isometric look */
 .logo-side-top {
   top: 0;
   left: 0;
@@ -142,8 +142,8 @@
   transform-origin: center top;
   transform: translateZ(30px) translateY(-3px) rotateX(-83deg);
   background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  opacity: 1;
-  border-radius: 1rem 1rem 0 0;
+  opacity: 0;
+  display: none;
 }
 
 /* Right side - black beveled frame extends from right edge */
@@ -172,7 +172,7 @@
   border-radius: 0 0 1rem 1rem;
 }
 
-/* Left side - black beveled frame extends from left edge */
+/* Left side - hidden for clean isometric look */
 .logo-side-left {
   top: 0;
   left: 0;
@@ -181,8 +181,8 @@
   transform-origin: left center;
   transform: translateZ(30px) translateX(-3px) rotateY(83deg);
   background: linear-gradient(270deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  opacity: 1;
-  border-radius: 1rem 0 0 1rem;
+  opacity: 0;
+  display: none;
 }
 
 /* Shimmer animation keyframes */
@@ -207,21 +207,13 @@
     0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Slightly lighten black frame on hover for all sides */
-.logo-3d-wrapper:hover .logo-side-top {
-  background: linear-gradient(180deg, rgba(10, 10, 10, 1), rgba(40, 40, 40, 0.9));
-}
-
+/* Slightly lighten black frame on hover for visible sides */
 .logo-3d-wrapper:hover .logo-side-right {
   background: linear-gradient(90deg, rgba(10, 10, 10, 1), rgba(40, 40, 40, 0.9));
 }
 
 .logo-3d-wrapper:hover .logo-side-bottom {
   background: linear-gradient(0deg, rgba(10, 10, 10, 1), rgba(40, 40, 40, 0.9));
-}
-
-.logo-3d-wrapper:hover .logo-side-left {
-  background: linear-gradient(270deg, rgba(10, 10, 10, 1), rgba(40, 40, 40, 0.9));
 }
 
 /* Mobile optimization - reduce effect on small screens */
@@ -243,12 +235,6 @@
     opacity: 0.9;
   }
   
-  .logo-side-top {
-    height: 35px;
-    transform: translateZ(20px) translateY(-2px) rotateX(-83deg);
-    background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  }
-  
   .logo-side-right {
     width: 35px;
     transform: translateZ(20px) translateX(2px) rotateY(-83deg);
@@ -259,12 +245,6 @@
     height: 35px;
     transform: translateZ(20px) translateY(2px) rotateX(83deg);
     background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  }
-  
-  .logo-side-left {
-    width: 35px;
-    transform: translateZ(20px) translateX(-2px) rotateY(83deg);
-    background: linear-gradient(270deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
   }
 }
 
