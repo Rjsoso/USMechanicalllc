@@ -34,31 +34,76 @@ function Header() {
       if (!logoElement) return;
 
       const rect = logoElement.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      
+      // Check multiple points around the logo for better detection
+      const points = [
+        { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, // center
+        { x: rect.left + 20, y: rect.top + 20 }, // top-left
+        { x: rect.right - 20, y: rect.top + 20 }, // top-right
+      ];
 
-      // Temporarily hide logo to check element behind it
+      let totalLuminance = 0;
+      let validSamples = 0;
+
+      // Temporarily hide logo to check elements behind it
       logoElement.style.pointerEvents = 'none';
-      const elementBehind = document.elementFromPoint(centerX, centerY);
+
+      for (const point of points) {
+        let element = document.elementFromPoint(point.x, point.y);
+        
+        if (!element) continue;
+
+        // Traverse up the DOM tree to find element with actual background
+        let attempts = 0;
+        while (element && attempts < 10) {
+          const styles = window.getComputedStyle(element);
+          const bgColor = styles.backgroundColor;
+          const bgImage = styles.backgroundImage;
+          
+          // Check if element has a background image (likely dark for hero/safety sections)
+          if (bgImage && bgImage !== 'none') {
+            // Check for specific sections with dark backgrounds
+            const elementId = element.id || '';
+            const elementClass = element.className || '';
+            
+            if (elementId.includes('safety') || elementId.includes('hero') || 
+                elementClass.includes('safety') || elementClass.includes('hero') ||
+                elementClass.includes('bg-black') || elementClass.includes('dark')) {
+              totalLuminance += 0; // Dark background
+              validSamples++;
+              break;
+            }
+          }
+          
+          // Parse RGB values if we have a color
+          const rgbMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+          if (rgbMatch) {
+            const r = parseInt(rgbMatch[1]);
+            const g = parseInt(rgbMatch[2]);
+            const b = parseInt(rgbMatch[3]);
+            const a = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
+            
+            // Only use if background is not transparent
+            if (a > 0.1) {
+              const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+              totalLuminance += luminance;
+              validSamples++;
+              break;
+            }
+          }
+          
+          element = element.parentElement;
+          attempts++;
+        }
+      }
+
       logoElement.style.pointerEvents = 'auto';
 
-      if (!elementBehind) return;
-
-      // Get computed background color
-      const bgColor = window.getComputedStyle(elementBehind).backgroundColor;
-      
-      // Parse RGB values
-      const rgbMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-      if (rgbMatch) {
-        const r = parseInt(rgbMatch[1]);
-        const g = parseInt(rgbMatch[2]);
-        const b = parseInt(rgbMatch[3]);
-        
-        // Calculate relative luminance
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        
+      // Calculate average luminance
+      if (validSamples > 0) {
+        const avgLuminance = totalLuminance / validSamples;
         // If background is dark (luminance < 0.5), use light shadow
-        setIsLightShadow(luminance < 0.5);
+        setIsLightShadow(avgLuminance < 0.5);
       }
     };
 
