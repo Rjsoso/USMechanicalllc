@@ -1,11 +1,36 @@
-import { memo } from 'react';
+import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
 import './Header.css';
 
 function Header() {
+  const [logo, setLogo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "headerSection"][0]{
+          logo
+        }`
+      )
+      .then((data) => {
+        if (data?.logo) {
+          setLogo(data.logo);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching header logo:', error);
+      });
+  }, []);
+
+  // Memoize logo URL for background image
+  const logoUrl = useMemo(() => {
+    if (!logo) return null;
+    return urlFor(logo).width(640).quality(95).auto('format').fit('max').url();
+  }, [logo]);
 
 
   const handleLogoClick = () => {
@@ -101,30 +126,30 @@ function Header() {
   return (
     <>
       {/* Logo - 3D plaque design with perspective */}
-      <div className="fixed top-4 left-4 z-50 plaque-perspective">
-        <div 
-          className="logo-3d-card"
-          onClick={handleLogoClick}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              handleLogoClick();
-            }
-          }}
-          aria-label="Go to home page"
-        >
-          <div className="logo-content">
-            <div className="us-text">
-              <span className="u">U</span>
-              <span className="s">S</span>
-            </div>
-            <div className="mechanical-text">Mechanical</div>
+      {logoUrl && (
+        <div className="fixed top-4 left-4 z-50 plaque-perspective">
+          <div 
+            className="logo-3d-card"
+            style={{
+              backgroundImage: `url(${logoUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+            onClick={handleLogoClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleLogoClick();
+              }
+            }}
+            aria-label="Go to home page"
+          >
           </div>
-          <div className="underline"></div>
         </div>
-      </div>
+      )}
 
       {/* Dock - positioned on right */}
       <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
