@@ -1,135 +1,12 @@
-import { useEffect, useState, useMemo, memo } from 'react';
+import { memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
 import './Header.css';
 
 function Header() {
-  const [logo, setLogo] = useState(null);
-  const [isLightShadow, setIsLightShadow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "headerSection"][0]{
-          logo
-        }`
-      )
-      .then((data) => {
-        if (data?.logo) {
-          setLogo(data.logo);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching header logo:', error);
-      });
-  }, []);
-
-  // Detect background color behind logo and adjust shadow
-  useEffect(() => {
-    const checkBackground = () => {
-      const logoElement = document.querySelector('.logo-wrapper');
-      if (!logoElement) return;
-
-      const rect = logoElement.getBoundingClientRect();
-      
-      // Check multiple points around the logo for better detection
-      const points = [
-        { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, // center
-        { x: rect.left + 20, y: rect.top + 20 }, // top-left
-        { x: rect.right - 20, y: rect.top + 20 }, // top-right
-      ];
-
-      let totalLuminance = 0;
-      let validSamples = 0;
-
-      // Temporarily hide logo to check elements behind it
-      logoElement.style.pointerEvents = 'none';
-
-      for (const point of points) {
-        let element = document.elementFromPoint(point.x, point.y);
-        
-        if (!element) continue;
-
-        // Traverse up the DOM tree to find element with actual background
-        let attempts = 0;
-        while (element && attempts < 10) {
-          const styles = window.getComputedStyle(element);
-          const bgColor = styles.backgroundColor;
-          const bgImage = styles.backgroundImage;
-          
-          // Check if element has a background image (likely dark for hero/safety sections)
-          if (bgImage && bgImage !== 'none') {
-            // Check for specific sections with dark backgrounds
-            const elementId = element.id || '';
-            const elementClass = element.className || '';
-            
-            if (elementId.includes('safety') || elementId.includes('hero') || 
-                elementClass.includes('safety') || elementClass.includes('hero') ||
-                elementClass.includes('bg-black') || elementClass.includes('dark')) {
-              totalLuminance += 0; // Dark background
-              validSamples++;
-              break;
-            }
-          }
-          
-          // Parse RGB values if we have a color
-          const rgbMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-          if (rgbMatch) {
-            const r = parseInt(rgbMatch[1]);
-            const g = parseInt(rgbMatch[2]);
-            const b = parseInt(rgbMatch[3]);
-            const a = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
-            
-            // Only use if background is not transparent
-            if (a > 0.1) {
-              const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-              totalLuminance += luminance;
-              validSamples++;
-              break;
-            }
-          }
-          
-          element = element.parentElement;
-          attempts++;
-        }
-      }
-
-      logoElement.style.pointerEvents = 'auto';
-
-      // Calculate average luminance
-      if (validSamples > 0) {
-        const avgLuminance = totalLuminance / validSamples;
-        // If background is dark (luminance < 0.5), use light shadow
-        setIsLightShadow(avgLuminance < 0.5);
-      }
-    };
-
-    // Check on scroll and resize
-    checkBackground();
-    window.addEventListener('scroll', checkBackground);
-    window.addEventListener('resize', checkBackground);
-
-    return () => {
-      window.removeEventListener('scroll', checkBackground);
-      window.removeEventListener('resize', checkBackground);
-    };
-  }, [logo]);
-
-  // Memoize logo URLs to prevent recalculation on every render
-  const logoUrls = useMemo(() => {
-    if (!logo) return null;
-    return {
-      src: urlFor(logo).width(640).quality(95).auto('format').fit('max').url(),
-      srcSet: `
-        ${urlFor(logo).width(320).quality(95).auto('format').fit('max').url()} 320w,
-        ${urlFor(logo).width(640).quality(95).auto('format').fit('max').url()} 640w,
-        ${urlFor(logo).width(1280).quality(95).auto('format').fit('max').url()} 1280w
-      `
-    };
-  }, [logo]);
 
   const handleLogoClick = () => {
     if (location.pathname === '/') {
@@ -223,36 +100,29 @@ function Header() {
 
   return (
     <>
-      {/* Logo - Separate, positioned in top-left corner with 3D shadow effect */}
-      {logoUrls && (
-        <div 
-          className={`fixed top-4 left-4 z-50 logo-wrapper ${isLightShadow ? 'light-shadow' : ''}`}
-          onClick={handleLogoClick}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              handleLogoClick();
-            }
-          }}
-          aria-label="Go to home page"
-        >
-          <img
-            src={logoUrls.src}
-            srcSet={logoUrls.srcSet}
-            sizes="(max-width: 768px) 128px, 160px"
-            alt="US Mechanical"
-            className="logo-image"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
-          />
+      {/* Logo - Custom 3D box design */}
+      <div 
+        className="fixed top-4 left-4 z-50 logo-box"
+        onClick={handleLogoClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleLogoClick();
+          }
+        }}
+        aria-label="Go to home page"
+      >
+        <div className="logo-content">
+          <div className="us-text">
+            <span className="u">U</span>
+            <span className="s">S</span>
+          </div>
+          <div className="mechanical-text">Mechanical</div>
         </div>
-      )}
+        <div className="underline"></div>
+      </div>
 
       {/* Dock - positioned on right */}
       <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />

@@ -1,80 +1,104 @@
-/* Logo wrapper with 3D shadow effect - default dark shadows */
-.logo-wrapper {
-  display: inline-block;
+/* 3D Logo Box - Custom HTML/CSS logo */
+.logo-box {
+  position: relative;
+  width: 180px;
+  height: 112px;
+  background-color: #7d8288;
+  border-radius: 10px;
+  
+  /* Creating the flat 3D thickness */
+  border-bottom: 4px solid #5a5e63;
+  border-right: 4px solid #5a5e63;
+  
+  display: flex;
+  padding: 12px;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
-  /* Multi-layer shadow for 3D depth effect - black shadows for light backgrounds */
-  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
-          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
-          drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.7));
-  transition: filter 0.3s ease, transform 0.3s ease;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.15);
 }
 
-/* Light shadows for dark backgrounds */
-.logo-wrapper.light-shadow {
-  filter: drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.6))
-          drop-shadow(16px 16px 8px rgba(255, 255, 255, 0.5))
-          drop-shadow(4px 4px 12px rgba(255, 255, 255, 0.7));
+/* The "Pop to the left and up" animation */
+.logo-box:hover {
+  transform: translate(-5px, -5px);
+  box-shadow: 12px 12px 20px rgba(0,0,0,0.25);
+  /* Increasing thickness during pop */
+  border-bottom: 6px solid #5a5e63;
+  border-right: 6px solid #5a5e63;
 }
 
-/* Hover effect - lift and glow with dark shadows (reduced glow) */
-.logo-wrapper:hover {
-  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
-          drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
-          drop-shadow(0 0 20px rgba(255, 255, 255, 0.15))
-          drop-shadow(0 0 40px rgba(200, 200, 255, 0.1));
-  transform: translateY(-2px);
+.logo-content {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
 }
 
-/* Hover effect with light shadows (reduced glow) */
-.logo-wrapper.light-shadow:hover {
-  filter: drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.6))
-          drop-shadow(16px 16px 8px rgba(255, 255, 255, 0.5))
-          drop-shadow(0 0 20px rgba(255, 255, 255, 0.2))
-          drop-shadow(0 0 40px rgba(200, 200, 255, 0.15));
-  transform: translateY(-2px);
+.us-text {
+  display: flex;
+  font-size: 88px;
+  line-height: 0.8;
+  letter-spacing: -4px;
+  user-select: none;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: 900;
 }
 
-/* Logo image */
-.logo-image {
-  display: block;
-  height: 8rem; /* 128px on mobile */
-  width: auto;
-  object-fit: contain;
-  border-radius: 0.75rem;
+.u { color: #0000ff; }
+.s { color: #d32f2f; }
+
+.mechanical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: white;
+  font-size: 19px;
+  font-weight: 900;
+  margin-left: auto;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  font-family: "Arial Black", Arial, sans-serif;
+}
+
+.underline {
+  position: absolute;
+  bottom: 14px;
+  left: 12px;
+  width: 65%;
+  height: 4px;
+  background: white;
+  border-radius: 40% 60% 30% 70%;
+  opacity: 0.9;
 }
 
 /* Desktop size */
 @media (min-width: 768px) {
-  .logo-image {
-    height: 10rem; /* 160px on desktop */
-  }
-}
-
-/* Mobile - responsive shadows */
-@media (max-width: 768px) {
-  .logo-wrapper {
-    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
-            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.5))
-            drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.65));
+  .logo-box {
+    width: 225px;
+    height: 140px;
+    padding: 15px;
+    border-radius: 12px;
+    border-bottom: 5px solid #5a5e63;
+    border-right: 5px solid #5a5e63;
   }
   
-  .logo-wrapper.light-shadow {
-    filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.6))
-            drop-shadow(8px 8px 6px rgba(255, 255, 255, 0.5))
-            drop-shadow(2px 2px 8px rgba(255, 255, 255, 0.65));
+  .logo-box:hover {
+    transform: translate(-6px, -6px);
+    border-bottom: 7px solid #5a5e63;
+    border-right: 7px solid #5a5e63;
   }
   
-  .logo-wrapper:hover {
-    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
-            drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.5))
-            drop-shadow(0 0 15px rgba(255, 255, 255, 0.12));
-    transform: translateY(-1px);
+  .us-text {
+    font-size: 110px;
+    letter-spacing: -5px;
   }
   
-  .logo-wrapper.light-shadow:hover {
-    filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.6))
-            drop-shadow(8px 8px 6px rgba(255, 255, 255, 0.5))
-            drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
-    transform: translateY(-1px);
+  .mechanical-text {
+    font-size: 24px;
+  }
+  
+  .underline {
+    bottom: 17px;
+    left: 15px;
+    height: 5px;
   }
 }
