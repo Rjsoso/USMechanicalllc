@@ -93,7 +93,7 @@
 }
 
 .logo-3d-box {
-  --logo-depth: 80px;
+  --logo-depth: 90px;
   position: relative;
   display: inline-block;
   transform-style: preserve-3d;
@@ -158,8 +158,8 @@
   right: 0;
   height: var(--logo-depth);
   transform-origin: center top;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-8px) rotateX(-70deg);
-  background: linear-gradient(180deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(-10px) rotateX(-65deg);
+  background: linear-gradient(180deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
   opacity: 1;
   display: block;
   border-radius: 1rem 1rem 0 0;
@@ -172,8 +172,8 @@
   right: 0;
   height: var(--logo-depth);
   transform-origin: center bottom;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(8px) rotateX(70deg);
-  background: linear-gradient(0deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateY(10px) rotateX(65deg);
+  background: linear-gradient(0deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
   opacity: 1;
   border-radius: 0 0 1rem 1rem;
 }
@@ -185,8 +185,8 @@
   bottom: 0;
   width: var(--logo-depth);
   transform-origin: left center;
-  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-8px) rotateY(70deg);
-  background: linear-gradient(270deg, rgba(120, 120, 120, 0.95), rgba(80, 80, 80, 0.95), rgba(50, 50, 50, 0.9));
+  transform: translateZ(calc(var(--logo-depth) * -1)) translateX(-10px) rotateY(65deg);
+  background: linear-gradient(270deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
   opacity: 1;
   display: block;
   border-radius: 1rem 0 0 1rem;
@@ -221,11 +221,11 @@
 
 /* Brighten metallic frame on hover for visible sides */
 .logo-3d-wrapper:hover .logo-side-right {
-  background: linear-gradient(90deg, rgba(150, 150, 150, 0.98), rgba(110, 110, 110, 0.98), rgba(80, 80, 80, 0.92));
+  display: none;
 }
 
 .logo-3d-wrapper:hover .logo-side-bottom {
-  background: linear-gradient(0deg, rgba(150, 150, 150, 0.98), rgba(110, 110, 110, 0.98), rgba(80, 80, 80, 0.92));
+  background: linear-gradient(0deg, rgba(170, 170, 170, 0.98), rgba(120, 120, 120, 0.98), rgba(80, 80, 80, 0.92));
 }
 
 /* Mobile optimization - reduce effect on small screens */
