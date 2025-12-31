@@ -196,7 +196,16 @@ const ServicesSection = () => {
   }
 
   return (
-    <section id="services" className="py-20 bg-gray-700 text-white">
+    <section 
+      id="services" 
+      className="py-20 bg-gray-700 text-white"
+      style={{
+        position: 'relative',
+        zIndex: 10,
+        marginTop: '-100px',
+        paddingTop: '120px',
+      }}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
           className="section-title text-5xl md:text-6xl text-center mb-12 text-white"

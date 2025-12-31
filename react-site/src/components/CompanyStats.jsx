@@ -100,7 +100,6 @@ const CompanyStats = () => {
   const [statsData, setStatsData] = useState(null);
   const [inView, setInView] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [safetyProgress, setSafetyProgress] = useState(0);
   const [scrollFade, setScrollFade] = useState(0);
   const sectionRef = useRef(null);
   const STATS_OVERLAP_PX = 60;
@@ -192,15 +191,6 @@ const CompanyStats = () => {
     };
   }, [statsData]);
 
-  // Listen to safety section progress to tie reveal timing
-  useEffect(() => {
-    const handleProgress = (evt) => {
-      const val = typeof evt.detail === 'number' ? evt.detail : 0;
-      setSafetyProgress(Math.min(1, Math.max(0, val)));
-    };
-    window.addEventListener('safetyProgress', handleProgress);
-    return () => window.removeEventListener('safetyProgress', handleProgress);
-  }, []);
 
   // Track scroll position to fade/translate stats out as it reaches the top
   useEffect(() => {
@@ -235,8 +225,7 @@ const CompanyStats = () => {
     return null;
   }
 
-  const reveal = Math.max(safetyProgress, inView ? 0.4 : 0);
-  const baseTranslate = -STATS_OVERLAP_PX * (1 - reveal);
+  const reveal = inView ? 1 : 0;
   const scrollTranslate = -120 * scrollFade;
 
   return (
@@ -244,16 +233,16 @@ const CompanyStats = () => {
       ref={sectionRef}
       className="w-full py-8 transition-opacity duration-700 ease-out"
       style={{
-        // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
-        opacity: Math.min(1, 0.04 + 0.96 * reveal),
-        transform: `translateY(${(baseTranslate + scrollTranslate).toFixed(1)}px)`,
+        // Stats appear below the sticky safety section
+        opacity: Math.min(1, 0.3 + 0.7 * reveal),
+        transform: `translateY(${scrollTranslate.toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 380ms ease-out',
         willChange: 'opacity, transform',
         background: 'transparent',
         marginTop: `-${STATS_OVERLAP_PX}px`,
         paddingTop: `${STATS_OVERLAP_PX}px`,
         position: 'relative',
-        zIndex: 10,
+        zIndex: 20,
       }}
     >
       <div className="max-w-6xl mx-auto text-center">

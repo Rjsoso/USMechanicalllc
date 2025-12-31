@@ -10,10 +10,6 @@ export default function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
-  const safetySectionRef = useRef(null)
-  const [safetySlide, setSafetySlide] = useState(0)
-  const SAFETY_LIFT_PX = 260
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
 
   // Default content fallback
   const defaultData = {
@@ -207,45 +203,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
-  // Bidirectional slide for Safety section linked to scroll (covers and reveals stats)
-  useEffect(() => {
-    if (loading) return
-    const node = safetySectionRef.current
-    if (!node) return
-
-    let ticking = false
-
-    const updateSlide = () => {
-      const rect = node.getBoundingClientRect()
-      const viewport = window.innerHeight || 1
-      const start = viewport * 0.9   // begin lifting when top is near bottom
-      const end = viewport * 0.35    // finish lift by mid-section
-      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
-      const easedProgress = easeOutCubic(progress)
-      const slide = -Math.min(SAFETY_LIFT_PX, Math.max(0, SAFETY_LIFT_PX * easedProgress))
-      setSafetySlide(slide)
-      // Expose progress to other components (e.g., CompanyStats reveal)
-      document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
-      window.dispatchEvent(new CustomEvent('safetyProgress', { detail: progress }))
-      ticking = false
-    }
-
-    const handleScroll = () => {
-      if (!ticking) {
-        ticking = true
-        requestAnimationFrame(updateSlide)
-      }
-    }
-
-    updateSlide()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-    }
-  }, [loading])
 
   if (loading || !data) {
     return (
@@ -304,14 +261,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
       <section
         id="safety"
-        ref={safetySectionRef}
-        className="py-20 bg-white text-gray-900 relative z-20 -mt-10"
+        className="py-20 bg-white text-gray-900 -mt-10"
         style={{
-          transform: `translateY(${safetySlide}px)`,
-          transition: 'transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1)',
-          willChange: 'transform',
-          marginBottom: '-60px', // overlap stats initially (further reduced footprint)
-          paddingBottom: '60px', // preserve internal spacing while overlapping
+          position: 'sticky',
+          top: '0',
+          zIndex: 30,
+          marginBottom: '-100px', // Allow Services to scroll underneath
+          paddingBottom: '60px',
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
