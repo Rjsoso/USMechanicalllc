@@ -484,12 +484,18 @@ const ServicesSection = () => {
                                     placeholder="Phone"
                                     className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                                   />
-                                  <input
+                                  <select
                                     name="deliveryMethod"
-                                    readOnly
-                                    value="General Inquiry"
-                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-                                  />
+                                    defaultValue="General Inquiry"
+                                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60 bg-slate-900"
+                                  >
+                                    <option value="General Inquiry">General Inquiry</option>
+                                    {servicesData.deliveryMethods.map((m, optionIdx) => (
+                                      <option key={optionIdx} value={m.title || `Method ${optionIdx + 1}`}>
+                                        {m.title || `Method ${optionIdx + 1}`}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </div>
                                 <textarea
                                   name="message"
