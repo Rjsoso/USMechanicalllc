@@ -30,11 +30,13 @@ export default function Home() {
         </section>
         <div className="bg-gray-700" style={{ marginTop: 'calc(100vh - 300px)', position: 'relative', zIndex: 1 }}>
 
-          <AboutAndSafety />
+          <div style={{ position: 'relative' }}>
+            <AboutAndSafety />
 
-          <CompanyStats />
+            <CompanyStats />
 
-          <ServicesSection />
+            <ServicesSection />
+          </div>
 
           <Suspense fallback={<div className="py-20 bg-gray-700 text-center text-white">Loading...</div>}>
             <Portfolio />
