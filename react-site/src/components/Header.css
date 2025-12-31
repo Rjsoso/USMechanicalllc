@@ -1,20 +1,36 @@
-/* Logo wrapper with 3D shadow effect - dark black shadows */
+/* Logo wrapper with 3D shadow effect - default dark shadows */
 .logo-wrapper {
   display: inline-block;
   cursor: pointer;
-  /* Multi-layer shadow for 3D depth effect */
+  /* Multi-layer shadow for 3D depth effect - black shadows for light backgrounds */
   filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
           drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
           drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.7));
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-/* Hover effect - lift and glow */
+/* Light shadows for dark backgrounds */
+.logo-wrapper.light-shadow {
+  filter: drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.6))
+          drop-shadow(16px 16px 8px rgba(255, 255, 255, 0.5))
+          drop-shadow(4px 4px 12px rgba(255, 255, 255, 0.7));
+}
+
+/* Hover effect - lift and glow with dark shadows */
 .logo-wrapper:hover {
   filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.6))
           drop-shadow(16px 16px 8px rgba(0, 0, 0, 0.5))
           drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))
           drop-shadow(0 0 40px rgba(200, 200, 255, 0.2));
+  transform: translateY(-2px);
+}
+
+/* Hover effect with light shadows */
+.logo-wrapper.light-shadow:hover {
+  filter: drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.6))
+          drop-shadow(16px 16px 8px rgba(255, 255, 255, 0.5))
+          drop-shadow(0 0 20px rgba(255, 255, 255, 0.4))
+          drop-shadow(0 0 40px rgba(200, 200, 255, 0.3));
   transform: translateY(-2px);
 }
 
@@ -34,7 +50,7 @@
   }
 }
 
-/* Mobile - dark shadows maintained */
+/* Mobile - responsive shadows */
 @media (max-width: 768px) {
   .logo-wrapper {
     filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
@@ -42,10 +58,23 @@
             drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.65));
   }
   
+  .logo-wrapper.light-shadow {
+    filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.6))
+            drop-shadow(8px 8px 6px rgba(255, 255, 255, 0.5))
+            drop-shadow(2px 2px 8px rgba(255, 255, 255, 0.65));
+  }
+  
   .logo-wrapper:hover {
     filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
             drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.5))
             drop-shadow(0 0 15px rgba(255, 255, 255, 0.25));
+    transform: translateY(-1px);
+  }
+  
+  .logo-wrapper.light-shadow:hover {
+    filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.6))
+            drop-shadow(8px 8px 6px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
     transform: translateY(-1px);
   }
 }

@@ -6,6 +6,7 @@ import './Header.css';
 
 function Header() {
   const [logo, setLogo] = useState(null);
+  const [isLightShadow, setIsLightShadow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,6 +26,52 @@ function Header() {
         console.error('Error fetching header logo:', error);
       });
   }, []);
+
+  // Detect background color behind logo and adjust shadow
+  useEffect(() => {
+    const checkBackground = () => {
+      const logoElement = document.querySelector('.logo-wrapper');
+      if (!logoElement) return;
+
+      const rect = logoElement.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Temporarily hide logo to check element behind it
+      logoElement.style.pointerEvents = 'none';
+      const elementBehind = document.elementFromPoint(centerX, centerY);
+      logoElement.style.pointerEvents = 'auto';
+
+      if (!elementBehind) return;
+
+      // Get computed background color
+      const bgColor = window.getComputedStyle(elementBehind).backgroundColor;
+      
+      // Parse RGB values
+      const rgbMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      if (rgbMatch) {
+        const r = parseInt(rgbMatch[1]);
+        const g = parseInt(rgbMatch[2]);
+        const b = parseInt(rgbMatch[3]);
+        
+        // Calculate relative luminance
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        
+        // If background is dark (luminance < 0.5), use light shadow
+        setIsLightShadow(luminance < 0.5);
+      }
+    };
+
+    // Check on scroll and resize
+    checkBackground();
+    window.addEventListener('scroll', checkBackground);
+    window.addEventListener('resize', checkBackground);
+
+    return () => {
+      window.removeEventListener('scroll', checkBackground);
+      window.removeEventListener('resize', checkBackground);
+    };
+  }, [logo]);
 
   // Memoize logo URLs to prevent recalculation on every render
   const logoUrls = useMemo(() => {
@@ -134,7 +181,7 @@ function Header() {
       {/* Logo - Separate, positioned in top-left corner with 3D shadow effect */}
       {logoUrls && (
         <div 
-          className="fixed top-4 left-4 z-50 logo-wrapper"
+          className={`fixed top-4 left-4 z-50 logo-wrapper ${isLightShadow ? 'light-shadow' : ''}`}
           onClick={handleLogoClick}
           role="button"
           tabIndex={0}
