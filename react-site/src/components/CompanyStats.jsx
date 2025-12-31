@@ -102,6 +102,7 @@ const CompanyStats = () => {
   const [loading, setLoading] = useState(true);
   const [safetyProgress, setSafetyProgress] = useState(0);
   const sectionRef = useRef(null);
+  const STATS_OVERLAP_PX = 260;
 
 
   useEffect(() => {
@@ -223,12 +224,12 @@ const CompanyStats = () => {
       style={{
         // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
         opacity: 0.04 + 0.96 * reveal,
-        transform: `translateY(${(-220 * (1 - reveal)).toFixed(1)}px)`,
+        transform: `translateY(${(-STATS_OVERLAP_PX * (1 - reveal)).toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 420ms ease',
         willChange: 'opacity, transform',
         background: 'transparent',
-        marginTop: '-220px',
-        paddingTop: '220px',
+        marginTop: `-${STATS_OVERLAP_PX}px`,
+        paddingTop: `${STATS_OVERLAP_PX}px`,
         position: 'relative',
         zIndex: 10,
       }}

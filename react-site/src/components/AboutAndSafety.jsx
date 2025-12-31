@@ -12,6 +12,8 @@ export default function AboutAndSafety() {
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const safetySectionRef = useRef(null)
   const [safetySlide, setSafetySlide] = useState(0)
+  const SAFETY_LIFT_PX = 260
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
 
   // Default content fallback
   const defaultData = {
@@ -219,7 +221,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
       const start = viewport * 0.9   // begin lifting when top is near bottom
       const end = viewport * 0.35    // finish lift by mid-section
       const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)))
-      const slide = -Math.min(180, Math.max(0, start - rect.top))
+      const easedProgress = easeOutCubic(progress)
+      const slide = -Math.min(SAFETY_LIFT_PX, Math.max(0, SAFETY_LIFT_PX * easedProgress))
       setSafetySlide(slide)
       // Expose progress to other components (e.g., CompanyStats reveal)
       document.documentElement.style.setProperty('--safety-progress', progress.toFixed(3))
@@ -305,11 +308,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
         className="py-20 bg-white text-gray-900 relative z-20 -mt-10"
         style={{
           transform: `translateY(${safetySlide}px)`,
-          transition: 'transform 120ms linear, opacity 200ms ease',
-          opacity: 1 - 0.06 * Math.min(1, Math.abs(safetySlide) / 220),
-          willChange: 'transform, opacity',
-          marginBottom: '-220px', // overlap stats initially
-          paddingBottom: '220px', // preserve internal spacing while overlapping
+          transition: 'transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1)',
+          willChange: 'transform',
+          marginBottom: '-260px', // overlap stats initially
+          paddingBottom: '260px', // preserve internal spacing while overlapping
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
