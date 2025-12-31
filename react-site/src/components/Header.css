@@ -177,13 +177,15 @@
 .logo-side-bottom {
   bottom: 0;
   left: 0;
-  right: 0;
+  width: auto;
   height: var(--logo-depth);
   transform-origin: center bottom;
   transform: translateZ(calc(var(--logo-depth) * -1)) translateY(10px) rotateX(65deg);
   background: linear-gradient(0deg, rgba(150, 150, 150, 0.95), rgba(100, 100, 100, 0.95), rgba(60, 60, 60, 0.92));
   opacity: 1;
   border-radius: 0 0 1rem 1rem;
+  /* Match the image width */
+  min-width: 100%;
 }
 
 /* Left side - hidden for right/bottom protrusion effect */
@@ -195,7 +197,7 @@
 .logo-side-right {
   top: 0;
   right: 0;
-  bottom: 0;
+  height: 8rem;
   width: var(--logo-depth);
   transform-origin: right center;
   transform: translateZ(calc(var(--logo-depth) * -1)) translateX(10px) rotateY(-65deg);
@@ -203,6 +205,12 @@
   opacity: 1;
   display: block;
   border-radius: 0 1rem 1rem 0;
+}
+
+@media (min-width: 768px) {
+  .logo-side-right {
+    height: 10rem;
+  }
 }
 
 /* Shimmer animation keyframes */
@@ -258,6 +266,7 @@
   }
 
   .logo-side-right {
+    height: 8rem;
     width: var(--logo-depth);
     transform: translateZ(calc(var(--logo-depth) * -1)) translateX(6px) rotateY(-70deg);
     background: linear-gradient(90deg, rgba(50, 50, 50, 0.9), rgba(80, 80, 80, 0.95), rgba(120, 120, 120, 0.95));
