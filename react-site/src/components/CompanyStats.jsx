@@ -101,8 +101,9 @@ const CompanyStats = () => {
   const [inView, setInView] = useState(false);
   const [loading, setLoading] = useState(true);
   const [safetyProgress, setSafetyProgress] = useState(0);
+  const [scrollFade, setScrollFade] = useState(0);
   const sectionRef = useRef(null);
-  const STATS_OVERLAP_PX = 150;
+  const STATS_OVERLAP_PX = 90;
 
 
   useEffect(() => {
@@ -201,6 +202,25 @@ const CompanyStats = () => {
     return () => window.removeEventListener('safetyProgress', handleProgress);
   }, []);
 
+  // Track scroll position to fade/translate stats out as it reaches the top
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const viewport = window.innerHeight || 1;
+      const progress = 1 - rect.top / viewport; // 0 when below viewport, 1 when top hits top
+      setScrollFade(Math.min(1, Math.max(0, progress)));
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
+
   if (loading) {
     return (
       <section className="w-full py-16 bg-gray-700">
@@ -216,15 +236,18 @@ const CompanyStats = () => {
   }
 
   const reveal = Math.max(safetyProgress, inView ? 0.4 : 0);
+  const fadeOut = Math.max(0, Math.min(1, 1 - scrollFade));
+  const baseTranslate = -STATS_OVERLAP_PX * (1 - reveal);
+  const scrollTranslate = -120 * scrollFade;
 
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 transition-opacity duration-700 ease-out"
+      className="w-full py-10 transition-opacity duration-700 ease-out"
       style={{
         // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
-        opacity: 0.04 + 0.96 * reveal,
-        transform: `translateY(${(-STATS_OVERLAP_PX * (1 - reveal)).toFixed(1)}px)`,
+        opacity: Math.max(0, (0.04 + 0.96 * reveal) * fadeOut),
+        transform: `translateY(${(baseTranslate + scrollTranslate).toFixed(1)}px)`,
         transition: 'opacity 420ms ease, transform 420ms ease',
         willChange: 'opacity, transform',
         background: 'transparent',
