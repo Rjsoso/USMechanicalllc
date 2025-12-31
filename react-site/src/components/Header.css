@@ -78,25 +78,32 @@
 
 /* 3D Extruded Box Logo Effect */
 .logo-3d-wrapper {
-  perspective: 1200px;
-  perspective-origin: 60% 60%;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
   transform-style: preserve-3d;
 }
 
 .logo-3d-box {
+  --logo-depth: 70px;
   position: relative;
   display: inline-block;
   transform-style: preserve-3d;
   transform: rotateX(0deg) rotateY(0deg);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
+  width: clamp(150px, 14vw, 210px);
+  height: clamp(150px, 14vw, 210px);
 }
 
 /* Front face containing the logo */
 .logo-front-face {
   position: relative;
-  display: block;
-  transform: translateZ(30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(0px);
   transform-style: preserve-3d;
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.25),
@@ -125,25 +132,19 @@
   z-index: 10;
 }
 
+/* Logo image fills the square container */
+.logo-face-image {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  border-radius: 0.75rem;
+}
+
 /* Base styles for all side panels */
 .logo-side {
   position: absolute;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15));
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
-}
-
-/* Top side - hidden for clean isometric look */
-.logo-side-top {
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 55px;
-  transform-origin: center top;
-  transform: translateZ(30px) translateY(-3px) rotateX(-83deg);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
-  opacity: 0;
-  display: none;
 }
 
 /* Right side - metallic gray beveled frame extends from right edge */
@@ -151,9 +152,9 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 70px;
+  width: var(--logo-depth);
   transform-origin: right center;
-  transform: translateZ(30px) translateX(5px) rotateY(-78deg);
+  transform: translateZ(calc(var(--logo-depth) * -1)) rotateY(-78deg);
   background: linear-gradient(90deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 0.9), rgba(110, 110, 110, 0.85));
   opacity: 1;
   border-radius: 0 0 1rem 0;
@@ -164,9 +165,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: var(--logo-depth);
   transform-origin: center bottom;
-  transform: translateZ(30px) translateY(5px) rotateX(78deg);
+  transform: translateZ(calc(var(--logo-depth) * -1)) rotateX(78deg);
   background: linear-gradient(0deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 0.9), rgba(110, 110, 110, 0.85));
   opacity: 1;
   border-radius: 0 0 1rem 1rem;
@@ -177,9 +178,9 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 55px;
+  width: var(--logo-depth);
   transform-origin: left center;
-  transform: translateZ(30px) translateX(-3px) rotateY(83deg);
+  transform: translateZ(calc(var(--logo-depth) * -1)) rotateY(78deg);
   background: linear-gradient(270deg, rgba(0, 0, 0, 1), rgba(30, 30, 30, 0.9));
   opacity: 0;
   display: none;
@@ -218,9 +219,15 @@
 
 /* Mobile optimization - reduce effect on small screens */
 @media (max-width: 768px) {
+  .logo-3d-box {
+    --logo-depth: 50px;
+    width: 160px;
+    height: 160px;
+  }
+
   .logo-3d-wrapper {
-    perspective: 800px;
-    perspective-origin: 60% 60%;
+    perspective: 950px;
+    perspective-origin: 50% 50%;
   }
   
   .logo-3d-box {
@@ -236,14 +243,14 @@
   }
   
   .logo-side-right {
-    width: 45px;
-    transform: translateZ(20px) translateX(3px) rotateY(-78deg);
+    width: var(--logo-depth);
+    transform: translateZ(calc(var(--logo-depth) * -1)) rotateY(-78deg);
     background: linear-gradient(90deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 0.9), rgba(110, 110, 110, 0.85));
   }
   
   .logo-side-bottom {
-    height: 45px;
-    transform: translateZ(20px) translateY(3px) rotateX(78deg);
+    height: var(--logo-depth);
+    transform: translateZ(calc(var(--logo-depth) * -1)) rotateX(78deg);
     background: linear-gradient(0deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 0.9), rgba(110, 110, 110, 0.85));
   }
 }

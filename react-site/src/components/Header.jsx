@@ -146,7 +146,7 @@ function Header() {
           }}
           aria-label="Go to home page"
         >
-          <div className="logo-3d-box">
+          <div className="logo-3d-box square-logo">
             {/* Side panels for 3D box effect */}
             <div className="logo-side logo-side-top"></div>
             <div className="logo-side logo-side-right"></div>
@@ -160,7 +160,7 @@ function Header() {
                 srcSet={logoUrls.srcSet}
                 sizes="(max-width: 768px) 128px, 160px"
                 alt="US Mechanical"
-                className="h-32 md:h-40 w-auto object-contain rounded-lg"
+                className="logo-face-image"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
