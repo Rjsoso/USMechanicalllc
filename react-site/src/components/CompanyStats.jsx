@@ -236,7 +236,6 @@ const CompanyStats = () => {
   }
 
   const reveal = Math.max(safetyProgress, inView ? 0.4 : 0);
-  const fadeOut = Math.max(0, Math.min(1, 1 - scrollFade));
   const baseTranslate = -STATS_OVERLAP_PX * (1 - reveal);
   const scrollTranslate = -120 * scrollFade;
 
@@ -246,9 +245,9 @@ const CompanyStats = () => {
       className="w-full py-10 transition-opacity duration-700 ease-out"
       style={{
         // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
-        opacity: Math.max(0, (0.04 + 0.96 * reveal) * fadeOut),
+        opacity: Math.min(1, 0.04 + 0.96 * reveal),
         transform: `translateY(${(baseTranslate + scrollTranslate).toFixed(1)}px)`,
-        transition: 'opacity 420ms ease, transform 420ms ease',
+        transition: 'opacity 420ms ease, transform 380ms ease-out',
         willChange: 'opacity, transform',
         background: 'transparent',
         marginTop: `-${STATS_OVERLAP_PX}px`,
