@@ -91,6 +91,7 @@
   perspective-origin: 50% 50%;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
+  overflow: visible !important;
 }
 
 .logo-3d-box {
@@ -104,6 +105,7 @@
   will-change: transform;
   backface-visibility: visible;
   -webkit-backface-visibility: visible;
+  overflow: visible !important;
 }
 
 /* Front face containing the logo */
@@ -118,6 +120,7 @@
     0 5px 15px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.4s ease, transform 0.4s ease;
   overflow: visible;
+  z-index: 2;
 }
 
 /* Shimmer effect overlay */
@@ -147,6 +150,8 @@
   width: auto;
   object-fit: contain;
   border-radius: 0.75rem;
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
@@ -160,6 +165,7 @@
   position: absolute;
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
+  z-index: 0;
 }
 
 /* Top side - hidden for right/bottom protrusion effect */
