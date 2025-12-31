@@ -1,107 +1,135 @@
-/* 3D Logo Box - Custom HTML/CSS logo */
+/* 3D Logo Box - Premium metallic design */
 .logo-box {
   position: relative;
-  width: 180px;
-  height: 112px;
-  background-color: #7d8288;
-  border-radius: 2px;
+  width: 208px;
+  height: 128px;
+  background: linear-gradient(145deg, #8b9198, #63686d);
+  border-radius: 8px;
   
-  /* Creating the flat 3D thickness */
-  border-bottom: 3px solid #5a5e63;
-  border-right: 3px solid #5a5e63;
+  /* Complex shadowing for 3D effect */
+  box-shadow: 
+    3px 3px 6px rgba(0, 0, 0, 0.4),
+    -1px -1px 2px rgba(255, 255, 255, 0.2);
   
   display: flex;
-  padding: 12px;
+  padding: 12px 16px;
   box-sizing: border-box;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
-  box-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Brushed metal texture overlay */
+.logo-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
 }
 
 /* The "Pop to the left and up" animation */
 .logo-box:hover {
   transform: translate(-4px, -4px);
-  box-shadow: 10px 10px 16px rgba(0,0,0,0.3);
-  /* Increasing thickness during pop */
-  border-bottom: 5px solid #5a5e63;
-  border-right: 5px solid #5a5e63;
+  box-shadow: 
+    10px 10px 16px rgba(0, 0, 0, 0.4),
+    -1px -1px 2px rgba(255, 255, 255, 0.2);
 }
 
 .logo-content {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  align-items: flex-start;
+  height: 100%;
 }
 
 .us-text {
   display: flex;
-  font-size: 88px;
-  line-height: 0.8;
-  letter-spacing: -4px;
-  user-select: none;
-  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 96px;
   font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -5px;
+  user-select: none;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
 }
 
-.u { color: #0000ff; }
-.s { color: #d32f2f; }
+.u { color: #0a1a8c; } /* Deeper metallic blue */
+.s { color: #b31d1d; } /* Deeper metallic red */
 
 .mechanical-text {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  color: white;
-  font-size: 19px;
+  color: #c0c0c0; /* Silver */
+  font-size: 17px;
   font-weight: 900;
-  margin-left: auto;
   text-transform: uppercase;
   line-height: 1;
-  letter-spacing: 0.5px;
-  font-family: "Arial Black", Arial, sans-serif;
+  letter-spacing: 1px;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Inset embossed look */
+  text-shadow: 
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.3),
+    -0.5px -0.5px 1px rgba(0, 0, 0, 0.5);
 }
 
 .underline {
   position: absolute;
-  bottom: 14px;
-  left: 12px;
-  width: 70%;
-  height: 4px;
-  background: white;
-  border-radius: 20% 80% 30% 70% / 50% 50% 50% 50%;
-  opacity: 0.9;
+  bottom: 18px;
+  left: 18px;
+  width: 60%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 40% 70% 30% 60%;
+  filter: blur(0.3px);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Desktop size */
 @media (min-width: 768px) {
   .logo-box {
-    width: 225px;
-    height: 140px;
-    padding: 15px;
-    border-radius: 2px;
-    border-bottom: 4px solid #5a5e63;
-    border-right: 4px solid #5a5e63;
-    box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+    width: 260px;
+    height: 160px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 
+      4px 4px 8px rgba(0, 0, 0, 0.4),
+      -1px -1px 3px rgba(255, 255, 255, 0.2);
   }
   
   .logo-box:hover {
     transform: translate(-5px, -5px);
-    box-shadow: 12px 12px 20px rgba(0,0,0,0.3);
-    border-bottom: 6px solid #5a5e63;
-    border-right: 6px solid #5a5e63;
+    box-shadow: 
+      12px 12px 20px rgba(0, 0, 0, 0.4),
+      -1px -1px 3px rgba(255, 255, 255, 0.2);
   }
   
   .us-text {
-    font-size: 110px;
-    letter-spacing: -5px;
+    font-size: 120px;
+    letter-spacing: -6px;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
   }
   
   .mechanical-text {
-    font-size: 24px;
+    font-size: 21px;
+    letter-spacing: 1px;
   }
   
   .underline {
-    bottom: 17px;
-    left: 15px;
-    width: 70%;
-    height: 5px;
+    bottom: 22px;
+    left: 22px;
+    width: 60%;
+    height: 6px;
   }
 }
