@@ -112,8 +112,8 @@ function Header() {
     ), label: 'Safety', onClick: () => scrollToSection('#safety') },
     { icon: (
       <svg className="text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m10.325 4.317 1.593-.398a1.125 1.125 0 0 1 1.365.808l.26 1.108a4.5 4.5 0 0 1 2.246 1.299l1.106-.263a1.125 1.125 0 0 1 1.36.815l.398 1.593a1.125 1.125 0 0 1-.808 1.365l-1.108.26a4.5 4.5 0 0 1-1.299 2.246l.263 1.106a1.125 1.125 0 0 1-.815 1.36l-1.593.398a1.125 1.125 0 0 1-1.365-.808l-.26-1.108a4.5 4.5 0 0 1-2.246-1.299l-1.106.263a1.125 1.125 0 0 1-1.36-.815l-.398-1.593a1.125 1.125 0 0 1 .808-1.365l1.108-.26a4.5 4.5 0 0 1 1.299-2.246l-.263-1.106a1.125 1.125 0 0 1 .815-1.36Z"/>
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/>
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.5 3.75a3.75 3.75 0 0 0-3.167 5.75L7 14.833a1.75 1.75 0 1 0 2.475 2.475L14.75 12.5A3.75 3.75 0 1 0 15.5 3.75Z"/>
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 15.75 8.25 15"/>
       </svg>
     ), label: 'Services', onClick: () => scrollToSection('#services') },
     { icon: (
