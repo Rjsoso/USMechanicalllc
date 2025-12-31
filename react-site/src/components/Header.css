@@ -99,13 +99,9 @@
   transform-style: preserve-3d;
   padding: 0.5rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.25),
-    0 5px 15px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 5px 15px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
 
@@ -124,7 +120,7 @@
   right: 0.5rem;
   height: 30px;
   transform-origin: center top;
-  transform: translateZ(15px) rotateX(90deg);
+  transform: translateZ(30px) rotateX(90deg);
   background: linear-gradient(180deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
   opacity: 1;
 }
@@ -136,7 +132,7 @@
   bottom: 0.5rem;
   width: 30px;
   transform-origin: right center;
-  transform: translateZ(15px) rotateY(90deg);
+  transform: translateZ(30px) rotateY(90deg);
   background: linear-gradient(90deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
   opacity: 1;
 }
@@ -148,7 +144,7 @@
   right: 0.5rem;
   height: 30px;
   transform-origin: center bottom;
-  transform: translateZ(15px) rotateX(-90deg);
+  transform: translateZ(30px) rotateX(-90deg);
   background: linear-gradient(0deg, rgba(30, 30, 30, 0.95), rgba(60, 60, 60, 0.7));
   opacity: 1;
 }
@@ -160,7 +156,7 @@
   bottom: 0.5rem;
   width: 30px;
   transform-origin: left center;
-  transform: translateZ(15px) rotateY(-90deg);
+  transform: translateZ(30px) rotateY(-90deg);
   background: linear-gradient(270deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
   opacity: 1;
 }
@@ -174,8 +170,7 @@
 .logo-3d-wrapper:hover .logo-front-face {
   box-shadow: 
     0 25px 50px rgba(0, 0, 0, 0.3),
-    0 15px 25px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 15px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Make sides more visible on hover to emphasize the 3D effect */
@@ -219,22 +214,22 @@
   
   .logo-side-top {
     height: 20px;
-    transform: translateZ(10px) rotateX(90deg);
+    transform: translateZ(20px) rotateX(90deg);
   }
   
   .logo-side-right {
     width: 20px;
-    transform: translateZ(10px) rotateY(90deg);
+    transform: translateZ(20px) rotateY(90deg);
   }
   
   .logo-side-bottom {
     height: 20px;
-    transform: translateZ(10px) rotateX(-90deg);
+    transform: translateZ(20px) rotateX(-90deg);
   }
   
   .logo-side-left {
     width: 20px;
-    transform: translateZ(10px) rotateY(-90deg);
+    transform: translateZ(20px) rotateY(-90deg);
   }
 }
 
