@@ -245,6 +245,16 @@ export default defineType({
               ],
             },
             {
+              name: "backgroundImage",
+              type: "image",
+              title: "Background Image",
+              description: "Optional background for this delivery method card",
+              options: { hotspot: true },
+              fields: [
+                { name: "alt", type: "string", title: "Alt text" },
+              ],
+            },
+            {
               name: "badge",
               type: "string",
               title: "Badge Text",

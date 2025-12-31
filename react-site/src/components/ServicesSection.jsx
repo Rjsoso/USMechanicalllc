@@ -34,6 +34,13 @@ const ServicesSection = () => {
               badgeTone,
               ctaLabel,
               ctaUrl,
+              backgroundImage {
+                asset-> {
+                  url,
+                  _id
+                },
+                alt
+              },
               body
             },
             servicesInfo[] {
@@ -315,31 +322,84 @@ const ServicesSection = () => {
           </div>
 
           <div className="relative min-h-[620px] md:min-h-[700px]">
-            <div className="grid gap-6 md:gap-8 md:grid-cols-2">
-              {servicesData.deliveryMethods.map((method, idx) => {
+            <div className="grid gap-6 md:gap-8 md:grid-cols-2 relative">
+              {/* SVG connectors for desktop */}
+              <svg
+                className="hidden md:block absolute inset-0 pointer-events-none"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                    <path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.35)" />
+                  </marker>
+                  <filter id="squiggle">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+                  </filter>
+                </defs>
+                <path
+                  d="M 35% 22% C 45% 30%, 55% 30%, 65% 22%"
+                  stroke="rgba(255,255,255,0.35)"
+                  strokeWidth="2.5"
+                  fill="none"
+                  markerEnd="url(#arrowhead)"
+                  filter="url(#squiggle)"
+                />
+                <path
+                  d="M 35% 70% C 45% 62%, 55% 62%, 65% 70%"
+                  stroke="rgba(255,255,255,0.35)"
+                  strokeWidth="2.5"
+                  fill="none"
+                  markerEnd="url(#arrowhead)"
+                  filter="url(#squiggle)"
+                />
+                <path
+                  d="M 15% 45% C 25% 55%, 25% 65%, 15% 75%"
+                  stroke="rgba(255,255,255,0.35)"
+                  strokeWidth="2.5"
+                  fill="none"
+                  markerEnd="url(#arrowhead)"
+                  filter="url(#squiggle)"
+                />
+              </svg>
+
+              {[0,1,3,2].map((mappedIdx, displayIdx) => {
+                const method = servicesData.deliveryMethods[mappedIdx];
                 const bodyPreview = extractPlainText(method.body);
                 const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
+                const bgUrl = method.backgroundImage?.asset?.url
+                  ? `${method.backgroundImage.asset.url}?w=1600&q=85&auto=format`
+                  : null;
 
                 return (
                   <motion.div
                     layout
-                    layoutId={`delivery-card-${idx}`}
-                    key={idx}
-                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-slate-900/80 p-6 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:border-white/20"
+                    layoutId={`delivery-card-${mappedIdx}`}
+                    key={mappedIdx}
+                    className="group relative overflow-hidden rounded-2xl border border-white/10 p-6 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:border-white/20"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
-                    transition={{ delay: idx * 0.05 }}
+                    transition={{ delay: displayIdx * 0.05 }}
+                    style={bgUrl ? {
+                      backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.82), rgba(5,7,12,0.94)), url(${bgUrl})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    } : undefined}
                   >
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
-                  <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
+                    {!bgUrl && (
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-cyan-500/10 via-sky-400/10 to-indigo-500/10" />
+                    )}
+                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
                     {method.badge && (
                       <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}>
                         {method.badge}
                       </span>
                     )}
                     <span className="text-sm text-gray-400 font-semibold">
-                      {String(idx + 1).padStart(2, '0')}
+                        {String(displayIdx + 1).padStart(2, '0')}
                     </span>
                   </div>
                   <h4 className="text-2xl font-semibold text-white mb-2 relative z-10">
@@ -357,7 +417,7 @@ const ServicesSection = () => {
                   )}
                     <div className="relative z-10 mt-5 flex flex-wrap gap-3 items-center">
                       <button
-                        onClick={() => handleExpand(idx)}
+                        onClick={() => handleExpand(mappedIdx)}
                         className="inline-flex items-center gap-2 bg-blue-600/90 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
                       >
                         Get a Quote
