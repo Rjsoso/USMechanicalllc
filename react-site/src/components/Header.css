@@ -138,10 +138,16 @@
 /* Logo image sized naturally; container wraps it */
 .logo-face-image {
   display: block;
-  height: clamp(130px, 14vw, 190px);
+  height: 8rem; /* revert to original ~128px height */
   width: auto;
   object-fit: contain;
   border-radius: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .logo-face-image {
+    height: 10rem; /* revert to original ~160px height on desktop */
+  }
 }
 
 /* Base styles for all side panels */
