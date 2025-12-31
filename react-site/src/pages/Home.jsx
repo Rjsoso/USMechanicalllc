@@ -32,8 +32,8 @@ export default function Home() {
       const safetyBottom = rect.bottom;
       const viewportHeight = window.innerHeight;
 
-      // Start sliding when Safety bottom reaches 70% of viewport
-      const slideStart = viewportHeight * 0.7;
+      // Start sliding when Safety bottom reaches 15% from top (85% to top)
+      const slideStart = viewportHeight * 0.15;
       const slideEnd = 0;
 
       if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
