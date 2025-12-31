@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
+import './Header.css';
 
 function Header() {
   const [logo, setLogo] = useState(null);
@@ -130,10 +131,10 @@ function Header() {
 
   return (
     <>
-      {/* Logo - Separate, positioned in top-left corner */}
+      {/* Logo - Separate, positioned in top-left corner with 3D effect */}
       {logoUrls && (
         <div 
-          className="fixed top-4 left-4 z-50 cursor-pointer"
+          className="fixed top-4 left-4 z-50 cursor-pointer logo-3d-wrapper"
           onClick={handleLogoClick}
           role="button"
           tabIndex={0}
@@ -145,19 +146,27 @@ function Header() {
           }}
           aria-label="Go to home page"
         >
-          <img
-            src={logoUrls.src}
-            srcSet={logoUrls.srcSet}
-            sizes="(max-width: 768px) 128px, 160px"
-            alt="US Mechanical"
-            className="h-32 md:h-40 w-auto object-contain rounded-lg transition-all duration-500 hover:opacity-80"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
-          />
+          <div className="logo-platform">
+            {/* Shadow layers for depth */}
+            <div className="logo-shadow-layer logo-shadow-layer-1"></div>
+            <div className="logo-shadow-layer logo-shadow-layer-2"></div>
+            <div className="logo-shadow-layer logo-shadow-layer-3"></div>
+            
+            {/* Logo image */}
+            <img
+              src={logoUrls.src}
+              srcSet={logoUrls.srcSet}
+              sizes="(max-width: 768px) 128px, 160px"
+              alt="US Mechanical"
+              className="h-32 md:h-40 w-auto object-contain rounded-lg relative z-10"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+          </div>
         </div>
       )}
 
