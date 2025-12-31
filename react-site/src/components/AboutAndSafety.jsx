@@ -262,13 +262,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
       <section
         id="safety"
         className="py-20 bg-white text-gray-900 -mt-10"
-        style={{
-          position: 'sticky',
-          top: '0',
-          zIndex: 10,
-          marginBottom: '0', // Proper spacing for Company Stats
-          paddingBottom: '60px',
-        }}
       >
         <div className="max-w-7xl mx-auto px-6">
           {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
