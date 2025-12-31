@@ -171,7 +171,7 @@ function HeroSection() {
             // Optimize image: use Sanity CDN with width/quality params if available
             const optimizedUrl = imageUrl 
               ? (imageUrl.includes('cdn.sanity.io') 
-                  ? `${imageUrl}?w=1920&q=85&auto=format` 
+                  ? `${imageUrl}?w=1600&q=80&auto=format` 
                   : imageUrl)
               : undefined;
             
@@ -201,9 +201,9 @@ function HeroSection() {
           className="fixed bg-cover bg-center brightness-75"
           style={{
             backgroundImage: heroData.backgroundImage?.asset?.url
-              ? `url(${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format)`
+              ? `url(${heroData.backgroundImage.asset.url}?w=1600&q=80&auto=format)`
               : heroData.backgroundImage && urlFor(heroData.backgroundImage)
-              ? urlFor(heroData.backgroundImage).width(1920).quality(85).auto('format').url()
+              ? urlFor(heroData.backgroundImage).width(1600).quality(80).auto('format').url()
               : undefined,
             top: 0,
             left: 0,

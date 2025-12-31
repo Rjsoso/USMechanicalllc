@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { client } from '../utils/sanity';
 import { urlFor } from '../utils/sanity';
 import { motion } from 'framer-motion';
@@ -8,6 +8,7 @@ export default function Contact() {
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const headerOffset = 180;
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -65,33 +66,50 @@ export default function Contact() {
     fetchContact();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-center text-lg text-white">Loading...</p>
-      </div>
-    );
-  }
+  // Attempt smooth scroll to contact when this component is ready
+  useEffect(() => {
+    const shouldScroll =
+      sessionStorage.getItem('scrollTo') === 'contact' ||
+      window.location.hash === '#contact';
 
-  if (error || !contactData) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center max-w-2xl px-6">
-          <h1 className="text-2xl font-bold mb-4 text-red-400">Contact Page Not Found</h1>
-          <p className="text-gray-300 mb-4">{error || 'No contact page data found.'}</p>
-          <p className="text-sm text-gray-400">
-            Please create a "Contact Page" document in Sanity Studio at{' '}
-            <a href="http://localhost:3333" className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
-              http://localhost:3333
-            </a>
-          </p>
-        </div>
-      </div>
-    );
-  }
+    if (!shouldScroll) return undefined;
+
+    const scrollToContact = () => {
+      const element = document.getElementById('contact');
+      if (!element) return false;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      sessionStorage.removeItem('scrollTo');
+      return true;
+    };
+
+    let attempts = 0;
+    const maxRetries = 20;
+    const timer = setInterval(() => {
+      attempts += 1;
+      if (scrollToContact() || attempts >= maxRetries) {
+        clearInterval(timer);
+      }
+    }, 150);
+
+    // Try immediately in case everything is already mounted
+    scrollToContact();
+
+    return () => clearInterval(timer);
+  }, [loading, contactData, headerOffset]);
 
   // Determine which background image to use (contact's own or hero's as fallback)
-  const backgroundImageUrl = contactData?.backgroundImage?.asset?.url || heroBackgroundImage;
+  const backgroundImageUrl = useMemo(() => {
+    const sanityImage = contactData?.backgroundImage;
+    if (sanityImage && urlFor(sanityImage)) {
+      return urlFor(sanityImage).width(1400).quality(80).auto('format').url();
+    }
+    if (heroBackgroundImage?.includes('cdn.sanity.io')) {
+      return `${heroBackgroundImage}?w=1400&q=80&auto=format`;
+    }
+    return heroBackgroundImage || null;
+  }, [contactData?.backgroundImage, heroBackgroundImage]);
   
   return (
     <section 
@@ -108,7 +126,7 @@ export default function Contact() {
           <div
             className="absolute inset-0 bg-cover bg-center brightness-75"
             style={{
-              backgroundImage: `url(${backgroundImageUrl}?w=1920&q=85&auto=format)`,
+              backgroundImage: `url(${backgroundImageUrl})`,
               zIndex: 0,
               width: '100%',
             }}
@@ -124,78 +142,103 @@ export default function Contact() {
         </>
       )}
       <div className="relative z-10 max-w-6xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="section-title text-5xl md:text-6xl text-center mb-8 text-white"
-        >
-          {contactData.heroTitle || 'Contact Us'}
-        </motion.h1>
-
-        <p className="text-center text-gray-300 mb-12">{contactData.description}</p>
-
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* LEFT SIDE — OFFICE INFO */}
-          <div>
-            {contactData.offices && contactData.offices.length > 0 ? (
-              contactData.offices.map((office, index) => (
-                <div key={index} className="mb-8">
-                  <h2 className="text-2xl font-semibold mb-4 text-white">{office.locationName}</h2>
-                  <p className="text-white">{office.address}</p>
-                  <p className="text-white">Phone: <span className="text-blue-300">{office.phone}</span></p>
-                  {office.fax && <p className="text-white">Fax: {office.fax}</p>}
-                </div>
-              ))
-            ) : (
-              <p className="text-white">No office locations available.</p>
-            )}
-
-            {/* AFFILIATES */}
-            {contactData.affiliates && contactData.affiliates.length > 0 && (
-              <div className="mt-8">
-                <h2 className="text-2xl font-semibold mb-4 text-white">Affiliate Companies</h2>
-                {contactData.affiliates.map((affiliate, i) => (
-                  <div key={i} className="mb-6">
-                    {affiliate.logo && urlFor(affiliate.logo) && (
-                      <img
-                        src={urlFor(affiliate.logo).width(200).url()}
-                        alt={affiliate.name}
-                        className="h-12 mb-2 object-contain"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                    <p className="font-semibold text-white">{affiliate.name}</p>
-                    {affiliate.description && <p className="text-gray-300">{affiliate.description}</p>}
-                  </div>
-                ))}
-              </div>
-            )}
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <p className="text-center text-lg text-white">Loading contact...</p>
           </div>
+        )}
 
-          {/* RIGHT SIDE — FORM */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20">
-            <h3 className="text-2xl font-semibold mb-4 text-white">
-              {contactData.formSettings?.headline || 'Send Us a Message'}
-            </h3>
-            <form
-              action="https://formspree.io/f/xgvrvody"
-              method="POST"
-              className="flex flex-col space-y-4"
+        {!loading && (error || !contactData) && (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center max-w-2xl px-6">
+              <h1 className="text-2xl font-bold mb-4 text-red-400">Contact Page Not Found</h1>
+              <p className="text-gray-300 mb-4">{error || 'No contact page data found.'}</p>
+              <p className="text-sm text-gray-400">
+                Please create a "Contact Page" document in Sanity Studio at{' '}
+                <a href="http://localhost:3333" className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
+                  http://localhost:3333
+                </a>
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!loading && contactData && (
+          <>
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="section-title text-5xl md:text-6xl text-center mb-8 text-white"
             >
-              <input type="text" name="name" placeholder="Name" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <input type="email" name="email" placeholder="Email" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <input type="tel" name="phone" placeholder="Phone" className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <textarea name="message" placeholder="Message" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-white/50" />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
+              {contactData.heroTitle || 'Contact Us'}
+            </motion.h1>
+
+            <p className="text-center text-gray-300 mb-12">{contactData.description}</p>
+
+            <div className="grid md:grid-cols-2 gap-12">
+              {/* LEFT SIDE — OFFICE INFO */}
+              <div>
+                {contactData.offices && contactData.offices.length > 0 ? (
+                  contactData.offices.map((office, index) => (
+                    <div key={index} className="mb-8">
+                      <h2 className="text-2xl font-semibold mb-4 text-white">{office.locationName}</h2>
+                      <p className="text-white">{office.address}</p>
+                      <p className="text-white">Phone: <span className="text-blue-300">{office.phone}</span></p>
+                      {office.fax && <p className="text-white">Fax: {office.fax}</p>}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-white">No office locations available.</p>
+                )}
+
+                {/* AFFILIATES */}
+                {contactData.affiliates && contactData.affiliates.length > 0 && (
+                  <div className="mt-8">
+                    <h2 className="text-2xl font-semibold mb-4 text-white">Affiliate Companies</h2>
+                    {contactData.affiliates.map((affiliate, i) => (
+                      <div key={i} className="mb-6">
+                        {affiliate.logo && urlFor(affiliate.logo) && (
+                          <img
+                            src={urlFor(affiliate.logo).width(200).quality(80).auto('format').url()}
+                            alt={affiliate.name}
+                            className="h-12 mb-2 object-contain"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
+                        <p className="font-semibold text-white">{affiliate.name}</p>
+                        {affiliate.description && <p className="text-gray-300">{affiliate.description}</p>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* RIGHT SIDE — FORM */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20">
+                <h3 className="text-2xl font-semibold mb-4 text-white">
+                  {contactData.formSettings?.headline || 'Send Us a Message'}
+                </h3>
+                <form
+                  action="https://formspree.io/f/xgvrvody"
+                  method="POST"
+                  className="flex flex-col space-y-4"
+                >
+                  <input type="text" name="name" placeholder="Name" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
+                  <input type="email" name="email" placeholder="Email" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
+                  <input type="tel" name="phone" placeholder="Phone" className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50" />
+                  <textarea name="message" placeholder="Message" required className="border border-white/30 bg-white/10 text-white placeholder-white/70 p-3 rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-white/50" />
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

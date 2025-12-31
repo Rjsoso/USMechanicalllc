@@ -46,7 +46,17 @@ export default function Home() {
             <Careers />
           </Suspense>
 
-          <Suspense fallback={<div className="py-20 bg-gray-700 text-center text-white">Loading...</div>}>
+          <Suspense
+            fallback={
+              <section
+                id="contact"
+                className="py-20 bg-gray-700 text-center text-white"
+                style={{ minHeight: '60vh' }}
+              >
+                Loading contact...
+              </section>
+            }
+          >
             <Contact />
           </Suspense>
         </div>
