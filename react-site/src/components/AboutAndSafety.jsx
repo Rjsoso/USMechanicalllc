@@ -310,8 +310,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
           transform: `translateY(${safetySlide}px)`,
           transition: 'transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1)',
           willChange: 'transform',
-          marginBottom: '-90px', // overlap stats initially (reduced footprint)
-          paddingBottom: '90px', // preserve internal spacing while overlapping
+          marginBottom: '-60px', // overlap stats initially (further reduced footprint)
+          paddingBottom: '60px', // preserve internal spacing while overlapping
         }}
       >
         <div className="max-w-7xl mx-auto px-6">

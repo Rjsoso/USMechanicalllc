@@ -103,7 +103,7 @@ const CompanyStats = () => {
   const [safetyProgress, setSafetyProgress] = useState(0);
   const [scrollFade, setScrollFade] = useState(0);
   const sectionRef = useRef(null);
-  const STATS_OVERLAP_PX = 90;
+  const STATS_OVERLAP_PX = 60;
 
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-10 transition-opacity duration-700 ease-out"
+      className="w-full py-8 transition-opacity duration-700 ease-out"
       style={{
         // Drop-out effect: stats start tucked under safety and fall into view as safety lifts
         opacity: Math.min(1, 0.04 + 0.96 * reveal),
