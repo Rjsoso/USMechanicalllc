@@ -7,6 +7,7 @@
   justify-content: flex-end;
   z-index: 90;
   pointer-events: none;
+  perspective: 1200px;
 }
 
 .dock-panel {
@@ -23,9 +24,26 @@
   border: 1px solid #9ca3af;
   padding: 0.6rem 0.85rem;
   pointer-events: auto;
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.35),
-    0 4px 12px rgba(0, 0, 0, 0.25);
+  transform-style: preserve-3d;
+  transform: rotateY(-5deg) rotateX(3deg);
+  overflow: visible;
+  transition: all 0.3s ease;
+  filter: 
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
+}
+
+.dock-outer:hover .dock-panel {
+  transform: translate(-2px, -2px) rotateY(-5deg) rotateX(3deg);
+  filter: 
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(10px 12px 18px rgba(0,0,0,0.4));
 }
 
 .dock-item {
