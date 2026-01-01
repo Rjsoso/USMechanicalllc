@@ -9,6 +9,7 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fetch logo from Sanity headerSection (centralized logo location)
   useEffect(() => {
     client
       .fetch(

@@ -51,18 +51,25 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     menuColor: '#ffffff',           // Hamburger icon color (white for visibility on grey)
   };
 
-  // Fetch navigation data from Sanity (logo, sections, buttonText)
+  // Fetch navigation data from Sanity (sections, buttonText from cardNav; logo from headerSection)
   useEffect(() => {
     const fetchNavData = async () => {
       try {
-        const data = await client.fetch(
-          `*[_type == "cardNav"][0]{
+        // Fetch logo from headerSection (centralized logo location)
+        const headerData = await client.fetch(
+          `*[_type == "headerSection"][0]{
             logo {
               asset-> {
                 _id,
                 url
               }
-            },
+            }
+          }`
+        );
+
+        // Fetch navigation-specific data from cardNav
+        const navData = await client.fetch(
+          `*[_type == "cardNav"][0]{
             sections[] {
               label,
               links[] {
@@ -74,7 +81,13 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
             buttonText
           }`
         );
-        setNavData(data);
+
+        // Combine the data
+        setNavData({
+          logo: headerData?.logo,
+          sections: navData?.sections,
+          buttonText: navData?.buttonText
+        });
       } catch (error) {
         console.error('Error fetching CardNav data:', error);
       }
