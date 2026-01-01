@@ -154,37 +154,12 @@ function Header() {
 
   return (
     <>
-      {/* SVG Filter for recessed engraving effect */}
-      <svg width="0" height="0" style={{ position: 'absolute' }}>
-        <filter id="recessed-engraving" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" in="SourceAlpha" result="blur" />
-          <feOffset dx="4" dy="4" result="offsetBlur" />
-          <feComposite operator="out" in="SourceAlpha" in2="offsetBlur" result="inverseShadow" />
-          <feFlood floodColor="black" floodOpacity="0.7" result="color" />
-          <feComposite operator="in" in="color" in2="inverseShadow" result="shadow" />
-          
-          <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="blur2" />
-          <feOffset dx="-1" dy="-1" result="offsetHighlight" />
-          <feComposite operator="out" in="SourceAlpha" in2="offsetHighlight" result="inverseHighlight" />
-          <feFlood floodColor="white" floodOpacity="0.5" result="color2" />
-          <feComposite operator="in" in="color2" in2="inverseHighlight" result="highlight" />
-
-          <feMerge>
-            <feMergeNode in="SourceGraphic" />
-            <feMergeNode in="shadow" />
-            <feMergeNode in="highlight" />
-          </feMerge>
-        </filter>
-      </svg>
-
-      {/* Logo - 3D plaque design with perspective and mouse parallax */}
+      {/* Logo - Stamped metal plaque design */}
       {logoUrl && (
         <div 
-          ref={sceneRef}
           className="fixed top-4 left-4 z-50 plaque-perspective"
         >
           <div 
-            ref={plaqueRef}
             className="logo-3d-card"
             onClick={handleLogoClick}
             role="button"
@@ -197,13 +172,18 @@ function Header() {
             }}
             aria-label="Go to home page"
           >
-            <div className="logo-layer">
-              <img 
-                src={logoUrl} 
-                alt="US Mechanical"
-                className="logo-plaque-image"
-              />
-            </div>
+            {/* Corner screws */}
+            <div className="screw top-left"></div>
+            <div className="screw top-right"></div>
+            <div className="screw bottom-left"></div>
+            <div className="screw bottom-right"></div>
+            
+            {/* Stamped logo */}
+            <img 
+              src={logoUrl} 
+              alt="US Mechanical"
+              className="stamped-logo"
+            />
           </div>
         </div>
       )}

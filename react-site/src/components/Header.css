@@ -3,80 +3,107 @@
   perspective: 1200px;
 }
 
-/* 3D Logo Plaque - High-contrast metallic with mouse parallax */
+/* The 3D Gray Metal Plaque with Stamped Effect */
 .logo-3d-card {
   position: relative;
-  width: 200px;
-  height: 124px;
-  background: linear-gradient(145deg, #a5aab0, #5d6166); /* High-contrast metallic gradient */
-  border-radius: 15px;
-  transform-style: preserve-3d;
-  transform: rotateY(-4deg) rotateX(2deg); /* Initial flat-ish stance */
+  width: 225px;
+  height: 140px;
+  /* Brushed Metal gradient */
+  background: linear-gradient(135deg, #7d7d7d 0%, #4a4a4a 50%, #2b2b2b 100%);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.1s ease-out; /* Fast, responsive */
   
-  /* Box thickness and shadow */
+  /* Strong 3D depth for the plaque */
   box-shadow: 
-    0px 2px 1px rgba(255,255,255,0.4) inset, /* Top rim light */
-    1px 1px 0px #34383c,
-    2px 2px 0px #34383c,
-    3px 3px 0px #34383c,
-    4px 4px 0px #34383c,
-    5px 5px 0px #34383c,
-    6px 10px 14px rgba(0,0,0,0.3);
+    5px 5px 12px rgba(0,0,0,0.3),   /* Outer drop shadow */
+    inset 1px 1px 2px rgba(255,255,255,0.3), /* Sharp edge highlight */
+    inset -1px -1px 2px rgba(0,0,0,0.5);
+  
+  border: 1px solid #333;
+  transition: all 0.3s ease;
 }
 
-/* Brushed Metal Texture Overlay */
-.logo-3d-card::before {
-  content: '';
+/* Hover effect - slight lift */
+.plaque-perspective:hover .logo-3d-card {
+  transform: translate(-2px, -2px);
+  box-shadow: 
+    7px 7px 15px rgba(0,0,0,0.35),
+    inset 1px 1px 2px rgba(255,255,255,0.3),
+    inset -1px -1px 2px rgba(0,0,0,0.5);
+}
+
+/* Steel Screws in corners */
+.screw {
   position: absolute;
-  inset: 0;
-  border-radius: 15px;
-  background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
-  opacity: 0.15;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle at 30% 30%, #999, #444);
+  border-radius: 50%;
+  box-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.5);
   pointer-events: none;
 }
 
-/* The Logo Layer - Container for logo with SVG filter */
-.logo-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* SVG filter for recessed engraving effect */
-  filter: url(#recessed-engraving);
+.screw.top-left { top: 8px; left: 8px; }
+.screw.top-right { top: 8px; right: 8px; }
+.screw.bottom-left { bottom: 8px; left: 8px; }
+.screw.bottom-right { bottom: 8px; right: 8px; }
+
+/* The Stamped/Pressed Logo Effect */
+.stamped-logo {
+  max-width: 75%;
+  max-height: 75%;
+  /* Dark, pressed-in appearance */
+  filter: 
+    brightness(0.2) 
+    contrast(2) 
+    drop-shadow(-1px -1px 1px rgba(0,0,0,0.7))
+    drop-shadow(1px 1px 1px rgba(255,255,255,0.15));
+  
+  opacity: 0.7;
+  transition: filter 0.3s ease;
 }
 
-/* Logo image styling */
-.logo-plaque-image {
-  width: 85%;
-  height: auto;
-  opacity: 0.95; /* Slight transparency helps the "metal" feel blend in */
-  display: block;
+/* Slightly enhance on hover */
+.plaque-perspective:hover .stamped-logo {
+  filter: 
+    brightness(0.25) 
+    contrast(2) 
+    drop-shadow(-1px -1px 1px rgba(0,0,0,0.8))
+    drop-shadow(1px 1px 1px rgba(255,255,255,0.2));
 }
 
 /* Desktop size */
 @media (min-width: 768px) {
   .logo-3d-card {
-    width: 260px;
-    height: 161px;
-    border-radius: 19px;
+    width: 280px;
+    height: 175px;
+    border-radius: 5px;
     
     /* Enhanced shadows for desktop */
     box-shadow: 
-      0px 2px 1px rgba(255,255,255,0.4) inset,
-      1px 1px 0px #34383c,
-      2px 2px 0px #34383c,
-      3px 3px 0px #34383c,
-      4px 4px 0px #34383c,
-      5px 5px 0px #34383c,
-      6px 6px 0px #34383c,
-      8px 12px 17px rgba(0,0,0,0.3);
+      6px 6px 15px rgba(0,0,0,0.3),
+      inset 1px 1px 2px rgba(255,255,255,0.3),
+      inset -1px -1px 2px rgba(0,0,0,0.5);
   }
   
-  .logo-3d-card::before {
-    border-radius: 19px;
+  .plaque-perspective:hover .logo-3d-card {
+    transform: translate(-3px, -3px);
+    box-shadow: 
+      9px 9px 18px rgba(0,0,0,0.35),
+      inset 1px 1px 2px rgba(255,255,255,0.3),
+      inset -1px -1px 2px rgba(0,0,0,0.5);
   }
+  
+  .screw {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .screw.top-left { top: 10px; left: 10px; }
+  .screw.top-right { top: 10px; right: 10px; }
+  .screw.bottom-left { bottom: 10px; left: 10px; }
+  .screw.bottom-right { bottom: 10px; right: 10px; }
 }
