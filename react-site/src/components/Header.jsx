@@ -126,11 +126,9 @@ function Header() {
 
   return (
     <>
-      {/* Logo - Stamped metal plaque design */}
+      {/* Logo with 3D shadow effect */}
       {logoUrl && (
-        <div 
-          className="fixed top-4 left-4 z-50 plaque-perspective"
-        >
+        <div className="fixed top-4 left-4 z-50 plaque-perspective">
           <div 
             className="logo-3d-card"
             onClick={handleLogoClick}
@@ -144,13 +142,6 @@ function Header() {
             }}
             aria-label="Go to home page"
           >
-            {/* Corner screws */}
-            <div className="screw top-left"></div>
-            <div className="screw top-right"></div>
-            <div className="screw bottom-left"></div>
-            <div className="screw bottom-right"></div>
-            
-            {/* Stamped logo */}
             <img 
               src={logoUrl} 
               alt="US Mechanical"
