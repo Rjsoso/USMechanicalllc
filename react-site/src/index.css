@@ -315,6 +315,34 @@ section#contact > div[class*="absolute"] {
   text-transform: uppercase;
 }
 
+/* Hero Button 3D Effect */
+.hero-button-3d {
+  transform-style: preserve-3d;
+  transform: translateZ(0) rotateY(-3deg) rotateX(2deg);
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: 
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
+}
+
+.hero-button-3d:hover {
+  transform: translateZ(0) rotateY(-3deg) rotateX(2deg) translateY(-3px) scale(1.05);
+  filter: 
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(10px 12px 18px rgba(0,0,0,0.4));
+}
+
 /* Ensure prose content sections have grey backgrounds instead of white */
 .prose,
 .prose * {
