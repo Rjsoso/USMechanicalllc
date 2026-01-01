@@ -3,73 +3,51 @@
   perspective: 1200px;
 }
 
-/* 3D Logo Plaque - Metallic surface with inset effect */
+/* 3D Logo Plaque - Simple hover effect with 3D shadows */
 .logo-3d-card {
   position: relative;
   width: 200px;
   height: 124px;
-  background: linear-gradient(145deg, #9ca3aa, #7a8087); /* Metallic gray background */
-  border-radius: 12px;
+  background: transparent;
   transform-style: preserve-3d;
   transform: rotateY(-5deg) rotateX(3deg);
   cursor: pointer;
-  overflow: hidden;
-  padding: 10px; /* Small padding for frame effect */
-  box-sizing: border-box;
+  overflow: visible;
+  padding: 0;
   transition: all 0.3s ease;
-  
-  /* Dual shadows: outer depth + inner bevel */
-  box-shadow: 
-    /* Outer 3D depth */
-    1px 1px 0px #3a3e42,
-    2px 2px 0px #3a3e42,
-    3px 3px 0px #3a3e42,
-    5px 7px 12px rgba(0,0,0,0.3),
-    /* Inner bevel for metallic plaque */
-    inset 0 2px 4px rgba(255,255,255,0.2),
-    inset 0 -2px 4px rgba(0,0,0,0.2);
 }
 
-/* Plaque pops out slightly on hover */
+/* Very subtle pop effect on hover - minimal movement */
 .plaque-perspective:hover .logo-3d-card {
-  transform: translate(-3px, -3px) rotateY(-5deg) rotateX(3deg);
-  box-shadow: 
-    /* Enhanced outer depth */
-    1px 1px 0px #3a3e42,
-    2px 2px 0px #3a3e42,
-    3px 3px 0px #3a3e42,
-    8px 10px 18px rgba(0,0,0,0.4),
-    /* Maintained inner bevel */
-    inset 0 2px 4px rgba(255,255,255,0.2),
-    inset 0 -2px 4px rgba(0,0,0,0.2);
+  transform: translate(-2px, -2px) rotateY(-5deg) rotateX(3deg);
 }
 
-/* Logo image styling - Inset/carved effect */
+/* Logo image styling - Balanced 3D depth with rounded edges */
 .logo-plaque-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+  border-radius: 12px; /* Softens the edges */
   
-  /* Blend mode to integrate with gray background */
-  mix-blend-mode: multiply;
-  opacity: 0.9;
-  
-  /* Inverted shadows for inset/carved appearance */
+  /* More visible 3D shadows - balanced depth */
   filter: 
-    drop-shadow(0 -1px 1px rgba(255,255,255,0.5)) /* Top highlight - makes it look recessed */
-    drop-shadow(0 1px 2px rgba(0,0,0,0.6)) /* Bottom shadow - depth */
-    drop-shadow(1px 1px 3px rgba(0,0,0,0.4)); /* Overall depth */
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(5px 7px 10px rgba(0,0,0,0.25));
   
-  transition: filter 0.3s ease, opacity 0.3s ease;
+  transition: filter 0.3s ease;
 }
 
-/* Slightly less inset on hover */
+/* Enhanced shadow on hover */
 .plaque-perspective:hover .logo-plaque-image {
   filter: 
-    drop-shadow(0 -1px 1px rgba(255,255,255,0.6))
-    drop-shadow(0 1px 2px rgba(0,0,0,0.5))
-    drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(10px 12px 18px rgba(0,0,0,0.35));
 }
 
 /* Desktop size */
@@ -77,44 +55,30 @@
   .logo-3d-card {
     width: 260px;
     height: 161px;
-    border-radius: 15px;
-    padding: 12px; /* Slightly more padding for desktop */
-    
-    /* Enhanced shadows for desktop */
-    box-shadow: 
-      1px 1px 0px #3a3e42,
-      2px 2px 0px #3a3e42,
-      3px 3px 0px #3a3e42,
-      4px 4px 0px #3a3e42,
-      6px 8px 14px rgba(0,0,0,0.3),
-      inset 0 2px 4px rgba(255,255,255,0.2),
-      inset 0 -2px 4px rgba(0,0,0,0.2);
   }
   
   .plaque-perspective:hover .logo-3d-card {
-    transform: translate(-4px, -4px) rotateY(-5deg) rotateX(3deg);
-    box-shadow: 
-      1px 1px 0px #3a3e42,
-      2px 2px 0px #3a3e42,
-      3px 3px 0px #3a3e42,
-      4px 4px 0px #3a3e42,
-      10px 12px 20px rgba(0,0,0,0.4),
-      inset 0 2px 4px rgba(255,255,255,0.2),
-      inset 0 -2px 4px rgba(0,0,0,0.2);
+    transform: translate(-3px, -3px) rotateY(-5deg) rotateX(3deg);
   }
   
   .logo-plaque-image {
-    /* Same inset effect, slightly enhanced for desktop */
+    border-radius: 15px; /* Larger rounded corners for desktop */
+    
+    /* More visible 3D shadows for desktop */
     filter: 
-      drop-shadow(0 -1px 2px rgba(255,255,255,0.5))
-      drop-shadow(0 1px 3px rgba(0,0,0,0.6))
-      drop-shadow(1px 1px 4px rgba(0,0,0,0.4));
+      drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+      drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
+      drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+      drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
   }
   
   .plaque-perspective:hover .logo-plaque-image {
     filter: 
-      drop-shadow(0 -1px 2px rgba(255,255,255,0.6))
-      drop-shadow(0 1px 3px rgba(0,0,0,0.5))
-      drop-shadow(1px 1px 3px rgba(0,0,0,0.3));
+      drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+      drop-shadow(12px 14px 22px rgba(0,0,0,0.4));
   }
 }
