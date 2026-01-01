@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, memo } from 'react';
+import { useEffect, useState, useMemo, memo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -8,6 +8,8 @@ function Header() {
   const [logo, setLogo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const sceneRef = useRef(null);
+  const plaqueRef = useRef(null);
 
   // Fetch logo from Sanity headerSection (centralized logo location)
   useEffect(() => {
@@ -26,6 +28,32 @@ function Header() {
         console.error('Error fetching header logo:', error);
       });
   }, []);
+
+  // Mouse parallax effect for 3D plaque
+  useEffect(() => {
+    const scene = sceneRef.current;
+    const plaque = plaqueRef.current;
+
+    if (!scene || !plaque) return;
+
+    const handleMouseMove = (e) => {
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+      plaque.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    };
+
+    const handleMouseLeave = () => {
+      plaque.style.transform = 'rotateY(-4deg) rotateX(2deg)';
+    };
+
+    scene.addEventListener('mousemove', handleMouseMove);
+    scene.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      scene.removeEventListener('mousemove', handleMouseMove);
+      scene.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [logoUrl]);
 
   // Memoize logo URL for background image
   const logoUrl = useMemo(() => {
@@ -126,10 +154,37 @@ function Header() {
 
   return (
     <>
-      {/* Logo - 3D plaque design with perspective */}
+      {/* SVG Filter for recessed engraving effect */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <filter id="recessed-engraving" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" in="SourceAlpha" result="blur" />
+          <feOffset dx="4" dy="4" result="offsetBlur" />
+          <feComposite operator="out" in="SourceAlpha" in2="offsetBlur" result="inverseShadow" />
+          <feFlood floodColor="black" floodOpacity="0.7" result="color" />
+          <feComposite operator="in" in="color" in2="inverseShadow" result="shadow" />
+          
+          <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="blur2" />
+          <feOffset dx="-1" dy="-1" result="offsetHighlight" />
+          <feComposite operator="out" in="SourceAlpha" in2="offsetHighlight" result="inverseHighlight" />
+          <feFlood floodColor="white" floodOpacity="0.5" result="color2" />
+          <feComposite operator="in" in="color2" in2="inverseHighlight" result="highlight" />
+
+          <feMerge>
+            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="shadow" />
+            <feMergeNode in="highlight" />
+          </feMerge>
+        </filter>
+      </svg>
+
+      {/* Logo - 3D plaque design with perspective and mouse parallax */}
       {logoUrl && (
-        <div className="fixed top-4 left-4 z-50 plaque-perspective">
+        <div 
+          ref={sceneRef}
+          className="fixed top-4 left-4 z-50 plaque-perspective"
+        >
           <div 
+            ref={plaqueRef}
             className="logo-3d-card"
             onClick={handleLogoClick}
             role="button"
@@ -142,11 +197,13 @@ function Header() {
             }}
             aria-label="Go to home page"
           >
-            <img 
-              src={logoUrl} 
-              alt="US Mechanical"
-              className="logo-plaque-image"
-            />
+            <div className="logo-layer">
+              <img 
+                src={logoUrl} 
+                alt="US Mechanical"
+                className="logo-plaque-image"
+              />
+            </div>
           </div>
         </div>
       )}
