@@ -220,14 +220,14 @@ Our goal is always simple: complete every project with zero safety issues.`,
           <div className="flex flex-col lg:flex-row items-stretch gap-0 w-full">
             {/* Carousel container - slides left and shrinks when expanded */}
             <div 
-              className="transition-all duration-[600ms] ease-out pb-12"
+              className="transition-all duration-[600ms] ease-out overflow-hidden"
               style={{
                 width: isExpanded ? '45%' : '75%',
                 transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
                 transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
-              <div className="h-[420px] md:h-[520px] lg:h-[620px]">
+              <div className="h-[480px] md:h-[580px] lg:h-[680px]">
                 <Carousel
                   items={carouselItems}
                   baseWidth={1100}
