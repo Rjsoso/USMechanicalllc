@@ -260,7 +260,7 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Single Rectangle Tabs / Accordion */}
-            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl overflow-hidden flex-1 flex flex-col">
+            <div className="relative border border-white/10 bg-gradient-to-br from-gray-700 via-gray-700/95 to-gray-700 shadow-2xl overflow-hidden flex-1 flex flex-col">
               <div className="flex flex-col divide-y divide-white/10 h-full">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
@@ -293,7 +293,7 @@ const ServicesSection = () => {
                           <span className="text-white font-semibold text-base sm:text-lg flex items-center gap-2">
                             {method.title}
                             {method.isQuote && (
-                              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-600 text-white text-xs font-bold">→</span>
+                              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-600 text-white text-xs font-bold">→</span>
                             )}
                           </span>
                         </div>
@@ -337,7 +337,7 @@ const ServicesSection = () => {
                               )}
 
                               {method.isQuote ? (
-                                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 shadow-lg">
+                                <div className="bg-white/5 border border-white/10 p-4 md:p-5 shadow-lg">
                                   <div className="mb-4">
                                     <p className="text-xs uppercase tracking-[0.25em] text-gray-300 mb-1">
                                       Request a Quote
@@ -358,25 +358,25 @@ const ServicesSection = () => {
                                       type="text"
                                       required
                                       placeholder="Name"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
+                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
                                     />
                                     <input
                                       name="email"
                                       type="email"
                                       required
                                       placeholder="Email"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
+                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
                                     />
                                     <input
                                       name="phone"
                                       type="tel"
                                       placeholder="Phone"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
+                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
                                     />
                                     <select
                                       name="deliveryMethod"
                                       defaultValue="General Inquiry"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60 bg-slate-900"
+                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60 bg-gray-700"
                                     >
                                       <option value="General Inquiry">General Inquiry</option>
                                       {servicesData.deliveryMethods.map((m, optionIdx) => (
@@ -390,14 +390,14 @@ const ServicesSection = () => {
                                       required
                                       rows="4"
                                       placeholder="Project details, timelines, and any specifics"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
+                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
                                     />
                                     <input type="hidden" name="targetEmail" value={emailTarget} />
                                     <div className="flex items-center gap-3 flex-wrap">
                                       <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
+                                        className="inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold px-5 py-3 transition disabled:opacity-60"
                                       >
                                         {submitting ? 'Sending...' : 'Send Request'}
                                       </button>
@@ -411,7 +411,7 @@ const ServicesSection = () => {
                                   </form>
                                 </div>
                               ) : (
-                                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 shadow-lg">
+                                <div className="bg-white/5 border border-white/10 p-4 md:p-5 shadow-lg">
                                   <div className="mb-1 flex items-center justify-between">
                                     <p className="text-xs uppercase tracking-[0.25em] text-gray-300">
                                       Delivery Method Details
