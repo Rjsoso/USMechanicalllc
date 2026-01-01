@@ -29,6 +29,12 @@ function Header() {
       });
   }, []);
 
+  // Memoize logo URL for background image
+  const logoUrl = useMemo(() => {
+    if (!logo) return null;
+    return urlFor(logo).width(640).quality(95).auto('format').fit('max').url();
+  }, [logo]);
+
   // Mouse parallax effect for 3D plaque
   useEffect(() => {
     const scene = sceneRef.current;
@@ -54,12 +60,6 @@ function Header() {
       scene.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [logoUrl]);
-
-  // Memoize logo URL for background image
-  const logoUrl = useMemo(() => {
-    if (!logo) return null;
-    return urlFor(logo).width(640).quality(95).auto('format').fit('max').url();
-  }, [logo]);
 
 
   const handleLogoClick = () => {
