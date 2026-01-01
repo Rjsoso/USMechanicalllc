@@ -55,9 +55,9 @@ function DockLabel({ children, className = '', ...rest }) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -5 }}
+          initial={{ opacity: 0, y: -5, x: '-50%' }}
+          animate={{ opacity: 1, y: 0, x: '-50%' }}
+          exit={{ opacity: 0, y: -5, x: '-50%' }}
           transition={{ duration: 0.2 }}
           className={`dock-label ${className}`}
           role="tooltip"
