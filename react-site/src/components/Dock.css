@@ -54,15 +54,29 @@
   border-radius: 0;
   background-color: #000000;
   border: 1px solid #222;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   cursor: pointer;
   outline: none;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+  filter:
+    drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+}
+
+.dock-item:hover {
+  transform: rotateY(-3deg) rotateX(2deg) translateY(-2px);
+  filter:
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(8px 10px 15px rgba(0, 0, 0, 0.4));
 }
 
 .dock-item:focus-visible {
-  box-shadow: 0 0 0 2px #8b5cf6;
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
 }
 
 .dock-icon {

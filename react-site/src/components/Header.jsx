@@ -152,7 +152,7 @@ function Header() {
       )}
 
       {/* Dock - positioned on right */}
-      <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+      <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={55} />
     </>
   );
 }
