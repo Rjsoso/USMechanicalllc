@@ -5,6 +5,7 @@ import { PortableText } from '@portabletext/react'
 import FadeInWhenVisible from './FadeInWhenVisible'
 import Carousel from './Carousel'
 import LogoLoop from './LogoLoop'
+import { FiArrowRight } from 'react-icons/fi'
 
 export default function AboutAndSafety() {
   const [data, setData] = useState(null)
@@ -259,7 +260,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     <div 
                       className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
                       style={{
-                        maxHeight: isExpanded ? 'none' : '4.5em',
+                        maxHeight: isExpanded ? 'none' : '7.5em',
                         overflow: 'hidden',
                         position: 'relative'
                       }}
@@ -270,30 +271,32 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     {/* Gradient fade overlay for truncated text */}
                     {!isExpanded && (
                       <div 
-                        className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none"
+                        className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none"
                       ></div>
                     )}
                     
                     {/* Read More / Close buttons */}
-                    <div className="mt-6 flex justify-start">
+                    <div className="mt-4 flex justify-start">
                       {!isExpanded ? (
                         <button
                           onClick={() => setIsExpanded(true)}
-                          className="px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                          className="bg-transparent text-white px-4 py-2 text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
                           aria-label="Read more about U.S. Mechanical"
                           aria-expanded="false"
                         >
                           Read More
+                          <FiArrowRight className="w-4 h-4" />
                         </button>
                       ) : (
                         <button
                           onClick={() => setIsExpanded(false)}
-                          className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
+                          className="bg-transparent text-white px-4 py-2 text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
                           aria-label="Close expanded text"
                           aria-expanded="true"
                         >
+                          Close
                           <svg 
-                            className="w-5 h-5" 
+                            className="w-4 h-4" 
                             fill="none" 
                             stroke="currentColor" 
                             viewBox="0 0 24 24"
@@ -305,7 +308,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
                               d="M6 18L18 6M6 6l12 12" 
                             />
                           </svg>
-                          Close
                         </button>
                       )}
                     </div>
