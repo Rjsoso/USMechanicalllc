@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, memo, useRef } from 'react';
+import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -8,8 +8,6 @@ function Header() {
   const [logo, setLogo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const sceneRef = useRef(null);
-  const plaqueRef = useRef(null);
 
   // Fetch logo from Sanity headerSection (centralized logo location)
   useEffect(() => {
@@ -34,32 +32,6 @@ function Header() {
     if (!logo) return null;
     return urlFor(logo).width(640).quality(95).auto('format').fit('max').url();
   }, [logo]);
-
-  // Mouse parallax effect for 3D plaque
-  useEffect(() => {
-    const scene = sceneRef.current;
-    const plaque = plaqueRef.current;
-
-    if (!scene || !plaque) return;
-
-    const handleMouseMove = (e) => {
-      const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
-      const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
-      plaque.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-    };
-
-    const handleMouseLeave = () => {
-      plaque.style.transform = 'rotateY(-4deg) rotateX(2deg)';
-    };
-
-    scene.addEventListener('mousemove', handleMouseMove);
-    scene.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      scene.removeEventListener('mousemove', handleMouseMove);
-      scene.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [logoUrl]);
 
 
   const handleLogoClick = () => {
