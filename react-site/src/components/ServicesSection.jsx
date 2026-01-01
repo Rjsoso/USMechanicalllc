@@ -213,7 +213,7 @@ const ServicesSection = () => {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-center items-start gap-10 md:gap-12">
+      <div className="flex flex-col md:flex-row justify-center items-stretch gap-10 md:gap-12">
         {/* LEFT — DESCRIPTION TEXT + SERVICE BOXES (full-bleed to the left edge) */}
         <div className="flex-1 md:w-1/2 pr-6 md:pr-10">
           <div className="space-y-4">
@@ -258,10 +258,10 @@ const ServicesSection = () => {
 
         {/* RIGHT — DELIVERY METHODS CONTENT */}
         {servicesData.deliveryMethods?.length > 0 && (
-          <div className="w-full md:w-1/2 px-6 md:px-0">
+          <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Single Rectangle Tabs / Accordion */}
-            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl overflow-hidden">
-              <div className="flex flex-col divide-y divide-white/10">
+            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-900 shadow-2xl overflow-hidden flex-1 flex flex-col">
+              <div className="flex flex-col divide-y divide-white/10 h-full">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
                   const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
@@ -293,7 +293,7 @@ const ServicesSection = () => {
                           <span className="text-white font-semibold text-base sm:text-lg flex items-center gap-2">
                             {method.title}
                             {method.isQuote && (
-                              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-600 text-white text-xs font-bold">→</span>
+                              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-600 text-white text-xs font-bold">→</span>
                             )}
                           </span>
                         </div>
@@ -358,25 +358,25 @@ const ServicesSection = () => {
                                       type="text"
                                       required
                                       placeholder="Name"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
                                     />
                                     <input
                                       name="email"
                                       type="email"
                                       required
                                       placeholder="Email"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
                                     />
                                     <input
                                       name="phone"
                                       type="tel"
                                       placeholder="Phone"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
                                     />
                                     <select
                                       name="deliveryMethod"
                                       defaultValue="General Inquiry"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60 bg-slate-900"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60 bg-slate-900"
                                     >
                                       <option value="General Inquiry">General Inquiry</option>
                                       {servicesData.deliveryMethods.map((m, optionIdx) => (
@@ -390,14 +390,14 @@ const ServicesSection = () => {
                                       required
                                       rows="4"
                                       placeholder="Project details, timelines, and any specifics"
-                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-slate-400/60"
                                     />
                                     <input type="hidden" name="targetEmail" value={emailTarget} />
                                     <div className="flex items-center gap-3 flex-wrap">
                                       <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
+                                        className="inline-flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-700 text-white font-semibold px-5 py-3 rounded-lg transition disabled:opacity-60"
                                       >
                                         {submitting ? 'Sending...' : 'Send Request'}
                                       </button>
