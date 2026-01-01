@@ -17,9 +17,9 @@
   transition: all 0.3s ease;
 }
 
-/* Subtle pop effect on hover - minimal movement */
+/* Very subtle pop effect on hover - minimal movement */
 .plaque-perspective:hover .logo-3d-card {
-  transform: translate(-4px, -4px) rotateY(-5deg) rotateX(3deg);
+  transform: translate(-2px, -2px) rotateY(-5deg) rotateX(3deg);
 }
 
 /* Logo image styling - Balanced 3D depth with rounded edges */
@@ -58,7 +58,7 @@
   }
   
   .plaque-perspective:hover .logo-3d-card {
-    transform: translate(-6px, -6px) rotateY(-5deg) rotateX(3deg);
+    transform: translate(-3px, -3px) rotateY(-5deg) rotateX(3deg);
   }
   
   .logo-plaque-image {
