@@ -214,109 +214,107 @@ Our goal is always simple: complete every project with zero safety issues.`,
   return (
     <>
       <section id="about" className="py-20 text-white bg-black relative z-0 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* ABOUT SECTION - Side-by-side carousel and text */}
-          {carouselItems.length > 0 && (
-            <div className="flex flex-col lg:flex-row items-stretch gap-0 mb-20">
-              {/* Carousel container - slides left and shrinks when expanded */}
-              <div 
-                className="transition-all duration-[600ms] ease-out"
-                style={{
-                  width: isExpanded ? '30%' : '60%',
-                  transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
-                  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-              >
-                <div className="h-[420px] md:h-[520px] lg:h-[620px]">
-                  <Carousel
-                    items={carouselItems}
-                    baseWidth={1100}
-                    autoplay={!isExpanded}
-                    autoplayDelay={4000}
-                    pauseOnHover={true}
-                    loop={true}
-                    round={false}
-                  />
-                </div>
-              </div>
-              
-              {/* Text container - expands to fill space with black background */}
-              <div 
-                className="bg-black flex items-center transition-all duration-[600ms] ease-out"
-                style={{
-                  width: isExpanded ? '70%' : '40%',
-                }}
-              >
-                <div className="w-full px-6 lg:px-8 py-8">
-                  <FadeInWhenVisible delay={0.1}>
-                    <h2 className="section-title text-4xl md:text-5xl lg:text-6xl text-white mb-4">
-                      {data.aboutTitle}
-                    </h2>
-                  </FadeInWhenVisible>
-                  
-                  <FadeInWhenVisible delay={0.2}>
-                    <div className="relative">
-                      {/* Text content with truncation */}
-                      <div 
-                        className="text-base md:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
-                        style={{
-                          maxHeight: isExpanded ? 'none' : '4.5em',
-                          overflow: 'hidden',
-                          position: 'relative'
-                        }}
-                      >
-                        {data.aboutText}
-                      </div>
-                      
-                      {/* Gradient fade overlay for truncated text */}
-                      {!isExpanded && (
-                        <div 
-                          className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none"
-                        ></div>
-                      )}
-                      
-                      {/* Read More / Close buttons */}
-                      <div className="mt-6 flex justify-start">
-                        {!isExpanded ? (
-                          <button
-                            onClick={() => setIsExpanded(true)}
-                            className="px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                            aria-label="Read more about U.S. Mechanical"
-                            aria-expanded="false"
-                          >
-                            Read More
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => setIsExpanded(false)}
-                            className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
-                            aria-label="Close expanded text"
-                            aria-expanded="true"
-                          >
-                            <svg 
-                              className="w-5 h-5" 
-                              fill="none" 
-                              stroke="currentColor" 
-                              viewBox="0 0 24 24"
-                            >
-                              <path 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                                strokeWidth={2} 
-                                d="M6 18L18 6M6 6l12 12" 
-                              />
-                            </svg>
-                            Close
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </FadeInWhenVisible>
-                </div>
+        {/* ABOUT SECTION - Side-by-side carousel and text */}
+        {carouselItems.length > 0 && (
+          <div className="flex flex-col lg:flex-row items-stretch gap-0 w-full">
+            {/* Carousel container - slides left and shrinks when expanded */}
+            <div 
+              className="transition-all duration-[600ms] ease-out overflow-hidden"
+              style={{
+                width: isExpanded ? '45%' : '75%',
+                transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
+              <div className="h-[420px] md:h-[520px] lg:h-[620px]">
+                <Carousel
+                  items={carouselItems}
+                  baseWidth={1100}
+                  autoplay={!isExpanded}
+                  autoplayDelay={4000}
+                  pauseOnHover={true}
+                  loop={true}
+                  round={false}
+                />
               </div>
             </div>
-          )}
-        </div>
+            
+            {/* Text container - expands to fill space with black background */}
+            <div 
+              className="bg-black flex items-center transition-all duration-[600ms] ease-out"
+              style={{
+                width: isExpanded ? '55%' : '25%',
+              }}
+            >
+              <div className="w-full px-6 lg:px-8 py-8">
+                <FadeInWhenVisible delay={0.1}>
+                  <h2 className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+                    {data.aboutTitle}
+                  </h2>
+                </FadeInWhenVisible>
+                
+                <FadeInWhenVisible delay={0.2}>
+                  <div className="relative">
+                    {/* Text content with truncation */}
+                    <div 
+                      className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
+                      style={{
+                        maxHeight: isExpanded ? 'none' : '4.5em',
+                        overflow: 'hidden',
+                        position: 'relative'
+                      }}
+                    >
+                      {data.aboutText}
+                    </div>
+                    
+                    {/* Gradient fade overlay for truncated text */}
+                    {!isExpanded && (
+                      <div 
+                        className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none"
+                      ></div>
+                    )}
+                    
+                    {/* Read More / Close buttons */}
+                    <div className="mt-6 flex justify-start">
+                      {!isExpanded ? (
+                        <button
+                          onClick={() => setIsExpanded(true)}
+                          className="px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                          aria-label="Read more about U.S. Mechanical"
+                          aria-expanded="false"
+                        >
+                          Read More
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setIsExpanded(false)}
+                          className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 rounded-lg text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
+                          aria-label="Close expanded text"
+                          aria-expanded="true"
+                        >
+                          <svg 
+                            className="w-5 h-5" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M6 18L18 6M6 6l12 12" 
+                            />
+                          </svg>
+                          Close
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </FadeInWhenVisible>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       <section
