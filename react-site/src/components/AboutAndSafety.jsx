@@ -242,12 +242,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-center transition-all duration-[600ms] ease-out"
+              className="bg-black flex items-start transition-all duration-[600ms] ease-out"
               style={{
                 width: isExpanded ? '55%' : '25%',
               }}
             >
-              <div className="w-full px-6 lg:px-8 py-8">
+              <div className="w-full px-6 lg:px-8 pt-8 pb-8">
                 <FadeInWhenVisible delay={0.1}>
                   <h2 className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4">
                     {data.aboutTitle}
@@ -280,7 +280,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       {!isExpanded ? (
                         <button
                           onClick={() => setIsExpanded(true)}
-                          className="bg-transparent text-white px-4 py-2 text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
+                          className="bg-transparent text-white border border-white/30 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/50 transition-all shadow-lg"
                           aria-label="Read more about U.S. Mechanical"
                           aria-expanded="false"
                         >
@@ -290,7 +290,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       ) : (
                         <button
                           onClick={() => setIsExpanded(false)}
-                          className="bg-transparent text-white px-4 py-2 text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
+                          className="bg-transparent text-white border border-white/30 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/50 transition-all shadow-lg"
                           aria-label="Close expanded text"
                           aria-expanded="true"
                         >
