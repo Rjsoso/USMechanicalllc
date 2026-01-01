@@ -260,7 +260,7 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Single Rectangle Tabs / Accordion */}
-            <div className="relative border border-white/10 bg-gradient-to-br from-gray-700 via-gray-700/95 to-gray-700 shadow-2xl overflow-hidden flex-1 flex flex-col">
+            <div className="relative border border-white/10 bg-gradient-to-br from-gray-500 via-gray-500/95 to-gray-500 shadow-2xl overflow-hidden flex-1 flex flex-col">
               <div className="flex flex-col divide-y divide-white/10 h-full">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
@@ -285,7 +285,12 @@ const ServicesSection = () => {
                               {String(idx + 1).padStart(2, '0')}
                             </span>
                             {!method.isQuote && method.badge && (
-                              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}>
+                              <span 
+                                className={`inline-flex items-center border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}
+                                style={{
+                                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.1)'
+                                }}
+                              >
                                 {method.badge}
                               </span>
                             )}
@@ -293,7 +298,12 @@ const ServicesSection = () => {
                           <span className="text-white font-semibold text-base sm:text-lg flex items-center gap-2">
                             {method.title}
                             {method.isQuote && (
-                              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-600 text-white text-xs font-bold">→</span>
+                              <span 
+                                className="inline-flex items-center justify-center h-6 w-6 bg-gray-600 text-white text-xs font-bold"
+                                style={{
+                                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.1)'
+                                }}
+                              >→</span>
                             )}
                           </span>
                         </div>
