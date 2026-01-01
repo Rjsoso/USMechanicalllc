@@ -8,13 +8,13 @@
   position: relative;
   width: 200px;
   height: 124px;
-  background: linear-gradient(145deg, #8b9198, #63686d); /* Metallic gray gradient */
+  background: linear-gradient(145deg, #9ca3aa, #7a8087); /* Lighter metallic gray gradient */
   border-radius: 12px;
   transform-style: preserve-3d;
   transform: rotateY(-5deg) rotateX(3deg);
   cursor: pointer;
   overflow: hidden;
-  padding: 15px; /* Adds breathing room around logo */
+  padding: 8px; /* Minimal padding - logo fills more space */
   box-sizing: border-box; /* Ensures padding doesn't increase overall size */
   
   /* Keep the 3D edge shadows */
