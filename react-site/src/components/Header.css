@@ -17,12 +17,12 @@
   transition: all 0.3s ease;
 }
 
-/* Simple pop effect on hover - translates up/left */
+/* Subtle pop effect on hover - minimal movement */
 .plaque-perspective:hover .logo-3d-card {
-  transform: translate(-8px, -8px) rotateY(-5deg) rotateX(3deg);
+  transform: translate(-4px, -4px) rotateY(-5deg) rotateX(3deg);
 }
 
-/* Logo image styling - Subtle 3D depth with rounded edges */
+/* Logo image styling - Balanced 3D depth with rounded edges */
 .logo-plaque-image {
   width: 100%;
   height: 100%;
@@ -30,21 +30,24 @@
   display: block;
   border-radius: 12px; /* Softens the edges */
   
-  /* Subtle 3D shadows - less prominent */
+  /* More visible 3D shadows - balanced depth */
   filter: 
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.3))
-    drop-shadow(4px 6px 8px rgba(0,0,0,0.2));
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(5px 7px 10px rgba(0,0,0,0.25));
   
   transition: filter 0.3s ease;
 }
 
-/* Slightly enhanced shadow on hover */
+/* Enhanced shadow on hover */
 .plaque-perspective:hover .logo-plaque-image {
   filter: 
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.3))
-    drop-shadow(8px 10px 16px rgba(0,0,0,0.3));
+    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(10px 12px 18px rgba(0,0,0,0.35));
 }
 
 /* Desktop size */
@@ -55,24 +58,27 @@
   }
   
   .plaque-perspective:hover .logo-3d-card {
-    transform: translate(-10px, -10px) rotateY(-5deg) rotateX(3deg);
+    transform: translate(-6px, -6px) rotateY(-5deg) rotateX(3deg);
   }
   
   .logo-plaque-image {
     border-radius: 15px; /* Larger rounded corners for desktop */
     
-    /* Subtle 3D shadows for desktop */
+    /* More visible 3D shadows for desktop */
     filter: 
-      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
-      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
-      drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.3))
-      drop-shadow(6px 8px 12px rgba(0,0,0,0.25));
+      drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+      drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
+      drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+      drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
   }
   
   .plaque-perspective:hover .logo-plaque-image {
     filter: 
-      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.5))
-      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.4))
-      drop-shadow(10px 12px 20px rgba(0,0,0,0.35));
+      drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+      drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
+      drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+      drop-shadow(12px 14px 22px rgba(0,0,0,0.4));
   }
 }
