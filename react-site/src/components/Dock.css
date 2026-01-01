@@ -57,7 +57,11 @@
   cursor: pointer;
   outline: none;
   transform-style: preserve-3d;
-  transition: all 0.3s ease;
+  transform: translateZ(0);
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   filter:
     drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))
     drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
@@ -87,7 +91,7 @@
 
 .dock-label {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + 1rem);
   bottom: auto;
   left: 50%;
   width: fit-content;
