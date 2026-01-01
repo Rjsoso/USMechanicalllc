@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, memo, useRef } from 'react';
+import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
@@ -8,9 +8,6 @@ function Header() {
   const [logo, setLogo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const plaqueRef = useRef(null);
-  const sceneRef = useRef(null);
-  const glintRef = useRef(null);
 
   useEffect(() => {
     client
@@ -34,37 +31,6 @@ function Header() {
     if (!logo) return null;
     return urlFor(logo).width(640).quality(95).auto('format').fit('max').url();
   }, [logo]);
-
-  // Professional Parallax Effect
-  useEffect(() => {
-    const scene = sceneRef.current;
-    const plaque = plaqueRef.current;
-    const glint = glintRef.current;
-
-    if (!scene || !plaque || !glint) return;
-
-    const handleMouseMove = (e) => {
-      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-      
-      plaque.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-      
-      // Move the light glint based on mouse position
-      glint.style.backgroundPosition = `${e.pageX / 10}% ${e.pageY / 10}%`;
-    };
-
-    const handleMouseLeave = () => {
-      plaque.style.transform = `rotateY(-5deg) rotateX(3deg)`;
-    };
-
-    scene.addEventListener('mousemove', handleMouseMove);
-    scene.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      scene.removeEventListener('mousemove', handleMouseMove);
-      scene.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [logoUrl]);
 
 
   const handleLogoClick = () => {
@@ -161,12 +127,8 @@ function Header() {
     <>
       {/* Logo - 3D plaque design with perspective */}
       {logoUrl && (
-        <div 
-          ref={sceneRef}
-          className="fixed top-4 left-4 z-50 plaque-perspective"
-        >
+        <div className="fixed top-4 left-4 z-50 plaque-perspective">
           <div 
-            ref={plaqueRef}
             className="logo-3d-card"
             onClick={handleLogoClick}
             role="button"
@@ -179,17 +141,11 @@ function Header() {
             }}
             aria-label="Go to home page"
           >
-            {/* Glint overlay that follows mouse */}
-            <div ref={glintRef} className="plaque-glint"></div>
-            
-            {/* Logo layer that floats above the plaque */}
-            <div className="logo-layer">
-              <img 
-                src={logoUrl} 
-                alt="US Mechanical" 
-                style={{ width: '85%' }}
-              />
-            </div>
+            <img 
+              src={logoUrl} 
+              alt="US Mechanical"
+              className="logo-plaque-image"
+            />
           </div>
         </div>
       )}

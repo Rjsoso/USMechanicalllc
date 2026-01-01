@@ -1,80 +1,52 @@
-/* 3D Plaque Perspective Container (The Scene) */
+/* 3D Plaque Perspective Container */
 .plaque-perspective {
   perspective: 1200px;
 }
 
-/* 3D Logo Plaque - The Physical Metal Plate */
+/* 3D Logo Plaque - Simple hover effect with 3D shadows */
 .logo-3d-card {
   position: relative;
   width: 200px;
   height: 124px;
-  background: linear-gradient(145deg, #8b9198, #63686d);
+  background: transparent;
   border-radius: 12px;
   transform-style: preserve-3d;
   transform: rotateY(-5deg) rotateX(3deg);
-  transition: transform 0.2s ease-out;
   cursor: pointer;
   overflow: hidden;
   
-  /* Layered Box Shadow for Thickness and Depth */
+  /* Keep the 3D edge shadows */
   box-shadow: 
-    /* Inner Bevel - Catching the light on the edge */
     0px 2px 0px rgba(255, 255, 255, 0.4) inset,
-    /* The Solid 3D Side Walls */
     1px 1px 0px #3a3e42,
     2px 2px 0px #3a3e42,
     3px 3px 0px #3a3e42,
     4px 4px 0px #3a3e42,
     5px 5px 0px #3a3e42,
-    /* The Ground Shadow */
     6px 10px 16px rgba(0,0,0,0.3);
+  
+  transition: all 0.3s ease;
 }
 
-/* Brushed Metal Texture Overlay */
-.logo-3d-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
-  opacity: 0.2;
-  pointer-events: none;
+/* Simple pop effect on hover - translates up/left */
+.plaque-perspective:hover .logo-3d-card {
+  transform: translate(-8px, -8px) rotateY(-5deg) rotateX(3deg);
+  box-shadow: 
+    0px 2px 0px rgba(255, 255, 255, 0.4) inset,
+    1px 1px 0px #3a3e42,
+    2px 2px 0px #3a3e42,
+    3px 3px 0px #3a3e42,
+    14px 14px 24px rgba(0,0,0,0.4);
 }
 
-/* The Glint - Dynamic reflection that follows mouse */
-.plaque-glint {
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
-  background-size: 200% 200%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* The Logo Layer - Floats above the plaque using translateZ */
-.logo-layer {
-  position: absolute;
+/* Logo image styling - fills entire plaque */
+.logo-plaque-image {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transform: translateZ(16px); /* Creates true 3D depth */
-  z-index: 2;
-  
-  /* Shadow cast onto the plate below */
-  filter: drop-shadow(2px 4px 3px rgba(0,0,0,0.4));
-}
-
-.logo-layer img {
-  max-width: 85%;
-  height: auto;
+  object-fit: contain;
   display: block;
+  border-radius: 12px;
 }
-
-/* Image will be applied via inline style as background */
 
 /* Desktop size */
 @media (min-width: 768px) {
@@ -95,16 +67,17 @@
       8px 12px 20px rgba(0,0,0,0.3);
   }
   
-  .logo-3d-card::before {
-    border-radius: 15px;
+  .plaque-perspective:hover .logo-3d-card {
+    transform: translate(-10px, -10px) rotateY(-5deg) rotateX(3deg);
+    box-shadow: 
+      0px 2px 0px rgba(255, 255, 255, 0.4) inset,
+      1px 1px 0px #3a3e42,
+      2px 2px 0px #3a3e42,
+      3px 3px 0px #3a3e42,
+      18px 18px 30px rgba(0,0,0,0.4);
   }
   
-  .plaque-glint {
+  .logo-plaque-image {
     border-radius: 15px;
-  }
-  
-  .logo-layer {
-    transform: translateZ(20px); /* More dramatic depth on desktop */
-    filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.4));
   }
 }
