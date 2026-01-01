@@ -8,14 +8,14 @@
   position: relative;
   width: 200px;
   height: 124px;
-  background: linear-gradient(145deg, #9ca3aa, #7a8087); /* Lighter metallic gray gradient */
+  background: transparent; /* No background - logo only */
   border-radius: 12px;
   transform-style: preserve-3d;
   transform: rotateY(-5deg) rotateX(3deg);
   cursor: pointer;
-  overflow: hidden;
-  padding: 8px; /* Minimal padding - logo fills more space */
-  box-sizing: border-box; /* Ensures padding doesn't increase overall size */
+  overflow: visible; /* Allow 3D effects to show beyond container */
+  padding: 0; /* No padding needed */
+  box-sizing: border-box;
   
   /* Keep the 3D edge shadows */
   box-shadow: 
