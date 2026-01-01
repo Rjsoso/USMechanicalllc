@@ -255,32 +255,34 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 </FadeInWhenVisible>
                 
                 <FadeInWhenVisible delay={0.2}>
-                  <div className="relative">
+                  <div>
                     {/* Text content with truncation */}
-                    <div 
-                      className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
-                      style={{
-                        maxHeight: isExpanded ? 'none' : '7.5em',
-                        overflow: 'hidden',
-                        position: 'relative'
-                      }}
-                    >
-                      {data.aboutText}
+                    <div className="relative">
+                      <div 
+                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
+                        style={{
+                          maxHeight: isExpanded ? 'none' : '20em',
+                          overflow: 'hidden',
+                          position: 'relative'
+                        }}
+                      >
+                        {data.aboutText}
+                      </div>
+                      
+                      {/* Gradient fade overlay for truncated text */}
+                      {!isExpanded && (
+                        <div 
+                          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none"
+                        ></div>
+                      )}
                     </div>
                     
-                    {/* Gradient fade overlay for truncated text */}
-                    {!isExpanded && (
-                      <div 
-                        className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none"
-                      ></div>
-                    )}
-                    
-                    {/* Read More / Close buttons */}
-                    <div className="mt-4 flex justify-start">
+                    {/* Read More / Close buttons - positioned outside fade area */}
+                    <div className="mt-3 flex justify-start">
                       {!isExpanded ? (
                         <button
                           onClick={() => setIsExpanded(true)}
-                          className="bg-transparent text-white border border-white/30 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/50 transition-all shadow-lg"
+                          className="bg-transparent text-white border border-white/50 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/70 transition-all shadow-lg"
                           aria-label="Read more about U.S. Mechanical"
                           aria-expanded="false"
                         >
@@ -290,7 +292,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       ) : (
                         <button
                           onClick={() => setIsExpanded(false)}
-                          className="bg-transparent text-white border border-white/30 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/50 transition-all shadow-lg"
+                          className="bg-transparent text-white border border-white/50 px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 hover:border-white/70 transition-all shadow-lg"
                           aria-label="Close expanded text"
                           aria-expanded="true"
                         >
