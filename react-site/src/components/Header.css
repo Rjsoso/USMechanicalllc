@@ -8,45 +8,46 @@
   position: relative;
   width: 200px;
   height: 124px;
-  background: transparent; /* No background - logo only */
-  border-radius: 12px;
+  background: transparent;
   transform-style: preserve-3d;
   transform: rotateY(-5deg) rotateX(3deg);
   cursor: pointer;
-  overflow: visible; /* Allow 3D effects to show beyond container */
-  padding: 0; /* No padding needed */
-  box-sizing: border-box;
-  
-  /* Keep the 3D edge shadows */
-  box-shadow: 
-    0px 2px 0px rgba(255, 255, 255, 0.4) inset,
-    1px 1px 0px #3a3e42,
-    2px 2px 0px #3a3e42,
-    3px 3px 0px #3a3e42,
-    4px 4px 0px #3a3e42,
-    5px 5px 0px #3a3e42,
-    6px 10px 16px rgba(0,0,0,0.3);
-  
+  overflow: visible;
+  padding: 0;
   transition: all 0.3s ease;
 }
 
 /* Simple pop effect on hover - translates up/left */
 .plaque-perspective:hover .logo-3d-card {
   transform: translate(-8px, -8px) rotateY(-5deg) rotateX(3deg);
-  box-shadow: 
-    0px 2px 0px rgba(255, 255, 255, 0.4) inset,
-    1px 1px 0px #3a3e42,
-    2px 2px 0px #3a3e42,
-    3px 3px 0px #3a3e42,
-    14px 14px 24px rgba(0,0,0,0.4);
 }
 
-/* Logo image styling - contains logo within plaque */
+/* Logo image styling - 3D depth applied directly to logo */
 .logo-plaque-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Won't crop logo, natural padding from gray background */
+  object-fit: contain;
   display: block;
+  
+  /* 3D shadows follow the logo's actual edges */
+  filter: 
+    drop-shadow(1px 1px 0px #3a3e42)
+    drop-shadow(2px 2px 0px #3a3e42)
+    drop-shadow(3px 3px 0px #3a3e42)
+    drop-shadow(4px 4px 0px #3a3e42)
+    drop-shadow(5px 5px 0px #3a3e42)
+    drop-shadow(6px 10px 16px rgba(0,0,0,0.3));
+  
+  transition: filter 0.3s ease;
+}
+
+/* Enhanced shadow on hover */
+.plaque-perspective:hover .logo-plaque-image {
+  filter: 
+    drop-shadow(1px 1px 0px #3a3e42)
+    drop-shadow(2px 2px 0px #3a3e42)
+    drop-shadow(3px 3px 0px #3a3e42)
+    drop-shadow(14px 14px 24px rgba(0,0,0,0.4));
 }
 
 /* Desktop size */
