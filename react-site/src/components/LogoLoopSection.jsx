@@ -46,7 +46,7 @@ export default function LogoLoopSection() {
 
   // Transform Sanity data to LogoLoop format
   const logos = logoData.map((item, index) => ({
-    src: urlFor(item.logo).width(500).url(),
+    src: urlFor(item.logo).width(800).url(),
     alt: item.logo.alt || item.companyName,
     title: item.companyName,
     href: item.url || undefined,
@@ -54,15 +54,15 @@ export default function LogoLoopSection() {
   }));
 
   return (
-    <section className="py-20 bg-black">
+    <section className="py-24 bg-black">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
           speed={120}
           direction="left"
           width="100%"
-          logoHeight={80}
-          gap={80}
+          logoHeight={120}
+          gap={100}
           hoverSpeed={30}
           fadeOut={true}
           fadeOutColor="#000000"
