@@ -33,6 +33,7 @@ export default defineType({
       name: 'icon',
       title: 'Icon',
       type: 'string',
+      initialValue: 'about',
       description: 'Choose an icon that represents this navigation item. This will appear in the navigation dock.',
       options: {
         list: [
