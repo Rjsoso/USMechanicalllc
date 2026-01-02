@@ -245,7 +245,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-start"
+              className="bg-black flex items-start overflow-hidden"
               style={{
                 width: isExpanded ? '55%' : '25%',
                 transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -254,9 +254,24 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 WebkitFontSmoothing: 'antialiased'
               }}
             >
-              <div className="w-full px-6 lg:px-8 pt-8 pb-8">
+              {/* Inner content container - maintains expanded width to prevent text reflow */}
+              <div 
+                className="px-6 lg:px-8 pt-8 pb-8"
+                style={{
+                  width: '100%',
+                  minWidth: isExpanded ? 'auto' : '800px', // Keep text wide to prevent reflow
+                  transition: 'min-width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  transform: 'translateZ(0)'
+                }}
+              >
                 <FadeInWhenVisible delay={0.1}>
-                  <h2 className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+                  <h2 
+                    className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
+                    style={{
+                      opacity: isExpanded ? 1 : 0.95,
+                      transition: 'opacity 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}
+                  >
                     {data.aboutTitle}
                   </h2>
                 </FadeInWhenVisible>
@@ -287,7 +302,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
                               backfaceVisibility: 'hidden',
                               WebkitFontSmoothing: 'antialiased',
                               paddingBottom: isExpanded ? '2rem' : '0',
-                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                              opacity: 1,
+                              filter: 'blur(0px)',
+                              willChange: 'auto'
                             }}
                           >
                             {data.aboutText}
