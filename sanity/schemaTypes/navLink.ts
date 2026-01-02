@@ -18,37 +18,42 @@ export default defineType({
       name: 'label', 
       title: 'Label', 
       type: 'string',
-      validation: (Rule) => Rule.required()
+      description: 'The text that will appear in the navigation menu (e.g., "About", "Services")',
+      validation: (Rule) => Rule.required().error('Label is required')
     },
     { 
       name: 'href', 
       title: 'Link Target', 
       type: 'string',
-      description: 'Use # for sections (e.g., #about, #services, #contact)',
-      validation: (Rule) => Rule.required()
+      description: 'Where this link goes. Use "#" + section ID for internal links (e.g., #about, #services, #contact)',
+      placeholder: '#about',
+      validation: (Rule) => Rule.required().error('Link target is required')
     },
     {
       name: 'icon',
       title: 'Icon',
       type: 'string',
-      description: 'Icon identifier for the navigation item',
+      description: 'Choose an icon that represents this navigation item. This will appear in the navigation dock.',
       options: {
         list: [
-          { title: '📋 About', value: 'about' },
-          { title: '🛡️ Safety', value: 'safety' },
-          { title: '🔧 Services', value: 'services' },
-          { title: '🏢 Projects', value: 'projects' },
-          { title: '📞 Contact', value: 'contact' }
-        ]
+          { title: '📋 About - For company info and details', value: 'about' },
+          { title: '🛡️ Safety - For safety information', value: 'safety' },
+          { title: '🔧 Services - For services and offerings', value: 'services' },
+          { title: '🏢 Projects - For portfolio and projects', value: 'projects' },
+          { title: '📞 Contact - For contact information', value: 'contact' }
+        ],
+        layout: 'radio'
       },
-      validation: (Rule) => Rule.required()
+      validation: (Rule) => Rule.required().error('Please select an icon')
     },
     {
       name: 'order',
       title: 'Display Order',
       type: 'number',
-      description: 'Order in which this item appears (lower numbers first)',
-      validation: (Rule) => Rule.required().min(0)
+      description: 'Controls the position in the menu. Start with 0 for the first item, then 1, 2, 3, etc.',
+      placeholder: 0,
+      initialValue: 0,
+      validation: (Rule) => Rule.required().min(0).error('Order must be 0 or greater')
     }
   ],
   preview: {
@@ -59,9 +64,11 @@ export default defineType({
       icon: 'icon'
     },
     prepare({ title, subtitle, order, icon }) {
+      const iconEmoji = iconMap[icon] || '📌'
+      const orderDisplay = order !== undefined ? `#${order}` : '?'
       return {
-        title: `${iconMap[icon] || '📌'} ${order !== undefined ? order + 1 : '?'}. ${title}`,
-        subtitle: subtitle
+        title: `${iconEmoji} ${orderDisplay} - ${title}`,
+        subtitle: `Links to: ${subtitle || 'Not set'}`
       }
     }
   }
