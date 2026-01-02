@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 
 // Lazy load below-fold components for better initial load performance
 const Portfolio = lazy(() => import('../components/Portfolio'))
+const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
 const Careers = lazy(() => import('../components/Careers'))
 const Contact = lazy(() => import('../pages/Contact'))
 
@@ -87,6 +88,10 @@ export default function Home() {
 
           <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
             <Portfolio />
+          </Suspense>
+
+          <Suspense fallback={<div className="py-16 bg-black"></div>}>
+            <LogoLoopSection />
           </Suspense>
 
           <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>

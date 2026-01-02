@@ -85,9 +85,19 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             ])
         ),
 
-      // 8. Contact Section
+      // 8. Logo Loop
       S.listItem()
-        .title('8. Contact Section')
+        .title('8. Logo Loop')
+        .child(
+          S.editor()
+            .id('logoLoop')
+            .schemaType('logoLoop')
+            .documentId('logoLoop')
+        ),
+
+      // 9. Contact Section
+      S.listItem()
+        .title('9. Contact Section')
         .child(
           S.editor()
             .id('contact')
@@ -95,9 +105,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('contact')
         ),
 
-      // 9. Company Information (used by Footer)
+      // 10. Company Information (used by Footer)
       S.listItem()
-        .title('9. Company Information (Footer)')
+        .title('10. Company Information (Footer)')
         .child(
           S.editor()
             .id('companyInfo')
@@ -105,9 +115,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('companyInfo')
         ),
 
-      // 10. Recognition Projects
+      // 11. Recognition Projects
       S.listItem()
-        .title('10. Recognition Projects')
+        .title('11. Recognition Projects')
         .child(
           S.documentTypeList('recognitionProject')
             .title('Recognition Projects')
