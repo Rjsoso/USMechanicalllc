@@ -22,7 +22,7 @@ import portfolioCategory from '../schemaTypes/portfolioCategory'
 import portfolioProject from '../schemaTypes/portfolioProject'
 import recognitionProject from '../schemaTypes/recognitionProject'
 import expandableServiceBox from '../schemaTypes/expandableServiceBox'
-import cardNav from '../schemaTypes/cardNav'
+// import cardNav from '../schemaTypes/cardNav' // REMOVED: Merged into headerSection
 import logoLoop from '../schemaTypes/logoLoop'
 
 export const schemaTypes = [
@@ -50,6 +50,6 @@ export const schemaTypes = [
     portfolioProject,
     recognitionProject,
     expandableServiceBox,
-    cardNav,
+    // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
 ]
