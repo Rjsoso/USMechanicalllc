@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 import { client } from '../utils/sanity';
-import CardSwap, { Card } from './CardSwap';
 
 const ServicesSection = () => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody';
@@ -264,10 +263,10 @@ const ServicesSection = () => {
             <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl min-h-[600px]">
               
               {/* HEADER - Full Width */}
-              {servicesData.deliveryMethodsBoxTitle && (
+              {servicesData.deliveryMethodsHeading && (
                 <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
                   <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-                    {servicesData.deliveryMethodsBoxTitle}
+                    {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
                   </h2>
                 </div>
               )}
@@ -461,77 +460,6 @@ const ServicesSection = () => {
           </div>
         )}
       </div>
-
-      {/* Delivery Methods Title */}
-      {servicesData.deliveryMethods?.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 mt-20 md:mt-24">
-          <div className="flex flex-col items-center text-center gap-4 mb-10">
-            {servicesData.deliveryMethodsAccent && (
-              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white">
-                {servicesData.deliveryMethodsAccent}
-              </span>
-            )}
-            <motion.h3
-              className="section-title text-5xl md:text-6xl text-white"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-            >
-              {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
-            </motion.h3>
-            <p className="text-white text-lg max-w-3xl mx-auto">
-              {servicesData.deliveryMethodsIntro ||
-                'Predictable delivery, tailored engagement, and clear ownership at every step.'}
-            </p>
-          </div>
-
-          {/* THE CARD SWAP (moved here) */}
-          <div
-            className="w-full flex justify-center items-center relative mb-16 md:mb-24 px-6 md:px-0"
-          style={{ minHeight: '450px' }}
-        >
-          {servicesData.services?.length > 0 ? (
-            <div
-              className="relative flex justify-center items-start"
-              style={{ width: "650px", height: "500px", marginTop: "40px" }}
-            >
-              <CardSwap
-                cardDistance={30}
-                verticalDistance={40}
-                width={650}
-                height={500}
-                delay={5000}
-                pauseOnHover={true}
-                skewAmount={0}
-              >
-                {servicesData.services.map((item, i) => {
-                  const optimizedUrl = item.imageUrl?.includes('cdn.sanity.io')
-                    ? `${item.imageUrl}?w=1300&q=85&auto=format`
-                    : item.imageUrl;
-                  
-                  return (
-                    <Card key={i} className="service-card">
-                      <img
-                        src={optimizedUrl}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </Card>
-                  );
-                })}
-              </CardSwap>
-            </div>
-          ) : (
-            <p className="text-white">No gallery images found.</p>
-          )}
-          </div>
-        </div>
-      )}
     </section>
   );
 };
