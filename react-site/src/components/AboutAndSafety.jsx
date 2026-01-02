@@ -12,6 +12,7 @@ export default function AboutAndSafety() {
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   // Default content fallback
   const defaultData = {
@@ -270,9 +271,14 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   <h2 
                     className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
                     style={{
-                      transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                      transform: isAnimating 
+                        ? 'translate3d(0, -1px, 0) scale(0.999)'
+                        : 'translate3d(0, 0, 0) scale(1)',
                       backfaceVisibility: 'hidden',
-                      WebkitFontSmoothing: 'antialiased'
+                      WebkitFontSmoothing: 'antialiased',
+                      opacity: isAnimating ? 0.85 : 1,
+                      transition: 'transform 1400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      willChange: isAnimating ? 'transform, opacity' : 'auto'
                     }}
                   >
                     {data.aboutTitle}
@@ -312,15 +318,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
                             className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                             style={{
                               lineHeight: '1.75',
-                              transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                              transform: isAnimating 
+                                ? 'translate3d(0, -2px, 0) scale(0.998)' // Subtle shift during reflow
+                                : 'translate3d(0, 0, 0) scale(1)',
                               backfaceVisibility: 'hidden',
                               WebkitFontSmoothing: 'antialiased',
-                              textRendering: 'optimizeLegibility', // Smooth text rendering
+                              textRendering: 'optimizeLegibility',
                               paddingBottom: isExpanded ? '2rem' : '0',
-                              letterSpacing: isExpanded ? '0' : '0.002em', // Subtle transition to reduce reflow jarring
-                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1), letter-spacing 1400ms cubic-bezier(0.16, 1, 0.3, 1), line-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
-                              willChange: 'padding-bottom, letter-spacing',
-                              contain: 'layout style' // Isolate from parent layout
+                              letterSpacing: isExpanded ? '0' : '0.002em',
+                              opacity: isAnimating ? 0.7 : 1, // Fade during reflow to mask word jumps
+                              filter: isAnimating ? 'blur(0.3px)' : 'blur(0px)', // Very subtle blur during transition
+                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1), letter-spacing 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), filter 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+                              willChange: isAnimating ? 'transform, opacity, filter' : 'auto',
+                              contain: 'layout style'
                             }}
                           >
                             {data.aboutText}
@@ -349,7 +359,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     <div className="mt-3 flex justify-start">
                       {!isExpanded ? (
                         <button
-                          onClick={() => setIsExpanded(true)}
+                          onClick={() => {
+                            setIsAnimating(true);
+                            setIsExpanded(true);
+                            setTimeout(() => setIsAnimating(false), 1400);
+                          }}
                           className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
                           aria-label="Read more about U.S. Mechanical"
                           aria-expanded="false"
@@ -364,7 +378,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         </button>
                       ) : (
                         <button
-                          onClick={() => setIsExpanded(false)}
+                          onClick={() => {
+                            setIsAnimating(true);
+                            setIsExpanded(false);
+                            setTimeout(() => setIsAnimating(false), 1400);
+                          }}
                           className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
                           aria-label="Close expanded text"
                           aria-expanded="true"
