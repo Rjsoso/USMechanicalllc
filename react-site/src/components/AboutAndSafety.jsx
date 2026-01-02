@@ -217,17 +217,24 @@ Our goal is always simple: complete every project with zero safety issues.`,
       <section id="about" className="py-20 text-white bg-black relative z-0 overflow-hidden">
         {/* ABOUT SECTION - Side-by-side carousel and text */}
         {carouselItems.length > 0 && (
-          <div className="flex flex-col lg:flex-row items-stretch gap-0 w-full">
+          <div 
+            className="flex flex-col lg:flex-row items-stretch gap-0 w-full"
+            style={{
+              perspective: '1000px', // 3D acceleration context
+              isolation: 'isolate' // Creates stacking context for GPU
+            }}
+          >
             {/* Carousel container - slides left and shrinks when expanded */}
             <div 
               className="overflow-hidden"
               style={{
                 width: isExpanded ? '45%' : '75%',
-                transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
+                transform: isExpanded ? 'translate3d(-15%, 0, 0)' : 'translate3d(0, 0, 0)',
                 transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'width, transform',
                 backfaceVisibility: 'hidden',
-                WebkitFontSmoothing: 'antialiased'
+                WebkitFontSmoothing: 'antialiased',
+                contain: 'layout style paint' // Isolate layout calculations
               }}
             >
               <div className="h-[480px] md:h-[580px] lg:h-[680px]">
@@ -245,34 +252,27 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-start overflow-hidden"
+              className="bg-black flex items-start"
               style={{
                 width: isExpanded ? '55%' : '25%',
                 transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'width',
                 backfaceVisibility: 'hidden',
-                WebkitFontSmoothing: 'antialiased'
+                WebkitFontSmoothing: 'antialiased',
+                contain: 'layout style paint', // Isolate layout calculations
+                isolation: 'isolate', // Creates stacking context
+                transform: 'translate3d(0, 0, 0)' // Force GPU compositing layer
               }}
             >
-              {/* Inner content container - FIXED width to prevent text reflow */}
-              <div 
-                className="pt-8 pb-8"
-                style={{
-                  width: '1000px', // Fixed width - text never reflows
-                  maxWidth: 'none',
-                  paddingLeft: '2rem',
-                  paddingRight: '2rem',
-                  flexShrink: 0,
-                  transform: 'translateZ(0)',
-                  backfaceVisibility: 'hidden'
-                }}
-              >
+              {/* Inner content container - flexible width allows reflow */}
+              <div className="w-full px-6 lg:px-8 pt-8 pb-8">
                 <FadeInWhenVisible delay={0.1}>
                   <h2 
                     className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
                     style={{
-                      opacity: isExpanded ? 1 : 0.95,
-                      transition: 'opacity 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                      transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                      backfaceVisibility: 'hidden',
+                      WebkitFontSmoothing: 'antialiased'
                     }}
                   >
                     {data.aboutTitle}
@@ -282,33 +282,45 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 <FadeInWhenVisible delay={0.2}>
                   <div>
                     {/* Text content with truncation - Using CSS Grid for smooth auto-height animation */}
-                    <div className="relative" style={{ position: 'relative' }}>
+                    <div 
+                      className="relative" 
+                      style={{ 
+                        position: 'relative',
+                        isolation: 'isolate' // Creates stacking context
+                      }}
+                    >
                       <div 
                         style={{
                           display: 'grid',
                           gridTemplateRows: isExpanded ? '1fr' : '0fr',
                           transition: 'grid-template-rows 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                           willChange: 'grid-template-rows',
-                          position: 'relative'
+                          position: 'relative',
+                          transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                          backfaceVisibility: 'hidden',
+                          contain: 'layout' // Prevent layout thrashing
                         }}
                       >
                         <div style={{ 
                           overflow: 'hidden',
                           minHeight: isExpanded ? 'auto' : '28em',
-                          transition: 'min-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                          transition: 'min-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                          transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                          backfaceVisibility: 'hidden'
                         }}>
                           <div 
                             className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                             style={{
                               lineHeight: '1.75',
-                              transform: 'translateZ(0)',
+                              transform: 'translate3d(0, 0, 0)', // GPU acceleration
                               backfaceVisibility: 'hidden',
                               WebkitFontSmoothing: 'antialiased',
+                              textRendering: 'optimizeLegibility', // Smooth text rendering
                               paddingBottom: isExpanded ? '2rem' : '0',
-                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
-                              opacity: 1,
-                              filter: 'blur(0px)',
-                              willChange: 'auto'
+                              letterSpacing: isExpanded ? '0' : '0.002em', // Subtle transition to reduce reflow jarring
+                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1), letter-spacing 1400ms cubic-bezier(0.16, 1, 0.3, 1), line-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                              willChange: 'padding-bottom, letter-spacing',
+                              contain: 'layout style' // Isolate from parent layout
                             }}
                           >
                             {data.aboutText}
@@ -325,8 +337,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           opacity: isExpanded ? 0 : 1,
                           visibility: isExpanded ? 'hidden' : 'visible',
                           transition: `opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '400ms'}, visibility 0ms ${isExpanded ? '800ms' : '0ms'}`,
-                          transform: 'translateZ(0)',
-                          willChange: 'opacity'
+                          transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                          backfaceVisibility: 'hidden',
+                          willChange: 'opacity',
+                          contain: 'layout paint' // Isolate paint operations
                         }}
                       ></div>
                     </div>
@@ -339,6 +353,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
                           aria-label="Read more about U.S. Mechanical"
                           aria-expanded="false"
+                          style={{
+                            transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                            backfaceVisibility: 'hidden',
+                            WebkitFontSmoothing: 'antialiased'
+                          }}
                         >
                           Read More
                           <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -349,6 +368,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
                           aria-label="Close expanded text"
                           aria-expanded="true"
+                          style={{
+                            transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                            backfaceVisibility: 'hidden',
+                            WebkitFontSmoothing: 'antialiased'
+                          }}
                         >
                           Close
                           <svg 
