@@ -453,7 +453,6 @@ const ServicesSection = () => {
                   </motion.div>
                 </AnimatePresence>
               </div>
-              </div>
             </div>
           </div>
         )}
