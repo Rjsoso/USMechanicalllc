@@ -220,11 +220,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
           <div className="flex flex-col lg:flex-row items-stretch gap-0 w-full">
             {/* Carousel container - slides left and shrinks when expanded */}
             <div 
-              className="transition-all duration-[600ms] ease-out overflow-hidden"
+              className="transition-all duration-[800ms] ease-out overflow-hidden"
               style={{
                 width: isExpanded ? '45%' : '75%',
                 transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
               }}
             >
               <div className="h-[480px] md:h-[580px] lg:h-[680px]">
@@ -242,9 +242,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-start transition-all duration-[600ms] ease-out"
+              className="bg-black flex items-start transition-all duration-[800ms] ease-out"
               style={{
                 width: isExpanded ? '55%' : '25%',
+                transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
               }}
             >
               <div className="w-full px-6 lg:px-8 pt-8 pb-8">
@@ -259,12 +260,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     {/* Text content with truncation */}
                     <div className="relative">
                       <div 
-                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-[600ms] ease-out"
+                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-[800ms] ease-out"
                         style={{
                           maxHeight: isExpanded ? '2000px' : '28em',
                           overflow: 'hidden',
                           position: 'relative',
-                          transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                          transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
                         }}
                       >
                         {data.aboutText}
@@ -273,7 +274,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       {/* Gradient fade overlay for truncated text */}
                       {!isExpanded && (
                         <div 
-                          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none"
+                          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none transition-opacity duration-[800ms]"
+                          style={{
+                            transitionTimingFunction: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                          }}
                         ></div>
                       )}
                     </div>
