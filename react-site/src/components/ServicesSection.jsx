@@ -259,183 +259,182 @@ const ServicesSection = () => {
         {/* RIGHT — DELIVERY METHODS CONTENT */}
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
-            {/* Single Rectangle Tabs / Accordion */}
-            <div className="relative border border-white/10 bg-gradient-to-br from-gray-500 via-gray-500/95 to-gray-500 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl">
-              <div className="flex flex-col divide-y divide-white/10 h-full">
+            {/* Horizontal Split Layout: 25% Nav | 75% Content */}
+            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-row rounded-l-2xl min-h-[600px]">
+              
+              {/* LEFT SIDEBAR - 25% Navigation */}
+              <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
-                  const badgeClass = badgeToneClasses[method.badgeTone] || badgeToneClasses.slate;
-                  const bodyPreview = extractPlainText(method.body);
-                  const bgUrl = method.backgroundImage?.asset?.url
-                    ? `${method.backgroundImage.asset.url}?w=900&q=80&auto=format`
-                    : null;
-                  const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
-
+                  
                   return (
-                    <div key={idx} className="bg-white/3">
-                      <button
-                        onClick={() => handleExpand(idx)}
-                        className={`w-full text-left px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 transition ${
-                          isActive ? 'bg-white/10' : 'hover:bg-white/5'
-                        }`}
-                      >
-                        <div className="flex flex-col gap-1 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-300 font-semibold">
-                              {String(idx + 1).padStart(2, '0')}
-                            </span>
-                            {!method.isQuote && method.badge && (
-                              <span 
-                                className={`inline-flex items-center border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}
-                                style={{
-                                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.1)'
-                                }}
-                              >
-                                {method.badge}
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-white font-semibold text-base sm:text-lg flex items-center gap-2">
-                            {method.title}
-                            {method.isQuote && (
-                              <span 
-                                className="inline-flex items-center justify-center h-6 w-6 bg-gray-600 text-white text-xs font-bold"
-                                style={{
-                                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.1)'
-                                }}
-                              >→</span>
-                            )}
-                          </span>
-                        </div>
-                        <FiArrowRight className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-300'}`} />
-                      </button>
-                      
-                      {isActive && (
-                        <AnimatePresence mode="wait">
-                          <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div
-                              className="flex flex-col gap-4 p-4 sm:p-6 border-t border-white/10"
-                              style={bgUrl ? {
-                                backgroundImage: `linear-gradient(180deg, rgba(10,12,17,0.82), rgba(5,7,12,0.94)), url(${bgUrl})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                              } : undefined}
-                            >
-                              {!method.isQuote && (
-                                <div className="space-y-3">
-                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-300 mb-2">Delivery Method Details</p>
-                                  {method.summary && (
-                                    <p className="text-white leading-relaxed text-sm">
-                                      {method.summary}
-                                    </p>
-                                  )}
-                                  {bodyPreview && (
-                                    <p className="text-white leading-relaxed text-sm">
-                                      {bodyPreview}
-                                    </p>
-                                  )}
-                                </div>
-                              )}
-
-                              {method.isQuote ? (
-                                <div className="bg-white/5 border border-white/10 p-4 md:p-5 shadow-lg">
-                                  <div className="mb-4">
-                                    <p className="text-xs uppercase tracking-[0.25em] text-gray-300 mb-1">
-                                      Request a Quote
-                                    </p>
-                                    <h5 className="text-xl font-semibold text-white">
-                                      {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
-                                    </h5>
-                                    <p className="text-white mt-2 text-sm">
-                                      {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
-                                    </p>
-                                  </div>
-                                  <form
-                                    onSubmit={(e) => handleQuoteSubmit(e, 'Request a Quote')}
-                                    className="grid gap-3"
-                                  >
-                                    <input
-                                      name="name"
-                                      type="text"
-                                      required
-                                      placeholder="Name"
-                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
-                                    />
-                                    <input
-                                      name="email"
-                                      type="email"
-                                      required
-                                      placeholder="Email"
-                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
-                                    />
-                                    <input
-                                      name="phone"
-                                      type="tel"
-                                      placeholder="Phone"
-                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
-                                    />
-                                    <select
-                                      name="deliveryMethod"
-                                      defaultValue="General Inquiry"
-                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60 bg-gray-700"
-                                    >
-                                      <option value="General Inquiry">General Inquiry</option>
-                                      {servicesData.deliveryMethods.map((m, optionIdx) => (
-                                        <option key={optionIdx} value={m.title || `Method ${optionIdx + 1}`}>
-                                          {m.title || `Method ${optionIdx + 1}`}
-                                        </option>
-                                      ))}
-                                    </select>
-                                    <textarea
-                                      name="message"
-                                      required
-                                      rows="4"
-                                      placeholder="Project details, timelines, and any specifics"
-                                      className="w-full border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gray-400/60"
-                                    />
-                                    <input type="hidden" name="targetEmail" value={emailTarget} />
-                                    <div className="flex items-center gap-3 flex-wrap">
-                                      <button
-                                        type="submit"
-                                        disabled={submitting}
-                                        className="inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold px-5 py-3 transition disabled:opacity-60"
-                                      >
-                                        {submitting ? 'Sending...' : 'Send Request'}
-                                      </button>
-                                      {submitStatus === 'success' && (
-                                        <span className="text-emerald-300 text-sm font-semibold">Sent! We'll respond shortly.</span>
-                                      )}
-                                      {submitStatus === 'error' && (
-                                        <span className="text-amber-300 text-sm font-semibold">There was an issue. Please try again.</span>
-                                      )}
-                                    </div>
-                                  </form>
-                                </div>
-                              ) : (
-                                <div className="bg-white/5 border border-white/10 p-4 md:p-5 shadow-lg">
-                                  <div className="mb-1 flex items-center justify-between">
-                                    <p className="text-xs uppercase tracking-[0.25em] text-gray-300">
-                                      Delivery Method Details
-                                    </p>
-                                  </div>
-                                  <div className="text-white text-sm">
-                                    <p>Click "Request a Quote" tab to inquire about this method.</p>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </motion.div>
-                        </AnimatePresence>
-                      )}
-                    </div>
+                    <button
+                      key={idx}
+                      onClick={() => handleExpand(idx)}
+                      className={`w-full px-4 py-6 flex items-center justify-center text-center transition-all border-b border-gray-200 ${
+                        isActive 
+                          ? 'bg-gray-100 text-gray-900 font-bold' 
+                          : 'bg-white/30 text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      <span className="text-2xl font-bold">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                    </button>
                   );
                 })}
+              </div>
+
+              {/* RIGHT CONTENT AREA - 75% */}
+              <div className="w-3/4 bg-white/80 overflow-y-auto">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="h-full"
+                  >
+                    {(() => {
+                      const allMethods = [...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }];
+                      const method = allMethods[activeTab];
+                      const badgeClass = badgeToneClasses[method?.badgeTone] || badgeToneClasses.slate;
+                      const bodyPreview = extractPlainText(method?.body);
+                      const bgUrl = method?.backgroundImage?.asset?.url
+                        ? `${method.backgroundImage.asset.url}?w=900&q=80&auto=format`
+                        : null;
+                      const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
+
+                      return (
+                        <div className="p-6 sm:p-8 h-full flex flex-col">
+                          {/* Method Title and Badge */}
+                          <div className="mb-6">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-2xl font-bold text-gray-900">
+                                {method?.title}
+                              </h3>
+                              {!method?.isQuote && method?.badge && (
+                                <span 
+                                  className={`inline-flex items-center border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}
+                                  style={{
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                                  }}
+                                >
+                                  {method.badge}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Content */}
+                          {!method?.isQuote ? (
+                            <div className="space-y-4 flex-1">
+                              <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-2">
+                                Delivery Method Details
+                              </p>
+                              {method?.summary && (
+                                <p className="text-gray-900 leading-relaxed text-base">
+                                  {method.summary}
+                                </p>
+                              )}
+                              {bodyPreview && (
+                                <p className="text-gray-700 leading-relaxed text-sm">
+                                  {bodyPreview}
+                                </p>
+                              )}
+                              
+                              <div className="bg-gray-50 border border-gray-200 p-5 mt-6">
+                                <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-2">
+                                  Interested?
+                                </p>
+                                <p className="text-gray-900 text-sm">
+                                  Click "Request a Quote" tab to inquire about this method.
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex-1">
+                              <div className="bg-gray-50 border border-gray-200 p-5 shadow-sm">
+                                <div className="mb-4">
+                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-1">
+                                    Request a Quote
+                                  </p>
+                                  <h5 className="text-xl font-semibold text-gray-900">
+                                    {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
+                                  </h5>
+                                  <p className="text-gray-700 mt-2 text-sm">
+                                    {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
+                                  </p>
+                                </div>
+                                <form
+                                  onSubmit={(e) => handleQuoteSubmit(e, 'Request a Quote')}
+                                  className="grid gap-3"
+                                >
+                                  <input
+                                    name="name"
+                                    type="text"
+                                    required
+                                    placeholder="Name"
+                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                  />
+                                  <input
+                                    name="email"
+                                    type="email"
+                                    required
+                                    placeholder="Email"
+                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                  />
+                                  <input
+                                    name="phone"
+                                    type="tel"
+                                    placeholder="Phone"
+                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                  />
+                                  <select
+                                    name="deliveryMethod"
+                                    defaultValue="General Inquiry"
+                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                  >
+                                    <option value="General Inquiry">General Inquiry</option>
+                                    {servicesData.deliveryMethods.map((m, optionIdx) => (
+                                      <option key={optionIdx} value={m.title || `Method ${optionIdx + 1}`}>
+                                        {m.title || `Method ${optionIdx + 1}`}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <textarea
+                                    name="message"
+                                    required
+                                    rows="4"
+                                    placeholder="Project details, timelines, and any specifics"
+                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                  />
+                                  <input type="hidden" name="targetEmail" value={emailTarget} />
+                                  <div className="flex items-center gap-3 flex-wrap">
+                                    <button
+                                      type="submit"
+                                      disabled={submitting}
+                                      className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold px-5 py-3 transition disabled:opacity-60"
+                                    >
+                                      {submitting ? 'Sending...' : 'Send Request'}
+                                    </button>
+                                    {submitStatus === 'success' && (
+                                      <span className="text-emerald-600 text-sm font-semibold">Sent! We'll respond shortly.</span>
+                                    )}
+                                    {submitStatus === 'error' && (
+                                      <span className="text-amber-600 text-sm font-semibold">There was an issue. Please try again.</span>
+                                    )}
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>
