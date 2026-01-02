@@ -22,7 +22,7 @@ import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
 import recognitionProject from './recognitionProject'
 import expandableServiceBox from './expandableServiceBox'
-import cardNav from './cardNav'
+// import cardNav from './cardNav' // REMOVED: Merged into headerSection
 import logoLoop from './logoLoop'
 
 export const schema = {
@@ -50,7 +50,7 @@ export const schema = {
     portfolioProject,
     recognitionProject,
     expandableServiceBox,
-    cardNav,
+    // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
   ],
 }
