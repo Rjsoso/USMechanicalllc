@@ -211,7 +211,14 @@ export default defineType({
       name: "deliveryMethodsAccent",
       type: "string",
       title: "Accent Label",
-      description: "Optional short label that appears above the heading (e.g., “Project Delivery”).",
+      description: "Optional short label that appears above the heading (e.g., "Project Delivery").",
+    },
+    {
+      name: "deliveryMethodsBoxTitle",
+      type: "string",
+      title: "Delivery Methods Box Title",
+      description: "Large heading displayed at the top of the delivery methods box (e.g., 'Delivery method?')",
+      placeholder: "Delivery method?",
     },
     {
       name: "deliveryMethods",

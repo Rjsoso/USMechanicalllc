@@ -28,6 +28,7 @@ const ServicesSection = () => {
             deliveryMethodsFormHeadline,
             deliveryMethodsFormCopy,
             deliveryMethodsEmail,
+            deliveryMethodsBoxTitle,
             deliveryMethods[] {
               title,
               summary,
@@ -260,10 +261,21 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-row rounded-l-2xl min-h-[600px]">
+            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl min-h-[600px]">
               
-              {/* LEFT SIDEBAR - 25% Navigation */}
-              <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
+              {/* HEADER - Full Width */}
+              {servicesData.deliveryMethodsBoxTitle && (
+                <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+                    {servicesData.deliveryMethodsBoxTitle}
+                  </h2>
+                </div>
+              )}
+              
+              {/* CONTENT AREA - Horizontal Split */}
+              <div className="flex flex-row flex-1">
+                {/* LEFT SIDEBAR - 25% Navigation */}
+                <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
                   
@@ -443,6 +455,7 @@ const ServicesSection = () => {
                     })()}
                   </motion.div>
                 </AnimatePresence>
+              </div>
               </div>
             </div>
           </div>
