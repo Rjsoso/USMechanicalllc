@@ -224,9 +224,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
               style={{
                 width: isExpanded ? '45%' : '75%',
                 transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
-                transition: 'width 1200ms cubic-bezier(0.16, 1, 0.3, 1), transform 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'width, transform',
-                backfaceVisibility: 'hidden'
+                backfaceVisibility: 'hidden',
+                WebkitFontSmoothing: 'antialiased'
               }}
             >
               <div className="h-[480px] md:h-[580px] lg:h-[680px]">
@@ -247,9 +248,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
               className="bg-black flex items-start"
               style={{
                 width: isExpanded ? '55%' : '25%',
-                transition: 'width 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'width',
-                backfaceVisibility: 'hidden'
+                backfaceVisibility: 'hidden',
+                WebkitFontSmoothing: 'antialiased'
               }}
             >
               <div className="w-full px-6 lg:px-8 pt-8 pb-8">
@@ -261,31 +263,35 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 
                 <FadeInWhenVisible delay={0.2}>
                   <div>
-                    {/* Text content with truncation */}
+                    {/* Text content with truncation - Using CSS Grid for smooth auto-height animation */}
                     <div className="relative" style={{ position: 'relative' }}>
                       <div 
-                        className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                         style={{
-                          maxHeight: isExpanded ? '2000px' : '28em',
-                          overflow: 'hidden',
-                          position: 'relative',
-                          lineHeight: '1.75',
-                          transition: 'max-height 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
-                          willChange: 'max-height',
-                          backfaceVisibility: 'hidden',
-                          WebkitFontSmoothing: 'antialiased',
-                          transform: 'translateZ(0)' // Force GPU acceleration
+                          display: 'grid',
+                          gridTemplateRows: isExpanded ? '1fr' : '0fr',
+                          transition: 'grid-template-rows 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                          willChange: 'grid-template-rows',
+                          position: 'relative'
                         }}
                       >
-                        <div 
-                          style={{
-                            transition: 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) 200ms',
-                            opacity: 1,
-                            transform: 'translateZ(0)',
-                            backfaceVisibility: 'hidden'
-                          }}
-                        >
-                          {data.aboutText}
+                        <div style={{ 
+                          overflow: 'hidden',
+                          minHeight: isExpanded ? 'auto' : '28em',
+                          transition: 'min-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                        }}>
+                          <div 
+                            className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
+                            style={{
+                              lineHeight: '1.75',
+                              transform: 'translateZ(0)',
+                              backfaceVisibility: 'hidden',
+                              WebkitFontSmoothing: 'antialiased',
+                              paddingBottom: isExpanded ? '2rem' : '0',
+                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)'
+                            }}
+                          >
+                            {data.aboutText}
+                          </div>
                         </div>
                       </div>
                       
@@ -293,11 +299,11 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       <div 
                         className="absolute bottom-0 left-0 right-0 pointer-events-none"
                         style={{
-                          height: '96px',
-                          background: 'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 30%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
+                          height: '120px',
+                          background: 'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.98) 20%, rgba(0, 0, 0, 0.95) 35%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
                           opacity: isExpanded ? 0 : 1,
-                          transition: 'opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)',
-                          transitionDelay: isExpanded ? '0ms' : '400ms',
+                          visibility: isExpanded ? 'hidden' : 'visible',
+                          transition: `opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '400ms'}, visibility 0ms ${isExpanded ? '800ms' : '0ms'}`,
                           transform: 'translateZ(0)',
                           willChange: 'opacity'
                         }}
