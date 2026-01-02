@@ -329,10 +329,7 @@ const ServicesSection = () => {
                             >
                               {!method.isQuote && (
                                 <div className="space-y-3">
-                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-300">Delivery Method</p>
-                                  <h4 className="text-2xl md:text-3xl font-semibold text-white">
-                                    {method.title}
-                                  </h4>
+                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-300 mb-2">Delivery Method Details</p>
                                   {method.summary && (
                                     <p className="text-white leading-relaxed text-sm">
                                       {method.summary}
