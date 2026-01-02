@@ -220,11 +220,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
           <div className="flex flex-col lg:flex-row items-stretch gap-0 w-full">
             {/* Carousel container - slides left and shrinks when expanded */}
             <div 
-              className="transition-all duration-[1000ms] ease-out overflow-hidden"
+              className="overflow-hidden"
               style={{
                 width: isExpanded ? '45%' : '75%',
                 transform: isExpanded ? 'translateX(-15%)' : 'translateX(0)',
-                transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                transition: 'width 1200ms cubic-bezier(0.16, 1, 0.3, 1), transform 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'width, transform',
+                backfaceVisibility: 'hidden'
               }}
             >
               <div className="h-[480px] md:h-[580px] lg:h-[680px]">
@@ -242,10 +244,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-start transition-all duration-[1000ms] ease-out"
+              className="bg-black flex items-start"
               style={{
                 width: isExpanded ? '55%' : '25%',
-                transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                transition: 'width 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'width',
+                backfaceVisibility: 'hidden'
               }}
             >
               <div className="w-full px-6 lg:px-8 pt-8 pb-8">
@@ -258,7 +262,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 <FadeInWhenVisible delay={0.2}>
                   <div>
                     {/* Text content with truncation */}
-                    <div className="relative">
+                    <div className="relative" style={{ position: 'relative' }}>
                       <div 
                         className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                         style={{
@@ -266,15 +270,19 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           overflow: 'hidden',
                           position: 'relative',
                           lineHeight: '1.75',
-                          transition: 'max-height 1000ms cubic-bezier(0.19, 1, 0.22, 1), opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
-                          willChange: isExpanded ? 'max-height, opacity' : 'auto'
+                          transition: 'max-height 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
+                          willChange: 'max-height',
+                          backfaceVisibility: 'hidden',
+                          WebkitFontSmoothing: 'antialiased',
+                          transform: 'translateZ(0)' // Force GPU acceleration
                         }}
                       >
                         <div 
                           style={{
-                            transition: 'transform 1000ms cubic-bezier(0.19, 1, 0.22, 1), opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
-                            transform: isExpanded ? 'translateY(0)' : 'translateY(0)',
-                            opacity: 1
+                            transition: 'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) 200ms',
+                            opacity: 1,
+                            transform: 'translateZ(0)',
+                            backfaceVisibility: 'hidden'
                           }}
                         >
                           {data.aboutText}
@@ -283,11 +291,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       
                       {/* Gradient fade overlay for truncated text */}
                       <div 
-                        className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none"
+                        className="absolute bottom-0 left-0 right-0 pointer-events-none"
                         style={{
+                          height: '96px',
+                          background: 'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 30%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
                           opacity: isExpanded ? 0 : 1,
-                          transition: 'opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
-                          transitionDelay: isExpanded ? '0ms' : '0ms'
+                          transition: 'opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)',
+                          transitionDelay: isExpanded ? '0ms' : '400ms',
+                          transform: 'translateZ(0)',
+                          willChange: 'opacity'
                         }}
                       ></div>
                     </div>
