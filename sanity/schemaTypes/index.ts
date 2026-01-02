@@ -1,4 +1,4 @@
-import ourServices from './ourServices'
+import ourServices from '../schemas/ourServices'
 import headerSection from './headerSection'
 import navLink from './navLink'
 import heroSection from './heroSection'
