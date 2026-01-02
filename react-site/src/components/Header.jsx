@@ -15,7 +15,7 @@ function Header() {
   useEffect(() => {
     client
       .fetch(
-        `*[_type == "headerSection"][0]{
+        `*[_type == "headerSection" && _id == "headerSection"][0]{
           logo,
           navLinks[] {
             label,
