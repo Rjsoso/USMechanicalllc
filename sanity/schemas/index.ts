@@ -23,6 +23,7 @@ import portfolioProject from '../schemaTypes/portfolioProject'
 import recognitionProject from '../schemaTypes/recognitionProject'
 import expandableServiceBox from '../schemaTypes/expandableServiceBox'
 import cardNav from '../schemaTypes/cardNav'
+import logoLoop from '../schemaTypes/logoLoop'
 
 export const schemaTypes = [
     ourServices,
@@ -50,4 +51,5 @@ export const schemaTypes = [
     recognitionProject,
     expandableServiceBox,
     cardNav,
+    logoLoop,
 ]
