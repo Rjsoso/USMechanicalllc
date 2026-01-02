@@ -259,11 +259,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     {/* Text content with truncation */}
                     <div className="relative">
                       <div 
-                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-400"
+                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-[600ms] ease-out"
                         style={{
-                          maxHeight: isExpanded ? 'none' : '28em',
+                          maxHeight: isExpanded ? '2000px' : '28em',
                           overflow: 'hidden',
-                          position: 'relative'
+                          position: 'relative',
+                          transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
                         }}
                       >
                         {data.aboutText}
