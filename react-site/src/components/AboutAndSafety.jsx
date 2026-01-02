@@ -260,26 +260,36 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     {/* Text content with truncation */}
                     <div className="relative">
                       <div 
-                        className="text-sm md:text-base lg:text-lg text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-[1000ms] ease-out"
+                        className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                         style={{
                           maxHeight: isExpanded ? '2000px' : '28em',
                           overflow: 'hidden',
                           position: 'relative',
-                          transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                          lineHeight: '1.75',
+                          transition: 'max-height 1000ms cubic-bezier(0.19, 1, 0.22, 1), opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
+                          willChange: isExpanded ? 'max-height, opacity' : 'auto'
                         }}
                       >
-                        {data.aboutText}
+                        <div 
+                          style={{
+                            transition: 'transform 1000ms cubic-bezier(0.19, 1, 0.22, 1), opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
+                            transform: isExpanded ? 'translateY(0)' : 'translateY(0)',
+                            opacity: 1
+                          }}
+                        >
+                          {data.aboutText}
+                        </div>
                       </div>
                       
                       {/* Gradient fade overlay for truncated text */}
-                      {!isExpanded && (
-                        <div 
-                          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none transition-opacity duration-[1000ms]"
-                          style={{
-                            transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)'
-                          }}
-                        ></div>
-                      )}
+                      <div 
+                        className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none"
+                        style={{
+                          opacity: isExpanded ? 0 : 1,
+                          transition: 'opacity 1000ms cubic-bezier(0.19, 1, 0.22, 1)',
+                          transitionDelay: isExpanded ? '0ms' : '0ms'
+                        }}
+                      ></div>
                     </div>
                     
                     {/* Read More / Close buttons - positioned outside fade area */}
