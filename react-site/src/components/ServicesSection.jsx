@@ -307,7 +307,15 @@ const ServicesSection = () => {
                       const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
 
                       return (
-                        <div className="p-6 sm:p-8 h-full flex flex-col">
+                        <div 
+                          className="p-6 sm:p-8 h-full flex flex-col relative"
+                          style={bgUrl ? {
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.90)), url(${bgUrl})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                          } : undefined}
+                        >
                           {/* Method Title and Badge */}
                           <div className="mb-6">
                             <div className="flex items-center gap-3 mb-2">
