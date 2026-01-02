@@ -260,7 +260,7 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Single Rectangle Tabs / Accordion */}
-            <div className="relative border border-white/10 bg-gradient-to-br from-gray-500 via-gray-500/95 to-gray-500 shadow-2xl overflow-hidden flex-1 flex flex-col">
+            <div className="relative border border-white/10 bg-gradient-to-br from-gray-500 via-gray-500/95 to-gray-500 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl">
               <div className="flex flex-col divide-y divide-white/10 h-full">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
