@@ -128,7 +128,7 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-black text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div className="min-h-screen bg-white text-black flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <p>Loading service...</p>
         </div>
         <Footer />
@@ -140,13 +140,13 @@ export default function ServiceDetail() {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-black text-white flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div className="min-h-screen bg-white text-black flex items-center justify-center" style={{ paddingTop: '180px' }}>
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-4">Service Not Found</h1>
-            <p className="text-white mb-8">The service you're looking for doesn't exist.</p>
+            <p className="text-black mb-8">The service you're looking for doesn't exist.</p>
             <button
               onClick={() => navigate('/')}
-              className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
             >
               Go Back Home
             </button>
@@ -160,7 +160,7 @@ export default function ServiceDetail() {
   return (
     <>
       <Header />
-      <main className="bg-black text-white min-h-screen" style={{ paddingTop: '180px' }}>
+      <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
@@ -191,7 +191,7 @@ export default function ServiceDetail() {
               };
               setTimeout(scrollToServices, 300);
             }}
-            className="mb-8 text-white hover:text-gray-100 transition-colors flex items-center gap-2"
+            className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
           >
             <svg
               className="w-5 h-5"
@@ -211,7 +211,7 @@ export default function ServiceDetail() {
 
           {/* Service Title */}
           <motion.h1
-            className="section-title text-5xl md:text-6xl mb-8 text-white"
+            className="section-title text-5xl md:text-6xl mb-8 text-black"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -221,7 +221,7 @@ export default function ServiceDetail() {
           {/* Preview Description */}
           {serviceData.description && (
             <motion.p
-              className="text-xl text-white mb-12 leading-relaxed"
+              className="text-xl text-black mb-12 leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -233,7 +233,7 @@ export default function ServiceDetail() {
           {/* Full Description (Rich Text) */}
           {serviceData.fullDescription && serviceData.fullDescription.length > 0 && (
             <motion.div
-              className="prose prose-invert prose-lg max-w-none mb-12"
+              className="prose prose-lg max-w-none mb-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -273,22 +273,22 @@ export default function ServiceDetail() {
               {serviceData.features && serviceData.features.length > 0 && (
                 <div className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
                   <FadeInWhenVisible delay={0.1}>
-                    <h2 className="text-3xl font-bold mb-6 text-white">Key Features</h2>
+                    <h2 className="text-3xl font-bold mb-6 text-black">Key Features</h2>
                   </FadeInWhenVisible>
                   <FadeInWhenVisible delay={0.2}>
                     <div className="space-y-4">
                       {serviceData.features.map((feature, index) => (
                         <div
                           key={index}
-                          className="p-6 rounded-xl bg-black border border-gray-600"
+                          className="p-6 rounded-xl bg-white border border-gray-300"
                         >
                           {feature.title && (
-                            <h3 className="text-xl font-semibold text-white mb-2">
+                            <h3 className="text-xl font-semibold text-black mb-2">
                               {feature.title}
                             </h3>
                           )}
                           {feature.description && (
-                            <p className="text-white leading-relaxed">
+                            <p className="text-black leading-relaxed">
                               {feature.description}
                             </p>
                           )}
