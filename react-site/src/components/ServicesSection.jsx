@@ -260,21 +260,10 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl min-h-[600px]">
+            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-row rounded-l-2xl min-h-[600px]">
               
-              {/* HEADER - Full Width */}
-              {servicesData.deliveryMethodsHeading && (
-                <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-                    {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
-                  </h2>
-                </div>
-              )}
-              
-              {/* CONTENT AREA - Horizontal Split */}
-              <div className="flex flex-row flex-1">
-                {/* LEFT SIDEBAR - 25% Navigation */}
-                <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
+              {/* LEFT SIDEBAR - 25% Navigation */}
+              <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
                 {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
                   const isActive = activeTab === idx;
                   
@@ -297,7 +286,16 @@ const ServicesSection = () => {
               </div>
 
               {/* RIGHT CONTENT AREA - 75% */}
-              <div className="w-3/4 bg-white/80 overflow-y-auto">
+              <div className="w-3/4 bg-white/80 overflow-y-auto flex flex-col">
+                {/* HEADER - Aligned with 75% Content Area */}
+                {servicesData.deliveryMethodsHeading && (
+                  <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
+                    <h2 className="section-title text-4xl md:text-5xl text-gray-900">
+                      {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
+                    </h2>
+                  </div>
+                )}
+                
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeTab}
@@ -305,7 +303,7 @@ const ServicesSection = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="h-full"
+                    className="flex-1"
                   >
                     {(() => {
                       const allMethods = [...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }];
