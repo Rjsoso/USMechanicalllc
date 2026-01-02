@@ -254,14 +254,17 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 WebkitFontSmoothing: 'antialiased'
               }}
             >
-              {/* Inner content container - maintains expanded width to prevent text reflow */}
+              {/* Inner content container - FIXED width to prevent text reflow */}
               <div 
-                className="px-6 lg:px-8 pt-8 pb-8"
+                className="pt-8 pb-8"
                 style={{
-                  width: '100%',
-                  minWidth: isExpanded ? 'auto' : '800px', // Keep text wide to prevent reflow
-                  transition: 'min-width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  transform: 'translateZ(0)'
+                  width: '1000px', // Fixed width - text never reflows
+                  maxWidth: 'none',
+                  paddingLeft: '2rem',
+                  paddingRight: '2rem',
+                  flexShrink: 0,
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden'
                 }}
               >
                 <FadeInWhenVisible delay={0.1}>
