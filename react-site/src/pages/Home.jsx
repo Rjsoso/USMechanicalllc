@@ -88,11 +88,11 @@ export default function Home() {
             <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
               <Portfolio />
             </Suspense>
-          </div>
 
-          <Suspense fallback={<div className="py-16 bg-black"></div>}>
-            <LogoLoopSection />
-          </Suspense>
+            <Suspense fallback={<div className="py-16 bg-black"></div>}>
+              <LogoLoopSection />
+            </Suspense>
+          </div>
 
           <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
             <Careers />
