@@ -73,7 +73,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="pt-8 pb-2 bg-black text-white">
+      <section id="portfolio" className="pt-8 pb-4 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -82,7 +82,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-8 pb-2 bg-black text-white">
+    <section id="portfolio" className="pt-8 pb-4 bg-black text-white">
       <div className="max-w-7xl mx-auto px-6">
         {!selectedCategory ? (
           <>

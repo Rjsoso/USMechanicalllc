@@ -1,6 +1,6 @@
 export default function Careers() {
   return (
-    <section id="careers" className="py-24 bg-black text-white">
+    <section id="careers" className="pt-4 pb-24 bg-black text-white">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="section-title text-5xl md:text-6xl text-white mb-6">Careers at U.S. Mechanical</h2>
         <p className="text-lg md:text-xl text-white mb-10">
