@@ -84,11 +84,11 @@ export default function Home() {
             <CompanyStats />
 
             <ServicesSection />
-          </div>
 
-          <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
-            <Portfolio />
-          </Suspense>
+            <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
+              <Portfolio />
+            </Suspense>
+          </div>
 
           <Suspense fallback={<div className="py-16 bg-black"></div>}>
             <LogoLoopSection />
