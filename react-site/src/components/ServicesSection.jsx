@@ -172,7 +172,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="pt-12 pb-1 bg-black text-white text-center">
+      <section id="services" className="pt-12 pb-0 bg-black text-white text-center">
         <p>Loading services...</p>
       </section>
     );
@@ -198,7 +198,7 @@ const ServicesSection = () => {
   return (
     <section 
       id="services" 
-      className="pt-12 pb-1 bg-black text-white"
+      className="pt-12 pb-0 bg-black text-white"
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
