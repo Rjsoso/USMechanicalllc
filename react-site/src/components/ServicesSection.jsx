@@ -353,12 +353,12 @@ const ServicesSection = () => {
                                 Delivery Method Details
                               </p>
                               {method?.summary && (
-                                <p className="text-gray-900 leading-relaxed text-base">
+                                <p className="text-gray-900 leading-relaxed text-lg">
                                   {method.summary}
                                 </p>
                               )}
                               {bodyPreview && (
-                                <p className="text-gray-700 leading-relaxed text-sm">
+                                <p className="text-gray-700 leading-relaxed text-base">
                                   {bodyPreview}
                                 </p>
                               )}
