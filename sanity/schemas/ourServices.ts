@@ -179,7 +179,7 @@ export default defineType({
       name: "deliveryMethodsHeading",
       type: "string",
       title: "Delivery Methods Heading",
-      description: "Title shown above the delivery methods slice (e.g., “Delivery Methods”).",
+      description: "Title shown above the delivery methods slice (e.g., 'Delivery Methods').",
     },
     {
       name: "deliveryMethodsIntro",
@@ -192,7 +192,7 @@ export default defineType({
       name: "deliveryMethodsFormHeadline",
       type: "string",
       title: "Quote Form Headline",
-      description: "Optional headline shown when a delivery method expands (e.g., “Request a Quote”).",
+      description: "Optional headline shown when a delivery method expands (e.g., 'Request a Quote').",
     },
     {
       name: "deliveryMethodsFormCopy",
@@ -211,7 +211,7 @@ export default defineType({
       name: "deliveryMethodsAccent",
       type: "string",
       title: "Accent Label",
-      description: "Optional short label that appears above the heading (e.g., "Project Delivery").",
+      description: "Optional short label that appears above the heading (e.g., 'Project Delivery').",
     },
     {
       name: "deliveryMethodsBoxTitle",
@@ -265,7 +265,7 @@ export default defineType({
               name: "badge",
               type: "string",
               title: "Badge Text",
-              description: "Short punchy tag (e.g., “Fast”, “Collaborative”).",
+              description: "Short punchy tag (e.g., 'Fast', 'Collaborative').",
             },
             {
               name: "badgeTone",
@@ -288,7 +288,7 @@ export default defineType({
               name: "ctaLabel",
               type: "string",
               title: "CTA Label",
-              description: "Optional call-to-action label (e.g., “See how it works”).",
+              description: "Optional call-to-action label (e.g., 'See how it works').",
             },
             {
               name: "ctaUrl",
