@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
-import ProjectModal from './ProjectModal';
 
 function Portfolio() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [projects, setProjects] = useState([]);
-  const [openProject, setOpenProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-black text-white">
+    <section id="portfolio" className="pt-20 pb-16 bg-black text-white">
       {!selectedCategory ? (
         <>
           {/* Section Title */}
@@ -188,7 +188,7 @@ function Portfolio() {
               {sortedProjects.map((project) => (
                 <div
                   key={project._id}
-                  onClick={() => setOpenProject(project)}
+                  onClick={() => navigate(`/projects/${project._id}`)}
                   className="bg-zinc-900 rounded-xl shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden group"
                 >
                   {project.images && project.images.length > 0 && (
@@ -257,13 +257,6 @@ function Portfolio() {
             </div>
           )}
         </div>
-      )}
-
-      {openProject && (
-        <ProjectModal
-          project={openProject}
-          onClose={() => setOpenProject(null)}
-        />
       )}
     </section>
   );
