@@ -15,7 +15,7 @@ export default function Careers() {
         qualifications,
         benefits,
         indeedUrl,
-        applicationPdfUrl,
+        "applicationPdfUrl": applicationPdf.asset->url,
         submissionEmail,
         submissionFax
       }`)
