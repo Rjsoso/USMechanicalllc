@@ -1,29 +1,94 @@
+import { useEffect, useState } from 'react';
+import { client } from '../utils/sanity';
+
 export default function Careers() {
+  const [careersData, setCareersData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    client
+      .fetch(`*[_type == "careers"][0]{
+        mainHeading,
+        jobTitle,
+        jobOverview,
+        jobDescription,
+        qualifications,
+        benefits,
+        indeedUrl,
+        "applicationPdfUrl": applicationPdf.asset->url,
+        submissionEmail,
+        submissionFax
+      }`)
+      .then((data) => {
+        setCareersData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching careers data:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <section id="careers" className="pt-4 pb-24 bg-black text-white">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="text-white">Loading careers...</div>
+        </div>
+      </section>
+    );
+  }
+
+  // Fallback content if no data from Sanity
+  const heading = careersData?.mainHeading || 'Careers at U.S. Mechanical';
+  const jobTitle = careersData?.jobTitle || 'Now hiring Plumbing and HVAC Installers';
+  const jobOverview = careersData?.jobOverview || ['Full-time', 'Entry- to mid-level experience', 'Competitive pay and benefits'];
+  const jobDescription = careersData?.jobDescription || 'Demolish and install plumbing and HVAC systems in new commercial and institutional construction throughout the Intermountain West including Utah, Nevada and Wyoming.';
+  const qualifications = careersData?.qualifications || [
+    { item: '18 years or older (Required)', required: true },
+    { item: 'US work authorization (Required)', required: true },
+    { item: 'High school or equivalent (Preferred)', required: false },
+    { item: 'Interest in plumbing, pipe fitting or sheet metal career (Preferred)', required: false },
+    { item: 'OSHA 10/30 card holder', required: false },
+  ];
+  const benefits = careersData?.benefits || [
+    '$500 referral bonus',
+    'Tuition reimbursement for apprentices',
+    'Paid time off starts accruing after 90 days',
+    'Free employee medical, dental, vision, and life insurance',
+    'Up to 3.5% 401(k) match',
+  ];
+  const indeedUrl = careersData?.indeedUrl || 'https://www.indeed.com/cmp/U.s.-Mechanical,-LLC/jobs';
+  const pdfUrl = careersData?.applicationPdfUrl || '/application.pdf';
+  const submissionEmail = careersData?.submissionEmail || 'admin@usmechanicalllc.com';
+  const submissionFax = careersData?.submissionFax || '(801) 785-6029';
+
   return (
     <section id="careers" className="pt-4 pb-24 bg-black text-white">
       <div className="max-w-5xl mx-auto px-6">
         {/* Main Heading */}
         <h2 className="section-title text-5xl md:text-6xl text-white mb-4 text-center">
-          Careers at U.S. Mechanical
+          {heading}
         </h2>
         
         {/* Subheading */}
         <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
-          Now hiring Plumbing and HVAC Installers
+          {jobTitle}
         </h3>
         
         {/* Job Overview Bullets */}
         <div className="mb-8 text-center">
           <ul className="inline-block text-left space-y-2 text-lg">
-            <li>• Full-time</li>
-            <li>• Entry- to mid-level experience</li>
-            <li>• Competitive pay and benefits</li>
+            {jobOverview.map((item, idx) => (
+              <li key={idx}>• {item}</li>
+            ))}
           </ul>
         </div>
         
         {/* Job Description */}
         <p className="text-lg text-white mb-10 text-center max-w-3xl mx-auto leading-relaxed">
-          Demolish and install plumbing and HVAC systems in new commercial and institutional construction throughout the Intermountain West including Utah, Nevada and Wyoming.
+          {jobDescription}
         </p>
         
         {/* Qualifications & Benefits Grid */}
@@ -31,48 +96,54 @@ export default function Careers() {
           <div>
             <h4 className="text-xl font-bold mb-4 text-white">Qualifications:</h4>
             <ul className="space-y-2 text-lg">
-              <li>• 18 years or older (Required)</li>
-              <li>• US work authorization (Required)</li>
-              <li>• High school or equivalent (Preferred)</li>
-              <li>• Interest in plumbing, pipe fitting or sheet metal career (Preferred)</li>
-              <li>• OSHA 10/30 card holder</li>
+              {qualifications.map((qual, idx) => (
+                <li key={idx}>
+                  • {qual.item} {qual.required ? '(Required)' : '(Preferred)'}
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h4 className="text-xl font-bold mb-4 text-white">Benefits:</h4>
             <ul className="space-y-2 text-lg">
-              <li>• $500 referral bonus</li>
-              <li>• Tuition reimbursement for apprentices</li>
-              <li>• Paid time off starts accruing after 90 days</li>
-              <li>• Free employee medical, dental, vision, and life insurance</li>
-              <li>• Up to 3.5% 401(k) match</li>
+              {benefits.map((benefit, idx) => (
+                <li key={idx}>• {benefit}</li>
+              ))}
             </ul>
           </div>
         </div>
         
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-          <a
-            href="https://www.indeed.com/cmp/U.s.-Mechanical,-LLC/jobs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
-          >
-            Apply on Indeed
-          </a>
-          <a
-            href="/application.pdf"
-            download
-            className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
-          >
-            Download Fillable PDF
-          </a>
+          {indeedUrl && (
+            <a
+              href={indeedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
+            >
+              Apply on Indeed
+            </a>
+          )}
+          {pdfUrl && (
+            <a
+              href={pdfUrl}
+              download
+              className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
+            >
+              Download Fillable PDF
+            </a>
+          )}
         </div>
         
         {/* Submission Instructions */}
-        <p className="text-sm text-gray-400 text-center">
-          Email to admin@usmechanicalllc.com or fax to (801) 785-6029
-        </p>
+        {(submissionEmail || submissionFax) && (
+          <p className="text-sm text-gray-400 text-center">
+            {submissionEmail && `Email to ${submissionEmail}`}
+            {submissionEmail && submissionFax && ' or '}
+            {submissionFax && `fax to ${submissionFax}`}
+          </p>
+        )}
       </div>
     </section>
   );
