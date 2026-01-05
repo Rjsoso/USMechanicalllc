@@ -93,13 +93,13 @@ export default defineType({
       }),
     },
     {
-      name: 'applicationPdf',
-      title: 'Application PDF',
-      type: 'file',
-      options: {
-        accept: 'application/pdf',
-      },
-      description: 'Fillable PDF application form for download',
+      name: 'applicationPdfUrl',
+      title: 'Application PDF URL',
+      type: 'url',
+      description: 'Direct URL to the fillable PDF application form (e.g., https://yourwebsite.com/application.pdf)',
+      validation: (Rule) => Rule.uri({
+        scheme: ['http', 'https'],
+      }),
     },
     {
       name: 'submissionEmail',
