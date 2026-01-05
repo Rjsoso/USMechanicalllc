@@ -85,9 +85,19 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="bg-black text-white">
+    <section id="portfolio" className="pt-20 pb-0 bg-black text-white">
       {!selectedCategory ? (
         <>
+          {/* Section Title */}
+          <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+            <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
+              Our Projects
+            </h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Explore our completed projects by category
+            </p>
+          </div>
+
           {/* Edge-to-edge category grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {displayCategories.map((category) => (
