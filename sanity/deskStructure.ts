@@ -115,14 +115,6 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('companyInfo')
         ),
 
-      // 11. Recognition Projects
-      S.listItem()
-        .title('11. Recognition Projects')
-        .child(
-          S.documentTypeList('recognitionProject')
-            .title('Recognition Projects')
-        ),
-
       S.divider(),
 
       // Supporting content types
