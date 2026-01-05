@@ -20,10 +20,10 @@ import companyStats from '../schemaTypes/companyStats'
 import companyInfo from '../schemaTypes/companyInfo' // Added: Missing from exports
 import portfolioCategory from '../schemaTypes/portfolioCategory'
 import portfolioProject from '../schemaTypes/portfolioProject'
-import recognitionProject from '../schemaTypes/recognitionProject'
 import expandableServiceBox from '../schemaTypes/expandableServiceBox'
 // import cardNav from '../schemaTypes/cardNav' // REMOVED: Merged into headerSection
 import logoLoop from '../schemaTypes/logoLoop'
+import careers from '../schemaTypes/careers'
 
 export const schemaTypes = [
     ourServices,
@@ -48,8 +48,8 @@ export const schemaTypes = [
     companyInfo, // Added: Missing from exports
     portfolioCategory,
     portfolioProject,
-    recognitionProject,
     expandableServiceBox,
     // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
+    careers,
 ]
