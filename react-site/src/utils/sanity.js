@@ -36,6 +36,5 @@ export const queries = {
   hero: `*[_type == "heroSection"][0]`,
   about: `*[_type == "aboutAndSafety"][0]`,
   safety: `*[_type == "aboutAndSafety"][0]`,
-  recognition: `*[_type == "recognitionProject"] | order(_createdAt asc)`,
   companyInfo: `*[_type == "companyInfo"][0]`,
 };

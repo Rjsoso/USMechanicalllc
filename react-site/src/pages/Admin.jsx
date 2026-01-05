@@ -3,7 +3,6 @@ import { client, writeClient, urlFor } from '../utils/sanity'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
-import RecognitionSection from '../components/RecognitionSection'
 import ContactSection from '../components/ContactSection'
 import Footer from '../components/Footer'
 
@@ -66,7 +65,6 @@ export default function Admin() {
     { id: 'headerSection', title: 'Header' },
     { id: 'heroSection', title: 'Hero Section' },
     { id: 'aboutAndSafety', title: 'About & Safety' },
-    { id: 'recognitionProject', title: 'Recognition Projects' },
     { id: 'contactSection', title: 'Contact Section' },
     { id: 'companyInfo', title: 'Footer Info' },
   ]
@@ -418,29 +416,6 @@ export default function Admin() {
           )}
           <PreviewSection sectionName="About & Safety">
             <AboutAndSafety />
-          </PreviewSection>
-        </div>
-
-        {/* Recognition */}
-        <div
-          onMouseEnter={() => setHoveredSection('recognitionProject')}
-          onMouseLeave={() => setHoveredSection(null)}
-          onClick={() => setActiveSection('recognitionProject')}
-          className={`relative cursor-pointer transition-all duration-200 ${
-            hoveredSection === 'recognitionProject'
-              ? 'ring-4 ring-blue-400 ring-opacity-50'
-              : activeSection === 'recognitionProject'
-              ? 'ring-4 ring-blue-600 ring-opacity-70'
-              : ''
-          }`}
-        >
-          {hoveredSection === 'recognitionProject' && (
-            <div className="absolute top-0 left-0 bg-blue-600 text-white text-xs px-3 py-1 rounded-br-lg z-10">
-              Click to edit: Recognition Projects
-            </div>
-          )}
-          <PreviewSection sectionName="Recognition Projects">
-            <RecognitionSection />
           </PreviewSection>
         </div>
 
