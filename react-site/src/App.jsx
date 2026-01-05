@@ -6,6 +6,7 @@ const Admin = lazy(() => import('./pages/Admin'))
 const AdminLogin = lazy(() => import('./pages/AdminLogin'))
 const Home = lazy(() => import('./pages/Home'))
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
+const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 
 function ProtectedRoute({ children }) {
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
+          <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route
