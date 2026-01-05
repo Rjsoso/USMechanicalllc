@@ -32,9 +32,9 @@ export default function Careers() {
   // Loading state
   if (loading) {
     return (
-      <section id="careers" className="pt-4 pb-24 bg-black text-white">
+      <section id="careers" className="pt-4 pb-24 bg-white text-black">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <div className="text-white">Loading careers...</div>
+          <div className="text-black">Loading careers...</div>
         </div>
       </section>
     );
@@ -65,15 +65,15 @@ export default function Careers() {
   const submissionFax = careersData?.submissionFax || '(801) 785-6029';
 
   return (
-    <section id="careers" className="pt-4 pb-24 bg-black text-white">
+    <section id="careers" className="pt-4 pb-24 bg-white text-black">
       <div className="max-w-5xl mx-auto px-6">
         {/* Main Heading */}
-        <h2 className="section-title text-5xl md:text-6xl text-white mb-4 text-center">
+        <h2 className="section-title text-5xl md:text-6xl text-black mb-4 text-center">
           {heading}
         </h2>
         
         {/* Subheading */}
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
+        <h3 className="text-2xl md:text-3xl font-bold text-black mb-8 text-center">
           {jobTitle}
         </h3>
         
@@ -87,14 +87,14 @@ export default function Careers() {
         </div>
         
         {/* Job Description */}
-        <p className="text-lg text-white mb-10 text-center max-w-3xl mx-auto leading-relaxed">
+        <p className="text-lg text-black mb-10 text-center max-w-3xl mx-auto leading-relaxed">
           {jobDescription}
         </p>
         
         {/* Qualifications & Benefits Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-10 text-left">
           <div>
-            <h4 className="text-xl font-bold mb-4 text-white">Qualifications:</h4>
+            <h4 className="text-xl font-bold mb-4 text-black">Qualifications:</h4>
             <ul className="space-y-2 text-lg">
               {qualifications.map((qual, idx) => (
                 <li key={idx}>
@@ -104,7 +104,7 @@ export default function Careers() {
             </ul>
           </div>
           <div>
-            <h4 className="text-xl font-bold mb-4 text-white">Benefits:</h4>
+            <h4 className="text-xl font-bold mb-4 text-black">Benefits:</h4>
             <ul className="space-y-2 text-lg">
               {benefits.map((benefit, idx) => (
                 <li key={idx}>• {benefit}</li>
@@ -120,7 +120,7 @@ export default function Careers() {
               href={indeedUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
+              className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-8 py-3"
             >
               Apply on Indeed
             </a>
@@ -129,7 +129,7 @@ export default function Careers() {
             <a
               href={pdfUrl}
               download
-              className="inline-block bg-[#003A70] hover:bg-[#002a52] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all text-center"
+              className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-8 py-3"
             >
               Download Fillable PDF
             </a>
@@ -138,7 +138,7 @@ export default function Careers() {
         
         {/* Submission Instructions */}
         {(submissionEmail || submissionFax) && (
-          <p className="text-sm text-gray-400 text-center">
+          <p className="text-sm text-gray-600 text-center">
             {submissionEmail && `Email to ${submissionEmail}`}
             {submissionEmail && submissionFax && ' or '}
             {submissionFax && `fax to ${submissionFax}`}
