@@ -368,7 +368,7 @@ const ServicesSection = () => {
                                   Interested?
                                 </p>
                                 <p className="text-gray-900 text-sm">
-                                  Click "Request a Quote" tab to inquire about this method.
+                                  Click "5" tab to inquire about this method.
                                 </p>
                               </div>
                             </div>
