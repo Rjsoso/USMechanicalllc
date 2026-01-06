@@ -81,15 +81,21 @@ function Portfolio() {
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -12px 24px rgba(0, 0, 0, 0.4), 0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ position: 'relative' }}>
           {displayCategories.map((category, index) => (
             <motion.div
               key={category._id}
               onClick={() => navigate(`/portfolio/${category._id}`)}
               className="relative cursor-pointer group overflow-hidden"
               style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ 
+                opacity: 0,
+                boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0)' : 'none'
+              }}
+              whileInView={{ 
+                opacity: 1,
+                boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0.4)' : 'none'
+              }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.12 }}
             >
