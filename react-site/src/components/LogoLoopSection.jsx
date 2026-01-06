@@ -54,7 +54,7 @@ export default function LogoLoopSection() {
   }));
 
   return (
-    <section className="pt-4 pb-4 bg-black">
+    <section className="py-32 bg-black flex items-center justify-center">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
