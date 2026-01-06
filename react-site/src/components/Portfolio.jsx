@@ -48,7 +48,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.6)', position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ boxShadow: '0 -12px 20px rgba(255, 255, 255, 0.15), 0 12px 24px rgba(0, 0, 0, 0.6)', position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
