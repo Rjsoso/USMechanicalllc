@@ -281,10 +281,15 @@ function HeroSection() {
             const match = text.match(/(.*?)(since 1963)(.*)/i);
             
             if (match) {
+              console.log('🎨 Rendering GradientText for:', match[2]);
               return (
                 <>
                   {match[1]}
-                  <GradientText colors={["#3404f6", "#f40101"]}>
+                  <GradientText 
+                    colors={["#40E0D0", "#FF1493", "#FFD700", "#40E0D0"]}
+                    animationSpeed={5}
+                    className="gradient-hero-text"
+                  >
                     {match[2]}
                   </GradientText>
                   {match[3]}

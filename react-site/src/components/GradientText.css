@@ -47,9 +47,17 @@
   display: inline-block;
   position: relative;
   z-index: 2;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
   font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Hero-specific styling for more prominent gradient */
+.gradient-hero-text .text-content {
+  font-weight: 700 !important;
 }
 
