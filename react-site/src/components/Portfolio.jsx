@@ -54,16 +54,31 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-0 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
+      {/* Gradient Transition Overlay */}
+      <motion.div 
+        className="h-32 bg-gradient-to-b from-transparent via-white/50 to-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+      />
+      
       {/* Section Title */}
-      <div className="bg-white py-16">
+      <motion.div 
+        className="bg-white py-16"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="max-w-7xl mx-auto px-6 text-center">
           <motion.h2 
             className="section-title text-5xl md:text-6xl mb-4 text-gray-900"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           >
             {sectionData?.sectionTitle || 'Our Projects'}
           </motion.h2>
@@ -71,13 +86,13 @@ function Portfolio() {
             className="text-gray-700 text-lg max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.35 }}
           >
             {sectionData?.sectionDescription || 'Explore our completed projects by category'}
           </motion.p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
