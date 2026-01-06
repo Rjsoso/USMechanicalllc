@@ -1,18 +1,11 @@
 import { Suspense, lazy } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-// Lazy load admin pages for code splitting
-const Admin = lazy(() => import('./pages/Admin'))
-const AdminLogin = lazy(() => import('./pages/AdminLogin'))
+// Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
 const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
-
-function ProtectedRoute({ children }) {
-  const isAuthenticated = localStorage.getItem('adminAuthenticated') === 'true'
-  return isAuthenticated ? children : <Navigate to="/login" />
-}
 
 function LoadingFallback() {
   return (
@@ -36,15 +29,6 @@ function App() {
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/login" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </Suspense>
     </Router>
