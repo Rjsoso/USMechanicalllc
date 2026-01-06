@@ -81,7 +81,7 @@ function Portfolio() {
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ position: 'relative' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
           {displayCategories.map((category, index) => (
             <motion.div
               key={category._id}
