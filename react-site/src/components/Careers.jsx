@@ -32,7 +32,7 @@ export default function Careers() {
   // Loading state
   if (loading) {
     return (
-      <section id="careers" className="pt-28 pb-24 bg-white text-black">
+      <section id="careers" className="pt-16 pb-24 bg-white text-black">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="text-black">Loading careers...</div>
         </div>
@@ -65,7 +65,7 @@ export default function Careers() {
   const submissionFax = careersData?.submissionFax || '(801) 785-6029';
 
   return (
-    <section id="careers" className="pt-28 pb-24 bg-white text-black">
+    <section id="careers" className="pt-16 pb-24 bg-white text-black">
       <div className="max-w-5xl mx-auto px-6">
         {/* Main Heading */}
         <h2 className="section-title text-5xl md:text-6xl text-black mb-4 text-center">
