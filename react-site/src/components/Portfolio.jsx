@@ -6,11 +6,13 @@ import { client, urlFor } from '../utils/sanity';
 function Portfolio() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [sectionData, setSectionData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    client
-      .fetch(
+    // Fetch both portfolio categories and section data
+    Promise.all([
+      client.fetch(
         `*[_type == "portfolioCategory"] | order(order asc) {
           _id,
           title,
@@ -24,13 +26,16 @@ function Portfolio() {
           },
           order
         }`
-      )
-      .then((data) => {
-        setCategories(data);
+      ),
+      client.fetch(`*[_type == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+    ])
+      .then(([categoriesData, sectionInfo]) => {
+        setCategories(categoriesData);
+        setSectionData(sectionInfo);
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching portfolio categories:', error);
+        console.error('Error fetching portfolio data:', error);
         setLoading(false);
       });
   }, []);
@@ -59,7 +64,7 @@ function Portfolio() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          Our Projects
+          {sectionData?.sectionTitle || 'Our Projects'}
         </motion.h2>
         <motion.p 
           className="text-gray-300 text-lg max-w-2xl mx-auto"
@@ -68,7 +73,7 @@ function Portfolio() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         >
-          Explore our completed projects by category
+          {sectionData?.sectionDescription || 'Explore our completed projects by category'}
         </motion.p>
       </div>
 

@@ -20,6 +20,7 @@ import companyStats from './companyStats'
 import companyInfo from './companyInfo'
 import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
+import portfolioSection from './portfolioSection'
 import expandableServiceBox from './expandableServiceBox'
 // import cardNav from './cardNav' // REMOVED: Merged into headerSection
 import logoLoop from './logoLoop'
@@ -48,6 +49,7 @@ export const schema = {
     companyInfo,
     portfolioCategory,
     portfolioProject,
+    portfolioSection,
     expandableServiceBox,
     // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
