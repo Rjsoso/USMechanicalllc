@@ -20,6 +20,7 @@ import companyStats from '../schemaTypes/companyStats'
 import companyInfo from '../schemaTypes/companyInfo' // Added: Missing from exports
 import portfolioCategory from '../schemaTypes/portfolioCategory'
 import portfolioProject from '../schemaTypes/portfolioProject'
+import portfolioSection from '../schemaTypes/portfolioSection'
 import expandableServiceBox from '../schemaTypes/expandableServiceBox'
 // import cardNav from '../schemaTypes/cardNav' // REMOVED: Merged into headerSection
 import logoLoop from '../schemaTypes/logoLoop'
@@ -48,6 +49,7 @@ export const schemaTypes = [
     companyInfo, // Added: Missing from exports
     portfolioCategory,
     portfolioProject,
+    portfolioSection,
     expandableServiceBox,
     // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
