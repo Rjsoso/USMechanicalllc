@@ -172,7 +172,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="pt-12 pb-0 bg-black text-white text-center">
+      <section id="services" className="pt-12 pb-0 bg-transparent text-white text-center">
         <p>Loading services...</p>
       </section>
     );
@@ -180,7 +180,7 @@ const ServicesSection = () => {
 
   if (!servicesData?.services || servicesData.services.length === 0) {
     return (
-      <section id="services" className="pt-12 pb-1 bg-black text-white">
+      <section id="services" className="pt-12 pb-1 bg-transparent text-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
@@ -198,7 +198,7 @@ const ServicesSection = () => {
   return (
     <section 
       id="services" 
-      className="pt-12 pb-12 bg-black text-white"
+      className="pt-12 pb-12 bg-transparent text-white"
       style={{ position: 'relative', zIndex: 15 }}
     >
       <div className="max-w-7xl mx-auto px-6">

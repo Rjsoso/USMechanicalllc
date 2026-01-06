@@ -40,7 +40,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 bg-black text-white">
+      <section id="portfolio" className="py-20 bg-transparent text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -49,7 +49,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-20 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <motion.h2 

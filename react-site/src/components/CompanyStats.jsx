@@ -192,7 +192,7 @@ const CompanyStats = () => {
 
   if (loading) {
     return (
-      <section className="w-full py-16 bg-black">
+      <section className="w-full py-16 bg-transparent">
         <div className="max-w-6xl mx-auto text-center">
           <div className="text-white">Loading stats...</div>
         </div>
@@ -207,7 +207,7 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-black"
+      className="w-full py-16 bg-transparent"
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
