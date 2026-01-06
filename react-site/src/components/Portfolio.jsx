@@ -50,7 +50,7 @@ function Portfolio() {
   return (
     <section id="portfolio" className="pt-20 pb-0 bg-white text-black" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.6)', position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
-      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+      <div className="max-w-7xl mx-auto px-6 mb-16 text-center" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)' }}>
         <h2 className="section-title text-5xl md:text-6xl mb-4 text-black">
           Our Projects
         </h2>
@@ -60,7 +60,7 @@ function Portfolio() {
       </div>
 
       {/* Edge-to-edge category grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -20px 40px rgba(255, 255, 255, 0.5)', position: 'relative' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -20px 40px rgba(0, 0, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.15)', position: 'relative' }}>
         {displayCategories.map((category) => (
           <div
             key={category._id}
