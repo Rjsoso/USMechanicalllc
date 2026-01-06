@@ -39,7 +39,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 bg-white text-black">
+      <section id="portfolio" className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -48,19 +48,19 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-white text-black" style={{ position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
-        <h2 className="section-title text-5xl md:text-6xl mb-4 text-black">
+        <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
           Our Projects
         </h2>
-        <p className="text-gray-700 text-lg max-w-2xl mx-auto">
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
           Explore our completed projects by category
         </p>
       </div>
 
       {/* Edge-to-edge category grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -20px 40px rgba(0, 0, 0, 0.3), 0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ position: 'relative' }}>
         {displayCategories.map((category) => (
           <div
             key={category._id}
@@ -107,7 +107,7 @@ function Portfolio() {
 
       {categories.length === 0 && (
         <div className="text-center py-20 px-6">
-          <p className="text-black">No portfolio categories available yet.</p>
+          <p className="text-white">No portfolio categories available yet.</p>
         </div>
       )}
     </section>
