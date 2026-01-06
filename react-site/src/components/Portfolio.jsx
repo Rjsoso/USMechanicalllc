@@ -60,7 +60,7 @@ function Portfolio() {
       </div>
 
       {/* Edge-to-edge category grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -20px 40px rgba(0, 0, 0, 0.15)', position: 'relative' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 -20px 40px rgba(0, 0, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.15)', position: 'relative' }}>
         {displayCategories.map((category) => (
           <div
             key={category._id}
