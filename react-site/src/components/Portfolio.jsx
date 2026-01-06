@@ -85,53 +85,58 @@ function Portfolio() {
           {displayCategories.map((category, index) => (
             <motion.div
               key={category._id}
-              onClick={() => navigate(`/portfolio/${category._id}`)}
-              className="relative cursor-pointer group overflow-hidden"
-              style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               initial={{ 
-                opacity: 0,
                 boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0)' : 'none'
               }}
               whileInView={{ 
-                opacity: 1,
                 boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0.4)' : 'none'
               }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.12 }}
             >
-              {/* Background Image */}
-              {category.image && (
-                <img
-                  src={urlFor(category.image).width(800).quality(90).auto('format').url()}
-                  alt={category.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-              
-              {/* Hover Overlay with Text */}
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 px-6 text-center">
-                  {category.title}
-                </h3>
-                <div className="flex items-center text-white text-lg font-medium">
-                  <span>Learn more</span>
-                  <svg
-                    className="w-6 h-6 ml-2 transform group-hover:translate-x-2 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
+              <motion.div
+                onClick={() => navigate(`/portfolio/${category._id}`)}
+                className="relative cursor-pointer group overflow-hidden"
+                style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.12 }}
+              >
+                {/* Background Image */}
+                {category.image && (
+                  <img
+                    src={urlFor(category.image).width(800).quality(90).auto('format').url()}
+                    alt={category.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                
+                {/* Hover Overlay with Text */}
+                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 px-6 text-center">
+                    {category.title}
+                  </h3>
+                  <div className="flex items-center text-white text-lg font-medium">
+                    <span>Learn more</span>
+                    <svg
+                      className="w-6 h-6 ml-2 transform group-hover:translate-x-2 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
