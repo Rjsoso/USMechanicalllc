@@ -39,7 +39,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 text-white">
+      <section id="portfolio" className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -48,7 +48,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 text-white">
+    <section id="portfolio" className="pt-20 pb-0 bg-black text-white">
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
