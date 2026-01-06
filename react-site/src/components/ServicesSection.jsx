@@ -199,7 +199,7 @@ const ServicesSection = () => {
     <section 
       id="services" 
       className="pt-12 pb-12 bg-black text-white"
-      style={{ boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)', position: 'relative', zIndex: 15 }}
+      style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative', zIndex: 15 }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
