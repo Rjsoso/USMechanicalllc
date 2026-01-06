@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { client, urlFor } from '../utils/sanity';
 
 function Portfolio() {
@@ -51,22 +52,38 @@ function Portfolio() {
     <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
-        <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
+        <motion.h2 
+          className="section-title text-5xl md:text-6xl mb-4 text-white"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           Our Projects
-        </h2>
-        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+        </motion.h2>
+        <motion.p 
+          className="text-gray-300 text-lg max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+        >
           Explore our completed projects by category
-        </p>
+        </motion.p>
       </div>
 
       {/* Edge-to-edge category grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
-        {displayCategories.map((category) => (
-          <div
+        {displayCategories.map((category, index) => (
+          <motion.div
             key={category._id}
             onClick={() => navigate(`/portfolio/${category._id}`)}
             className="relative cursor-pointer group overflow-hidden"
             style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
           >
             {/* Background Image */}
             {category.image && (
@@ -101,7 +118,7 @@ function Portfolio() {
                 </svg>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
