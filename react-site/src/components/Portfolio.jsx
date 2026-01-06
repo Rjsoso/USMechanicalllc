@@ -39,7 +39,7 @@ function Portfolio() {
 
   if (loading) {
     return (
-      <section id="portfolio" className="py-20 bg-black text-white">
+      <section id="portfolio" className="py-20 bg-white text-black">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">Loading portfolio...</div>
         </div>
@@ -48,13 +48,13 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-black text-white" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.6)', position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-20 pb-0 bg-white text-black" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.6)', position: 'relative', zIndex: 10 }}>
       {/* Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
-        <h2 className="section-title text-5xl md:text-6xl mb-4 text-white">
+        <h2 className="section-title text-5xl md:text-6xl mb-4 text-black">
           Our Projects
         </h2>
-        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+        <p className="text-gray-700 text-lg max-w-2xl mx-auto">
           Explore our completed projects by category
         </p>
       </div>
@@ -110,7 +110,7 @@ function Portfolio() {
 
       {categories.length === 0 && (
         <div className="text-center py-20 px-6">
-          <p className="text-white">No portfolio categories available yet.</p>
+          <p className="text-black">No portfolio categories available yet.</p>
         </div>
       )}
     </section>
