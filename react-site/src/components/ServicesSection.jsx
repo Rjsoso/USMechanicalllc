@@ -199,6 +199,7 @@ const ServicesSection = () => {
     <section 
       id="services" 
       className="pt-12 pb-0 bg-black text-white"
+      style={{ boxShadow: '0 20px 40px rgba(255, 255, 255, 0.5)', position: 'relative' }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
