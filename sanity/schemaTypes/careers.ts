@@ -114,11 +114,21 @@ export default defineType({
       type: 'string',
       description: 'Fax number for application submissions (e.g., "(801) 785-6029")',
     },
+    {
+      name: 'backgroundImage',
+      title: 'Background Image',
+      type: 'image',
+      description: 'Optional background image for the careers section. Will be displayed with a semi-transparent overlay for text readability.',
+      options: {
+        hotspot: true,
+      },
+    },
   ],
   preview: {
     select: {
       title: 'mainHeading',
       subtitle: 'jobTitle',
+      media: 'backgroundImage',
     },
   },
 })

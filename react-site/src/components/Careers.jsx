@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { client } from '../utils/sanity';
+import { client, urlFor } from '../utils/sanity';
 
 export default function Careers() {
   const [careersData, setCareersData] = useState(null);
@@ -17,7 +17,8 @@ export default function Careers() {
         indeedUrl,
         "applicationPdfUrl": applicationPdf.asset->url,
         submissionEmail,
-        submissionFax
+        submissionFax,
+        backgroundImage
       }`)
       .then((data) => {
         setCareersData(data);
@@ -63,10 +64,26 @@ export default function Careers() {
   const pdfUrl = careersData?.applicationPdfUrl || '/application.pdf';
   const submissionEmail = careersData?.submissionEmail || 'admin@usmechanicalllc.com';
   const submissionFax = careersData?.submissionFax || '(801) 785-6029';
+  const backgroundImage = careersData?.backgroundImage;
+
+  // Generate background image URL if available
+  const backgroundImageUrl = backgroundImage ? urlFor(backgroundImage).width(1920).quality(90).url() : null;
 
   return (
-    <section id="careers" className="pt-8 pb-24 bg-white text-black" style={{ marginTop: '-20rem' }}>
-      <div className="max-w-5xl mx-auto px-6">
+    <section 
+      id="careers" 
+      className="pt-8 pb-24 text-black relative" 
+      style={{ 
+        marginTop: '-20rem',
+        ...(backgroundImageUrl && {
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        })
+      }}
+    >
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
         {/* Main Heading */}
         <h2 className="section-title text-5xl md:text-6xl text-black mb-4 text-center">
           {heading}
