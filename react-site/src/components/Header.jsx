@@ -39,6 +39,7 @@ function Header() {
           console.warn('⚠️ No navLinks found in Sanity! Using fallback navigation.');
         }
       })
+    
       .catch((error) => {
         console.error('❌ Error fetching header data:', error);
       });
