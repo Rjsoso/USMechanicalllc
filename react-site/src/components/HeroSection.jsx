@@ -272,6 +272,12 @@ function HeroSection() {
         >
           {(() => {
             const text = heroData.subtext;
+            
+            // Check if text exists and is a string
+            if (!text || typeof text !== 'string') {
+              return text || '';
+            }
+            
             const match = text.match(/(.*?)(since 1963)(.*)/i);
             
             if (match) {
