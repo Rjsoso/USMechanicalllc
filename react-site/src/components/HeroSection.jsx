@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import GradientText from './GradientText'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -269,7 +270,24 @@ function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.6 }}
         >
-          {heroData.subtext}
+          {(() => {
+            const text = heroData.subtext;
+            const match = text.match(/(.*?)(since 1963)(.*)/i);
+            
+            if (match) {
+              return (
+                <>
+                  {match[1]}
+                  <GradientText colors={["#3404f6", "#f40101"]}>
+                    {match[2]}
+                  </GradientText>
+                  {match[3]}
+                </>
+              );
+            }
+            
+            return text;
+          })()}
         </motion.p>
 
         <motion.a
