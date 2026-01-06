@@ -79,9 +79,6 @@ function Portfolio() {
               />
             )}
             
-            {/* Default Overlay */}
-            <div className="absolute inset-0 bg-black/30 transition-opacity duration-300 group-hover:opacity-0" />
-            
             {/* Hover Overlay with Text */}
             <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 px-6 text-center">
