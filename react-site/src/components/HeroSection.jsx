@@ -288,7 +288,7 @@ function HeroSection() {
 
         <motion.p
           className="text-lg md:text-xl text-white max-w-2xl mx-auto"
-          style={{ marginBottom: '1rem' }}
+          style={{ marginBottom: '0px' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.6 }}
@@ -299,7 +299,7 @@ function HeroSection() {
         <motion.a
           href={heroData.buttonLink || '#contact'}
           className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-8 py-3"
-          style={{ marginTop: '-250px' }}
+          style={{ marginTop: '20px' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.9 }}
