@@ -300,12 +300,20 @@ section#contact > div[class*="absolute"] {
   position: relative;
   display: inline-block;
   color: #d1d5db; /* Light grey */
+  text-shadow: 1px 1px 0px rgba(209, 213, 219, 0.5);
 }
 
 @media (min-width: 768px) {
   .hero-3d-text {
     font-size: 6rem;
   }
+}
+
+/* Smaller "Since" styling */
+.hero-since {
+  font-size: 0.6em;
+  margin-right: 0.4em;
+  display: inline-block;
 }
 
 /* Section Titles - Same font as hero */

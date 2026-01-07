@@ -267,16 +267,17 @@ function HeroSection() {
               return headline || '';
             }
             
-            // Match "1963" in the headline
-            const match = headline.match(/(.*?)(1963)(.*)/i);
+            // Match "Since" and "1963" separately
+            const match = headline.match(/(.*?)\s*(since)\s+(1963)(.*)/i);
             
             if (match) {
               console.log('✨ Applying gradient to BIG headline 1963');
               return (
                 <>
-                  {match[1]}
-                  <GradientText>{match[2]}</GradientText>
-                  {match[3]}
+                  {match[1]}{' '}
+                  <span className="hero-since">{match[2]}</span>
+                  <GradientText>{match[3]}</GradientText>
+                  {match[4]}
                 </>
               );
             }
