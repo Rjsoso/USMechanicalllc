@@ -274,7 +274,7 @@ function HeroSection() {
                 <>
                   {match[1]}{' '}
                   <span className="hero-since">{match[2]}</span>
-                  <span style={{ color: '#3404f6', fontFamily: 'Rubik, sans-serif', fontWeight: 900 }}>{match[3]}</span>
+                  <span className="hero-1963">{match[3]}</span>
                   {match[4]}
                 </>
               );
