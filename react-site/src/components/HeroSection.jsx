@@ -264,8 +264,8 @@ function HeroSection() {
           {heroData.headline}
         </motion.h1>
 
-        <motion.p
-          className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-8"
+        <motion.div
+          className="text-lg md:text-xl max-w-2xl mx-auto mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.6 }}
@@ -275,28 +275,26 @@ function HeroSection() {
             
             // Check if text exists and is a string
             if (!text || typeof text !== 'string') {
-              return text || '';
+              return <span className="text-white">{text || ''}</span>;
             }
             
             // Match "since " and "1963" separately
             const match = text.match(/(.*?since\s+)(1963)(.*)/i);
             
             if (match) {
-              console.log('✨ Applying gradient to:', match[2]);
+              console.log('✨ Rendering separate colored 1963');
               return (
                 <>
-                  {match[1]}
-                  <GradientText>
-                    {match[2]}
-                  </GradientText>
-                  {match[3]}
+                  <span className="text-white">{match[1]}</span>
+                  <GradientText>{match[2]}</GradientText>
+                  <span className="text-white">{match[3]}</span>
                 </>
               );
             }
             
-            return text;
+            return <span className="text-white">{text}</span>;
           })()}
-        </motion.p>
+        </motion.div>
 
         <motion.a
           href={heroData.buttonLink || '#contact'}
