@@ -1,23 +1,18 @@
-@keyframes gradient-shift {
+@keyframes color-shift {
   0% {
-    background-position: 0% 50%;
+    color: #3404f6;
   }
   50% {
-    background-position: 100% 50%;
+    color: #f40101;
   }
   100% {
-    background-position: 0% 50%;
+    color: #3404f6;
   }
 }
 
 .gradient-text-wrapper span {
-  background: linear-gradient(90deg, #3404f6, #f40101, #3404f6) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  color: transparent !important;
-  animation: gradient-shift 3s ease-in-out infinite !important;
+  color: #3404f6 !important;
+  animation: color-shift 3s ease-in-out infinite !important;
   font-weight: 900 !important;
   display: inline-block !important;
 }
@@ -26,13 +21,8 @@
 p .gradient-text-wrapper span,
 .text-white .gradient-text-wrapper span,
 p.text-white .gradient-text-wrapper span {
-  background: linear-gradient(90deg, #3404f6, #f40101, #3404f6) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  color: transparent !important;
-  animation: gradient-shift 3s ease-in-out infinite !important;
+  color: #3404f6 !important;
+  animation: color-shift 3s ease-in-out infinite !important;
   font-weight: 900 !important;
 }
 
