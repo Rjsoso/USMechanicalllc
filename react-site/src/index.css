@@ -301,13 +301,13 @@ section#contact > div[class*="absolute"] {
   display: inline-block;
   color: #7B7F84; /* Light grey matching logo container */
   text-shadow: 
-    1px 1px 0px rgba(255, 255, 255, 1),
-    2px 2px 0px rgba(255, 255, 255, 0.9),
-    3px 3px 0px rgba(255, 255, 255, 0.7),
-    4px 4px 0px rgba(255, 255, 255, 0.5),
-    5px 5px 0px rgba(255, 255, 255, 0.3),
-    0 0 15px rgba(255, 255, 255, 0.5);
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 1);
+    1px 1px 0px rgba(240, 240, 240, 1),
+    2px 2px 0px rgba(240, 240, 240, 0.9),
+    3px 3px 0px rgba(240, 240, 240, 0.7),
+    4px 4px 0px rgba(240, 240, 240, 0.5),
+    5px 5px 0px rgba(240, 240, 240, 0.3),
+    0 0 15px rgba(240, 240, 240, 0.5);
+  -webkit-text-stroke: 1.5px rgba(240, 240, 240, 1);
   paint-order: stroke fill;
 }
 
@@ -324,6 +324,16 @@ section#contact > div[class*="absolute"] {
   display: inline-block;
   text-decoration: underline;
   text-underline-offset: 0.2em;
+  text-decoration-color: rgba(240, 240, 240, 1);
+  text-shadow: 
+    1px 1px 0px rgba(240, 240, 240, 1),
+    2px 2px 0px rgba(240, 240, 240, 0.9),
+    3px 3px 0px rgba(240, 240, 240, 0.7),
+    4px 4px 0px rgba(240, 240, 240, 0.5),
+    5px 5px 0px rgba(240, 240, 240, 0.3),
+    0 0 15px rgba(240, 240, 240, 0.5);
+  -webkit-text-stroke: 1.5px rgba(240, 240, 240, 1);
+  paint-order: stroke fill;
 }
 
 /* Section Titles - Same font as hero */
