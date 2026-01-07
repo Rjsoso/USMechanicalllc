@@ -3,14 +3,11 @@ import './GradientText.css';
 export default function GradientText({ children }) {
   console.log('🎨 Rendering gradient on:', children);
   
-  // Inline styles to override parent's text-white with maximum specificity
+  // First test: just make it a different color to confirm override works
   const inlineStyle = {
-    color: 'transparent',
-    WebkitTextFillColor: 'transparent',
-    background: 'linear-gradient(90deg, #FF00FF 0%, #00FFFF 25%, #FFFF00 50%, #00FFFF 75%, #FF00FF 100%)',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    backgroundSize: '200% auto',
+    color: '#FF00FF',
+    WebkitTextFillColor: '#FF00FF',
+    fontWeight: '900',
   };
   
   return (
