@@ -307,7 +307,7 @@ section#contact > div[class*="absolute"] {
     4px 4px 0px rgba(70, 70, 70, 0.5),
     5px 5px 0px rgba(70, 70, 70, 0.3),
     0 0 15px rgba(70, 70, 70, 0.5);
-  -webkit-text-stroke: 1.5px rgba(70, 70, 70, 1);
+  -webkit-text-stroke: 2.5px rgba(70, 70, 70, 1);
   paint-order: stroke fill;
 }
 
