@@ -298,7 +298,7 @@ function HeroSection() {
 
         <motion.a
           href={heroData.buttonLink || '#contact'}
-          className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-6 py-2"
+          className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-4 py-2"
           style={{ display: 'block', marginTop: '-30px' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
