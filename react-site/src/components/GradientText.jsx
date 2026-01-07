@@ -8,11 +8,22 @@ export default function GradientText({
 }) {
   // Create gradient with all colors
   const gradientColors = [...colors, colors[0]].join(', ');
+  const gradientString = `linear-gradient(90deg, ${gradientColors})`;
+  
+  console.log('🎨 GradientText styles:', {
+    gradient: gradientString,
+    colors: colors,
+    speed: animationSpeed
+  });
   
   const gradientStyle = {
-    backgroundImage: `linear-gradient(90deg, ${gradientColors})`,
+    backgroundImage: gradientString,
     backgroundSize: '200% 100%',
-    '--animation-duration': `${animationSpeed}s`,
+    animation: `gradient-animation ${animationSpeed}s ease infinite`,
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    color: 'transparent',
   };
 
   return (

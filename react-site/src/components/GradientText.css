@@ -15,21 +15,23 @@
   position: relative;
 }
 
-.text-content {
-  display: inline;
+.animated-gradient-text .text-content {
+  display: inline !important;
   background-clip: text !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  background-size: 200% 100%;
-  animation: gradient-animation var(--animation-duration, 5s) ease infinite;
-  font-weight: inherit;
-  font-size: inherit;
-  line-height: inherit;
+  background-size: 200% 100% !important;
+  animation: gradient-animation 5s ease infinite !important;
+  font-weight: 700 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 
-/* Hero-specific styling for more prominent gradient */
-.gradient-hero-text .text-content {
-  font-weight: 700 !important;
+/* Override Tailwind's text-white from parent */
+.text-white .animated-gradient-text .text-content,
+p.text-white .animated-gradient-text .text-content {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
