@@ -300,7 +300,13 @@ section#contact > div[class*="absolute"] {
   position: relative;
   display: inline-block;
   color: #d1d5db; /* Light grey */
-  text-shadow: 1px 1px 0px rgba(209, 213, 219, 0.5);
+  text-shadow: 
+    1px 1px 0px rgba(209, 213, 219, 0.8),
+    2px 2px 0px rgba(209, 213, 219, 0.6),
+    3px 3px 0px rgba(209, 213, 219, 0.4),
+    4px 4px 0px rgba(209, 213, 219, 0.2),
+    0 0 10px rgba(255, 255, 255, 0.3);
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
 }
 
 @media (min-width: 768px) {
