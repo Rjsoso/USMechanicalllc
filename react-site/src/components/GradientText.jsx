@@ -18,54 +18,36 @@ function interpolateColor(color1, color2, ratio) {
 }
 
 export default function GradientText({ children }) {
-  const [colors, setColors] = useState(['#3404f6', '#3404f6', '#3404f6', '#3404f6']);
+  const [color, setColor] = useState('#3404f6');
   
   useEffect(() => {
-    console.log('🎨 DISTINCT PER-DIGIT: blue↔red on:', children);
+    console.log('🎨 SMOOTH GRADIENT: blue↔red on:', children);
     
-    const text = children.toString();
-    const digits = text.split('');
+    const blue = '#3404f6';
+    const red = '#f40101';
     
     let progress = 0;
     const interval = setInterval(() => {
-      // Slow progress (~10 seconds for full cycle)
+      // Slow smooth progress (~10 seconds for full cycle)
       progress += 0.008;
       
-      // Each digit gets a different phase offset
-      const newColors = digits.map((_, index) => {
-        // Offset each digit by 90 degrees (π/2)
-        const offset = (index * Math.PI / 2);
-        const sineValue = (Math.sin(progress + offset) + 1) / 2; // 0 to 1
-        
-        // Smooth transition: Blue → Red → Blue
-        const blue = '#3404f6';
-        const red = '#f40101';
-        
-        return interpolateColor(blue, red, sineValue);
-      });
+      // Use sine wave for smooth back-and-forth motion
+      const sineValue = (Math.sin(progress) + 1) / 2; // 0 to 1
       
-      setColors(newColors);
+      // Smooth transition: Blue → Red → Blue
+      const newColor = interpolateColor(blue, red, sineValue);
+      setColor(newColor);
     }, 50);
     
     return () => clearInterval(interval);
   }, [children]);
   
-  const text = children.toString();
-  const digits = text.split('');
-  
   return (
-    <span style={{ display: 'inline' }}>
-      {digits.map((digit, index) => (
-        <span 
-          key={index}
-          style={{ 
-            color: colors[index] || '#3404f6',
-            display: 'inline'
-          }}
-        >
-          {digit}
-        </span>
-      ))}
+    <span style={{ 
+      color: color,
+      display: 'inline'
+    }}>
+      {children}
     </span>
   );
 }
