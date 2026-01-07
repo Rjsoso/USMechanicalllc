@@ -317,11 +317,13 @@ section#contact > div[class*="absolute"] {
   }
 }
 
-/* Smaller "Since" styling */
+/* Smaller "Since" styling with underline */
 .hero-since {
   font-size: 0.6em;
   margin-right: 0.4em;
   display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* Section Titles - Same font as hero */

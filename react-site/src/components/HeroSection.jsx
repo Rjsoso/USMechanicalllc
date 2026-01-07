@@ -287,7 +287,8 @@ function HeroSection() {
         </motion.h1>
 
         <motion.p
-          className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-8"
+          className="text-lg md:text-xl text-white max-w-2xl mx-auto"
+          style={{ marginBottom: '1rem' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.6 }}
