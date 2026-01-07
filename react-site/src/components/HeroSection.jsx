@@ -261,40 +261,38 @@ function HeroSection() {
             delay: 0.3 
           }}
         >
-          {heroData.headline}
-        </motion.h1>
-
-        <motion.div
-          className="text-lg md:text-xl max-w-2xl mx-auto mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.6 }}
-        >
           {(() => {
-            const text = heroData.subtext;
-            
-            // Check if text exists and is a string
-            if (!text || typeof text !== 'string') {
-              return <span className="text-white">{text || ''}</span>;
+            const headline = heroData.headline;
+            if (!headline || typeof headline !== 'string') {
+              return headline || '';
             }
             
-            // Match "since " and "1963" separately
-            const match = text.match(/(.*?since\s+)(1963)(.*)/i);
+            // Match "1963" in the headline
+            const match = headline.match(/(.*?)(1963)(.*)/i);
             
             if (match) {
-              console.log('✨ Rendering separate colored 1963');
+              console.log('✨ Applying gradient to BIG headline 1963');
               return (
                 <>
-                  <span className="text-white">{match[1]}</span>
+                  {match[1]}
                   <GradientText>{match[2]}</GradientText>
-                  <span className="text-white">{match[3]}</span>
+                  {match[3]}
                 </>
               );
             }
             
-            return <span className="text-white">{text}</span>;
+            return headline;
           })()}
-        </motion.div>
+        </motion.h1>
+
+        <motion.p
+          className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.6 }}
+        >
+          {heroData.subtext}
+        </motion.p>
 
         <motion.a
           href={heroData.buttonLink || '#contact'}
