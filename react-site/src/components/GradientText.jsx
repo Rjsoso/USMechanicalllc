@@ -18,50 +18,54 @@ function interpolateColor(color1, color2, ratio) {
 }
 
 export default function GradientText({ children }) {
-  const [color, setColor] = useState('#f40101');
+  const [colors, setColors] = useState(['#3404f6', '#3404f6', '#3404f6', '#3404f6']);
   
   useEffect(() => {
-    console.log('🎨 SMOOTH GRADIENT: red→purple→blue on:', children);
+    console.log('🎨 DISTINCT PER-DIGIT: blue↔red on:', children);
     
-    // Define color stops: Red → Purple → Blue
-    const colors = [
-      '#f40101', // Red
-      '#8B00FF', // Purple
-      '#3404f6'  // Blue
-    ];
+    const text = children.toString();
+    const digits = text.split('');
     
     let progress = 0;
     const interval = setInterval(() => {
-      // Slow smooth progress (completes cycle in ~15 seconds)
-      progress += 0.005;
+      // Slow progress (~10 seconds for full cycle)
+      progress += 0.008;
       
-      // Use sine wave for smooth back-and-forth motion
-      const sineValue = (Math.sin(progress) + 1) / 2; // 0 to 1
+      // Each digit gets a different phase offset
+      const newColors = digits.map((_, index) => {
+        // Offset each digit by 90 degrees (π/2)
+        const offset = (index * Math.PI / 2);
+        const sineValue = (Math.sin(progress + offset) + 1) / 2; // 0 to 1
+        
+        // Smooth transition: Blue → Red → Blue
+        const blue = '#3404f6';
+        const red = '#f40101';
+        
+        return interpolateColor(blue, red, sineValue);
+      });
       
-      // Map sine value to color transitions
-      let newColor;
-      if (sineValue < 0.5) {
-        // Transition from Red to Purple (first half)
-        const ratio = sineValue * 2; // 0 to 1
-        newColor = interpolateColor(colors[0], colors[1], ratio);
-      } else {
-        // Transition from Purple to Blue (second half)
-        const ratio = (sineValue - 0.5) * 2; // 0 to 1
-        newColor = interpolateColor(colors[1], colors[2], ratio);
-      }
-      
-      setColor(newColor);
-    }, 50); // Update every 50ms for smooth animation
+      setColors(newColors);
+    }, 50);
     
     return () => clearInterval(interval);
   }, [children]);
   
+  const text = children.toString();
+  const digits = text.split('');
+  
   return (
-    <span style={{ 
-      color: color,
-      display: 'inline'
-    }}>
-      {children}
+    <span style={{ display: 'inline' }}>
+      {digits.map((digit, index) => (
+        <span 
+          key={index}
+          style={{ 
+            color: colors[index] || '#3404f6',
+            display: 'inline'
+          }}
+        >
+          {digit}
+        </span>
+      ))}
     </span>
   );
 }
