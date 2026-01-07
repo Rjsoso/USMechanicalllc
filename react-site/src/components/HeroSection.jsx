@@ -230,7 +230,7 @@ function HeroSection() {
         }}
       ></div>
 
-      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '80px' }}>
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '150px' }}>
         {/* Logo */}
         {logoUrl && (
           <motion.img
