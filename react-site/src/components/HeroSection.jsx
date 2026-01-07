@@ -230,7 +230,7 @@ function HeroSection() {
         }}
       ></div>
 
-      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '150px' }}>
+      <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '80px' }}>
         {/* Logo */}
         {logoUrl && (
           <motion.img
@@ -295,29 +295,6 @@ function HeroSection() {
         >
           {heroData.subtext}
         </motion.p>
-
-        <motion.a
-          href={heroData.buttonLink || '#contact'}
-          className="hero-button-3d inline-block bg-black hover:bg-zinc-800 text-white font-semibold px-4 py-2"
-          style={{ display: 'block', marginTop: '-30px' }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.9 }}
-          onClick={(e) => {
-            // Handle smooth scroll if it's an anchor link
-            const href = heroData.buttonLink || '#contact';
-            if (href.startsWith('#')) {
-              e.preventDefault();
-              const element = document.querySelector(href);
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }
-          }}
-          data-button-text={heroData.buttonText || defaultHeroData.buttonText}
-          >
-          {heroData.buttonText || defaultHeroData.buttonText}
-        </motion.a>
       </div>
     </section>
   )
