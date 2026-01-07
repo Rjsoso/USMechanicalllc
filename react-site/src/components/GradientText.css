@@ -1,14 +1,38 @@
-/* Test with solid bright color first */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .gradient-text-wrapper span {
-  color: #FF00FF !important;
+  background: linear-gradient(90deg, #3404f6, #f40101, #3404f6) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  animation: gradient-shift 3s ease-in-out infinite !important;
   font-weight: 900 !important;
+  display: inline-block !important;
 }
 
 /* Maximum specificity override */
 p .gradient-text-wrapper span,
 .text-white .gradient-text-wrapper span,
 p.text-white .gradient-text-wrapper span {
-  color: #FF00FF !important;
+  background: linear-gradient(90deg, #3404f6, #f40101, #3404f6) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  animation: gradient-shift 3s ease-in-out infinite !important;
   font-weight: 900 !important;
 }
 
