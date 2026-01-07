@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import GradientText from './GradientText'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -271,12 +270,11 @@ function HeroSection() {
             const match = headline.match(/(.*?)\s*(since)\s+(1963)(.*)/i);
             
             if (match) {
-              console.log('✨ Applying gradient to BIG headline 1963');
               return (
                 <>
                   {match[1]}{' '}
                   <span className="hero-since">{match[2]}</span>
-                  <GradientText>{match[3]}</GradientText>
+                  <span style={{ color: '#ff0000', fontFamily: 'Rubik, sans-serif', fontWeight: 900 }}>{match[3]}</span>
                   {match[4]}
                 </>
               );
