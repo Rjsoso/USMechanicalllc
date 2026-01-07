@@ -45,7 +45,9 @@ export default function GradientText({ children }) {
   return (
     <span style={{ 
       color: color,
-      display: 'inline'
+      display: 'inline',
+      fontFamily: 'Rubik, sans-serif',
+      fontWeight: 900
     }}>
       {children}
     </span>
