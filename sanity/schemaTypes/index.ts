@@ -25,6 +25,7 @@ import expandableServiceBox from './expandableServiceBox'
 // import cardNav from './cardNav' // REMOVED: Merged into headerSection
 import logoLoop from './logoLoop'
 import careers from './careers'
+import testimonial from './testimonial'
 
 export const schema = {
   types: [
@@ -54,6 +55,7 @@ export const schema = {
     // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
     careers,
+    testimonial,
   ],
 }
 
