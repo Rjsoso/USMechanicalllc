@@ -1,0 +1,16 @@
+# robots.txt for U.S. Mechanical LLC
+# This file tells search engines which pages they can crawl
+
+# Allow all search engines to crawl all content
+User-agent: *
+Allow: /
+
+# Disallow crawling of specific paths (if any)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Sitemap location
+Sitemap: https://usmechanicalllc.com/sitemap.xml
+
+# Crawl-delay (optional, uncomment if needed to prevent overload)
+# Crawl-delay: 1

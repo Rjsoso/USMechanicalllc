@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://usmechanicalllc.com/</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://usmechanicalllc.com/contact</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Services Pages -->
+  <!-- Add your service detail pages here as they're created -->
+  <!-- Example:
+  <url>
+    <loc>https://usmechanicalllc.com/services/hvac</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  -->
+
+  <!-- Portfolio/Projects Pages -->
+  <!-- Add your portfolio category and project pages here -->
+  <!-- Example:
+  <url>
+    <loc>https://usmechanicalllc.com/portfolio/commercial</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  -->
+
+  <!-- 
+  IMPORTANT: Update this sitemap when you:
+  1. Add new pages to your site
+  2. Make significant content changes
+  3. Add new services or portfolio items
+  
+  After updating, submit the new sitemap to:
+  - Google Search Console
+  - Bing Webmaster Tools
+  
+  You can also consider using a dynamic sitemap generator
+  if you frequently add content.
+  -->
+
+</urlset>

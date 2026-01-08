@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import StructuredData from './components/StructuredData'
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -23,6 +24,9 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
+      {/* Add Schema.org structured data for SEO */}
+      <StructuredData />
+      
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
