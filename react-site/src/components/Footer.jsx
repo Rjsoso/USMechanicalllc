@@ -1,5 +1,5 @@
-import { useEffect, useState, memo } from 'react'
-import { client } from '../utils/sanity'
+import { useEffect, useState, memo, useMemo } from 'react'
+import { client, urlFor } from '../utils/sanity'
 
 // Fallback contact data in case Sanity fetch fails
 const FALLBACK_DATA = {
@@ -11,11 +11,14 @@ const FALLBACK_DATA = {
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
+  const [logo, setLogo] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchInfo = () => {
       setLoading(true)
+      
+      // Fetch contact data
       client
         .fetch(`*[_type == "contact"][0]{
           email,
@@ -37,6 +40,20 @@ function Footer() {
           console.error('Footer: Failed to fetch contact data from Sanity:', err)
           setLoading(false)
         })
+      
+      // Fetch logo from header section
+      client
+        .fetch(`*[_type == "headerSection" && _id == "headerSection"][0]{
+          logo
+        }`)
+        .then(res => {
+          if (res?.logo) {
+            setLogo(res.logo)
+          }
+        })
+        .catch((err) => {
+          console.error('Footer: Failed to fetch logo from Sanity:', err)
+        })
     };
 
     fetchInfo();
@@ -57,6 +74,17 @@ function Footer() {
   const displayEmail = contactData?.email || FALLBACK_DATA.email
   const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
 
+  // Memoize logo URL
+  const logoUrl = useMemo(() => {
+    if (!logo) return '/logo.png' // Fallback to public logo
+    try {
+      return urlFor(logo).width(120).quality(90).auto('format').url()
+    } catch (err) {
+      console.error('Footer: Error generating logo URL:', err)
+      return '/logo.png'
+    }
+  }, [logo])
+
   return (
     <footer className="bg-black text-gray-300 py-10 text-center">
       <div className="max-w-6xl mx-auto space-y-3">
@@ -75,7 +103,14 @@ function Footer() {
         {displayLicense && (
           <p className="text-sm text-gray-500">{displayLicense}</p>
         )}
-        <p className="text-sm mt-4">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <img 
+            src={logoUrl} 
+            alt="US Mechanical" 
+            className="h-6 w-auto object-contain"
+          />
+          <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
+        </div>
       </div>
     </footer>
   )
