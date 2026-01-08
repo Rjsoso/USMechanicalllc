@@ -3,5 +3,8 @@
   "outputDirectory": "react-site/dist",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-  ]
+  ],
+  "github": {
+    "silent": false
+  }
 }
