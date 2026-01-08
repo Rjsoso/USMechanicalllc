@@ -1,11 +1,21 @@
 import { useEffect, useState, memo } from 'react'
 import { client } from '../utils/sanity'
 
+// Fallback contact data in case Sanity fetch fails
+const FALLBACK_DATA = {
+  address: '472 South 640 West Pleasant Grove, UT 84062',
+  phone: '(801) 785-6028',
+  email: null,
+  licenseInfo: null
+}
+
 function Footer() {
   const [contactData, setContactData] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchInfo = () => {
+      setLoading(true)
       client
         .fetch(`*[_type == "contact"][0]{
           email,
@@ -16,9 +26,16 @@ function Footer() {
             phone
           }
         }`)
-        .then(res => setContactData(res))
-        .catch(() => {
-          // Component will return null if contactData is null, which is fine
+        .then(res => {
+          setContactData(res)
+          setLoading(false)
+          if (!res) {
+            console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
+          }
+        })
+        .catch((err) => {
+          console.error('Footer: Failed to fetch contact data from Sanity:', err)
+          setLoading(false)
         })
     };
 
@@ -33,28 +50,30 @@ function Footer() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
-  if (!contactData) return null
-
-  // Use first office for footer info
-  const mainOffice = contactData.offices?.[0]
+  // Use Sanity data if available, otherwise use fallback
+  const mainOffice = contactData?.offices?.[0]
+  const displayAddress = mainOffice?.address || FALLBACK_DATA.address
+  const displayPhone = mainOffice?.phone || FALLBACK_DATA.phone
+  const displayEmail = contactData?.email || FALLBACK_DATA.email
+  const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
 
   return (
     <footer className="bg-black text-gray-300 py-10 text-center">
       <div className="max-w-6xl mx-auto space-y-3">
-        {mainOffice?.address && <p>{mainOffice.address}</p>}
+        {displayAddress && <p>{displayAddress}</p>}
         <p>
-          {contactData.email && (
+          {displayEmail && (
             <>
-              <a href={`mailto:${contactData.email}`} className="hover:text-white">
-                {contactData.email}
+              <a href={`mailto:${displayEmail}`} className="hover:text-white">
+                {displayEmail}
               </a>
-              {mainOffice?.phone && ' | '}
+              {displayPhone && ' | '}
             </>
           )}
-          {mainOffice?.phone}
+          {displayPhone}
         </p>
-        {contactData.licenseInfo && (
-          <p className="text-sm text-gray-500">{contactData.licenseInfo}</p>
+        {displayLicense && (
+          <p className="text-sm text-gray-500">{displayLicense}</p>
         )}
         <p className="text-sm mt-4">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
       </div>
