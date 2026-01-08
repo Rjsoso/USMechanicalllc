@@ -11,7 +11,6 @@ const Portfolio = lazy(() => import('../components/Portfolio'))
 const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
 const Careers = lazy(() => import('../components/Careers'))
 const Contact = lazy(() => import('../pages/Contact'))
-const TestimonialTransition = lazy(() => import('../components/TestimonialTransition'))
 
 export default function Home() {
   const [scrollSlide, setScrollSlide] = useState(0);
@@ -85,10 +84,6 @@ export default function Home() {
             <CompanyStats />
 
             <ServicesSection />
-
-            <Suspense fallback={<div className="py-8 bg-black"></div>}>
-              <TestimonialTransition />
-            </Suspense>
 
             <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
               <Portfolio />
