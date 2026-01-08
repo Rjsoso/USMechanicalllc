@@ -95,24 +95,14 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('careers')
         ),
 
-      // 9. Contact Section
+      // 9. Contact Page (includes company info for Footer)
       S.listItem()
-        .title('9. Contact Section')
+        .title('9. Contact Page (Footer + Contact)')
         .child(
           S.editor()
             .id('contact')
             .schemaType('contact')
             .documentId('contact')
-        ),
-
-      // 10. Company Information (used by Footer)
-      S.listItem()
-        .title('10. Company Information (Footer)')
-        .child(
-          S.editor()
-            .id('companyInfo')
-            .schemaType('companyInfo')
-            .documentId('companyInfo')
         ),
 
       S.divider(),
