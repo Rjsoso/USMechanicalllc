@@ -17,19 +17,26 @@ export default function CategoryDetail() {
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const data = await client.fetch(
-          `*[_type == "portfolioCategory" && _id == $categoryId][0]{
-            _id,
-            title,
-            description,
-            image {
-              asset-> {
-                _id,
-                url
-              },
-              alt
-            },
-            "projects": projects[]-> {
+        
+        // Fetch category and all projects that reference this category
+        const [category, projects] = await Promise.all([
+          client.fetch(
+            `*[_type == "portfolioCategory" && _id == $categoryId][0]{
+              _id,
+              title,
+              description,
+              image {
+                asset-> {
+                  _id,
+                  url
+                },
+                alt
+              }
+            }`,
+            { categoryId }
+          ),
+          client.fetch(
+            `*[_type == "portfolioProject" && category._ref == $categoryId] | order(order asc) {
               _id,
               title,
               description,
@@ -45,18 +52,22 @@ export default function CategoryDetail() {
               client,
               projectType,
               order
-            } | order(order asc)
-          }`,
-          { categoryId }
-        );
+            }`,
+            { categoryId }
+          )
+        ]);
 
-        if (!data) {
+        if (!category) {
           setError('Category not found');
           setLoading(false);
           return;
         }
 
-        setCategoryData(data);
+        // Combine category data with projects
+        setCategoryData({
+          ...category,
+          projects: projects || []
+        });
         setLoading(false);
       } catch (err) {
         console.error('Error fetching category:', err);
