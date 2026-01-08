@@ -2,13 +2,14 @@ import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { client } from "../utils/sanity";
 
 // Animate only when visible in viewport - only once per page visit
-const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
-  const [count, setCount] = useState(0);
+const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 }) => {
+  const [count, setCount] = useState(startValue);
   const animationRef = useRef(null);
   const startedRef = useRef(false);
   const completedRef = useRef(false);
   const cancelledRef = useRef(false);
   const targetValueRef = useRef(null);
+  const startValueRef = useRef(startValue);
 
   // Extract numeric part and suffix (e.g., "150M", "62 Years", "150 M" → 150/62 and "M"/"Years"/" M")
   const match = String(value).trim().match(/^(\d+)\s*(.*)$/);
@@ -48,10 +49,12 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
     startedRef.current = true;
     cancelledRef.current = false;
     targetValueRef.current = numericValue;
-    setCount(0);
+    startValueRef.current = startValue;
+    setCount(startValue);
     
     const startTime = Date.now();
     const targetValue = numericValue; // Capture value at start
+    const animationStartValue = startValue; // Capture start value
     
     const animate = () => {
       // Don't continue if cancelled
@@ -59,7 +62,7 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
       
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const currentValue = Math.floor(targetValue * progress);
+      const currentValue = Math.floor(animationStartValue + (targetValue - animationStartValue) * progress);
       
       setCount(currentValue);
       
@@ -80,7 +83,7 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView }) => {
       // Cleanup only runs on unmount or when dependencies change
       // If dependencies change, the effect will handle cancellation above
     };
-  }, [inView, numericValue, duration]);
+  }, [inView, numericValue, duration, startValue]);
 
   // If we have a numeric value and animation hasn't started yet, show 0
   // Otherwise show the animated count or the full value
@@ -115,7 +118,9 @@ const CompanyStats = () => {
           title,
           stats[]{
             label,
-            value
+            value,
+            enableCustomStart,
+            animateFromValue
           }
         }`;
         
@@ -129,7 +134,9 @@ const CompanyStats = () => {
             title,
             stats[]{
               label,
-              value
+              value,
+              enableCustomStart,
+              animateFromValue
             }
           }`;
           data = await client.fetch(query);
@@ -219,7 +226,11 @@ const CompanyStats = () => {
           {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
                 <div className="text-5xl font-extrabold mb-2 text-[#c43821]">
-                  <AnimatedNumber value={item.value} inView={inView} />
+                  <AnimatedNumber 
+                    value={item.value} 
+                    startValue={item.enableCustomStart ? item.animateFromValue : 0}
+                    inView={inView} 
+                  />
                 </div>
                 <p className="text-lg font-medium text-white">
                   {item.label}
