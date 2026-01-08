@@ -36,5 +36,5 @@ export const queries = {
   hero: `*[_type == "heroSection"][0]`,
   about: `*[_type == "aboutAndSafety"][0]`,
   safety: `*[_type == "aboutAndSafety"][0]`,
-  companyInfo: `*[_type == "companyInfo"][0]`,
+  contact: `*[_type == "contact"][0]`,
 };

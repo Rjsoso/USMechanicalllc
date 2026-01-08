@@ -13,7 +13,6 @@ import formSettings from './formSettings'
 import stat from './stat'
 import contact from '../schemas/pages/contact'
 import companyStats from './companyStats'
-import companyInfo from './companyInfo'
 import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
 import portfolioSection from './portfolioSection'
@@ -38,7 +37,6 @@ export const schema = {
     aboutAndSafety,
     contact,
     companyStats,
-    companyInfo,
     portfolioCategory,
     portfolioProject,
     portfolioSection,

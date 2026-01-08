@@ -34,6 +34,18 @@ export default defineType({
       title: 'Contact Form Settings',
       type: 'formSettings',
     },
+    {
+      name: 'email',
+      title: 'General Email',
+      type: 'string',
+      description: 'Main company email address (displayed in footer)',
+    },
+    {
+      name: 'licenseInfo',
+      title: 'License Information',
+      type: 'string',
+      description: 'License info displayed in footer (e.g., "Licensed in UT, NV, AZ")',
+    },
   ],
 })
 
