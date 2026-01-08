@@ -26,22 +26,17 @@ function Header() {
         }`
       )
       .then((data) => {
-        console.log('🔍 Sanity Header Data:', data);
         if (data?.logo) {
           setLogo(data.logo);
         }
         if (data?.navLinks && data.navLinks.length > 0) {
-          console.log('📊 Nav Links from Sanity:', data.navLinks);
           // Sort by order field
           const sortedLinks = [...data.navLinks].sort((a, b) => a.order - b.order);
           setNavLinks(sortedLinks);
-        } else {
-          console.warn('⚠️ No navLinks found in Sanity! Using fallback navigation.');
         }
       })
-    
       .catch((error) => {
-        console.error('❌ Error fetching header data:', error);
+        console.error('Error fetching header data:', error);
       });
   }, []);
 
@@ -144,29 +139,19 @@ function Header() {
       )
     };
     
-    if (!icons[iconType]) {
-      console.warn(`⚠️ Icon type "${iconType}" not found, defaulting to "about" icon`);
-    }
-    
     return icons[iconType] || icons.about;
   };
 
   // Map navLinks to dockItems, or use default fallback if no navLinks
   const dockItems = useMemo(() => {
     if (navLinks.length > 0) {
-      console.log('✅ Using Sanity navLinks:', navLinks);
-      const items = navLinks.map(link => {
-        console.log(`  - Icon: "${link.icon}", Label: "${link.label}"`);
-        return {
-          icon: getIconSvg(link.icon),
-          label: link.label,
-          onClick: () => scrollToSection(link.href)
-        };
-      });
-      return items;
+      return navLinks.map(link => ({
+        icon: getIconSvg(link.icon),
+        label: link.label,
+        onClick: () => scrollToSection(link.href)
+      }));
     }
     // Fallback to default navigation if Sanity data not available
-    console.log('⚠️ Using fallback navigation (5 icons)');
     return [
       { icon: getIconSvg('about'), label: 'About', onClick: () => scrollToSection('#about') },
       { icon: getIconSvg('safety'), label: 'Safety', onClick: () => scrollToSection('#safety') },

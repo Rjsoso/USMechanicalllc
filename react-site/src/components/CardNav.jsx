@@ -83,7 +83,7 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
           buttonText: headerData?.ctaButtonText
         });
       } catch (error) {
-        console.error('Error fetching CardNav data:', error);
+        console.error('Error fetching navigation data:', error);
       }
     };
 

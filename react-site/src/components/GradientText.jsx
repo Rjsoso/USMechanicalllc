@@ -21,8 +21,6 @@ export default function GradientText({ children }) {
   const [color, setColor] = useState('#3404f6');
   
   useEffect(() => {
-    console.log('🎨 SMOOTH GRADIENT: blue↔red on:', children);
-    
     const blue = '#3404f6';
     const red = '#f40101';
     
