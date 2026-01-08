@@ -319,7 +319,7 @@ section#contact > div[class*="absolute"] {
 
 /* Smaller "Since" styling - keeps cursive font */
 .hero-since {
-  font-size: 0.6em;
+  font-size: 0.75em;
   margin-right: 0.4em;
   display: inline-block;
   font-family: 'Corinthia', cursive;
