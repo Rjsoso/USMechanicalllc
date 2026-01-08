@@ -40,6 +40,12 @@ export default {
       type: 'text',
       rows: 2,
     },
+    {
+      name: 'licenseInfo',
+      title: 'License Information',
+      type: 'string',
+      description: 'License info displayed in footer (e.g., "Licensed in UT, NV, AZ")',
+    },
   ],
   preview: {
     select: {
