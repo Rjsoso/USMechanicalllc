@@ -54,31 +54,7 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-20 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
-      {/* Section Title */}
-      <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <motion.h2 
-            className="section-title text-5xl md:text-6xl mb-4 text-gray-900"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            {sectionData?.sectionTitle || 'Our Projects'}
-          </motion.h2>
-          <motion.p 
-            className="text-gray-700 text-lg max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-          >
-            {sectionData?.sectionDescription || 'Explore our completed projects by category'}
-          </motion.p>
-        </div>
-      </div>
-
+    <section id="portfolio" className="pt-8 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
