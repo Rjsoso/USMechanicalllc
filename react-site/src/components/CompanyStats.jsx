@@ -120,7 +120,8 @@ const CompanyStats = () => {
             label,
             value,
             enableCustomStart,
-            animateFromValue
+            animateFromValue,
+            animationDuration
           }
         }`;
         
@@ -136,7 +137,8 @@ const CompanyStats = () => {
               label,
               value,
               enableCustomStart,
-              animateFromValue
+              animateFromValue,
+              animationDuration
             }
           }`;
           data = await client.fetch(query);
@@ -229,6 +231,7 @@ const CompanyStats = () => {
                   <AnimatedNumber 
                     value={item.value} 
                     startValue={item.enableCustomStart ? item.animateFromValue : 0}
+                    duration={item.animationDuration || 2000}
                     inView={inView} 
                   />
                 </div>

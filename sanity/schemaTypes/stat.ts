@@ -22,6 +22,14 @@ export default defineType({
       hidden: ({ parent }) => !parent?.enableCustomStart,
       validation: (Rule) => Rule.min(0),
     },
+    {
+      name: 'animationDuration',
+      title: 'Animation Duration (milliseconds)',
+      type: 'number',
+      description: 'How long the animation takes in milliseconds (default: 2000ms = 2 seconds). Higher = slower.',
+      validation: (Rule) => Rule.min(500).max(10000),
+      initialValue: 2000,
+    },
   ],
 })
 
