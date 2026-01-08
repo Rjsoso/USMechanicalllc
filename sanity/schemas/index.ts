@@ -14,10 +14,7 @@ import aboutAndSafety from '../schemaTypes/aboutAndSafety'
 // import contactSection from '../schemaTypes/contactSection' // Replaced by contact schema
 // import servicesSection from '../schemaTypes/servicesSection' // Replaced by ourServices
 import contact from './pages/contact'
-// import servicesPage from './pages/services' // REMOVED: Unused
-// import companyInformation from '../schemaTypes/companyInformation' // Replaced by contact schema
 import companyStats from '../schemaTypes/companyStats'
-import companyInfo from '../schemaTypes/companyInfo' // Added: Missing from exports
 import portfolioCategory from '../schemaTypes/portfolioCategory'
 import portfolioProject from '../schemaTypes/portfolioProject'
 import portfolioSection from '../schemaTypes/portfolioSection'
@@ -40,13 +37,8 @@ export const schemaTypes = [
     headerSection,
     heroSection,
     aboutAndSafety,
-    // servicesSection, // Replaced by ourServices
-    // contactSection, // Replaced by contact schema
     contact,
-    // servicesPage, // REMOVED: Unused
-    // companyInformation, // Replaced by contact schema
     companyStats,
-    companyInfo, // Added: Missing from exports
     portfolioCategory,
     portfolioProject,
     portfolioSection,
