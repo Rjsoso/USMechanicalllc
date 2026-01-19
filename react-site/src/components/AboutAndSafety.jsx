@@ -293,14 +293,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   <h2 
                     className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
                     style={{
-                      transform: isAnimating 
-                        ? 'translate3d(0, -1px, 0) scale(0.999)'
-                        : 'translate3d(0, 0, 0) scale(1)',
+                      transform: 'translate3d(0, 0, 0)',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
-                      opacity: isAnimating ? 0.85 : 1,
-                      transition: 'transform 1400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 700ms cubic-bezier(0.16, 1, 0.3, 1)',
-                      willChange: isAnimating ? 'transform, opacity' : 'auto'
+                      textRendering: 'optimizeLegibility'
                     }}
                   >
                     {data.aboutTitle}
@@ -340,18 +336,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
                             className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
                             style={{
                               lineHeight: '1.75',
-                              transform: isAnimating 
-                                ? 'translate3d(0, -2px, 0) scale(0.998)' // Subtle shift during reflow
-                                : 'translate3d(0, 0, 0) scale(1)',
+                              transform: 'translate3d(0, 0, 0)',
                               backfaceVisibility: 'hidden',
                               WebkitFontSmoothing: 'antialiased',
                               textRendering: 'optimizeLegibility',
                               paddingBottom: isExpanded ? '2rem' : '0',
-                              letterSpacing: isExpanded ? '0' : '0.002em',
-                              opacity: isAnimating ? 0.7 : 1, // Fade during reflow to mask word jumps
-                              filter: isAnimating ? 'blur(0.3px)' : 'blur(0px)', // Very subtle blur during transition
-                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1), letter-spacing 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), filter 700ms cubic-bezier(0.16, 1, 0.3, 1)',
-                              willChange: isAnimating ? 'transform, opacity, filter' : 'auto',
+                              transition: 'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                               contain: 'layout style'
                             }}
                           >
