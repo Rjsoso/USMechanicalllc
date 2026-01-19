@@ -11,7 +11,10 @@ export default defineType({
       title: 'Logo Image',
       type: 'image',
       description: 'Upload your company logo. This appears in the header.',
-      options: { hotspot: true },
+      options: { 
+        hotspot: true,
+        metadata: ['blurhash', 'lqip', 'palette']
+      },
       validation: (Rule) => Rule.required().error('Logo is required'),
     },
     {
