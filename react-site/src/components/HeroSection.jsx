@@ -15,6 +15,12 @@ const defaultHeroData = {
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  
+  // Randomly select color for "1963" on component mount
+  const yearColor = useMemo(() => {
+    const colors = ['#3404f6', '#dc2626'] // blue and red
+    return colors[Math.floor(Math.random() * colors.length)]
+  }, [])
 
   useEffect(() => {
     const fetchHero = () => {
@@ -274,7 +280,7 @@ function HeroSection() {
                 <>
                   {match[1]}{' '}
                   <span className="hero-since">{match[2]}</span>
-                  <span className="hero-1963">{match[3]}</span>
+                  <span className="hero-1963" style={{ color: yearColor }}>{match[3]}</span>
                   {match[4]}
                 </>
               );

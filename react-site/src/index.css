@@ -349,10 +349,10 @@ section#contact > div[class*="absolute"] {
 }
 
 /* 1963 styling with black stroke */
+/* Color is set dynamically via inline style in HeroSection component */
 .hero-1963 {
   font-family: 'Rubik', sans-serif;
   font-weight: 900;
-  color: #3404f6;
   text-shadow: 
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
