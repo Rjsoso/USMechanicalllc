@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { client, urlFor } from '../utils/sanity';
+import { navigateAndScroll } from '../utils/scrollToSection';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
@@ -64,28 +65,7 @@ export default function ProjectDetail() {
   }, [id]);
 
   const handleRequestQuote = () => {
-    sessionStorage.setItem('scrollTo', 'contact');
-    navigate('/');
-    let retryCount = 0;
-    const maxRetries = 20;
-    const scrollToContact = () => {
-      const contactElement = document.querySelector('#contact');
-      if (contactElement) {
-        const headerOffset = 180;
-        const elementPosition = contactElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        sessionStorage.removeItem('scrollTo');
-      } else if (retryCount < maxRetries) {
-        retryCount++;
-        setTimeout(scrollToContact, 150);
-      }
-    };
-    setTimeout(scrollToContact, 300);
+    navigateAndScroll('contact', navigate);
   };
 
   // Map images to carousel items format
@@ -148,30 +128,7 @@ export default function ProjectDetail() {
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
-            onClick={() => {
-              sessionStorage.setItem('scrollTo', 'portfolio');
-              navigate('/');
-              let retryCount = 0;
-              const maxRetries = 20;
-              const scrollToPortfolio = () => {
-                const portfolioElement = document.querySelector('#portfolio');
-                if (portfolioElement) {
-                  const headerOffset = 180;
-                  const elementPosition = portfolioElement.getBoundingClientRect().top;
-                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                  
-                  window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                  });
-                  sessionStorage.removeItem('scrollTo');
-                } else if (retryCount < maxRetries) {
-                  retryCount++;
-                  setTimeout(scrollToPortfolio, 150);
-                }
-              };
-              setTimeout(scrollToPortfolio, 300);
-            }}
+            onClick={() => navigateAndScroll('portfolio', navigate)}
             className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
           >
             <svg

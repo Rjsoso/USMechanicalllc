@@ -5,6 +5,7 @@ import AboutAndSafety from '../components/AboutAndSafety'
 import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Footer from '../components/Footer'
+import { scrollToSection } from '../utils/scrollToSection'
 
 // Lazy load below-fold components for better initial load performance
 const Portfolio = lazy(() => import('../components/Portfolio'))
@@ -18,7 +19,16 @@ export default function Home() {
   // Ensure page starts at top on load, unless we're scrolling to a specific section
   useEffect(() => {
     const scrollTo = sessionStorage.getItem('scrollTo');
-    if (!scrollTo) {
+    
+    if (scrollTo) {
+      // We have a section to scroll to - wait for components to load
+      scrollToSection(scrollTo, 180, 30, 200).then((success) => {
+        if (success) {
+          sessionStorage.removeItem('scrollTo');
+        }
+      });
+    } else {
+      // No section to scroll to - start at top
       window.scrollTo(0, 0);
     }
   }, []);

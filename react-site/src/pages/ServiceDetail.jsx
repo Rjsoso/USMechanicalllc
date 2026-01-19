@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { client, urlFor } from '../utils/sanity';
 import { PortableText } from '@portabletext/react';
+import { navigateAndScroll } from '../utils/scrollToSection';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
@@ -77,31 +78,7 @@ export default function ServiceDetail() {
   }, [slug]);
 
   const handleRequestQuote = () => {
-    // Store that we want to scroll to contact
-    sessionStorage.setItem('scrollTo', 'contact');
-    navigate('/');
-    // Wait for navigation, then scroll with retry mechanism
-    let retryCount = 0;
-    const maxRetries = 20;
-    const scrollToContact = () => {
-      const contactElement = document.querySelector('#contact');
-      if (contactElement) {
-        // Calculate offset to account for fixed header
-        const headerOffset = 180;
-        const elementPosition = contactElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        sessionStorage.removeItem('scrollTo');
-      } else if (retryCount < maxRetries) {
-        retryCount++;
-        setTimeout(scrollToContact, 150);
-      }
-    };
-    setTimeout(scrollToContact, 300);
+    navigateAndScroll('contact', navigate);
   };
 
   // Map images to carousel items format (exact same as AboutAndSafety)
@@ -164,33 +141,7 @@ export default function ServiceDetail() {
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Button */}
           <button
-            onClick={() => {
-              // Store that we want to scroll to services
-              sessionStorage.setItem('scrollTo', 'services');
-              navigate('/');
-              // Wait for navigation, then scroll with retry mechanism
-              let retryCount = 0;
-              const maxRetries = 20;
-              const scrollToServices = () => {
-                const servicesElement = document.querySelector('#services');
-                if (servicesElement) {
-                  // Calculate offset to account for fixed header
-                  const headerOffset = 180;
-                  const elementPosition = servicesElement.getBoundingClientRect().top;
-                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                  
-                  window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                  });
-                  sessionStorage.removeItem('scrollTo');
-                } else if (retryCount < maxRetries) {
-                  retryCount++;
-                  setTimeout(scrollToServices, 150);
-                }
-              };
-              setTimeout(scrollToServices, 300);
-            }}
+            onClick={() => navigateAndScroll('services', navigate)}
             className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
           >
             <svg
