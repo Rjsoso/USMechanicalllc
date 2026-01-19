@@ -54,7 +54,20 @@ function Portfolio() {
   }
 
   return (
-    <section id="portfolio" className="pt-8 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
+    <section id="portfolio" className="pt-24 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
+      {/* Portfolio Title */}
+      <div className="max-w-7xl mx-auto px-6 mb-12">
+        <motion.h2 
+          className="section-title text-5xl md:text-6xl text-center text-white"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {sectionData?.sectionTitle || 'Portfolio'}
+        </motion.h2>
+      </div>
+
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
