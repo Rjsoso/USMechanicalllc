@@ -92,6 +92,15 @@ export default function Contact() {
 
   // Attempt smooth scroll to contact when this component is ready
   useEffect(() => {
+    // Don't scroll on page reload - only on navigation from other pages
+    const isPageReload = performance.getEntriesByType('navigation')[0]?.type === 'reload' || 
+                         performance.navigation?.type === 1;
+    
+    if (isPageReload) {
+      console.log('Contact: Page reload detected, skipping auto-scroll');
+      return undefined;
+    }
+    
     const shouldScroll =
       sessionStorage.getItem('scrollTo') === 'contact' ||
       window.location.hash === '#contact';

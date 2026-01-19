@@ -18,6 +18,13 @@ export default function Home() {
   const location = useLocation();
   const [scrollSlide, setScrollSlide] = useState(0);
   const initialScrollDone = useRef(false);
+  
+  // Detect if this is a page reload (not navigation)
+  const isPageReload = useRef(
+    !location.state?.scrollTo && 
+    (performance.getEntriesByType('navigation')[0]?.type === 'reload' || 
+     performance.navigation?.type === 1)
+  );
 
   // Disable browser scroll restoration
   useLayoutEffect(() => {
@@ -31,6 +38,11 @@ export default function Home() {
     if (!initialScrollDone.current) {
       const scrollTo = location.state?.scrollTo;
       if (!scrollTo) {
+        // Clear any URL hash that might trigger scrolling
+        if (window.location.hash) {
+          console.log('Clearing hash:', window.location.hash);
+          window.history.replaceState(null, '', window.location.pathname);
+        }
         // Force scroll to top immediately before browser paints
         window.scrollTo(0, 0);
       }
@@ -39,7 +51,14 @@ export default function Home() {
   }, []);
 
   // Handle navigation to specific sections (runs after paint)
+  // BUT: Skip on page reload to prevent unwanted scrolling
   useEffect(() => {
+    // If this is a page reload, don't run any scroll logic
+    if (isPageReload.current) {
+      console.log('Home.jsx: Page reload detected, skipping scroll logic');
+      return;
+    }
+    
     const scrollTo = location.state?.scrollTo;
     console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo);
     
