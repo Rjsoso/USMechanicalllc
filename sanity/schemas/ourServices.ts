@@ -148,34 +148,6 @@ export default defineType({
       ],
     },
     {
-      name: "services",
-      title: "CardSwap Images",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "title",
-              type: "string",
-              title: "Title",
-            },
-            {
-              name: "description",
-              type: "text",
-              title: "Description",
-            },
-            {
-              name: "image",
-              type: "image",
-              title: "Card Image",
-              options: { hotspot: true }, // IMPORTANT FIX
-            },
-          ],
-        },
-      ],
-    },
-    {
       name: "deliveryMethodsHeading",
       type: "string",
       title: "Delivery Methods Heading",
