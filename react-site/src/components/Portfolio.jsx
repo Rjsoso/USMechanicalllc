@@ -27,7 +27,7 @@ function Portfolio() {
           order
         }`
       ),
-      client.fetch(`*[_type == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
     ])
       .then(([categoriesData, sectionInfo]) => {
         setCategories(categoriesData);
