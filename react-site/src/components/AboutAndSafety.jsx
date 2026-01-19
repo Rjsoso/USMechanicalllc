@@ -241,7 +241,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {/* ABOUT SECTION - Side-by-side carousel and text */}
         {carouselItems.length > 0 && (
           <div 
-            className="flex flex-col lg:flex-row items-stretch gap-0 w-full"
+            className="flex flex-col md:flex-row items-stretch gap-0 w-full"
             style={{
               perspective: '1000px', // 3D acceleration context
               isolation: 'isolate' // Creates stacking context for GPU
@@ -260,7 +260,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 contain: 'layout style paint' // Isolate layout calculations
               }}
             >
-              <div className="h-[480px] md:h-[580px] lg:h-[680px]">
+              <div className="h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]">
                 <Carousel
                   items={carouselItems}
                   baseWidth={1100}

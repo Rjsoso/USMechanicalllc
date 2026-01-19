@@ -104,3 +104,23 @@
     height: 124px;
   }
 }
+
+/* Mobile landscape - reduce logo significantly */
+@media (max-height: 600px) and (orientation: landscape) {
+  .logo-3d-card {
+    width: 140px !important;
+    height: 87px !important;
+  }
+  
+  .plaque-perspective {
+    top: 8px !important;
+    left: 8px !important;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .logo-3d-card {
+    width: 110px !important;
+    height: 68px !important;
+  }
+}

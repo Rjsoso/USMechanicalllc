@@ -112,3 +112,37 @@
   }
 }
 
+/* Mobile landscape - reduce dock size */
+@media (max-height: 600px) and (orientation: landscape) {
+  .dock-outer {
+    top: 8px !important;
+    right: 8px !important;
+  }
+  
+  .dock-panel {
+    padding: 0.4rem 0.6rem !important;
+    gap: 0.6rem !important;
+  }
+  
+  .dock-item {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .dock-panel {
+    padding: 0.3rem 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  .dock-item {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+    min-height: 35px !important;
+  }
+}
+

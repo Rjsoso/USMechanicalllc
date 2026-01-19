@@ -488,3 +488,42 @@ footer {
     margin-right: auto;
   }
 }
+
+/* ============================================
+   MOBILE LANDSCAPE OPTIMIZATIONS
+   Fix layout issues in landscape orientation
+   ============================================ */
+
+/* Hero section landscape adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  #hero {
+    min-height: 85vh !important;
+  }
+  
+  #hero .relative.z-10 {
+    margin-top: 40px !important;
+  }
+  
+  .hero-3d-text {
+    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  }
+  
+  .hero-since {
+    font-size: 0.8em !important;
+  }
+}
+
+/* About section landscape adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  #about {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+}
+
+/* General landscape text sizing */
+@media (max-height: 500px) and (orientation: landscape) {
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
+  }
+}
