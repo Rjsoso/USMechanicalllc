@@ -66,6 +66,17 @@ function Portfolio() {
         >
           {sectionData?.sectionTitle || 'Portfolio'}
         </motion.h2>
+        {sectionData?.sectionDescription && (
+          <motion.p 
+            className="text-white text-lg text-center mt-4 opacity-90 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 0.9, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {sectionData.sectionDescription}
+          </motion.p>
+        )}
       </div>
 
       {/* Edge-to-edge category grid with white background */}
