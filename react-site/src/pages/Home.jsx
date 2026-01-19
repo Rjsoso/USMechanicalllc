@@ -22,7 +22,8 @@ export default function Home() {
     
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
-      scrollToSection(scrollTo, 180, 30, 200).then((success) => {
+      // Use default parameters (50 retries, 200ms delay, 500ms initial delay)
+      scrollToSection(scrollTo).then((success) => {
         if (success) {
           sessionStorage.removeItem('scrollTo');
         }
