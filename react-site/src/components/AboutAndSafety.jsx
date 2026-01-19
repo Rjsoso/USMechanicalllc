@@ -13,6 +13,14 @@ export default function AboutAndSafety() {
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920)
+
+  // Track window width for responsive logo sizing
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Default content fallback
   const defaultData = {
@@ -206,6 +214,20 @@ Our goal is always simple: complete every project with zero safety issues.`,
     }).filter(Boolean);
   }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
 
+  // Responsive logo sizing for safety section
+  const getSafetyLogoHeight = () => {
+    if (windowWidth >= 2560) return 90; // 3xl
+    if (windowWidth >= 1920) return 100; // 2xl
+    if (windowWidth >= 1440) return 110; // xl
+    return 120; // default
+  };
+
+  const getSafetyGap = () => {
+    if (windowWidth >= 2560) return 28; // 3xl
+    if (windowWidth >= 1920) return 32; // 2xl
+    if (windowWidth >= 1440) return 36; // xl
+    return 40; // default
+  };
 
   if (loading || !data) {
     return (
@@ -462,8 +484,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         logos={safetyLogoItems}
                         speed={120}
                         direction="left"
-                        logoHeight={120}
-                        gap={40}
+                        logoHeight={getSafetyLogoHeight()}
+                        gap={getSafetyGap()}
                         fadeOut={true}
                         fadeOutColor="#ffffff"
                         hoverSpeed={20}
@@ -479,8 +501,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         logos={safetyLogoItems}
                         speed={120}
                         direction="right"
-                        logoHeight={120}
-                        gap={40}
+                        logoHeight={getSafetyLogoHeight()}
+                        gap={getSafetyGap()}
                         fadeOut={true}
                         fadeOutColor="#ffffff"
                         hoverSpeed={20}

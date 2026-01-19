@@ -171,6 +171,31 @@
   );
 }
 
+/* Responsive sizing for large screens */
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .logoloop {
+    --logoloop-logoHeight: clamp(80px, 6vw, 110px);
+    --logoloop-gap: clamp(60px, 4vw, 90px);
+  }
+}
+
+/* Full HD+ (1920px+) */
+@media (min-width: 1920px) {
+  .logoloop {
+    --logoloop-logoHeight: clamp(70px, 5vw, 100px);
+    --logoloop-gap: clamp(50px, 3.5vw, 80px);
+  }
+}
+
+/* 4K+ (2560px+) */
+@media (min-width: 2560px) {
+  .logoloop {
+    --logoloop-logoHeight: clamp(60px, 4vw, 90px);
+    --logoloop-gap: clamp(45px, 3vw, 70px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .logoloop__track {
     transform: translate3d(0, 0, 0) !important;

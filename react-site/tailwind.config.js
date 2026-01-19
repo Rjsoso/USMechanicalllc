@@ -17,6 +17,11 @@ export default {
       fontFamily: {
         sans: ['Inter', 'Poppins', 'system-ui', 'sans-serif'],
       },
+      screens: {
+        'xl': '1440px',
+        '2xl': '1920px',
+        '3xl': '2560px',
+      },
     },
   },
   plugins: [],

@@ -5,6 +5,14 @@ import LogoLoop from './LogoLoop';
 export default function LogoLoopSection() {
   const [logoData, setLogoData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
+
+  // Track window width for responsive logo sizing
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     client
@@ -53,16 +61,31 @@ export default function LogoLoopSection() {
     key: `logo-${index}`,
   }));
 
+  // Responsive logo sizing based on screen width
+  const getLogoHeight = () => {
+    if (windowWidth >= 2560) return 80; // 3xl
+    if (windowWidth >= 1920) return 90; // 2xl
+    if (windowWidth >= 1440) return 100; // xl
+    return 120; // default
+  };
+
+  const getGap = () => {
+    if (windowWidth >= 2560) return 60; // 3xl
+    if (windowWidth >= 1920) return 70; // 2xl
+    if (windowWidth >= 1440) return 80; // xl
+    return 100; // default
+  };
+
   return (
-    <section className="py-8 bg-white">
+    <section className="py-8 xl:py-6 2xl:py-4 bg-white">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
           speed={120}
           direction="left"
           width="100%"
-          logoHeight={120}
-          gap={100}
+          logoHeight={getLogoHeight()}
+          gap={getGap()}
           hoverSpeed={30}
           fadeOut={true}
           fadeOutColor="#ffffff"

@@ -216,18 +216,18 @@ const CompanyStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 bg-transparent"
+      className="w-full py-16 xl:py-12 2xl:py-10 bg-transparent"
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (
-          <h2 className="section-title text-5xl md:text-6xl text-white mb-10">
+          <h2 className="section-title text-5xl md:text-6xl xl:text-5xl 2xl:text-6xl text-white mb-10">
             {statsData.title}
           </h2>
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <div className="text-5xl font-extrabold mb-2 text-[#c43821]">
+                <div className="text-5xl xl:text-4xl 2xl:text-5xl font-extrabold mb-2 text-[#c43821]">
                   <AnimatedNumber 
                     value={item.value} 
                     startValue={item.enableCustomStart ? item.animateFromValue : 0}

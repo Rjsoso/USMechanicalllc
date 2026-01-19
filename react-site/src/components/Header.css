@@ -80,3 +80,27 @@
       drop-shadow(12px 14px 22px rgba(0,0,0,0.45));
   }
 }
+
+/* Large Desktop - slightly reduce logo to prevent dominance */
+@media (min-width: 1440px) {
+  .logo-3d-card {
+    width: 240px;
+    height: 149px;
+  }
+}
+
+/* Full HD+ - further reduce for balance on very large screens */
+@media (min-width: 1920px) {
+  .logo-3d-card {
+    width: 220px;
+    height: 136px;
+  }
+}
+
+/* 4K+ - constrain maximum size */
+@media (min-width: 2560px) {
+  .logo-3d-card {
+    width: 200px;
+    height: 124px;
+  }
+}
