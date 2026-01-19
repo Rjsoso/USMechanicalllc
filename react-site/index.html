@@ -84,9 +84,14 @@
       // Clear sessionStorage scroll target on page reload
       // This prevents unwanted scrolling when user reloads the page
       sessionStorage.removeItem('scrollTo');
+      // Clear history state (React Router location.state) on page reload
+      // This prevents location.state.scrollTo from persisting
+      if (history.state) {
+        history.replaceState({}, document.title);
+      }
       // Clear any URL hash that might cause scrolling
       if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname);
+        history.replaceState({}, '', window.location.pathname);
       }
       // Force immediate scroll to top
       window.scrollTo(0, 0);

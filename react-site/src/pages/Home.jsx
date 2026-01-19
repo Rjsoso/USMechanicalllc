@@ -36,12 +36,18 @@ export default function Home() {
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
     if (!initialScrollDone.current) {
+      // On page reload, clear location state immediately
+      if (isPageReload.current) {
+        console.log('Home.jsx: Clearing location state on page reload');
+        window.history.replaceState({}, document.title);
+      }
+      
       const scrollTo = location.state?.scrollTo;
-      if (!scrollTo) {
+      if (!scrollTo || isPageReload.current) {
         // Clear any URL hash that might trigger scrolling
         if (window.location.hash) {
           console.log('Clearing hash:', window.location.hash);
-          window.history.replaceState(null, '', window.location.pathname);
+          window.history.replaceState({}, '', window.location.pathname);
         }
         // Force scroll to top immediately before browser paints
         window.scrollTo(0, 0);
@@ -53,20 +59,28 @@ export default function Home() {
   // Handle navigation to specific sections (runs after paint)
   // BUT: Skip on page reload to prevent unwanted scrolling
   useEffect(() => {
+    const scrollTo = location.state?.scrollTo;
+    console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo);
+    
     // If this is a page reload, don't run any scroll logic
     if (isPageReload.current) {
       console.log('Home.jsx: Page reload detected, skipping scroll logic');
+      // Clear location state to prevent it from persisting
+      if (scrollTo) {
+        window.history.replaceState({}, document.title);
+      }
       return;
     }
-    
-    const scrollTo = location.state?.scrollTo;
-    console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo);
     
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
       console.log(`Home.jsx: Starting scroll to ${scrollTo}`);
       scrollToSection(scrollTo).then((success) => {
         console.log(`Scroll to ${scrollTo} result: ${success}`);
+        // Clear the state after successful scroll
+        if (success) {
+          window.history.replaceState({}, document.title);
+        }
       });
     }
   }, [location.state?.scrollTo]);
