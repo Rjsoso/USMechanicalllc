@@ -18,6 +18,16 @@ export default defineType({
       description: 'Intro text under the main heading',
     },
     {
+      name: 'footerLogo',
+      title: 'Footer Logo',
+      type: 'image',
+      description: 'Logo displayed in the footer next to copyright text (recommended: square format, 512x512px)',
+      options: { 
+        hotspot: true,
+        metadata: ['blurhash', 'lqip', 'palette']
+      },
+    },
+    {
       name: 'offices',
       title: 'Office Locations',
       type: 'array',
