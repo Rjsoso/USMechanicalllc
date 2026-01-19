@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
 
@@ -17,6 +17,13 @@ function LoadingFallback() {
 }
 
 function App() {
+  // Disable browser scroll restoration globally
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   return (
     <Router
       future={{

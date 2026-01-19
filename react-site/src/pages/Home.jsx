@@ -18,6 +18,13 @@ export default function Home() {
   const location = useLocation();
   const [scrollSlide, setScrollSlide] = useState(0);
 
+  // Disable browser scroll restoration
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   // Ensure page starts at top on load, unless we're scrolling to a specific section
   useEffect(() => {
     // Check React Router location state first (most reliable)
@@ -32,11 +39,11 @@ export default function Home() {
         console.log(`Scroll to ${scrollTo} result: ${success}`);
       });
     } else {
-      // No section to scroll to - start at top
+      // No section to scroll to - start at top immediately
       console.log('Home.jsx: No scrollTo in location state, scrolling to top');
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
-  }, [location]);
+  }, [location.state?.scrollTo]);
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   useEffect(() => {
