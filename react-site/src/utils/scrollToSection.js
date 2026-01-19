@@ -11,45 +11,66 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
     let retryCount = 0;
     
     const attemptScroll = () => {
+      console.log(`Attempt ${retryCount + 1}/${maxRetries} - Looking for #${sectionId}`);
       const element = document.querySelector(`#${sectionId}`);
       
       if (element) {
         // Element found - check if it's actually visible and has dimensions
         const rect = element.getBoundingClientRect();
+        console.log(`Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`);
         
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // Use window.scrollY (modern) or fallback to pageYOffset
-          const currentScroll = window.scrollY || window.pageYOffset;
-          const elementPosition = rect.top;
-          const offsetPosition = currentScroll + elementPosition - headerOffset;
+          // Special handling for contact section - scroll to bottom of page
+          if (sectionId === 'contact') {
+            // Get total page height
+            const pageHeight = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+            
+            console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`);
+            
+            window.scrollTo({
+              top: pageHeight - windowHeight,
+              behavior: 'smooth'
+            });
+          } else {
+            // Normal scroll for other sections
+            const currentScroll = window.scrollY || window.pageYOffset;
+            const elementPosition = rect.top;
+            const offsetPosition = currentScroll + elementPosition - headerOffset;
+            
+            console.log(`Scrolling to ${sectionId}: ${offsetPosition}`);
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
           
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-          
-          console.log(`Scrolled to section: ${sectionId}`);
+          console.log(`✓ Successfully scrolled to section: ${sectionId}`);
           resolve(true);
           return true;
         } else {
           // Element exists but not rendered yet - keep retrying
+          console.log(`Element #${sectionId} found but height is 0, retrying...`);
           if (retryCount < maxRetries) {
             retryCount++;
             setTimeout(attemptScroll, retryDelay);
           } else {
-            console.warn(`Section ${sectionId} found but not rendered after ${maxRetries} attempts`);
+            console.error(`✗ Section ${sectionId} found but not rendered after ${maxRetries} attempts`);
             resolve(false);
           }
         }
       } else {
         // Element not found - retry if attempts remaining
+        console.log(`Element #${sectionId} not found in DOM, retrying...`);
         if (retryCount < maxRetries) {
           retryCount++;
           setTimeout(attemptScroll, retryDelay);
         } else {
           // Max retries reached - give up
-          console.warn(`Failed to find section: ${sectionId} after ${maxRetries} attempts`);
+          console.error(`✗ Failed to find section: ${sectionId} after ${maxRetries} attempts`);
+          console.log('Available sections:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
           resolve(false);
         }
       }
