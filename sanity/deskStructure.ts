@@ -61,6 +61,15 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .title('Portfolio')
             .items([
               S.listItem()
+                .title('Portfolio Section Settings')
+                .child(
+                  S.editor()
+                    .id('portfolioSection')
+                    .schemaType('portfolioSection')
+                    .documentId('portfolioSection')
+                ),
+              S.divider(),
+              S.listItem()
                 .title('Categories')
                 .child(
                   S.documentTypeList('portfolioCategory')
