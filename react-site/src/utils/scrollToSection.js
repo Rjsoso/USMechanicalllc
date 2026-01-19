@@ -89,9 +89,15 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
  * @param {function} navigate - React Router navigate function
  */
 export function navigateAndScroll(sectionId, navigate) {
+  // Confirm function is being called
+  alert(`DEBUG: Navigating to section: ${sectionId}`);
+  console.log(`navigateAndScroll called with sectionId: ${sectionId}`);
+  
   // Store the section to scroll to
   sessionStorage.setItem('scrollTo', sectionId);
+  console.log(`SessionStorage set: scrollTo = ${sectionId}`);
   
   // Navigate to home page
   navigate('/');
+  console.log('Navigation triggered to home page');
 }

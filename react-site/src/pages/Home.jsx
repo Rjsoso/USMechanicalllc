@@ -19,17 +19,21 @@ export default function Home() {
   // Ensure page starts at top on load, unless we're scrolling to a specific section
   useEffect(() => {
     const scrollTo = sessionStorage.getItem('scrollTo');
+    console.log('Home.jsx useEffect - scrollTo from sessionStorage:', scrollTo);
     
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
+      console.log(`Home.jsx: Starting scroll to ${scrollTo}`);
       // Use default parameters (50 retries, 200ms delay, 500ms initial delay)
       scrollToSection(scrollTo).then((success) => {
+        console.log(`Scroll to ${scrollTo} result: ${success}`);
         if (success) {
           sessionStorage.removeItem('scrollTo');
         }
       });
     } else {
       // No section to scroll to - start at top
+      console.log('Home.jsx: No scrollTo, scrolling to top');
       window.scrollTo(0, 0);
     }
   }, []);
