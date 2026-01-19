@@ -6,16 +6,16 @@
 
   <!-- Homepage -->
   <url>
-    <loc>https://www.usmechanicalllc.com/</loc>
-    <lastmod>2026-01-08</lastmod>
+    <loc>https://us-mechanicalllc.vercel.app/</loc>
+    <lastmod>2026-01-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Contact Page -->
   <url>
-    <loc>https://www.usmechanicalllc.com/contact</loc>
-    <lastmod>2026-01-08</lastmod>
+    <loc>https://us-mechanicalllc.vercel.app/contact</loc>
+    <lastmod>2026-01-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -24,8 +24,8 @@
   <!-- Add your service detail pages here as they're created -->
   <!-- Example:
   <url>
-    <loc>https://www.usmechanicalllc.com/services/hvac</loc>
-    <lastmod>2026-01-08</lastmod>
+    <loc>https://us-mechanicalllc.vercel.app/services/hvac</loc>
+    <lastmod>2026-01-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -35,8 +35,8 @@
   <!-- Add your portfolio category and project pages here -->
   <!-- Example:
   <url>
-    <loc>https://www.usmechanicalllc.com/portfolio/commercial</loc>
-    <lastmod>2026-01-08</lastmod>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/commercial</loc>
+    <lastmod>2026-01-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
