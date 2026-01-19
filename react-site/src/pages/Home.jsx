@@ -1,4 +1,5 @@
 import { useEffect, useState, Suspense, lazy } from 'react'
+import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
@@ -14,12 +15,14 @@ const Careers = lazy(() => import('../components/Careers'))
 const Contact = lazy(() => import('../pages/Contact'))
 
 export default function Home() {
+  const location = useLocation();
   const [scrollSlide, setScrollSlide] = useState(0);
 
   // Ensure page starts at top on load, unless we're scrolling to a specific section
   useEffect(() => {
-    const scrollTo = sessionStorage.getItem('scrollTo');
-    console.log('Home.jsx useEffect - scrollTo from sessionStorage:', scrollTo);
+    // Check React Router location state first (most reliable)
+    const scrollTo = location.state?.scrollTo;
+    console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo);
     
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
@@ -27,16 +30,13 @@ export default function Home() {
       // Use default parameters (50 retries, 200ms delay, 500ms initial delay)
       scrollToSection(scrollTo).then((success) => {
         console.log(`Scroll to ${scrollTo} result: ${success}`);
-        if (success) {
-          sessionStorage.removeItem('scrollTo');
-        }
       });
     } else {
       // No section to scroll to - start at top
-      console.log('Home.jsx: No scrollTo, scrolling to top');
+      console.log('Home.jsx: No scrollTo in location state, scrolling to top');
       window.scrollTo(0, 0);
     }
-  }, []);
+  }, [location]);
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   useEffect(() => {
