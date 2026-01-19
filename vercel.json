@@ -2,7 +2,10 @@
   "buildCommand": "cd react-site && npm install && npm run build",
   "outputDirectory": "react-site/dist",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { 
+      "source": "/((?!googlef1125308598c4431\\.html|robots\\.txt|sitemap\\.xml|favicon\\.png|logo\\.png|.*\\.(png|jpg|jpeg|svg|webp|ico)).*)", 
+      "destination": "/" 
+    }
   ],
   "github": {
     "silent": false
