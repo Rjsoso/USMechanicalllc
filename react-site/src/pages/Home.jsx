@@ -111,7 +111,6 @@ export default function Home() {
           <Suspense
             fallback={
               <section
-                id="contact"
                 className="py-20 bg-black text-center text-white"
                 style={{ minHeight: '60vh' }}
               >
