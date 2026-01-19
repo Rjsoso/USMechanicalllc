@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense, lazy } from 'react'
+import { useEffect, useLayoutEffect, useState, Suspense, lazy, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -17,31 +17,38 @@ const Contact = lazy(() => import('../pages/Contact'))
 export default function Home() {
   const location = useLocation();
   const [scrollSlide, setScrollSlide] = useState(0);
+  const initialScrollDone = useRef(false);
 
   // Disable browser scroll restoration
-  useEffect(() => {
+  useLayoutEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
   }, []);
 
-  // Ensure page starts at top on load, unless we're scrolling to a specific section
+  // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
+  useLayoutEffect(() => {
+    if (!initialScrollDone.current) {
+      const scrollTo = location.state?.scrollTo;
+      if (!scrollTo) {
+        // Force scroll to top immediately before browser paints
+        window.scrollTo(0, 0);
+      }
+      initialScrollDone.current = true;
+    }
+  }, []);
+
+  // Handle navigation to specific sections (runs after paint)
   useEffect(() => {
-    // Check React Router location state first (most reliable)
     const scrollTo = location.state?.scrollTo;
     console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo);
     
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
       console.log(`Home.jsx: Starting scroll to ${scrollTo}`);
-      // Use default parameters (50 retries, 200ms delay, 500ms initial delay)
       scrollToSection(scrollTo).then((success) => {
         console.log(`Scroll to ${scrollTo} result: ${success}`);
       });
-    } else {
-      // No section to scroll to - start at top immediately
-      console.log('Home.jsx: No scrollTo in location state, scrolling to top');
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
   }, [location.state?.scrollTo]);
 

@@ -75,6 +75,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Force scroll to top immediately on page load -->
+    <script>
+      // Disable browser scroll restoration
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      // Force immediate scroll to top
+      window.scrollTo(0, 0);
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
