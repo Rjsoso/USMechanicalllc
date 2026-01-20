@@ -70,6 +70,8 @@ export default defineType({
                   { title: "Medium Gray", value: "#4a4a4a" },
                   { title: "Light Gray", value: "#d1d5db" },
                   { title: "White", value: "#ffffff" },
+                  { title: "US Blue (Logo)", value: "#0028B8" },
+                  { title: "US Red (Logo)", value: "#D14124" },
                   { title: "Navy Blue", value: "#1e3a8a" },
                   { title: "Sky Blue", value: "#0ea5e9" },
                   { title: "Dark Green", value: "#065f46" },
