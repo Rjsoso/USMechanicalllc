@@ -286,9 +286,9 @@ const ServicesSection = () => {
 
         {/* RIGHT — DELIVERY METHODS CONTENT */}
         {servicesData.deliveryMethods?.length > 0 && (
-          <div className="w-full md:w-1/2 px-6 md:px-0 flex flex-col">
+          <div className="flex-1 md:w-1/2 px-6 md:px-0 flex flex-col">
             {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl min-h-[600px]">
+            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl">
               
               {/* HEADER - Full Width Centered */}
               {servicesData.deliveryMethodsHeading && (
