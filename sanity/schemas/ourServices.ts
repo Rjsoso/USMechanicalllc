@@ -6,6 +6,44 @@ export default defineType({
   type: "document",
   fields: [
     {
+      name: "backgroundType",
+      type: "string",
+      title: "Background Type",
+      description: "Choose how to style the services section background",
+      options: {
+        list: [
+          { title: "Color", value: "color" },
+          { title: "Image", value: "image" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "color",
+    },
+    {
+      name: "backgroundColor",
+      type: "string",
+      title: "Background Color",
+      description: "CSS color value (e.g., '#000000', 'rgb(0,0,0)', 'transparent')",
+      hidden: ({ parent }) => parent?.backgroundType !== "color",
+      initialValue: "transparent",
+    },
+    {
+      name: "backgroundImage",
+      type: "image",
+      title: "Background Image",
+      description: "Upload a background image for the services section",
+      options: { hotspot: true },
+      hidden: ({ parent }) => parent?.backgroundType !== "image",
+      fields: [
+        {
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
+          description: "Describe the image for accessibility",
+        },
+      ],
+    },
+    {
       name: "sectionTitle",
       type: "string",
       title: "Section Title",

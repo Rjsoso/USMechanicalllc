@@ -21,6 +21,15 @@ const ServicesSection = () => {
             sectionTitle,
             rotatingText,
             descriptionText,
+            backgroundType,
+            backgroundColor,
+            backgroundImage {
+              asset-> {
+                url,
+                _id
+              },
+              alt
+            },
             deliveryMethodsHeading,
             deliveryMethodsIntro,
             deliveryMethodsAccent,
@@ -179,8 +188,36 @@ const ServicesSection = () => {
   }
 
   if (!servicesData?.services || servicesData.services.length === 0) {
+    // Calculate background style for empty state
+    const getBackgroundStyle = () => {
+      if (!servicesData) return {};
+      
+      if (servicesData.backgroundType === 'image' && servicesData.backgroundImage?.asset?.url) {
+        const imageUrl = `${servicesData.backgroundImage.asset.url}?w=1920&q=80&auto=format`;
+        return {
+          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${imageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        };
+      }
+      
+      if (servicesData.backgroundType === 'color' && servicesData.backgroundColor) {
+        return {
+          backgroundColor: servicesData.backgroundColor,
+        };
+      }
+      
+      return {};
+    };
+
     return (
-      <section id="services" className="pt-12 pb-1 bg-transparent text-white">
+      <section 
+        id="services" 
+        className="pt-12 pb-1 text-white"
+        style={getBackgroundStyle()}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
@@ -195,11 +232,37 @@ const ServicesSection = () => {
     );
   }
 
+  // Calculate background style for main section
+  const getSectionBackgroundStyle = () => {
+    const baseStyle = { position: 'relative', zIndex: 15 };
+    
+    if (servicesData.backgroundType === 'image' && servicesData.backgroundImage?.asset?.url) {
+      const imageUrl = `${servicesData.backgroundImage.asset.url}?w=1920&q=80&auto=format`;
+      return {
+        ...baseStyle,
+        backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      };
+    }
+    
+    if (servicesData.backgroundType === 'color' && servicesData.backgroundColor) {
+      return {
+        ...baseStyle,
+        backgroundColor: servicesData.backgroundColor,
+      };
+    }
+    
+    return baseStyle;
+  };
+
   return (
     <section 
       id="services" 
-      className="pt-12 pb-20 bg-transparent text-white"
-      style={{ position: 'relative', zIndex: 15 }}
+      className="pt-12 pb-20 text-white"
+      style={getSectionBackgroundStyle()}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
