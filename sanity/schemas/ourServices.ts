@@ -6,63 +6,6 @@ export default defineType({
   type: "document",
   fields: [
     {
-      name: "backgroundType",
-      type: "string",
-      title: "Background Type",
-      description: "Choose how to style the services section background",
-      options: {
-        list: [
-          { title: "Color", value: "color" },
-          { title: "Image", value: "image" },
-        ],
-        layout: "radio",
-      },
-      initialValue: "color",
-    },
-    {
-      name: "backgroundColor",
-      type: "string",
-      title: "Background Color",
-      description: "Choose a background color for the services section",
-      hidden: ({ parent }) => parent?.backgroundType !== "color",
-      options: {
-        list: [
-          { title: "Black", value: "#000000" },
-          { title: "Dark Gray", value: "#1a1a1a" },
-          { title: "Medium Gray", value: "#4a4a4a" },
-          { title: "Light Gray", value: "#d1d5db" },
-          { title: "White", value: "#ffffff" },
-          { title: "Navy Blue", value: "#1e3a8a" },
-          { title: "Sky Blue", value: "#0ea5e9" },
-          { title: "Dark Green", value: "#065f46" },
-          { title: "Emerald", value: "#10b981" },
-          { title: "Dark Red", value: "#7f1d1d" },
-          { title: "Red", value: "#ef4444" },
-          { title: "Orange", value: "#f97316" },
-          { title: "Amber", value: "#f59e0b" },
-          { title: "Transparent", value: "transparent" },
-        ],
-        layout: "dropdown",
-      },
-      initialValue: "transparent",
-    },
-    {
-      name: "backgroundImage",
-      type: "image",
-      title: "Background Image",
-      description: "Upload a background image for the services section",
-      options: { hotspot: true },
-      hidden: ({ parent }) => parent?.backgroundType !== "image",
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description: "Describe the image for accessibility",
-        },
-      ],
-    },
-    {
       name: "sectionTitle",
       type: "string",
       title: "Section Title",
