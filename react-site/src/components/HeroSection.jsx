@@ -257,12 +257,13 @@ function HeroSection() {
         <motion.h1
           className="hero-3d-text"
           data-text={heroData.headline}
-          initial={{ opacity: 0, y: -300 }}
+          initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ 
-            type: "tween",
-            ease: [0.5, 0, 0.75, 0],
-            duration: 0.4,
+            type: "spring",
+            stiffness: 60,
+            damping: 15,
+            duration: 0.8,
             delay: 0.3 
           }}
         >
