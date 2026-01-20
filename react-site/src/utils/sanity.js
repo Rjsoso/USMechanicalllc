@@ -5,7 +5,7 @@ export const client = createClient({
   projectId: "3vpl3hho",
   dataset: "production",
   apiVersion: "2023-05-03",
-  useCdn: false,
+  useCdn: true,
 });
 
 // Write-capable client for admin operations (uses token)

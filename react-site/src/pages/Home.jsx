@@ -3,12 +3,12 @@ import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
-import CompanyStats from '../components/CompanyStats'
-import ServicesSection from '../components/ServicesSection'
 import Footer from '../components/Footer'
 import { scrollToSection } from '../utils/scrollToSection'
 
 // Lazy load below-fold components for better initial load performance
+const CompanyStats = lazy(() => import('../components/CompanyStats'))
+const ServicesSection = lazy(() => import('../components/ServicesSection'))
 const Portfolio = lazy(() => import('../components/Portfolio'))
 const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
 const Careers = lazy(() => import('../components/Careers'))
@@ -143,9 +143,13 @@ export default function Home() {
               zIndex: 5,
             }}
           >
-            <CompanyStats />
+            <Suspense fallback={<div className="py-16 bg-black"></div>}>
+              <CompanyStats />
+            </Suspense>
 
-            <ServicesSection />
+            <Suspense fallback={<div className="py-16 bg-black"></div>}>
+              <ServicesSection />
+            </Suspense>
 
             <Suspense fallback={<div className="py-20 bg-black text-center text-white">Loading...</div>}>
               <Portfolio />

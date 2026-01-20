@@ -11,19 +11,22 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'animation-vendor': ['framer-motion', 'gsap'],
-          'sanity-vendor': ['@sanity/client', '@sanity/image-url', '@portabletext/react'],
+          // Vendor chunks - more granular splitting
+          'react-core': ['react', 'react-dom'],
+          'react-router': ['react-router-dom'],
+          'animation': ['framer-motion', 'gsap'],
+          'sanity': ['@sanity/client', '@sanity/image-url', '@portabletext/react'],
+          'icons': ['react-icons', 'lucide-react'],
         }
       }
     },
-    // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
+    // More aggressive minification for production
+    minify: 'esbuild',
+    target: 'es2015',
+    // Reduce chunk size further
+    chunkSizeWarningLimit: 500,
     // Enable source maps for production debugging (optional)
     sourcemap: false,
-    // Use esbuild minification (default, faster and no extra dependencies)
-    minify: 'esbuild',
   },
   // Optimize dependencies
   optimizeDeps: {
