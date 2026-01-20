@@ -49,6 +49,7 @@ const ServicesSection = () => {
               description,
               backgroundType,
               backgroundColor,
+              textColor,
               backgroundImage {
                 asset-> {
                   _id,
@@ -256,9 +257,17 @@ const ServicesSection = () => {
                   className="p-8 shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105 rounded-r-xl"
                   style={backgroundStyle}
                 >
-                  <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>
+                  <h3 
+                    className="text-xl font-semibold mb-3"
+                    style={{ color: box.textColor || '#ffffff' }}
+                  >
+                    {box.title}
+                  </h3>
                   {box.description && (
-                    <p className="text-sm text-gray-300 opacity-75 line-clamp-2 leading-relaxed mb-4">
+                    <p 
+                      className="text-sm opacity-75 line-clamp-2 leading-relaxed mb-4"
+                      style={{ color: box.textColor || '#d1d5db' }}
+                    >
                       {box.description}
                     </p>
                   )}

@@ -99,6 +99,27 @@ export default defineType({
               ],
             },
             {
+              name: "textColor",
+              type: "string",
+              title: "Text Color",
+              description: "Choose the color for title and description text",
+              options: {
+                list: [
+                  { title: "White", value: "#ffffff" },
+                  { title: "Light Gray", value: "#d1d5db" },
+                  { title: "Medium Gray", value: "#9ca3af" },
+                  { title: "Dark Gray", value: "#4b5563" },
+                  { title: "Black", value: "#000000" },
+                  { title: "Sky Blue", value: "#0ea5e9" },
+                  { title: "Emerald", value: "#10b981" },
+                  { title: "Amber", value: "#f59e0b" },
+                  { title: "Red", value: "#ef4444" },
+                ],
+                layout: "dropdown",
+              },
+              initialValue: "#ffffff",
+            },
+            {
               name: "slug",
               type: "slug",
               title: "URL Slug",
