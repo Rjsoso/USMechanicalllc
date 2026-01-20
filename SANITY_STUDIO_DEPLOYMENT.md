@@ -12,7 +12,7 @@ For the best stability and flexibility, your studio should be deployed to BOTH:
 - **Build:** ✅ Complete
 - **CORS:** ✅ Properly configured for Vercel
 - **Vercel Deployment:** ✅ Active at `https://sanity-henna.vercel.app`
-- **Sanity Hosting:** ⚠️ Needs deployment
+- **Sanity Hosting:** ✅ DEPLOYED at `https://us-mechanical.sanity.studio/`
 
 ---
 
@@ -37,9 +37,9 @@ npx sanity deploy
 2. Choose a hostname: `us-mechanical` or `usmechanical` (lowercase, no spaces)
 3. Wait for deployment to complete (~30 seconds)
 
-**You'll get a URL like:**
+**✅ DEPLOYED TO:**
 ```
-https://us-mechanical.sanity.studio
+https://us-mechanical.sanity.studio/
 ```
 
 **Access your studio at this URL going forward.**
