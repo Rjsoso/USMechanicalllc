@@ -40,7 +40,7 @@ export default defineType({
           { title: '📋 About - For company info and details', value: 'about' },
           { title: '🛡️ Safety - For safety information', value: 'safety' },
           { title: '🔧 Services - For services and offerings', value: 'services' },
-          { title: '🏢 Projects - For portfolio and projects', value: 'projects' },
+          { title: '🏢 Portfolio - For portfolio and projects', value: 'projects' },
           { title: '📞 Contact - For contact information', value: 'contact' }
         ],
         layout: 'radio'

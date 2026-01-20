@@ -156,7 +156,7 @@ function Header() {
       { icon: getIconSvg('about'), label: 'About', onClick: () => scrollToSection('#about') },
       { icon: getIconSvg('safety'), label: 'Safety', onClick: () => scrollToSection('#safety') },
       { icon: getIconSvg('services'), label: 'Services', onClick: () => scrollToSection('#services') },
-      { icon: getIconSvg('projects'), label: 'Projects', onClick: () => scrollToSection('#portfolio') },
+      { icon: getIconSvg('projects'), label: 'Portfolio', onClick: () => scrollToSection('#portfolio') },
       { icon: getIconSvg('contact'), label: 'Contact', onClick: () => scrollToSection('#contact') }
     ];
   }, [navLinks]);

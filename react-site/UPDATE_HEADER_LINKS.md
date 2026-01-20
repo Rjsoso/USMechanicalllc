@@ -12,8 +12,8 @@
      - href: `#about`
    
    - **Link 2:**
-     - Label: `Projects`
-     - href: `#projects`
+     - Label: `Portfolio`
+     - href: `#portfolio`
    
    - **Link 3:**
      - Label: `Contact`
@@ -31,7 +31,7 @@
 2. Open the **Header Section** document
 3. Edit the **Navigation Links** array:
    - Add/Edit link 1: Label: `About`, Link Target: `#about`
-   - Add/Edit link 2: Label: `Projects`, Link Target: `#projects`
+   - Add/Edit link 2: Label: `Portfolio`, Link Target: `#portfolio`
    - Add/Edit link 3: Label: `Contact`, Link Target: `#contact`
 4. Update the **Button Link** to: `#contact`
 5. Click **Publish**
@@ -50,6 +50,6 @@ node update-header-links.js
 
 - `#hero` - Hero Section
 - `#about` - About & Safety Section
-- `#projects` - Recognition Projects Section
+- `#portfolio` - Portfolio Section
 - `#contact` - Contact Section
 
