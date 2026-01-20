@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { client, urlFor } from '../utils/sanity';
 
 export default function Careers() {
@@ -84,32 +85,61 @@ export default function Careers() {
     >
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         {/* Main Heading */}
-        <h2 className="section-title text-5xl md:text-6xl text-black mb-4 text-center">
+        <motion.h2 
+          className="section-title text-5xl md:text-6xl text-black mb-4 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0 }}
+        >
           {heading}
-        </h2>
+        </motion.h2>
         
         {/* Subheading */}
-        <h3 className="text-2xl md:text-3xl font-bold text-black mb-8 text-center">
+        <motion.h3 
+          className="text-2xl md:text-3xl font-bold text-black mb-8 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
           {jobTitle}
-        </h3>
+        </motion.h3>
         
         {/* Job Overview Bullets */}
-        <div className="mb-8 text-center">
+        <motion.div 
+          className="mb-8 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <ul className="inline-block text-left space-y-2 text-lg">
             {jobOverview.map((item, idx) => (
               <li key={idx}>• {item}</li>
             ))}
           </ul>
-        </div>
+        </motion.div>
         
         {/* Job Description */}
-        <p className="text-lg text-black mb-10 text-center max-w-3xl mx-auto leading-relaxed">
+        <motion.p 
+          className="text-lg text-black mb-10 text-center max-w-3xl mx-auto leading-relaxed"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
           {jobDescription}
-        </p>
+        </motion.p>
         
         {/* Qualifications & Benefits Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-10 text-left">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <h4 className="text-xl font-bold mb-4 text-black">Qualifications:</h4>
             <ul className="space-y-2 text-lg">
               {qualifications.map((qual, idx) => (
@@ -118,19 +148,30 @@ export default function Careers() {
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
             <h4 className="text-xl font-bold mb-4 text-black">Benefits:</h4>
             <ul className="space-y-2 text-lg">
               {benefits.map((benefit, idx) => (
                 <li key={idx}>• {benefit}</li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </div>
         
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <motion.div 
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
           {indeedUrl && (
             <a
               href={indeedUrl}
@@ -150,15 +191,21 @@ export default function Careers() {
               Download Fillable PDF
             </a>
           )}
-        </div>
+        </motion.div>
         
         {/* Submission Instructions */}
         {(submissionEmail || submissionFax) && (
-          <p className="text-sm text-gray-600 text-center">
+          <motion.p 
+            className="text-sm text-gray-600 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+          >
             {submissionEmail && `Email to ${submissionEmail}`}
             {submissionEmail && submissionFax && ' or '}
             {submissionFax && `fax to ${submissionFax}`}
-          </p>
+          </motion.p>
         )}
       </div>
     </section>

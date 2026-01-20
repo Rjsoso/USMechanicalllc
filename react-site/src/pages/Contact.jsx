@@ -300,26 +300,43 @@ export default function Contact() {
         {!loading && contactData && (
           <>
             <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0 }}
               className="section-title text-5xl md:text-6xl text-center mb-8 text-white"
             >
               {contactData.heroTitle || 'Contact Us'}
             </motion.h1>
 
-            <p className="text-center text-white mb-12">{contactData.description}</p>
+            <motion.p 
+              className="text-center text-white mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              {contactData.description}
+            </motion.p>
 
             <div className="grid md:grid-cols-2 gap-12">
               {/* LEFT SIDE — OFFICE INFO */}
               <div>
                 {contactData.offices && contactData.offices.length > 0 ? (
                   contactData.offices.map((office, index) => (
-                    <div key={index} className="mb-8">
+                    <motion.div 
+                      key={index} 
+                      className="mb-8"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+                    >
                       <h2 className="text-2xl font-semibold mb-4 text-white">{office.locationName}</h2>
                       <p className="text-white">{office.address}</p>
                       <p className="text-white">Phone: <span className="text-blue-300">{office.phone}</span></p>
                       {office.fax && <p className="text-white">Fax: {office.fax}</p>}
-                    </div>
+                    </motion.div>
                   ))
                 ) : (
                   <p className="text-white">No office locations available.</p>
@@ -327,10 +344,23 @@ export default function Contact() {
 
                 {/* AFFILIATES */}
                 {contactData.affiliates && contactData.affiliates.length > 0 && (
-                  <div className="mt-8">
+                  <motion.div 
+                    className="mt-8"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6, delay: 0.2 + (contactData.offices?.length || 0) * 0.1 }}
+                  >
                     <h2 className="text-2xl font-semibold mb-4 text-white">Affiliate Companies</h2>
                     {contactData.affiliates.map((affiliate, i) => (
-                      <div key={i} className="mb-6">
+                      <motion.div 
+                        key={i} 
+                        className="mb-6"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.5, delay: 0.3 + (contactData.offices?.length || 0) * 0.1 + (i * 0.1) }}
+                      >
                         {affiliate.logo && urlFor(affiliate.logo) && (
                           <img
                             src={urlFor(affiliate.logo).width(200).quality(80).auto('format').url()}
@@ -342,14 +372,20 @@ export default function Contact() {
                         )}
                         <p className="font-semibold text-white">{affiliate.name}</p>
                         {affiliate.description && <p className="text-white">{affiliate.description}</p>}
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 )}
               </div>
 
               {/* RIGHT SIDE — FORM */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20">
+              <motion.div 
+                className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
                 <h3 className="text-2xl font-semibold mb-4 text-white">
                   {contactData.formSettings?.headline || 'Send Us a Message'}
                 </h3>
@@ -466,7 +502,7 @@ export default function Contact() {
                     </p>
                   )}
                 </form>
-              </div>
+              </motion.div>
             </div>
           </>
         )}
