@@ -43,16 +43,6 @@ function Portfolio() {
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories]);
 
-  if (loading) {
-    return (
-      <section id="portfolio" className="py-20 bg-transparent text-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center">Loading portfolio...</div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section id="portfolio" className="pt-24 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
       {/* Portfolio Title */}
@@ -83,25 +73,11 @@ function Portfolio() {
       <div className="bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
           {displayCategories.map((category, index) => (
-            <motion.div
-              key={category._id}
-              initial={{ 
-                boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0)' : 'none'
-              }}
-              whileInView={{ 
-                boxShadow: index < 3 ? '0 -12px 24px rgba(0, 0, 0, 0.4)' : 'none'
-              }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.12 }}
-            >
-              <motion.div
+            <div key={category._id}>
+              <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
                 className="relative cursor-pointer group overflow-hidden"
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: "easeInOut", delay: index * 0.12 }}
               >
                 {/* Background Image */}
                 {category.image && (
@@ -136,8 +112,8 @@ function Portfolio() {
                     </svg>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
