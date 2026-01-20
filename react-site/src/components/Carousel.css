@@ -121,23 +121,22 @@
   z-index: 10;
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
-  color: #000;
-  font-size: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .carousel-nav-button:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 1);
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.15);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .carousel-nav-button:active:not(:disabled) {
@@ -147,7 +146,6 @@
 .carousel-nav-button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .carousel-nav-button.left {
@@ -187,7 +185,7 @@
   .carousel-nav-button {
     width: 40px;
     height: 40px;
-    font-size: 20px;
+    font-size: 28px;
   }
 
   .carousel-nav-button.left {
