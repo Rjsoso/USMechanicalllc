@@ -113,6 +113,51 @@
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+/* Navigation Arrows */
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: #000;
+  font-size: 24px;
+}
+
+.carousel-nav-button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-nav-button:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-nav-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-nav-button.left {
+  left: 16px;
+}
+
+.carousel-nav-button.right {
+  right: 16px;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .carousel-container {
@@ -137,5 +182,19 @@
   .carousel-indicator {
     height: 6px;
     width: 6px;
+  }
+
+  .carousel-nav-button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .carousel-nav-button.left {
+    left: 12px;
+  }
+
+  .carousel-nav-button.right {
+    right: 12px;
   }
 }

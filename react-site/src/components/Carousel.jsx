@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 import './Carousel.css';
 
@@ -172,6 +173,33 @@ export default function Carousel({
   const activeIndex =
     items.length === 0 ? 0 : loop ? (position - 1 + items.length) % items.length : Math.min(position, items.length - 1);
 
+  // Navigation arrow handlers
+  const handlePrevious = () => {
+    if (isAnimating) return;
+    setPosition(prev => {
+      const next = prev - 1;
+      if (loop) {
+        return next < 0 ? itemsForRender.length - 1 : next;
+      }
+      return Math.max(0, next);
+    });
+  };
+
+  const handleNext = () => {
+    if (isAnimating) return;
+    setPosition(prev => {
+      const next = prev + 1;
+      if (loop) {
+        return next >= itemsForRender.length ? 0 : next;
+      }
+      return Math.min(itemsForRender.length - 1, next);
+    });
+  };
+
+  // Determine if arrows should be disabled (non-loop mode only)
+  const isPrevDisabled = !loop && position <= 0;
+  const isNextDisabled = !loop && position >= itemsForRender.length - 1;
+
   if (items.length === 0) {
     return null;
   }
@@ -215,6 +243,25 @@ export default function Carousel({
           />
         ))}
       </motion.div>
+
+      {/* Navigation Arrows */}
+      <button
+        className="carousel-nav-button left"
+        onClick={handlePrevious}
+        disabled={isPrevDisabled}
+        aria-label="Previous image"
+      >
+        <FiChevronLeft />
+      </button>
+      <button
+        className="carousel-nav-button right"
+        onClick={handleNext}
+        disabled={isNextDisabled}
+        aria-label="Next image"
+      >
+        <FiChevronRight />
+      </button>
+
       <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
         <div className="carousel-indicators">
           {items.map((_, index) => (
