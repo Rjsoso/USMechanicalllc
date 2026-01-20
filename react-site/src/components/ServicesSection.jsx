@@ -56,6 +56,8 @@ const ServicesSection = () => {
             servicesInfo[] {
               title,
               description,
+              backgroundType,
+              backgroundColor,
               backgroundImage {
                 asset-> {
                   _id,
@@ -282,23 +284,36 @@ const ServicesSection = () => {
         <div className="flex-1 md:w-1/2 pr-6 md:pr-10">
           <div className="space-y-4">
             {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => {
-              const backgroundImageUrl = box.backgroundImage?.asset?.url
-                ? `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`
-                : null;
-
-              const backgroundStyle = backgroundImageUrl
-                ? {
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${backgroundImageUrl})`,
+              // Calculate background style based on type
+              const getBoxBackgroundStyle = () => {
+                if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
+                  const imageUrl = `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`;
+                  return {
+                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${imageUrl})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                  }
-                : undefined;
+                  };
+                }
+                
+                if (box.backgroundType === 'color' && box.backgroundColor) {
+                  return {
+                    backgroundColor: box.backgroundColor,
+                  };
+                }
+                
+                // Fallback to default black background
+                return {
+                  backgroundColor: '#000000',
+                };
+              };
+
+              const backgroundStyle = getBoxBackgroundStyle();
 
               return (
                 <div
                   key={index}
-                    className="p-8 bg-black shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105 rounded-r-xl"
+                  className="p-8 shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105 rounded-r-xl"
                   style={backgroundStyle}
                 >
                   <h3 className="text-xl font-semibold text-white mb-3">{box.title}</h3>

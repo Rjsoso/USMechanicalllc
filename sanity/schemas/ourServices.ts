@@ -82,11 +82,33 @@ export default defineType({
               description: "Preview text shown in the service box (truncated to 2 lines)",
             },
             {
+              name: "backgroundType",
+              type: "string",
+              title: "Background Type",
+              description: "Choose how to style this service box background",
+              options: {
+                list: [
+                  { title: "Color", value: "color" },
+                  { title: "Image", value: "image" },
+                ],
+                layout: "radio",
+              },
+              initialValue: "image",
+            },
+            {
+              name: "backgroundColor",
+              type: "string",
+              title: "Background Color",
+              description: "CSS color value (e.g., '#1a1a1a', 'rgb(26,26,26)', 'transparent')",
+              hidden: ({ parent }) => parent?.backgroundType !== "color",
+            },
+            {
               name: "backgroundImage",
               type: "image",
               title: "Box Background Image",
-              description: "Optional background image displayed behind this service box",
+              description: "Background image displayed behind this service box",
               options: { hotspot: true },
+              hidden: ({ parent }) => parent?.backgroundType !== "image",
               fields: [
                 {
                   name: "alt",
