@@ -6,7 +6,8 @@
     "dev": "sanity dev",
     "start": "sanity dev",
     "build": "sanity build",
-    "deploy": "sanity deploy"
+    "deploy": "sanity deploy",
+    "populate-contact": "sanity exec scripts/populateContactData.ts --with-user-token"
   },
   "keywords": [],
   "author": "",
