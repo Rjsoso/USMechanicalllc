@@ -18,6 +18,15 @@ export default defineType({
       description: 'Intro text under the main heading',
     },
     {
+      name: 'backgroundImage',
+      title: 'Background Image',
+      type: 'image',
+      description: 'Background image for the contact page. Will be displayed with a dark overlay for text readability.',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
       name: 'footerLogo',
       title: 'Footer Logo',
       type: 'image',
