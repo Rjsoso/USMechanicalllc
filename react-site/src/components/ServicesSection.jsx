@@ -181,7 +181,7 @@ const ServicesSection = () => {
     );
   }
 
-  if (!servicesData?.services || servicesData.services.length === 0) {
+  if (!servicesData?.servicesInfo || servicesData.servicesInfo.length === 0) {
     return (
       <section 
         id="services" 
