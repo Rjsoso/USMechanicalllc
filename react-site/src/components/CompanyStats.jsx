@@ -227,7 +227,7 @@ const CompanyStats = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {statsData.stats?.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <div className="text-5xl font-extrabold mb-2 text-[#DC4226]">
+                <div className="text-5xl font-extrabold mb-2 text-[#FF5630]">
                   <AnimatedNumber 
                     value={item.value} 
                     startValue={item.enableCustomStart ? item.animateFromValue : 0}
