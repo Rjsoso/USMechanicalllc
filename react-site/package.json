@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css}\"",
-    "sanity:clean": "rm -rf .sanity node_modules && npm install && npm run dev"
+    "sanity:clean": "rm -rf .sanity node_modules && npm install && npm run dev",
+    "generate-sitemap": "node generate-sitemap.mjs"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",
