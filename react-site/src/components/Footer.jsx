@@ -18,9 +18,9 @@ function Footer() {
     const fetchInfo = () => {
       setLoading(true)
       
-      // Fetch contact data including footer logo
+      // Fetch contact data including footer logo - exclude drafts to ensure consistency
       client
-        .fetch(`*[_type == "contact"][0]{
+        .fetch(`*[_type == "contact" && !(_id in path("drafts.**"))][0]{
           email,
           licenseInfo,
           footerLogo,

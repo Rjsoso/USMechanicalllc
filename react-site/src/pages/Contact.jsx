@@ -38,8 +38,9 @@ export default function Contact() {
     const fetchContact = async () => {
       try {
         setLoading(true);
-        // Fetch contact data
-        const contactQuery = `*[_type == "contact"][0]{
+        // Fetch contact data - explicitly target published document (not drafts)
+        // This ensures webhooks fire correctly when content is published
+        let contactQuery = `*[_type == "contact" && _id == "contact"][0]{
           ...,
           backgroundImage {
             asset-> {
@@ -48,7 +49,22 @@ export default function Contact() {
             }
           }
         }`;
-        const contactData = await client.fetch(contactQuery);
+        let contactData = await client.fetch(contactQuery);
+        
+        // Fallback: If specific ID not found, get first published document (exclude drafts)
+        if (!contactData) {
+          contactQuery = `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
+            ...,
+            backgroundImage {
+              asset-> {
+                _id,
+                url
+              }
+            }
+          }`;
+          contactData = await client.fetch(contactQuery);
+        }
+        
         setContactData(contactData);
         
         // Fetch hero background image as fallback
