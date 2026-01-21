@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { client, urlFor } from '../utils/sanity';
 import { PortableText } from '@portabletext/react';
 import { navigateAndScroll } from '../utils/scrollToSection';
@@ -13,6 +14,7 @@ export default function ServiceDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [serviceData, setServiceData] = useState(null);
+  const [servicesList, setServicesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -63,6 +65,7 @@ export default function ServiceDetail() {
           return;
         }
 
+        setServicesList(Array.isArray(data.servicesInfo) ? data.servicesInfo : []);
         setServiceData(service);
         setLoading(false);
       } catch (err) {
@@ -85,6 +88,18 @@ export default function ServiceDetail() {
   const handleRequestQuote = () => {
     navigateAndScroll('contact', navigate);
   };
+
+  const { prevService, nextService } = useMemo(() => {
+    if (!Array.isArray(servicesList) || servicesList.length === 0) {
+      return { prevService: null, nextService: null };
+    }
+    const currentIndex = servicesList.findIndex((s) => s.slug?.current === slug);
+    if (currentIndex < 0) return { prevService: null, nextService: null };
+    return {
+      prevService: currentIndex > 0 ? servicesList[currentIndex - 1] : null,
+      nextService: currentIndex < servicesList.length - 1 ? servicesList[currentIndex + 1] : null,
+    };
+  }, [servicesList, slug]);
 
   // Map images to carousel items format (exact same as AboutAndSafety)
   const carouselItems = useMemo(() => {
@@ -144,26 +159,52 @@ export default function ServiceDetail() {
       <Header />
       <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
-          {/* Back Button */}
-          <button
-            onClick={() => navigateAndScroll('services', navigate)}
-            className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Back + Prev/Next */}
+          <div className="mb-8 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => navigateAndScroll('services', navigate)}
+              className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Services
-          </button>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back to Services
+            </button>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => prevService?.slug?.current && navigate(`/services/${prevService.slug.current}`)}
+                disabled={!prevService?.slug?.current}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Previous service"
+              >
+                <FiChevronLeft className="text-lg" />
+                Previous Service
+              </button>
+
+              <button
+                type="button"
+                onClick={() => nextService?.slug?.current && navigate(`/services/${nextService.slug.current}`)}
+                disabled={!nextService?.slug?.current}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Next service"
+              >
+                Next Service
+                <FiChevronRight className="text-lg" />
+              </button>
+            </div>
+          </div>
 
           {/* Service Title */}
           <motion.h1
@@ -201,7 +242,7 @@ export default function ServiceDetail() {
           {/* Images Carousel and Features Side by Side */}
           {(serviceData.images && serviceData.images.length > 0) || (serviceData.features && serviceData.features.length > 0) ? (
             <motion.div
-              className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-12"
+              className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -259,7 +300,7 @@ export default function ServiceDetail() {
 
           {/* Request a Quote Button */}
           <motion.div
-            className="flex justify-center mt-16 mb-8"
+            className="flex justify-center mt-8 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
