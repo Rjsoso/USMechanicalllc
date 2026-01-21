@@ -192,7 +192,7 @@ export default function ProjectDetail() {
             {carouselItems.length > 0 && (
               <div className="lg:w-2/3 w-full">
                 <FadeInWhenVisible>
-                  <div className="w-full" style={{ height: '500px', position: 'relative' }}>
+                  <div className="w-full" style={{ height: '600px', position: 'relative' }}>
                     <Carousel
                       items={carouselItems}
                       baseWidth={700}
