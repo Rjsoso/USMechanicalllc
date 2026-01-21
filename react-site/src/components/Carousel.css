@@ -117,7 +117,7 @@
 /* Navigation Arrows */
 .carousel-nav-button {
   position: absolute;
-  top: calc(50% - 16px);
+  top: calc(50% - 28px);
   transform: translateY(-50%);
   z-index: 10;
   width: 48px;
