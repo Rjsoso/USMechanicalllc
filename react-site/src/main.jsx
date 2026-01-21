@@ -4,10 +4,9 @@ import App from './App.jsx'
 import './index.css'
 
 // Console message for curious developers
-// Display toolbox icon
 console.log(
-  '%c ',
-  'font-size: 1px; padding: 60px 80px; background: url(https://us-mechanicalllc.vercel.app/toolbox-icon.png) no-repeat center; background-size: contain;'
+  '%c🧰',
+  'font-size: 60px; line-height: 1;'
 )
 
 console.log(
