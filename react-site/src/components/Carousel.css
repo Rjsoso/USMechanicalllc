@@ -93,7 +93,7 @@
 }
 
 .carousel-nav-container.compact {
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 .carousel-indicators-container {
@@ -224,7 +224,7 @@
   }
 
   .carousel-nav-container.compact {
-    margin-top: 0;
+    margin-top: 10px;
   }
 
   .carousel-indicators {
