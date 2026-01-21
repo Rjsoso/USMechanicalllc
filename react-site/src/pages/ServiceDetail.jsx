@@ -77,6 +77,11 @@ export default function ServiceDetail() {
     }
   }, [slug]);
 
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
   const handleRequestQuote = () => {
     navigateAndScroll('contact', navigate);
   };
