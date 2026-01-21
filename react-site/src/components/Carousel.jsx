@@ -205,62 +205,66 @@ export default function Carousel({
   }
 
   return (
-    <div
-      ref={containerRef}
-      className={`carousel-container ${round ? 'round' : ''}`}
-      style={{
-        width: `${baseWidth}px`,
-        ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
-      }}
-    >
-      <motion.div
-        className="carousel-track"
-        drag={isAnimating ? false : 'x'}
-        {...dragProps}
+    <div className="carousel-wrapper">
+      <div
+        ref={containerRef}
+        className={`carousel-container ${round ? 'round' : ''}`}
         style={{
-          width: itemWidth,
-          gap: `${GAP}px`,
-          perspective: 1000,
-          perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
-          x
+          width: `${baseWidth}px`,
+          ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
         }}
-        onDragEnd={handleDragEnd}
-        animate={{ x: -(position * trackItemOffset) }}
-        transition={effectiveTransition}
-        onAnimationStart={handleAnimationStart}
-        onAnimationComplete={handleAnimationComplete}
       >
-        {itemsForRender.map((item, index) => (
-          <CarouselItem
-            key={`${item?.id ?? index}-${index}`}
-            item={item}
-            index={index}
-            itemWidth={itemWidth}
-            round={round}
-            trackItemOffset={trackItemOffset}
-            x={x}
-            transition={effectiveTransition}
-          />
-        ))}
-      </motion.div>
+        <motion.div
+          className="carousel-track"
+          drag={isAnimating ? false : 'x'}
+          {...dragProps}
+          style={{
+            width: itemWidth,
+            gap: `${GAP}px`,
+            perspective: 1000,
+            perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
+            x
+          }}
+          onDragEnd={handleDragEnd}
+          animate={{ x: -(position * trackItemOffset) }}
+          transition={effectiveTransition}
+          onAnimationStart={handleAnimationStart}
+          onAnimationComplete={handleAnimationComplete}
+        >
+          {itemsForRender.map((item, index) => (
+            <CarouselItem
+              key={`${item?.id ?? index}-${index}`}
+              item={item}
+              index={index}
+              itemWidth={itemWidth}
+              round={round}
+              trackItemOffset={trackItemOffset}
+              x={x}
+              transition={effectiveTransition}
+            />
+          ))}
+        </motion.div>
+      </div>
 
-      {/* Navigation Arrows */}
-      <button
-        className="carousel-nav-button left"
-        onClick={handlePrevious}
-        disabled={isPrevDisabled}
-        aria-label="Previous image"
-      >
-        <FiChevronLeft />
-      </button>
-      <button
-        className="carousel-nav-button right"
-        onClick={handleNext}
-        disabled={isNextDisabled}
-        aria-label="Next image"
-      >
-        <FiChevronRight />
-      </button>
+      {/* Navigation Arrows - moved below carousel */}
+      <div className="carousel-nav-container">
+        <button
+          className="carousel-nav-button left"
+          onClick={handlePrevious}
+          disabled={isPrevDisabled}
+          aria-label="Previous image"
+        >
+          <FiChevronLeft />
+        </button>
+        <button
+          className="carousel-nav-button right"
+          onClick={handleNext}
+          disabled={isNextDisabled}
+          aria-label="Next image"
+        >
+          <FiChevronRight />
+        </button>
+      </div>
 
       <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
         <div className="carousel-indicators">

@@ -1,3 +1,11 @@
+.carousel-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
 .carousel-container {
   position: relative;
   overflow: hidden;
@@ -74,6 +82,13 @@
   text-align: center;
 }
 
+.carousel-nav-container {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
 .carousel-indicators-container {
   display: flex;
   width: 100%;
@@ -116,10 +131,7 @@
 
 /* Navigation Arrows */
 .carousel-nav-button {
-  position: absolute;
-  top: calc(60% - 28px);
-  transform: translateY(-50%);
-  z-index: 10;
+  position: relative;
   width: 48px;
   height: 48px;
   background: rgba(255, 255, 255, 0.2);
@@ -140,12 +152,12 @@
 .carousel-nav-button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.3);
   color: rgba(0, 0, 0, 1);
-  transform: translateY(-50%) scale(1.1);
+  transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .carousel-nav-button:active:not(:disabled) {
-  transform: translateY(-50%) scale(0.95);
+  transform: scale(0.95);
 }
 
 .carousel-nav-button:disabled {
@@ -153,16 +165,12 @@
   cursor: not-allowed;
 }
 
-.carousel-nav-button.left {
-  left: 16px;
-}
-
-.carousel-nav-button.right {
-  right: 16px;
-}
-
 /* Responsive styles */
 @media (max-width: 768px) {
+  .carousel-wrapper {
+    gap: 12px;
+  }
+
   .carousel-container {
     padding: 12px;
     width: 100% !important;
@@ -175,6 +183,10 @@
 
   .carousel-item {
     width: 100% !important;
+  }
+
+  .carousel-nav-container {
+    gap: 12px;
   }
 
   .carousel-indicators {
@@ -191,13 +203,5 @@
     width: 40px;
     height: 40px;
     font-size: 28px;
-  }
-
-  .carousel-nav-button.left {
-    left: 12px;
-  }
-
-  .carousel-nav-button.right {
-    right: 12px;
   }
 }
