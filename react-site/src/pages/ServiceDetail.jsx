@@ -214,6 +214,7 @@ export default function ServiceDetail() {
                       items={carouselItems}
                       baseWidth={550}
                       containerClassName="h-[500px]"
+                      compactNav={true}
                       autoplay={true}
                       autoplayDelay={4000}
                       pauseOnHover={true}

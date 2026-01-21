@@ -46,6 +46,7 @@ export default function Carousel({
   baseWidth = 300,
   containerClassName = "",
   arrowsInside = false,
+  compactNav = false,
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
@@ -229,7 +230,7 @@ export default function Carousel({
   }
 
   return (
-    <div className="carousel-wrapper">
+    <div className={`carousel-wrapper ${compactNav ? 'compact' : ''}`}>
       <div
         ref={containerRef}
         className={`carousel-container ${round ? 'round' : ''} ${containerClassName}`}
@@ -275,7 +276,7 @@ export default function Carousel({
 
       {/* Render arrows underneath if not inside */}
       {!arrowsInside && (
-        <div className="carousel-nav-container">
+        <div className={`carousel-nav-container ${compactNav ? 'compact' : ''}`}>
           {renderNavButtons(false)}
         </div>
       )}

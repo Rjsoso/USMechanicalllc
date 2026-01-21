@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.carousel-wrapper.compact {
+  gap: 0;
+}
+
 .carousel-container {
   position: relative;
   overflow: hidden;
@@ -86,6 +90,10 @@
   gap: 16px;
   justify-content: center;
   align-items: center;
+}
+
+.carousel-nav-container.compact {
+  margin-top: 0;
 }
 
 .carousel-indicators-container {
@@ -193,6 +201,10 @@
     gap: 4px;
   }
 
+  .carousel-wrapper.compact {
+    gap: 0;
+  }
+
   .carousel-container {
     padding: 12px;
     width: 100% !important;
@@ -209,6 +221,10 @@
 
   .carousel-nav-container {
     gap: 8px;
+  }
+
+  .carousel-nav-container.compact {
+    margin-top: 0;
   }
 
   .carousel-indicators {
