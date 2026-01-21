@@ -45,6 +45,7 @@ export default function Carousel({
   items = [],
   baseWidth = 300,
   containerClassName = "",
+  arrowsInside = false,
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
@@ -201,6 +202,28 @@ export default function Carousel({
   const isPrevDisabled = !loop && position <= 0;
   const isNextDisabled = !loop && position >= itemsForRender.length - 1;
 
+  // Define navigation button JSX to avoid duplication
+  const renderNavButtons = (isInside) => (
+    <>
+      <button
+        className={`carousel-nav-button left ${isInside ? 'inside' : ''}`}
+        onClick={handlePrevious}
+        disabled={isPrevDisabled}
+        aria-label="Previous image"
+      >
+        <FiChevronLeft />
+      </button>
+      <button
+        className={`carousel-nav-button right ${isInside ? 'inside' : ''}`}
+        onClick={handleNext}
+        disabled={isNextDisabled}
+        aria-label="Next image"
+      >
+        <FiChevronRight />
+      </button>
+    </>
+  );
+
   if (items.length === 0) {
     return null;
   }
@@ -245,27 +268,17 @@ export default function Carousel({
             />
           ))}
         </motion.div>
+
+        {/* Render arrows inside if requested */}
+        {arrowsInside && renderNavButtons(true)}
       </div>
 
-      {/* Navigation Arrows - moved below carousel */}
-      <div className="carousel-nav-container">
-        <button
-          className="carousel-nav-button left"
-          onClick={handlePrevious}
-          disabled={isPrevDisabled}
-          aria-label="Previous image"
-        >
-          <FiChevronLeft />
-        </button>
-        <button
-          className="carousel-nav-button right"
-          onClick={handleNext}
-          disabled={isNextDisabled}
-          aria-label="Next image"
-        >
-          <FiChevronRight />
-        </button>
-      </div>
+      {/* Render arrows underneath if not inside */}
+      {!arrowsInside && (
+        <div className="carousel-nav-container">
+          {renderNavButtons(false)}
+        </div>
+      )}
 
       <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
         <div className="carousel-indicators">

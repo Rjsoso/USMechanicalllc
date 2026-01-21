@@ -148,6 +148,21 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.carousel-nav-button.inside {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.carousel-nav-button.inside.left {
+  left: 16px;
+}
+
+.carousel-nav-button.inside.right {
+  right: 16px;
+}
+
 .carousel-nav-button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.3);
   color: rgba(0, 0, 0, 1);
@@ -155,8 +170,16 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.carousel-nav-button.inside:hover:not(:disabled) {
+  transform: translateY(-50%) scale(1.1);
+}
+
 .carousel-nav-button:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.carousel-nav-button.inside:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .carousel-nav-button:disabled {

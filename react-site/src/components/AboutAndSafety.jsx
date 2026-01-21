@@ -264,6 +264,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   items={carouselItems}
                   baseWidth={1100}
                   containerClassName="h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]"
+                  arrowsInside={true}
                   autoplay={!isExpanded}
                   autoplayDelay={4000}
                   pauseOnHover={true}
