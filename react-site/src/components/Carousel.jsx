@@ -173,9 +173,6 @@ export default function Carousel({
         }
       };
 
-  const activeIndex =
-    items.length === 0 ? 0 : loop ? (position - 1 + items.length) % items.length : Math.min(position, items.length - 1);
-
   // Navigation arrow handlers
   const handlePrevious = () => {
     if (isAnimating) return;
@@ -280,22 +277,6 @@ export default function Carousel({
           {renderNavButtons(false)}
         </div>
       )}
-
-      <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
-        <div className="carousel-indicators">
-          {items.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`carousel-indicator ${activeIndex === index ? 'active' : 'inactive'}`}
-              animate={{
-                scale: activeIndex === index ? 1.2 : 1
-              }}
-              onClick={() => setPosition(loop ? index + 1 : index)}
-              transition={{ duration: 0.15 }}
-            />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
