@@ -11,7 +11,7 @@ console.log(
 
 console.log(
   '%c👷 Built with precision. %c🔧',
-  'font-size: 16px; font-weight: bold; color: #dc2626; padding: 4px 0;',
+  'font-size: 16px; font-weight: bold; color: #dc2626; padding: 4px 0; text-shadow: 0 0 10px #dc2626, 0 0 20px #dc2626;',
   'font-size: 16px;'
 )
 
@@ -20,10 +20,10 @@ console.log(
   '%cInterested in mechanical contracting excellence? We\'ve been building exceptional systems since 1963.\n' +
   '%cReach out to us at info@usmechanicalllc.com or call 801-785-6028\n\n' +
   '%c- The US Mechanical Team.',
-  'font-size: 13px; color: #ffffff; line-height: 1.6;',
-  'font-size: 13px; color: #ffffff; line-height: 1.6;',
-  'font-size: 13px; font-weight: bold; color: #dc2626; line-height: 1.6;',
-  'font-size: 12px; color: #ffffff; font-style: italic; line-height: 1.6;'
+  'font-size: 13px; color: #ffffff; line-height: 1.6; text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;',
+  'font-size: 13px; color: #ffffff; line-height: 1.6; text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;',
+  'font-size: 13px; font-weight: bold; color: #dc2626; line-height: 1.6; text-shadow: 0 0 10px #dc2626, 0 0 20px #dc2626;',
+  'font-size: 12px; color: #ffffff; font-style: italic; line-height: 1.6; text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;'
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
