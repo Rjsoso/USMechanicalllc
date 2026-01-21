@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { client, urlFor } from '../utils/sanity';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,6 +11,7 @@ export default function CategoryDetail() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState(null);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,7 +21,7 @@ export default function CategoryDetail() {
         setLoading(true);
         
         // Fetch category and all projects that reference this category
-        const [category, projects] = await Promise.all([
+        const [category, projects, categories] = await Promise.all([
           client.fetch(
             `*[_type == "portfolioCategory" && _id == $categoryId][0]{
               _id,
@@ -54,6 +56,13 @@ export default function CategoryDetail() {
               order
             }`,
             { categoryId }
+          ),
+          client.fetch(
+            `*[_type == "portfolioCategory"] | order(order asc) {
+              _id,
+              title,
+              order
+            }`
           )
         ]);
 
@@ -62,6 +71,9 @@ export default function CategoryDetail() {
           setLoading(false);
           return;
         }
+
+        const navCategories = Array.isArray(categories) ? categories.slice(0, 6) : [];
+        setCategoriesList(navCategories);
 
         // Combine category data with projects
         setCategoryData({
@@ -80,6 +92,18 @@ export default function CategoryDetail() {
       fetchCategory();
     }
   }, [categoryId]);
+
+  const { prevCategory, nextCategory } = useMemo(() => {
+    if (!Array.isArray(categoriesList) || categoriesList.length === 0) {
+      return { prevCategory: null, nextCategory: null };
+    }
+    const currentIndex = categoriesList.findIndex((c) => c._id === categoryId);
+    if (currentIndex < 0) return { prevCategory: null, nextCategory: null };
+    return {
+      prevCategory: currentIndex > 0 ? categoriesList[currentIndex - 1] : null,
+      nextCategory: currentIndex < categoriesList.length - 1 ? categoriesList[currentIndex + 1] : null,
+    };
+  }, [categoriesList, categoryId]);
 
   // Sort projects by order
   const sortedProjects = useMemo(() => {
@@ -125,49 +149,75 @@ export default function CategoryDetail() {
       <Header />
       <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
-          {/* Back Button */}
-          <button
-            onClick={() => {
-              sessionStorage.setItem('scrollTo', 'portfolio');
-              navigate('/');
-              let retryCount = 0;
-              const maxRetries = 20;
-              const scrollToPortfolio = () => {
-                const portfolioElement = document.querySelector('#portfolio');
-                if (portfolioElement) {
-                  const headerOffset = 180;
-                  const elementPosition = portfolioElement.getBoundingClientRect().top;
-                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                  
-                  window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                  });
-                  sessionStorage.removeItem('scrollTo');
-                } else if (retryCount < maxRetries) {
-                  retryCount++;
-                  setTimeout(scrollToPortfolio, 150);
-                }
-              };
-              setTimeout(scrollToPortfolio, 300);
-            }}
-            className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Back + Prev/Next */}
+          <div className="mb-8 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => {
+                sessionStorage.setItem('scrollTo', 'portfolio');
+                navigate('/');
+                let retryCount = 0;
+                const maxRetries = 20;
+                const scrollToPortfolio = () => {
+                  const portfolioElement = document.querySelector('#portfolio');
+                  if (portfolioElement) {
+                    const headerOffset = 180;
+                    const elementPosition = portfolioElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                    sessionStorage.removeItem('scrollTo');
+                  } else if (retryCount < maxRetries) {
+                    retryCount++;
+                    setTimeout(scrollToPortfolio, 150);
+                  }
+                };
+                setTimeout(scrollToPortfolio, 300);
+              }}
+              className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Portfolio
-          </button>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back to Portfolio
+            </button>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => prevCategory?._id && navigate(`/portfolio/${prevCategory._id}`)}
+                disabled={!prevCategory?._id}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Previous category"
+              >
+                <FiChevronLeft className="text-lg" />
+                Previous Category
+              </button>
+
+              <button
+                type="button"
+                onClick={() => nextCategory?._id && navigate(`/portfolio/${nextCategory._id}`)}
+                disabled={!nextCategory?._id}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Next category"
+              >
+                Next Category
+                <FiChevronRight className="text-lg" />
+              </button>
+            </div>
+          </div>
 
           {/* Category Title */}
           <motion.h1
