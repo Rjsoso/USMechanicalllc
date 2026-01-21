@@ -13,7 +13,6 @@
   border-radius: 24px;
   padding: 0;
   background-color: transparent;
-  height: 100%;
   --outer-r: 24px;
   --p-distance: 0;
 }

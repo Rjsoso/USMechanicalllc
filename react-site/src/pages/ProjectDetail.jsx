@@ -192,17 +192,16 @@ export default function ProjectDetail() {
             {carouselItems.length > 0 && (
               <div className="lg:w-2/3 w-full">
                 <FadeInWhenVisible>
-                  <div className="w-full" style={{ height: '600px', position: 'relative' }}>
-                    <Carousel
-                      items={carouselItems}
-                      baseWidth={700}
-                      autoplay={true}
-                      autoplayDelay={4000}
-                      pauseOnHover={true}
-                      loop={true}
-                      round={false}
-                    />
-                  </div>
+                  <Carousel
+                    items={carouselItems}
+                    baseWidth={700}
+                    containerClassName="h-[500px]"
+                    autoplay={true}
+                    autoplayDelay={4000}
+                    pauseOnHover={true}
+                    loop={true}
+                    round={false}
+                  />
                 </FadeInWhenVisible>
               </div>
             )}

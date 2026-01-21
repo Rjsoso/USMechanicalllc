@@ -260,17 +260,16 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 contain: 'layout style paint' // Isolate layout calculations
               }}
             >
-              <div className="h-[480px] md:h-[550px] lg:h-[680px] xl:h-[780px]">
                 <Carousel
                   items={carouselItems}
                   baseWidth={1100}
+                  containerClassName="h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]"
                   autoplay={!isExpanded}
                   autoplayDelay={4000}
                   pauseOnHover={true}
                   loop={true}
                   round={false}
                 />
-              </div>
             </div>
             
             {/* Text container - expands to fill space with black background */}

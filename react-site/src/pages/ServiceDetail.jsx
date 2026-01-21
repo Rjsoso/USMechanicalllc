@@ -210,17 +210,16 @@ export default function ServiceDetail() {
               {carouselItems.length > 0 && (
                 <div className="md:w-1/2 w-full order-2 md:order-1 flex justify-center">
                   <FadeInWhenVisible>
-                    <div className="w-full" style={{ height: '600px', position: 'relative', maxWidth: '550px' }}>
-                      <Carousel
-                        items={carouselItems}
-                        baseWidth={550}
-                        autoplay={true}
-                        autoplayDelay={4000}
-                        pauseOnHover={true}
-                        loop={true}
-                        round={false}
-                      />
-                    </div>
+                    <Carousel
+                      items={carouselItems}
+                      baseWidth={550}
+                      containerClassName="h-[500px]"
+                      autoplay={true}
+                      autoplayDelay={4000}
+                      pauseOnHover={true}
+                      loop={true}
+                      round={false}
+                    />
                   </FadeInWhenVisible>
                 </div>
               )}

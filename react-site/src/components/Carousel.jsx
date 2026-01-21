@@ -44,6 +44,7 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
 export default function Carousel({
   items = [],
   baseWidth = 300,
+  containerClassName = "",
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
@@ -208,7 +209,7 @@ export default function Carousel({
     <div className="carousel-wrapper">
       <div
         ref={containerRef}
-        className={`carousel-container ${round ? 'round' : ''}`}
+        className={`carousel-container ${round ? 'round' : ''} ${containerClassName}`}
         style={{
           width: `${baseWidth}px`,
           ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
