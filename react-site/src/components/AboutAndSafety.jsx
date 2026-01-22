@@ -467,7 +467,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
               <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
                 <div
                   data-testid="safety-ribbon"
-                  className="absolute right-0 w-full overflow-hidden z-0 md:translate-x-6 lg:translate-x-12 xl:translate-x-24"
+                  className="absolute right-0 w-full overflow-hidden z-0"
                   onMouseEnter={() => setIsLoopsHovered(true)}
                   onMouseLeave={() => setIsLoopsHovered(false)}
                 >
