@@ -704,10 +704,16 @@ body {
     animation-duration: 0.1s !important;
   }
   
-  /* Disable all transforms and 3D effects on initial load */
-  [data-framer-motion],
-  [style*="transform"] {
+  /* Disable transforms only on Framer Motion and carousel, not LogoLoop */
+  [data-framer-motion]:not(.logoloop__track):not(.logoloop *),
+  .carousel-item[style*="transform"] {
     transform: none !important;
+  }
+  
+  /* Ensure LogoLoop animations work on mobile */
+  .logoloop__track {
+    will-change: transform !important;
+    transform: none; /* Will be overridden by JS - this is just a starting point */
   }
   
   /* Disable slide animation on mobile for better performance */
