@@ -486,7 +486,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 <div
                   data-testid="safety-ribbon"
                   className="w-full overflow-hidden z-0"
-                  style={{
+                  style={isMobile ? {} : {
                     position: 'absolute',
                     left: 0,
                     width: '50vw'
@@ -494,9 +494,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   onMouseEnter={() => setIsLoopsHovered(true)}
                   onMouseLeave={() => setIsLoopsHovered(false)}
                 >
-                  <div className="space-y-8">
+                  <div className={isMobile ? "space-y-4" : "space-y-8"}>
                     {/* Top loop - scrolls left */}
-                    <div style={{ height: '160px', position: 'relative' }}>
+                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
                       <LogoLoop
                         logos={safetyLogoItems}
                         speed={120}
@@ -505,15 +505,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         gap={getSafetyGap()}
                         fadeOut={true}
                         fadeOutColor="#ffffff"
-                        hoverSpeed={20}
-                        externalHoverState={isLoopsHovered}
-                        scaleOnHover={true}
+                        hoverSpeed={isMobile ? undefined : 20}
+                        externalHoverState={isMobile ? undefined : isLoopsHovered}
+                        scaleOnHover={!isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>
                     
                     {/* Bottom loop - scrolls right */}
-                    <div style={{ height: '160px', position: 'relative' }}>
+                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
                       <LogoLoop
                         logos={safetyLogoItems}
                         speed={120}
@@ -522,9 +522,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         gap={getSafetyGap()}
                         fadeOut={true}
                         fadeOutColor="#ffffff"
-                        hoverSpeed={20}
-                        externalHoverState={isLoopsHovered}
-                        scaleOnHover={true}
+                        hoverSpeed={isMobile ? undefined : 20}
+                        externalHoverState={isMobile ? undefined : isLoopsHovered}
+                        scaleOnHover={!isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>

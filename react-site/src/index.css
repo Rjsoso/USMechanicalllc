@@ -732,22 +732,15 @@ body {
     width: 100% !important;
   }
   
-  /* Logo loop container - remove absolute positioning */
+  /* Logo loop container - full width on mobile */
   #safety > div > div > div:last-child {
     width: 100% !important;
-    position: static !important;
   }
   
-  /* Logo loop ribbon - full width, not absolute */
+  /* Ensure logo loop ribbon is visible and full width */
   #safety [data-testid="safety-ribbon"] {
-    position: static !important;
+    position: relative !important;
     width: 100% !important;
-    left: auto !important;
-  }
-  
-  /* Reduce logo loop height on mobile */
-  #safety [data-testid="safety-ribbon"] > div > div {
-    height: 100px !important;
   }
   
   /* Services Section Mobile Layout */
