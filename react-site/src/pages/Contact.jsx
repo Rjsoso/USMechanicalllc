@@ -270,27 +270,7 @@ export default function Contact() {
         minHeight: '100vh',
       }}
     >
-      {/* Background Image - absolute position relative to section */}
-      {backgroundImageUrl && (
-        <>
-          <div
-            className="absolute inset-0 bg-cover bg-center brightness-75"
-            style={{
-              backgroundImage: `url(${backgroundImageUrl})`,
-              zIndex: 0,
-              width: '100%',
-            }}
-          />
-          {/* Dark overlay for readability */}
-          <div 
-            className="absolute inset-0 bg-black/60"
-            style={{
-              zIndex: 1,
-              width: '100%',
-            }}
-          />
-        </>
-      )}
+      {/* Background removed - hero's fixed background shows through */}
       <div className="relative z-10 max-w-6xl mx-auto">
         {loading && (
           <div className="flex items-center justify-center py-12">
