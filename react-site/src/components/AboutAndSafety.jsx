@@ -455,10 +455,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
           WebkitBackfaceVisibility: 'hidden',
         }}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className={isMobile ? "w-full px-0" : "max-w-7xl mx-auto px-6"}>
           {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
           {/* All content (text and logos) comes from Sanity CMS */}
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
+          <div className={isMobile ? "flex flex-col gap-8 px-6" : "flex flex-col md:flex-row items-center gap-8 md:gap-12 relative"}>
             {/* Text on left */}
             <div
               data-testid="safety-text"
@@ -482,11 +482,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
             {/* LogoLoops on right - extends to page edge, centered vertically */}
             {safetyLogoItems.length > 0 && (
-              <div className={isMobile ? "w-screen relative left-1/2 right-1/2 -mx-[50vw]" : `${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
+              <div className={isMobile ? "w-full -mx-6" : `${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
                 <div
                   data-testid="safety-ribbon"
                   className="w-full overflow-hidden z-0"
-                  style={isMobile ? {} : {
+                  style={isMobile ? {
+                    width: '100vw'
+                  } : {
                     position: 'absolute',
                     left: 0,
                     width: '50vw'

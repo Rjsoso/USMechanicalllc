@@ -713,7 +713,6 @@ body {
   /* Ensure LogoLoop animations work on mobile */
   .logoloop__track {
     will-change: transform !important;
-    transform: none; /* Will be overridden by JS - this is just a starting point */
   }
   
   /* Disable slide animation on mobile for better performance */
@@ -762,14 +761,20 @@ body {
     }
   }
   
-  /* Apply CSS animation to first logo loop track - scrolls left */
-  #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track {
-    animation: scrollLeft 15s linear infinite !important;
+  /* Force CSS animations on logo loop tracks - override all blocking rules */
+  #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track[style] {
+    animation-name: scrollLeft !important;
+    animation-duration: 15s !important;
+    animation-timing-function: linear !important;
+    animation-iteration-count: infinite !important;
   }
   
   /* Second loop scrolls right */
-  #safety [data-testid="safety-ribbon"] > div > div:last-child .logoloop__track {
-    animation: scrollRight 15s linear infinite !important;
+  #safety [data-testid="safety-ribbon"] > div > div:nth-child(2) .logoloop__track[style] {
+    animation-name: scrollRight !important;
+    animation-duration: 15s !important;
+    animation-timing-function: linear !important;
+    animation-iteration-count: infinite !important;
   }
   
   /* Services Section Mobile Layout */
