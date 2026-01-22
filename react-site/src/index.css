@@ -552,7 +552,7 @@ footer {
   [class*="animate-"],
   [class*="transition-"],
   .hero-button-3d,
-  section {
+  section:not(#hero) {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-perspective: 1000px;
