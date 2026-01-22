@@ -4,12 +4,12 @@ import { client, urlFor } from '../utils/sanity'
 
 // Fallback hero data
 const defaultHeroData = {
-  headline: 'Building the Future of Mechanical Contracting',
-  subtext: 'Excellence in Plumbing, HVAC, and Mechanical Systems since 1963.',
-  buttonText: 'Request a Quote',
-  buttonLink: '#contact',
+  // Keep defaults aligned with the published CMS values to avoid “mismatch” confusion
+  headline: 'Trusted Mechanical Contractors Since 1963',
+  subtext: '',
+  buttonText: 'Apply Here',
+  buttonLink: '#careers',
   backgroundImage: null,
-  logo: null,
 }
 
 function HeroSection() {
@@ -45,12 +45,6 @@ function HeroSection() {
               },
               "imageUrl": image.asset->url
             },
-            logo {
-              asset-> {
-                _id,
-                url
-              }
-            },
             headline,
             subtext,
             buttonText,
@@ -61,7 +55,7 @@ function HeroSection() {
           // If document with specific ID not found, try first document
           if (!data || !data._id) {
             return client.fetch(
-              `*[_type == "heroSection"][0]{
+              `*[_type == "heroSection" && !(_id in path("drafts.**"))][0]{
                 _id,
                 backgroundImage {
                   asset-> {
@@ -79,12 +73,6 @@ function HeroSection() {
                   title,
                   description,
                   "imageUrl": image.asset->url
-                },
-                logo {
-                  asset-> {
-                    _id,
-                    url
-                  }
                 },
                 headline,
                 subtext,
@@ -113,12 +101,14 @@ function HeroSection() {
             }
           } else {
             // Use default data if Sanity returns null
+            console.warn('HeroSection: No published heroSection document found; using default fallback content.')
             setHeroData(defaultHeroData)
           }
         })
         .catch(error => {
           console.error('Error fetching hero section:', error);
           // On error, use default data
+          console.warn('HeroSection: Failed to fetch hero data from Sanity; using default fallback content.')
           setHeroData(defaultHeroData)
         })
     };
@@ -143,12 +133,6 @@ function HeroSection() {
       return () => clearInterval(interval)
     }
   }, [heroData.carouselImages])
-
-  // Memoize logo URL to prevent recalculation
-  const logoUrl = useMemo(() => {
-    if (!heroData.logo || !urlFor(heroData.logo)) return null;
-    return urlFor(heroData.logo).width(400).quality(90).auto('format').url();
-  }, [heroData.logo]);
 
   return (
     <section
@@ -236,24 +220,6 @@ function HeroSection() {
       ></div>
 
       <div className="relative z-10 px-6 max-w-4xl mx-auto text-center" style={{ marginTop: '80px' }}>
-        {/* Logo */}
-        {logoUrl && (
-          <motion.img
-            src={logoUrl}
-            alt="US Mechanical Logo"
-            className="mx-auto mb-6 w-52 md:w-64"
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onError={e => {
-              e.target.style.display = 'none'
-            }}
-          />
-        )}
-
         <motion.h1
           className="hero-3d-text"
           data-text={heroData.headline}

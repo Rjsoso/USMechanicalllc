@@ -11,6 +11,15 @@ export default defineType({
       description: 'Single background image (used if no carousel images are provided)',
       type: 'image',
       options: { hotspot: true },
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const doc = context?.document as any
+          const carouselCount = Array.isArray(doc?.carouselImages) ? doc.carouselImages.length : 0
+          if (!value && carouselCount === 0) {
+            return 'Provide a Background Image or at least one Carousel Image.'
+          }
+          return true
+        }),
     },
     {
       name: 'carouselImages',
@@ -36,13 +45,16 @@ export default defineType({
           },
         },
       ],
-    },
-    {
-      name: 'logo',
-      title: 'Logo Image',
-      description: 'Company logo displayed above the headline',
-      type: 'image',
-      options: { hotspot: true },
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const doc = context?.document as any
+          const hasBackground = Boolean(doc?.backgroundImage)
+          const count = Array.isArray(value) ? value.length : 0
+          if (!hasBackground && count === 0) {
+            return 'Provide at least one Carousel Image or set a Background Image.'
+          }
+          return true
+        }),
     },
     {
       name: 'headline',
@@ -76,5 +88,26 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
   ],
+  preview: {
+    select: {
+      title: 'headline',
+      backgroundImage: 'backgroundImage',
+      firstCarouselImage: 'carouselImages.0.image',
+    },
+    prepare({ title, backgroundImage, firstCarouselImage }) {
+      const usesCarousel = Boolean(firstCarouselImage)
+      const usesBackground = Boolean(backgroundImage)
+
+      return {
+        title: title || 'Hero Section',
+        subtitle: usesCarousel
+          ? 'Website uses: Carousel Images (first image shown as preview)'
+          : usesBackground
+            ? 'Website uses: Background Image'
+            : 'Missing: set Background Image or Carousel Images',
+        media: firstCarouselImage || backgroundImage,
+      }
+    },
+  },
 })
 
