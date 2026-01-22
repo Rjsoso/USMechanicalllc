@@ -124,3 +124,29 @@
     height: 68px !important;
   }
 }
+
+/* Mobile optimizations - standard phones */
+@media (max-width: 767px) {
+  .plaque-perspective {
+    top: 12px !important;
+    left: 12px !important;
+  }
+  
+  .logo-3d-card {
+    width: 140px !important;
+    height: 87px !important;
+  }
+  
+  /* Simplify 3D shadow on mobile for better performance */
+  .stamped-logo {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)) !important;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 375px) {
+  .logo-3d-card {
+    width: 120px !important;
+    height: 74px !important;
+  }
+}

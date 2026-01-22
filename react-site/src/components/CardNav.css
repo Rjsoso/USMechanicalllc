@@ -10,6 +10,13 @@
   box-sizing: border-box;
 }
 
+/* Hide on desktop, show on mobile only */
+@media (min-width: 768px) {
+  .card-nav-container {
+    display: none !important;
+  }
+}
+
 .card-nav {
   display: block;
   height: 60px;
@@ -171,13 +178,14 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .card-nav-container {
-    width: 90%;
+    width: calc(100% - 32px);
     max-width: none;
+    min-width: auto;
     top: 16px;
-    right: 5%;
-    left: auto;
+    right: 16px;
+    left: 16px;
   }
 
   .card-nav {

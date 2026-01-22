@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     
     <!-- Primary Meta Tags -->
     <title>US Mechanical | Plumbing & HVAC Experts | Since 1963</title>
@@ -54,18 +54,37 @@
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     
+    <!-- iOS-specific meta tags for web app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="US Mechanical" />
+    
     <!-- Android Chrome -->
     <link rel="icon" sizes="192x192" href="/favicon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
     
     <!-- Web App Manifest -->
     <link rel="manifest" href="/site.webmanifest" />
     
     <!-- Theme colors -->
-    <meta name="theme-color" content="#000000" />
-    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="msapplication-TileColor" content="#1a1a1a" />
+    <meta name="msapplication-navbutton-color" content="#1a1a1a" />
     
     <!-- Force light color scheme to prevent dark mode inconsistencies -->
     <meta name="color-scheme" content="light" />
+    
+    <!-- Mobile browser UI optimization -->
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="format-detection" content="address=yes" />
+    
+    <!-- Disable automatic phone number detection on iOS Safari if numbers should not be linked -->
+    <!-- Remove this if you want phone numbers to be automatically linked -->
+    <!-- <meta name="format-detection" content="telephone=no" /> -->
+    
+    <!-- Optimize rendering on mobile -->
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="width" />
     
     <!-- Sitemap -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />

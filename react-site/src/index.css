@@ -693,3 +693,472 @@ body {
 .has-scroll-animation {
   contain: none;
 }
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Stack About section vertically on mobile */
+  #about .flex-col {
+    flex-direction: column !important;
+  }
+  
+  #about > div > div:first-child,
+  #about > div > div:last-child {
+    width: 100% !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  /* Disable slide animation on mobile for better performance */
+  .has-scroll-animation {
+    transform: none !important;
+  }
+  
+  /* Services Section Mobile Layout */
+  /* Stack delivery methods vertically on mobile */
+  #services .flex-row {
+    flex-direction: column !important;
+  }
+  
+  /* Make horizontal scrollable tab navigation for delivery methods */
+  #services .flex.flex-row > div:first-child {
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Tab items in horizontal layout */
+  #services .flex.flex-row > div:first-child > button {
+    flex: 0 0 auto;
+    min-width: 80px;
+    border-bottom: none !important;
+    border-right: 1px solid #e5e7eb;
+  }
+  
+  /* Content area full width below tabs */
+  #services .flex.flex-row > div:last-child {
+    width: 100% !important;
+  }
+  
+  /* Optimize service boxes for mobile */
+  #services .space-y-4 > div {
+    padding: 1.5rem !important;
+  }
+  
+  /* Full-width form inputs on mobile */
+  #services input,
+  #services textarea,
+  #services select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+  }
+  
+  /* Improve button sizing */
+  #services button[type="submit"] {
+    padding: 14px 20px;
+    min-height: 48px;
+  }
+}
+
+/* ============================================
+   MOBILE TOUCH OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Minimum touch target size for all interactive elements */
+  button, 
+  a[role="button"],
+  .nav-card-link,
+  .carousel-nav-button,
+  .dock-item {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  /* Better tap feedback with visual response */
+  button:active,
+  a[role="button"]:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+    transition: opacity 0.1s ease, transform 0.1s ease;
+  }
+  
+  /* Remove 300ms tap delay on all interactive elements */
+  a, button, input, select, textarea {
+    touch-action: manipulation;
+  }
+  
+  /* Prevent text selection on interactive elements during tap */
+  button, .nav-card-link, .carousel-nav-button {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Improve scroll performance on mobile */
+  .overflow-y-auto,
+  .overflow-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Larger click areas for small elements */
+  .carousel-nav-button {
+    padding: 12px;
+  }
+  
+  /* Ensure nav links are easily tappable */
+  nav a,
+  nav button {
+    padding: 12px 16px;
+    min-height: 44px;
+  }
+}
+
+/* ============================================
+   MOBILE TYPOGRAPHY & SPACING
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Hero text adjustments for mobile */
+  .hero-3d-text {
+    font-size: clamp(2.5rem, 8vw, 4rem) !important;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.6) !important;
+  }
+  
+  /* Section titles optimized for mobile screens */
+  .section-title {
+    font-size: clamp(2rem, 7vw, 3.5rem) !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Body text readability improvements */
+  body {
+    font-size: 16px; /* Prevent iOS zoom on input focus */
+    line-height: 1.6;
+  }
+  
+  /* Increase spacing for breathing room on mobile */
+  section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .max-w-7xl {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  /* Adjust heading sizes for better readability */
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: clamp(1.5rem, 4vw, 1.875rem);
+    line-height: 1.4;
+  }
+  
+  /* Better paragraph spacing */
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+  
+  /* Comfortable list spacing */
+  ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Extra small phones (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .hero-3d-text {
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+  }
+  
+  .section-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
+  }
+  
+  /* Slightly reduce padding on very small screens */
+  section {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+}
+
+/* ============================================
+   MOBILE FORMS & MODALS OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Contact form mobile optimization */
+  #contact .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Optimize all form input sizing for mobile */
+  input, 
+  textarea, 
+  select {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+    padding: 14px 12px !important;
+    width: 100%;
+  }
+  
+  /* Full-width submit buttons with better touch targets */
+  button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    min-height: 48px;
+  }
+  
+  /* Form field spacing */
+  form > div,
+  form > input,
+  form > textarea,
+  form > select {
+    margin-bottom: 1rem;
+  }
+  
+  /* Portfolio modal mobile fixes */
+  .modal,
+  .modal-content {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+  
+  .modal-overlay {
+    padding: 16px;
+    align-items: flex-start;
+  }
+  
+  /* Modal images full width on mobile */
+  .modal img,
+  .modal-content img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Modal close button easier to tap */
+  .modal button,
+  .modal-content button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+}
+
+/* Extra small phone modal adjustments */
+@media (max-width: 375px) {
+  .modal,
+  .modal-content {
+    width: calc(100vw - 24px) !important;
+    margin: 12px;
+  }
+  
+  .modal-overlay {
+    padding: 12px;
+  }
+}
+
+/* ============================================
+   iOS SAFE AREA SUPPORT (Notch/Dynamic Island)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  /* Fixed header elements respect safe areas */
+  .fixed.top-4 {
+    top: max(16px, env(safe-area-inset-top)) !important;
+  }
+  
+  /* Logo positioning with safe area */
+  .plaque-perspective {
+    top: max(16px, env(safe-area-inset-top)) !important;
+    left: max(16px, env(safe-area-inset-left)) !important;
+  }
+  
+  /* CardNav hamburger menu */
+  .card-nav-container {
+    top: max(16px, env(safe-area-inset-top)) !important;
+    left: max(16px, env(safe-area-inset-left)) !important;
+    right: max(16px, env(safe-area-inset-right)) !important;
+  }
+  
+  /* Footer padding for home indicator */
+  footer {
+    padding-bottom: max(40px, env(safe-area-inset-bottom)) !important;
+  }
+  
+  /* Full-screen modals respect safe areas */
+  .modal-overlay {
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  /* Dock safe area (though hidden on mobile) */
+  .dock-outer {
+    top: max(16px, env(safe-area-inset-top)) !important;
+    right: max(16px, env(safe-area-inset-right)) !important;
+  }
+  
+  /* Hero section content safe area */
+  #hero .relative.z-10 {
+    padding-top: max(80px, calc(80px + env(safe-area-inset-top)));
+  }
+  
+  /* Section padding for safe areas */
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ============================================
+   PORTFOLIO GRID MOBILE OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Single column on mobile with better spacing */
+  #portfolio .grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  
+  /* Optimize image aspect ratio for mobile viewing */
+  #portfolio .relative {
+    padding-bottom: 56.25% !important; /* 16:9 ratio better for mobile */
+  }
+  
+  /* Larger, more readable text on category cards */
+  #portfolio h3 {
+    font-size: clamp(2rem, 6vw, 2.5rem) !important;
+    padding: 1rem;
+  }
+  
+  /* Better hover/tap overlay on mobile */
+  #portfolio .group .absolute {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  /* Show overlay on tap/touch */
+  #portfolio .group:active .absolute,
+  #portfolio .group:focus .absolute {
+    opacity: 1;
+  }
+  
+  /* Larger "Learn more" text */
+  #portfolio .group .flex span {
+    font-size: 1.125rem;
+  }
+  
+  /* Portfolio section title */
+  #portfolio h2 {
+    font-size: clamp(2.5rem, 7vw, 3.5rem) !important;
+    margin-bottom: 2rem;
+  }
+  
+  /* Portfolio description */
+  #portfolio p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+  
+  /* Better image loading on mobile */
+  #portfolio img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* ============================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Enhanced reduced motion for mobile devices */
+@media (max-width: 767px) and (prefers-reduced-motion: reduce),
+       (max-width: 767px) {
+  /* Disable complex 3D transforms on mobile for better performance */
+  .hero-button-3d,
+  .logo-3d-card,
+  .dock-panel {
+    transform: none !important;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2)) !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* Simplify all transitions for better battery life */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Disable parallax and scroll-based animations */
+  .has-scroll-animation,
+  [style*="transform: translate3d"] {
+    transform: none !important;
+  }
+  
+  /* Reduce motion on framer-motion elements */
+  [data-framer-motion] {
+    animation-duration: 0.15s !important;
+  }
+}
+
+/* Additional mobile-specific performance hints */
+@media (max-width: 767px) {
+  /* Force GPU compositing only where needed */
+  .hero-3d-text,
+  .section-title {
+    will-change: auto;
+    transform: translateZ(0);
+  }
+  
+  /* Optimize images for mobile */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

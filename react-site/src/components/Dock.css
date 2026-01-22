@@ -147,3 +147,10 @@
   }
 }
 
+/* Hide Dock on mobile devices */
+@media (max-width: 767px) {
+  .dock-outer {
+    display: none !important;
+  }
+}
+

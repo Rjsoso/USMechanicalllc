@@ -3,10 +3,12 @@ import { useEffect, useState, useMemo, memo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { client, urlFor } from '../utils/sanity';
 import Dock from './Dock';
+import CardNav from './CardNav';
 import './Header.css';
 
 function Header() {
   const [logo, setLogo] = useState(null);
+  const [logoLoading, setLogoLoading] = useState(true);
   const [navLinks, setNavLinks] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -183,13 +185,22 @@ function Header() {
               src={logoUrl} 
               alt="US Mechanical"
               className="stamped-logo"
+              loading="eager"
+              onLoad={() => setLogoLoading(false)}
+              style={{ 
+                opacity: logoLoading ? 0 : 1, 
+                transition: 'opacity 0.3s ease' 
+              }}
             />
           </div>
         </div>
       )}
 
-      {/* Dock - positioned on right */}
+      {/* Dock - positioned on right (hidden on mobile) */}
       <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={55} />
+      
+      {/* CardNav - hamburger menu for mobile (hidden on desktop) */}
+      <CardNav />
     </>
   );
 }

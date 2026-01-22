@@ -139,9 +139,10 @@ const ServicesSection = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [expandedIndex, handleClose]);
 
-  // Auto-rotation effect for delivery methods tabs
+  // Auto-rotation effect for delivery methods tabs (disabled on mobile)
   useEffect(() => {
-    if (!isAutoRotating || !servicesData?.deliveryMethods?.length) {
+    const isMobile = window.innerWidth < 768;
+    if (!isAutoRotating || !servicesData?.deliveryMethods?.length || isMobile) {
       return undefined;
     }
 

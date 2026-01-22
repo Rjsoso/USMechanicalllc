@@ -15,6 +15,9 @@ const defaultHeroData = {
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 768
+  )
   
   // Randomly select color for "1963" on component mount
   const yearColor = useMemo(() => {
@@ -124,15 +127,24 @@ function HeroSection() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
-  // Auto-cycle through carousel images if available
+  // Add resize listener for mobile detection
   useEffect(() => {
-    if (heroData.carouselImages && heroData.carouselImages.length > 1) {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Auto-cycle through carousel images if available (disabled on mobile)
+  useEffect(() => {
+    if (heroData.carouselImages && heroData.carouselImages.length > 1 && !isMobile) {
       const interval = setInterval(() => {
         setCurrentImageIndex(prev => (prev + 1) % heroData.carouselImages.length)
       }, 5000) // Change image every 5 seconds
       return () => clearInterval(interval)
     }
-  }, [heroData.carouselImages])
+  }, [heroData.carouselImages, isMobile])
 
   return (
     <section
