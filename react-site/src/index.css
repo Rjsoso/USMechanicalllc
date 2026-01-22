@@ -700,7 +700,7 @@ body {
 
 @media (max-width: 767px) {
   /* Reduce initial page jitter by disabling animations during load */
-  * {
+  *:not(.logoloop__track) {
     animation-duration: 0.1s !important;
   }
   
@@ -1212,7 +1212,7 @@ body {
   }
   
   /* Simplify all transitions for better battery life */
-  * {
+  *:not(.logoloop__track) {
     animation-duration: 0.2s !important;
     transition-duration: 0.2s !important;
   }
