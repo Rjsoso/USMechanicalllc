@@ -521,29 +521,6 @@ footer {
   }
 }
 
-/* Portrait orientation - force logo loop animations to work */
-@media (max-width: 767px) and (orientation: portrait) {
-  /* Ensure animations run in portrait mode */
-  #safety .logoloop__track {
-    -webkit-animation-play-state: running !important;
-    animation-play-state: running !important;
-    -webkit-transform: translateZ(0) !important;
-    transform: translateZ(0) !important;
-  }
-  
-  /* First loop scrolls left */
-  #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track {
-    -webkit-animation: scrollLeft 15s linear infinite !important;
-    animation: scrollLeft 15s linear infinite !important;
-  }
-  
-  /* Second loop scrolls right */
-  #safety [data-testid="safety-ribbon"] > div > div:nth-child(2) .logoloop__track {
-    -webkit-animation: scrollRight 15s linear infinite !important;
-    animation: scrollRight 15s linear infinite !important;
-  }
-}
-
 /* General landscape text sizing */
 @media (max-height: 500px) and (orientation: landscape) {
   .section-title {
@@ -1289,8 +1266,8 @@ body {
   }
   
   /* Disable parallax and scroll-based animations, except LogoLoop */
-  .has-scroll-animation,
-  [style*="transform: translate3d"]:not(.logoloop__track) {
+  .has-scroll-animation:not(.logoloop):not(.logoloop *),
+  [style*="transform: translate3d"]:not(.logoloop__track):not(.logoloop *) {
     transform: none !important;
   }
   
@@ -1319,7 +1296,7 @@ body {
   }
   
   /* Simplify transforms - use translate instead of translate3d */
-  [style*="translate3d"] {
+  [style*="translate3d"]:not(.logoloop__track):not(.logoloop *) {
     transform: none !important;
   }
   
