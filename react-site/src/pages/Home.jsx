@@ -154,8 +154,13 @@ export default function Home() {
             style={{ 
               position: 'relative',
               transform: `translate3d(0, ${scrollSlide}px, 0)`,
+              WebkitTransform: `translate3d(0, ${scrollSlide}px, 0)`,
+              transformStyle: 'preserve-3d',
+              WebkitTransformStyle: 'preserve-3d',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
               zIndex: 2,
-              willChange: scrollSlide !== 0 ? 'transform' : 'auto',
+              willChange: 'transform',
               isolation: 'isolate',
             }}
           >

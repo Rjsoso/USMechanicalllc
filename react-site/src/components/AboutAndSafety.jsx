@@ -436,6 +436,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
           position: 'relative',
           zIndex: 20,
           isolation: 'isolate',
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
