@@ -86,31 +86,44 @@ export default function Home() {
   }, [location.state?.scrollTo]);
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
+  // Optimized with requestAnimationFrame throttling for smooth iOS performance
   useEffect(() => {
+    let rafId = null;
+    let lastScrollTime = 0;
+    const THROTTLE = 16; // ~60fps max
+
     const handleScroll = () => {
-      const safetySection = document.querySelector('#safety');
-      if (!safetySection) return;
+      const now = Date.now();
+      if (now - lastScrollTime < THROTTLE) return; // Throttle to prevent excessive updates
+      lastScrollTime = now;
 
-      const rect = safetySection.getBoundingClientRect();
-      const safetyBottom = rect.bottom;
-      const viewportHeight = window.innerHeight;
+      if (rafId) cancelAnimationFrame(rafId);
+      
+      rafId = requestAnimationFrame(() => {
+        const safetySection = document.querySelector('#safety');
+        if (!safetySection) return;
 
-      // Start sliding when Safety bottom reaches 25% from top (75% to top)
-      const slideStart = viewportHeight * 0.25;
-      const slideEnd = 0;
+        const rect = safetySection.getBoundingClientRect();
+        const safetyBottom = rect.bottom;
+        const viewportHeight = window.innerHeight;
 
-      if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
-        // Calculate progress from 0 to 1
-        const progress = 1 - (safetyBottom / slideStart);
-        const maxSlide = 300; // How far to slide up (pixels)
-        setScrollSlide(-progress * maxSlide);
-      } else if (safetyBottom < slideEnd) {
-        // Fully slid under
-        setScrollSlide(-300);
-      } else {
-        // Not started yet
-        setScrollSlide(0);
-      }
+        // Start sliding when Safety bottom reaches 25% from top (75% to top)
+        const slideStart = viewportHeight * 0.25;
+        const slideEnd = 0;
+
+        if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
+          // Calculate progress from 0 to 1
+          const progress = 1 - (safetyBottom / slideStart);
+          const maxSlide = 300; // How far to slide up (pixels)
+          setScrollSlide(-progress * maxSlide);
+        } else if (safetyBottom < slideEnd) {
+          // Fully slid under
+          setScrollSlide(-300);
+        } else {
+          // Not started yet
+          setScrollSlide(0);
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -118,6 +131,7 @@ export default function Home() {
     handleScroll(); // Initial calculation
     
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
@@ -136,11 +150,12 @@ export default function Home() {
           <AboutAndSafety />
 
           <div 
+            className="has-scroll-animation"
             style={{ 
               position: 'relative',
               transform: `translateY(${scrollSlide}px)`,
-              transition: 'transform 0.3s ease-out',
               zIndex: 5,
+              willChange: scrollSlide !== 0 ? 'transform' : 'auto',
             }}
           >
             <Suspense fallback={<div className="py-16 bg-black"></div>}>

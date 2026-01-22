@@ -571,9 +571,15 @@ footer {
 }
 
 /* CSS Containment for better rendering performance on iOS */
+/* Exclude sections with scroll-triggered transforms to prevent conflicts */
 @supports (contain: layout style paint) {
   section:not(#hero):not(#contact) {
     contain: layout style paint;
+  }
+  
+  /* Disable containment for sections inside scroll-animated containers */
+  .has-scroll-animation section {
+    contain: none;
   }
 }
 
@@ -582,6 +588,11 @@ footer {
   section:not(#hero):not(#contact) {
     content-visibility: auto;
     contain-intrinsic-size: auto 500px;
+  }
+  
+  /* Disable content-visibility for sections inside scroll-animated containers */
+  .has-scroll-animation section {
+    content-visibility: visible;
   }
 }
 
@@ -621,4 +632,36 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: subpixel-antialiased;
   }
+}
+
+/* ============================================
+   NATIVE FADE-IN ANIMATIONS
+   Replaces Framer Motion whileInView for better iOS performance
+   ============================================ */
+.fade-in-native {
+  opacity: 0;
+  transform: translateY(40px) translateZ(0);
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.fade-in-native--visible {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+  will-change: auto; /* Remove will-change after animation */
+}
+
+/* Remove transition on reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-native {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Exclude scroll-animated containers from CSS containment */
+.has-scroll-animation {
+  contain: none;
 }

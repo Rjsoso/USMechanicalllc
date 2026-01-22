@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
-import FadeInWhenVisible from './FadeInWhenVisible'
+import FadeInNative from './FadeInNative'
 import Carousel from './Carousel'
 import LogoLoop from './LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
@@ -289,7 +289,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
             >
               {/* Inner content container - flexible width allows reflow */}
               <div className="w-full px-6 lg:px-8 pt-8 pb-8">
-                <FadeInWhenVisible delay={0.1}>
+                <FadeInNative delay={0.1}>
                   <h2 
                     className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
                     style={{
@@ -301,9 +301,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   >
                     {data.aboutTitle}
                   </h2>
-                </FadeInWhenVisible>
+                </FadeInNative>
                 
-                <FadeInWhenVisible delay={0.2}>
+                <FadeInNative delay={0.2}>
                   <div>
                     {/* Text content with truncation - Using CSS Grid for smooth auto-height animation */}
                     <div 
@@ -422,7 +422,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       )}
                     </div>
                   </div>
-                </FadeInWhenVisible>
+                </FadeInNative>
               </div>
             </div>
           </div>
@@ -446,12 +446,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
               data-testid="safety-text"
               className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative z-10 bg-white`}
             >
-              <FadeInWhenVisible delay={0.3}>
+              <FadeInNative delay={0.3}>
                 <h3 className="section-title text-5xl md:text-6xl mb-4 text-gray-900">
                   {data.safetyTitle}
                 </h3>
-              </FadeInWhenVisible>
-              <FadeInWhenVisible delay={0.4}>
+              </FadeInNative>
+              <FadeInNative delay={0.4}>
                 <div className="text-lg text-gray-700 leading-relaxed">
                   {Array.isArray(data.safetyText) ? (
                     <PortableText value={data.safetyText} />
@@ -459,7 +459,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     <p className="whitespace-pre-line">{data.safetyText}</p>
                   )}
                 </div>
-              </FadeInWhenVisible>
+              </FadeInNative>
             </div>
 
             {/* LogoLoops on right - extends to page edge, centered vertically */}
