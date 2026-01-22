@@ -255,7 +255,12 @@ const ServicesSection = () => {
                 <div
                   key={index}
                   className="p-8 shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105 rounded-r-xl"
-                  style={backgroundStyle}
+                  style={{
+                    ...backgroundStyle,
+                    transform: 'translateZ(0)',
+                    WebkitFontSmoothing: 'antialiased',
+                    willChange: 'transform'
+                  }}
                 >
                   <h3 
                     className="text-xl font-semibold mb-3"
@@ -332,7 +337,15 @@ const ServicesSection = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ 
+                      duration: 0.2, // Faster transitions for snappier feel on iOS
+                      ease: [0.22, 1, 0.36, 1] // iOS-optimized easing
+                    }}
+                    style={{
+                      transform: 'translateZ(0)',
+                      willChange: 'transform, opacity',
+                      WebkitFontSmoothing: 'antialiased'
+                    }}
                     className="flex-1"
                   >
                     {(() => {

@@ -2,9 +2,11 @@ import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { client } from "../utils/sanity";
 
 // Animate only when visible in viewport - only once per page visit
+// Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
 const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 }) => {
   const [count, setCount] = useState(startValue);
   const animationRef = useRef(null);
+  const intervalRef = useRef(null);
   const startedRef = useRef(false);
   const completedRef = useRef(false);
   const cancelledRef = useRef(false);
@@ -39,6 +41,10 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
         cancelAnimationFrame(animationRef.current);
         animationRef.current = null;
       }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
       startedRef.current = false;
       completedRef.current = false;
     }
@@ -55,10 +61,15 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
     const startTime = Date.now();
     const targetValue = numericValue; // Capture value at start
     const animationStartValue = startValue; // Capture start value
+    const updateInterval = 50; // Throttle to 50ms (20 updates/sec instead of 60)
     
-    const animate = () => {
+    // Use setInterval for throttled updates (better for iOS/Safari performance)
+    intervalRef.current = setInterval(() => {
       // Don't continue if cancelled
-      if (cancelledRef.current) return;
+      if (cancelledRef.current) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        return;
+      }
       
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
@@ -66,22 +77,21 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
       
       setCount(currentValue);
       
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
+      if (progress >= 1) {
         // Ensure we reach the exact final value
         setCount(targetValue);
         completedRef.current = true;
-        animationRef.current = null;
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
-    };
-    
-    animationRef.current = requestAnimationFrame(animate);
+    }, updateInterval);
     
     return () => {
-      // Don't cancel animation in cleanup - let it complete naturally
-      // Cleanup only runs on unmount or when dependencies change
-      // If dependencies change, the effect will handle cancellation above
+      // Cleanup on unmount
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [inView, numericValue, duration, startValue]);
 
@@ -89,7 +99,7 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
   // Otherwise show the animated count or the full value
   if (numericValue) {
     return (
-      <span>
+      <span style={{ willChange: 'contents' }}>
         {count.toLocaleString()}
         {suffix}
       </span>
@@ -217,6 +227,10 @@ const CompanyStats = () => {
     <section
       ref={sectionRef}
       className="w-full py-16 xl:py-12 2xl:py-10 bg-transparent"
+      style={{
+        transform: 'translateZ(0)',
+        WebkitFontSmoothing: 'antialiased'
+      }}
     >
       <div className="max-w-6xl mx-auto text-center">
         {statsData.title && (

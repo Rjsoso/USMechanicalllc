@@ -527,3 +527,65 @@ footer {
     font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
   }
 }
+
+/* ============================================
+   iOS/SAFARI ANIMATION OPTIMIZATIONS
+   Force GPU acceleration and smooth scrolling
+   ============================================ */
+
+/* Respect reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Force hardware acceleration on animated elements */
+@media (prefers-reduced-motion: no-preference) {
+  /* Apply GPU acceleration hints to common animated elements */
+  [class*="motion-"],
+  [class*="animate-"],
+  [class*="transition-"],
+  .hero-button-3d,
+  section {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  /* Optimize transforms for iOS/Safari */
+  [class*="transform"],
+  [class*="scale"],
+  [class*="translate"] {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Smooth scrolling optimization for iOS */
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent iOS Safari from flickering during animations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize text rendering during animations on iOS */
+body {
+  text-rendering: optimizeSpeed;
+}
+
+/* When animations are running, use optimizeSpeed */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    text-rendering: optimizeSpeed;
+  }
+}
