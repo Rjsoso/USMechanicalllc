@@ -434,7 +434,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
         className="py-20 bg-white text-gray-900 -mt-10"
         style={{
           position: 'relative',
-          zIndex: 10,
+          zIndex: 20,
+          isolation: 'isolate',
         }}
       >
         <div className="max-w-7xl mx-auto px-6">

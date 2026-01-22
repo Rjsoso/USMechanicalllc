@@ -154,8 +154,9 @@ export default function Home() {
             style={{ 
               position: 'relative',
               transform: `translateY(${scrollSlide}px)`,
-              zIndex: 5,
+              zIndex: 2,
               willChange: scrollSlide !== 0 ? 'transform' : 'auto',
+              isolation: 'isolate',
             }}
           >
             <Suspense fallback={<div className="py-16 bg-black"></div>}>

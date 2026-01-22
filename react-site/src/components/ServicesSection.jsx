@@ -205,7 +205,7 @@ const ServicesSection = () => {
     <section 
       id="services" 
       className="pt-12 pb-20 bg-transparent text-white"
-      style={{ position: 'relative', zIndex: 15 }}
+      style={{ position: 'relative' }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
