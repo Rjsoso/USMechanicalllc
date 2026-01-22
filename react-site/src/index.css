@@ -1190,9 +1190,9 @@ body {
     transition-duration: 0.2s !important;
   }
   
-  /* Disable parallax and scroll-based animations */
+  /* Disable parallax and scroll-based animations, except LogoLoop */
   .has-scroll-animation,
-  [style*="transform: translate3d"] {
+  [style*="transform: translate3d"]:not(.logoloop__track) {
     transform: none !important;
   }
   
@@ -1204,9 +1204,13 @@ body {
 
 /* Additional mobile-specific performance hints */
 @media (max-width: 767px) {
-  /* Remove will-change from all elements to reduce jitter */
-  * {
+  /* Remove will-change from all elements to reduce jitter, except LogoLoop */
+  *:not(.logoloop__track) {
     will-change: auto !important;
+  }
+  
+  .logoloop__track {
+    will-change: transform !important;
   }
   
   /* Only use will-change on actively animating elements */

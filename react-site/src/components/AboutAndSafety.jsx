@@ -220,6 +220,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {
+    if (windowWidth < 768) return 60; // Mobile
     if (windowWidth >= 2560) return 90; // 3xl
     if (windowWidth >= 1920) return 100; // 2xl
     if (windowWidth >= 1440) return 110; // xl
@@ -227,6 +228,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
   };
 
   const getSafetyGap = () => {
+    if (windowWidth < 768) return 20; // Mobile
     if (windowWidth >= 2560) return 28; // 3xl
     if (windowWidth >= 1920) return 32; // 2xl
     if (windowWidth >= 1440) return 36; // xl
