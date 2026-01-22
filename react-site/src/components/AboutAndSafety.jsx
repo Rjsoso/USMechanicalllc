@@ -496,9 +496,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 >
                   <div className={isMobile ? "space-y-4" : "space-y-8"}>
                     {/* Top loop - scrolls left */}
-                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
+                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative', width: '100%', overflow: 'hidden' }}>
                       <LogoLoop
-                        logos={safetyLogoItems}
+                        logos={isMobile && safetyLogoItems.length > 0 ? 
+                          // Manually duplicate logos for mobile to ensure enough copies
+                          [...safetyLogoItems, ...safetyLogoItems, ...safetyLogoItems, ...safetyLogoItems] 
+                          : safetyLogoItems
+                        }
                         speed={isMobile ? 200 : 120}
                         direction="left"
                         logoHeight={getSafetyLogoHeight()}
@@ -514,9 +518,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     </div>
                     
                     {/* Bottom loop - scrolls right */}
-                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
+                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative', width: '100%', overflow: 'hidden' }}>
                       <LogoLoop
-                        logos={safetyLogoItems}
+                        logos={isMobile && safetyLogoItems.length > 0 ? 
+                          // Manually duplicate logos for mobile to ensure enough copies
+                          [...safetyLogoItems, ...safetyLogoItems, ...safetyLogoItems, ...safetyLogoItems] 
+                          : safetyLogoItems
+                        }
                         speed={isMobile ? 200 : 120}
                         direction="right"
                         logoHeight={getSafetyLogoHeight()}
