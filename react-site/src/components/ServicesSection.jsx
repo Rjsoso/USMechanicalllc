@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, memo } from 'react';
+import { useEffect, useState, useCallback, memo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
@@ -11,7 +11,10 @@ const ServicesSection = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('idle'); // idle | loading | success | error
+  const [isAutoRotating, setIsAutoRotating] = useState(true);
   const navigate = useNavigate();
+  const rotationIntervalRef = useRef(null);
+  const userInteractionTimeoutRef = useRef(null);
 
   useEffect(() => {
     const fetchServices = () => {
@@ -102,6 +105,19 @@ const ServicesSection = () => {
     setActiveTab(index);
     setExpandedIndex(index);
     setSubmitStatus('idle');
+    
+    // Pause auto-rotation on user interaction
+    setIsAutoRotating(false);
+    
+    // Clear any existing timeout
+    if (userInteractionTimeoutRef.current) {
+      clearTimeout(userInteractionTimeoutRef.current);
+    }
+    
+    // Resume auto-rotation after 10 seconds of inactivity
+    userInteractionTimeoutRef.current = setTimeout(() => {
+      setIsAutoRotating(true);
+    }, 10000);
   }, []);
 
   const handleClose = useCallback(() => {
@@ -122,6 +138,41 @@ const ServicesSection = () => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [expandedIndex, handleClose]);
+
+  // Auto-rotation effect for delivery methods tabs
+  useEffect(() => {
+    if (!isAutoRotating || !servicesData?.deliveryMethods?.length) {
+      return undefined;
+    }
+
+    const maxTabIndex = servicesData.deliveryMethods.length - 1; // Exclude "Request a Quote" tab
+
+    rotationIntervalRef.current = setInterval(() => {
+      setActiveTab((prevTab) => {
+        // If we're on the last delivery method tab or beyond, go back to 0
+        if (prevTab >= maxTabIndex) {
+          return 0;
+        }
+        // Otherwise, advance to next tab
+        return prevTab + 1;
+      });
+    }, 5000); // Rotate every 5 seconds
+
+    return () => {
+      if (rotationIntervalRef.current) {
+        clearInterval(rotationIntervalRef.current);
+      }
+    };
+  }, [isAutoRotating, servicesData]);
+
+  // Cleanup user interaction timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (userInteractionTimeoutRef.current) {
+        clearTimeout(userInteractionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const badgeToneClasses = {
     sky: 'bg-sky-500/15 text-sky-50 border-sky-500/40',
