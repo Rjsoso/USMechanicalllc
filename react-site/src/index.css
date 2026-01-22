@@ -743,6 +743,35 @@ body {
     width: 100% !important;
   }
   
+  /* CSS fallback animation for logo loops on mobile */
+  @keyframes scrollLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  
+  @keyframes scrollRight {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  /* Apply CSS animation to first logo loop track - scrolls left */
+  #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track {
+    animation: scrollLeft 15s linear infinite !important;
+  }
+  
+  /* Second loop scrolls right */
+  #safety [data-testid="safety-ribbon"] > div > div:last-child .logoloop__track {
+    animation: scrollRight 15s linear infinite !important;
+  }
+  
   /* Services Section Mobile Layout */
   /* Services main container - stack vertically */
   #services > div > div.flex {

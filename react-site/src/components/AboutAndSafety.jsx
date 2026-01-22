@@ -482,7 +482,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
             {/* LogoLoops on right - extends to page edge, centered vertically */}
             {safetyLogoItems.length > 0 && (
-              <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
+              <div className={isMobile ? "w-screen relative left-1/2 right-1/2 -mx-[50vw]" : `${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
                 <div
                   data-testid="safety-ribbon"
                   className="w-full overflow-hidden z-0"
@@ -494,9 +494,22 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   onMouseEnter={() => setIsLoopsHovered(true)}
                   onMouseLeave={() => setIsLoopsHovered(false)}
                 >
+                  {isMobile && safetyLogoItems.length > 0 && console.log('Safety logos on mobile:', {
+                    originalCount: safetyLogoItems.length,
+                    duplicatedCount: safetyLogoItems.length * 4,
+                    logoHeight: getSafetyLogoHeight(),
+                    gap: getSafetyGap(),
+                    windowWidth: windowWidth
+                  })}
                   <div className={isMobile ? "space-y-4" : "space-y-8"}>
                     {/* Top loop - scrolls left */}
-                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative', width: '100%', overflow: 'hidden' }}>
+                    <div style={{ 
+                      height: isMobile ? '100px' : '160px', 
+                      position: 'relative', 
+                      width: isMobile ? '100vw' : '100%',
+                      maxWidth: isMobile ? 'none' : '100%',
+                      overflow: 'hidden' 
+                    }}>
                       <LogoLoop
                         logos={isMobile && safetyLogoItems.length > 0 ? 
                           // Manually duplicate logos for mobile to ensure enough copies
@@ -518,7 +531,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     </div>
                     
                     {/* Bottom loop - scrolls right */}
-                    <div style={{ height: isMobile ? '100px' : '160px', position: 'relative', width: '100%', overflow: 'hidden' }}>
+                    <div style={{ 
+                      height: isMobile ? '100px' : '160px', 
+                      position: 'relative', 
+                      width: isMobile ? '100vw' : '100%',
+                      maxWidth: isMobile ? 'none' : '100%',
+                      overflow: 'hidden' 
+                    }}>
                       <LogoLoop
                         logos={isMobile && safetyLogoItems.length > 0 ? 
                           // Manually duplicate logos for mobile to ensure enough copies
