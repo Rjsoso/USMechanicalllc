@@ -19,6 +19,11 @@ export default function Home() {
   const [scrollSlide, setScrollSlide] = useState(0);
   const initialScrollDone = useRef(false);
   
+  // Refs for smooth scroll interpolation
+  const lastScrollSlideRef = useRef(0);
+  const targetScrollSlideRef = useRef(0);
+  const animationFrameRef = useRef(null);
+  
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
     !location.state?.scrollTo && 
@@ -86,15 +91,36 @@ export default function Home() {
   }, [location.state?.scrollTo]);
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
-  // Optimized with requestAnimationFrame throttling for smooth iOS performance
+  // Hypersmooth with interpolation for 120Hz displays
   useEffect(() => {
     let rafId = null;
     let lastScrollTime = 0;
-    const THROTTLE = 16; // ~60fps max
+    const THROTTLE = 8; // 120fps max for high refresh rate displays
+    const INTERPOLATION_SPEED = 0.15; // Smooth interpolation factor
+
+    // Smooth interpolation loop for buttery transforms
+    const interpolate = () => {
+      const current = lastScrollSlideRef.current;
+      const target = targetScrollSlideRef.current;
+      const diff = target - current;
+
+      if (Math.abs(diff) > 0.1) {
+        // Smooth interpolation
+        const newValue = current + diff * INTERPOLATION_SPEED;
+        lastScrollSlideRef.current = newValue;
+        setScrollSlide(newValue);
+        animationFrameRef.current = requestAnimationFrame(interpolate);
+      } else {
+        // Snap to final value
+        lastScrollSlideRef.current = target;
+        setScrollSlide(target);
+        animationFrameRef.current = null;
+      }
+    };
 
     const handleScroll = () => {
       const now = Date.now();
-      if (now - lastScrollTime < THROTTLE) return; // Throttle to prevent excessive updates
+      if (now - lastScrollTime < THROTTLE) return;
       lastScrollTime = now;
 
       if (rafId) cancelAnimationFrame(rafId);
@@ -107,31 +133,33 @@ export default function Home() {
         const safetyBottom = rect.bottom;
         const viewportHeight = window.innerHeight;
 
-        // Start sliding when Safety bottom reaches 25% from top (75% to top)
         const slideStart = viewportHeight * 0.25;
         const slideEnd = 0;
 
+        let targetValue = 0;
         if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
-          // Calculate progress from 0 to 1
           const progress = 1 - (safetyBottom / slideStart);
-          const maxSlide = 300; // How far to slide up (pixels)
-          setScrollSlide(-progress * maxSlide);
+          const maxSlide = 300;
+          targetValue = -progress * maxSlide;
         } else if (safetyBottom < slideEnd) {
-          // Fully slid under
-          setScrollSlide(-300);
-        } else {
-          // Not started yet
-          setScrollSlide(0);
+          targetValue = -300;
+        }
+
+        // Set target and start interpolation
+        targetScrollSlideRef.current = targetValue;
+        if (!animationFrameRef.current) {
+          animationFrameRef.current = requestAnimationFrame(interpolate);
         }
       });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
-    handleScroll(); // Initial calculation
+    handleScroll();
     
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };

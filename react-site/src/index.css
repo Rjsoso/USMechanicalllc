@@ -603,7 +603,7 @@ html {
 
 body {
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none; /* Prevent bounce overscroll during animations */
+  overscroll-behavior-y: contain; /* Smoother than 'none' for Chrome */
   scroll-behavior: smooth;
 }
 
@@ -612,6 +612,33 @@ body {
 .overflow-auto {
   -webkit-overflow-scrolling: touch;
   will-change: scroll-position;
+}
+
+/* ============================================
+   HYPERSMOOTH SCROLLING FOR ALL BROWSERS
+   Match iOS Safari smoothness on Chrome/Desktop
+   ============================================ */
+
+/* Optimize for high refresh rate displays (120Hz+) */
+@media (min-resolution: 120dpi) {
+  * {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+/* Force GPU acceleration on all animated elements */
+[class*="animate"],
+[class*="transition"],
+.has-scroll-animation *,
+.has-scroll-animation {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 
 /* Prevent iOS Safari from flickering during animations */
@@ -641,8 +668,9 @@ body {
 .fade-in-native {
   opacity: 0;
   transform: translateY(40px) translateZ(0);
-  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Ultra-smooth iOS-matched easing */
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 

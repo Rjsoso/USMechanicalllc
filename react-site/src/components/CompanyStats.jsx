@@ -61,7 +61,7 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
     const startTime = Date.now();
     const targetValue = numericValue; // Capture value at start
     const animationStartValue = startValue; // Capture start value
-    const updateInterval = 33; // 30fps - optimal balance for iOS smoothness (smoother than 20fps)
+    const updateInterval = 16; // 60fps - ultra-smooth for desktop/Chrome (matches refresh rate)
     
     // Use setInterval for throttled updates (better for iOS/Safari performance)
     intervalRef.current = setInterval(() => {
@@ -73,7 +73,13 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
       
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const currentValue = Math.floor(animationStartValue + (targetValue - animationStartValue) * progress);
+      
+      // Add cubic ease-in-out for smoother perceived motion
+      const easeProgress = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      
+      const currentValue = Math.floor(animationStartValue + (targetValue - animationStartValue) * easeProgress);
       
       setCount(currentValue);
       

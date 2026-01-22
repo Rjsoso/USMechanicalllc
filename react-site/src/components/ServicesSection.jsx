@@ -338,8 +338,8 @@ const ServicesSection = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ 
-                      duration: 0.2, // Faster transitions for snappier feel on iOS
-                      ease: [0.22, 1, 0.36, 1] // iOS-optimized easing
+                      duration: 0.35, // Smoother, more iOS-like timing
+                      ease: [0.16, 1, 0.3, 1] // iOS spring-like easing for hypersmooth feel
                     }}
                     style={{
                       transform: 'translateZ(0)',

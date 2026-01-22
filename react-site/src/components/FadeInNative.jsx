@@ -13,17 +13,19 @@ function FadeInNative({ children, delay = 0, className = '' }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTriggered) {
-          // Add small delay if specified
-          setTimeout(() => {
-            setIsVisible(true);
-            hasTriggered = true;
-            observer.disconnect(); // Disconnect immediately after trigger
-          }, delay * 1000);
+          // Use requestAnimationFrame for smoother timing
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              setIsVisible(true);
+              hasTriggered = true;
+              observer.disconnect(); // Disconnect immediately after trigger
+            }, delay * 1000);
+          });
         }
       },
       {
-        threshold: 0.15,
-        rootMargin: '50px 0px',
+        threshold: 0.1, // Lower threshold for earlier trigger
+        rootMargin: '100px 0px', // Larger margin for anticipatory feel
       }
     );
 
