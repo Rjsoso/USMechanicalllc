@@ -186,26 +186,32 @@
     top: 8px;
     right: 8px;
     left: 8px;
+    display: block !important;
+    z-index: 9999 !important;
   }
 
   .card-nav {
     min-width: auto;
     width: 100%;
+    display: block !important;
   }
 
   .card-nav-top {
     padding: 0.5rem 1rem;
     justify-content: space-between;
+    display: flex !important;
   }
 
   .hamburger-menu {
     order: 2;
+    display: flex !important;
   }
 
   .logo-container {
     position: static;
     transform: none;
     order: 1;
+    display: flex !important;
   }
 
   .card-nav-cta-button {
@@ -219,12 +225,14 @@
     padding: 0.5rem;
     bottom: 0;
     justify-content: flex-start;
+    display: flex !important;
   }
 
   .card-nav.open .card-nav-content {
     visibility: visible !important;
     pointer-events: auto !important;
     opacity: 1 !important;
+    display: flex !important;
   }
   
   .nav-card {
@@ -234,13 +242,21 @@
     max-height: none;
     display: flex !important;
     opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .nav-card-label {
     font-size: 18px;
+    display: block !important;
+  }
+  
+  .nav-card-links {
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .nav-card-link {
     font-size: 15px;
+    display: flex !important;
   }
 }

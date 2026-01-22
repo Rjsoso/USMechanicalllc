@@ -31,7 +31,8 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
           src={item.src}
           alt={item.alt || `Carousel image ${index + 1}`}
           className="carousel-item-image"
-          loading="lazy"
+          loading={index === 0 ? "eager" : "lazy"}
+          fetchPriority={index === 0 ? "high" : "auto"}
         />
         {item.caption && (
           <div className="carousel-item-caption">{item.caption}</div>

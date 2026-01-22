@@ -699,6 +699,17 @@ body {
    ============================================ */
 
 @media (max-width: 767px) {
+  /* Reduce initial page jitter by disabling animations during load */
+  * {
+    animation-duration: 0.1s !important;
+  }
+  
+  /* Disable all transforms and 3D effects on initial load */
+  [data-framer-motion],
+  [style*="transform"] {
+    transform: none !important;
+  }
+  
   /* Disable slide animation on mobile for better performance */
   .has-scroll-animation {
     transform: none !important;
@@ -1222,6 +1233,29 @@ body {
   .carousel-wrapper,
   .carousel-container {
     contain: none !important;
+  }
+  
+  /* Ensure About section carousel is full width and centered */
+  #about .carousel-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  #about .carousel-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+  }
+  
+  /* Disable 3D transforms on carousel items for mobile */
+  #about .carousel-item {
+    transform: none !important;
+  }
+  
+  /* Ensure About section is visible and not hidden */
+  #about {
+    display: block !important;
+    visibility: visible !important;
   }
   
   /* Optimize images for mobile */

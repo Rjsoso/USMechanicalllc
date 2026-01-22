@@ -51,6 +51,30 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
     menuColor: '#ffffff',           // Hamburger icon color (white for visibility on grey)
   };
 
+  // Default fallback navigation structure
+  const defaultSections = [
+    {
+      label: 'Services',
+      links: [
+        { label: 'Our Services', href: '#services', ariaLabel: 'View our services' },
+        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'View our portfolio' }
+      ]
+    },
+    {
+      label: 'Company',
+      links: [
+        { label: 'About Us', href: '#about', ariaLabel: 'Learn about us' },
+        { label: 'Safety', href: '#safety', ariaLabel: 'Our safety practices' }
+      ]
+    },
+    {
+      label: 'Connect',
+      links: [
+        { label: 'Contact', href: '#contact', ariaLabel: 'Contact us' }
+      ]
+    }
+  ];
+
   // Fetch navigation data from Sanity (all from headerSection)
   useEffect(() => {
     const fetchNavData = async () => {
@@ -76,15 +100,25 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
           }`
         );
 
-        // Set the data
+        // Set the data with fallback to default sections
+        const sections = headerData?.sections && headerData.sections.length > 0 
+          ? headerData.sections 
+          : defaultSections;
+        
         setNavData({
           logo: headerData?.logo,
-          sections: headerData?.sections || [],
-          buttonText: headerData?.ctaButtonText
+          sections: sections,
+          buttonText: headerData?.ctaButtonText || 'Get Started'
         });
-        console.log('CardNav sections loaded:', headerData?.sections?.length || 0);
+        console.log('CardNav sections loaded:', sections?.length || 0, sections);
       } catch (error) {
         console.error('Error fetching navigation data:', error);
+        // Use fallback data on error
+        setNavData({
+          logo: null,
+          sections: defaultSections,
+          buttonText: 'Get Started'
+        });
       }
     };
 

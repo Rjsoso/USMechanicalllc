@@ -266,10 +266,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
             >
                 <Carousel
                   items={carouselItems}
-                  baseWidth={1100}
-                  containerClassName="h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]"
+                  baseWidth={isMobile ? windowWidth - 32 : 1100}
+                  containerClassName={isMobile ? "h-[300px]" : "h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]"}
                   arrowsInside={true}
-                  autoplay={!isExpanded}
+                  autoplay={isMobile ? false : !isExpanded}
                   autoplayDelay={4000}
                   pauseOnHover={true}
                   loop={true}
