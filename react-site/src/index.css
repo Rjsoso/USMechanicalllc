@@ -742,39 +742,87 @@ body {
     width: 100% !important;
   }
   
-  /* CSS fallback animation for logo loops on mobile */
-  @keyframes scrollLeft {
+  /* CSS fallback animation for logo loops on mobile - with Safari iOS webkit prefixes */
+  @-webkit-keyframes scrollLeft {
     from {
+      -webkit-transform: translateX(0);
       transform: translateX(0);
     }
     to {
+      -webkit-transform: translateX(-50%);
       transform: translateX(-50%);
+    }
+  }
+  
+  @keyframes scrollLeft {
+    from {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+    to {
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+  }
+  
+  @-webkit-keyframes scrollRight {
+    from {
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+    to {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
     }
   }
   
   @keyframes scrollRight {
     from {
+      -webkit-transform: translateX(-50%);
       transform: translateX(-50%);
     }
     to {
+      -webkit-transform: translateX(0);
       transform: translateX(0);
     }
   }
   
-  /* Force CSS animations on logo loop tracks - override all blocking rules */
+  /* Force CSS animations on logo loop tracks - with Safari iOS webkit prefixes */
   #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track[style] {
+    -webkit-animation-name: scrollLeft !important;
+    -webkit-animation-duration: 15s !important;
+    -webkit-animation-timing-function: linear !important;
+    -webkit-animation-iteration-count: infinite !important;
+    -webkit-animation-play-state: running !important;
     animation-name: scrollLeft !important;
     animation-duration: 15s !important;
     animation-timing-function: linear !important;
     animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
   }
   
   /* Second loop scrolls right */
   #safety [data-testid="safety-ribbon"] > div > div:nth-child(2) .logoloop__track[style] {
+    -webkit-animation-name: scrollRight !important;
+    -webkit-animation-duration: 15s !important;
+    -webkit-animation-timing-function: linear !important;
+    -webkit-animation-iteration-count: infinite !important;
+    -webkit-animation-play-state: running !important;
     animation-name: scrollRight !important;
     animation-duration: 15s !important;
     animation-timing-function: linear !important;
     animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
+  }
+  
+  /* Force GPU acceleration for Safari iOS */
+  #safety .logoloop__track {
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    -webkit-transform-style: preserve-3d !important;
+    transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
   }
   
   /* Services Section Mobile Layout */
