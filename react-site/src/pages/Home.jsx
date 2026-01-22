@@ -153,7 +153,7 @@ export default function Home() {
             className="has-scroll-animation"
             style={{ 
               position: 'relative',
-              transform: `translateY(${scrollSlide}px)`,
+              transform: `translate3d(0, ${scrollSlide}px, 0)`,
               zIndex: 2,
               willChange: scrollSlide !== 0 ? 'transform' : 'auto',
               isolation: 'isolate',
