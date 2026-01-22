@@ -220,7 +220,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {
-    if (windowWidth < 768) return 60; // Mobile
+    if (windowWidth < 768) return 50; // Mobile - smaller for more copies
     if (windowWidth >= 2560) return 90; // 3xl
     if (windowWidth >= 1920) return 100; // 2xl
     if (windowWidth >= 1440) return 110; // xl
@@ -228,7 +228,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
   };
 
   const getSafetyGap = () => {
-    if (windowWidth < 768) return 20; // Mobile
+    if (windowWidth < 768) return 30; // Mobile - more gap for visibility
     if (windowWidth >= 2560) return 28; // 3xl
     if (windowWidth >= 1920) return 32; // 2xl
     if (windowWidth >= 1440) return 36; // xl
@@ -499,13 +499,14 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
                       <LogoLoop
                         logos={safetyLogoItems}
-                        speed={120}
+                        speed={isMobile ? 200 : 120}
                         direction="left"
                         logoHeight={getSafetyLogoHeight()}
                         gap={getSafetyGap()}
-                        fadeOut={true}
+                        fadeOut={!isMobile}
                         fadeOutColor="#ffffff"
                         hoverSpeed={isMobile ? undefined : 20}
+                        pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={!isMobile}
                         ariaLabel="Safety logos and certifications"
@@ -516,13 +517,14 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     <div style={{ height: isMobile ? '100px' : '160px', position: 'relative' }}>
                       <LogoLoop
                         logos={safetyLogoItems}
-                        speed={120}
+                        speed={isMobile ? 200 : 120}
                         direction="right"
                         logoHeight={getSafetyLogoHeight()}
                         gap={getSafetyGap()}
-                        fadeOut={true}
+                        fadeOut={!isMobile}
                         fadeOutColor="#ffffff"
                         hoverSpeed={isMobile ? undefined : 20}
+                        pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={!isMobile}
                         ariaLabel="Safety logos and certifications"
