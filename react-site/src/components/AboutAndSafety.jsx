@@ -14,10 +14,14 @@ export default function AboutAndSafety() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
 
   // Track window width for responsive logo sizing
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth)
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth)
+      setIsMobile(window.innerWidth < 768)
+    }
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -242,15 +246,15 @@ Our goal is always simple: complete every project with zero safety issues.`,
         {carouselItems.length > 0 && (
           <div 
             className="flex flex-col md:flex-row items-stretch gap-0 w-full"
-            style={{
+            style={isMobile ? {} : {
               perspective: '1000px', // 3D acceleration context
               isolation: 'isolate' // Creates stacking context for GPU
             }}
           >
             {/* Carousel container - slides left and shrinks when expanded */}
             <div 
-              className="overflow-hidden"
-              style={{
+              className={isMobile ? "w-full" : "overflow-hidden"}
+              style={isMobile ? {} : {
                 width: isExpanded ? '45%' : '75%',
                 transform: isExpanded ? 'translate3d(-15%, 0, 0)' : 'translate3d(0, 0, 0)',
                 transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -275,8 +279,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
             
             {/* Text container - expands to fill space with black background */}
             <div 
-              className="bg-black flex items-start"
-              style={{
+              className={isMobile ? "w-full bg-black" : "bg-black flex items-start"}
+              style={isMobile ? {} : {
                 width: isExpanded ? '55%' : '25%',
                 transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
                 willChange: 'width',
@@ -292,7 +296,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                 <FadeInNative delay={0.1}>
                   <h2 
                     className="section-title text-3xl md:text-4xl lg:text-5xl text-white mb-4"
-                    style={{
+                    style={isMobile ? {} : {
                       transform: 'translate3d(0, 0, 0)',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
@@ -308,13 +312,13 @@ Our goal is always simple: complete every project with zero safety issues.`,
                     {/* Text content with truncation - Using CSS Grid for smooth auto-height animation */}
                     <div 
                       className="relative" 
-                      style={{ 
+                      style={isMobile ? {} : { 
                         position: 'relative',
                         isolation: 'isolate' // Creates stacking context
                       }}
                     >
                       <div 
-                        style={{
+                        style={isMobile ? {} : {
                           display: 'grid',
                           gridTemplateRows: isExpanded ? '1fr' : '0fr',
                           transition: 'grid-template-rows 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -325,7 +329,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                           contain: 'layout' // Prevent layout thrashing
                         }}
                       >
-                        <div style={{ 
+                        <div style={isMobile ? {} : { 
                           overflow: 'hidden',
                           minHeight: isExpanded ? 'auto' : '28em',
                           transition: 'min-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -334,7 +338,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         }}>
                           <div 
                             className="text-sm md:text-base lg:text-lg text-gray-100 whitespace-pre-line"
-                            style={{
+                            style={isMobile ? {
+                              lineHeight: '1.75'
+                            } : {
                               lineHeight: '1.75',
                               transform: 'translate3d(0, 0, 0)',
                               backfaceVisibility: 'hidden',
@@ -351,76 +357,81 @@ Our goal is always simple: complete every project with zero safety issues.`,
                       </div>
                       
                       {/* Gradient fade overlay for truncated text */}
-                      <div 
-                        className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                        style={{
-                          height: '120px',
-                          background: 'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.98) 20%, rgba(0, 0, 0, 0.95) 35%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
-                          opacity: isExpanded ? 0 : 1,
-                          visibility: isExpanded ? 'hidden' : 'visible',
-                          transition: `opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '400ms'}, visibility 0ms ${isExpanded ? '800ms' : '0ms'}`,
-                          transform: 'translate3d(0, 0, 0)', // GPU acceleration
-                          backfaceVisibility: 'hidden',
-                          willChange: 'opacity',
-                          contain: 'layout paint' // Isolate paint operations
-                        }}
-                      ></div>
+                      {!isMobile && (
+                        <div 
+                          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                          style={{
+                            height: '120px',
+                            background: 'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.98) 20%, rgba(0, 0, 0, 0.95) 35%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
+                            opacity: isExpanded ? 0 : 1,
+                            visibility: isExpanded ? 'hidden' : 'visible',
+                            transition: `opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '400ms'}, visibility 0ms ${isExpanded ? '800ms' : '0ms'}`,
+                            transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                            backfaceVisibility: 'hidden',
+                            willChange: 'opacity',
+                            contain: 'layout paint' // Isolate paint operations
+                          }}
+                        ></div>
+                      )}
                     </div>
                     
                     {/* Read More / Close buttons - positioned outside fade area */}
-                    <div className="mt-3 flex justify-start">
-                      {!isExpanded ? (
-                        <button
-                          onClick={() => {
-                            setIsAnimating(true);
-                            setIsExpanded(true);
-                            setTimeout(() => setIsAnimating(false), 1400);
-                          }}
-                          className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
-                          aria-label="Read more about U.S. Mechanical"
-                          aria-expanded="false"
-                          style={{
-                            transform: 'translate3d(0, 0, 0)', // GPU acceleration
-                            backfaceVisibility: 'hidden',
-                            WebkitFontSmoothing: 'antialiased'
-                          }}
-                        >
-                          Read More
-                          <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            setIsAnimating(true);
-                            setIsExpanded(false);
-                            setTimeout(() => setIsAnimating(false), 1400);
-                          }}
-                          className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
-                          aria-label="Close expanded text"
-                          aria-expanded="true"
-                          style={{
-                            transform: 'translate3d(0, 0, 0)', // GPU acceleration
-                            backfaceVisibility: 'hidden',
-                            WebkitFontSmoothing: 'antialiased'
-                          }}
-                        >
-                          Close
-                          <svg 
-                            className="w-4 h-4 transition-transform duration-300" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
+                    {/* Only show expand buttons on desktop */}
+                    {!isMobile && (
+                      <div className="mt-3 flex justify-start">
+                        {!isExpanded ? (
+                          <button
+                            onClick={() => {
+                              setIsAnimating(true);
+                              setIsExpanded(true);
+                              setTimeout(() => setIsAnimating(false), 1400);
+                            }}
+                            className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
+                            aria-label="Read more about U.S. Mechanical"
+                            aria-expanded="false"
+                            style={{
+                              transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                              backfaceVisibility: 'hidden',
+                              WebkitFontSmoothing: 'antialiased'
+                            }}
                           >
-                            <path 
-                              strokeLinecap="round" 
-                              strokeLinejoin="round" 
-                              strokeWidth={2} 
-                              d="M6 18L18 6M6 6l12 12" 
-                            />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
+                            Read More
+                            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setIsAnimating(true);
+                              setIsExpanded(false);
+                              setTimeout(() => setIsAnimating(false), 1400);
+                            }}
+                            className="bg-transparent text-white px-4 py-2 text-sm font-bold flex items-center gap-2 hover:-translate-y-1 transition-all duration-300"
+                            aria-label="Close expanded text"
+                            aria-expanded="true"
+                            style={{
+                              transform: 'translate3d(0, 0, 0)', // GPU acceleration
+                              backfaceVisibility: 'hidden',
+                              WebkitFontSmoothing: 'antialiased'
+                            }}
+                          >
+                            Close
+                            <svg 
+                              className="w-4 h-4 transition-transform duration-300" 
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={2} 
+                                d="M6 18L18 6M6 6l12 12" 
+                              />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </FadeInNative>
               </div>

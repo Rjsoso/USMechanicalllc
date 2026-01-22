@@ -699,24 +699,6 @@ body {
    ============================================ */
 
 @media (max-width: 767px) {
-  /* Disable complex About section animations on mobile */
-  #about .flex.flex-col.md\:flex-row {
-    flex-direction: column !important;
-  }
-  
-  /* Force both carousel and text to full width, disable animations */
-  #about > div > div {
-    width: 100% !important;
-    transform: none !important;
-    transition: none !important;
-    position: static !important;
-  }
-  
-  /* Hide Read More/Close button on mobile to avoid animation triggers */
-  #about button:has(svg) {
-    display: none !important;
-  }
-  
   /* Disable slide animation on mobile for better performance */
   .has-scroll-animation {
     transform: none !important;

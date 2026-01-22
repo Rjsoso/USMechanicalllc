@@ -79,9 +79,10 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
         // Set the data
         setNavData({
           logo: headerData?.logo,
-          sections: headerData?.sections,
+          sections: headerData?.sections || [],
           buttonText: headerData?.ctaButtonText
         });
+        console.log('CardNav sections loaded:', headerData?.sections?.length || 0);
       } catch (error) {
         console.error('Error fetching navigation data:', error);
       }

@@ -221,11 +221,19 @@
     justify-content: flex-start;
   }
 
+  .card-nav.open .card-nav-content {
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+  }
+  
   .nav-card {
     height: auto;
     min-height: 60px;
     flex: 1 1 auto;
     max-height: none;
+    display: flex !important;
+    opacity: 1 !important;
   }
 
   .nav-card-label {
