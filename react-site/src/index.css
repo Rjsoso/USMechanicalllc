@@ -699,16 +699,22 @@ body {
    ============================================ */
 
 @media (max-width: 767px) {
-  /* Stack About section vertically on mobile */
-  #about .flex-col {
+  /* Disable complex About section animations on mobile */
+  #about .flex.flex-col.md\:flex-row {
     flex-direction: column !important;
   }
   
-  #about > div > div:first-child,
-  #about > div > div:last-child {
+  /* Force both carousel and text to full width, disable animations */
+  #about > div > div {
     width: 100% !important;
     transform: none !important;
     transition: none !important;
+    position: static !important;
+  }
+  
+  /* Hide Read More/Close button on mobile to avoid animation triggers */
+  #about button:has(svg) {
+    display: none !important;
   }
   
   /* Disable slide animation on mobile for better performance */
@@ -716,39 +722,98 @@ body {
     transform: none !important;
   }
   
-  /* Services Section Mobile Layout */
-  /* Stack delivery methods vertically on mobile */
-  #services .flex-row {
+  /* Safety Section Mobile Layout */
+  /* Stack safety section vertically */
+  #safety > div > div {
     flex-direction: column !important;
   }
   
-  /* Make horizontal scrollable tab navigation for delivery methods */
-  #services .flex.flex-row > div:first-child {
-    flex-direction: row !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid #e5e7eb;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Tab items in horizontal layout */
-  #services .flex.flex-row > div:first-child > button {
-    flex: 0 0 auto;
-    min-width: 80px;
-    border-bottom: none !important;
-    border-right: 1px solid #e5e7eb;
-  }
-  
-  /* Content area full width below tabs */
-  #services .flex.flex-row > div:last-child {
+  /* Safety text full width */
+  #safety > div > div > div:first-child {
     width: 100% !important;
   }
   
-  /* Optimize service boxes for mobile */
+  /* Logo loop container - remove absolute positioning */
+  #safety > div > div > div:last-child {
+    width: 100% !important;
+    position: static !important;
+  }
+  
+  /* Logo loop ribbon - full width, not absolute */
+  #safety [data-testid="safety-ribbon"] {
+    position: static !important;
+    width: 100% !important;
+    left: auto !important;
+  }
+  
+  /* Reduce logo loop height on mobile */
+  #safety [data-testid="safety-ribbon"] > div > div {
+    height: 100px !important;
+  }
+  
+  /* Services Section Mobile Layout */
+  /* Services main container - stack vertically */
+  #services > div > div.flex {
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+  
+  /* Service boxes column - full width, remove padding */
+  #services > div > div.flex > div:first-child {
+    width: 100% !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Service boxes - better mobile sizing */
   #services .space-y-4 > div {
-    padding: 1.5rem !important;
+    padding: 1.25rem !important;
+    border-radius: 0.75rem !important;
+  }
+  
+  /* Service box text */
+  #services .space-y-4 > div h3 {
+    font-size: 1.125rem !important;
+  }
+  
+  #services .space-y-4 > div p {
+    font-size: 0.875rem !important;
+  }
+  
+  /* Delivery methods column - full width */
+  #services > div > div.flex > div:last-child {
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Delivery methods container - stack vertically */
+  #services .flex.flex-col.rounded-l-2xl {
+    border-radius: 0.75rem !important;
+  }
+  
+  /* Delivery methods nav row */
+  #services .flex.flex-col.rounded-l-2xl > div:last-child {
+    flex-direction: column !important;
+  }
+  
+  /* Nav sidebar becomes horizontal tabs */
+  #services .flex.flex-col.rounded-l-2xl > div:last-child > div:first-child {
+    width: 100% !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Tab buttons */
+  #services .flex.flex-col.rounded-l-2xl button {
+    min-width: 70px !important;
+    padding: 1rem !important;
+  }
+  
+  /* Content area below tabs */
+  #services .flex.flex-col.rounded-l-2xl > div:last-child > div:last-child {
+    width: 100% !important;
   }
   
   /* Full-width form inputs on mobile */
@@ -1095,6 +1160,13 @@ body {
     width: 100%;
     height: 100%;
   }
+  
+  /* Ensure portfolio section loads and displays properly */
+  #portfolio {
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* ============================================
@@ -1133,11 +1205,41 @@ body {
 
 /* Additional mobile-specific performance hints */
 @media (max-width: 767px) {
-  /* Force GPU compositing only where needed */
+  /* Remove will-change from all elements to reduce jitter */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Only use will-change on actively animating elements */
+  *:hover,
+  *:focus,
+  *:active {
+    will-change: transform, opacity;
+  }
+  
+  /* Simplify transforms - use translate instead of translate3d */
+  [style*="translate3d"] {
+    transform: none !important;
+  }
+  
+  /* Reduce transition complexity */
+  * {
+    transition-timing-function: ease !important;
+  }
+  
+  /* Disable complex text animations */
   .hero-3d-text,
   .section-title {
-    will-change: auto;
-    transform: translateZ(0);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.4) !important;
+    will-change: auto !important;
+    transform: none !important;
+  }
+  
+  /* Simplify carousel to reduce containment issues */
+  .carousel-wrapper,
+  .carousel-container {
+    contain: none !important;
   }
   
   /* Optimize images for mobile */

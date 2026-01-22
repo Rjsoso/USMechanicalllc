@@ -63,6 +63,7 @@ export default function LogoLoopSection() {
 
   // Responsive logo sizing based on screen width
   const getLogoHeight = () => {
+    if (windowWidth < 768) return 60; // Mobile
     if (windowWidth >= 2560) return 80; // 3xl
     if (windowWidth >= 1920) return 90; // 2xl
     if (windowWidth >= 1440) return 100; // xl
@@ -70,6 +71,7 @@ export default function LogoLoopSection() {
   };
 
   const getGap = () => {
+    if (windowWidth < 768) return 40; // Mobile
     if (windowWidth >= 2560) return 60; // 3xl
     if (windowWidth >= 1920) return 70; // 2xl
     if (windowWidth >= 1440) return 80; // xl

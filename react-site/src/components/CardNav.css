@@ -180,12 +180,12 @@
 
 @media (max-width: 767px) {
   .card-nav-container {
-    width: calc(100% - 32px);
+    width: auto;
     max-width: none;
     min-width: auto;
-    top: 16px;
-    right: 16px;
-    left: 16px;
+    top: 8px;
+    right: 8px;
+    left: 8px;
   }
 
   .card-nav {
