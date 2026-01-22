@@ -131,7 +131,8 @@ export const LogoLoop = memo(
     renderItem,
     ariaLabel = 'Partner logos',
     className,
-    style
+    style,
+    useCssAnimation = false
   }) => {
     const containerRef = useRef(null);
     const trackRef = useRef(null);
@@ -192,7 +193,16 @@ export const LogoLoop = memo(
 
     useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical]);
 
-    useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, isHovered, effectiveHoverSpeed, isVertical);
+    // Only use JS animation if useCssAnimation is false (desktop mode)
+    useAnimationLoop(
+      useCssAnimation ? { current: null } : trackRef,
+      targetVelocity,
+      seqWidth,
+      seqHeight,
+      isHovered,
+      effectiveHoverSpeed,
+      isVertical
+    );
 
     const cssVariables = useMemo(
       () => ({

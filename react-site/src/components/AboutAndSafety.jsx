@@ -528,6 +528,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={!isMobile}
+                        useCssAnimation={isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>
@@ -556,6 +557,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
                         pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={!isMobile}
+                        useCssAnimation={isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>
