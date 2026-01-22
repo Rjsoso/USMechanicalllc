@@ -442,7 +442,10 @@ Our goal is always simple: complete every project with zero safety issues.`,
           {/* All content (text and logos) comes from Sanity CMS */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
             {/* Text on left */}
-            <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'}`}>
+            <div
+              data-testid="safety-text"
+              className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative z-10 bg-white`}
+            >
               <FadeInWhenVisible delay={0.3}>
                 <h3 className="section-title text-5xl md:text-6xl mb-4 text-gray-900">
                   {data.safetyTitle}
@@ -463,7 +466,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
             {safetyLogoItems.length > 0 && (
               <div className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative flex items-center`}>
                 <div
-                  className="absolute right-0 md:right-[-24px] lg:right-[-48px] xl:right-[-96px] w-full md:w-[48vw] max-w-none overflow-hidden"
+                  data-testid="safety-ribbon"
+                  className="absolute right-0 w-full overflow-hidden z-0 md:translate-x-6 lg:translate-x-12 xl:translate-x-24"
                   onMouseEnter={() => setIsLoopsHovered(true)}
                   onMouseLeave={() => setIsLoopsHovered(false)}
                 >
