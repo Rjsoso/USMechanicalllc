@@ -22,6 +22,32 @@ export default {
         '2xl': '1920px',
         '3xl': '2560px',
       },
+      keyframes: {
+        scrollLeft: {
+          'from': { 
+            '-webkit-transform': 'translateX(0)',
+            'transform': 'translateX(0)' 
+          },
+          'to': { 
+            '-webkit-transform': 'translateX(-50%)',
+            'transform': 'translateX(-50%)' 
+          },
+        },
+        scrollRight: {
+          'from': { 
+            '-webkit-transform': 'translateX(-50%)',
+            'transform': 'translateX(-50%)' 
+          },
+          'to': { 
+            '-webkit-transform': 'translateX(0)',
+            'transform': 'translateX(0)' 
+          },
+        },
+      },
+      animation: {
+        'scroll-left': 'scrollLeft 15s linear infinite',
+        'scroll-right': 'scrollRight 15s linear infinite',
+      },
     },
   },
   plugins: [],
