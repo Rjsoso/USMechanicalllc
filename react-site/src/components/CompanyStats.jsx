@@ -174,16 +174,24 @@ const CompanyStats = () => {
   }, []);
 
   // Watch when the section scrolls into view (only after data is loaded)
+  // Once animated, never retriggers (prevents jitter on scroll up/down)
   useEffect(() => {
     if (!statsData || !sectionRef.current) return;
 
     // Reset inView to false initially to prevent auto-scroll
     setInView(false);
+    
+    let hasAnimated = false; // Track if animation has already run
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Only set inView when actually intersecting (user scrolled to it)
-        setInView(entry.isIntersecting);
+        // Only trigger animation once on first intersection
+        if (entry.isIntersecting && !hasAnimated) {
+          setInView(true);
+          hasAnimated = true;
+          // Disconnect observer after first trigger to prevent retriggering
+          observer.disconnect();
+        }
       },
       { 
         threshold: 0.15, // Optimized threshold for better performance
@@ -202,9 +210,6 @@ const CompanyStats = () => {
 
     return () => {
       clearTimeout(timeoutId);
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
       observer.disconnect();
     };
   }, [statsData]);
