@@ -61,7 +61,7 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
     const startTime = Date.now();
     const targetValue = numericValue; // Capture value at start
     const animationStartValue = startValue; // Capture start value
-    const updateInterval = 50; // Throttle to 50ms (20 updates/sec instead of 60)
+    const updateInterval = 33; // 30fps - optimal balance for iOS smoothness (smoother than 20fps)
     
     // Use setInterval for throttled updates (better for iOS/Safari performance)
     intervalRef.current = setInterval(() => {
@@ -99,7 +99,11 @@ const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 })
   // Otherwise show the animated count or the full value
   if (numericValue) {
     return (
-      <span style={{ willChange: 'contents' }}>
+      <span style={{ 
+        willChange: 'contents',
+        transform: 'translateZ(0)', // GPU acceleration for smoother number updates
+        WebkitFontSmoothing: 'antialiased'
+      }}>
         {count.toLocaleString()}
         {suffix}
       </span>
@@ -194,8 +198,8 @@ const CompanyStats = () => {
         }
       },
       { 
-        threshold: 0.15, // Optimized threshold for better performance
-        rootMargin: '50px 0px', // Small margin for smoother triggering
+        threshold: 0.1, // Lower threshold triggers earlier for more responsive feel
+        rootMargin: '100px 0px', // Larger margin starts animation sooner
         // Use passive observation for better scroll performance
       }
     );

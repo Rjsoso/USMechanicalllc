@@ -565,12 +565,42 @@ footer {
   [class*="translate"] {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
   }
 }
 
-/* Smooth scrolling optimization for iOS */
+/* CSS Containment for better rendering performance on iOS */
+@supports (contain: layout style paint) {
+  section:not(#hero):not(#contact) {
+    contain: layout style paint;
+  }
+}
+
+/* Content visibility for off-screen sections (Safari 17+) */
+@supports (content-visibility: auto) {
+  section:not(#hero):not(#contact) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+}
+
+/* Enhanced scroll performance for iOS */
 html {
   -webkit-overflow-scrolling: touch;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none; /* Prevent bounce overscroll during animations */
+  scroll-behavior: smooth;
+}
+
+/* Optimize scrollable containers */
+.overflow-y-auto,
+.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
 }
 
 /* Prevent iOS Safari from flickering during animations */
@@ -581,11 +611,14 @@ html {
 /* Optimize text rendering during animations on iOS */
 body {
   text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* When animations are running, use optimizeSpeed */
-@media (prefers-reduced-motion: no-preference) {
+/* Use subpixel antialiasing when not animating for crispness */
+@media (prefers-reduced-motion: reduce) {
   body {
-    text-rendering: optimizeSpeed;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 }

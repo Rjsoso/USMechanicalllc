@@ -20,7 +20,8 @@ function FadeInWhenVisible({ children, delay = 0, className = '' }) {
       style={{
         transform: 'translateZ(0)', // Force GPU acceleration
         willChange: 'transform, opacity',
-        WebkitFontSmoothing: 'antialiased'
+        WebkitFontSmoothing: 'antialiased',
+        isolation: 'isolate' // Create stacking context for better compositing
       }}
     >
       {children}
