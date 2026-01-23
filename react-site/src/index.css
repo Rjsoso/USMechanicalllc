@@ -1251,6 +1251,24 @@ body {
 }
 
 /* ============================================
+   CAREERS MOBILE OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Remove negative margin on mobile to prevent portfolio overlap */
+  #careers {
+    margin-top: 0 !important;
+    padding-top: 3rem !important;
+  }
+  
+  /* Ensure careers section is visible and not covered */
+  #careers {
+    position: relative !important;
+    z-index: 5 !important;
+  }
+}
+
+/* ============================================
    MOBILE PERFORMANCE OPTIMIZATIONS
    ============================================ */
 
