@@ -25,6 +25,12 @@
   }
 }
 
+/* Ensure HTML element has dark background */
+html {
+  background-color: #1a1a1a !important;
+  background: #1a1a1a !important;
+}
+
 /* CRITICAL: Override Tailwind Preflight white backgrounds immediately after utilities */
 /* Tailwind Preflight sets background-color: white on body and other elements */
 /* We need to override this BEFORE our section-specific rules */
@@ -1214,9 +1220,14 @@ body {
     height: 100%;
   }
   
-  /* Force portfolio title and description to be visible on mobile (override Framer Motion initial state) */
-  #portfolio h2,
-  #portfolio p {
+  /* Force all Framer Motion elements to be visible on mobile (override initial opacity: 0) */
+  [data-framer-motion] {
+    opacity: 1 !important;
+  }
+  
+  /* Specifically ensure all sections and their content are visible */
+  section *[style*="opacity: 0"],
+  section *[style*="opacity:0"] {
     opacity: 1 !important;
   }
   
