@@ -7,8 +7,8 @@ const defaultHeroData = {
   // Keep defaults aligned with the published CMS values to avoid “mismatch” confusion
   headline: 'Trusted Mechanical Contractors Since 1963',
   subtext: '',
-  buttonText: 'Apply Here',
-  buttonLink: '#careers',
+  buttonText: '',
+  buttonLink: '#contact',
   backgroundImage: null,
 }
 
@@ -63,12 +63,10 @@ function HeroSection() {
         })
         .then(data => {
           if (data) {
-            // Ensure buttonText and buttonLink are set with fallbacks
+            // Use data from Sanity, respecting empty values for optional fields
             const heroDataWithDefaults = {
               ...data,
-              buttonText: (data.buttonText && typeof data.buttonText === 'string' && data.buttonText.trim() !== '') 
-                ? data.buttonText 
-                : defaultHeroData.buttonText,
+              buttonText: data.buttonText || '',
               buttonLink: data.buttonLink || defaultHeroData.buttonLink,
             };
             
@@ -188,6 +186,23 @@ function HeroSection() {
         >
           {heroData.subtext}
         </motion.p>
+
+        {/* CTA Button - only show if buttonText is provided */}
+        {heroData.buttonText && heroData.buttonText.trim() !== '' && (
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <a
+              href={heroData.buttonLink || '#contact'}
+              className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+            >
+              {heroData.buttonText}
+            </a>
+          </motion.div>
+        )}
       </div>
     </section>
   )

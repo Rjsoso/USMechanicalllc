@@ -31,18 +31,24 @@ export default defineType({
     {
       name: 'buttonText',
       title: 'Button Text',
-      description: 'Text displayed on the call-to-action button',
+      description: 'Optional call-to-action button text. Leave empty to hide the button.',
       type: 'string',
-      initialValue: 'Request a Quote',
-      validation: (Rule) => Rule.required().max(50),
+      validation: (Rule) => Rule.max(50),
     },
     {
       name: 'buttonLink',
       title: 'Button Link',
-      description: 'URL or anchor link (e.g., #contact or /contact)',
+      description: 'URL or anchor link (e.g., #contact or /contact). Only used if button text is provided.',
       type: 'string',
       initialValue: '#contact',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.custom((value, context) => {
+        const doc = context?.document as any
+        const hasButtonText = doc?.buttonText && doc.buttonText.trim() !== ''
+        if (hasButtonText && !value) {
+          return 'Button link is required when button text is provided'
+        }
+        return true
+      }),
     },
   ],
   preview: {
