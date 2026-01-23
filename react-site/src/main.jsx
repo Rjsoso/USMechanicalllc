@@ -31,3 +31,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 )
+
+// Mark body as loaded to fade out loading overlay
+setTimeout(() => {
+  document.body.classList.add('loaded');
+}, 100);

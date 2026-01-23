@@ -100,6 +100,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Rubik:wght@900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS to prevent flash of white background on load -->
+    <style>
+      /* Set dark background immediately to prevent FOUC */
+      html {
+        background-color: #1a1a1a;
+        background: #1a1a1a;
+      }
+      
+      body {
+        background-color: #1a1a1a;
+        background: #1a1a1a;
+        margin: 0;
+        padding: 0;
+      }
+      
+      #root {
+        background-color: #1a1a1a;
+        background: #1a1a1a;
+        min-height: 100vh;
+      }
+      
+      /* Prevent any white flash during initial render */
+      * {
+        background-color: transparent;
+      }
+      
+      /* Loading state styling */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #1a1a1a;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.3s ease-out;
+      }
+      
+      /* Hide loading overlay once content is ready */
+      body.loaded::before {
+        opacity: 0;
+        transition: opacity 0.5s ease-out 0.1s;
+      }
+    </style>
   </head>
   <body>
     <!-- Force scroll to top immediately on page load -->
