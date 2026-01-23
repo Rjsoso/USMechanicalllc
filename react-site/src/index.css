@@ -1219,6 +1219,35 @@ body {
   #portfolio p {
     opacity: 1 !important;
   }
+  
+  /* Force portfolio grid items and images to be visible */
+  #portfolio .grid > div {
+    display: block !important;
+    opacity: 1 !important;
+  }
+  
+  #portfolio .relative {
+    display: block !important;
+    position: relative !important;
+    opacity: 1 !important;
+  }
+  
+  #portfolio img {
+    opacity: 1 !important;
+    display: block !important;
+  }
+  
+  /* Ensure grid container is visible */
+  #portfolio .bg-white {
+    display: block !important;
+    min-height: 200px !important;
+  }
+  
+  /* Force category cards to be visible */
+  #portfolio .group {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
 
 /* ============================================
