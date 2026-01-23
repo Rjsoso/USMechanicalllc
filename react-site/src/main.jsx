@@ -32,7 +32,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 )
 
-// Mark body as loaded to fade out loading overlay
-setTimeout(() => {
-  document.body.classList.add('loaded');
-}, 100);
+// Mark body as loaded after React renders and content is in DOM
+// Use requestAnimationFrame to ensure content is painted
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.body.classList.add('loaded');
+    // Remove overlay completely after fade completes
+    setTimeout(() => {
+      document.body.classList.add('loaded-complete');
+    }, 200);
+  });
+});

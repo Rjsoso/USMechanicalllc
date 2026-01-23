@@ -105,29 +105,25 @@
     <style>
       /* Set dark background immediately to prevent FOUC */
       html {
-        background-color: #1a1a1a;
-        background: #1a1a1a;
+        background-color: #1a1a1a !important;
+        background: #1a1a1a !important;
       }
       
       body {
-        background-color: #1a1a1a;
-        background: #1a1a1a;
+        background-color: #1a1a1a !important;
+        background: #1a1a1a !important;
         margin: 0;
         padding: 0;
+        overflow: hidden;
       }
       
       #root {
-        background-color: #1a1a1a;
-        background: #1a1a1a;
+        background-color: #1a1a1a !important;
+        background: #1a1a1a !important;
         min-height: 100vh;
       }
       
-      /* Prevent any white flash during initial render */
-      * {
-        background-color: transparent;
-      }
-      
-      /* Loading state styling */
+      /* Loading state styling - covers screen until content ready */
       body::before {
         content: '';
         position: fixed;
@@ -136,16 +132,25 @@
         right: 0;
         bottom: 0;
         background: #1a1a1a;
-        z-index: 9999;
+        z-index: 99999;
         pointer-events: none;
         opacity: 1;
-        transition: opacity 0.3s ease-out;
       }
       
-      /* Hide loading overlay once content is ready */
+      /* Fast fade-out when content is loaded */
       body.loaded::before {
         opacity: 0;
-        transition: opacity 0.5s ease-out 0.1s;
+        transition: opacity 0.15s ease-out;
+      }
+      
+      /* Remove loading overlay completely after fade */
+      body.loaded-complete::before {
+        display: none;
+      }
+      
+      /* Re-enable scrolling once loaded */
+      body.loaded {
+        overflow: visible;
       }
     </style>
   </head>
