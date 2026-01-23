@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Logo Loop Keyframes - Must be outside Tailwind layers to prevent purging */
+@keyframes scrollLeft {
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  to {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollRight {
+  from {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
 /* CRITICAL: Override Tailwind Preflight white backgrounds immediately after utilities */
 /* Tailwind Preflight sets background-color: white on body and other elements */
 /* We need to override this BEFORE our section-specific rules */
