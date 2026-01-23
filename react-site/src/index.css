@@ -723,12 +723,12 @@ body {
 
 @media (max-width: 767px) {
   /* Reduce initial page jitter by disabling animations during load */
-  *:not(.logoloop__track) {
+  *:not(.logoloop__track):not(#portfolio *) {
     animation-duration: 0.1s !important;
   }
   
-  /* Disable transforms only on Framer Motion and carousel, not LogoLoop */
-  [data-framer-motion]:not(.logoloop__track):not(.logoloop *),
+  /* Disable transforms only on Framer Motion and carousel, not LogoLoop or Portfolio */
+  [data-framer-motion]:not(.logoloop__track):not(.logoloop *):not(#portfolio *),
   .carousel-item[style*="transform"] {
     transform: none !important;
   }
@@ -1212,13 +1212,6 @@ body {
     object-fit: cover;
     width: 100%;
     height: 100%;
-  }
-  
-  /* Ensure portfolio section loads and displays properly */
-  #portfolio {
-    display: block !important;
-    opacity: 1 !important;
-    transform: none !important;
   }
 }
 

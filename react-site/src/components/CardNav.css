@@ -214,6 +214,10 @@
     display: flex !important;
   }
 
+  .logo {
+    height: 40px; /* Increased from 28px for better visibility on mobile */
+  }
+
   .card-nav-cta-button {
     display: none;
   }
