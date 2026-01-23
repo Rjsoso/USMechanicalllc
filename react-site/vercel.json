@@ -4,7 +4,6 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "installCommand": "npm install",
-  "$comment": "Trigger rebuild 2026-01-22",
   "rewrites": [
     {
       "source": "/(.*)",
