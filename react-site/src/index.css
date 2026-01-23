@@ -529,9 +529,10 @@ footer {
     min-height: 85vh !important;
   }
   
-  #hero .relative.z-10 {
+  /* Removed margin-top override - let inline style control positioning */
+  /* #hero .relative.z-10 {
     margin-top: 40px !important;
-  }
+  } */
   
   .hero-3d-text {
     font-size: clamp(2rem, 5vw, 3.5rem) !important;
@@ -1151,8 +1152,9 @@ body {
   }
   
   /* Hero section content safe area */
+  /* Adjusted to not conflict with inline marginTop - only handle safe area inset */
   #hero .relative.z-10 {
-    padding-top: max(80px, calc(80px + env(safe-area-inset-top)));
+    padding-top: max(0px, env(safe-area-inset-top));
   }
   
   /* Section padding for safe areas */
