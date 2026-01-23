@@ -126,26 +126,50 @@ export default function ProjectDetail() {
       <Header />
       <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
-          {/* Back Button */}
-          <button
-            onClick={() => navigateAndScroll('portfolio', navigate)}
-            className="mb-8 text-black hover:text-gray-700 transition-colors flex items-center gap-2"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Back Buttons */}
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+            <button
+              onClick={() => navigateAndScroll('portfolio', navigate)}
+              className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Projects
-          </button>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back to Portfolio
+            </button>
+
+            {projectData.category && (
+              <button
+                onClick={() => navigate(`/portfolio/${projectData.category._id}`)}
+                className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                Back to Projects
+              </button>
+            )}
+          </div>
 
           {/* Project Category Badge */}
           {projectData.category && (
