@@ -3,10 +3,6 @@ import headerSection from './headerSection'
 import navLink from './navLink'
 import heroSection from './heroSection'
 import aboutAndSafety from './aboutAndSafety'
-import service from './service'
-import serviceWithImage from './serviceWithImage'
-import serviceItem from './serviceItem'
-import serviceItemWithImage from './serviceItemWithImage'
 import office from './office'
 import affiliate from './affiliate'
 import formSettings from './formSettings'
@@ -16,7 +12,6 @@ import companyStats from './companyStats'
 import portfolioCategory from './portfolioCategory'
 import portfolioProject from './portfolioProject'
 import portfolioSection from './portfolioSection'
-import expandableServiceBox from './expandableServiceBox'
 import logoLoop from './logoLoop'
 import careers from './careers'
 
@@ -24,10 +19,6 @@ export const schema = {
   types: [
     ourServices,
     navLink,
-    service,
-    serviceWithImage,
-    serviceItem,
-    serviceItemWithImage,
     office,
     affiliate,
     formSettings,
@@ -40,7 +31,6 @@ export const schema = {
     portfolioCategory,
     portfolioProject,
     portfolioSection,
-    expandableServiceBox,
     logoLoop,
     careers,
   ],

@@ -40,8 +40,6 @@ We maintain offices in Pleasant Grove, Utah, and Las Vegas, Nevada, as well as S
 Our experience modification rate (EMR) remains below the national average, qualifying us for self-insured insurance programs that reduce risk management costs. These savings, combined with our dedication to safety, provide added value on every project.
 
 Our goal is always simple: complete every project with zero safety issues.`,
-    photo1: null,
-    safetyImage: null,
   }
 
   // Fetch all content from Sanity (text and images)
@@ -63,34 +61,8 @@ Our goal is always simple: complete every project with zero safety issues.`,
               alt,
               caption
             },
-            photo1 {
-              asset-> {
-                _id,
-                url,
-                originalFilename
-              },
-              alt
-            },
             safetyTitle,
             safetyText,
-            safetyImage {
-              asset-> {
-                _id,
-                url,
-                originalFilename
-              },
-              alt,
-              caption
-            },
-            safetyImage2 {
-              asset-> {
-                _id,
-                url,
-                originalFilename
-              },
-              alt,
-              caption
-            },
             safetyLogos[] {
               image {
                 asset-> {
@@ -136,18 +108,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
   // Map aboutPhotos to carousel items format
   const carouselItems = useMemo(() => {
     if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
-      // Fallback to photo1 if aboutPhotos is empty
-      if (data?.photo1 && data.photo1.asset) {
-        const imageUrl = data.photo1.asset.url 
-          ? `${data.photo1.asset.url}?w=1000&q=82&auto=format`
-          : urlFor(data.photo1).width(1000).quality(82).auto('format').url();
-        return [{
-          id: 'photo1',
-          src: imageUrl,
-          alt: data.photo1.alt || "About US Mechanical",
-          caption: null
-        }];
-      }
       return [];
     }
     
@@ -163,36 +123,12 @@ Our goal is always simple: complete every project with zero safety issues.`,
         caption: photo.caption || null
       };
     }).filter(Boolean);
-  }, [data?.aboutPhotos, data?.photo1]);
+  }, [data?.aboutPhotos]);
 
   // Transform safetyLogos to LogoLoop format
   const safetyLogoItems = useMemo(() => {
     if (!data?.safetyLogos || !Array.isArray(data.safetyLogos) || data.safetyLogos.length === 0) {
-      // Fallback to safetyImage and safetyImage2 if safetyLogos is empty
-      const fallbackItems = [];
-      if (data?.safetyImage && data.safetyImage.asset) {
-        const imageUrl = data.safetyImage.asset.url
-          ? `${data.safetyImage.asset.url}?w=200&q=80&auto=format`
-          : urlFor(data.safetyImage).width(200).quality(80).auto('format').url();
-        fallbackItems.push({
-          src: imageUrl,
-          alt: data.safetyImage.alt || 'Safety image',
-          title: data.safetyImage.caption || 'Safety image',
-          href: undefined
-        });
-      }
-      if (data?.safetyImage2 && data.safetyImage2.asset) {
-        const imageUrl = data.safetyImage2.asset.url
-          ? `${data.safetyImage2.asset.url}?w=200&q=80&auto=format`
-          : urlFor(data.safetyImage2).width(200).quality(80).auto('format').url();
-        fallbackItems.push({
-          src: imageUrl,
-          alt: data.safetyImage2.alt || 'Safety image 2',
-          title: data.safetyImage2.caption || 'Safety image 2',
-          href: undefined
-        });
-      }
-      return fallbackItems;
+      return [];
     }
 
     return data.safetyLogos.map((item, index) => {
@@ -216,7 +152,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
       // This can be extended later to support icon components
       return null;
     }).filter(Boolean);
-  }, [data?.safetyLogos, data?.safetyImage, data?.safetyImage2]);
+  }, [data?.safetyLogos]);
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {

@@ -45,22 +45,6 @@ export default defineType({
       validation: (Rule) => Rule.min(1).max(10),
     },
     {
-      name: 'photo1',
-      title: 'About Photo (Legacy)',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Legacy single photo field. Use About Photos array instead.',
-      hidden: true,
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description: 'Important for accessibility',
-        },
-      ],
-    },
-    {
       name: 'safetyTitle',
       title: 'Safety Title',
       type: 'string',
@@ -73,53 +57,9 @@ export default defineType({
       description: 'Text content for the Safety & Risk Management section',
     },
     {
-      name: 'safetyImage',
-      title: 'Safety Photo',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'First photo displayed with the Safety & Risk Management section',
-      hidden: true, // Hidden for backward compatibility
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description: 'Important for accessibility. Describe what is shown in the image.',
-        },
-        {
-          name: 'caption',
-          type: 'string',
-          title: 'Caption',
-          description: 'Optional caption for the image',
-        },
-      ],
-    },
-    {
-      name: 'safetyImage2',
-      title: 'Safety Photo 2',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Second photo displayed below the first Safety photo',
-      hidden: true, // Hidden for backward compatibility
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description: 'Important for accessibility. Describe what is shown in the image.',
-        },
-        {
-          name: 'caption',
-          type: 'string',
-          title: 'Caption',
-          description: 'Optional caption for the image',
-        },
-      ],
-    },
-    {
       name: 'safetyLogos',
-      title: 'Safety Logos & Images',
-      description: 'Logos and images displayed in rotating loops in the Safety section. Items cycle seamlessly between the two loops.',
+      title: 'Safety Certifications & Compliance Logos',
+      description: 'Safety certifications, compliance logos, and accreditation images displayed in rotating loops in the Safety & Risk Management section. These are separate from partner logos (managed in Logo Loop section). Items cycle seamlessly between two horizontal loops.',
       type: 'array',
       of: [
         {

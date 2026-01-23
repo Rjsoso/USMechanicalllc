@@ -4,6 +4,7 @@ export default defineType({
   name: 'logoLoop',
   title: 'Logo Loop',
   type: 'document',
+  description: 'Partner and vendor logos displayed in an animated carousel on the website. This is separate from the Safety logos (managed in About & Safety Section) and company logos (managed in Header Section and Contact Page).',
   fields: [
     {
       name: 'title',
@@ -21,7 +22,7 @@ export default defineType({
     },
     {
       name: 'logos',
-      title: 'Logos',
+      title: 'Partner & Vendor Logos',
       type: 'array',
       of: [
         {

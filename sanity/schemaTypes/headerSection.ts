@@ -8,9 +8,9 @@ export default defineType({
   fields: [
     {
       name: 'logo',
-      title: 'Logo Image',
+      title: 'Header Logo',
       type: 'image',
-      description: 'Upload your company logo. This appears in the header.',
+      description: 'Main site logo that appears in the header navigation bar. This is different from the footer logo, which can be managed in the Contact Page section.',
       options: { 
         hotspot: true,
         metadata: ['blurhash', 'lqip', 'palette']

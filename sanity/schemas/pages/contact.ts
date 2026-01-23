@@ -30,7 +30,7 @@ export default defineType({
       name: 'footerLogo',
       title: 'Footer Logo',
       type: 'image',
-      description: 'Logo displayed in the footer next to copyright text (recommended: square format, 512x512px)',
+      description: 'Logo displayed in the website footer next to copyright text. This can be different from the header logo (managed in Header Section). Recommended: square format, 512x512px.',
       options: { 
         hotspot: true,
         metadata: ['blurhash', 'lqip', 'palette']
