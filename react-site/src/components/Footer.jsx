@@ -1,5 +1,5 @@
-import { useEffect, useState, memo, useMemo } from 'react'
-import { client, urlFor } from '../utils/sanity'
+import { useEffect, useState, memo } from 'react'
+import { client } from '../utils/sanity'
 
 // Fallback contact data in case Sanity fetch fails
 const FALLBACK_DATA = {
@@ -11,19 +11,17 @@ const FALLBACK_DATA = {
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
-  const [logo, setLogo] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchInfo = () => {
       setLoading(true)
       
-      // Fetch contact data including footer logo - exclude drafts to ensure consistency
+      // Fetch contact data - exclude drafts to ensure consistency
       client
         .fetch(`*[_type == "contact" && !(_id in path("drafts.**"))][0]{
           email,
           licenseInfo,
-          footerLogo,
           offices[] {
             locationName,
             address,
@@ -32,24 +30,6 @@ function Footer() {
         }`)
         .then(res => {
           setContactData(res)
-          // Set footer logo from contact data
-          if (res?.footerLogo) {
-            setLogo(res.footerLogo)
-          } else {
-            // Fallback: try to get logo from header section
-            client
-              .fetch(`*[_type == "headerSection" && _id == "headerSection"][0]{
-                logo
-              }`)
-              .then(headerRes => {
-                if (headerRes?.logo) {
-                  setLogo(headerRes.logo)
-                }
-              })
-              .catch((err) => {
-                console.error('Footer: Failed to fetch header logo fallback:', err)
-              })
-          }
           setLoading(false)
           if (!res) {
             console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
@@ -79,16 +59,8 @@ function Footer() {
   const displayEmail = contactData?.email || FALLBACK_DATA.email
   const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
 
-  // Memoize logo URL
-  const logoUrl = useMemo(() => {
-    if (!logo) return '/logo.png' // Fallback to public logo
-    try {
-      return urlFor(logo).width(120).quality(90).auto('format').url()
-    } catch (err) {
-      console.error('Footer: Error generating logo URL:', err)
-      return '/logo.png'
-    }
-  }, [logo])
+  // Use favicon for footer logo
+  const logoUrl = '/favicon.png'
 
   return (
     <footer className="bg-black text-gray-300 py-10 text-center">
