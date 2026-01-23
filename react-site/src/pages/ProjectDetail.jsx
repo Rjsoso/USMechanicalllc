@@ -127,7 +127,7 @@ export default function ProjectDetail() {
       <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
         <div className="max-w-7xl mx-auto px-6 py-20">
           {/* Back Buttons */}
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div className="mb-8 flex flex-wrap items-center gap-4">
             <button
               onClick={() => navigateAndScroll('portfolio', navigate)}
               className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
