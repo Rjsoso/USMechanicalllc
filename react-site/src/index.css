@@ -33,8 +33,8 @@
 /* Tailwind Preflight includes: body { background-color: white; } */
 /* We must override this immediately to prevent white backgrounds */
 body {
-  background-color: transparent !important;
-  background: transparent !important;
+  background-color: #1a1a1a !important;
+  background: #1a1a1a !important;
 }
 
 
