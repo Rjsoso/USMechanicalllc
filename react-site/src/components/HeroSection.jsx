@@ -14,10 +14,6 @@ const defaultHeroData = {
 
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 768
-  )
   
   // Randomly select color for "1963" on component mount
   const yearColor = useMemo(() => {
@@ -27,8 +23,7 @@ function HeroSection() {
 
   useEffect(() => {
     const fetchHero = () => {
-      // Simplified query matching the pattern used in ServicesSection (which works)
-      // Try document with _id "heroSection" first, fallback to first document
+      // Fetch hero section data from Sanity
       client
         .fetch(
           `*[_type == "heroSection" && _id == "heroSection"][0]{
@@ -38,15 +33,6 @@ function HeroSection() {
                 _id,
                 url
               }
-            },
-            carouselImages[] {
-              image {
-                asset-> {
-                  _id,
-                  url
-                }
-              },
-              "imageUrl": image.asset->url
             },
             headline,
             subtext,
@@ -65,17 +51,6 @@ function HeroSection() {
                     _id,
                     url
                   }
-                },
-                carouselImages[] {
-                  image {
-                    asset-> {
-                      _id,
-                      url
-                    }
-                  },
-                  title,
-                  description,
-                  "imageUrl": image.asset->url
                 },
                 headline,
                 subtext,
@@ -98,10 +73,6 @@ function HeroSection() {
             };
             
             setHeroData(heroDataWithDefaults)
-            // Reset to first image when new data loads
-            if (data.carouselImages && data.carouselImages.length > 0) {
-              setCurrentImageIndex(0)
-            }
           } else {
             // Use default data if Sanity returns null
             console.warn('HeroSection: No published heroSection document found; using default fallback content.')
@@ -127,24 +98,6 @@ function HeroSection() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [])
 
-  // Add resize listener for mobile detection
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Auto-cycle through carousel images if available (disabled on mobile)
-  useEffect(() => {
-    if (heroData.carouselImages && heroData.carouselImages.length > 1 && !isMobile) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex(prev => (prev + 1) % heroData.carouselImages.length)
-      }, 5000) // Change image every 5 seconds
-      return () => clearInterval(interval)
-    }
-  }, [heroData.carouselImages, isMobile])
 
   return (
     <section
@@ -157,66 +110,24 @@ function HeroSection() {
         top: 0,
       }}
     >
-      {/* Background - extends to very top of viewport, covering header gap */}
-      {/* Use carousel images if available, otherwise fall back to backgroundImage */}
-      {heroData.carouselImages && Array.isArray(heroData.carouselImages) && heroData.carouselImages.length > 0 && heroData.carouselImages.some(img => img.imageUrl || img.image?.asset?.url) ? (
-        <>
-          {/* Only render current and next image for performance */}
-          {heroData.carouselImages.map((item, index) => {
-            const isCurrent = currentImageIndex === index;
-            const isNext = currentImageIndex === (index - 1 + heroData.carouselImages.length) % heroData.carouselImages.length;
-            
-            // Only render current image and preload next one
-            if (!isCurrent && !isNext) return null;
-            
-            const imageUrl = item.imageUrl || (item.image?.asset?.url);
-            // Optimize image: use Sanity CDN with width/quality params if available
-            const optimizedUrl = imageUrl 
-              ? (imageUrl.includes('cdn.sanity.io') 
-                  ? `${imageUrl}?w=1600&q=80&auto=format` 
-                  : imageUrl)
-              : undefined;
-            
-            return (
-              <motion.div
-                key={index}
-                className="fixed bg-cover bg-center brightness-75"
-                style={{
-                  backgroundImage: optimizedUrl ? `url(${optimizedUrl})` : undefined,
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: '100vh',
-                  width: '100%',
-                  zIndex: isCurrent ? -2 : -3,
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isCurrent ? 1 : 0 }}
-                transition={{ duration: 0.5 }}
-              ></motion.div>
-            );
-          })}
-        </>
-      ) : (
-        <div
-          className="fixed bg-cover bg-center brightness-75"
-          style={{
-            backgroundImage: heroData.backgroundImage?.asset?.url
-              ? `url(${heroData.backgroundImage.asset.url}?w=1600&q=80&auto=format)`
-              : heroData.backgroundImage && urlFor(heroData.backgroundImage)
-              ? urlFor(heroData.backgroundImage).width(1600).quality(80).auto('format').url()
-              : undefined,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: '100vh',
-            width: '100%',
-            zIndex: -2,
-          }}
-        ></div>
-      )}
+      {/* Background image */}
+      <div
+        className="fixed bg-cover bg-center brightness-75"
+        style={{
+          backgroundImage: heroData.backgroundImage?.asset?.url
+            ? `url(${heroData.backgroundImage.asset.url}?w=1600&q=80&auto=format)`
+            : heroData.backgroundImage && urlFor(heroData.backgroundImage)
+            ? `url(${urlFor(heroData.backgroundImage).width(1600).quality(80).auto('format').url()})`
+            : undefined,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: '100vh',
+          width: '100%',
+          zIndex: -2,
+        }}
+      ></div>
 
       <div 
         className="fixed bg-gradient-to-b from-black/30 via-black/10 to-black/40"
