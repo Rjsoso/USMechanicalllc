@@ -152,6 +152,21 @@
       body.loaded {
         overflow: visible;
       }
+      
+      /* Hide white sections during overlay fade to prevent flash */
+      .bg-white,
+      #careers,
+      .bg-gray-100 {
+        opacity: 0;
+        transition: opacity 0.05s ease-in;
+      }
+      
+      /* Show white sections only after overlay is completely removed */
+      body.loaded-complete .bg-white,
+      body.loaded-complete #careers,
+      body.loaded-complete .bg-gray-100 {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>

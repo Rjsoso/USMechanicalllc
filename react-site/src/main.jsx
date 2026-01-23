@@ -40,6 +40,6 @@ requestAnimationFrame(() => {
     // Remove overlay completely after fade completes
     setTimeout(() => {
       document.body.classList.add('loaded-complete');
-    }, 200);
+    }, 150);
   });
 });
