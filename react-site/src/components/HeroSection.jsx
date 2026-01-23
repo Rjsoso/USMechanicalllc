@@ -190,14 +190,14 @@ function HeroSection() {
         {/* CTA Button - only show if buttonText is provided */}
         {heroData.buttonText && heroData.buttonText.trim() !== '' && (
           <motion.div
-            className="mt-8"
+            className="mt-5.5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <a
               href={heroData.buttonLink || '#contact'}
-              className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+              className="hero-button-3d inline-block px-8 py-4 bg-black text-white font-semibold text-lg transition-colors duration-300"
             >
               {heroData.buttonText}
             </a>
