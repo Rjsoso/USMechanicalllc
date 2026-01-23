@@ -49,10 +49,10 @@ function Portfolio() {
       <div className="max-w-7xl mx-auto px-6 mb-12">
         <motion.h2 
           className="section-title text-5xl md:text-6xl text-center text-white"
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {sectionData?.sectionTitle || 'Portfolio'}
         </motion.h2>
@@ -61,8 +61,8 @@ function Portfolio() {
             className="text-white text-lg text-center mt-4 opacity-90 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {sectionData.sectionDescription}
           </motion.p>

@@ -209,8 +209,10 @@ export default function ServiceDetail() {
           {/* Service Title */}
           <motion.h1
             className="section-title text-5xl md:text-6xl mb-8 text-black"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {serviceData.title}
           </motion.h1>
@@ -220,8 +222,9 @@ export default function ServiceDetail() {
             <motion.p
               className="text-xl text-black mb-12 leading-relaxed"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {serviceData.description}
             </motion.p>
@@ -232,8 +235,9 @@ export default function ServiceDetail() {
             <motion.div
               className="prose prose-lg max-w-none mb-12"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               <PortableText value={serviceData.fullDescription} />
             </motion.div>
@@ -244,8 +248,9 @@ export default function ServiceDetail() {
             <motion.div
               className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-6"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {/* Carousel on left, features on right (or reverse on mobile) */}
               {carouselItems.length > 0 && (

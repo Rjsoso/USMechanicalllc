@@ -296,10 +296,10 @@ export default function Contact() {
         {!loading && contactData && (
           <>
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
               className="section-title text-5xl md:text-6xl text-center mb-8 text-white"
             >
               {contactData.heroTitle || 'Contact Us'}
@@ -307,10 +307,10 @@ export default function Contact() {
 
             <motion.p 
               className="text-center text-white mb-12"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {contactData.description}
             </motion.p>
@@ -323,10 +323,10 @@ export default function Contact() {
                     <motion.div 
                       key={index} 
                       className="mb-8"
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+                      viewport={{ once: true, margin: "500px" }}
+                      transition={{ duration: 0.25 }}
                     >
                       <h2 className="text-2xl font-semibold mb-4 text-white">{office.locationName}</h2>
                       <p className="text-white">{office.address}</p>
@@ -342,20 +342,20 @@ export default function Contact() {
                 {contactData.affiliates && contactData.affiliates.length > 0 && (
                   <motion.div 
                     className="mt-8"
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.6, delay: 0.2 + (contactData.offices?.length || 0) * 0.1 }}
+                    viewport={{ once: true, margin: "500px" }}
+                    transition={{ duration: 0.25 }}
                   >
                     <h2 className="text-2xl font-semibold mb-4 text-white">Affiliate Companies</h2>
                     {contactData.affiliates.map((affiliate, i) => (
                       <motion.div 
                         key={i} 
                         className="mb-6"
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.2 }}
-                        transition={{ duration: 0.5, delay: 0.3 + (contactData.offices?.length || 0) * 0.1 + (i * 0.1) }}
+                        viewport={{ once: true, margin: "500px" }}
+                        transition={{ duration: 0.25 }}
                       >
                         {affiliate.logo && urlFor(affiliate.logo) && (
                           <img
@@ -377,10 +377,10 @@ export default function Contact() {
               {/* RIGHT SIDE — FORM */}
               <motion.div 
                 className="bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/20"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true, margin: "500px" }}
+                transition={{ duration: 0.25 }}
               >
                 <h3 className="text-2xl font-semibold mb-4 text-white">
                   {contactData.formSettings?.headline || 'Send Us a Message'}

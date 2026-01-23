@@ -193,7 +193,7 @@ function HeroSection() {
                 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isCurrent ? 1 : 0 }}
-                transition={{ duration: 1 }}
+                transition={{ duration: 0.5 }}
               ></motion.div>
             );
           })}
@@ -273,7 +273,7 @@ function HeroSection() {
           style={{ marginBottom: '0px' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.6 }}
+          transition={{ duration: 0.5 }}
         >
           {heroData.subtext}
         </motion.p>

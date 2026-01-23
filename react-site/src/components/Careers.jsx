@@ -87,10 +87,10 @@ export default function Careers() {
         {/* Main Heading */}
         <motion.h2 
           className="section-title text-5xl md:text-6xl text-black mb-4 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {heading}
         </motion.h2>
@@ -98,10 +98,10 @@ export default function Careers() {
         {/* Subheading */}
         <motion.h3 
           className="text-2xl md:text-3xl font-bold text-black mb-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {jobTitle}
         </motion.h3>
@@ -109,10 +109,10 @@ export default function Careers() {
         {/* Job Overview Bullets */}
         <motion.div 
           className="mb-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           <ul className="inline-block text-left space-y-2 text-lg">
             {jobOverview.map((item, idx) => (
@@ -124,10 +124,10 @@ export default function Careers() {
         {/* Job Description */}
         <motion.p 
           className="text-lg text-black mb-10 text-center max-w-3xl mx-auto leading-relaxed"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {jobDescription}
         </motion.p>
@@ -135,10 +135,10 @@ export default function Careers() {
         {/* Qualifications & Benefits Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-10 text-left">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             <h4 className="text-xl font-bold mb-4 text-black">Qualifications:</h4>
             <ul className="space-y-2 text-lg">
@@ -150,10 +150,10 @@ export default function Careers() {
             </ul>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             <h4 className="text-xl font-bold mb-4 text-black">Benefits:</h4>
             <ul className="space-y-2 text-lg">
@@ -167,10 +167,10 @@ export default function Careers() {
         {/* Action Buttons */}
         <motion.div 
           className="flex flex-col sm:flex-row gap-4 justify-center mb-6"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {indeedUrl && (
             <a
@@ -197,10 +197,10 @@ export default function Careers() {
         {(submissionEmail || submissionFax) && (
           <motion.p 
             className="text-sm text-gray-600 text-center"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {submissionEmail && `Email to ${submissionEmail}`}
             {submissionEmail && submissionFax && ' or '}

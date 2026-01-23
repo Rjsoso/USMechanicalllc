@@ -242,8 +242,10 @@ const ServicesSection = () => {
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2 
             className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {servicesData.sectionTitle || 'Our Services'}
           </motion.h2>
@@ -262,8 +264,10 @@ const ServicesSection = () => {
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
           className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "500px" }}
+          transition={{ duration: 0.25 }}
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
@@ -386,12 +390,12 @@ const ServicesSection = () => {
                   <AnimatePresence mode="wait">
                   <motion.div
                     key={activeTab}
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
+                    exit={{ opacity: 0, x: -10 }}
                     transition={{ 
-                      duration: 0.35, // Smoother, more iOS-like timing
-                      ease: [0.16, 1, 0.3, 1] // iOS spring-like easing for hypersmooth feel
+                      duration: 0.25,
+                      ease: [0.16, 1, 0.3, 1]
                     }}
                     style={{
                       transform: 'translateZ(0)',

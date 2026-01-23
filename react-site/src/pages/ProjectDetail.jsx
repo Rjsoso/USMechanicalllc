@@ -152,7 +152,9 @@ export default function ProjectDetail() {
             <motion.div
               className="mb-4"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               <span className="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">
                 {projectData.category.title}
@@ -163,8 +165,10 @@ export default function ProjectDetail() {
           {/* Project Title */}
           <motion.h1
             className="section-title text-5xl md:text-6xl mb-8 text-black"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {projectData.title}
           </motion.h1>
@@ -174,8 +178,9 @@ export default function ProjectDetail() {
             <motion.p
               className="text-xl text-black mb-12 leading-relaxed"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {projectData.description}
             </motion.p>
@@ -185,8 +190,9 @@ export default function ProjectDetail() {
           <motion.div
             className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 mb-12"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {/* Carousel on left */}
             {carouselItems.length > 0 && (
@@ -277,9 +283,10 @@ export default function ProjectDetail() {
           {/* Request a Quote Button */}
           <motion.div
             className="flex justify-center mt-16 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             <button
               onClick={handleRequestQuote}

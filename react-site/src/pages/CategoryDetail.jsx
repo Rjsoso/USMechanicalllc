@@ -222,8 +222,10 @@ export default function CategoryDetail() {
           {/* Category Title */}
           <motion.h1
             className="section-title text-5xl md:text-6xl mb-6 text-black"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "500px" }}
+            transition={{ duration: 0.25 }}
           >
             {categoryData.title}
           </motion.h1>
@@ -233,8 +235,9 @@ export default function CategoryDetail() {
             <motion.p
               className="text-xl text-gray-700 mb-12 leading-relaxed max-w-3xl"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {categoryData.description}
             </motion.p>
@@ -245,8 +248,9 @@ export default function CategoryDetail() {
             <motion.div
               className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "500px" }}
+              transition={{ duration: 0.25 }}
             >
               {sortedProjects.map((project, index) => (
                 <FadeInWhenVisible key={project._id} delay={index * 0.1}>
