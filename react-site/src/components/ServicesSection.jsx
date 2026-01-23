@@ -22,22 +22,16 @@ const ServicesSection = () => {
         .fetch(
           `*[_type == "ourServices"][0]{
             sectionTitle,
-            rotatingText,
             descriptionText,
             deliveryMethodsHeading,
-            deliveryMethodsIntro,
-            deliveryMethodsAccent,
             deliveryMethodsFormHeadline,
             deliveryMethodsFormCopy,
             deliveryMethodsEmail,
-            deliveryMethodsBoxTitle,
             deliveryMethods[] {
               title,
               summary,
               badge,
               badgeTone,
-              ctaLabel,
-              ctaUrl,
               backgroundImage {
                 asset-> {
                   url,
@@ -76,11 +70,6 @@ const ServicesSection = () => {
                 title,
                 description
               }
-            },
-            services[] {
-              title,
-              description,
-              "imageUrl": image.asset->url
             }
           }`
         )

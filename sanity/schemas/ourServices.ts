@@ -9,14 +9,7 @@ export default defineType({
       name: "sectionTitle",
       type: "string",
       title: "Section Title",
-      description: "Static title (used if rotatingText is empty)",
-    },
-    {
-      name: "rotatingText",
-      type: "array",
-      title: "Rotating Text",
-      description: "Array of text strings that will rotate in the title. Leave empty to use static sectionTitle.",
-      of: [{ type: "string" }],
+      description: "Main title for the Our Services section",
     },
     {
       name: "descriptionText",
@@ -218,13 +211,6 @@ export default defineType({
       description: "Title shown above the delivery methods slice (e.g., 'Delivery Methods').",
     },
     {
-      name: "deliveryMethodsIntro",
-      type: "text",
-      rows: 3,
-      title: "Delivery Methods Intro",
-      description: "Short supporting copy that sets context for how you deliver projects.",
-    },
-    {
       name: "deliveryMethodsFormHeadline",
       type: "string",
       title: "Quote Form Headline",
@@ -242,19 +228,6 @@ export default defineType({
       type: "string",
       title: "Quote Request Email",
       description: "Email to receive Delivery Method quote requests (fallback is info@usmechanicalllc.com).",
-    },
-    {
-      name: "deliveryMethodsAccent",
-      type: "string",
-      title: "Accent Label",
-      description: "Optional short label that appears above the heading (e.g., 'Project Delivery').",
-    },
-    {
-      name: "deliveryMethodsBoxTitle",
-      type: "string",
-      title: "Delivery Methods Box Title",
-      description: "Large heading displayed at the top of the delivery methods box (e.g., 'Delivery method?')",
-      placeholder: "Delivery method?",
     },
     {
       name: "deliveryMethods",
@@ -319,18 +292,6 @@ export default defineType({
                 layout: "radio",
                 direction: "horizontal",
               },
-            },
-            {
-              name: "ctaLabel",
-              type: "string",
-              title: "CTA Label",
-              description: "Optional call-to-action label (e.g., 'See how it works').",
-            },
-            {
-              name: "ctaUrl",
-              type: "url",
-              title: "CTA URL",
-              description: "External link for the CTA (or use a deep link).",
             },
           ],
           preview: {
