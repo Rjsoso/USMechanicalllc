@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo } from 'react'
 
 function FadeInNative({ children, delay = 0, className = '' }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const elementRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false)
+  const elementRef = useRef(null)
 
   useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
+    const element = elementRef.current
+    if (!element) return
 
-    let hasTriggered = false;
+    let hasTriggered = false
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -16,23 +16,23 @@ function FadeInNative({ children, delay = 0, className = '' }) {
           // Use requestAnimationFrame for smoother timing
           requestAnimationFrame(() => {
             setTimeout(() => {
-              setIsVisible(true);
-              hasTriggered = true;
-              observer.disconnect(); // Disconnect immediately after trigger
-            }, delay * 1000);
-          });
+              setIsVisible(true)
+              hasTriggered = true
+              observer.disconnect() // Disconnect immediately after trigger
+            }, delay * 1000)
+          })
         }
       },
       {
         threshold: 0.1, // Lower threshold for earlier trigger
         rootMargin: '100px 0px', // Larger margin for anticipatory feel
       }
-    );
+    )
 
-    observer.observe(element);
+    observer.observe(element)
 
-    return () => observer.disconnect();
-  }, [delay]);
+    return () => observer.disconnect()
+  }, [delay])
 
   return (
     <div
@@ -41,7 +41,7 @@ function FadeInNative({ children, delay = 0, className = '' }) {
     >
       {children}
     </div>
-  );
+  )
 }
 
-export default memo(FadeInNative);
+export default memo(FadeInNative)

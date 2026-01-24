@@ -28,22 +28,17 @@
   transform: rotateY(-5deg) rotateX(3deg);
   overflow: visible;
   transition: all 0.3s ease;
-  filter: 
-    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
-    drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
+  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(7px 9px 14px rgba(0, 0, 0, 0.3));
 }
 
 .dock-outer:hover .dock-panel {
   transform: translate(-2px, -2px) rotateY(-5deg) rotateX(3deg);
-  filter: 
-    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(10px 12px 18px rgba(0,0,0,0.4));
+  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(10px 12px 18px rgba(0, 0, 0, 0.4));
 }
 
 .dock-item {
@@ -61,20 +56,17 @@
   will-change: transform, filter;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  filter:
-    drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
 }
 
 .dock-item:hover {
   transform: rotateY(-3deg) rotateX(2deg) translateY(-2px);
-  filter:
-    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
+  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
     drop-shadow(8px 10px 15px rgba(0, 0, 0, 0.4));
 }
 
@@ -119,12 +111,12 @@
     top: 8px !important;
     right: 8px !important;
   }
-  
+
   .dock-panel {
     padding: 0.4rem 0.6rem !important;
     gap: 0.6rem !important;
   }
-  
+
   .dock-item {
     width: 40px !important;
     height: 40px !important;
@@ -138,7 +130,7 @@
     padding: 0.3rem 0.5rem !important;
     gap: 0.5rem !important;
   }
-  
+
   .dock-item {
     width: 35px !important;
     height: 35px !important;
@@ -153,4 +145,3 @@
     display: none !important;
   }
 }
-

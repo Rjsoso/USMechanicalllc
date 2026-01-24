@@ -10,8 +10,8 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-600"></div>
     </div>
   )
 }
@@ -20,9 +20,9 @@ function App() {
   // Disable browser scroll restoration globally
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
+      window.history.scrollRestoration = 'manual'
     }
-  }, []);
+  }, [])
 
   return (
     <Router
@@ -33,7 +33,7 @@ function App() {
     >
       {/* Add Schema.org structured data for SEO */}
       <StructuredData />
-      
+
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />

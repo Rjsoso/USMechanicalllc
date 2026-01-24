@@ -7,80 +7,87 @@
  * @returns {Promise<boolean>} - Resolves to true if successful
  */
 export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, retryDelay = 200) {
-  return new Promise((resolve) => {
-    let retryCount = 0;
-    
+  return new Promise(resolve => {
+    let retryCount = 0
+
     const attemptScroll = () => {
-      console.log(`Attempt ${retryCount + 1}/${maxRetries} - Looking for #${sectionId}`);
-      const element = document.querySelector(`#${sectionId}`);
-      
+      console.log(`Attempt ${retryCount + 1}/${maxRetries} - Looking for #${sectionId}`)
+      const element = document.querySelector(`#${sectionId}`)
+
       if (element) {
         // Element found - check if it's actually visible and has dimensions
-        const rect = element.getBoundingClientRect();
-        console.log(`Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`);
-        
+        const rect = element.getBoundingClientRect()
+        console.log(
+          `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
+        )
+
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
           // Special handling for contact section - scroll to bottom of page
           if (sectionId === 'contact') {
             // Get total page height
-            const pageHeight = document.documentElement.scrollHeight;
-            const windowHeight = window.innerHeight;
-            
-            console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`);
-            
+            const pageHeight = document.documentElement.scrollHeight
+            const windowHeight = window.innerHeight
+
+            console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`)
+
             window.scrollTo({
               top: pageHeight - windowHeight,
-              behavior: 'smooth'
-            });
+              behavior: 'smooth',
+            })
           } else {
             // Normal scroll for other sections
-            const currentScroll = window.scrollY || window.pageYOffset;
-            const elementPosition = rect.top;
-            const offsetPosition = currentScroll + elementPosition - headerOffset;
-            
-            console.log(`Scrolling to ${sectionId}: ${offsetPosition}`);
-            
+            const currentScroll = window.scrollY || window.pageYOffset
+            const elementPosition = rect.top
+            const offsetPosition = currentScroll + elementPosition - headerOffset
+
+            console.log(`Scrolling to ${sectionId}: ${offsetPosition}`)
+
             window.scrollTo({
               top: offsetPosition,
-              behavior: 'smooth'
-            });
+              behavior: 'smooth',
+            })
           }
-          
-          console.log(`✓ Successfully scrolled to section: ${sectionId}`);
-          resolve(true);
-          return true;
+
+          console.log(`✓ Successfully scrolled to section: ${sectionId}`)
+          resolve(true)
+          return true
         } else {
           // Element exists but not rendered yet - keep retrying
-          console.log(`Element #${sectionId} found but height is 0, retrying...`);
+          console.log(`Element #${sectionId} found but height is 0, retrying...`)
           if (retryCount < maxRetries) {
-            retryCount++;
-            setTimeout(attemptScroll, retryDelay);
+            retryCount++
+            setTimeout(attemptScroll, retryDelay)
           } else {
-            console.error(`✗ Section ${sectionId} found but not rendered after ${maxRetries} attempts`);
-            resolve(false);
+            console.error(
+              `✗ Section ${sectionId} found but not rendered after ${maxRetries} attempts`
+            )
+            resolve(false)
           }
         }
       } else {
         // Element not found - retry if attempts remaining
-        console.log(`Element #${sectionId} not found in DOM, retrying...`);
+        console.log(`Element #${sectionId} not found in DOM, retrying...`)
         if (retryCount < maxRetries) {
-          retryCount++;
-          setTimeout(attemptScroll, retryDelay);
+          retryCount++
+          setTimeout(attemptScroll, retryDelay)
         } else {
           // Max retries reached - give up
-          console.error(`✗ Failed to find section: ${sectionId} after ${maxRetries} attempts`);
-          console.log('Available sections:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
-          resolve(false);
+          console.error(`✗ Failed to find section: ${sectionId} after ${maxRetries} attempts`)
+          console.log(
+            'Available sections:',
+            Array.from(document.querySelectorAll('[id]')).map(el => el.id)
+          )
+          resolve(false)
         }
       }
-      
-      return false;
-    };
-    
+
+      return false
+    }
+
     // Start first attempt with delay for page to settle
-    setTimeout(attemptScroll, 500);
-  });
+    setTimeout(attemptScroll, 500)
+  })
 }
 
 /**
@@ -89,9 +96,9 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
  * @param {function} navigate - React Router navigate function
  */
 export function navigateAndScroll(sectionId, navigate) {
-  console.log(`navigateAndScroll called with sectionId: ${sectionId}`);
-  
+  console.log(`navigateAndScroll called with sectionId: ${sectionId}`)
+
   // Use React Router state to pass the section (more reliable than sessionStorage)
-  navigate('/', { state: { scrollTo: sectionId } });
-  console.log(`Navigated with state: { scrollTo: ${sectionId} }`);
+  navigate('/', { state: { scrollTo: sectionId } })
+  console.log(`Navigated with state: { scrollTo: ${sectionId} }`)
 }

@@ -1,22 +1,35 @@
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'motion/react';
-import { Children, cloneElement, useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'motion/react'
+import { Children, cloneElement, useEffect, useRef, useState } from 'react'
 
-import './Dock.css';
+import './Dock.css'
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }) {
-  const ref = useRef(null);
-  const isHovered = useMotionValue(0);
+function DockItem({
+  children,
+  className = '',
+  onClick,
+  mouseX,
+  spring,
+  distance,
+  magnification,
+  baseItemSize,
+}) {
+  const ref = useRef(null)
+  const isHovered = useMotionValue(0)
 
-  const mouseDistance = useTransform(mouseX, (val) => {
+  const mouseDistance = useTransform(mouseX, val => {
     const rect = ref.current?.getBoundingClientRect() ?? {
       x: 0,
       width: baseItemSize,
-    };
-    return val - rect.x - (rect.width ?? baseItemSize) / 2;
-  });
+    }
+    return val - rect.x - (rect.width ?? baseItemSize) / 2
+  })
 
-  const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
-  const size = useSpring(targetSize, spring);
+  const targetSize = useTransform(
+    mouseDistance,
+    [-distance, 0, distance],
+    [baseItemSize, magnification, baseItemSize]
+  )
+  const size = useSpring(targetSize, spring)
 
   return (
     <motion.div
@@ -35,21 +48,21 @@ function DockItem({ children, className = '', onClick, mouseX, spring, distance,
       role="button"
       aria-haspopup="true"
     >
-      {Children.map(children, (child) => cloneElement(child, { isHovered }))}
+      {Children.map(children, child => cloneElement(child, { isHovered }))}
     </motion.div>
-  );
+  )
 }
 
 function DockLabel({ children, className = '', ...rest }) {
-  const { isHovered } = rest;
-  const [isVisible, setIsVisible] = useState(false);
+  const { isHovered } = rest
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = isHovered.on('change', (latest) => {
-      setIsVisible(latest === 1);
-    });
-    return () => unsubscribe();
-  }, [isHovered]);
+    const unsubscribe = isHovered.on('change', latest => {
+      setIsVisible(latest === 1)
+    })
+    return () => unsubscribe()
+  }, [isHovered])
 
   return (
     <AnimatePresence>
@@ -66,11 +79,11 @@ function DockLabel({ children, className = '', ...rest }) {
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }
 
 function DockIcon({ children, className = '' }) {
-  return <div className={`dock-icon ${className}`}>{children}</div>;
+  return <div className={`dock-icon ${className}`}>{children}</div>
 }
 
 export default function Dock({
@@ -82,16 +95,16 @@ export default function Dock({
   panelHeight = 70,
   baseItemSize = 50,
 }) {
-  const mouseX = useMotionValue(Infinity);
+  const mouseX = useMotionValue(Infinity)
 
   return (
     <motion.div style={{ height: panelHeight, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
         onMouseMove={({ clientX }) => {
-          mouseX.set(clientX);
+          mouseX.set(clientX)
         }}
         onMouseLeave={() => {
-          mouseX.set(Infinity);
+          mouseX.set(Infinity)
         }}
         className={`dock-panel ${className}`}
         style={{ height: panelHeight }}
@@ -115,6 +128,5 @@ export default function Dock({
         ))}
       </motion.div>
     </motion.div>
-  );
+  )
 }
-

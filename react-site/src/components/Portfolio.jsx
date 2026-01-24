@@ -1,13 +1,12 @@
-import { useEffect, useState, useMemo, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { client, urlFor } from '../utils/sanity';
+import { useEffect, useState, useMemo, memo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { client, urlFor } from '../utils/sanity'
 
 function Portfolio() {
-  const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
-  const [sectionData, setSectionData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
+  const [categories, setCategories] = useState([])
+  const [sectionData, setSectionData] = useState(null)
 
   useEffect(() => {
     // Fetch both portfolio categories and section data
@@ -27,41 +26,43 @@ function Portfolio() {
           order
         }`
       ),
-      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`),
     ])
       .then(([categoriesData, sectionInfo]) => {
-        setCategories(categoriesData);
-        setSectionData(sectionInfo);
-        setLoading(false);
+        setCategories(categoriesData)
+        setSectionData(sectionInfo)
       })
-      .catch((error) => {
-        console.error('Error fetching portfolio data:', error);
-        setLoading(false);
-      });
-  }, []);
+      .catch(error => {
+        console.error('Error fetching portfolio data:', error)
+      })
+  }, [])
 
   // Limit to 6 categories for the grid
-  const displayCategories = useMemo(() => categories.slice(0, 6), [categories]);
+  const displayCategories = useMemo(() => categories.slice(0, 6), [categories])
 
   return (
-    <section id="portfolio" className="pt-24 pb-0 bg-transparent text-white" style={{ position: 'relative', zIndex: 10 }}>
+    <section
+      id="portfolio"
+      className="bg-transparent pb-0 pt-24 text-white"
+      style={{ position: 'relative', zIndex: 10 }}
+    >
       {/* Portfolio Title */}
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <motion.h2 
-          className="section-title text-5xl md:text-6xl text-center text-white"
+      <div className="mx-auto mb-12 max-w-7xl px-6">
+        <motion.h2
+          className="section-title text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "500px" }}
+          viewport={{ once: true, margin: '500px' }}
           transition={{ duration: 0.25 }}
         >
           {sectionData?.sectionTitle || 'Portfolio'}
         </motion.h2>
         {sectionData?.sectionDescription && (
-          <motion.p 
-            className="text-white text-lg text-center mt-4 opacity-90 max-w-3xl mx-auto"
+          <motion.p
+            className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={{ once: true, margin: "500px" }}
+            viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
             {sectionData.sectionDescription}
@@ -71,12 +72,15 @@ function Portfolio() {
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}>
-          {displayCategories.map((category, index) => (
+        <div
+          className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
+        >
+          {displayCategories.map(category => (
             <div key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
-                className="relative cursor-pointer group overflow-hidden"
+                className="group relative cursor-pointer overflow-hidden"
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               >
                 {/* Background Image */}
@@ -84,21 +88,21 @@ function Portfolio() {
                   <img
                     src={urlFor(category.image).width(800).quality(90).auto('format').url()}
                     alt={category.title}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover"
                     loading="lazy"
                     decoding="async"
                   />
                 )}
-                
+
                 {/* Hover Overlay with Text */}
-                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
-                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 px-6 text-center">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <h3 className="mb-4 px-6 text-center text-3xl font-bold text-white md:text-4xl lg:text-5xl">
                     {category.title}
                   </h3>
-                  <div className="flex items-center text-white text-lg font-medium">
+                  <div className="flex items-center text-lg font-medium text-white">
                     <span>Learn more</span>
                     <svg
-                      className="w-6 h-6 ml-2 transform group-hover:translate-x-2 transition-transform duration-300"
+                      className="ml-2 h-6 w-6 transform transition-transform duration-300 group-hover:translate-x-2"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -119,12 +123,12 @@ function Portfolio() {
       </div>
 
       {categories.length === 0 && (
-        <div className="text-center py-20 px-6">
+        <div className="px-6 py-20 text-center">
           <p className="text-white">No portfolio categories available yet.</p>
         </div>
       )}
     </section>
-  );
+  )
 }
 
-export default memo(Portfolio);
+export default memo(Portfolio)

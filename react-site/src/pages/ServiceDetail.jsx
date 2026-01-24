@@ -1,27 +1,27 @@
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { client, urlFor } from '../utils/sanity';
-import { PortableText } from '@portabletext/react';
-import { navigateAndScroll } from '../utils/scrollToSection';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Carousel from '../components/Carousel';
-import FadeInWhenVisible from '../components/FadeInWhenVisible';
+import { useEffect, useState, useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { client, urlFor } from '../utils/sanity'
+import { PortableText } from '@portabletext/react'
+import { navigateAndScroll } from '../utils/scrollToSection'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import Carousel from '../components/Carousel'
+import FadeInWhenVisible from '../components/FadeInWhenVisible'
 
 export default function ServiceDetail() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-  const [serviceData, setServiceData] = useState(null);
-  const [servicesList, setServicesList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const [serviceData, setServiceData] = useState(null)
+  const [servicesList, setServicesList] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchService = async () => {
       try {
-        setLoading(true);
+        setLoading(true)
         // Fetch the ourServices document and find the service with matching slug
         const data = await client.fetch(
           `*[_type == "ourServices"][0]{
@@ -46,104 +46,116 @@ export default function ServiceDetail() {
               }
             }
           }`
-        );
+        )
 
         if (!data || !data.servicesInfo) {
-          setError('Service not found');
-          setLoading(false);
-          return;
+          setError('Service not found')
+          setLoading(false)
+          return
         }
 
         // Find the service with matching slug
-        const service = data.servicesInfo.find(
-          (s) => s.slug?.current === slug
-        );
+        const service = data.servicesInfo.find(s => s.slug?.current === slug)
 
         if (!service) {
-          setError('Service not found');
-          setLoading(false);
-          return;
+          setError('Service not found')
+          setLoading(false)
+          return
         }
 
-        setServicesList(Array.isArray(data.servicesInfo) ? data.servicesInfo : []);
-        setServiceData(service);
-        setLoading(false);
+        setServicesList(Array.isArray(data.servicesInfo) ? data.servicesInfo : [])
+        setServiceData(service)
+        setLoading(false)
       } catch (err) {
-        console.error('Error fetching service:', err);
-        setError('Failed to load service');
-        setLoading(false);
+        console.error('Error fetching service:', err)
+        setError('Failed to load service')
+        setLoading(false)
       }
-    };
+    }
 
     if (slug) {
-      fetchService();
+      fetchService()
     }
-  }, [slug]);
+  }, [slug])
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
+    window.scrollTo(0, 0)
+  }, [slug])
 
   const handleRequestQuote = () => {
-    navigateAndScroll('contact', navigate);
-  };
+    navigateAndScroll('contact', navigate)
+  }
 
   const { prevService, nextService } = useMemo(() => {
     if (!Array.isArray(servicesList) || servicesList.length === 0) {
-      return { prevService: null, nextService: null };
+      return { prevService: null, nextService: null }
     }
-    const currentIndex = servicesList.findIndex((s) => s.slug?.current === slug);
-    if (currentIndex < 0) return { prevService: null, nextService: null };
+    const currentIndex = servicesList.findIndex(s => s.slug?.current === slug)
+    if (currentIndex < 0) return { prevService: null, nextService: null }
     return {
       prevService: currentIndex > 0 ? servicesList[currentIndex - 1] : null,
       nextService: currentIndex < servicesList.length - 1 ? servicesList[currentIndex + 1] : null,
-    };
-  }, [servicesList, slug]);
+    }
+  }, [servicesList, slug])
 
   // Map images to carousel items format (exact same as AboutAndSafety)
   const carouselItems = useMemo(() => {
-    if (!serviceData?.images || !Array.isArray(serviceData.images) || serviceData.images.length === 0) {
-      return [];
+    if (
+      !serviceData?.images ||
+      !Array.isArray(serviceData.images) ||
+      serviceData.images.length === 0
+    ) {
+      return []
     }
-    
-    return serviceData.images.map((photo, index) => {
-      if (!photo || !photo.asset) return null;
-      const imageUrl = photo.asset.url
-        ? `${photo.asset.url}?w=800&q=85&auto=format`
-        : urlFor(photo).width(800).quality(85).auto('format').url();
-      return {
-        id: `service-photo-${index}`,
-        src: imageUrl,
-        alt: photo.alt || `${serviceData.title} ${index + 1}`,
-        caption: photo.caption || null
-      };
-    }).filter(Boolean);
-  }, [serviceData?.images, serviceData?.title]);
+
+    return serviceData.images
+      .map((photo, index) => {
+        if (!photo || !photo.asset) return null
+        const imageUrl = photo.asset.url
+          ? `${photo.asset.url}?w=800&q=85&auto=format`
+          : urlFor(photo).width(800).quality(85).auto('format').url()
+        return {
+          id: `service-photo-${index}`,
+          src: imageUrl,
+          alt: photo.alt || `${serviceData.title} ${index + 1}`,
+          caption: photo.caption || null,
+        }
+      })
+      .filter(Boolean)
+  }, [serviceData])
 
   if (loading) {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-white text-black flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <p>Loading service...</p>
         </div>
         <Footer />
       </>
-    );
+    )
   }
 
   if (error || !serviceData) {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-white text-black flex items-center justify-center" style={{ paddingTop: '180px' }}>
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Service Not Found</h1>
-            <p className="text-black mb-8">The service you're looking for doesn't exist.</p>
+            <h1 className="mb-4 text-4xl font-bold">Service Not Found</h1>
+            <p className="mb-8 text-black">
+              The service you&apos;re looking for doesn&apos;t exist.
+            </p>
             <button
               onClick={() => navigate('/')}
-              className="bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+              className="rounded-lg bg-black px-6 py-3 font-semibold text-white transition-colors hover:bg-gray-800"
             >
               Go Back Home
             </button>
@@ -151,26 +163,21 @@ export default function ServiceDetail() {
         </div>
         <Footer />
       </>
-    );
+    )
   }
 
   return (
     <>
       <Header />
-      <main className="bg-white text-black min-h-screen" style={{ paddingTop: '180px' }}>
-        <div className="max-w-7xl mx-auto px-6 py-20">
+      <main className="min-h-screen bg-white text-black" style={{ paddingTop: '180px' }}>
+        <div className="mx-auto max-w-7xl px-6 py-20">
           {/* Back + Prev/Next */}
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <button
               onClick={() => navigateAndScroll('services', navigate)}
-              className="text-black hover:text-gray-700 transition-colors flex items-center gap-2"
+              className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -184,9 +191,11 @@ export default function ServiceDetail() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => prevService?.slug?.current && navigate(`/services/${prevService.slug.current}`)}
+                onClick={() =>
+                  prevService?.slug?.current && navigate(`/services/${prevService.slug.current}`)
+                }
                 disabled={!prevService?.slug?.current}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Previous service"
               >
                 <FiChevronLeft className="text-lg" />
@@ -195,9 +204,11 @@ export default function ServiceDetail() {
 
               <button
                 type="button"
-                onClick={() => nextService?.slug?.current && navigate(`/services/${nextService.slug.current}`)}
+                onClick={() =>
+                  nextService?.slug?.current && navigate(`/services/${nextService.slug.current}`)
+                }
                 disabled={!nextService?.slug?.current}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-50 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Next service"
               >
                 Next Service
@@ -208,10 +219,10 @@ export default function ServiceDetail() {
 
           {/* Service Title */}
           <motion.h1
-            className="section-title text-5xl md:text-6xl mb-8 text-black"
+            className="section-title mb-8 text-5xl text-black md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "500px" }}
+            viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
             {serviceData.title}
@@ -220,10 +231,10 @@ export default function ServiceDetail() {
           {/* Preview Description */}
           {serviceData.description && (
             <motion.p
-              className="text-xl text-black mb-12 leading-relaxed"
+              className="mb-12 text-xl leading-relaxed text-black"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "500px" }}
+              viewport={{ once: true, margin: '500px' }}
               transition={{ duration: 0.25 }}
             >
               {serviceData.description}
@@ -233,10 +244,10 @@ export default function ServiceDetail() {
           {/* Full Description (Rich Text) */}
           {serviceData.fullDescription && serviceData.fullDescription.length > 0 && (
             <motion.div
-              className="prose prose-lg max-w-none mb-12"
+              className="prose prose-lg mb-12 max-w-none"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "500px" }}
+              viewport={{ once: true, margin: '500px' }}
               transition={{ duration: 0.25 }}
             >
               <PortableText value={serviceData.fullDescription} />
@@ -244,17 +255,18 @@ export default function ServiceDetail() {
           )}
 
           {/* Images Carousel and Features Side by Side */}
-          {(serviceData.images && serviceData.images.length > 0) || (serviceData.features && serviceData.features.length > 0) ? (
+          {(serviceData.images && serviceData.images.length > 0) ||
+          (serviceData.features && serviceData.features.length > 0) ? (
             <motion.div
-              className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-6"
+              className="mb-6 flex flex-col items-center gap-8 md:flex-row md:gap-12"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "500px" }}
+              viewport={{ once: true, margin: '500px' }}
               transition={{ duration: 0.25 }}
             >
               {/* Carousel on left, features on right (or reverse on mobile) */}
               {carouselItems.length > 0 && (
-                <div className="md:w-1/2 w-full order-2 md:order-1 flex justify-center">
+                <div className="order-2 flex w-full justify-center md:order-1 md:w-1/2">
                   <FadeInWhenVisible>
                     <Carousel
                       items={carouselItems}
@@ -272,26 +284,23 @@ export default function ServiceDetail() {
 
               {/* Features List on Right */}
               {serviceData.features && serviceData.features.length > 0 && (
-                <div className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}>
+                <div
+                  className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}
+                >
                   <FadeInWhenVisible delay={0.1}>
-                    <h2 className="text-3xl font-bold mb-6 text-black">Key Features</h2>
+                    <h2 className="mb-6 text-3xl font-bold text-black">Key Features</h2>
                   </FadeInWhenVisible>
                   <FadeInWhenVisible delay={0.2}>
                     <div className="space-y-4">
                       {serviceData.features.map((feature, index) => (
-                        <div
-                          key={index}
-                          className="p-6 rounded-xl bg-white border border-gray-300"
-                        >
+                        <div key={index} className="rounded-xl border border-gray-300 bg-white p-6">
                           {feature.title && (
-                            <h3 className="text-xl font-semibold text-black mb-2">
+                            <h3 className="mb-2 text-xl font-semibold text-black">
                               {feature.title}
                             </h3>
                           )}
                           {feature.description && (
-                            <p className="text-black leading-relaxed">
-                              {feature.description}
-                            </p>
+                            <p className="leading-relaxed text-black">{feature.description}</p>
                           )}
                         </div>
                       ))}
@@ -304,14 +313,14 @@ export default function ServiceDetail() {
 
           {/* Request a Quote Button */}
           <motion.div
-            className="flex justify-center mt-8 mb-8"
+            className="mb-8 mt-8 flex justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
             <button
               onClick={handleRequestQuote}
-              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+              className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
             >
               Request a Quote
             </button>
@@ -320,5 +329,5 @@ export default function ServiceDetail() {
       </main>
       <Footer />
     </>
-  );
+  )
 }

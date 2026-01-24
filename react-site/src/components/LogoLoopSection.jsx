@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
-import { client, urlFor } from '../utils/sanity';
-import LogoLoop from './LogoLoop';
+import { useEffect, useState } from 'react'
+import { client, urlFor } from '../utils/sanity'
+import LogoLoop from './LogoLoop'
 
 export default function LogoLoopSection() {
-  const [logoData, setLogoData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
+  const [logoData, setLogoData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1920
+  )
 
   // Track window width for responsive logo sizing
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     client
@@ -33,23 +35,23 @@ export default function LogoLoopSection() {
           }
         }`
       )
-      .then((data) => {
+      .then(data => {
         if (data && data.enabled && data.logos) {
           // Sort logos by order field
-          const sortedLogos = [...data.logos].sort((a, b) => (a.order || 0) - (b.order || 0));
-          setLogoData(sortedLogos);
+          const sortedLogos = [...data.logos].sort((a, b) => (a.order || 0) - (b.order || 0))
+          setLogoData(sortedLogos)
         }
-        setLoading(false);
+        setLoading(false)
       })
-      .catch((error) => {
-        console.error('Error fetching logo loop data:', error);
-        setLoading(false);
-      });
-  }, []);
+      .catch(error => {
+        console.error('Error fetching logo loop data:', error)
+        setLoading(false)
+      })
+  }, [])
 
   // Don't render anything if loading, disabled, or no logos
   if (loading || !logoData || logoData.length === 0) {
-    return null;
+    return null
   }
 
   // Transform Sanity data to LogoLoop format
@@ -59,27 +61,27 @@ export default function LogoLoopSection() {
     title: item.companyName,
     href: item.url || undefined,
     key: `logo-${index}`,
-  }));
+  }))
 
   // Responsive logo sizing based on screen width
   const getLogoHeight = () => {
-    if (windowWidth < 768) return 60; // Mobile
-    if (windowWidth >= 2560) return 80; // 3xl
-    if (windowWidth >= 1920) return 90; // 2xl
-    if (windowWidth >= 1440) return 100; // xl
-    return 120; // default
-  };
+    if (windowWidth < 768) return 60 // Mobile
+    if (windowWidth >= 2560) return 80 // 3xl
+    if (windowWidth >= 1920) return 90 // 2xl
+    if (windowWidth >= 1440) return 100 // xl
+    return 120 // default
+  }
 
   const getGap = () => {
-    if (windowWidth < 768) return 40; // Mobile
-    if (windowWidth >= 2560) return 60; // 3xl
-    if (windowWidth >= 1920) return 70; // 2xl
-    if (windowWidth >= 1440) return 80; // xl
-    return 100; // default
-  };
+    if (windowWidth < 768) return 40 // Mobile
+    if (windowWidth >= 2560) return 60 // 3xl
+    if (windowWidth >= 1920) return 70 // 2xl
+    if (windowWidth >= 1440) return 80 // xl
+    return 100 // default
+  }
 
   return (
-    <section className="py-8 xl:py-6 2xl:py-4 bg-white">
+    <section className="bg-white py-8 xl:py-6 2xl:py-4">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
@@ -96,6 +98,5 @@ export default function LogoLoopSection() {
         />
       </div>
     </section>
-  );
+  )
 }
-

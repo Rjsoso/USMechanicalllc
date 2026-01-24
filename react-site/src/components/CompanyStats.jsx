@@ -1,131 +1,140 @@
-import { useEffect, useState, useRef, memo, useCallback } from "react";
-import { client } from "../utils/sanity";
+import { useEffect, useState, useRef, memo } from 'react'
+import { client } from '../utils/sanity'
 
 // Animate only when visible in viewport - only once per page visit
 // Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
-const AnimatedNumber = memo(({ value, duration = 2000, inView, startValue = 0 }) => {
-  const [count, setCount] = useState(startValue);
-  const animationRef = useRef(null);
-  const intervalRef = useRef(null);
-  const startedRef = useRef(false);
-  const completedRef = useRef(false);
-  const cancelledRef = useRef(false);
-  const targetValueRef = useRef(null);
-  const startValueRef = useRef(startValue);
+const AnimatedNumber = memo(function AnimatedNumber({
+  value,
+  duration = 2000,
+  inView,
+  startValue = 0,
+}) {
+  const [count, setCount] = useState(startValue)
+  const animationRef = useRef(null)
+  const intervalRef = useRef(null)
+  const startedRef = useRef(false)
+  const completedRef = useRef(false)
+  const cancelledRef = useRef(false)
+  const targetValueRef = useRef(null)
+  const startValueRef = useRef(startValue)
 
   // Extract numeric part and suffix (e.g., "150M", "62 Years", "150 M" → 150/62 and "M"/"Years"/" M")
-  const match = String(value).trim().match(/^(\d+)\s*(.*)$/);
-  const numericValue = match ? parseFloat(match[1]) : null;
-  const suffix = match && match[2] ? match[2].trim() : "";
-
-  // If no numeric value, just return the value as-is
-  if (!numericValue) return <span>{value}</span>;
+  const match = String(value)
+    .trim()
+    .match(/^(\d+)\s*(.*)$/)
+  const numericValue = match ? parseFloat(match[1]) : null
+  const suffix = match && match[2] ? match[2].trim() : ''
 
   useEffect(() => {
+    // If no numeric value, skip animation
+    if (!numericValue) return
     // If animation already completed, don't restart
     if (completedRef.current) {
-      setCount(numericValue);
-      return;
+      // Use requestAnimationFrame to avoid setState during render
+      requestAnimationFrame(() => setCount(numericValue))
+      return
     }
 
     // Only start animation when in view
     if (!inView || !numericValue) {
       // If not in view and not completed, keep current count (don't reset)
-      return;
+      return
     }
 
     // If target value changed and animation was started, cancel old animation
     if (startedRef.current && targetValueRef.current !== numericValue) {
       if (animationRef.current) {
-        cancelledRef.current = true;
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
+        cancelledRef.current = true
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
       }
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
       }
-      startedRef.current = false;
-      completedRef.current = false;
+      startedRef.current = false
+      completedRef.current = false
     }
 
     // Don't restart if already animating the same value
-    if (startedRef.current && targetValueRef.current === numericValue) return;
+    if (startedRef.current && targetValueRef.current === numericValue) return
 
-    startedRef.current = true;
-    cancelledRef.current = false;
-    targetValueRef.current = numericValue;
-    startValueRef.current = startValue;
-    setCount(startValue);
-    
-    const startTime = Date.now();
-    const targetValue = numericValue; // Capture value at start
-    const animationStartValue = startValue; // Capture start value
-    const updateInterval = 16; // 60fps - ultra-smooth for desktop/Chrome (matches refresh rate)
-    
+    startedRef.current = true
+    cancelledRef.current = false
+    targetValueRef.current = numericValue
+    startValueRef.current = startValue
+    // Use requestAnimationFrame to avoid setState during render
+    requestAnimationFrame(() => setCount(startValue))
+
+    const startTime = Date.now()
+    const targetValue = numericValue // Capture value at start
+    const animationStartValue = startValue // Capture start value
+    const updateInterval = 16 // 60fps - ultra-smooth for desktop/Chrome (matches refresh rate)
+
     // Use setInterval for throttled updates (better for iOS/Safari performance)
     intervalRef.current = setInterval(() => {
       // Don't continue if cancelled
       if (cancelledRef.current) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-        return;
+        if (intervalRef.current) clearInterval(intervalRef.current)
+        return
       }
-      
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
+
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+
       // Add cubic ease-in-out for smoother perceived motion
-      const easeProgress = progress < 0.5
-        ? 4 * progress * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      
-      const currentValue = Math.floor(animationStartValue + (targetValue - animationStartValue) * easeProgress);
-      
-      setCount(currentValue);
-      
+      const easeProgress =
+        progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2
+
+      const currentValue = Math.floor(
+        animationStartValue + (targetValue - animationStartValue) * easeProgress
+      )
+
+      setCount(currentValue)
+
       if (progress >= 1) {
         // Ensure we reach the exact final value
-        setCount(targetValue);
-        completedRef.current = true;
-        if (intervalRef.current) clearInterval(intervalRef.current);
-        intervalRef.current = null;
+        setCount(targetValue)
+        completedRef.current = true
+        if (intervalRef.current) clearInterval(intervalRef.current)
+        intervalRef.current = null
       }
-    }, updateInterval);
-    
+    }, updateInterval)
+
     return () => {
       // Cleanup on unmount
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
       }
-    };
-  }, [inView, numericValue, duration, startValue]);
+    }
+  }, [inView, numericValue, duration, startValue])
 
-  // If we have a numeric value and animation hasn't started yet, show 0
-  // Otherwise show the animated count or the full value
-  if (numericValue) {
-    return (
-      <span style={{ 
+  // If no numeric value, just return the value as-is
+  if (!numericValue) {
+    return <span>{value}</span>
+  }
+
+  // Return animated count with suffix
+  return (
+    <span
+      style={{
         willChange: 'contents',
         transform: 'translateZ(0)', // GPU acceleration for smoother number updates
-        WebkitFontSmoothing: 'antialiased'
-      }}>
-        {count.toLocaleString()}
-        {suffix}
-      </span>
-    );
-  }
-  
-  return <span>{value}</span>;
-});
+        WebkitFontSmoothing: 'antialiased',
+      }}
+    >
+      {count.toLocaleString()}
+      {suffix}
+    </span>
+  )
+})
 
 const CompanyStats = () => {
-  const [statsData, setStatsData] = useState(null);
-  const [inView, setInView] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const sectionRef = useRef(null);
-  const STATS_OVERLAP_PX = 60;
-
+  const [statsData, setStatsData] = useState(null)
+  const [inView, setInView] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const sectionRef = useRef(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,10 +152,10 @@ const CompanyStats = () => {
             animateFromValue,
             animationDuration
           }
-        }`;
-        
-        let data = await client.fetch(query);
-        
+        }`
+
+        let data = await client.fetch(query)
+
         // Fallback: Get first published document if specific ID not found
         if (!data) {
           query = `*[_type == "companyStats" && !(_id in path("drafts.**"))][0]{
@@ -160,119 +169,114 @@ const CompanyStats = () => {
               animateFromValue,
               animationDuration
             }
-          }`;
-          data = await client.fetch(query);
+          }`
+          data = await client.fetch(query)
         }
-        
-        setStatsData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching company stats:', error);
-        setLoading(false);
-      }
-    };
 
-    fetchData();
+        setStatsData(data)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching company stats:', error)
+        setLoading(false)
+      }
+    }
+
+    fetchData()
 
     // Refresh data when window regains focus (helps catch updates)
     const handleFocus = () => {
-      fetchData();
-    };
+      fetchData()
+    }
 
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, []);
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
 
   // Watch when the section scrolls into view (only after data is loaded)
   // Once animated, never retriggers (prevents jitter on scroll up/down)
   useEffect(() => {
-    if (!statsData || !sectionRef.current) return;
+    if (!statsData || !sectionRef.current) return
 
-    // Reset inView to false initially to prevent auto-scroll
-    setInView(false);
-    
-    let hasAnimated = false; // Track if animation has already run
+    let hasAnimated = false // Track if animation has already run
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         // Only trigger animation once on first intersection
         if (entry.isIntersecting && !hasAnimated) {
-          setInView(true);
-          hasAnimated = true;
+          hasAnimated = true
+          setInView(true)
           // Disconnect observer after first trigger to prevent retriggering
-          observer.disconnect();
+          observer.disconnect()
         }
       },
-      { 
+      {
         threshold: 0.1, // Lower threshold triggers earlier for more responsive feel
         rootMargin: '100px 0px', // Larger margin starts animation sooner
         // Use passive observation for better scroll performance
       }
-    );
+    )
 
     // Delay to prevent immediate trigger on page load
     // This ensures page starts at top, not auto-scrolling to stats section
     const timeoutId = setTimeout(() => {
       if (sectionRef.current) {
-        observer.observe(sectionRef.current);
+        observer.observe(sectionRef.current)
       }
-    }, 300); // Reduced delay for better UX while maintaining performance
+    }, 300) // Reduced delay for better UX while maintaining performance
 
     return () => {
-      clearTimeout(timeoutId);
-      observer.disconnect();
-    };
-  }, [statsData]);
+      clearTimeout(timeoutId)
+      observer.disconnect()
+    }
+  }, [statsData])
 
   if (loading) {
     return (
-      <section className="w-full py-16 bg-transparent">
-        <div className="max-w-6xl mx-auto text-center">
+      <section className="w-full bg-transparent py-16">
+        <div className="mx-auto max-w-6xl text-center">
           <div className="text-white">Loading stats...</div>
         </div>
       </section>
-    );
+    )
   }
 
   if (!statsData || !statsData.stats || statsData.stats.length === 0) {
-    return null;
+    return null
   }
 
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 xl:py-12 2xl:py-10 bg-transparent"
+      className="w-full bg-transparent py-16 xl:py-12 2xl:py-10"
       style={{
         transform: 'translateZ(0)',
-        WebkitFontSmoothing: 'antialiased'
+        WebkitFontSmoothing: 'antialiased',
       }}
     >
-      <div className="max-w-6xl mx-auto text-center">
+      <div className="mx-auto max-w-6xl text-center">
         {statsData.title && (
-          <h2 className="section-title text-5xl md:text-6xl xl:text-5xl 2xl:text-6xl text-white mb-10">
+          <h2 className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl">
             {statsData.title}
           </h2>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {statsData.stats?.map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center">
-                <div className="text-5xl font-extrabold mb-2 text-[#dc2626]">
-                  <AnimatedNumber 
-                    value={item.value} 
-                    startValue={item.enableCustomStart ? item.animateFromValue : 0}
-                    duration={item.animationDuration || 2000}
-                    inView={inView} 
-                  />
-                </div>
-                <p className="text-lg font-medium text-white">
-                  {item.label}
-                </p>
+            <div key={idx} className="flex flex-col items-center">
+              <div className="mb-2 text-5xl font-extrabold text-[#dc2626]">
+                <AnimatedNumber
+                  value={item.value}
+                  startValue={item.enableCustomStart ? item.animateFromValue : 0}
+                  duration={item.animationDuration || 2000}
+                  inView={inView}
+                />
               </div>
-            ))}
+              <p className="text-lg font-medium text-white">{item.label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default memo(CompanyStats);
+export default memo(CompanyStats)

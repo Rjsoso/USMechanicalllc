@@ -6,20 +6,21 @@ const FALLBACK_DATA = {
   address: '472 South 640 West Pleasant Grove, UT 84062',
   phone: '(801) 785-6028',
   email: null,
-  licenseInfo: null
+  licenseInfo: null,
 }
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  // eslint-disable-next-line no-unused-vars  
+  const [loading, setLoading] = useState(true) // Tracks loading state for contact data
 
   useEffect(() => {
     const fetchInfo = () => {
       setLoading(true)
-      
       // Fetch contact data - exclude drafts to ensure consistency
       client
-        .fetch(`*[_type == "contact" && !(_id in path("drafts.**"))][0]{
+        .fetch(
+          `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
           email,
           licenseInfo,
           offices[] {
@@ -27,7 +28,8 @@ function Footer() {
             address,
             phone
           }
-        }`)
+        }`
+        )
         .then(res => {
           setContactData(res)
           setLoading(false)
@@ -35,21 +37,21 @@ function Footer() {
             console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('Footer: Failed to fetch contact data from Sanity:', err)
           setLoading(false)
         })
-    };
+    }
 
-    fetchInfo();
+    fetchInfo()
 
     // Refresh data when window regains focus
     const handleFocus = () => {
-      fetchInfo();
-    };
+      fetchInfo()
+    }
 
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
   }, [])
 
   // Use Sanity data if available, otherwise use fallback
@@ -63,8 +65,8 @@ function Footer() {
   const logoUrl = '/favicon.png'
 
   return (
-    <footer className="bg-black text-gray-300 py-10 text-center">
-      <div className="max-w-6xl mx-auto space-y-3">
+    <footer className="bg-black py-10 text-center text-gray-300">
+      <div className="mx-auto max-w-6xl space-y-3">
         {displayAddress && <p>{displayAddress}</p>}
         <p>
           {displayEmail && (
@@ -77,15 +79,9 @@ function Footer() {
           )}
           {displayPhone}
         </p>
-        {displayLicense && (
-          <p className="text-sm text-gray-500">{displayLicense}</p>
-        )}
-        <div className="flex items-center justify-center gap-2 mt-4">
-          <img 
-            src={logoUrl} 
-            alt="US Mechanical" 
-            className="h-6 w-auto object-contain"
-          />
+        {displayLicense && <p className="text-sm text-gray-500">{displayLicense}</p>}
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" />
           <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
         </div>
       </div>

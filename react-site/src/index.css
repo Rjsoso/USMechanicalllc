@@ -43,14 +43,15 @@ body {
   background: #1a1a1a !important;
 }
 
-
 /* Removed - handled by comprehensive rule below */
 
 /* Enhanced glassmorphism for header */
 header {
   backdrop-filter: blur(20px) saturate(1.8);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  transition: background-color 0.9s ease, color 0.9s ease;
+  transition:
+    background-color 0.9s ease,
+    color 0.9s ease;
 }
 
 * {
@@ -111,7 +112,9 @@ body > *:not(section) {
 }
 
 /* Force transparent background (hero image will show through) */
-html, body, #root {
+html,
+body,
+#root {
   background: transparent !important;
   background-color: transparent !important;
 }
@@ -155,10 +158,9 @@ section#contact {
 }
 
 /* Ensure Contact section background elements display properly */
-section#contact > div[class*="absolute"] {
+section#contact > div[class*='absolute'] {
   position: absolute !important;
 }
-
 
 /* Safety Images Grid */
 .safety-images-grid {
@@ -173,7 +175,7 @@ section#contact > div[class*="absolute"] {
   height: auto;
   border-radius: 12px;
   object-fit: cover;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   display: block;
 }
 
@@ -329,7 +331,7 @@ section#contact > div[class*="absolute"] {
   position: relative;
   display: inline-block;
   color: #808080; /* Gray text */
-  text-shadow: 
+  text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
     3px 3px 0px rgba(0, 0, 0, 0.6),
@@ -366,7 +368,7 @@ section#contact > div[class*="absolute"] {
   font-family: 'Corinthia', cursive;
   text-transform: capitalize;
   color: #808080; /* Gray text */
-  text-shadow: 
+  text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
     3px 3px 0px rgba(0, 0, 0, 0.6),
@@ -382,7 +384,7 @@ section#contact > div[class*="absolute"] {
 .hero-1963 {
   font-family: 'Rubik', sans-serif;
   font-weight: 900;
-  text-shadow: 
+  text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
     3px 3px 0px rgba(0, 0, 0, 0.6),
@@ -407,25 +409,21 @@ section#contact > div[class*="absolute"] {
   will-change: transform, filter;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: 
-    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
-    drop-shadow(7px 9px 14px rgba(0,0,0,0.3));
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
+    drop-shadow(7px 9px 14px rgba(0, 0, 0, 0.3));
 }
 
 .hero-button-3d:hover {
   transform: translateZ(0) rotateY(-3deg) rotateX(2deg) translateY(-3px) scale(1.05);
-  filter: 
-    drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(10px 12px 18px rgba(0,0,0,0.4));
+  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
+    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
+    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
+    drop-shadow(10px 12px 18px rgba(0, 0, 0, 0.4));
 }
 
 /* Ensure prose content sections have grey backgrounds instead of white */
@@ -502,14 +500,14 @@ footer {
   .max-w-7xl {
     max-width: 1800px;
   }
-  
+
   /* Prevent sections from stretching too wide */
   section {
     max-width: 2560px;
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   /* Constrain main content area */
   main {
     max-width: 2560px;
@@ -528,16 +526,16 @@ footer {
   #hero {
     min-height: 85vh !important;
   }
-  
+
   /* Removed margin-top override - let inline style control positioning */
   /* #hero .relative.z-10 {
     margin-top: 40px !important;
   } */
-  
+
   .hero-3d-text {
     font-size: clamp(2rem, 5vw, 3.5rem) !important;
   }
-  
+
   .hero-since {
     font-size: 0.8em !important;
   }
@@ -578,9 +576,9 @@ footer {
 /* Force hardware acceleration on animated elements */
 @media (prefers-reduced-motion: no-preference) {
   /* Apply GPU acceleration hints to common animated elements */
-  [class*="motion-"],
-  [class*="animate-"],
-  [class*="transition-"],
+  [class*='motion-'],
+  [class*='animate-'],
+  [class*='transition-'],
   .hero-button-3d,
   section:not(#hero) {
     -webkit-backface-visibility: hidden;
@@ -588,11 +586,11 @@ footer {
     -webkit-perspective: 1000px;
     perspective: 1000px;
   }
-  
+
   /* Optimize transforms for iOS/Safari */
-  [class*="transform"],
-  [class*="scale"],
-  [class*="translate"] {
+  [class*='transform'],
+  [class*='scale'],
+  [class*='translate'] {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-transform-style: preserve-3d;
@@ -606,7 +604,7 @@ footer {
   section:not(#hero):not(#contact) {
     contain: layout style paint;
   }
-  
+
   /* Disable containment for sections inside scroll-animated containers */
   .has-scroll-animation section {
     contain: none;
@@ -619,7 +617,7 @@ footer {
     content-visibility: auto;
     contain-intrinsic-size: auto 500px;
   }
-  
+
   /* Disable content-visibility for sections inside scroll-animated containers */
   .has-scroll-animation section {
     content-visibility: visible;
@@ -658,8 +656,8 @@ body {
 }
 
 /* Force GPU acceleration on all animated elements */
-[class*="animate"],
-[class*="transition"],
+[class*='animate'],
+[class*='transition'],
 .has-scroll-animation *,
 .has-scroll-animation {
   transform: translateZ(0);
@@ -699,8 +697,9 @@ body {
   opacity: 0;
   transform: translateY(40px) translateZ(0);
   /* Ultra-smooth iOS-matched easing */
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -733,48 +732,48 @@ body {
   *:not(.logoloop__track):not(#portfolio *) {
     animation-duration: 0.1s !important;
   }
-  
+
   /* Disable transforms only on Framer Motion and carousel, not LogoLoop or Portfolio */
   [data-framer-motion]:not(.logoloop__track):not(.logoloop *):not(#portfolio *),
-  .carousel-item[style*="transform"] {
+  .carousel-item[style*='transform'] {
     transform: none !important;
   }
-  
+
   /* Ensure LogoLoop animations work on mobile */
   .logoloop__track {
     will-change: transform !important;
   }
-  
+
   /* Disable slide animation on mobile for better performance */
   .has-scroll-animation {
     transform: none !important;
   }
-  
+
   /* Safety Section Mobile Layout */
   /* Stack safety section vertically */
   #safety > div > div {
     flex-direction: column !important;
   }
-  
+
   /* Safety text full width */
   #safety > div > div > div:first-child {
     width: 100% !important;
   }
-  
+
   /* Logo loop container - full width on mobile */
   #safety > div > div > div:last-child {
     width: 100% !important;
   }
-  
+
   /* Ensure logo loop ribbon is visible and full width */
-  #safety [data-testid="safety-ribbon"] {
+  #safety [data-testid='safety-ribbon'] {
     position: relative !important;
     width: 100% !important;
   }
-  
+
   /* Force CSS animations on logo loop tracks - with Safari iOS webkit prefixes */
   /* Keyframes are defined in tailwind.config.js to prevent build-time purging */
-  #safety [data-testid="safety-ribbon"] > div > div:first-child .logoloop__track[style] {
+  #safety [data-testid='safety-ribbon'] > div > div:first-child .logoloop__track[style] {
     -webkit-animation-name: scrollLeft !important;
     -webkit-animation-duration: 15s !important;
     -webkit-animation-timing-function: linear !important;
@@ -786,9 +785,9 @@ body {
     animation-iteration-count: infinite !important;
     animation-play-state: running !important;
   }
-  
+
   /* Second loop scrolls right */
-  #safety [data-testid="safety-ribbon"] > div > div:nth-child(2) .logoloop__track[style] {
+  #safety [data-testid='safety-ribbon'] > div > div:nth-child(2) .logoloop__track[style] {
     -webkit-animation-name: scrollRight !important;
     -webkit-animation-duration: 15s !important;
     -webkit-animation-timing-function: linear !important;
@@ -800,7 +799,7 @@ body {
     animation-iteration-count: infinite !important;
     animation-play-state: running !important;
   }
-  
+
   /* Force GPU acceleration for Safari iOS */
   #safety .logoloop__track {
     -webkit-transform: translateZ(0) !important;
@@ -810,52 +809,52 @@ body {
     -webkit-backface-visibility: hidden !important;
     backface-visibility: hidden !important;
   }
-  
+
   /* Services Section Mobile Layout */
   /* Services main container - stack vertically */
   #services > div > div.flex {
     flex-direction: column !important;
     gap: 2rem !important;
   }
-  
+
   /* Service boxes column - full width, remove padding */
   #services > div > div.flex > div:first-child {
     width: 100% !important;
     padding-right: 0 !important;
   }
-  
+
   /* Service boxes - better mobile sizing */
   #services .space-y-4 > div {
     padding: 1.25rem !important;
     border-radius: 0.75rem !important;
   }
-  
+
   /* Service box text */
   #services .space-y-4 > div h3 {
     font-size: 1.125rem !important;
   }
-  
+
   #services .space-y-4 > div p {
     font-size: 0.875rem !important;
   }
-  
+
   /* Delivery methods column - full width */
   #services > div > div.flex > div:last-child {
     width: 100% !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  
+
   /* Delivery methods container - stack vertically */
   #services .flex.flex-col.rounded-l-2xl {
     border-radius: 0.75rem !important;
   }
-  
+
   /* Delivery methods nav row */
   #services .flex.flex-col.rounded-l-2xl > div:last-child {
     flex-direction: column !important;
   }
-  
+
   /* Nav sidebar becomes horizontal tabs */
   #services .flex.flex-col.rounded-l-2xl > div:last-child > div:first-child {
     width: 100% !important;
@@ -864,27 +863,27 @@ body {
     border-right: none !important;
     border-bottom: 1px solid #e5e7eb !important;
   }
-  
+
   /* Tab buttons */
   #services .flex.flex-col.rounded-l-2xl button {
     min-width: 70px !important;
     padding: 1rem !important;
   }
-  
+
   /* Content area below tabs */
   #services .flex.flex-col.rounded-l-2xl > div:last-child > div:last-child {
     width: 100% !important;
   }
-  
+
   /* Full-width form inputs on mobile */
   #services input,
   #services textarea,
   #services select {
     font-size: 16px !important; /* Prevent zoom on iOS */
   }
-  
+
   /* Improve button sizing */
-  #services button[type="submit"] {
+  #services button[type='submit'] {
     padding: 14px 20px;
     min-height: 48px;
   }
@@ -896,35 +895,43 @@ body {
 
 @media (max-width: 767px) {
   /* Minimum touch target size for all interactive elements */
-  button, 
-  a[role="button"],
+  button,
+  a[role='button'],
   .nav-card-link,
   .carousel-nav-button,
   .dock-item {
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   /* Better tap feedback with visual response */
   button:active,
-  a[role="button"]:active {
+  a[role='button']:active {
     opacity: 0.7;
     transform: scale(0.98);
-    transition: opacity 0.1s ease, transform 0.1s ease;
+    transition:
+      opacity 0.1s ease,
+      transform 0.1s ease;
   }
-  
+
   /* Remove 300ms tap delay on all interactive elements */
-  a, button, input, select, textarea {
+  a,
+  button,
+  input,
+  select,
+  textarea {
     touch-action: manipulation;
   }
-  
+
   /* Prevent text selection on interactive elements during tap */
-  button, .nav-card-link, .carousel-nav-button {
+  button,
+  .nav-card-link,
+  .carousel-nav-button {
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   /* Improve scroll performance on mobile */
   .overflow-y-auto,
   .overflow-auto,
@@ -932,12 +939,12 @@ body {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
-  
+
   /* Larger click areas for small elements */
   .carousel-nav-button {
     padding: 12px;
   }
-  
+
   /* Ensure nav links are easily tappable */
   nav a,
   nav button {
@@ -956,58 +963,59 @@ body {
     font-size: clamp(2.5rem, 8vw, 4rem) !important;
     -webkit-text-stroke: 2px rgba(0, 0, 0, 0.6) !important;
   }
-  
+
   /* Section titles optimized for mobile screens */
   .section-title {
     font-size: clamp(2rem, 7vw, 3.5rem) !important;
     line-height: 1.2 !important;
   }
-  
+
   /* Body text readability improvements */
   body {
     font-size: 16px; /* Prevent iOS zoom on input focus */
     line-height: 1.6;
   }
-  
+
   /* Increase spacing for breathing room on mobile */
   section {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
-  
+
   .max-w-7xl {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  
+
   /* Adjust heading sizes for better readability */
   h1 {
     font-size: clamp(2rem, 6vw, 2.5rem);
     line-height: 1.2;
   }
-  
+
   h2 {
     font-size: clamp(1.75rem, 5vw, 2.25rem);
     line-height: 1.3;
   }
-  
+
   h3 {
     font-size: clamp(1.5rem, 4vw, 1.875rem);
     line-height: 1.4;
   }
-  
+
   /* Better paragraph spacing */
   p {
     margin-bottom: 1rem;
     line-height: 1.7;
   }
-  
+
   /* Comfortable list spacing */
-  ul, ol {
+  ul,
+  ol {
     padding-left: 1.5rem;
     margin-bottom: 1rem;
   }
-  
+
   li {
     margin-bottom: 0.5rem;
   }
@@ -1018,11 +1026,11 @@ body {
   .hero-3d-text {
     font-size: clamp(2rem, 9vw, 3rem) !important;
   }
-  
+
   .section-title {
     font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
   }
-  
+
   /* Slightly reduce padding on very small screens */
   section {
     padding-left: 0.75rem !important;
@@ -1039,24 +1047,24 @@ body {
   #contact .grid {
     grid-template-columns: 1fr !important;
   }
-  
+
   /* Optimize all form input sizing for mobile */
-  input, 
-  textarea, 
+  input,
+  textarea,
   select {
     font-size: 16px !important; /* Prevent iOS zoom on focus */
     padding: 14px 12px !important;
     width: 100%;
   }
-  
+
   /* Full-width submit buttons with better touch targets */
-  button[type="submit"] {
+  button[type='submit'] {
     width: 100%;
     padding: 16px;
     font-size: 18px;
     min-height: 48px;
   }
-  
+
   /* Form field spacing */
   form > div,
   form > input,
@@ -1064,7 +1072,7 @@ body {
   form > select {
     margin-bottom: 1rem;
   }
-  
+
   /* Portfolio modal mobile fixes */
   .modal,
   .modal-content {
@@ -1074,19 +1082,19 @@ body {
     max-height: calc(100vh - 32px);
     overflow-y: auto;
   }
-  
+
   .modal-overlay {
     padding: 16px;
     align-items: flex-start;
   }
-  
+
   /* Modal images full width on mobile */
   .modal img,
   .modal-content img {
     width: 100%;
     height: auto;
   }
-  
+
   /* Modal close button easier to tap */
   .modal button,
   .modal-content button {
@@ -1103,7 +1111,7 @@ body {
     width: calc(100vw - 24px) !important;
     margin: 12px;
   }
-  
+
   .modal-overlay {
     padding: 12px;
   }
@@ -1118,25 +1126,25 @@ body {
   .fixed.top-4 {
     top: max(16px, env(safe-area-inset-top)) !important;
   }
-  
+
   /* Logo positioning with safe area */
   .plaque-perspective {
     top: max(16px, env(safe-area-inset-top)) !important;
     left: max(16px, env(safe-area-inset-left)) !important;
   }
-  
+
   /* CardNav hamburger menu */
   .card-nav-container {
     top: max(16px, env(safe-area-inset-top)) !important;
     left: max(16px, env(safe-area-inset-left)) !important;
     right: max(16px, env(safe-area-inset-right)) !important;
   }
-  
+
   /* Footer padding for home indicator */
   footer {
     padding-bottom: max(40px, env(safe-area-inset-bottom)) !important;
   }
-  
+
   /* Full-screen modals respect safe areas */
   .modal-overlay {
     padding-top: max(16px, env(safe-area-inset-top));
@@ -1144,19 +1152,19 @@ body {
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
   }
-  
+
   /* Dock safe area (though hidden on mobile) */
   .dock-outer {
     top: max(16px, env(safe-area-inset-top)) !important;
     right: max(16px, env(safe-area-inset-right)) !important;
   }
-  
+
   /* Hero section content safe area */
   /* Adjusted to not conflict with inline marginTop - only handle safe area inset */
   #hero .relative.z-10 {
     padding-top: max(0px, env(safe-area-inset-top));
   }
-  
+
   /* Section padding for safe areas */
   body {
     padding-left: env(safe-area-inset-left);
@@ -1174,88 +1182,88 @@ body {
     grid-template-columns: 1fr !important;
     gap: 0 !important;
   }
-  
+
   /* Optimize image aspect ratio for mobile viewing */
   #portfolio .relative {
     padding-bottom: 56.25% !important; /* 16:9 ratio better for mobile */
   }
-  
+
   /* Larger, more readable text on category cards */
   #portfolio h3 {
     font-size: clamp(2rem, 6vw, 2.5rem) !important;
     padding: 1rem;
   }
-  
+
   /* Better hover/tap overlay on mobile */
   #portfolio .group .absolute {
     opacity: 0;
     transition: opacity 0.2s ease;
   }
-  
+
   /* Show overlay on tap/touch */
   #portfolio .group:active .absolute,
   #portfolio .group:focus .absolute {
     opacity: 1;
   }
-  
+
   /* Larger "Learn more" text */
   #portfolio .group .flex span {
     font-size: 1.125rem;
   }
-  
+
   /* Portfolio section title */
   #portfolio h2 {
     font-size: clamp(2.5rem, 7vw, 3.5rem) !important;
     margin-bottom: 2rem;
   }
-  
+
   /* Portfolio description */
   #portfolio p {
     font-size: 1.125rem;
     line-height: 1.7;
   }
-  
+
   /* Better image loading on mobile */
   #portfolio img {
     object-fit: cover;
     width: 100%;
     height: 100%;
   }
-  
+
   /* Force all Framer Motion elements to be visible on mobile (override initial opacity: 0) */
   [data-framer-motion] {
     opacity: 1 !important;
   }
-  
+
   /* Specifically ensure all sections and their content are visible */
-  section *[style*="opacity: 0"],
-  section *[style*="opacity:0"] {
+  section *[style*='opacity: 0'],
+  section *[style*='opacity:0'] {
     opacity: 1 !important;
   }
-  
+
   /* Force portfolio grid items and images to be visible */
   #portfolio .grid > div {
     display: block !important;
     opacity: 1 !important;
   }
-  
+
   #portfolio .relative {
     display: block !important;
     position: relative !important;
     opacity: 1 !important;
   }
-  
+
   #portfolio img {
     opacity: 1 !important;
     display: block !important;
   }
-  
+
   /* Ensure grid container is visible */
   #portfolio .bg-white {
     display: block !important;
     min-height: 200px !important;
   }
-  
+
   /* Force category cards to be visible */
   #portfolio .group {
     opacity: 1 !important;
@@ -1273,7 +1281,7 @@ body {
     margin-top: 0 !important;
     padding-top: 3rem !important;
   }
-  
+
   /* Ensure careers section is visible and not covered */
   #careers {
     position: relative !important;
@@ -1286,29 +1294,28 @@ body {
    ============================================ */
 
 /* Enhanced reduced motion for mobile devices */
-@media (max-width: 767px) and (prefers-reduced-motion: reduce),
-       (max-width: 767px) {
+@media (max-width: 767px) and (prefers-reduced-motion: reduce), (max-width: 767px) {
   /* Disable complex 3D transforms on mobile for better performance */
   .hero-button-3d,
   .logo-3d-card,
   .dock-panel {
     transform: none !important;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2)) !important;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2)) !important;
     transition: opacity 0.2s ease !important;
   }
-  
+
   /* Simplify all transitions for better battery life */
   *:not(.logoloop__track) {
     animation-duration: 0.2s !important;
     transition-duration: 0.2s !important;
   }
-  
+
   /* Disable parallax and scroll-based animations, except LogoLoop */
   .has-scroll-animation:not(.logoloop):not(.logoloop *),
-  [style*="transform: translate3d"]:not(.logoloop__track):not(.logoloop *) {
+  [style*='transform: translate3d']:not(.logoloop__track):not(.logoloop *) {
     transform: none !important;
   }
-  
+
   /* Reduce motion on framer-motion elements */
   [data-framer-motion] {
     animation-duration: 0.15s !important;
@@ -1321,83 +1328,87 @@ body {
   *:not(.logoloop__track) {
     will-change: auto !important;
   }
-  
+
   .logoloop__track {
     will-change: transform !important;
   }
-  
+
   /* Only use will-change on actively animating elements */
   *:hover,
   *:focus,
   *:active {
     will-change: transform, opacity;
   }
-  
+
   /* Simplify transforms - use translate instead of translate3d */
-  [style*="translate3d"]:not(.logoloop__track):not(.logoloop *) {
+  [style*='translate3d']:not(.logoloop__track):not(.logoloop *) {
     transform: none !important;
   }
-  
+
   /* Reduce transition complexity */
   * {
     transition-timing-function: ease !important;
   }
-  
+
   /* Disable complex text animations */
   .hero-3d-text,
   .section-title {
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
     -webkit-text-stroke: 1px rgba(0, 0, 0, 0.4) !important;
     will-change: auto !important;
     transform: none !important;
   }
-  
+
   /* Simplify carousel to reduce containment issues */
   .carousel-wrapper,
   .carousel-container {
     contain: none !important;
   }
-  
+
   /* Ensure About section carousel is full width and centered */
   #about .carousel-wrapper {
     width: 100% !important;
     max-width: 100% !important;
   }
-  
+
   #about .carousel-container {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto;
   }
-  
+
   /* Disable 3D transforms on carousel items for mobile */
   #about .carousel-item {
     transform: none !important;
   }
-  
+
   /* Ensure About section is visible and not hidden */
   #about {
     display: block !important;
     visibility: visible !important;
   }
-  
+
   /* Optimize images for mobile */
   img {
     content-visibility: auto;
   }
-  
+
   /* Reduce animation complexity on mobile */
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
-  
+
   @keyframes slideIn {
-    from { 
+    from {
       opacity: 0;
       transform: translateY(10px);
     }
-    to { 
+    to {
       opacity: 1;
       transform: translateY(0);
     }

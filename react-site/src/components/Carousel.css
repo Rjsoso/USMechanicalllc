@@ -194,7 +194,7 @@
     height: 40px;
     font-size: 28px;
   }
-  
+
   /* Swipe-friendly navigation controls */
   .carousel-nav-button.inside {
     width: 36px;
@@ -203,15 +203,15 @@
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(8px);
   }
-  
+
   .carousel-nav-button.inside.left {
     left: 8px;
   }
-  
+
   .carousel-nav-button.inside.right {
     right: 8px;
   }
-  
+
   /* Larger tap targets for dots/indicators */
   .carousel-dots button {
     width: 12px;
@@ -221,12 +221,12 @@
     min-height: 44px;
     padding: 16px;
   }
-  
+
   /* Image optimization for mobile */
   .carousel-item-image {
     border-radius: 16px;
   }
-  
+
   /* Better caption readability on mobile */
   .carousel-item-caption {
     font-size: 13px;
@@ -240,25 +240,25 @@
     padding: 4px;
     border-radius: 12px;
   }
-  
+
   .carousel-item {
     border-radius: 12px;
   }
-  
+
   .carousel-nav-button.inside {
     width: 32px;
     height: 32px;
     font-size: 20px;
   }
-  
+
   .carousel-nav-button.inside.left {
     left: 4px;
   }
-  
+
   .carousel-nav-button.inside.right {
     right: 4px;
   }
-  
+
   .carousel-item-caption {
     font-size: 12px;
     padding: 8px 10px;

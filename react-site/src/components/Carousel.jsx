@@ -1,18 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'motion/react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { motion, useMotionValue, useTransform } from 'motion/react'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-import './Carousel.css';
+import './Carousel.css'
 
-const DRAG_BUFFER = 0;
-const VELOCITY_THRESHOLD = 500;
-const GAP = 16;
-const SPRING_OPTIONS = { type: 'spring', stiffness: 300, damping: 30 };
+const DRAG_BUFFER = 0
+const VELOCITY_THRESHOLD = 500
+const GAP = 16
+const SPRING_OPTIONS = { type: 'spring', stiffness: 300, damping: 30 }
 
 function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
-  const range = [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset];
-  const outputRange = [90, 0, -90];
-  const rotateY = useTransform(x, range, outputRange, { clamp: false });
+  const range = [
+    -(index + 1) * trackItemOffset,
+    -index * trackItemOffset,
+    -(index - 1) * trackItemOffset,
+  ]
+  const outputRange = [90, 0, -90]
+  const rotateY = useTransform(x, range, outputRange, { clamp: false })
 
   return (
     <motion.div
@@ -22,7 +26,7 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
         width: itemWidth,
         height: round ? itemWidth : '100%',
         rotateY: rotateY,
-        ...(round && { borderRadius: '50%' })
+        ...(round && { borderRadius: '50%' }),
       }}
       transition={transition}
     >
@@ -31,178 +35,195 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
           src={item.src}
           alt={item.alt || `Carousel image ${index + 1}`}
           className="carousel-item-image"
-          loading={index === 0 ? "eager" : "lazy"}
-          fetchPriority={index === 0 ? "high" : "auto"}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          fetchPriority={index === 0 ? 'high' : 'auto'}
         />
-        {item.caption && (
-          <div className="carousel-item-caption">{item.caption}</div>
-        )}
+        {item.caption && <div className="carousel-item-caption">{item.caption}</div>}
       </div>
     </motion.div>
-  );
+  )
 }
 
 export default function Carousel({
   items = [],
   baseWidth = 300,
-  containerClassName = "",
+  containerClassName = '',
   arrowsInside = false,
   compactNav = false,
   autoplay = false,
   autoplayDelay = 3000,
   pauseOnHover = false,
   loop = false,
-  round = false
+  round = false,
 }) {
-  const containerPadding = 0;
-  const itemWidth = baseWidth;
-  const trackItemOffset = itemWidth + GAP;
+  const itemWidth = baseWidth
+  const trackItemOffset = itemWidth + GAP
   const itemsForRender = useMemo(() => {
-    if (!loop) return items;
-    if (items.length === 0) return [];
-    return [items[items.length - 1], ...items, items[0]];
-  }, [items, loop]);
+    if (!loop) return items
+    if (items.length === 0) return []
+    return [items[items.length - 1], ...items, items[0]]
+  }, [items, loop])
 
-  const [position, setPosition] = useState(loop ? 1 : 0);
-  const x = useMotionValue(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isJumping, setIsJumping] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  // Initialize position based on loop mode
+  const initialPosition = loop ? 1 : 0
+  const [position, setPosition] = useState(initialPosition)
+  const x = useMotionValue(0)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isJumping, setIsJumping] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
 
-  const containerRef = useRef(null);
+  const containerRef = useRef(null)
+  const hasInitialized = useRef(false)
+
+  // Handle position initialization and reset when items or mode change
+  useEffect(() => {
+    const startingPosition = loop ? 1 : 0
+
+    if (!hasInitialized.current) {
+      // First initialization
+      hasInitialized.current = true
+      x.set(-startingPosition * trackItemOffset)
+      return
+    }
+
+    // Reset position and x when items change - use requestAnimationFrame to avoid setState during render
+    requestAnimationFrame(() => {
+      setPosition(startingPosition)
+      x.set(-startingPosition * trackItemOffset)
+    })
+  }, [items.length, loop, trackItemOffset, x])
+
+  // Adjust position if it exceeds new array bounds (non-loop mode)
+  useEffect(() => {
+    if (!loop && position > itemsForRender.length - 1 && itemsForRender.length > 0) {
+      // Use requestAnimationFrame to avoid setState during render
+      requestAnimationFrame(() => {
+        setPosition(Math.max(0, itemsForRender.length - 1))
+      })
+    }
+  }, [itemsForRender.length, loop, position])
+
   useEffect(() => {
     if (pauseOnHover && containerRef.current) {
-      const container = containerRef.current;
-      const handleMouseEnter = () => setIsHovered(true);
-      const handleMouseLeave = () => setIsHovered(false);
-      container.addEventListener('mouseenter', handleMouseEnter);
-      container.addEventListener('mouseleave', handleMouseLeave);
+      const container = containerRef.current
+      const handleMouseEnter = () => setIsHovered(true)
+      const handleMouseLeave = () => setIsHovered(false)
+      container.addEventListener('mouseenter', handleMouseEnter)
+      container.addEventListener('mouseleave', handleMouseLeave)
       return () => {
-        container.removeEventListener('mouseenter', handleMouseEnter);
-        container.removeEventListener('mouseleave', handleMouseLeave);
-      };
+        container.removeEventListener('mouseenter', handleMouseEnter)
+        container.removeEventListener('mouseleave', handleMouseLeave)
+      }
     }
-  }, [pauseOnHover]);
+  }, [pauseOnHover])
 
   useEffect(() => {
-    if (!autoplay || itemsForRender.length <= 1) return undefined;
-    if (pauseOnHover && isHovered) return undefined;
+    if (!autoplay || itemsForRender.length <= 1) return undefined
+    if (pauseOnHover && isHovered) return undefined
 
     const timer = setInterval(() => {
-      setPosition(prev => Math.min(prev + 1, itemsForRender.length - 1));
-    }, autoplayDelay);
+      setPosition(prev => Math.min(prev + 1, itemsForRender.length - 1))
+    }, autoplayDelay)
 
-    return () => clearInterval(timer);
-  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length]);
+    return () => clearInterval(timer)
+  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length])
 
-  useEffect(() => {
-    const startingPosition = loop ? 1 : 0;
-    setPosition(startingPosition);
-    x.set(-startingPosition * trackItemOffset);
-  }, [items.length, loop, trackItemOffset, x]);
-
-  useEffect(() => {
-    if (!loop && position > itemsForRender.length - 1) {
-      setPosition(Math.max(0, itemsForRender.length - 1));
-    }
-  }, [itemsForRender.length, loop, position]);
-
-  const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS;
+  const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS
 
   const handleAnimationStart = () => {
-    setIsAnimating(true);
-  };
+    setIsAnimating(true)
+  }
 
   const handleAnimationComplete = () => {
     if (!loop || itemsForRender.length <= 1) {
-      setIsAnimating(false);
-      return;
+      setIsAnimating(false)
+      return
     }
-    const lastCloneIndex = itemsForRender.length - 1;
+    const lastCloneIndex = itemsForRender.length - 1
 
     if (position === lastCloneIndex) {
-      setIsJumping(true);
-      const target = 1;
-      setPosition(target);
-      x.set(-target * trackItemOffset);
+      setIsJumping(true)
+      const target = 1
+      setPosition(target)
+      x.set(-target * trackItemOffset)
       requestAnimationFrame(() => {
-        setIsJumping(false);
-        setIsAnimating(false);
-      });
-      return;
+        setIsJumping(false)
+        setIsAnimating(false)
+      })
+      return
     }
 
     if (position === 0) {
-      setIsJumping(true);
-      const target = items.length;
-      setPosition(target);
-      x.set(-target * trackItemOffset);
+      setIsJumping(true)
+      const target = items.length
+      setPosition(target)
+      x.set(-target * trackItemOffset)
       requestAnimationFrame(() => {
-        setIsJumping(false);
-        setIsAnimating(false);
-      });
-      return;
+        setIsJumping(false)
+        setIsAnimating(false)
+      })
+      return
     }
 
-    setIsAnimating(false);
-  };
+    setIsAnimating(false)
+  }
 
   const handleDragEnd = (_, info) => {
-    const { offset, velocity } = info;
+    const { offset, velocity } = info
     const direction =
       offset.x < -DRAG_BUFFER || velocity.x < -VELOCITY_THRESHOLD
         ? 1
         : offset.x > DRAG_BUFFER || velocity.x > VELOCITY_THRESHOLD
           ? -1
-          : 0;
+          : 0
 
-    if (direction === 0) return;
+    if (direction === 0) return
 
     setPosition(prev => {
-      const next = prev + direction;
-      const max = itemsForRender.length - 1;
-      return Math.max(0, Math.min(next, max));
-    });
-  };
+      const next = prev + direction
+      const max = itemsForRender.length - 1
+      return Math.max(0, Math.min(next, max))
+    })
+  }
 
   const dragProps = loop
     ? {}
     : {
         dragConstraints: {
           left: -trackItemOffset * Math.max(itemsForRender.length - 1, 0),
-          right: 0
-        }
-      };
+          right: 0,
+        },
+      }
 
   // Navigation arrow handlers
   const handlePrevious = () => {
-    if (isAnimating) return;
+    if (isAnimating) return
     setPosition(prev => {
-      const next = prev - 1;
+      const next = prev - 1
       if (loop) {
-        return next < 0 ? itemsForRender.length - 1 : next;
+        return next < 0 ? itemsForRender.length - 1 : next
       }
-      return Math.max(0, next);
-    });
-  };
+      return Math.max(0, next)
+    })
+  }
 
   const handleNext = () => {
-    if (isAnimating) return;
+    if (isAnimating) return
     setPosition(prev => {
-      const next = prev + 1;
+      const next = prev + 1
       if (loop) {
-        return next >= itemsForRender.length ? 0 : next;
+        return next >= itemsForRender.length ? 0 : next
       }
-      return Math.min(itemsForRender.length - 1, next);
-    });
-  };
+      return Math.min(itemsForRender.length - 1, next)
+    })
+  }
 
   // Determine if arrows should be disabled (non-loop mode only)
-  const isPrevDisabled = !loop && position <= 0;
-  const isNextDisabled = !loop && position >= itemsForRender.length - 1;
+  const isPrevDisabled = !loop && position <= 0
+  const isNextDisabled = !loop && position >= itemsForRender.length - 1
 
   // Define navigation button JSX to avoid duplication
-  const renderNavButtons = (isInside) => (
+  const renderNavButtons = isInside => (
     <>
       <button
         className={`carousel-nav-button left ${isInside ? 'inside' : ''}`}
@@ -221,10 +242,10 @@ export default function Carousel({
         <FiChevronRight />
       </button>
     </>
-  );
+  )
 
   if (items.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -234,7 +255,7 @@ export default function Carousel({
         className={`carousel-container ${round ? 'round' : ''} ${containerClassName}`}
         style={{
           width: `${baseWidth}px`,
-          ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
+          ...(round && { height: `${baseWidth}px`, borderRadius: '50%' }),
         }}
       >
         <motion.div
@@ -246,7 +267,7 @@ export default function Carousel({
             gap: `${GAP}px`,
             perspective: 1000,
             perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
-            x
+            x,
           }}
           onDragEnd={handleDragEnd}
           animate={{ x: -(position * trackItemOffset) }}
@@ -279,5 +300,5 @@ export default function Carousel({
         </div>
       )}
     </div>
-  );
+  )
 }

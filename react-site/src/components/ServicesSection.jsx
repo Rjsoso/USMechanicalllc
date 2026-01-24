@@ -1,20 +1,20 @@
-import { useEffect, useState, useCallback, memo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { FiArrowRight } from 'react-icons/fi';
-import { client } from '../utils/sanity';
+import { useEffect, useState, useCallback, memo, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { FiArrowRight } from 'react-icons/fi'
+import { client } from '../utils/sanity'
 
 const ServicesSection = () => {
-  const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody';
-  const [servicesData, setServicesData] = useState(null);
-  const [expandedIndex, setExpandedIndex] = useState(null);
-  const [activeTab, setActiveTab] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('idle'); // idle | loading | success | error
-  const [isAutoRotating, setIsAutoRotating] = useState(true);
-  const navigate = useNavigate();
-  const rotationIntervalRef = useRef(null);
-  const userInteractionTimeoutRef = useRef(null);
+  const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody'
+  const [servicesData, setServicesData] = useState(null)
+  const [expandedIndex, setExpandedIndex] = useState(null)
+  const [activeTab, setActiveTab] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState('idle') // idle | loading | success | error
+  const [isAutoRotating, setIsAutoRotating] = useState(true)
+  const navigate = useNavigate()
+  const rotationIntervalRef = useRef(null)
+  const userInteractionTimeoutRef = useRef(null)
 
   useEffect(() => {
     const fetchServices = () => {
@@ -73,96 +73,99 @@ const ServicesSection = () => {
             }
           }`
         )
-        .then((data) => {
-          setServicesData(data);
+        .then(data => {
+          setServicesData(data)
         })
-        .catch((error) => {
-          console.error('Error fetching services from Sanity:', error);
-        });
-    };
-
-    fetchServices();
-  }, []);
-
-  const handleLearnMore = useCallback((service) => {
-    if (service?.slug?.current) {
-      navigate(`/services/${service.slug.current}`);
+        .catch(error => {
+          console.error('Error fetching services from Sanity:', error)
+        })
     }
-  }, [navigate]);
 
-  const handleExpand = useCallback((index) => {
-    setActiveTab(index);
-    setExpandedIndex(index);
-    setSubmitStatus('idle');
-    
+    fetchServices()
+  }, [])
+
+  const handleLearnMore = useCallback(
+    service => {
+      if (service?.slug?.current) {
+        navigate(`/services/${service.slug.current}`)
+      }
+    },
+    [navigate]
+  )
+
+  const handleExpand = useCallback(index => {
+    setActiveTab(index)
+    setExpandedIndex(index)
+    setSubmitStatus('idle')
+
     // Pause auto-rotation on user interaction
-    setIsAutoRotating(false);
-    
+    setIsAutoRotating(false)
+
     // Clear any existing timeout
     if (userInteractionTimeoutRef.current) {
-      clearTimeout(userInteractionTimeoutRef.current);
+      clearTimeout(userInteractionTimeoutRef.current)
     }
-    
+
     // Resume auto-rotation after 10 seconds of inactivity
     userInteractionTimeoutRef.current = setTimeout(() => {
-      setIsAutoRotating(true);
-    }, 10000);
-  }, []);
+      setIsAutoRotating(true)
+    }, 10000)
+  }, [])
 
   const handleClose = useCallback(() => {
-    setExpandedIndex(null);
-    setSubmitStatus('idle');
-    setSubmitting(false);
-  }, []);
+    setExpandedIndex(null)
+    setSubmitStatus('idle')
+    setSubmitting(false)
+  }, [])
 
   useEffect(() => {
-    if (expandedIndex === null) return undefined;
+    if (expandedIndex === null) return undefined
 
-    const onKeyDown = (e) => {
+    const onKeyDown = e => {
       if (e.key === 'Escape') {
-        handleClose();
+        handleClose()
       }
-    };
+    }
 
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [expandedIndex, handleClose]);
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [expandedIndex, handleClose])
 
   // Auto-rotation effect for delivery methods tabs (disabled on mobile)
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 768
     if (!isAutoRotating || !servicesData?.deliveryMethods?.length || isMobile) {
-      return undefined;
+      return undefined
     }
 
-    const maxTabIndex = servicesData.deliveryMethods.length - 1; // Exclude "Request a Quote" tab
+    const maxTabIndex = servicesData.deliveryMethods.length - 1 // Exclude "Request a Quote" tab
 
     rotationIntervalRef.current = setInterval(() => {
-      setActiveTab((prevTab) => {
+      setActiveTab(prevTab => {
         // If we're on the last delivery method tab or beyond, go back to 0
         if (prevTab >= maxTabIndex) {
-          return 0;
+          return 0
         }
         // Otherwise, advance to next tab
-        return prevTab + 1;
-      });
-    }, 5000); // Rotate every 5 seconds
+        return prevTab + 1
+      })
+    }, 5000) // Rotate every 5 seconds
 
     return () => {
       if (rotationIntervalRef.current) {
-        clearInterval(rotationIntervalRef.current);
+        clearInterval(rotationIntervalRef.current)
       }
-    };
-  }, [isAutoRotating, servicesData]);
+    }
+  }, [isAutoRotating, servicesData])
 
   // Cleanup user interaction timeout on unmount
   useEffect(() => {
     return () => {
       if (userInteractionTimeoutRef.current) {
-        clearTimeout(userInteractionTimeoutRef.current);
+        clearTimeout(userInteractionTimeoutRef.current)
       }
-    };
-  }, []);
+    }
+  }, [])
 
   const badgeToneClasses = {
     sky: 'bg-sky-500/15 text-sky-50 border-sky-500/40',
@@ -170,70 +173,67 @@ const ServicesSection = () => {
     emerald: 'bg-emerald-400/15 text-emerald-50 border-emerald-400/40',
     pink: 'bg-pink-400/15 text-pink-50 border-pink-400/40',
     slate: 'bg-white/5 text-slate-100 border-white/10',
-  };
+  }
 
   const extractPlainText = (blocks = []) => {
-    if (!Array.isArray(blocks)) return '';
+    if (!Array.isArray(blocks)) return ''
     return blocks
-      .filter((block) => block?._type === 'block' && Array.isArray(block.children))
-      .map((block) => block.children.map((child) => child.text || '').join(''))
+      .filter(block => block?._type === 'block' && Array.isArray(block.children))
+      .map(block => block.children.map(child => child.text || '').join(''))
       .join(' ')
-      .trim();
-  };
+      .trim()
+  }
 
   const handleQuoteSubmit = async (event, methodTitle = '') => {
-    event.preventDefault();
-    if (!servicesData) return;
+    event.preventDefault()
+    if (!servicesData) return
 
-    const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
-    setSubmitting(true);
-    setSubmitStatus('loading');
+    const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com'
+    setSubmitting(true)
+    setSubmitStatus('loading')
 
     try {
-      const formData = new FormData(event.target);
-      formData.set('deliveryMethod', methodTitle);
-      formData.set('targetEmail', emailTarget);
+      const formData = new FormData(event.target)
+      formData.set('deliveryMethod', methodTitle)
+      formData.set('targetEmail', emailTarget)
 
       const response = await fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { Accept: 'application/json' },
         body: formData,
-      });
+      })
 
       if (!response.ok) {
-        throw new Error('Submission failed');
+        throw new Error('Submission failed')
       }
 
-      setSubmitStatus('success');
-      event.target.reset();
+      setSubmitStatus('success')
+      event.target.reset()
     } catch (error) {
-      console.error('Quote request failed:', error);
-      setSubmitStatus('error');
+      console.error('Quote request failed:', error)
+      setSubmitStatus('error')
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   if (!servicesData) {
     return (
-      <section id="services" className="pt-12 pb-0 bg-transparent text-white text-center">
+      <section id="services" className="bg-transparent pb-0 pt-12 text-center text-white">
         <p>Loading services...</p>
       </section>
-    );
+    )
   }
 
   if (!servicesData?.servicesInfo || servicesData.servicesInfo.length === 0) {
     return (
-      <section 
-        id="services" 
-        className="pt-12 pb-1 bg-transparent text-white"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.h2 
-            className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
+      <section id="services" className="bg-transparent pb-1 pt-12 text-white">
+        <div className="mx-auto max-w-7xl px-6">
+          <motion.h2
+            className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "500px" }}
+            viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
             {servicesData.sectionTitle || 'Our Services'}
@@ -241,128 +241,129 @@ const ServicesSection = () => {
           <p className="text-center text-white">No services available.</p>
         </div>
       </section>
-    );
+    )
   }
 
   return (
-    <section 
-      id="services" 
-      className="pt-12 pb-20 bg-transparent text-white"
+    <section
+      id="services"
+      className="bg-transparent pb-20 pt-12 text-white"
       style={{ position: 'relative' }}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.h2 
-          className="section-title text-5xl md:text-6xl text-center mb-12 text-white"
+      <div className="mx-auto max-w-7xl px-6">
+        <motion.h2
+          className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "500px" }}
+          viewport={{ once: true, margin: '500px' }}
           transition={{ duration: 0.25 }}
         >
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
-        <p className="text-white text-lg mb-8 text-left">
-          {servicesData.descriptionText}
-        </p>
+        <p className="mb-8 text-left text-lg text-white">{servicesData.descriptionText}</p>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-center items-stretch gap-10 md:gap-12">
+      <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-12">
         {/* LEFT — DESCRIPTION TEXT + SERVICE BOXES (full-bleed to the left edge) */}
-        <div className="flex-1 md:w-1/2 pr-6 md:pr-10">
+        <div className="flex-1 pr-6 md:w-1/2 md:pr-10">
           <div className="space-y-4">
-            {servicesData.servicesInfo && servicesData.servicesInfo.map((box, index) => {
-              // Calculate background style based on type
-              const getBoxBackgroundStyle = () => {
-                if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
-                  const imageUrl = `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`;
-                  return {
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${imageUrl})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                  };
-                }
-                
-                if (box.backgroundType === 'color' && box.backgroundColor) {
-                  return {
-                    backgroundColor: box.backgroundColor,
-                  };
-                }
-                
-                // Fallback to default black background
-                return {
-                  backgroundColor: '#000000',
-                };
-              };
+            {servicesData.servicesInfo &&
+              servicesData.servicesInfo.map((box, index) => {
+                // Calculate background style based on type
+                const getBoxBackgroundStyle = () => {
+                  if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
+                    const imageUrl = `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`
+                    return {
+                      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${imageUrl})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                    }
+                  }
 
-              const backgroundStyle = getBoxBackgroundStyle();
+                  if (box.backgroundType === 'color' && box.backgroundColor) {
+                    return {
+                      backgroundColor: box.backgroundColor,
+                    }
+                  }
 
-              return (
-                <div
-                  key={index}
-                  className="p-8 shadow relative group overflow-hidden transform transition-transform duration-200 ease-out hover:scale-105 focus-within:scale-105 rounded-r-xl"
-                  style={{
-                    ...backgroundStyle,
-                    transform: 'translateZ(0)',
-                    WebkitFontSmoothing: 'antialiased',
-                    willChange: 'transform'
-                  }}
-                >
-                  <h3 
-                    className="text-xl font-semibold mb-3"
-                    style={{ color: box.textColor || '#ffffff' }}
+                  // Fallback to default black background
+                  return {
+                    backgroundColor: '#000000',
+                  }
+                }
+
+                const backgroundStyle = getBoxBackgroundStyle()
+
+                return (
+                  <div
+                    key={index}
+                    className="group relative transform overflow-hidden rounded-r-xl p-8 shadow transition-transform duration-200 ease-out focus-within:scale-105 hover:scale-105"
+                    style={{
+                      ...backgroundStyle,
+                      transform: 'translateZ(0)',
+                      WebkitFontSmoothing: 'antialiased',
+                      willChange: 'transform',
+                    }}
                   >
-                    {box.title}
-                  </h3>
-                  {box.description && (
-                    <p 
-                      className="text-sm opacity-75 line-clamp-2 leading-relaxed mb-4"
-                      style={{ color: box.textColor || '#d1d5db' }}
+                    <h3
+                      className="mb-3 text-xl font-semibold"
+                      style={{ color: box.textColor || '#ffffff' }}
                     >
-                      {box.description}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => handleLearnMore(box)}
-                    className="absolute bottom-4 right-4 bg-transparent text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:-translate-y-1 transition-all"
-                  >
-                    Learn More
-                    <FiArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              );
-            })}
+                      {box.title}
+                    </h3>
+                    {box.description && (
+                      <p
+                        className="mb-4 line-clamp-2 text-sm leading-relaxed opacity-75"
+                        style={{ color: box.textColor || '#d1d5db' }}
+                      >
+                        {box.description}
+                      </p>
+                    )}
+                    <button
+                      onClick={() => handleLearnMore(box)}
+                      className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-white transition-all hover:-translate-y-1"
+                    >
+                      Learn More
+                      <FiArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                )
+              })}
           </div>
         </div>
 
         {/* RIGHT — DELIVERY METHODS CONTENT */}
         {servicesData.deliveryMethods?.length > 0 && (
-          <div className="flex-1 md:w-1/2 px-6 md:px-0 flex flex-col">
+          <div className="flex flex-1 flex-col px-6 md:w-1/2 md:px-0">
             {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-            <div className="relative border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl overflow-hidden flex-1 flex flex-col rounded-l-2xl">
-              
+            <div className="relative flex flex-1 flex-col overflow-hidden rounded-l-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl">
               {/* HEADER - Full Width Centered */}
               {servicesData.deliveryMethodsHeading && (
                 <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
-                  <h2 className="section-title text-4xl md:text-5xl text-gray-900 text-center">
+                  <h2 className="section-title text-center text-4xl text-gray-900 md:text-5xl">
                     {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
                   </h2>
                 </div>
               )}
-              
+
               {/* CONTENT AREA - Horizontal Split */}
-              <div className="flex flex-row flex-1">
+              <div className="flex flex-1 flex-row">
                 {/* LEFT SIDEBAR - 25% Navigation */}
-                <div className="w-1/4 border-r border-gray-200 bg-white/50 flex flex-col">
-                  {[...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }].map((method, idx) => {
-                    const isActive = activeTab === idx;
-                    
+                <div className="flex w-1/4 flex-col border-r border-gray-200 bg-white/50">
+                  {[
+                    ...servicesData.deliveryMethods,
+                    { title: 'Request a Quote', isQuote: true },
+                  ].map((method, idx) => {
+                    const isActive = activeTab === idx
+
                     return (
                       <button
                         key={idx}
                         onClick={() => handleExpand(idx)}
-                        className={`w-full px-4 py-6 flex items-center justify-center text-center transition-all border-b border-gray-200 ${
-                          isActive 
-                            ? 'bg-gray-100 text-gray-900 font-bold' 
+                        className={`flex w-full items-center justify-center border-b border-gray-200 px-4 py-6 text-center transition-all ${
+                          isActive
+                            ? 'bg-gray-100 font-bold text-gray-900'
                             : 'bg-white/30 text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                         }`}
                       >
@@ -370,184 +371,202 @@ const ServicesSection = () => {
                           {String(idx + 1).padStart(2, '0')}
                         </span>
                       </button>
-                    );
+                    )
                   })}
                 </div>
 
                 {/* RIGHT CONTENT AREA - 75% */}
-                <div className="w-3/4 bg-white/80 overflow-y-auto">
+                <div className="w-3/4 overflow-y-auto bg-white/80">
                   <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ 
-                      duration: 0.25,
-                      ease: [0.16, 1, 0.3, 1]
-                    }}
-                    style={{
-                      transform: 'translateZ(0)',
-                      willChange: 'transform, opacity',
-                      WebkitFontSmoothing: 'antialiased'
-                    }}
-                    className="flex-1"
-                  >
-                    {(() => {
-                      const allMethods = [...servicesData.deliveryMethods, { title: 'Request a Quote', isQuote: true }];
-                      const method = allMethods[activeTab];
-                      const badgeClass = badgeToneClasses[method?.badgeTone] || badgeToneClasses.slate;
-                      const bodyPreview = extractPlainText(method?.body);
-                      const bgUrl = method?.backgroundImage?.asset?.url
-                        ? `${method.backgroundImage.asset.url}?w=900&q=80&auto=format`
-                        : null;
-                      const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com';
+                    <motion.div
+                      key={activeTab}
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{
+                        duration: 0.25,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      style={{
+                        transform: 'translateZ(0)',
+                        willChange: 'transform, opacity',
+                        WebkitFontSmoothing: 'antialiased',
+                      }}
+                      className="flex-1"
+                    >
+                      {(() => {
+                        const allMethods = [
+                          ...servicesData.deliveryMethods,
+                          { title: 'Request a Quote', isQuote: true },
+                        ]
+                        const method = allMethods[activeTab]
+                        const badgeClass =
+                          badgeToneClasses[method?.badgeTone] || badgeToneClasses.slate
+                        const bodyPreview = extractPlainText(method?.body)
+                        const bgUrl = method?.backgroundImage?.asset?.url
+                          ? `${method.backgroundImage.asset.url}?w=900&q=80&auto=format`
+                          : null
+                        const emailTarget =
+                          servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com'
 
-                      return (
-                        <div 
-                          className="p-6 sm:p-8 h-full flex flex-col relative"
-                          style={bgUrl ? {
-                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.90)), url(${bgUrl})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                          } : undefined}
-                        >
-                          {/* Method Title and Badge */}
-                          <div className="mb-6">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-2xl font-bold text-gray-900">
-                                {method?.title}
-                              </h3>
-                              {!method?.isQuote && method?.badge && (
-                                <span 
-                                  className={`inline-flex items-center border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}
-                                  style={{
-                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                                  }}
-                                >
-                                  {method.badge}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          {!method?.isQuote ? (
-                            <div className="space-y-4 flex-1">
-                              <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-2">
-                                Delivery Method Details
-                              </p>
-                              {method?.summary && (
-                                <p className="text-gray-900 leading-relaxed text-lg">
-                                  {method.summary}
-                                </p>
-                              )}
-                              {bodyPreview && (
-                                <p className="text-gray-700 leading-relaxed text-base">
-                                  {bodyPreview}
-                                </p>
-                              )}
-                              
-                              <div className="bg-gray-50 border border-gray-200 p-5 mt-6">
-                                <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-2">
-                                  Interested?
-                                </p>
-                                <p className="text-gray-900 text-sm">
-                                  Click "5" tab to inquire about this method.
-                                </p>
+                        return (
+                          <div
+                            className="relative flex h-full flex-col p-6 sm:p-8"
+                            style={
+                              bgUrl
+                                ? {
+                                    backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.90)), url(${bgUrl})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                  }
+                                : undefined
+                            }
+                          >
+                            {/* Method Title and Badge */}
+                            <div className="mb-6">
+                              <div className="mb-2 flex items-center gap-3">
+                                <h3 className="text-2xl font-bold text-gray-900">
+                                  {method?.title}
+                                </h3>
+                                {!method?.isQuote && method?.badge && (
+                                  <span
+                                    className={`inline-flex items-center border px-2.5 py-0.5 text-[11px] font-semibold ${badgeClass}`}
+                                    style={{
+                                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                    }}
+                                  >
+                                    {method.badge}
+                                  </span>
+                                )}
                               </div>
                             </div>
-                          ) : (
-                            <div className="flex-1">
-                              <div className="bg-gray-50 border border-gray-200 p-5 shadow-sm">
-                                <div className="mb-4">
-                                  <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-1">
-                                    Request a Quote
+
+                            {/* Content */}
+                            {!method?.isQuote ? (
+                              <div className="flex-1 space-y-4">
+                                <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                  Delivery Method Details
+                                </p>
+                                {method?.summary && (
+                                  <p className="text-lg leading-relaxed text-gray-900">
+                                    {method.summary}
                                   </p>
-                                  <h5 className="text-xl font-semibold text-gray-900">
-                                    {servicesData.deliveryMethodsFormHeadline || 'Tell us about your project'}
-                                  </h5>
-                                  <p className="text-gray-700 mt-2 text-sm">
-                                    {servicesData.deliveryMethodsFormCopy || 'Share a few details and we will follow up quickly.'}
+                                )}
+                                {bodyPreview && (
+                                  <p className="text-base leading-relaxed text-gray-700">
+                                    {bodyPreview}
+                                  </p>
+                                )}
+
+                                <div className="mt-6 border border-gray-200 bg-gray-50 p-5">
+                                  <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                    Interested?
+                                  </p>
+                                  <p className="text-sm text-gray-900">
+                                    Click &quot;5&quot; tab to inquire about this method.
                                   </p>
                                 </div>
-                                <form
-                                  onSubmit={(e) => handleQuoteSubmit(e, 'Request a Quote')}
-                                  className="grid gap-3"
-                                >
-                                  <input
-                                    name="name"
-                                    type="text"
-                                    required
-                                    placeholder="Name"
-                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                                  />
-                                  <input
-                                    name="email"
-                                    type="email"
-                                    required
-                                    placeholder="Email"
-                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                                  />
-                                  <input
-                                    name="phone"
-                                    type="tel"
-                                    placeholder="Phone"
-                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                                  />
-                                  <select
-                                    name="deliveryMethod"
-                                    defaultValue="General Inquiry"
-                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                                  >
-                                    <option value="General Inquiry">General Inquiry</option>
-                                    {servicesData.deliveryMethods.map((m, optionIdx) => (
-                                      <option key={optionIdx} value={m.title || `Method ${optionIdx + 1}`}>
-                                        {m.title || `Method ${optionIdx + 1}`}
-                                      </option>
-                                    ))}
-                                  </select>
-                                  <textarea
-                                    name="message"
-                                    required
-                                    rows="4"
-                                    placeholder="Project details, timelines, and any specifics"
-                                    className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                                  />
-                                  <input type="hidden" name="targetEmail" value={emailTarget} />
-                                  <div className="flex items-center gap-3 flex-wrap">
-                                    <button
-                                      type="submit"
-                                      disabled={submitting}
-                                      className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold px-5 py-3 transition disabled:opacity-60"
-                                    >
-                                      {submitting ? 'Sending...' : 'Send Request'}
-                                    </button>
-                                    {submitStatus === 'success' && (
-                                      <span className="text-emerald-600 text-sm font-semibold">Sent! We'll respond shortly.</span>
-                                    )}
-                                    {submitStatus === 'error' && (
-                                      <span className="text-amber-600 text-sm font-semibold">There was an issue. Please try again.</span>
-                                    )}
-                                  </div>
-                                </form>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                            ) : (
+                              <div className="flex-1">
+                                <div className="border border-gray-200 bg-gray-50 p-5 shadow-sm">
+                                  <div className="mb-4">
+                                    <p className="mb-1 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                      Request a Quote
+                                    </p>
+                                    <h5 className="text-xl font-semibold text-gray-900">
+                                      {servicesData.deliveryMethodsFormHeadline ||
+                                        'Tell us about your project'}
+                                    </h5>
+                                    <p className="mt-2 text-sm text-gray-700">
+                                      {servicesData.deliveryMethodsFormCopy ||
+                                        'Share a few details and we will follow up quickly.'}
+                                    </p>
+                                  </div>
+                                  <form
+                                    onSubmit={e => handleQuoteSubmit(e, 'Request a Quote')}
+                                    className="grid gap-3"
+                                  >
+                                    <input
+                                      name="name"
+                                      type="text"
+                                      required
+                                      placeholder="Name"
+                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    />
+                                    <input
+                                      name="email"
+                                      type="email"
+                                      required
+                                      placeholder="Email"
+                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    />
+                                    <input
+                                      name="phone"
+                                      type="tel"
+                                      placeholder="Phone"
+                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    />
+                                    <select
+                                      name="deliveryMethod"
+                                      defaultValue="General Inquiry"
+                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    >
+                                      <option value="General Inquiry">General Inquiry</option>
+                                      {servicesData.deliveryMethods.map((m, optionIdx) => (
+                                        <option
+                                          key={optionIdx}
+                                          value={m.title || `Method ${optionIdx + 1}`}
+                                        >
+                                          {m.title || `Method ${optionIdx + 1}`}
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <textarea
+                                      name="message"
+                                      required
+                                      rows="4"
+                                      placeholder="Project details, timelines, and any specifics"
+                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    />
+                                    <input type="hidden" name="targetEmail" value={emailTarget} />
+                                    <div className="flex flex-wrap items-center gap-3">
+                                      <button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="inline-flex items-center justify-center gap-2 bg-gray-900 px-5 py-3 font-semibold text-white transition hover:bg-gray-800 disabled:opacity-60"
+                                      >
+                                        {submitting ? 'Sending...' : 'Send Request'}
+                                      </button>
+                                      {submitStatus === 'success' && (
+                                        <span className="text-sm font-semibold text-emerald-600">
+                                          Sent! We&apos;ll respond shortly.
+                                        </span>
+                                      )}
+                                      {submitStatus === 'error' && (
+                                        <span className="text-sm font-semibold text-amber-600">
+                                          There was an issue. Please try again.
+                                        </span>
+                                      )}
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })()}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default memo(ServicesSection);
+export default memo(ServicesSection)

@@ -26,7 +26,7 @@ const client = createClient({
   useCdn: false,
 });
 
-const DOMAIN = 'https://us-mechanicalllc.vercel.app';
+const DOMAIN = 'https://usmechanical.com';
 const TODAY = new Date().toISOString().split('T')[0];
 
 async function generateSitemap() {
