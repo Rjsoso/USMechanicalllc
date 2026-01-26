@@ -733,8 +733,8 @@ body {
     animation-duration: 0.1s !important;
   }
 
-  /* Disable transforms only on Framer Motion and carousel, not LogoLoop or Portfolio */
-  [data-framer-motion]:not(.logoloop__track):not(.logoloop *):not(#portfolio *),
+  /* Disable transforms only on Framer Motion and carousel, not LogoLoop, Portfolio, Careers, or Contact */
+  [data-framer-motion]:not(.logoloop__track):not(.logoloop *):not(#portfolio *):not(#careers *):not(#contact *),
   .carousel-item[style*='transform'] {
     transform: none !important;
   }
