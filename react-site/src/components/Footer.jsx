@@ -155,7 +155,7 @@ function Footer() {
                   onClick={() => handleNavClick('about')}
                   className="transition-colors hover:text-white"
                 >
-                  Company Background
+                  About
                 </button>
               </li>
               <li>
@@ -163,15 +163,7 @@ function Footer() {
                   onClick={() => handleNavClick('safety')}
                   className="transition-colors hover:text-white"
                 >
-                  Safety
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleNavClick('about')}
-                  className="transition-colors hover:text-white"
-                >
-                  Service Recognitions
+                  Safety & Risk Management
                 </button>
               </li>
             </ul>
