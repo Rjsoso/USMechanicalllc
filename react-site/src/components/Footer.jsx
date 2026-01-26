@@ -220,7 +220,7 @@ function Footer() {
               {displayLicense && (
                 <span className="text-gray-400">{displayLicense}</span>
               )}
-              <span className="font-medium text-primary-orange">{displayFooterBadge}</span>
+              <span className="font-medium text-primary-red">{displayFooterBadge}</span>
               <span className="text-gray-400">•</span>
               <span className="text-gray-400">{displayServiceArea}</span>
             </div>

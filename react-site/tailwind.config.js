@@ -28,6 +28,7 @@ export default {
         primary: {
           blue: '#0b21d6',
           orange: '#ff6b35',
+          red: '#DC2626',
           black: '#1a1a1a',
         },
         muted: '#6b7076',
