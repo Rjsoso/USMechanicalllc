@@ -1356,13 +1356,20 @@ body {
     transition-timing-function: ease !important;
   }
 
-  /* Disable complex text animations (except in Careers/Contact which need GPU acceleration) */
-  .hero-3d-text,
-  .section-title:not(#careers *, #contact *) {
+  /* Disable complex text animations on static sections only */
+  /* Hero, Portfolio, Careers, and Contact need GPU acceleration for smooth text fades */
+  .section-title:not(#hero *, #portfolio *, #careers *, #contact *) {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
     -webkit-text-stroke: 1px rgba(0, 0, 0, 0.4) !important;
     will-change: auto !important;
     transform: none !important;
+  }
+
+  /* Hero text needs full GPU acceleration for smooth opacity transitions */
+  #hero .hero-3d-text {
+    will-change: opacity, transform !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
   }
 
   /* Simplify carousel to reduce containment issues */
