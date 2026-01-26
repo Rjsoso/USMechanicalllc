@@ -79,11 +79,23 @@ function Footer() {
   const displayPhone = mainOffice?.phone || FALLBACK_DATA.phone
   const displayEmail = contactData?.email || FALLBACK_DATA.email
   const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
-  const displayCompanyDescription = contactData?.footerCompanyDescription || FALLBACK_DATA.footerCompanyDescription
-  const displayBusinessHoursDays = contactData?.businessHours?.days || FALLBACK_DATA.businessHours.days
-  const displayBusinessHoursTime = contactData?.businessHours?.hours || FALLBACK_DATA.businessHours.hours
-  const displayServiceArea = contactData?.serviceArea || FALLBACK_DATA.serviceArea
-  const displayFooterBadge = contactData?.footerBadge || FALLBACK_DATA.footerBadge
+  
+  // For optional fields: only use fallback if Sanity failed to load, not if field is intentionally empty
+  const displayCompanyDescription = contactData 
+    ? (contactData.footerCompanyDescription ?? '')
+    : FALLBACK_DATA.footerCompanyDescription
+  const displayBusinessHoursDays = contactData 
+    ? (contactData.businessHours?.days ?? '')
+    : FALLBACK_DATA.businessHours.days
+  const displayBusinessHoursTime = contactData 
+    ? (contactData.businessHours?.hours ?? '')
+    : FALLBACK_DATA.businessHours.hours
+  const displayServiceArea = contactData 
+    ? (contactData.serviceArea ?? '')
+    : FALLBACK_DATA.serviceArea
+  const displayFooterBadge = contactData 
+    ? (contactData.footerBadge ?? '')
+    : FALLBACK_DATA.footerBadge
 
   // Use favicon for footer logo
   const logoUrl = '/favicon.png'
@@ -110,9 +122,11 @@ function Footer() {
           {/* Column 1: Company Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">U.S. Mechanical LLC</h3>
-            <p className="text-sm leading-relaxed">
-              {displayCompanyDescription}
-            </p>
+            {displayCompanyDescription && (
+              <p className="text-sm leading-relaxed">
+                {displayCompanyDescription}
+              </p>
+            )}
             <div className="space-y-2">
               {displayPhone && (
                 <a 
@@ -197,13 +211,19 @@ function Footer() {
           {/* Column 4: Business Hours */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Business Hours</h3>
-            <div className="flex items-start gap-2 text-sm">
-              <Clock className="mt-0.5 h-4 w-4 flex-shrink-0" />
-              <div>
-                <p className="font-medium text-white">{displayBusinessHoursDays}</p>
-                <p>{displayBusinessHoursTime}</p>
+            {(displayBusinessHoursDays || displayBusinessHoursTime) && (
+              <div className="flex items-start gap-2 text-sm">
+                <Clock className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                <div>
+                  {displayBusinessHoursDays && (
+                    <p className="font-medium text-white">{displayBusinessHoursDays}</p>
+                  )}
+                  {displayBusinessHoursTime && (
+                    <p>{displayBusinessHoursTime}</p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -220,9 +240,15 @@ function Footer() {
               {displayLicense && (
                 <span className="text-gray-400">{displayLicense}</span>
               )}
-              <span className="font-medium text-primary-red">{displayFooterBadge}</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-gray-400">{displayServiceArea}</span>
+              {displayFooterBadge && (
+                <span className="font-medium text-primary-red">{displayFooterBadge}</span>
+              )}
+              {displayFooterBadge && displayServiceArea && (
+                <span className="text-gray-400">•</span>
+              )}
+              {displayServiceArea && (
+                <span className="text-gray-400">{displayServiceArea}</span>
+              )}
             </div>
           </div>
         </div>
