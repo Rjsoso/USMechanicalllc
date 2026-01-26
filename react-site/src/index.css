@@ -1230,14 +1230,9 @@ body {
     height: 100%;
   }
 
-  /* Force all Framer Motion elements to be visible on mobile (override initial opacity: 0) */
-  [data-framer-motion] {
-    opacity: 1 !important;
-  }
-
-  /* Specifically ensure all sections and their content are visible */
-  section *[style*='opacity: 0'],
-  section *[style*='opacity:0'] {
+  /* Force visibility only on Portfolio section to prevent white flash on mobile */
+  /* Other sections should retain their Framer Motion animations */
+  #portfolio [data-framer-motion] {
     opacity: 1 !important;
   }
 
@@ -1286,6 +1281,23 @@ body {
   #careers {
     position: relative !important;
     z-index: 5 !important;
+  }
+}
+
+/* ============================================
+   DESKTOP ANIMATION PROTECTION
+   ============================================ */
+
+/* Ensure Framer Motion animations work properly on desktop and larger screens */
+@media (min-width: 768px) {
+  /* Allow Framer Motion to control opacity naturally for animations */
+  [data-framer-motion] {
+    opacity: inherit;
+  }
+  
+  /* Ensure all sections can animate properly */
+  section * {
+    opacity: inherit;
   }
 }
 
