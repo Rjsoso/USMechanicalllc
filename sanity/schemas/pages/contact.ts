@@ -55,6 +55,44 @@ export default defineType({
       type: 'string',
       description: 'License info displayed in footer (e.g., "Licensed in UT, NV, AZ")',
     },
+    {
+      name: 'footerCompanyDescription',
+      title: 'Footer Company Description',
+      type: 'text',
+      description: 'Brief company description shown in footer Column 1',
+    },
+    {
+      name: 'businessHours',
+      title: 'Business Hours',
+      type: 'object',
+      description: 'Operating hours displayed in footer',
+      fields: [
+        {
+          name: 'days',
+          title: 'Days',
+          type: 'string',
+          description: 'e.g., "Monday - Friday"',
+        },
+        {
+          name: 'hours',
+          title: 'Hours',
+          type: 'string',
+          description: 'e.g., "8:00 AM - 5:00 PM"',
+        },
+      ],
+    },
+    {
+      name: 'serviceArea',
+      title: 'Service Area',
+      type: 'string',
+      description: 'Geographic area served (e.g., "Serving Northern Utah")',
+    },
+    {
+      name: 'footerBadge',
+      title: 'Footer Badge Text',
+      type: 'string',
+      description: 'Certification/licensing badge text (e.g., "Fully Licensed & Insured")',
+    },
   ],
 })
 
