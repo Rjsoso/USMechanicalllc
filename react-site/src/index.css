@@ -1285,23 +1285,6 @@ body {
 }
 
 /* ============================================
-   DESKTOP ANIMATION PROTECTION
-   ============================================ */
-
-/* Ensure Framer Motion animations work properly on desktop and larger screens */
-@media (min-width: 768px) {
-  /* Allow Framer Motion to control opacity naturally for animations */
-  [data-framer-motion] {
-    opacity: inherit;
-  }
-  
-  /* Ensure all sections can animate properly */
-  section * {
-    opacity: inherit;
-  }
-}
-
-/* ============================================
    MOBILE PERFORMANCE OPTIMIZATIONS
    ============================================ */
 
