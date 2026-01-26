@@ -1339,15 +1339,38 @@ body {
     -webkit-transform: translateZ(0) !important;
   }
 
-  /* GPU acceleration for elements that transition on page load */
-  /* These elements start at opacity: 0 and transition to opacity: 1 when body.loaded-complete is added */
-  /* Without GPU acceleration, mobile browsers create white artifacts during the transition */
+  /* GPU acceleration for page load transitions - target specific children to avoid breaking fixed backgrounds */
+  /* Apply to animated elements within sections, not the sections themselves */
   .bg-white,
-  #careers,
   .bg-gray-100,
-  #portfolio,
-  #hero,
-  #contact {
+  #careers > *,
+  #portfolio > *,
+  #hero > div:not(.fixed),
+  #contact > * {
+    will-change: opacity, transform !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+
+  /* Ensure Hero text elements specifically get GPU acceleration */
+  #hero .hero-3d-text,
+  #hero .motion-div,
+  #hero [class*="motion"] {
+    will-change: opacity, transform !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+
+  /* Ensure Portfolio and Contact text elements get GPU acceleration */
+  #portfolio .section-title,
+  #contact .section-title,
+  #contact h1,
+  #careers .section-title,
+  #careers h2 {
     will-change: opacity, transform !important;
     backface-visibility: hidden !important;
     -webkit-backface-visibility: hidden !important;
