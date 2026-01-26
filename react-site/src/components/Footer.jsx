@@ -178,7 +178,7 @@ function Footer() {
                   onClick={() => handleNavClick('services')}
                   className="transition-colors hover:text-white"
                 >
-                  Our Services
+                  Services
                 </button>
               </li>
               <li>
