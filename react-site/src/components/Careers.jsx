@@ -89,6 +89,7 @@ export default function Careers() {
       className="relative pb-24 pt-8 text-black"
       style={{
         marginTop: '-20rem',
+        backgroundColor: '#f5f5f5',
         ...(backgroundImageUrl && {
           backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
           backgroundSize: 'cover',

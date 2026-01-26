@@ -1328,6 +1328,17 @@ body {
     will-change: transform !important;
   }
 
+  /* Override will-change removal for Careers/Contact animations to prevent white flashing */
+  /* These sections need GPU acceleration on mobile due to simultaneous opacity+transform */
+  #careers [data-framer-motion],
+  #contact [data-framer-motion] {
+    will-change: opacity, transform !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+
   /* Only use will-change on actively animating elements */
   *:hover,
   *:focus,
