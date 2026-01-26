@@ -44,7 +44,7 @@ function Header() {
 
   // Memoize logo URL for background image
   const logoUrl = useMemo(() => {
-    if (!logo) return null
+    if (!logo?.asset) return null
     return urlFor(logo).width(640).quality(95).auto('format').fit('max').url()
   }, [logo])
 

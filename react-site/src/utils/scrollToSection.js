@@ -1,3 +1,4 @@
+/* global process */
 /**
  * Scrolls to a section with retry mechanism
  * @param {string} sectionId - The ID of the section to scroll to (without #)
@@ -11,15 +12,21 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
     let retryCount = 0
 
     const attemptScroll = () => {
-      console.log(`Attempt ${retryCount + 1}/${maxRetries} - Looking for #${sectionId}`)
+      if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development')
+          console.log(`Attempt ${retryCount + 1}/${maxRetries} - Looking for #${sectionId}`)
+      }
       const element = document.querySelector(`#${sectionId}`)
 
       if (element) {
         // Element found - check if it's actually visible and has dimensions
         const rect = element.getBoundingClientRect()
-        console.log(
-          `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
-        )
+        if (process.env.NODE_ENV === 'development') {
+          if (process.env.NODE_ENV === 'development')
+            console.log(
+              `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
+            )
+        }
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
@@ -29,7 +36,10 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             const pageHeight = document.documentElement.scrollHeight
             const windowHeight = window.innerHeight
 
-            console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`)
+            if (process.env.NODE_ENV === 'development') {
+              if (process.env.NODE_ENV === 'development')
+                console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`)
+            }
 
             window.scrollTo({
               top: pageHeight - windowHeight,
@@ -41,7 +51,10 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             const elementPosition = rect.top
             const offsetPosition = currentScroll + elementPosition - headerOffset
 
-            console.log(`Scrolling to ${sectionId}: ${offsetPosition}`)
+            if (process.env.NODE_ENV === 'development') {
+              if (process.env.NODE_ENV === 'development')
+                console.log(`Scrolling to ${sectionId}: ${offsetPosition}`)
+            }
 
             window.scrollTo({
               top: offsetPosition,
@@ -49,35 +62,49 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             })
           }
 
-          console.log(`✓ Successfully scrolled to section: ${sectionId}`)
+          if (process.env.NODE_ENV === 'development') {
+            if (process.env.NODE_ENV === 'development')
+              console.log(`✓ Successfully scrolled to section: ${sectionId}`)
+          }
           resolve(true)
           return true
         } else {
           // Element exists but not rendered yet - keep retrying
-          console.log(`Element #${sectionId} found but height is 0, retrying...`)
+          if (process.env.NODE_ENV === 'development') {
+            if (process.env.NODE_ENV === 'development')
+              console.log(`Element #${sectionId} found but height is 0, retrying...`)
+          }
           if (retryCount < maxRetries) {
             retryCount++
             setTimeout(attemptScroll, retryDelay)
           } else {
-            console.error(
-              `✗ Section ${sectionId} found but not rendered after ${maxRetries} attempts`
-            )
+            if (process.env.NODE_ENV === 'development') {
+              console.error(
+                `✗ Section ${sectionId} found but not rendered after ${maxRetries} attempts`
+              )
+            }
             resolve(false)
           }
         }
       } else {
         // Element not found - retry if attempts remaining
-        console.log(`Element #${sectionId} not found in DOM, retrying...`)
+        if (process.env.NODE_ENV === 'development') {
+          if (process.env.NODE_ENV === 'development')
+            console.log(`Element #${sectionId} not found in DOM, retrying...`)
+        }
         if (retryCount < maxRetries) {
           retryCount++
           setTimeout(attemptScroll, retryDelay)
         } else {
           // Max retries reached - give up
-          console.error(`✗ Failed to find section: ${sectionId} after ${maxRetries} attempts`)
-          console.log(
-            'Available sections:',
-            Array.from(document.querySelectorAll('[id]')).map(el => el.id)
-          )
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`✗ Failed to find section: ${sectionId} after ${maxRetries} attempts`)
+            if (process.env.NODE_ENV === 'development')
+              console.log(
+                'Available sections:',
+                Array.from(document.querySelectorAll('[id]')).map(el => el.id)
+              )
+          }
           resolve(false)
         }
       }
@@ -96,9 +123,15 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
  * @param {function} navigate - React Router navigate function
  */
 export function navigateAndScroll(sectionId, navigate) {
-  console.log(`navigateAndScroll called with sectionId: ${sectionId}`)
+  if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development')
+      console.log(`navigateAndScroll called with sectionId: ${sectionId}`)
+  }
 
   // Use React Router state to pass the section (more reliable than sessionStorage)
   navigate('/', { state: { scrollTo: sectionId } })
-  console.log(`Navigated with state: { scrollTo: ${sectionId} }`)
+  if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development')
+      console.log(`Navigated with state: { scrollTo: ${sectionId} }`)
+  }
 }

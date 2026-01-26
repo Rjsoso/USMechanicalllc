@@ -263,16 +263,20 @@ export const LogoLoop = memo(
           </span>
         ) : (
           <img
-            src={item.src}
-            srcSet={item.srcSet}
-            sizes={item.sizes}
-            width={item.width}
-            height={item.height}
-            alt={item.alt ?? ''}
-            title={item.title}
+            src={item?.src || ''}
+            srcSet={item?.srcSet}
+            sizes={item?.sizes}
+            width={item?.width}
+            height={item?.height}
+            alt={item?.alt || item?.title || 'Partner logo'}
+            title={item?.title}
             loading="lazy"
             decoding="async"
             draggable={false}
+            onError={e => {
+              e.target.style.opacity = '0.3'
+              e.target.alt = 'Logo failed to load'
+            }}
           />
         )
         const itemAriaLabel = isNodeItem ? (item.ariaLabel ?? item.title) : (item.alt ?? item.title)

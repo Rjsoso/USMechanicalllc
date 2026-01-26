@@ -1,3 +1,4 @@
+/* global process */
 import { useLayoutEffect, useRef, useState, useEffect, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
@@ -109,7 +110,8 @@ const CardNav = ({ className = '', ease = 'power3.out' }) => {
           sections: sections,
           buttonText: headerData?.ctaButtonText || 'Get Started',
         })
-        console.log('CardNav sections loaded:', sections?.length || 0, sections)
+        if (process.env.NODE_ENV === 'development')
+          console.log('CardNav sections loaded:', sections?.length || 0, sections)
       } catch (error) {
         console.error('Error fetching navigation data:', error)
         // Use fallback data on error

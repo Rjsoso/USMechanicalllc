@@ -11,7 +11,7 @@ const FALLBACK_DATA = {
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
-  // eslint-disable-next-line no-unused-vars  
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true) // Tracks loading state for contact data
 
   useEffect(() => {

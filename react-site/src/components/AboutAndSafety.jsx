@@ -122,7 +122,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
           ? `${photo.asset.url}?w=1200&q=82&auto=format`
-          : urlFor(photo).width(1200).quality(82).auto('format').url()
+          : (photo.asset && urlFor(photo)?.width(1200).quality(82).auto('format').url()) || ''
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
@@ -147,7 +147,9 @@ Our goal is always simple: complete every project with zero safety issues.`,
         if (item.image && item.image.asset) {
           const imageUrl = item.image.asset.url
             ? `${item.image.asset.url}?w=200&q=80&auto=format`
-            : urlFor(item.image).width(200).quality(80).auto('format').url()
+            : (item.image.asset &&
+                urlFor(item.image)?.width(200).quality(80).auto('format').url()) ||
+              ''
           return {
             src: imageUrl,
             alt: item.image.alt || item.title || `Safety logo ${index + 1}`,
@@ -496,15 +498,6 @@ Our goal is always simple: complete every project with zero safety issues.`,
                   onMouseEnter={() => setIsLoopsHovered(true)}
                   onMouseLeave={() => setIsLoopsHovered(false)}
                 >
-                  {isMobile &&
-                    safetyLogoItems.length > 0 &&
-                    console.log('Safety logos on mobile:', {
-                      originalCount: safetyLogoItems.length,
-                      duplicatedCount: safetyLogoItems.length * 4,
-                      logoHeight: getSafetyLogoHeight(),
-                      gap: getSafetyGap(),
-                      windowWidth: windowWidth,
-                    })}
                   <div className={isMobile ? 'space-y-4' : 'space-y-8'}>
                     {/* Top loop - scrolls left */}
                     <div

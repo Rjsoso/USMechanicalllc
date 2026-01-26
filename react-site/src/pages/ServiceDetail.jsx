@@ -5,6 +5,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import { navigateAndScroll } from '../utils/scrollToSection'
+import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
@@ -114,7 +115,7 @@ export default function ServiceDetail() {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
           ? `${photo.asset.url}?w=800&q=85&auto=format`
-          : urlFor(photo).width(800).quality(85).auto('format').url()
+          : (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
         return {
           id: `service-photo-${index}`,
           src: imageUrl,
@@ -168,6 +169,15 @@ export default function ServiceDetail() {
 
   return (
     <>
+      <SEO
+        title={`${serviceData.title} | US Mechanical`}
+        description={
+          serviceData.metaDescription ||
+          `Professional ${serviceData.title} services by US Mechanical. Serving Utah, Nevada, and beyond since 1963.`
+        }
+        keywords={`${serviceData.title}, mechanical services, HVAC, plumbing, ${serviceData.title} Utah, ${serviceData.title} Nevada`}
+        url={`https://usmechanical.com/services/${serviceData.slug.current}`}
+      />
       <Header />
       <main className="min-h-screen bg-white text-black" style={{ paddingTop: '180px' }}>
         <div className="mx-auto max-w-7xl px-6 py-20">

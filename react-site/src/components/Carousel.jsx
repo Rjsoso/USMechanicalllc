@@ -32,11 +32,15 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
     >
       <div className="carousel-item-image-container">
         <img
-          src={item.src}
-          alt={item.alt || `Carousel image ${index + 1}`}
+          src={item?.src || ''}
+          alt={item?.alt || `Carousel image ${index + 1}`}
           className="carousel-item-image"
           loading={index === 0 ? 'eager' : 'lazy'}
           fetchPriority={index === 0 ? 'high' : 'auto'}
+          onError={e => {
+            e.target.style.opacity = '0.3'
+            e.target.alt = 'Image failed to load'
+          }}
         />
         {item.caption && <div className="carousel-item-caption">{item.caption}</div>}
       </div>

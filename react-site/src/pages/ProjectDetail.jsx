@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 import { navigateAndScroll } from '../utils/scrollToSection'
+import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
@@ -83,7 +84,7 @@ export default function ProjectDetail() {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
           ? `${photo.asset.url}?w=800&q=85&auto=format`
-          : urlFor(photo).width(800).quality(85).auto('format').url()
+          : (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
         return {
           id: `project-photo-${index}`,
           src: imageUrl,
@@ -137,6 +138,15 @@ export default function ProjectDetail() {
 
   return (
     <>
+      <SEO
+        title={`${projectData.title} | Portfolio | US Mechanical`}
+        description={
+          projectData.metaDescription ||
+          `View the ${projectData.title} project by US Mechanical. Professional mechanical contracting services.`
+        }
+        keywords={`${projectData.title}, US Mechanical portfolio, mechanical project, ${projectData.category?.title || 'construction'}`}
+        url={`https://usmechanical.com/projects/${projectData._id}`}
+      />
       <Header />
       <main className="min-h-screen bg-white text-black" style={{ paddingTop: '180px' }}>
         <div className="mx-auto max-w-7xl px-6 py-20">

@@ -1,9 +1,11 @@
+/* global process */
 import { useEffect, useLayoutEffect, useState, Suspense, lazy, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 import { scrollToSection } from '../utils/scrollToSection'
 
 // Lazy load below-fold components for better initial load performance
@@ -43,7 +45,8 @@ export default function Home() {
     if (!initialScrollDone.current) {
       // On page reload, clear location state immediately
       if (isPageReload.current) {
-        console.log('Home.jsx: Clearing location state on page reload')
+        if (process.env.NODE_ENV === 'development')
+          console.log('Home.jsx: Clearing location state on page reload')
         window.history.replaceState({}, document.title)
       }
 
@@ -51,7 +54,8 @@ export default function Home() {
       if (!scrollTo || isPageReload.current) {
         // Clear any URL hash that might trigger scrolling
         if (window.location.hash) {
-          console.log('Clearing hash:', window.location.hash)
+          if (process.env.NODE_ENV === 'development')
+            console.log('Clearing hash:', window.location.hash)
           window.history.replaceState({}, '', window.location.pathname)
         }
         // Force scroll to top immediately before browser paints
@@ -67,11 +71,13 @@ export default function Home() {
   // BUT: Skip on page reload to prevent unwanted scrolling
   useEffect(() => {
     const scrollTo = location.state?.scrollTo
-    console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo)
+    if (process.env.NODE_ENV === 'development')
+      console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo)
 
     // If this is a page reload, don't run any scroll logic
     if (isPageReload.current) {
-      console.log('Home.jsx: Page reload detected, skipping scroll logic')
+      if (process.env.NODE_ENV === 'development')
+        console.log('Home.jsx: Page reload detected, skipping scroll logic')
       // Clear location state to prevent it from persisting
       if (scrollTo) {
         window.history.replaceState({}, document.title)
@@ -81,9 +87,11 @@ export default function Home() {
 
     if (scrollTo) {
       // We have a section to scroll to - wait for components to load
-      console.log(`Home.jsx: Starting scroll to ${scrollTo}`)
+      if (process.env.NODE_ENV === 'development')
+        console.log(`Home.jsx: Starting scroll to ${scrollTo}`)
       scrollToSection(scrollTo).then(success => {
-        console.log(`Scroll to ${scrollTo} result: ${success}`)
+        if (process.env.NODE_ENV === 'development')
+          console.log(`Scroll to ${scrollTo} result: ${success}`)
         // Clear the state after successful scroll
         if (success) {
           window.history.replaceState({}, document.title)
@@ -169,6 +177,12 @@ export default function Home() {
 
   return (
     <>
+      <SEO
+        title="US Mechanical | Plumbing & HVAC Experts | Since 1963"
+        description="Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists. Licensed, bonded & insured."
+        keywords="mechanical contractors, HVAC contractors, plumbing contractors, commercial HVAC, industrial plumbing, process piping, Utah contractors, Nevada contractors, Pleasant Grove HVAC, Las Vegas mechanical, design build, construction services"
+        url="https://usmechanical.com/"
+      />
       <Header />
 
       <main>

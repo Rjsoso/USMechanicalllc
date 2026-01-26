@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
+import { canSubmitForm, recordSubmission, formatTimeRemaining } from '../utils/rateLimit'
 
 const ServicesSection = () => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody'
@@ -188,9 +189,23 @@ const ServicesSection = () => {
     event.preventDefault()
     if (!servicesData) return
 
+    // Check rate limiting
+    const rateLimitCheck = canSubmitForm()
+    if (!rateLimitCheck.allowed) {
+      setSubmitStatus('error')
+      alert(
+        `Rate limit exceeded. Please wait ${formatTimeRemaining(rateLimitCheck.timeUntilReset)} before submitting again.`
+      )
+      return
+    }
+
     const emailTarget = servicesData.deliveryMethodsEmail || 'info@usmechanicalllc.com'
     setSubmitting(true)
     setSubmitStatus('loading')
+
+    // Add timeout handling
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
 
     try {
       const formData = new FormData(event.target)
@@ -201,16 +216,25 @@ const ServicesSection = () => {
         method: 'POST',
         headers: { Accept: 'application/json' },
         body: formData,
+        signal: controller.signal,
       })
+
+      clearTimeout(timeoutId)
 
       if (!response.ok) {
         throw new Error('Submission failed')
       }
 
+      // Record successful submission for rate limiting
+      recordSubmission()
       setSubmitStatus('success')
       event.target.reset()
     } catch (error) {
+      clearTimeout(timeoutId)
       console.error('Quote request failed:', error)
+      if (error.name === 'AbortError') {
+        alert('Request timed out. Please check your internet connection and try again.')
+      }
       setSubmitStatus('error')
     } finally {
       setSubmitting(false)

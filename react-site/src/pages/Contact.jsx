@@ -1,7 +1,9 @@
+/* global process */
 import { useEffect, useState, useMemo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { motion } from 'framer-motion'
+import SEO from '../components/SEO'
 import { validateContactForm, sanitizeFormData, detectSpam } from '../utils/validation'
 import {
   canSubmitForm,
@@ -113,7 +115,8 @@ export default function Contact() {
       performance.navigation?.type === 1
 
     if (isPageReload) {
-      console.log('Contact: Page reload detected, skipping auto-scroll')
+      if (process.env.NODE_ENV === 'development')
+        console.log('Contact: Page reload detected, skipping auto-scroll')
       return undefined
     }
 
@@ -222,6 +225,10 @@ export default function Contact() {
     // Submit form
     setFormSubmitting(true)
 
+    // Add timeout handling
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
     try {
       const response = await fetch('https://formspree.io/f/xgvrvody', {
         method: 'POST',
@@ -229,7 +236,10 @@ export default function Contact() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(sanitizedData),
+        signal: controller.signal,
       })
+
+      clearTimeout(timeoutId)
 
       if (response.ok) {
         // Record successful submission for rate limiting
@@ -254,10 +264,15 @@ export default function Contact() {
         throw new Error('Failed to submit form')
       }
     } catch (err) {
+      clearTimeout(timeoutId)
       console.error('Form submission error:', err)
-      setFormError(
-        'Failed to send message. Please try again later or contact us directly via email.'
-      )
+      if (err.name === 'AbortError') {
+        setFormError('Request timed out. Please check your internet connection and try again.')
+      } else {
+        setFormError(
+          'Failed to send message. Please try again later or contact us directly via email.'
+        )
+      }
     } finally {
       setFormSubmitting(false)
     }
@@ -267,255 +282,269 @@ export default function Contact() {
   const remainingSubmissions = getRemainingSubmissions()
 
   return (
-    <section
-      id="contact"
-      className="relative w-full px-6 py-20"
-      style={{
-        backgroundColor: 'transparent',
-        minHeight: '100vh',
-      }}
-    >
-      {/* Background removed - hero's fixed background shows through */}
-      <div className="relative z-10 mx-auto max-w-6xl">
-        {loading && (
-          <div className="flex items-center justify-center py-12">
-            <p className="text-center text-lg text-white">Loading contact...</p>
-          </div>
-        )}
-
-        {!loading && (error || !contactData) && (
-          <div className="flex items-center justify-center py-12">
-            <div className="max-w-2xl px-6 text-center">
-              <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
-              <p className="mb-4 text-white">{error || 'No contact page data found.'}</p>
-              <p className="text-sm text-gray-300">
-                Please create a &quot;Contact Page&quot; document in Sanity Studio at{' '}
-                <a
-                  href="http://localhost:3333"
-                  className="text-blue-400 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  http://localhost:3333
-                </a>
-              </p>
+    <>
+      <SEO
+        title="Contact Us | US Mechanical | Get a Quote"
+        description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
+        keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
+        url="https://usmechanical.com/contact"
+      />
+      <section
+        id="contact"
+        className="relative w-full px-6 py-20"
+        style={{
+          backgroundColor: 'transparent',
+          minHeight: '100vh',
+        }}
+      >
+        {/* Background removed - hero's fixed background shows through */}
+        <div className="relative z-10 mx-auto max-w-6xl">
+          {loading && (
+            <div className="flex items-center justify-center py-12">
+              <p className="text-center text-lg text-white">Loading contact...</p>
             </div>
-          </div>
-        )}
+          )}
 
-        {!loading && contactData && (
-          <>
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '500px' }}
-              transition={{ duration: 0.25 }}
-              className="section-title mb-8 text-center text-5xl text-white md:text-6xl"
-            >
-              {contactData.heroTitle || 'Contact Us'}
-            </motion.h1>
+          {!loading && (error || !contactData) && (
+            <div className="flex items-center justify-center py-12">
+              <div className="max-w-2xl px-6 text-center">
+                <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
+                <p className="mb-4 text-white">{error || 'No contact page data found.'}</p>
+                <p className="text-sm text-gray-300">
+                  Please create a &quot;Contact Page&quot; document in Sanity Studio at{' '}
+                  <a
+                    href="http://localhost:3333"
+                    className="text-blue-400 underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    http://localhost:3333
+                  </a>
+                </p>
+              </div>
+            </div>
+          )}
 
-            <motion.p
-              className="mb-12 text-center text-white"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '500px' }}
-              transition={{ duration: 0.25 }}
-            >
-              {contactData.description}
-            </motion.p>
+          {!loading && contactData && (
+            <>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '500px' }}
+                transition={{ duration: 0.25 }}
+                className="section-title mb-8 text-center text-5xl text-white md:text-6xl"
+              >
+                {contactData.heroTitle || 'Contact Us'}
+              </motion.h1>
 
-            <div className="grid gap-12 md:grid-cols-2">
-              {/* LEFT SIDE — OFFICE INFO */}
-              <div>
-                {contactData.offices && contactData.offices.length > 0 ? (
-                  contactData.offices.map((office, index) => (
+              <motion.p
+                className="mb-12 text-center text-white"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '500px' }}
+                transition={{ duration: 0.25 }}
+              >
+                {contactData.description}
+              </motion.p>
+
+              <div className="grid gap-12 md:grid-cols-2">
+                {/* LEFT SIDE — OFFICE INFO */}
+                <div>
+                  {contactData.offices && contactData.offices.length > 0 ? (
+                    contactData.offices.map((office, index) => (
+                      <motion.div
+                        key={index}
+                        className="mb-8"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '500px' }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <h2 className="mb-4 text-2xl font-semibold text-white">
+                          {office.locationName}
+                        </h2>
+                        <p className="text-white">{office.address}</p>
+                        <p className="text-white">
+                          Phone: <span className="text-blue-300">{office.phone}</span>
+                        </p>
+                        {office.fax && <p className="text-white">Fax: {office.fax}</p>}
+                      </motion.div>
+                    ))
+                  ) : (
+                    <p className="text-white">No office locations available.</p>
+                  )}
+
+                  {/* AFFILIATES */}
+                  {contactData.affiliates && contactData.affiliates.length > 0 && (
                     <motion.div
-                      key={index}
-                      className="mb-8"
+                      className="mt-8"
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '500px' }}
                       transition={{ duration: 0.25 }}
                     >
                       <h2 className="mb-4 text-2xl font-semibold text-white">
-                        {office.locationName}
+                        Affiliate Companies
                       </h2>
-                      <p className="text-white">{office.address}</p>
-                      <p className="text-white">
-                        Phone: <span className="text-blue-300">{office.phone}</span>
-                      </p>
-                      {office.fax && <p className="text-white">Fax: {office.fax}</p>}
+                      {contactData.affiliates.map((affiliate, i) => (
+                        <motion.div
+                          key={i}
+                          className="mb-6"
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: '500px' }}
+                          transition={{ duration: 0.25 }}
+                        >
+                          {affiliate.logo && urlFor(affiliate.logo) && (
+                            <img
+                              src={urlFor(affiliate.logo)
+                                .width(200)
+                                .quality(80)
+                                .auto('format')
+                                .url()}
+                              alt={affiliate.name}
+                              className="mb-2 h-12 object-contain"
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          )}
+                          <p className="font-semibold text-white">{affiliate.name}</p>
+                          {affiliate.description && (
+                            <p className="text-white">{affiliate.description}</p>
+                          )}
+                        </motion.div>
+                      ))}
                     </motion.div>
-                  ))
-                ) : (
-                  <p className="text-white">No office locations available.</p>
-                )}
-
-                {/* AFFILIATES */}
-                {contactData.affiliates && contactData.affiliates.length > 0 && (
-                  <motion.div
-                    className="mt-8"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '500px' }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <h2 className="mb-4 text-2xl font-semibold text-white">Affiliate Companies</h2>
-                    {contactData.affiliates.map((affiliate, i) => (
-                      <motion.div
-                        key={i}
-                        className="mb-6"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '500px' }}
-                        transition={{ duration: 0.25 }}
-                      >
-                        {affiliate.logo && urlFor(affiliate.logo) && (
-                          <img
-                            src={urlFor(affiliate.logo).width(200).quality(80).auto('format').url()}
-                            alt={affiliate.name}
-                            className="mb-2 h-12 object-contain"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        )}
-                        <p className="font-semibold text-white">{affiliate.name}</p>
-                        {affiliate.description && (
-                          <p className="text-white">{affiliate.description}</p>
-                        )}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-              </div>
-
-              {/* RIGHT SIDE — FORM */}
-              <motion.div
-                className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '500px' }}
-                transition={{ duration: 0.25 }}
-              >
-                <h3 className="mb-4 text-2xl font-semibold text-white">
-                  {contactData.formSettings?.headline || 'Send Us a Message'}
-                </h3>
-
-                {/* Success Message */}
-                {formSuccess && (
-                  <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
-                    <p className="font-semibold text-white">✓ Message sent successfully!</p>
-                    <p className="mt-1 text-sm text-white/80">We&apos;ll get back to you soon.</p>
-                  </div>
-                )}
-
-                {/* Rate Limit Error */}
-                {rateLimitError && (
-                  <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                    <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
-                    <p className="mt-1 text-sm text-white/80">{rateLimitError}</p>
-                  </div>
-                )}
-
-                {/* General Form Error */}
-                {formError && (
-                  <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                    <p className="font-semibold text-white">⚠ Error</p>
-                    <p className="mt-1 text-sm text-white/80">{formError}</p>
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Name *"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className={`w-full border ${formErrors.name ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                      maxLength="100"
-                    />
-                    {formErrors.name && (
-                      <p className="mt-1 text-sm text-red-300">{formErrors.name}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email *"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full border ${formErrors.email ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                      maxLength="254"
-                    />
-                    {formErrors.email && (
-                      <p className="mt-1 text-sm text-red-300">{formErrors.email}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone (optional)"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className={`w-full border ${formErrors.phone ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                      maxLength="20"
-                    />
-                    {formErrors.phone && (
-                      <p className="mt-1 text-sm text-red-300">{formErrors.phone}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <textarea
-                      name="message"
-                      placeholder="Message * (minimum 10 characters)"
-                      required
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className={`w-full border ${formErrors.message ? 'border-red-500' : 'border-white/30'} h-32 resize-none rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                      maxLength="5000"
-                    />
-                    {formErrors.message && (
-                      <p className="mt-1 text-sm text-red-300">{formErrors.message}</p>
-                    )}
-                    <p className="mt-1 text-xs text-white/60">
-                      {formData.message.length}/5000 characters
-                    </p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={formSubmitting || rateLimitError}
-                    className={`rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 ${
-                      formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
-                    }`}
-                  >
-                    {formSubmitting ? 'Sending...' : 'Submit'}
-                  </button>
-
-                  {/* Rate limit info */}
-                  {remainingSubmissions < 3 && !rateLimitError && (
-                    <p className="text-center text-xs text-white/60">
-                      {remainingSubmissions > 0
-                        ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
-                        : 'Maximum submissions reached for this hour'}
-                    </p>
                   )}
-                </form>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+                </div>
+
+                {/* RIGHT SIDE — FORM */}
+                <motion.div
+                  className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '500px' }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <h3 className="mb-4 text-2xl font-semibold text-white">
+                    {contactData.formSettings?.headline || 'Send Us a Message'}
+                  </h3>
+
+                  {/* Success Message */}
+                  {formSuccess && (
+                    <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
+                      <p className="font-semibold text-white">✓ Message sent successfully!</p>
+                      <p className="mt-1 text-sm text-white/80">We&apos;ll get back to you soon.</p>
+                    </div>
+                  )}
+
+                  {/* Rate Limit Error */}
+                  {rateLimitError && (
+                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                      <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
+                      <p className="mt-1 text-sm text-white/80">{rateLimitError}</p>
+                    </div>
+                  )}
+
+                  {/* General Form Error */}
+                  {formError && (
+                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                      <p className="font-semibold text-white">⚠ Error</p>
+                      <p className="mt-1 text-sm text-white/80">{formError}</p>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                    <div>
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder="Name *"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className={`w-full border ${formErrors.name ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        maxLength="100"
+                      />
+                      {formErrors.name && (
+                        <p className="mt-1 text-sm text-red-300">{formErrors.name}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Email *"
+                        required
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className={`w-full border ${formErrors.email ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        maxLength="254"
+                      />
+                      {formErrors.email && (
+                        <p className="mt-1 text-sm text-red-300">{formErrors.email}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Phone (optional)"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full border ${formErrors.phone ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        maxLength="20"
+                      />
+                      {formErrors.phone && (
+                        <p className="mt-1 text-sm text-red-300">{formErrors.phone}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <textarea
+                        name="message"
+                        placeholder="Message * (minimum 10 characters)"
+                        required
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        className={`w-full border ${formErrors.message ? 'border-red-500' : 'border-white/30'} h-32 resize-none rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        maxLength="5000"
+                      />
+                      {formErrors.message && (
+                        <p className="mt-1 text-sm text-red-300">{formErrors.message}</p>
+                      )}
+                      <p className="mt-1 text-xs text-white/60">
+                        {formData.message.length}/5000 characters
+                      </p>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={formSubmitting || rateLimitError}
+                      className={`rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 ${
+                        formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
+                      }`}
+                    >
+                      {formSubmitting ? 'Sending...' : 'Submit'}
+                    </button>
+
+                    {/* Rate limit info */}
+                    {remainingSubmissions < 3 && !rateLimitError && (
+                      <p className="text-center text-xs text-white/60">
+                        {remainingSubmissions > 0
+                          ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
+                          : 'Maximum submissions reached for this hour'}
+                      </p>
+                    )}
+                  </form>
+                </motion.div>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </>
   )
 }

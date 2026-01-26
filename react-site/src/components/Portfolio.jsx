@@ -84,7 +84,7 @@ function Portfolio() {
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               >
                 {/* Background Image */}
-                {category.image && (
+                {category.image?.asset && (
                   <img
                     src={urlFor(category.image).width(800).quality(90).auto('format').url()}
                     alt={category.title}

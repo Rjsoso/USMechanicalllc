@@ -50,26 +50,32 @@ export default function ProjectModal({ project, onClose }) {
             <div className="relative mb-6">
               <div className="relative h-96 w-full overflow-hidden rounded-t-lg bg-black md:h-[500px]">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImageIndex}
-                    src={urlFor(images[currentImageIndex])
-                      .width(1200)
-                      .quality(90)
-                      .auto('format')
-                      .url()}
-                    alt={
-                      images[currentImageIndex]?.alt ||
-                      project.title ||
-                      `Project image ${currentImageIndex + 1}`
-                    }
-                    className="h-full w-full object-contain"
-                    loading="eager"
-                    decoding="async"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                  {images[currentImageIndex] && (
+                    <motion.img
+                      key={currentImageIndex}
+                      src={
+                        images[currentImageIndex]?.asset
+                          ? urlFor(images[currentImageIndex])
+                              .width(1200)
+                              .quality(90)
+                              .auto('format')
+                              .url()
+                          : ''
+                      }
+                      alt={
+                        images[currentImageIndex]?.alt ||
+                        project.title ||
+                        `Project image ${currentImageIndex + 1}`
+                      }
+                      className="h-full w-full object-contain"
+                      loading="eager"
+                      decoding="async"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
                 </AnimatePresence>
 
                 {/* Navigation Arrows */}
@@ -137,7 +143,11 @@ export default function ProjectModal({ project, onClose }) {
                         }`}
                       >
                         <img
-                          src={urlFor(img).width(100).height(100).quality(80).auto('format').url()}
+                          src={
+                            img?.asset
+                              ? urlFor(img).width(100).height(100).quality(80).auto('format').url()
+                              : ''
+                          }
                           alt={img?.alt || `Thumbnail ${index + 1}`}
                           className="h-full w-full object-cover"
                           loading="lazy"

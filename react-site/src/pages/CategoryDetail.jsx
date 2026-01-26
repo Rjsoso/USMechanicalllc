@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
+import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
@@ -155,6 +156,15 @@ export default function CategoryDetail() {
 
   return (
     <>
+      <SEO
+        title={`${categoryData.title} Portfolio | US Mechanical`}
+        description={
+          categoryData.metaDescription ||
+          `View ${categoryData.title} projects by US Mechanical. Professional mechanical contracting services since 1963.`
+        }
+        keywords={`${categoryData.title}, US Mechanical portfolio, mechanical projects, ${categoryData.title} projects`}
+        url={`https://usmechanical.com/portfolio/${categoryData._id}`}
+      />
       <Header />
       <main className="min-h-screen bg-white text-black" style={{ paddingTop: '180px' }}>
         <div className="mx-auto max-w-7xl px-6 py-20">

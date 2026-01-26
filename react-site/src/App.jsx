@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
+import ErrorBoundary from './components/ErrorBoundary'
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -25,24 +26,26 @@ function App() {
   }, [])
 
   return (
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      {/* Add Schema.org structured data for SEO */}
-      <StructuredData />
+    <ErrorBoundary>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        {/* Add Schema.org structured data for SEO */}
+        <StructuredData />
 
-      <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services/:slug" element={<ServiceDetail />} />
-          <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
-        </Routes>
-      </Suspense>
-    </Router>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services/:slug" element={<ServiceDetail />} />
+            <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
+          </Routes>
+        </Suspense>
+      </Router>
+    </ErrorBoundary>
   )
 }
 
