@@ -1,5 +1,7 @@
 import ourServices from './ourServices'
 import navLink from '../schemaTypes/navLink'
+import drawerLink from '../schemaTypes/drawerLink'
+import drawerSection from '../schemaTypes/drawerSection'
 import office from '../schemaTypes/office'
 import affiliate from '../schemaTypes/affiliate'
 import formSettings from '../schemaTypes/formSettings'
@@ -21,6 +23,8 @@ import careers from '../schemaTypes/careers'
 export const schemaTypes = [
     ourServices,
     navLink,
+    drawerLink,
+    drawerSection,
     office,
     affiliate,
     formSettings,
