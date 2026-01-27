@@ -13,16 +13,6 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
   }
 }
 
-// Production security warning
-if (process.env.NODE_ENV === 'production') {
-  console.log('%cStop!', 'color: red; font-size: 50px; font-weight: bold; text-shadow: 0 0 10px red;')
-  console.log(
-    '%cThis is a browser feature intended for developers. If someone told you to copy-paste something here, it is a scam and will give them access to your information.',
-    'font-size: 16px; color: #ff6b6b;'
-  )
-  console.log(' ') // Spacer
-}
-
 // Console message for curious developers
 console.log(
   '%c👷 Built with precision. %c🔧',
