@@ -31,8 +31,6 @@ console.log(
   'font-size: 12px; color: #ffffff; font-style: italic; line-height: 1.6; text-shadow: 0 0 5px #ffffff;'
 )
 
-console.log('%c🧰', 'font-size: 60px; line-height: 1;')
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
