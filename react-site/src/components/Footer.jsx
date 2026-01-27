@@ -1,6 +1,6 @@
 import { useEffect, useState, memo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Phone, MapPin, Clock } from 'lucide-react'
+import { Phone, MapPin, Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 
@@ -200,7 +200,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Business Hours */}
+          {/* Column 4: Business Hours & Social Media */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Business Hours</h3>
             {(displayBusinessHoursDays || displayBusinessHoursTime) && (
@@ -216,6 +216,22 @@ function Footer() {
                 </div>
               </div>
             )}
+            
+            {/* Social Media */}
+            <div className="pt-2">
+              <h4 className="text-sm font-semibold text-white mb-2">Follow Us</h4>
+              <div className="flex gap-3">
+                <a 
+                  href="https://www.linkedin.com/company/us-mechanical-llc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-gray-300 transition-all hover:bg-[#0A66C2] hover:text-white"
+                  aria-label="Follow us on LinkedIn"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
