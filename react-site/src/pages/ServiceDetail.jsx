@@ -325,13 +325,12 @@ export default function ServiceDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Link
-              to="/#contact"
-              reloadDocument
+            <a
+              href={`${window.location.origin}/#contact`}
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
             >
-              Request a Quote [v20:05-LINK-RELOAD]
-            </Link>
+              Request a Quote [v20:10-PURE-A]
+            </a>
           </motion.div>
         </div>
       </main>

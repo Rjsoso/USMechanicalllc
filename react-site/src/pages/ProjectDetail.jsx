@@ -384,13 +384,12 @@ export default function ProjectDetail() {
             viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
-            <Link
-              to="/#contact"
-              reloadDocument
+            <a
+              href={`${window.location.origin}/#contact`}
               className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
             >
               Request a Quote
-            </Link>
+            </a>
           </motion.div>
         </div>
       </main>
