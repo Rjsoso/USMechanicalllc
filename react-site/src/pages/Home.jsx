@@ -250,9 +250,20 @@ export default function Home() {
         // Trigger at 50% through careers section
         const triggerPoint = careersTop + (careersHeight * 0.5)
 
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Contact scroll check:', {
+            scrollPosition,
+            triggerPoint,
+            careersTop,
+            careersHeight,
+            triggered: contactAnimationTriggered.current
+          })
+        }
+
         if (scrollPosition >= triggerPoint) {
           contactAnimationTriggered.current = true
           setContactSlide(0)
+          console.log('Contact animation TRIGGERED - setting slideOffset to 0')
         }
       })
     }

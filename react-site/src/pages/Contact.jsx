@@ -19,6 +19,11 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
   const [error, setError] = useState(null)
   const headerOffset = 180
 
+  // Debug: Log slideOffset changes
+  useEffect(() => {
+    console.log('Contact slideOffset:', slideOffset, 'disableInternalAnimations:', disableInternalAnimations);
+  }, [slideOffset, disableInternalAnimations])
+
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -303,8 +308,7 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
           style={{
             transform: `translate3d(0, ${slideOffset}px, 0)`,
             WebkitTransform: `translate3d(0, ${slideOffset}px, 0)`,
-            transition: 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)',
-            willChange: slideOffset !== 0 ? 'transform' : 'auto',
+            transition: slideOffset === 0 ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
             transformStyle: 'preserve-3d',
             WebkitTransformStyle: 'preserve-3d',
             backfaceVisibility: 'hidden',
