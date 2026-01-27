@@ -300,6 +300,9 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
         style={{
           backgroundColor: '#1a1a1a',
           minHeight: '100vh',
+          marginTop: '-15rem',
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         {/* Background removed - hero's fixed background shows through */}
