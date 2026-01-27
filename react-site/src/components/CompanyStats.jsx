@@ -210,19 +210,19 @@ const CompanyStats = () => {
         }
       },
       {
-        threshold: 0.1, // Lower threshold triggers earlier for more responsive feel
-        rootMargin: '100px 0px', // Larger margin starts animation sooner
+        threshold: 0.4, // Trigger when 40% visible to avoid interfering with programmatic scrolls
+        rootMargin: '0px', // No pre-trigger margin to prevent animation during scroll to nearby sections
         // Use passive observation for better scroll performance
       }
     )
 
-    // Delay to prevent immediate trigger on page load
-    // This ensures page starts at top, not auto-scrolling to stats section
+    // Delay to allow programmatic scrolls to complete before enabling observer
+    // Prevents bouncy scroll when navigating to services section
     const timeoutId = setTimeout(() => {
       if (sectionRef.current) {
         observer.observe(sectionRef.current)
       }
-    }, 300) // Reduced delay for better UX while maintaining performance
+    }, 800) // Increased delay ensures smooth scrolls complete first
 
     return () => {
       clearTimeout(timeoutId)
