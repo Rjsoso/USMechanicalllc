@@ -103,13 +103,13 @@ export default function Home() {
       if (process.env.NODE_ENV === 'development')
         console.log(`Home.jsx: Starting scroll to ${targetSection}`)
       
-      // For lazy-loaded sections like contact, give extra time for Suspense to resolve AND images to load
+      // For lazy-loaded sections like contact, give time for Suspense to resolve
       const isLazySection = targetSection === 'contact'
-      const initialDelay = isLazySection ? 600 : 0
+      const initialDelay = isLazySection ? 400 : 0
       
       setTimeout(() => {
-        // Use smooth scroll behavior with longer duration for lazy sections
-        scrollToSection(targetSection, 180, isLazySection ? 150 : 50, isLazySection ? 400 : 200).then(success => {
+        // Use smooth scroll with retry mechanism for lazy sections
+        scrollToSection(targetSection, 180, isLazySection ? 200 : 50, isLazySection ? 50 : 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
           

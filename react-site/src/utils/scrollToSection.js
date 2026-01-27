@@ -52,22 +52,38 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // Special handling for contact section - scroll to bottom of page
+          // Special handling for contact section - scroll with offset
           if (sectionId === 'contact') {
-            // Wait a bit longer for contact section to fully render
+            const currentScroll = window.scrollY || window.pageYOffset
+            const elementPosition = rect.top
+            const offsetPosition = currentScroll + elementPosition - headerOffset
+
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`Scrolling to contact with offset: ${offsetPosition}`)
+            }
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            })
+            
+            // Re-adjust after a delay in case content shifted
             setTimeout(() => {
-              const pageHeight = document.documentElement.scrollHeight
-              const windowHeight = window.innerHeight
-
-              if (process.env.NODE_ENV === 'development') {
-                console.log(`Scrolling to contact (bottom of page): ${pageHeight - windowHeight}`)
+              const contactEl = document.getElementById('contact')
+              if (contactEl) {
+                const newRect = contactEl.getBoundingClientRect()
+                const currentPos = window.scrollY
+                const targetPos = currentPos + newRect.top - headerOffset
+                
+                // Only adjust if we're off by more than 10px
+                if (Math.abs(newRect.top - headerOffset) > 10) {
+                  window.scrollTo({
+                    top: targetPos,
+                    behavior: 'smooth',
+                  })
+                }
               }
-
-              window.scrollTo({
-                top: pageHeight - windowHeight,
-                behavior: 'smooth',
-              })
-            }, 100)
+            }, 800)
           } else {
             // Normal scroll for other sections
             const currentScroll = window.scrollY || window.pageYOffset
