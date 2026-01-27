@@ -333,14 +333,15 @@ export default function ServiceDetail() {
                 e.stopPropagation(); // Also stop event bubbling
                 // #region agent log
                 const targetUrl = `${window.location.origin}/#contact`;
-                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:2026-01-27-19:50] Request Quote clicked', {targetUrl:targetUrl,currentUrl:window.location.href,origin:window.location.origin,hypothesisId:'E'});
+                alert(`Navigating to: ${targetUrl}`);
+                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:v19:53] BEFORE navigation', {targetUrl:targetUrl,currentUrl:window.location.href,origin:window.location.origin,hash:'#contact',hypothesisId:'E'});
                 // #endregion
-                console.log('[DEBUG ServiceDetail.jsx:339] About to navigate to:', targetUrl);
+                console.log('[DEBUG ServiceDetail.jsx:339] Setting window.location.href to:', targetUrl);
                 window.location.href = targetUrl;
-                console.log('[DEBUG ServiceDetail.jsx:341] Navigation command sent');
+                console.log('[DEBUG ServiceDetail.jsx:341] After setting href (this may not show)');
               }}
             >
-              Request a Quote [v19:45-FIXED]
+              Request a Quote [v19:53]
             </a>
           </motion.div>
         </div>
