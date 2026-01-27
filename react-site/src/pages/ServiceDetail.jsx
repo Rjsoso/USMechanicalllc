@@ -328,6 +328,11 @@ export default function ServiceDetail() {
             <a
               href="/#contact"
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
+              onClick={(e) => {
+                // #region agent log
+                fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ServiceDetail.jsx:332',message:'Request Quote clicked',data:{href:'/#contact',currentUrl:window.location.href},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
+                // #endregion
+              }}
             >
               Request a Quote
             </a>

@@ -42,6 +42,9 @@ export default function Home() {
 
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:44',message:'useLayoutEffect START',data:{hash:window.location.hash,href:window.location.href,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     if (!initialScrollDone.current) {
       // On page reload, clear location state immediately
       if (isPageReload.current) {
@@ -60,10 +63,16 @@ export default function Home() {
           if (!validSections.includes(urlHash)) {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:63',message:'CLEARING invalid hash',data:{hash:window.location.hash,urlHash:urlHash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+            // #endregion
             window.history.replaceState({}, '', window.location.pathname)
           } else {
             if (process.env.NODE_ENV === 'development')
               console.log('Valid hash detected, allowing browser to handle:', window.location.hash)
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:67',message:'Valid hash - NOT clearing',data:{hash:window.location.hash,urlHash:urlHash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+            // #endregion
             // Don't clear valid hashes - let browser handle the scroll
             return
           }
@@ -83,6 +92,10 @@ export default function Home() {
     const scrollTo = location.state?.scrollTo
     const urlHash = window.location.hash.replace('#', '')
     const targetSection = scrollTo || urlHash
+    
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:82',message:'useEffect START',data:{scrollTo:scrollTo,urlHash:urlHash,targetSection:targetSection,isPageReload:isPageReload.current,locationHash:location.hash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
     
     if (process.env.NODE_ENV === 'development')
       console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo, 'urlHash:', urlHash)
@@ -107,10 +120,22 @@ export default function Home() {
       const isLazySection = targetSection === 'contact'
       const initialDelay = isLazySection ? 300 : 0
       
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:111',message:'About to scroll',data:{targetSection:targetSection,isLazySection:isLazySection,initialDelay:initialDelay},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
+      
       setTimeout(() => {
+        // #region agent log
+        const contactEl = document.getElementById('contact');
+        fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:115',message:'BEFORE scrollToSection',data:{targetSection:targetSection,contactElementExists:!!contactEl,contactElementVisible:contactEl?contactEl.offsetParent!==null:false},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+        // #endregion
         scrollToSection(targetSection, 180, isLazySection ? 100 : 50, 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
+          
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:119',message:'AFTER scrollToSection',data:{success:success,currentHash:window.location.hash,scrollY:window.scrollY},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+          // #endregion
           
           // Clear only the location.state, but keep the hash in the URL for direct navigation
           if (scrollTo) {
