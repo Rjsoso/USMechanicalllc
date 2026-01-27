@@ -50,6 +50,27 @@ export default defineType({
         return true
       }),
     },
+    {
+      name: 'secondButtonText',
+      title: 'Second Button Text',
+      description: 'Optional second call-to-action button text (e.g., "Apply"). Leave empty to hide the second button.',
+      type: 'string',
+      validation: (Rule) => Rule.max(50),
+    },
+    {
+      name: 'secondButtonLink',
+      title: 'Second Button Link',
+      description: 'URL or anchor link for the second button (e.g., /careers or #careers). Only used if second button text is provided.',
+      type: 'string',
+      validation: (Rule) => Rule.custom((value, context) => {
+        const doc = context?.document as any
+        const hasSecondButtonText = doc?.secondButtonText && doc.secondButtonText.trim() !== ''
+        if (hasSecondButtonText && !value) {
+          return 'Second button link is required when second button text is provided'
+        }
+        return true
+      }),
+    },
   ],
   preview: {
     select: {

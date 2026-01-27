@@ -9,6 +9,8 @@ const defaultHeroData = {
   subtext: '',
   buttonText: '',
   buttonLink: '#contact',
+  secondButtonText: '',
+  secondButtonLink: '',
   backgroundImage: null,
 }
 
@@ -38,7 +40,9 @@ function HeroSection() {
             headline,
             subtext,
             buttonText,
-            buttonLink
+            buttonLink,
+            secondButtonText,
+            secondButtonLink
           }`
         )
         .then(data => {
@@ -56,7 +60,9 @@ function HeroSection() {
                 headline,
                 subtext,
                 buttonText,
-                buttonLink
+                buttonLink,
+                secondButtonText,
+                secondButtonLink
               }`
             )
           }
@@ -69,6 +75,8 @@ function HeroSection() {
               ...data,
               buttonText: data.buttonText || '',
               buttonLink: data.buttonLink || defaultHeroData.buttonLink,
+              secondButtonText: data.secondButtonText || '',
+              secondButtonLink: data.secondButtonLink || '',
             }
 
             setHeroData(heroDataWithDefaults)
@@ -195,21 +203,32 @@ function HeroSection() {
           {heroData.subtext}
         </motion.p>
 
-        {/* CTA Button - only show if buttonText is provided */}
-        {heroData.buttonText && heroData.buttonText.trim() !== '' && (
+        {/* CTA Buttons - show if either buttonText or secondButtonText is provided */}
+        {((heroData.buttonText && heroData.buttonText.trim() !== '') ||
+          (heroData.secondButtonText && heroData.secondButtonText.trim() !== '')) && (
           <motion.div
-            className="mt-2"
+            className="mt-2 flex flex-col gap-4 sm:flex-row sm:justify-center"
             style={{ marginTop: '-20px' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <a
-              href={heroData.buttonLink || '#contact'}
-              className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300"
-            >
-              {heroData.buttonText}
-            </a>
+            {heroData.buttonText && heroData.buttonText.trim() !== '' && (
+              <a
+                href={heroData.buttonLink || '#contact'}
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300"
+              >
+                {heroData.buttonText}
+              </a>
+            )}
+            {heroData.secondButtonText && heroData.secondButtonText.trim() !== '' && (
+              <a
+                href={heroData.secondButtonLink || '#careers'}
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300"
+              >
+                {heroData.secondButtonText}
+              </a>
+            )}
           </motion.div>
         )}
       </div>
