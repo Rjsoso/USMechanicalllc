@@ -26,6 +26,10 @@ export default function Home() {
   const targetScrollSlideRef = useRef(0)
   const animationFrameRef = useRef(null)
 
+  // Contact slide animation state
+  const [contactSlide, setContactSlide] = useState(300)
+  const contactAnimationTriggered = useRef(false)
+
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
     !location.state?.scrollTo &&
@@ -207,6 +211,63 @@ export default function Home() {
     }
   }, [])
 
+  // Contact section slide-out animation - triggers once at 75% through Careers
+  useEffect(() => {
+    // Skip animation if navigating directly to contact
+    const isDirectContactNavigation = 
+      location.state?.scrollTo === 'contact' || 
+      window.location.hash === '#contact'
+    
+    if (isDirectContactNavigation) {
+      contactAnimationTriggered.current = true
+      setContactSlide(0)
+      return
+    }
+
+    let rafId = null
+    let lastScrollTime = 0
+    const THROTTLE = 8 // 120fps max
+
+    const handleContactScroll = () => {
+      // Only run once per page load
+      if (contactAnimationTriggered.current) return
+
+      const now = Date.now()
+      if (now - lastScrollTime < THROTTLE) return
+      lastScrollTime = now
+
+      if (rafId) cancelAnimationFrame(rafId)
+
+      rafId = requestAnimationFrame(() => {
+        const careersSection = document.querySelector('#careers')
+        if (!careersSection) return
+
+        const rect = careersSection.getBoundingClientRect()
+        const careersTop = rect.top + window.scrollY
+        const careersHeight = rect.height
+        const scrollPosition = window.scrollY + window.innerHeight
+
+        // Trigger at 75% through careers section
+        const triggerPoint = careersTop + (careersHeight * 0.75)
+
+        if (scrollPosition >= triggerPoint) {
+          contactAnimationTriggered.current = true
+          setContactSlide(0)
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleContactScroll, { passive: true })
+    window.addEventListener('resize', handleContactScroll)
+    handleContactScroll() // Check initial state
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll', handleContactScroll)
+      window.removeEventListener('resize', handleContactScroll)
+    }
+  }, [location.state?.scrollTo])
+
   return (
     <>
       <SEO
@@ -296,7 +357,14 @@ export default function Home() {
               </section>
             }
           >
-            <Careers />
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 4,
+              }}
+            >
+              <Careers />
+            </div>
           </Suspense>
 
           <Suspense
@@ -319,7 +387,22 @@ export default function Home() {
               </section>
             }
           >
-            <Contact />
+            <div
+              style={{
+                transform: `translate3d(0, ${contactSlide}px, 0)`,
+                WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
+                transition: 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                willChange: contactAnimationTriggered.current ? 'auto' : 'transform',
+                transformStyle: 'preserve-3d',
+                WebkitTransformStyle: 'preserve-3d',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                position: 'relative',
+                zIndex: 3,
+              }}
+            >
+              <Contact />
+            </div>
           </Suspense>
         </div>
       </main>
