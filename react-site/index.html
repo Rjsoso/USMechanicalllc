@@ -189,9 +189,13 @@
       if (history.state) {
         history.replaceState({}, document.title);
       }
-      // Clear any URL hash that might cause scrolling
+      // Clear any INVALID URL hash that might cause scrolling
+      // BUT preserve valid section hashes like #contact
       if (window.location.hash) {
-        history.replaceState({}, '', window.location.pathname);
+        const validHashes = ['#contact', '#services', '#portfolio', '#about', '#safety', '#careers', '#hero'];
+        if (!validHashes.includes(window.location.hash)) {
+          history.replaceState({}, '', window.location.pathname);
+        }
       }
       // Force immediate scroll to top
       window.scrollTo(0, 0);
