@@ -27,7 +27,7 @@ export default function Home() {
   const animationFrameRef = useRef(null)
 
   // Contact slide animation state
-  const [contactSlide, setContactSlide] = useState(300)
+  const [contactSlide, setContactSlide] = useState(-300)
   const contactAnimationTriggered = useRef(false)
 
   // Detect if this is a page reload (not navigation)
