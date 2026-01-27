@@ -90,6 +90,9 @@ export default function Careers() {
       style={{
         marginTop: '-20rem',
         backgroundColor: '#f5f5f5',
+        overflow: 'hidden',
+        position: 'relative',
+        zIndex: 4,
         ...(backgroundImageUrl && {
           backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
