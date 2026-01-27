@@ -19,7 +19,7 @@ export default function ProjectModal({ project, onClose }) {
   }
 
   // Preload adjacent images for smooth transitions
-  const preloadAdjacentImages = () => {
+  useEffect(() => {
     if (hasMultipleImages) {
       const nextIndex = (currentImageIndex + 1) % images.length
       const prevIndex = (currentImageIndex - 1 + images.length) % images.length
@@ -31,12 +31,7 @@ export default function ProjectModal({ project, onClose }) {
         }
       })
     }
-  }
-
-  // Preload adjacent images when current image changes
-  if (hasMultipleImages) {
-    preloadAdjacentImages()
-  }
+  }, [currentImageIndex, hasMultipleImages, images])
 
   return (
     <AnimatePresence>
