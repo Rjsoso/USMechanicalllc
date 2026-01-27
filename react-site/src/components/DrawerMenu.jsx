@@ -82,7 +82,15 @@ const DrawerMenu = () => {
     const scrollWithOffset = () => {
       const element = document.querySelector(href)
       if (element) {
-        const headerOffset = 180
+        const sectionOffsets = {
+          '#services': 100,
+          '#portfolio': 120,
+          '#contact': 180,
+          '#about': 180,
+          '#safety': 180,
+          '#careers': 180,
+        }
+        const headerOffset = sectionOffsets[href] || 180
         const elementPosition = element.getBoundingClientRect().top
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 

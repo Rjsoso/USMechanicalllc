@@ -1,6 +1,8 @@
 import { useEffect, useState, memo } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
+import { navigateToSection } from '../utils/scrollToSection'
 
 // Fallback hero data
 const defaultHeroData = {
@@ -23,6 +25,8 @@ const generateYearColor = () => {
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [yearColor] = useState(() => generateYearColor())
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const fetchHero = () => {
@@ -214,20 +218,26 @@ function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {heroData.buttonText && heroData.buttonText.trim() !== '' && (
-              <a
-                href={heroData.buttonLink || '#contact'}
-                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300"
+              <button
+                onClick={() => {
+                  const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
+                  navigateToSection(sectionId, navigate, location.pathname)
+                }}
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
               >
                 {heroData.buttonText}
-              </a>
+              </button>
             )}
             {heroData.secondButtonText && heroData.secondButtonText.trim() !== '' && (
-              <a
-                href={heroData.secondButtonLink || '#careers'}
-                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300"
+              <button
+                onClick={() => {
+                  const sectionId = (heroData.secondButtonLink || '#careers').replace('#', '')
+                  navigateToSection(sectionId, navigate, location.pathname)
+                }}
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
               >
                 {heroData.secondButtonText}
-              </a>
+              </button>
             )}
           </motion.div>
         )}

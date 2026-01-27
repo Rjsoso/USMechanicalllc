@@ -140,3 +140,60 @@ export function navigateAndScroll(sectionId, navigate) {
       console.log(`Navigated with state: { scrollTo: ${sectionId} }`)
   }
 }
+
+/**
+ * Navigate to a section with proper scroll behavior (modeled after working drawer menu)
+ * @param {string} sectionId - The ID of the section to scroll to (without #)
+ * @param {function} navigate - React Router navigate function
+ * @param {string} currentPath - Current pathname (default: '/')
+ */
+export function navigateToSection(sectionId, navigate, currentPath = '/') {
+  // Section-specific offsets to account for padding
+  const sectionOffsets = {
+    'services': 100,
+    'portfolio': 120,
+    'contact': 180,
+    'about': 180,
+    'safety': 180,
+    'careers': 180,
+    'hero': 0,
+  }
+  
+  const scrollWithOffset = () => {
+    const element = document.querySelector(`#${sectionId}`)
+    if (element) {
+      const headerOffset = sectionOffsets[sectionId] || 180
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+      return true
+    }
+    return false
+  }
+
+  // If we're on a different page, navigate to home first
+  if (currentPath !== '/') {
+    sessionStorage.setItem('scrollTo', sectionId)
+    navigate('/')
+
+    // Retry mechanism for lazy-loaded sections
+    let retryCount = 0
+    const maxRetries = 20
+    const attemptScroll = () => {
+      if (scrollWithOffset()) {
+        sessionStorage.removeItem('scrollTo')
+      } else if (retryCount < maxRetries) {
+        retryCount++
+        setTimeout(attemptScroll, 100)
+      }
+    }
+    setTimeout(attemptScroll, 150)
+  } else {
+    // Already on home page, scroll immediately
+    scrollWithOffset()
+  }
+}

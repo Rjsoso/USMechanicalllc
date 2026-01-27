@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
-import { navigateAndScroll } from '../utils/scrollToSection'
+import { navigateToSection } from '../utils/scrollToSection'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -14,6 +14,7 @@ import FadeInWhenVisible from '../components/FadeInWhenVisible'
 export default function ServiceDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [serviceData, setServiceData] = useState(null)
   const [servicesList, setServicesList] = useState([])
   const [loading, setLoading] = useState(true)
@@ -181,7 +182,7 @@ export default function ServiceDetail() {
           {/* Back + Prev/Next */}
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <button
-              onClick={() => navigateAndScroll('services', navigate)}
+              onClick={() => navigateToSection('services', navigate, location.pathname)}
               className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

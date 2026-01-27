@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
+import { navigateToSection } from '../utils/scrollToSection'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -11,6 +12,7 @@ import FadeInWhenVisible from '../components/FadeInWhenVisible'
 export default function CategoryDetail() {
   const { categoryId } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [categoryData, setCategoryData] = useState(null)
   const [categoriesList, setCategoriesList] = useState([])
   const [loading, setLoading] = useState(true)
@@ -171,30 +173,7 @@ export default function CategoryDetail() {
           {/* Back + Prev/Next */}
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <button
-              onClick={() => {
-                sessionStorage.setItem('scrollTo', 'portfolio')
-                navigate('/')
-                let retryCount = 0
-                const maxRetries = 20
-                const scrollToPortfolio = () => {
-                  const portfolioElement = document.querySelector('#portfolio')
-                  if (portfolioElement) {
-                    const headerOffset = 180
-                    const elementPosition = portfolioElement.getBoundingClientRect().top
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-                    window.scrollTo({
-                      top: offsetPosition,
-                      behavior: 'smooth',
-                    })
-                    sessionStorage.removeItem('scrollTo')
-                  } else if (retryCount < maxRetries) {
-                    retryCount++
-                    setTimeout(scrollToPortfolio, 150)
-                  }
-                }
-                setTimeout(scrollToPortfolio, 300)
-              }}
+              onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
               className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

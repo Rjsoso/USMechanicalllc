@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import { navigateAndScroll } from '../utils/scrollToSection'
+import { navigateToSection } from '../utils/scrollToSection'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -12,6 +12,7 @@ import FadeInWhenVisible from '../components/FadeInWhenVisible'
 export default function ProjectDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [projectData, setProjectData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -150,7 +151,7 @@ export default function ProjectDetail() {
           {/* Back Buttons */}
           <div className="mb-8 flex flex-wrap items-center gap-4">
             <button
-              onClick={() => navigateAndScroll('portfolio', navigate)}
+              onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
               className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
