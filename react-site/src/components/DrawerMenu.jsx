@@ -1,0 +1,269 @@
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'motion/react'
+import { client } from '../utils/sanity'
+import './DrawerMenu.css'
+
+const DrawerMenu = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [sections, setSections] = useState([])
+  const navigate = useNavigate()
+  const location = useLocation()
+  const hamburgerRef = useRef(null)
+  const drawerRef = useRef(null)
+
+  // Default fallback navigation structure
+  const defaultSections = [
+    {
+      label: 'Services',
+      links: [
+        { label: 'Our Services', href: '#services', ariaLabel: 'View our services' },
+        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'View our portfolio' },
+      ],
+    },
+    {
+      label: 'Company',
+      links: [
+        { label: 'About Us', href: '#about', ariaLabel: 'Learn about us' },
+        { label: 'Safety', href: '#safety', ariaLabel: 'Our safety practices' },
+      ],
+    },
+    {
+      label: 'Connect',
+      links: [{ label: 'Contact', href: '#contact', ariaLabel: 'Contact us' }],
+    },
+  ]
+
+  // Fetch navigation data from Sanity
+  useEffect(() => {
+    const fetchNavData = async () => {
+      try {
+        const headerData = await client.fetch(
+          `*[_type == "headerSection"][0]{
+            sections[] {
+              label,
+              links[] {
+                label,
+                href,
+                ariaLabel
+              }
+            }
+          }`
+        )
+
+        const fetchedSections =
+          headerData?.sections && headerData.sections.length > 0
+            ? headerData.sections
+            : defaultSections
+
+        setSections(fetchedSections)
+      } catch (error) {
+        console.error('Error fetching navigation data:', error)
+        setSections(defaultSections)
+      }
+    }
+
+    fetchNavData()
+  }, [])
+
+  // Handle scroll to section with offset
+  const handleLinkClick = href => {
+    // Close drawer first
+    setIsOpen(false)
+
+    const scrollWithOffset = () => {
+      const element = document.querySelector(href)
+      if (element) {
+        const headerOffset = 180
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+        return true
+      }
+      return false
+    }
+
+    // If we're on a different page, navigate to home first
+    if (location.pathname !== '/') {
+      const sectionName = href.replace('#', '')
+      sessionStorage.setItem('scrollTo', sectionName)
+      navigate('/')
+
+      // Wait for navigation to complete, then scroll with retry mechanism
+      let retryCount = 0
+      const maxRetries = 20
+      const attemptScroll = () => {
+        if (scrollWithOffset()) {
+          sessionStorage.removeItem('scrollTo')
+        } else if (retryCount < maxRetries) {
+          retryCount++
+          setTimeout(attemptScroll, 150)
+        }
+      }
+      setTimeout(attemptScroll, 300)
+    } else {
+      // Already on home page, just scroll
+      scrollWithOffset()
+    }
+  }
+
+  // Toggle drawer open/closed
+  const toggleDrawer = () => {
+    setIsOpen(prev => !prev)
+  }
+
+  // Close drawer on escape key
+  useEffect(() => {
+    const handleEscape = e => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false)
+        // Return focus to hamburger button
+        hamburgerRef.current?.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isOpen])
+
+  // Focus trap when drawer is open
+  useEffect(() => {
+    if (isOpen && drawerRef.current) {
+      const focusableElements = drawerRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+
+      const handleTab = e => {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            // Shift + Tab
+            if (document.activeElement === firstElement) {
+              e.preventDefault()
+              lastElement?.focus()
+            }
+          } else {
+            // Tab
+            if (document.activeElement === lastElement) {
+              e.preventDefault()
+              firstElement?.focus()
+            }
+          }
+        }
+      }
+
+      document.addEventListener('keydown', handleTab)
+      return () => document.removeEventListener('keydown', handleTab)
+    }
+  }, [isOpen])
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  return (
+    <>
+      {/* Hamburger Button */}
+      <button
+        ref={hamburgerRef}
+        className={`drawer-hamburger ${isOpen ? 'open' : ''}`}
+        onClick={toggleDrawer}
+        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isOpen}
+        aria-controls="drawer-menu"
+      >
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+      </button>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="drawer-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={toggleDrawer}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Drawer Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.nav
+            ref={drawerRef}
+            id="drawer-menu"
+            className="drawer-panel"
+            role="navigation"
+            aria-label="Main navigation"
+            aria-hidden={!isOpen}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 30,
+              duration: 0.4,
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={{ left: 0, right: 0.2 }}
+            onDragEnd={(_, info) => {
+              if (info.offset.x > 100) {
+                setIsOpen(false)
+              }
+            }}
+          >
+            <div className="drawer-content">
+              {sections.map((section, idx) => (
+                <motion.div
+                  key={`${section.label}-${idx}`}
+                  className="drawer-section"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 + 0.1 }}
+                >
+                  <h3 className="drawer-section-label">{section.label}</h3>
+                  <div className="drawer-section-links">
+                    {section.links?.map((link, i) => (
+                      <button
+                        key={`${link.label}-${i}`}
+                        className="drawer-link"
+                        onClick={() => handleLinkClick(link.href)}
+                        aria-label={link.ariaLabel || link.label}
+                      >
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
+export default DrawerMenu

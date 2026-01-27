@@ -1,0 +1,343 @@
+/* Hamburger Button */
+.drawer-hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  padding: 0;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.drawer-hamburger:hover {
+  transform: scale(1.05);
+}
+
+.drawer-hamburger:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Hamburger Lines */
+.hamburger-line {
+  width: 24px;
+  height: 3px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+/* Hamburger to X animation */
+.drawer-hamburger.open .hamburger-line:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.drawer-hamburger.open .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.drawer-hamburger.open .hamburger-line:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Overlay */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 98;
+  cursor: pointer;
+}
+
+/* Drawer Panel */
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  background: linear-gradient(180deg, #0d0716 0%, #170d27 50%, #271e37 100%);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.drawer-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawer-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.drawer-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Drawer Content */
+.drawer-content {
+  padding: 2rem;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Section */
+.drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.drawer-section-label {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+/* Section Links */
+.drawer-section-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.drawer-link {
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  font-size: 16px;
+  padding: 8px 0;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.drawer-link::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.2s ease;
+}
+
+.drawer-link:hover {
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.drawer-link:hover::after {
+  width: 100%;
+}
+
+.drawer-link:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Tablet Styles */
+@media (max-width: 1024px) {
+  .drawer-panel {
+    width: 350px;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .drawer-hamburger {
+    top: 16px;
+    right: 16px;
+  }
+
+  .drawer-panel {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .drawer-content {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .drawer-section-label {
+    font-size: 18px;
+  }
+
+  .drawer-link {
+    font-size: 15px;
+    padding: 6px 0;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 375px) {
+  .drawer-panel {
+    width: 85%;
+    max-width: 280px;
+  }
+
+  .drawer-content {
+    padding: 1.25rem;
+  }
+
+  .drawer-section-label {
+    font-size: 17px;
+  }
+
+  .drawer-link {
+    font-size: 14px;
+  }
+}
+
+/* Mobile Landscape */
+@media (max-height: 600px) and (orientation: landscape) {
+  .drawer-hamburger {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    gap: 5px;
+  }
+
+  .hamburger-line {
+    width: 20px;
+    height: 2.5px;
+  }
+
+  .drawer-hamburger.open .hamburger-line:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+  }
+
+  .drawer-hamburger.open .hamburger-line:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
+  }
+
+  .drawer-panel {
+    width: 280px;
+  }
+
+  .drawer-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .drawer-section {
+    gap: 0.5rem;
+  }
+
+  .drawer-section-label {
+    font-size: 16px;
+  }
+
+  .drawer-link {
+    font-size: 14px;
+    padding: 4px 0;
+  }
+}
+
+/* Very Short Landscape */
+@media (max-height: 500px) and (orientation: landscape) {
+  .drawer-hamburger {
+    top: 8px;
+    right: 8px;
+  }
+
+  .drawer-panel {
+    width: 260px;
+  }
+
+  .drawer-content {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .drawer-section-label {
+    font-size: 15px;
+  }
+
+  .drawer-link {
+    font-size: 13px;
+  }
+}
+
+/* Large Desktop - slightly adjust hamburger position */
+@media (min-width: 1440px) {
+  .drawer-hamburger {
+    top: 24px;
+    right: 24px;
+  }
+}
+
+/* Extra Large Desktop */
+@media (min-width: 1920px) {
+  .drawer-hamburger {
+    top: 28px;
+    right: 28px;
+  }
+
+  .drawer-panel {
+    width: 420px;
+  }
+
+  .drawer-content {
+    padding: 2.5rem;
+  }
+
+  .drawer-section-label {
+    font-size: 22px;
+  }
+
+  .drawer-link {
+    font-size: 17px;
+  }
+}
+
+/* Animation performance optimization */
+@media (prefers-reduced-motion: reduce) {
+  .drawer-hamburger,
+  .hamburger-line,
+  .drawer-overlay,
+  .drawer-panel,
+  .drawer-link {
+    transition: none !important;
+    animation: none !important;
+  }
+}
