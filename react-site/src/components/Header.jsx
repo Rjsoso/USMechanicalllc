@@ -47,14 +47,15 @@ function Header() {
     } else {
       // Navigate to home page and scroll to hero
       navigate('/')
-      setTimeout(() => {
+      // Use requestAnimationFrame for smoother, faster execution
+      requestAnimationFrame(() => {
         const heroElement = document.querySelector('#hero')
         if (heroElement) {
           heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' })
         }
-      }, 100)
+      })
     }
   }
 

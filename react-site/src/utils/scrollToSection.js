@@ -17,10 +17,8 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
     const baseRetryDelay = retryDelay
 
     const attemptScroll = () => {
-      // Exponential backoff for lazy-loaded sections
-      const currentDelay = isLazySection 
-        ? Math.min(baseRetryDelay * Math.pow(1.1, Math.floor(retryCount / 10)), 500)
-        : baseRetryDelay
+      // Faster, consistent retry delay
+      const currentDelay = retryDelay
 
       if (process.env.NODE_ENV === 'development') {
         console.log(`Attempt ${retryCount + 1}/${effectiveMaxRetries} - Looking for #${sectionId}`)
@@ -52,53 +50,19 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // Special handling for contact section - scroll with offset
-          if (sectionId === 'contact') {
-            const currentScroll = window.scrollY || window.pageYOffset
-            const elementPosition = rect.top
-            const offsetPosition = currentScroll + elementPosition - headerOffset
+          // Unified scroll handling for all sections
+          const currentScroll = window.scrollY || window.pageYOffset
+          const elementPosition = rect.top
+          const offsetPosition = currentScroll + elementPosition - headerOffset
 
-            if (process.env.NODE_ENV === 'development') {
-              console.log(`Scrolling to contact with offset: ${offsetPosition}`)
-            }
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth',
-            })
-            
-            // Re-adjust after a delay in case content shifted
-            setTimeout(() => {
-              const contactEl = document.getElementById('contact')
-              if (contactEl) {
-                const newRect = contactEl.getBoundingClientRect()
-                const currentPos = window.scrollY
-                const targetPos = currentPos + newRect.top - headerOffset
-                
-                // Only adjust if we're off by more than 10px
-                if (Math.abs(newRect.top - headerOffset) > 10) {
-                  window.scrollTo({
-                    top: targetPos,
-                    behavior: 'smooth',
-                  })
-                }
-              }
-            }, 800)
-          } else {
-            // Normal scroll for other sections
-            const currentScroll = window.scrollY || window.pageYOffset
-            const elementPosition = rect.top
-            const offsetPosition = currentScroll + elementPosition - headerOffset
-
-            if (process.env.NODE_ENV === 'development') {
-              console.log(`Scrolling to ${sectionId}: ${offsetPosition}`)
-            }
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth',
-            })
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`Scrolling to ${sectionId} with offset: ${offsetPosition}`)
           }
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+          })
 
           if (process.env.NODE_ENV === 'development') {
             console.log(`✓ Successfully scrolled to section: ${sectionId}`)
@@ -146,8 +110,8 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
       return false
     }
 
-    // Start first attempt with delay for page to settle
-    setTimeout(attemptScroll, 150)
+    // Start first attempt immediately with requestAnimationFrame for faster execution
+    requestAnimationFrame(() => attemptScroll())
   })
 }
 

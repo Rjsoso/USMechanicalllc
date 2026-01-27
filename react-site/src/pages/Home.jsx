@@ -105,11 +105,11 @@ export default function Home() {
       
       // For lazy-loaded sections like contact, give time for Suspense to resolve
       const isLazySection = targetSection === 'contact'
-      const initialDelay = isLazySection ? 400 : 0
+      const initialDelay = isLazySection ? 150 : 0
       
       setTimeout(() => {
         // Use smooth scroll with retry mechanism for lazy sections
-        scrollToSection(targetSection, 180, isLazySection ? 200 : 50, isLazySection ? 50 : 200).then(success => {
+        scrollToSection(targetSection, 180, isLazySection ? 100 : 50, isLazySection ? 50 : 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
           

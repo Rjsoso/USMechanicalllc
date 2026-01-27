@@ -69,6 +69,11 @@ const DrawerMenu = () => {
     fetchNavData()
   }, [])
 
+  // Preload Contact component on hover for faster navigation
+  const preloadContact = () => {
+    import('../pages/Contact').catch(() => {})
+  }
+
   // Handle scroll to section with offset
   const handleLinkClick = href => {
     // Close drawer first
@@ -81,9 +86,11 @@ const DrawerMenu = () => {
         const elementPosition = element.getBoundingClientRect().top
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
+        // Use instant scroll for same-page, smooth for cross-page
+        const behavior = location.pathname === '/' ? 'instant' : 'smooth'
         window.scrollTo({
           top: offsetPosition,
-          behavior: 'smooth',
+          behavior: behavior,
         })
         return true
       }
@@ -96,7 +103,7 @@ const DrawerMenu = () => {
       sessionStorage.setItem('scrollTo', sectionName)
       navigate('/')
 
-      // Wait for navigation to complete, then scroll with retry mechanism
+      // Use requestAnimationFrame for faster execution with retry mechanism
       let retryCount = 0
       const maxRetries = 20
       const attemptScroll = () => {
@@ -104,12 +111,12 @@ const DrawerMenu = () => {
           sessionStorage.removeItem('scrollTo')
         } else if (retryCount < maxRetries) {
           retryCount++
-          setTimeout(attemptScroll, 150)
+          requestAnimationFrame(() => setTimeout(attemptScroll, 100))
         }
       }
-      setTimeout(attemptScroll, 300)
+      requestAnimationFrame(() => setTimeout(attemptScroll, 150))
     } else {
-      // Already on home page, just scroll
+      // Already on home page, scroll instantly
       scrollWithOffset()
     }
   }
@@ -254,6 +261,7 @@ const DrawerMenu = () => {
                         key={`${link.label}-${i}`}
                         className="drawer-link"
                         onClick={() => handleLinkClick(link.href)}
+                        onMouseEnter={link.href === '#contact' || link.href === '#careers' ? preloadContact : undefined}
                         aria-label={link.ariaLabel || link.label}
                       >
                         {link.label}
