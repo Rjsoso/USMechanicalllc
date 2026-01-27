@@ -239,27 +239,62 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <Suspense fallback={<div className="bg-black py-16"></div>}>
+            <Suspense fallback={<div className="bg-black" style={{ minHeight: '200px' }}></div>}>
               <CompanyStats />
             </Suspense>
 
-            <Suspense fallback={<div className="bg-black py-16"></div>}>
+            <Suspense 
+              fallback={
+                <section 
+                  id="services" 
+                  className="bg-transparent pt-12 text-center text-white" 
+                  style={{ minHeight: '600px' }}
+                >
+                  <div className="animate-pulse">
+                    <div className="mx-auto h-8 w-64 bg-white/10 rounded mb-4"></div>
+                    <div className="mx-auto h-4 w-96 bg-white/10 rounded"></div>
+                  </div>
+                </section>
+              }
+            >
               <ServicesSection />
             </Suspense>
 
             <Suspense
-              fallback={<div className="bg-black py-20 text-center text-white">Loading...</div>}
+              fallback={
+                <section 
+                  id="portfolio" 
+                  className="bg-transparent pt-24 pb-0 text-white" 
+                  style={{ minHeight: '700px' }}
+                >
+                  <div className="animate-pulse text-center">
+                    <div className="mx-auto h-10 w-48 bg-white/10 rounded mb-6"></div>
+                    <div className="mx-auto h-4 w-80 bg-white/10 rounded"></div>
+                  </div>
+                </section>
+              }
             >
               <Portfolio />
             </Suspense>
 
-            <Suspense fallback={<div className="bg-black py-16"></div>}>
+            <Suspense fallback={<div className="bg-black" style={{ minHeight: '300px' }}></div>}>
               <LogoLoopSection />
             </Suspense>
           </div>
 
           <Suspense
-            fallback={<div className="bg-black py-20 text-center text-white">Loading...</div>}
+            fallback={
+              <section 
+                id="careers" 
+                className="bg-white pt-0 pb-24 text-black" 
+                style={{ minHeight: '800px' }}
+              >
+                <div className="animate-pulse text-center pt-20">
+                  <div className="mx-auto h-10 w-64 bg-gray-200 rounded mb-6"></div>
+                  <div className="mx-auto h-4 w-96 bg-gray-200 rounded"></div>
+                </div>
+              </section>
+            }
           >
             <Careers />
           </Suspense>
@@ -267,10 +302,20 @@ export default function Home() {
           <Suspense
             fallback={
               <section
-                className="bg-black py-20 text-center text-white"
-                style={{ minHeight: '60vh' }}
+                id="contact"
+                className="bg-black py-20 text-white"
+                style={{ minHeight: '80vh' }}
               >
-                Loading contact...
+                <div className="animate-pulse text-center">
+                  <div className="mx-auto h-10 w-72 bg-white/10 rounded mb-6"></div>
+                  <div className="mx-auto h-4 w-96 bg-white/10 rounded mb-8"></div>
+                  <div className="mx-auto max-w-2xl space-y-4">
+                    <div className="h-12 bg-white/10 rounded"></div>
+                    <div className="h-12 bg-white/10 rounded"></div>
+                    <div className="h-32 bg-white/10 rounded"></div>
+                    <div className="h-12 bg-white/10 rounded w-40"></div>
+                  </div>
+                </div>
               </section>
             }
           >
