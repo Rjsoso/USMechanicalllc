@@ -329,7 +329,7 @@ export default function ServiceDetail() {
               href={`${window.location.origin}/#contact`}
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
             >
-              Request a Quote [v20:10-PURE-A]
+              Request a Quote
             </a>
           </motion.div>
         </div>

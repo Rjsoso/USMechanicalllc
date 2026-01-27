@@ -42,9 +42,6 @@ export default function Home() {
 
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
-    // #region agent log
-    console.log('[DEBUG Home.jsx:44] useLayoutEffect START',{hash:window.location.hash,href:window.location.href,initialHash:window.__INITIAL_HASH__,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current,hypothesisId:'A'});
-    // #endregion
     if (!initialScrollDone.current) {
       // On page reload, clear location state immediately
       if (isPageReload.current) {
@@ -63,16 +60,10 @@ export default function Home() {
           if (!validSections.includes(urlHash)) {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
-            // #region agent log
-            console.log('[DEBUG Home.jsx:63] CLEARING invalid hash',{hash:window.location.hash,urlHash:urlHash,hypothesisId:'A'});
-            // #endregion
             window.history.replaceState({}, '', window.location.pathname)
           } else {
             if (process.env.NODE_ENV === 'development')
               console.log('Valid hash detected, allowing browser to handle:', window.location.hash)
-            // #region agent log
-            console.log('[DEBUG Home.jsx:67] Valid hash - NOT clearing',{hash:window.location.hash,urlHash:urlHash,hypothesisId:'A'});
-            // #endregion
             // Don't clear valid hashes - let browser handle the scroll
             return
           }
@@ -92,10 +83,6 @@ export default function Home() {
     const scrollTo = location.state?.scrollTo
     const urlHash = window.location.hash.replace('#', '')
     const targetSection = scrollTo || urlHash
-    
-    // #region agent log
-    console.log('[DEBUG Home.jsx:82] useEffect START',{scrollTo:scrollTo,urlHash:urlHash,targetSection:targetSection,isPageReload:isPageReload.current,locationHash:location.hash,hypothesisId:'C'});
-    // #endregion
     
     if (process.env.NODE_ENV === 'development')
       console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo, 'urlHash:', urlHash)
@@ -118,26 +105,13 @@ export default function Home() {
       
       // For lazy-loaded sections like contact, give extra time for Suspense to resolve AND images to load
       const isLazySection = targetSection === 'contact'
-      const initialDelay = isLazySection ? 600 : 0 // Increased from 300ms to 600ms
-      
-      // #region agent log
-      console.log('[DEBUG Home.jsx:111] About to scroll',{targetSection:targetSection,isLazySection:isLazySection,initialDelay:initialDelay,hypothesisId:'C'});
-      // #endregion
+      const initialDelay = isLazySection ? 600 : 0
       
       setTimeout(() => {
-        // #region agent log
-        const contactEl = document.getElementById('contact');
-        console.log('[DEBUG Home.jsx:115] BEFORE scrollToSection',{targetSection:targetSection,contactElementExists:!!contactEl,contactElementVisible:contactEl?contactEl.offsetParent!==null:false,hypothesisId:'B'});
-        // #endregion
-        
         // Use smooth scroll behavior with longer duration for lazy sections
         scrollToSection(targetSection, 180, isLazySection ? 150 : 50, isLazySection ? 400 : 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
-          
-          // #region agent log
-          console.log('[DEBUG Home.jsx:119] AFTER scrollToSection',{success:success,currentHash:window.location.hash,scrollY:window.scrollY,hypothesisId:'C'});
-          // #endregion
           
           // Clear only the location.state, but keep the hash in the URL for direct navigation
           if (scrollTo) {

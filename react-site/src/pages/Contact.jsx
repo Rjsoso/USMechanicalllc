@@ -13,11 +13,6 @@ import {
 } from '../utils/rateLimit'
 
 export default function Contact() {
-  // #region agent log
-  useEffect(() => {
-    console.log('[DEBUG Contact.jsx:16] Contact component MOUNTED',{contactElExists:!!document.getElementById('contact'),hypothesisId:'B'});
-  }, []);
-  // #endregion
   const [contactData, setContactData] = useState(null)
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
   const [loading, setLoading] = useState(true)
