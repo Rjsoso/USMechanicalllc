@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 import { navigateAndScroll } from '../utils/scrollToSection'
@@ -384,12 +384,12 @@ export default function ProjectDetail() {
             viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
-            <Link
-              to="/#contact"
+            <a
+              href="/#contact"
               className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
             >
               Request a Quote
-            </Link>
+            </a>
           </motion.div>
         </div>
       </main>
