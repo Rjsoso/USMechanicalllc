@@ -247,8 +247,8 @@ export default function Home() {
         const careersHeight = rect.height
         const scrollPosition = window.scrollY + window.innerHeight
 
-        // Trigger at 75% through careers section
-        const triggerPoint = careersTop + (careersHeight * 0.75)
+        // Trigger at 50% through careers section
+        const triggerPoint = careersTop + (careersHeight * 0.5)
 
         if (scrollPosition >= triggerPoint) {
           contactAnimationTriggered.current = true
@@ -387,22 +387,10 @@ export default function Home() {
               </section>
             }
           >
-            <div
-              style={{
-                transform: `translate3d(0, ${contactSlide}px, 0)`,
-                WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
-                transition: 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)',
-                willChange: contactAnimationTriggered.current ? 'auto' : 'transform',
-                transformStyle: 'preserve-3d',
-                WebkitTransformStyle: 'preserve-3d',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                position: 'relative',
-                zIndex: 3,
-              }}
-            >
-              <Contact />
-            </div>
+            <Contact 
+              slideOffset={contactSlide}
+              disableInternalAnimations={!contactAnimationTriggered.current}
+            />
           </Suspense>
         </div>
       </main>
