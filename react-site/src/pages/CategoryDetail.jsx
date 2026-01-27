@@ -384,7 +384,7 @@ export default function CategoryDetail() {
             </div>
           )}
         </div>
-      </main>
+      </motion.main>
       <Footer />
     </>
   )
