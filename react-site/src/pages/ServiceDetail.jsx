@@ -329,17 +329,18 @@ export default function ServiceDetail() {
               href="/#contact"
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
               onClick={(e) => {
+                e.preventDefault(); // FIRST - prevent default navigation
+                e.stopPropagation(); // Also stop event bubbling
                 // #region agent log
-                alert('Button clicked! Check console for details.');
-                console.log('[DEBUG ServiceDetail.jsx:332 BUILD:2026-01-27-19:42] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:42',hypothesisId:'E'});
+                alert('✅ NEW CODE RUNNING! Button clicked!');
+                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:2026-01-27-19:45] Request Quote clicked BEFORE navigation', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:45',hypothesisId:'E'});
                 // #endregion
-                // Prevent React Router from intercepting - force full page navigation
-                e.preventDefault();
-                console.log('[DEBUG ServiceDetail.jsx:338] About to navigate with window.location.href');
+                console.log('[DEBUG ServiceDetail.jsx:339] About to navigate with window.location.href');
                 window.location.href = '/#contact';
+                console.log('[DEBUG ServiceDetail.jsx:341] Navigation command sent');
               }}
             >
-              Request a Quote [NEW-v19:42]
+              Request a Quote [v19:45-FIXED]
             </a>
           </motion.div>
         </div>
