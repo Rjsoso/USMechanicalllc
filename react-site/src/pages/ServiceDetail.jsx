@@ -331,7 +331,7 @@ export default function ServiceDetail() {
               onClick={(e) => {
                 // #region agent log
                 alert('Button clicked! Check console for details.');
-                console.log('[DEBUG ServiceDetail.jsx:332 BUILD:2026-01-27-19:38] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:38',hypothesisId:'E'});
+                console.log('[DEBUG ServiceDetail.jsx:332 BUILD:2026-01-27-19:42] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:42',hypothesisId:'E'});
                 // #endregion
                 // Prevent React Router from intercepting - force full page navigation
                 e.preventDefault();
@@ -339,7 +339,7 @@ export default function ServiceDetail() {
                 window.location.href = '/#contact';
               }}
             >
-              Request a Quote
+              Request a Quote [NEW-v19:42]
             </a>
           </motion.div>
         </div>
