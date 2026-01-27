@@ -116,9 +116,9 @@ export default function Home() {
       if (process.env.NODE_ENV === 'development')
         console.log(`Home.jsx: Starting scroll to ${targetSection}`)
       
-      // For lazy-loaded sections like contact, give extra time for Suspense to resolve
+      // For lazy-loaded sections like contact, give extra time for Suspense to resolve AND images to load
       const isLazySection = targetSection === 'contact'
-      const initialDelay = isLazySection ? 300 : 0
+      const initialDelay = isLazySection ? 600 : 0 // Increased from 300ms to 600ms
       
       // #region agent log
       console.log('[DEBUG Home.jsx:111] About to scroll',{targetSection:targetSection,isLazySection:isLazySection,initialDelay:initialDelay,hypothesisId:'C'});
@@ -129,7 +129,9 @@ export default function Home() {
         const contactEl = document.getElementById('contact');
         console.log('[DEBUG Home.jsx:115] BEFORE scrollToSection',{targetSection:targetSection,contactElementExists:!!contactEl,contactElementVisible:contactEl?contactEl.offsetParent!==null:false,hypothesisId:'B'});
         // #endregion
-        scrollToSection(targetSection, 180, isLazySection ? 100 : 50, 200).then(success => {
+        
+        // Use smooth scroll behavior with longer duration for lazy sections
+        scrollToSection(targetSection, 180, isLazySection ? 150 : 50, isLazySection ? 400 : 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
           
