@@ -16,7 +16,7 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
 // Console message for curious developers
 console.log(
   '%c👷 Built with precision. %c🔧',
-  'font-size: 16px; font-weight: bold; color: #dc2626; padding: 4px 0; text-shadow: 0 0 5px #dc2626;',
+  'font-size: 16px; font-weight: bold; color: #ffffff; padding: 4px 0; text-shadow: 0 0 5px #ffffff;',
   'font-size: 16px;'
 )
 
@@ -27,7 +27,7 @@ console.log(
     '%c- The US Mechanical Team.',
   'font-size: 13px; color: #ffffff; line-height: 1.6; text-shadow: 0 0 5px #ffffff;',
   'font-size: 13px; color: #ffffff; line-height: 1.6; text-shadow: 0 0 5px #ffffff;',
-  'font-size: 13px; font-weight: bold; color: #dc2626; line-height: 1.6; text-shadow: 0 0 5px #dc2626;',
+  'font-size: 13px; font-weight: bold; color: #ffffff; line-height: 1.6; text-shadow: 0 0 5px #ffffff;',
   'font-size: 12px; color: #ffffff; font-style: italic; line-height: 1.6; text-shadow: 0 0 5px #ffffff;'
 )
 
