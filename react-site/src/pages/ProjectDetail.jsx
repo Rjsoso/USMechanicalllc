@@ -387,6 +387,11 @@ export default function ProjectDetail() {
             <a
               href="/#contact"
               className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
+              onClick={(e) => {
+                // Prevent React Router from intercepting - force full page navigation
+                e.preventDefault();
+                window.location.href = '/#contact';
+              }}
             >
               Request a Quote
             </a>
