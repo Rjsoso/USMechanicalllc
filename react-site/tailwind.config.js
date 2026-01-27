@@ -34,7 +34,7 @@ export default {
         muted: '#6b7076',
       },
       fontFamily: {
-        sans: ['Times New Roman', 'Times', 'serif'],
+        sans: ['Fjalla One', 'sans-serif'],
         display: ['Rubik', 'sans-serif'], // For titles
       },
       screens: {
