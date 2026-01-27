@@ -332,16 +332,13 @@ export default function ServiceDetail() {
                 e.preventDefault(); // FIRST - prevent default navigation
                 e.stopPropagation(); // Also stop event bubbling
                 // #region agent log
-                const targetUrl = `${window.location.origin}/#contact`;
-                alert(`Navigating to: ${targetUrl}`);
-                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:v19:53] BEFORE navigation', {targetUrl:targetUrl,currentUrl:window.location.href,origin:window.location.origin,hash:'#contact',hypothesisId:'E'});
+                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:v20:00] Using window.location.replace with hash');
                 // #endregion
-                console.log('[DEBUG ServiceDetail.jsx:339] Setting window.location.href to:', targetUrl);
-                window.location.href = targetUrl;
-                console.log('[DEBUG ServiceDetail.jsx:341] After setting href (this may not show)');
+                // Use window.location.replace() which may handle hash better
+                window.location.replace(`${window.location.origin}/#contact`);
               }}
             >
-              Request a Quote [v19:53]
+              Request a Quote [v20:00-REPLACE]
             </a>
           </motion.div>
         </div>

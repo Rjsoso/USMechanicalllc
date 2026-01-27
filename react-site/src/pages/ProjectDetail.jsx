@@ -391,8 +391,7 @@ export default function ProjectDetail() {
                 // Prevent React Router from intercepting - force full page navigation
                 e.preventDefault();
                 e.stopPropagation();
-                const targetUrl = `${window.location.origin}/#contact`;
-                window.location.href = targetUrl;
+                window.location.replace(`${window.location.origin}/#contact`);
               }}
             >
               Request a Quote
