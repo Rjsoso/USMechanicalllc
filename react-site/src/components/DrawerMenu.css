@@ -71,7 +71,7 @@
   right: 0;
   bottom: 0;
   width: 400px;
-  background: linear-gradient(180deg, #0d0716 0%, #170d27 50%, #271e37 100%);
+  background: linear-gradient(180deg, #1e3a8a 0%, #7c2d87 50%, #dc2626 100%);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   z-index: 99;
   overflow-y: auto;

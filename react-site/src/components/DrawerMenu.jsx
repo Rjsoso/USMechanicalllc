@@ -15,17 +15,17 @@ const DrawerMenu = () => {
   // Default fallback navigation structure
   const defaultSections = [
     {
-      label: 'Services',
-      links: [
-        { label: 'Our Services', href: '#services', ariaLabel: 'View our services' },
-        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'View our portfolio' },
-      ],
-    },
-    {
       label: 'Company',
       links: [
         { label: 'About Us', href: '#about', ariaLabel: 'Learn about us' },
         { label: 'Safety', href: '#safety', ariaLabel: 'Our safety practices' },
+      ],
+    },
+    {
+      label: 'Services',
+      links: [
+        { label: 'Our Services', href: '#services', ariaLabel: 'View our services' },
+        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'View our portfolio' },
       ],
     },
     {
