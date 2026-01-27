@@ -29,6 +29,10 @@
   border-radius: 4px;
 }
 
+.drawer-hamburger:active {
+  transform: scale(0.95);
+}
+
 /* Hamburger Lines */
 .hamburger-line {
   width: 24px;
@@ -37,6 +41,9 @@
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
+  /* Performance optimizations */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 /* Hamburger to X animation */
@@ -62,6 +69,9 @@
   -webkit-backdrop-filter: blur(4px);
   z-index: 98;
   cursor: pointer;
+  /* Performance optimizations */
+  will-change: opacity;
+  backface-visibility: hidden;
 }
 
 /* Drawer Panel */
@@ -77,6 +87,11 @@
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout style paint;
   /* Custom scrollbar */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
@@ -146,6 +161,9 @@
   position: relative;
   display: inline-block;
   width: fit-content;
+  /* Improve touch responsiveness */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
 }
 
 .drawer-link::after {
@@ -172,6 +190,11 @@
   outline: 2px solid #8b5cf6;
   outline-offset: 4px;
   border-radius: 4px;
+}
+
+.drawer-link:active {
+  transform: scale(0.98);
+  opacity: 0.7;
 }
 
 /* Tablet Styles */

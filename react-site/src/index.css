@@ -62,9 +62,17 @@ header {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 180px; /* Account for fixed header */
   background: transparent;
   /* Prevent browser default white background */
   background-color: transparent !important;
+}
+
+/* Smoother scrolling on supported browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -76,6 +84,32 @@ body {
   background: transparent;
   /* Prevent browser default white background */
   background-color: transparent !important;
+}
+
+/* Performance optimizations for all interactive elements */
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize font rendering for smoothness */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Smooth scrolling momentum on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent layout shifts during animations */
+img,
+video {
+  content-visibility: auto;
 }
 
 /* Ensure no white bar appears above header - hero section extends to top */

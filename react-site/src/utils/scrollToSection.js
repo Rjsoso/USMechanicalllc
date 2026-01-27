@@ -113,7 +113,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
     }
 
     // Start first attempt with delay for page to settle
-    setTimeout(attemptScroll, 500)
+    setTimeout(attemptScroll, 150)
   })
 }
 

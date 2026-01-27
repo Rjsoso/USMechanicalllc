@@ -199,7 +199,7 @@ const DrawerMenu = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
             onClick={toggleDrawer}
             aria-hidden="true"
           />
@@ -221,9 +221,10 @@ const DrawerMenu = () => {
             exit={{ x: '100%' }}
             transition={{
               type: 'spring',
-              stiffness: 300,
-              damping: 30,
-              duration: 0.4,
+              stiffness: 400,
+              damping: 32,
+              mass: 0.8,
+              duration: 0.3,
             }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -241,7 +242,7 @@ const DrawerMenu = () => {
                   className="drawer-section"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 + 0.1 }}
+                  transition={{ delay: idx * 0.08 + 0.05, duration: 0.3, ease: 'easeOut' }}
                 >
                   <h3 className="drawer-section-label">{section.label}</h3>
                   <div className="drawer-section-links">
