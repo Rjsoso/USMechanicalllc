@@ -8,14 +8,8 @@ export const client = createClient({
   useCdn: true,
 })
 
-// Write-capable client for admin operations (uses token)
-export const writeClient = createClient({
-  projectId: '3vpl3hho',
-  dataset: 'production',
-  apiVersion: '2023-05-03',
-  useCdn: false,
-  token: import.meta.env.VITE_SANITY_WRITE_TOKEN,
-})
+// Note: Write operations should be performed through Sanity Studio or backend APIs
+// NEVER expose write tokens in client-side code
 
 const builder = imageUrlBuilder(client)
 export const urlFor = source => builder.image(source)
