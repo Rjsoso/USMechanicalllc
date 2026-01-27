@@ -1,6 +1,6 @@
 import { useEffect, useState, memo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Phone, MapPin, Clock, Linkedin } from 'lucide-react'
+import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 
@@ -127,23 +127,6 @@ function Footer() {
                 {displayCompanyDescription}
               </p>
             )}
-            <div className="space-y-2">
-              {displayPhone && (
-                <a 
-                  href={`tel:${displayPhone.replace(/\D/g, '')}`}
-                  className="flex items-center gap-2 text-sm transition-colors hover:text-white"
-                >
-                  <Phone className="h-4 w-4" />
-                  <span>{displayPhone}</span>
-                </a>
-              )}
-              {displayAddress && (
-                <div className="flex items-start gap-2 text-sm">
-                  <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                  <span>{displayAddress}</span>
-                </div>
-              )}
-            </div>
           </div>
 
           {/* Column 2: About Us Navigation */}
