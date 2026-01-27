@@ -69,10 +69,9 @@ html {
 
 body {
   font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    sans-serif;
+    'Times New Roman',
+    Times,
+    serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: transparent;

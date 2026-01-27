@@ -34,7 +34,8 @@ export default {
         muted: '#6b7076',
       },
       fontFamily: {
-        sans: ['Inter', 'Poppins', 'system-ui', 'sans-serif'],
+        sans: ['Times New Roman', 'Times', 'serif'],
+        display: ['Rubik', 'sans-serif'], // For titles
       },
       screens: {
         'xl': '1440px',
