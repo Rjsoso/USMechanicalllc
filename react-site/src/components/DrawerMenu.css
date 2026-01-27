@@ -118,21 +118,11 @@
 .drawer-section-label {
   font-size: 32px;
   font-weight: 700; /* Bold for section titles */
-  color: #808080; /* Gray text like hero */
+  color: #ffffff;
   margin: 0;
   letter-spacing: -0.5px;
   text-transform: uppercase;
   font-family: 'Inter', sans-serif;
-  /* Hero 3D effect */
-  text-shadow:
-    1px 1px 0px rgba(0, 0, 0, 0.8),
-    2px 2px 0px rgba(0, 0, 0, 0.7),
-    3px 3px 0px rgba(0, 0, 0, 0.6),
-    4px 4px 0px rgba(0, 0, 0, 0.5),
-    5px 5px 0px rgba(0, 0, 0, 0.3),
-    0 0 15px rgba(0, 0, 0, 0.4);
-  -webkit-text-stroke: 3px rgba(0, 0, 0, 0.6);
-  paint-order: stroke fill;
 }
 
 /* Section Links */
@@ -145,7 +135,7 @@
 .drawer-link {
   background: none;
   border: none;
-  color: #808080; /* Gray text like hero */
+  color: #e5e7eb;
   font-size: 22px;
   padding: 8px 0;
   text-align: left;
@@ -156,14 +146,6 @@
   position: relative;
   display: inline-block;
   width: fit-content;
-  /* Lighter 3D effect for links */
-  text-shadow:
-    1px 1px 0px rgba(0, 0, 0, 0.7),
-    2px 2px 0px rgba(0, 0, 0, 0.6),
-    3px 3px 0px rgba(0, 0, 0, 0.5),
-    0 0 10px rgba(0, 0, 0, 0.3);
-  -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.6);
-  paint-order: stroke fill;
 }
 
 .drawer-link::after {
@@ -178,8 +160,8 @@
 }
 
 .drawer-link:hover {
-  color: #a0a0a0; /* Lighter gray on hover */
-  opacity: 0.9;
+  color: #ffffff;
+  opacity: 0.8;
 }
 
 .drawer-link:hover::after {
