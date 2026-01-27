@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
@@ -325,21 +325,13 @@ export default function ServiceDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <a
-              href="/#contact"
+            <Link
+              to="/#contact"
+              reloadDocument
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
-              onClick={(e) => {
-                e.preventDefault(); // FIRST - prevent default navigation
-                e.stopPropagation(); // Also stop event bubbling
-                // #region agent log
-                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:v20:00] Using window.location.replace with hash');
-                // #endregion
-                // Use window.location.replace() which may handle hash better
-                window.location.replace(`${window.location.origin}/#contact`);
-              }}
             >
-              Request a Quote [v20:00-REPLACE]
-            </a>
+              Request a Quote [v20:05-LINK-RELOAD]
+            </Link>
           </motion.div>
         </div>
       </main>

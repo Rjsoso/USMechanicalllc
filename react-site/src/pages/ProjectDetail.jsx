@@ -384,18 +384,13 @@ export default function ProjectDetail() {
             viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
-            <a
-              href="/#contact"
+            <Link
+              to="/#contact"
+              reloadDocument
               className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
-              onClick={(e) => {
-                // Prevent React Router from intercepting - force full page navigation
-                e.preventDefault();
-                e.stopPropagation();
-                window.location.replace(`${window.location.origin}/#contact`);
-              }}
             >
               Request a Quote
-            </a>
+            </Link>
           </motion.div>
         </div>
       </main>
