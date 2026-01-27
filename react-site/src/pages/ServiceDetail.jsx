@@ -326,7 +326,7 @@ export default function ServiceDetail() {
             transition={{ delay: 0.6 }}
           >
             <a
-              href={`${window.location.origin}/#contact`}
+              href="mailto:info@usmechanicalllc.com?subject=Quote%20Request%20from%20US%20Mechanical%20Website"
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
             >
               Request a Quote

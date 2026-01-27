@@ -385,7 +385,7 @@ export default function ProjectDetail() {
             transition={{ duration: 0.25 }}
           >
             <a
-              href={`${window.location.origin}/#contact`}
+              href="mailto:info@usmechanicalllc.com?subject=Quote%20Request%20from%20US%20Mechanical%20Website"
               className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
             >
               Request a Quote
