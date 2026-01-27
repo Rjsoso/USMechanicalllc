@@ -50,13 +50,20 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // Unified scroll handling for all sections
+          // Section-specific offset adjustments
+          const sectionOffsets = {
+            'services': 100,    // Services has pt-12, needs less offset
+            'portfolio': 120,   // Portfolio has pt-24, needs less offset
+            'contact': 180,     // Contact uses default
+          }
+          const effectiveOffset = sectionOffsets[sectionId] || headerOffset
+
           const currentScroll = window.scrollY || window.pageYOffset
           const elementPosition = rect.top
-          const offsetPosition = currentScroll + elementPosition - headerOffset
+          const offsetPosition = currentScroll + elementPosition - effectiveOffset
 
           if (process.env.NODE_ENV === 'development') {
-            console.log(`Scrolling to ${sectionId} with offset: ${offsetPosition}`)
+            console.log(`Scrolling to ${sectionId} with offset: ${offsetPosition} (using ${effectiveOffset}px offset)`)
           }
 
           window.scrollTo({
