@@ -168,6 +168,11 @@
         opacity: 1;
       }
     </style>
+    <script>
+      // Capture hash IMMEDIATELY before React loads
+      window.__INITIAL_HASH__ = window.location.hash;
+      console.log('[DEBUG index.html] Page loaded with hash:', window.__INITIAL_HASH__);
+    </script>
   </head>
   <body>
     <!-- Force scroll to top immediately on page load -->

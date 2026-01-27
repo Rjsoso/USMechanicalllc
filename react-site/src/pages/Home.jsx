@@ -43,7 +43,7 @@ export default function Home() {
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
     // #region agent log
-    console.log('[DEBUG Home.jsx:44] useLayoutEffect START',{hash:window.location.hash,href:window.location.href,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current,hypothesisId:'A'});
+    console.log('[DEBUG Home.jsx:44] useLayoutEffect START',{hash:window.location.hash,href:window.location.href,initialHash:window.__INITIAL_HASH__,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current,hypothesisId:'A'});
     // #endregion
     if (!initialScrollDone.current) {
       // On page reload, clear location state immediately
