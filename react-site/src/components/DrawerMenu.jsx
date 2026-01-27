@@ -74,12 +74,12 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section with offset and monitoring
+  // Handle scroll to section with instant navigation
   const handleLinkClick = href => {
     // Close drawer first
     setIsOpen(false)
 
-    const scrollWithOffsetAndMonitoring = () => {
+    const scrollWithInstant = () => {
       const element = document.querySelector(href)
       if (!element) return false
       
@@ -92,52 +92,14 @@ const DrawerMenu = () => {
         '#careers': 180,
       }
       const headerOffset = sectionOffsets[href] || 180
+      const rect = element.getBoundingClientRect()
+      const targetPosition = window.scrollY + rect.top - headerOffset
       
-      // Calculate and perform initial scroll
-      const scrollToTarget = () => {
-        const rect = element.getBoundingClientRect()
-        const targetPosition = window.scrollY + rect.top - headerOffset
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth',
-        })
-        return targetPosition
-      }
-      
-      let lastTargetPosition = scrollToTarget()
-      
-      // Monitor for content shifts during scroll
-      let monitorChecks = 0
-      const maxMonitorChecks = 20
-      
-      const monitorInterval = setInterval(() => {
-        monitorChecks++
-        
-        const rect = element.getBoundingClientRect()
-        const currentTargetPos = window.scrollY + rect.top - headerOffset
-        
-        // Adjust if target moved significantly
-        if (Math.abs(currentTargetPos - lastTargetPosition) > 20) {
-          lastTargetPosition = scrollToTarget()
-        }
-        
-        // Stop monitoring and do final check
-        if (monitorChecks >= maxMonitorChecks) {
-          clearInterval(monitorInterval)
-          
-          setTimeout(() => {
-            const finalRect = element.getBoundingClientRect()
-            const finalTargetPos = window.scrollY + finalRect.top - headerOffset
-            
-            if (Math.abs(window.scrollY - finalTargetPos) > 10) {
-              window.scrollTo({
-                top: finalTargetPos,
-                behavior: 'smooth',
-              })
-            }
-          }, 300)
-        }
-      }, 100)
+      // Use instant scroll for immediate, clean navigation
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'instant',
+      })
       
       return true
     }
@@ -152,7 +114,7 @@ const DrawerMenu = () => {
       let retryCount = 0
       const maxRetries = 20
       const attemptScroll = () => {
-        if (scrollWithOffsetAndMonitoring()) {
+        if (scrollWithInstant()) {
           sessionStorage.removeItem('scrollTo')
         } else if (retryCount < maxRetries) {
           retryCount++
@@ -161,8 +123,8 @@ const DrawerMenu = () => {
       }
       requestAnimationFrame(() => setTimeout(attemptScroll, 150))
     } else {
-      // Already on home page, scroll with monitoring
-      scrollWithOffsetAndMonitoring()
+      // Already on home page, scroll instantly
+      scrollWithInstant()
     }
   }
 

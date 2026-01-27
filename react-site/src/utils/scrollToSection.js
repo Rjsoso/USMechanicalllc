@@ -1,6 +1,6 @@
 /* global process */
 /**
- * Scrolls to a section with monitoring to handle content loading during scroll
+ * Scrolls to a section with instant behavior (no animation)
  * @param {string} sectionId - The ID of the section to scroll to (without #)
  * @param {number} headerOffset - Offset for fixed header (default: 180)
  * @param {number} maxRetries - Maximum retry attempts (default: 50)
@@ -58,75 +58,23 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           }
           const effectiveOffset = sectionOffsets[sectionId] || headerOffset
 
-          // Calculate and perform initial scroll
-          const scrollToTarget = () => {
-            const currentRect = element.getBoundingClientRect()
-            const currentScroll = window.scrollY || window.pageYOffset
-            const targetPosition = currentScroll + currentRect.top - effectiveOffset
-            
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth',
-            })
-            
-            return targetPosition
-          }
+          const currentScroll = window.scrollY || window.pageYOffset
+          const targetPosition = currentScroll + rect.top - effectiveOffset
 
           if (process.env.NODE_ENV === 'development') {
-            console.log(`Starting monitored scroll to ${sectionId} with ${effectiveOffset}px offset`)
+            console.log(`Scrolling instantly to ${sectionId} with ${effectiveOffset}px offset`)
           }
 
-          let lastTargetPosition = scrollToTarget()
+          // Use instant scroll for immediate, clean navigation
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'instant',
+          })
 
-          // Monitor the element during scroll to handle content shifts
-          let monitorChecks = 0
-          const maxMonitorChecks = 20 // Monitor for 2 seconds (20 * 100ms)
-          
-          const monitorInterval = setInterval(() => {
-            monitorChecks++
-            
-            const currentRect = element.getBoundingClientRect()
-            const currentScroll = window.scrollY || window.pageYOffset
-            const currentTargetPos = currentScroll + currentRect.top - effectiveOffset
-            
-            // If target moved significantly (>20px), adjust scroll
-            if (Math.abs(currentTargetPos - lastTargetPosition) > 20) {
-              if (process.env.NODE_ENV === 'development') {
-                console.log(`Target moved by ${Math.abs(currentTargetPos - lastTargetPosition).toFixed(0)}px, adjusting...`)
-              }
-              lastTargetPosition = scrollToTarget()
-            }
-            
-            // Stop monitoring after max checks
-            if (monitorChecks >= maxMonitorChecks) {
-              clearInterval(monitorInterval)
-              
-              // Final position verification after scroll settles
-              setTimeout(() => {
-                const finalRect = element.getBoundingClientRect()
-                const finalScroll = window.scrollY || window.pageYOffset
-                const finalTargetPos = finalScroll + finalRect.top - effectiveOffset
-                const positionError = Math.abs(finalScroll - finalTargetPos)
-                
-                // If still off by more than 10px, make final adjustment
-                if (positionError > 10) {
-                  if (process.env.NODE_ENV === 'development') {
-                    console.log(`Final adjustment needed: ${positionError.toFixed(0)}px off`)
-                  }
-                  window.scrollTo({
-                    top: finalTargetPos,
-                    behavior: 'smooth',
-                  })
-                }
-                
-                if (process.env.NODE_ENV === 'development') {
-                  console.log(`✓ Successfully scrolled to section: ${sectionId}`)
-                }
-                resolve(true)
-              }, 300)
-            }
-          }, 100)
-
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`✓ Successfully scrolled to section: ${sectionId}`)
+          }
+          resolve(true)
           return true
         } else {
           // Element exists but not rendered yet - keep retrying
@@ -194,7 +142,7 @@ export function navigateAndScroll(sectionId, navigate) {
 }
 
 /**
- * Navigate to a section with proper scroll behavior with monitoring
+ * Navigate to a section with instant scroll (no animation)
  * @param {string} sectionId - The ID of the section to scroll to (without #)
  * @param {function} navigate - React Router navigate function
  * @param {string} currentPath - Current pathname (default: '/')
@@ -211,57 +159,19 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     'hero': 0,
   }
   
-  const scrollWithOffsetAndMonitoring = () => {
+  const scrollWithInstant = () => {
     const element = document.querySelector(`#${sectionId}`)
     if (!element) return false
     
     const headerOffset = sectionOffsets[sectionId] || 180
+    const rect = element.getBoundingClientRect()
+    const targetPosition = window.scrollY + rect.top - headerOffset
     
-    // Calculate and perform initial scroll
-    const scrollToTarget = () => {
-      const rect = element.getBoundingClientRect()
-      const targetPosition = window.scrollY + rect.top - headerOffset
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth',
-      })
-      return targetPosition
-    }
-    
-    let lastTargetPosition = scrollToTarget()
-    
-    // Monitor for content shifts during scroll
-    let monitorChecks = 0
-    const maxMonitorChecks = 20
-    
-    const monitorInterval = setInterval(() => {
-      monitorChecks++
-      
-      const rect = element.getBoundingClientRect()
-      const currentTargetPos = window.scrollY + rect.top - headerOffset
-      
-      // Adjust if target moved significantly
-      if (Math.abs(currentTargetPos - lastTargetPosition) > 20) {
-        lastTargetPosition = scrollToTarget()
-      }
-      
-      // Stop monitoring and do final check
-      if (monitorChecks >= maxMonitorChecks) {
-        clearInterval(monitorInterval)
-        
-        setTimeout(() => {
-          const finalRect = element.getBoundingClientRect()
-          const finalTargetPos = window.scrollY + finalRect.top - headerOffset
-          
-          if (Math.abs(window.scrollY - finalTargetPos) > 10) {
-            window.scrollTo({
-              top: finalTargetPos,
-              behavior: 'smooth',
-            })
-          }
-        }, 300)
-      }
-    }, 100)
+    // Use instant scroll for immediate, clean navigation
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'instant',
+    })
     
     return true
   }
@@ -275,7 +185,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     let retryCount = 0
     const maxRetries = 20
     const attemptScroll = () => {
-      if (scrollWithOffsetAndMonitoring()) {
+      if (scrollWithInstant()) {
         sessionStorage.removeItem('scrollTo')
       } else if (retryCount < maxRetries) {
         retryCount++
@@ -284,7 +194,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     }
     setTimeout(attemptScroll, 150)
   } else {
-    // Already on home page, scroll with monitoring
-    scrollWithOffsetAndMonitoring()
+    // Already on home page, scroll instantly
+    scrollWithInstant()
   }
 }
