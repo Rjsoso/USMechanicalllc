@@ -18,6 +18,16 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const headerOffset = 180
+  const [enableTransition, setEnableTransition] = useState(false)
+
+  // Enable transition after component mounts (prevents flash on initial render)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEnableTransition(true)
+      console.log('Transitions enabled')
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Debug: Log slideOffset changes
   useEffect(() => {
@@ -311,7 +321,7 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
           style={{
             transform: `translate3d(0, ${slideOffset}px, 0)`,
             WebkitTransform: `translate3d(0, ${slideOffset}px, 0)`,
-            transition: slideOffset === 0 ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
+            transition: enableTransition ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
             transformStyle: 'preserve-3d',
             WebkitTransformStyle: 'preserve-3d',
             backfaceVisibility: 'hidden',
