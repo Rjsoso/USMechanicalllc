@@ -45,10 +45,19 @@ export default function ProjectModal({ project, onClose }) {
           onClick={e => e.stopPropagation()}
         >
           {/* Close Button */}
-          <button
+          <motion.button
             onClick={onClose}
             className="absolute right-4 top-4 z-20 rounded-full bg-black/70 p-2 text-white transition-colors hover:bg-black/90"
             aria-label="Close modal"
+            whileHover={{
+              scale: 1.1,
+              rotate: 90,
+              transition: { duration: 0.2 },
+            }}
+            whileTap={{
+              scale: 0.95,
+              transition: { duration: 0.1 },
+            }}
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -58,7 +67,7 @@ export default function ProjectModal({ project, onClose }) {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
+          </motion.button>
 
           {/* Image Gallery */}
           {images.length > 0 && (
@@ -97,16 +106,28 @@ export default function ProjectModal({ project, onClose }) {
                 {/* Navigation Arrows */}
                 {hasMultipleImages && (
                   <>
-                    <button
+                    <motion.button
                       onClick={prevImage}
                       className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 p-2 text-white transition-colors hover:bg-black/90"
                       aria-label="Previous image"
+                      whileHover={{
+                        scale: 1.1,
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+                        transition: { duration: 0.2 },
+                      }}
+                      whileTap={{
+                        scale: 0.95,
+                        rotate: -2,
+                        transition: { duration: 0.1 },
+                      }}
                     >
-                      <svg
+                      <motion.svg
                         className="h-6 w-6"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        whileTap={{ x: -2 }}
+                        transition={{ duration: 0.1 }}
                       >
                         <path
                           strokeLinecap="round"
@@ -114,18 +135,30 @@ export default function ProjectModal({ project, onClose }) {
                           strokeWidth={2}
                           d="M15 19l-7-7 7-7"
                         />
-                      </svg>
-                    </button>
-                    <button
+                      </motion.svg>
+                    </motion.button>
+                    <motion.button
                       onClick={nextImage}
                       className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 p-2 text-white transition-colors hover:bg-black/90"
                       aria-label="Next image"
+                      whileHover={{
+                        scale: 1.1,
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+                        transition: { duration: 0.2 },
+                      }}
+                      whileTap={{
+                        scale: 0.95,
+                        rotate: 2,
+                        transition: { duration: 0.1 },
+                      }}
                     >
-                      <svg
+                      <motion.svg
                         className="h-6 w-6"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        whileTap={{ x: 2 }}
+                        transition={{ duration: 0.1 }}
                       >
                         <path
                           strokeLinecap="round"
@@ -133,8 +166,8 @@ export default function ProjectModal({ project, onClose }) {
                           strokeWidth={2}
                           d="M9 5l7 7-7 7"
                         />
-                      </svg>
-                    </button>
+                      </motion.svg>
+                    </motion.button>
                   </>
                 )}
 
@@ -149,7 +182,7 @@ export default function ProjectModal({ project, onClose }) {
                 {hasMultipleImages && images.length <= 6 && (
                   <div className="absolute bottom-0 left-0 right-0 flex gap-2 overflow-x-auto bg-zinc-900 p-2">
                     {images.map((img, index) => (
-                      <button
+                      <motion.button
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
                         className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded border-2 bg-gray-800 transition-all ${
@@ -157,6 +190,14 @@ export default function ProjectModal({ project, onClose }) {
                             ? 'border-white'
                             : 'border-transparent opacity-60 hover:opacity-100'
                         }`}
+                        whileHover={{
+                          scale: 1.05,
+                          transition: { duration: 0.2 },
+                        }}
+                        whileTap={{
+                          scale: 0.95,
+                          transition: { duration: 0.1 },
+                        }}
                       >
                         <img
                           src={
@@ -170,7 +211,7 @@ export default function ProjectModal({ project, onClose }) {
                           decoding="async"
                           style={{ backgroundColor: '#1f2937' }}
                         />
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 )}

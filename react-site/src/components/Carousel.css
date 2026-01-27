@@ -110,16 +110,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
   color: rgba(0, 0, 0, 0.8);
   font-size: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Remove transition - Framer Motion handles animations */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  will-change: transform;
+  /* Enable GPU acceleration for better performance */
+  transform: translateZ(0);
 }
 
 .carousel-nav-button.inside {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateZ(0);
   z-index: 10;
 }
 
@@ -131,28 +135,24 @@
   right: 16px;
 }
 
+/* Hover states - Framer Motion handles transform/scale */
 .carousel-nav-button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.3);
   color: rgba(0, 0, 0, 1);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.carousel-nav-button.inside:hover:not(:disabled) {
-  transform: translateY(-50%) scale(1.1);
-}
-
-.carousel-nav-button:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.carousel-nav-button.inside:active:not(:disabled) {
-  transform: translateY(-50%) scale(0.95);
-}
+/* Active states handled by Framer Motion whileTap */
 
 .carousel-nav-button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* Icon container for smooth icon animations */
+.carousel-nav-button > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive styles */

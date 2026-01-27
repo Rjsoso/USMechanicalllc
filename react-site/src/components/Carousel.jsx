@@ -201,7 +201,6 @@ export default function Carousel({
 
   // Navigation arrow handlers
   const handlePrevious = () => {
-    if (isAnimating) return
     setPosition(prev => {
       const next = prev - 1
       if (loop) {
@@ -212,7 +211,6 @@ export default function Carousel({
   }
 
   const handleNext = () => {
-    if (isAnimating) return
     setPosition(prev => {
       const next = prev + 1
       if (loop) {
@@ -229,22 +227,68 @@ export default function Carousel({
   // Define navigation button JSX to avoid duplication
   const renderNavButtons = isInside => (
     <>
-      <button
+      <motion.button
         className={`carousel-nav-button left ${isInside ? 'inside' : ''}`}
         onClick={handlePrevious}
         disabled={isPrevDisabled}
         aria-label="Previous image"
+        whileHover={
+          !isPrevDisabled
+            ? {
+                scale: 1.1,
+                boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+                transition: { duration: 0.2 },
+              }
+            : {}
+        }
+        whileTap={
+          !isPrevDisabled
+            ? {
+                scale: 0.95,
+                rotate: -2,
+                transition: { duration: 0.1 },
+              }
+            : {}
+        }
       >
-        <FiChevronLeft />
-      </button>
-      <button
+        <motion.div
+          whileTap={!isPrevDisabled ? { x: -2 } : {}}
+          transition={{ duration: 0.1 }}
+        >
+          <FiChevronLeft />
+        </motion.div>
+      </motion.button>
+      <motion.button
         className={`carousel-nav-button right ${isInside ? 'inside' : ''}`}
         onClick={handleNext}
         disabled={isNextDisabled}
         aria-label="Next image"
+        whileHover={
+          !isNextDisabled
+            ? {
+                scale: 1.1,
+                boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+                transition: { duration: 0.2 },
+              }
+            : {}
+        }
+        whileTap={
+          !isNextDisabled
+            ? {
+                scale: 0.95,
+                rotate: 2,
+                transition: { duration: 0.1 },
+              }
+            : {}
+        }
       >
-        <FiChevronRight />
-      </button>
+        <motion.div
+          whileTap={!isNextDisabled ? { x: 2 } : {}}
+          transition={{ duration: 0.1 }}
+        >
+          <FiChevronRight />
+        </motion.div>
+      </motion.button>
     </>
   )
 
