@@ -51,14 +51,24 @@ export default function Home() {
       }
 
       const scrollTo = location.state?.scrollTo
+      const urlHash = window.location.hash.replace('#', '')
+      
       if (!scrollTo || isPageReload.current) {
-        // Clear any URL hash that might trigger scrolling
+        // Clear any URL hash only if it's not a valid section
         if (window.location.hash) {
-          if (process.env.NODE_ENV === 'development')
-            console.log('Clearing hash:', window.location.hash)
-          window.history.replaceState({}, '', window.location.pathname)
+          const validSections = ['contact', 'services', 'portfolio', 'about', 'safety', 'careers', 'hero']
+          if (!validSections.includes(urlHash)) {
+            if (process.env.NODE_ENV === 'development')
+              console.log('Clearing invalid hash:', window.location.hash)
+            window.history.replaceState({}, '', window.location.pathname)
+          } else {
+            if (process.env.NODE_ENV === 'development')
+              console.log('Valid hash detected, allowing browser to handle:', window.location.hash)
+            // Don't clear valid hashes - let browser handle the scroll
+            return
+          }
         }
-        // Force scroll to top immediately before browser paints
+        // Force scroll to top immediately before browser paints (only if no valid hash)
         window.scrollTo(0, 0)
       }
       initialScrollDone.current = true
@@ -71,8 +81,11 @@ export default function Home() {
   // BUT: Skip on page reload to prevent unwanted scrolling
   useEffect(() => {
     const scrollTo = location.state?.scrollTo
+    const urlHash = window.location.hash.replace('#', '')
+    const targetSection = scrollTo || urlHash
+    
     if (process.env.NODE_ENV === 'development')
-      console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo)
+      console.log('Home.jsx useEffect - scrollTo from location.state:', scrollTo, 'urlHash:', urlHash)
 
     // If this is a page reload, don't run any scroll logic
     if (isPageReload.current) {
@@ -85,35 +98,38 @@ export default function Home() {
       return
     }
 
-    if (scrollTo) {
+    if (targetSection) {
       // We have a section to scroll to - wait for components to load
       if (process.env.NODE_ENV === 'development')
-        console.log(`Home.jsx: Starting scroll to ${scrollTo}`)
+        console.log(`Home.jsx: Starting scroll to ${targetSection}`)
       
       // For lazy-loaded sections like contact, give extra time for Suspense to resolve
-      const isLazySection = scrollTo === 'contact'
+      const isLazySection = targetSection === 'contact'
       const initialDelay = isLazySection ? 300 : 0
       
       setTimeout(() => {
-        scrollToSection(scrollTo, 180, isLazySection ? 100 : 50, 200).then(success => {
+        scrollToSection(targetSection, 180, isLazySection ? 100 : 50, 200).then(success => {
           if (process.env.NODE_ENV === 'development')
-            console.log(`Scroll to ${scrollTo} result: ${success}`)
+            console.log(`Scroll to ${targetSection} result: ${success}`)
           
-          // Clear the state after scroll attempt (successful or not)
-          window.history.replaceState({}, document.title)
+          // Clear the state and hash after scroll attempt (successful or not)
+          if (scrollTo) {
+            window.history.replaceState({}, document.title)
+          }
+          // Keep the hash in the URL for direct navigation
           
           // If scroll failed for contact, try one more time with a longer delay
           if (!success && isLazySection) {
             if (process.env.NODE_ENV === 'development')
               console.log('Contact scroll failed, retrying once more...')
             setTimeout(() => {
-              scrollToSection(scrollTo, 180, 50, 300)
+              scrollToSection(targetSection, 180, 50, 300)
             }, 500)
           }
         })
       }, initialDelay)
     }
-  }, [location.state?.scrollTo])
+  }, [location.state?.scrollTo, location.hash])
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
