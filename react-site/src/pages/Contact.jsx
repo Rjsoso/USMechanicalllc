@@ -15,7 +15,7 @@ import {
 export default function Contact() {
   // #region agent log
   useEffect(() => {
-    fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Contact.jsx:16',message:'Contact component MOUNTED',data:{contactElExists:!!document.getElementById('contact')},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+    console.log('[DEBUG Contact.jsx:16] Contact component MOUNTED',{contactElExists:!!document.getElementById('contact'),hypothesisId:'B'});
   }, []);
   // #endregion
   const [contactData, setContactData] = useState(null)

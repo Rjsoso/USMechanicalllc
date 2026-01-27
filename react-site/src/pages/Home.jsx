@@ -127,14 +127,14 @@ export default function Home() {
       setTimeout(() => {
         // #region agent log
         const contactEl = document.getElementById('contact');
-        fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:115',message:'BEFORE scrollToSection',data:{targetSection:targetSection,contactElementExists:!!contactEl,contactElementVisible:contactEl?contactEl.offsetParent!==null:false},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+        console.log('[DEBUG Home.jsx:115] BEFORE scrollToSection',{targetSection:targetSection,contactElementExists:!!contactEl,contactElementVisible:contactEl?contactEl.offsetParent!==null:false,hypothesisId:'B'});
         // #endregion
         scrollToSection(targetSection, 180, isLazySection ? 100 : 50, 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
           
           // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:119',message:'AFTER scrollToSection',data:{success:success,currentHash:window.location.hash,scrollY:window.scrollY},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+          console.log('[DEBUG Home.jsx:119] AFTER scrollToSection',{success:success,currentHash:window.location.hash,scrollY:window.scrollY,hypothesisId:'C'});
           // #endregion
           
           // Clear only the location.state, but keep the hash in the URL for direct navigation

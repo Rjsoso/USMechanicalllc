@@ -332,6 +332,9 @@ export default function ServiceDetail() {
                 // #region agent log
                 console.log('[DEBUG ServiceDetail.jsx:332] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,hypothesisId:'E'});
                 // #endregion
+                // Prevent React Router from intercepting - force full page navigation
+                e.preventDefault();
+                window.location.href = '/#contact';
               }}
             >
               Request a Quote
