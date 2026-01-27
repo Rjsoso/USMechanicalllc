@@ -84,12 +84,12 @@ const DrawerMenu = () => {
       if (!element) return false
       
       const sectionOffsets = {
-        '#services': 100,
-        '#portfolio': 120,
-        '#contact': 180,
-        '#about': 180,
-        '#safety': 180,
-        '#careers': 180,
+        '#services': 80,     // pt-12 (48px) → title visible at ~32px from viewport top
+        '#portfolio': 100,   // pt-24 (96px) → title visible at ~4px from viewport top
+        '#contact': 60,      // py-20 (80px) → title visible at ~20px from viewport top
+        '#about': 60,        // py-20 (80px) → content visible at ~20px from viewport top
+        '#safety': 60,       // (same as about)
+        '#careers': 80,      // pt-8 (32px) → accounting for negative margin
       }
       const headerOffset = sectionOffsets[href] || 180
       const rect = element.getBoundingClientRect()

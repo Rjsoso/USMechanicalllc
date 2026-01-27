@@ -46,15 +46,15 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // Section-specific offset adjustments
+          // Section-specific offset adjustments for optimal title visibility
           const sectionOffsets = {
-            'services': 100,    // Services has pt-12, needs less offset
-            'portfolio': 120,   // Portfolio has pt-24, needs less offset
-            'contact': 180,     // Contact uses default
-            'about': 180,
-            'safety': 180,
-            'careers': 180,
-            'hero': 0,
+            'services': 80,     // pt-12 (48px) → title visible at ~32px from viewport top
+            'portfolio': 100,   // pt-24 (96px) → title visible at ~4px from viewport top
+            'contact': 60,      // py-20 (80px) → title visible at ~20px from viewport top
+            'about': 60,        // py-20 (80px) → content visible at ~20px from viewport top
+            'safety': 60,       // (same as about)
+            'careers': 80,      // pt-8 (32px) → accounting for negative margin
+            'hero': 0,          // keep at 0 for full viewport
           }
           const effectiveOffset = sectionOffsets[sectionId] || headerOffset
 
@@ -148,15 +148,15 @@ export function navigateAndScroll(sectionId, navigate) {
  * @param {string} currentPath - Current pathname (default: '/')
  */
 export function navigateToSection(sectionId, navigate, currentPath = '/') {
-  // Section-specific offsets to account for padding
+  // Section-specific offsets for optimal title visibility
   const sectionOffsets = {
-    'services': 100,
-    'portfolio': 120,
-    'contact': 180,
-    'about': 180,
-    'safety': 180,
-    'careers': 180,
-    'hero': 0,
+    'services': 80,     // pt-12 (48px) → title visible at ~32px from viewport top
+    'portfolio': 100,   // pt-24 (96px) → title visible at ~4px from viewport top
+    'contact': 60,      // py-20 (80px) → title visible at ~20px from viewport top
+    'about': 60,        // py-20 (80px) → content visible at ~20px from viewport top
+    'safety': 60,       // (same as about)
+    'careers': 80,      // pt-8 (32px) → accounting for negative margin
+    'hero': 0,          // keep at 0 for full viewport
   }
   
   const scrollWithInstant = () => {
