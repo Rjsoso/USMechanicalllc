@@ -112,11 +112,11 @@ export default function Home() {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
           
-          // Clear the state and hash after scroll attempt (successful or not)
+          // Clear only the location.state, but keep the hash in the URL for direct navigation
           if (scrollTo) {
-            window.history.replaceState({}, document.title)
+            const currentHash = window.location.hash
+            window.history.replaceState({}, document.title, window.location.pathname + currentHash)
           }
-          // Keep the hash in the URL for direct navigation
           
           // If scroll failed for contact, try one more time with a longer delay
           if (!success && isLazySection) {
