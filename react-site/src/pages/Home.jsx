@@ -43,7 +43,7 @@ export default function Home() {
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
     // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:44',message:'useLayoutEffect START',data:{hash:window.location.hash,href:window.location.href,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+    console.log('[DEBUG Home.jsx:44] useLayoutEffect START',{hash:window.location.hash,href:window.location.href,isPageReload:isPageReload.current,initialScrollDone:initialScrollDone.current,hypothesisId:'A'});
     // #endregion
     if (!initialScrollDone.current) {
       // On page reload, clear location state immediately
@@ -64,14 +64,14 @@ export default function Home() {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
             // #region agent log
-            fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:63',message:'CLEARING invalid hash',data:{hash:window.location.hash,urlHash:urlHash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+            console.log('[DEBUG Home.jsx:63] CLEARING invalid hash',{hash:window.location.hash,urlHash:urlHash,hypothesisId:'A'});
             // #endregion
             window.history.replaceState({}, '', window.location.pathname)
           } else {
             if (process.env.NODE_ENV === 'development')
               console.log('Valid hash detected, allowing browser to handle:', window.location.hash)
             // #region agent log
-            fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:67',message:'Valid hash - NOT clearing',data:{hash:window.location.hash,urlHash:urlHash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+            console.log('[DEBUG Home.jsx:67] Valid hash - NOT clearing',{hash:window.location.hash,urlHash:urlHash,hypothesisId:'A'});
             // #endregion
             // Don't clear valid hashes - let browser handle the scroll
             return
@@ -94,7 +94,7 @@ export default function Home() {
     const targetSection = scrollTo || urlHash
     
     // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:82',message:'useEffect START',data:{scrollTo:scrollTo,urlHash:urlHash,targetSection:targetSection,isPageReload:isPageReload.current,locationHash:location.hash},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+    console.log('[DEBUG Home.jsx:82] useEffect START',{scrollTo:scrollTo,urlHash:urlHash,targetSection:targetSection,isPageReload:isPageReload.current,locationHash:location.hash,hypothesisId:'C'});
     // #endregion
     
     if (process.env.NODE_ENV === 'development')
@@ -121,7 +121,7 @@ export default function Home() {
       const initialDelay = isLazySection ? 300 : 0
       
       // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Home.jsx:111',message:'About to scroll',data:{targetSection:targetSection,isLazySection:isLazySection,initialDelay:initialDelay},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+      console.log('[DEBUG Home.jsx:111] About to scroll',{targetSection:targetSection,isLazySection:isLazySection,initialDelay:initialDelay,hypothesisId:'C'});
       // #endregion
       
       setTimeout(() => {
