@@ -222,7 +222,7 @@ function Footer() {
               <h4 className="text-sm font-semibold text-white mb-2">Follow Us</h4>
               <div className="flex gap-3">
                 <a 
-                  href="https://www.linkedin.com/company/us-mechanical-llc"
+                  href="https://www.linkedin.com/company/usmechanicalllc/posts/?feedView=all"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-gray-300 transition-all hover:bg-[#0A66C2] hover:text-white"
