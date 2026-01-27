@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 
@@ -16,6 +16,26 @@ export default function ProjectModal({ project, onClose }) {
 
   const prevImage = () => {
     setCurrentImageIndex(prev => (prev - 1 + images.length) % images.length)
+  }
+
+  // Preload adjacent images for smooth transitions
+  const preloadAdjacentImages = () => {
+    if (hasMultipleImages) {
+      const nextIndex = (currentImageIndex + 1) % images.length
+      const prevIndex = (currentImageIndex - 1 + images.length) % images.length
+      
+      [nextIndex, prevIndex].forEach(index => {
+        if (images[index]?.asset) {
+          const img = new Image()
+          img.src = urlFor(images[index]).width(1200).quality(90).auto('format').url()
+        }
+      })
+    }
+  }
+
+  // Preload adjacent images when current image changes
+  if (hasMultipleImages) {
+    preloadAdjacentImages()
   }
 
   return (
@@ -48,7 +68,7 @@ export default function ProjectModal({ project, onClose }) {
           {/* Image Gallery */}
           {images.length > 0 && (
             <div className="relative mb-6">
-              <div className="relative h-96 w-full overflow-hidden rounded-t-lg bg-black md:h-[500px]">
+              <div className="relative h-96 w-full overflow-hidden rounded-t-lg bg-gray-900 md:h-[500px]">
                 <AnimatePresence mode="wait">
                   {images[currentImageIndex] && (
                     <motion.img
@@ -73,7 +93,8 @@ export default function ProjectModal({ project, onClose }) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ backgroundColor: '#111827' }}
                     />
                   )}
                 </AnimatePresence>
@@ -136,7 +157,7 @@ export default function ProjectModal({ project, onClose }) {
                       <button
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
-                        className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded border-2 transition-all ${
+                        className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded border-2 bg-gray-800 transition-all ${
                           index === currentImageIndex
                             ? 'border-white'
                             : 'border-transparent opacity-60 hover:opacity-100'
@@ -149,9 +170,10 @@ export default function ProjectModal({ project, onClose }) {
                               : ''
                           }
                           alt={img?.alt || `Thumbnail ${index + 1}`}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover transition-opacity duration-200"
                           loading="lazy"
                           decoding="async"
+                          style={{ backgroundColor: '#1f2937' }}
                         />
                       </button>
                     ))}

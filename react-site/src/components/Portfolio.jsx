@@ -7,6 +7,7 @@ function Portfolio() {
   const navigate = useNavigate()
   const [categories, setCategories] = useState([])
   const [sectionData, setSectionData] = useState(null)
+  const [loadedImages, setLoadedImages] = useState(new Set())
 
   useEffect(() => {
     // Fetch both portfolio categories and section data
@@ -80,7 +81,7 @@ function Portfolio() {
             <div key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
-                className="group relative cursor-pointer overflow-hidden"
+                className="group relative cursor-pointer overflow-hidden bg-gray-200"
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               >
                 {/* Background Image */}
@@ -88,9 +89,17 @@ function Portfolio() {
                   <img
                     src={urlFor(category.image).width(800).quality(90).auto('format').url()}
                     alt={category.title}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300"
                     loading="lazy"
                     decoding="async"
+                    style={{ 
+                      opacity: loadedImages.has(category._id) ? 1 : 0,
+                      backgroundColor: '#e5e7eb'
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.opacity = '1'
+                      setLoadedImages(prev => new Set(prev).add(category._id))
+                    }}
                   />
                 )}
 

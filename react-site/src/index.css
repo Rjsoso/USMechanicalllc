@@ -94,6 +94,31 @@ a,
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Prevent white flash during image loading */
+img {
+  background-color: transparent;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Smooth image fade-in */
+img[loading="lazy"],
+img[loading="eager"] {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+img[loading="lazy"].loaded,
+img[loading="eager"].loaded,
+img:not([loading]) {
+  opacity: 1;
+}
+
+/* Ensure images display once loaded */
+img[src] {
+  opacity: 1;
+}
+
 /* Optimize font rendering for smoothness */
 * {
   -webkit-font-smoothing: antialiased;
@@ -215,11 +240,11 @@ section#contact > div[class*='absolute'] {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
   z-index: 9999;
 }
 
@@ -1278,6 +1303,7 @@ body {
     display: block !important;
     position: relative !important;
     opacity: 1 !important;
+    background-color: #e5e7eb !important; /* Gray placeholder */
   }
 
   #portfolio img {
@@ -1285,16 +1311,18 @@ body {
     display: block !important;
   }
 
-  /* Ensure grid container is visible */
+  /* Ensure grid container is visible with smooth background */
   #portfolio .bg-white {
     display: block !important;
     min-height: 200px !important;
+    background-color: #ffffff !important;
   }
 
-  /* Force category cards to be visible */
+  /* Force category cards to be visible with placeholder background */
   #portfolio .group {
     opacity: 1 !important;
     visibility: visible !important;
+    background-color: #e5e7eb !important;
   }
 }
 

@@ -168,7 +168,13 @@ export default function CategoryDetail() {
         url={`https://usmechanical.com/portfolio/${categoryData._id}`}
       />
       <Header />
-      <main className="min-h-screen bg-white text-black" style={{ paddingTop: '180px' }}>
+      <motion.main 
+        className="min-h-screen bg-white text-black" 
+        style={{ paddingTop: '180px' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
         <div className="mx-auto max-w-7xl px-6 py-20">
           {/* Back + Prev/Next */}
           <div className="mb-8 flex flex-wrap items-center gap-3">
