@@ -390,7 +390,9 @@ export default function ProjectDetail() {
               onClick={(e) => {
                 // Prevent React Router from intercepting - force full page navigation
                 e.preventDefault();
-                window.location.href = '/#contact';
+                e.stopPropagation();
+                const targetUrl = `${window.location.origin}/#contact`;
+                window.location.href = targetUrl;
               }}
             >
               Request a Quote

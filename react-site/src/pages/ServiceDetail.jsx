@@ -332,11 +332,11 @@ export default function ServiceDetail() {
                 e.preventDefault(); // FIRST - prevent default navigation
                 e.stopPropagation(); // Also stop event bubbling
                 // #region agent log
-                alert('✅ NEW CODE RUNNING! Button clicked!');
-                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:2026-01-27-19:45] Request Quote clicked BEFORE navigation', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:45',hypothesisId:'E'});
+                const targetUrl = `${window.location.origin}/#contact`;
+                console.log('[DEBUG ServiceDetail.jsx:333 BUILD:2026-01-27-19:50] Request Quote clicked', {targetUrl:targetUrl,currentUrl:window.location.href,origin:window.location.origin,hypothesisId:'E'});
                 // #endregion
-                console.log('[DEBUG ServiceDetail.jsx:339] About to navigate with window.location.href');
-                window.location.href = '/#contact';
+                console.log('[DEBUG ServiceDetail.jsx:339] About to navigate to:', targetUrl);
+                window.location.href = targetUrl;
                 console.log('[DEBUG ServiceDetail.jsx:341] Navigation command sent');
               }}
             >
