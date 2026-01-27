@@ -89,14 +89,29 @@ export default function Home() {
       // We have a section to scroll to - wait for components to load
       if (process.env.NODE_ENV === 'development')
         console.log(`Home.jsx: Starting scroll to ${scrollTo}`)
-      scrollToSection(scrollTo).then(success => {
-        if (process.env.NODE_ENV === 'development')
-          console.log(`Scroll to ${scrollTo} result: ${success}`)
-        // Clear the state after successful scroll
-        if (success) {
+      
+      // For lazy-loaded sections like contact, give extra time for Suspense to resolve
+      const isLazySection = scrollTo === 'contact'
+      const initialDelay = isLazySection ? 300 : 0
+      
+      setTimeout(() => {
+        scrollToSection(scrollTo, 180, isLazySection ? 100 : 50, 200).then(success => {
+          if (process.env.NODE_ENV === 'development')
+            console.log(`Scroll to ${scrollTo} result: ${success}`)
+          
+          // Clear the state after scroll attempt (successful or not)
           window.history.replaceState({}, document.title)
-        }
-      })
+          
+          // If scroll failed for contact, try one more time with a longer delay
+          if (!success && isLazySection) {
+            if (process.env.NODE_ENV === 'development')
+              console.log('Contact scroll failed, retrying once more...')
+            setTimeout(() => {
+              scrollToSection(scrollTo, 180, 50, 300)
+            }, 500)
+          }
+        })
+      }, initialDelay)
     }
   }, [location.state?.scrollTo])
 
