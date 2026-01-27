@@ -4,7 +4,7 @@ export default defineType({
   name: 'headerSection',
   title: 'Header & Navigation',
   type: 'document',
-  description: 'Configure your website header with logo and icon-based dock navigation',
+  description: 'Configure your website header with logo and drawer menu navigation',
   fields: [
     {
       name: 'logo',
@@ -18,23 +18,23 @@ export default defineType({
       validation: (Rule) => Rule.required().error('Logo is required'),
     },
     {
-      name: 'navLinks',
-      title: 'Icon Navigation (Dock)',
+      name: 'sections',
+      title: 'Drawer Menu Sections',
       type: 'array',
-      description: 'Icon-based navigation for the floating dock menu. Each item needs a label, icon, link target, and display order.',
-      of: [{ type: 'navLink' }],
-      validation: (Rule) => Rule.required().min(1).error('Add at least one navigation link'),
+      description: 'Sections for the mobile drawer menu. Each section has a heading (e.g., "Connect", "Company") and contains multiple navigation links.',
+      of: [{ type: 'drawerSection' }],
+      validation: (Rule) => Rule.required().min(1).error('Add at least one section'),
     },
   ],
   preview: {
     select: {
-      navCount: 'navLinks.length',
+      sectionCount: 'sections.length',
     },
-    prepare({ navCount }) {
-      const navItems = navCount || 0
+    prepare({ sectionCount }) {
+      const sections = sectionCount || 0
       return {
         title: 'Header & Navigation',
-        subtitle: `Logo + ${navItems} icon dock item${navItems !== 1 ? 's' : ''}`,
+        subtitle: `Logo + ${sections} drawer menu section${sections !== 1 ? 's' : ''}`,
       }
     }
   }

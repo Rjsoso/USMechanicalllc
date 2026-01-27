@@ -30,7 +30,10 @@ const DrawerMenu = () => {
     },
     {
       label: 'Connect',
-      links: [{ label: 'Contact', href: '#contact', ariaLabel: 'Contact us' }],
+      links: [
+        { label: 'Careers at US Mechanical', href: '#careers', ariaLabel: 'View career opportunities' },
+        { label: 'Contact', href: '#contact', ariaLabel: 'Contact us' },
+      ],
     },
   ]
 
