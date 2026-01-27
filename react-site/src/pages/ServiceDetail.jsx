@@ -330,11 +330,12 @@ export default function ServiceDetail() {
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
               onClick={(e) => {
                 // #region agent log
-                console.log('[DEBUG ServiceDetail.jsx:332 BUILD:2026-01-27-19:35] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:35',hypothesisId:'E'});
+                alert('Button clicked! Check console for details.');
+                console.log('[DEBUG ServiceDetail.jsx:332 BUILD:2026-01-27-19:38] Request Quote clicked', {href:'/#contact',currentUrl:window.location.href,buildTime:'2026-01-27-19:38',hypothesisId:'E'});
                 // #endregion
                 // Prevent React Router from intercepting - force full page navigation
                 e.preventDefault();
-                console.log('[DEBUG ServiceDetail.jsx:337] About to navigate with window.location.href');
+                console.log('[DEBUG ServiceDetail.jsx:338] About to navigate with window.location.href');
                 window.location.href = '/#contact';
               }}
             >
