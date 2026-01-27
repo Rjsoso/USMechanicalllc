@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
@@ -84,9 +84,6 @@ export default function ServiceDetail() {
     window.scrollTo(0, 0)
   }, [slug])
 
-  const handleRequestQuote = () => {
-    navigateAndScroll('contact', navigate)
-  }
 
   const { prevService, nextService } = useMemo(() => {
     if (!Array.isArray(servicesList) || servicesList.length === 0) {
@@ -328,12 +325,12 @@ export default function ServiceDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <button
-              onClick={handleRequestQuote}
+            <Link
+              to="/#contact"
               className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
             >
               Request a Quote
-            </button>
+            </Link>
           </motion.div>
         </div>
       </main>
