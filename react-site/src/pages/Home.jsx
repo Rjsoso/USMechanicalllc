@@ -30,6 +30,11 @@ export default function Home() {
   const skipContactAnimationOnce = useRef(false)
   const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
   
+  // Contact interpolation refs for ultra-smooth motion
+  const lastContactSlideRef = useRef(-600)
+  const targetContactSlideRef = useRef(-600)
+  const contactAnimationFrameRef = useRef(null)
+  
   // DEBUG: Track Contact wrapper renders
   useEffect(() => {
     console.warn('[RENDER-DEBUG] Contact wrapper rendered', {
@@ -325,6 +330,29 @@ export default function Home() {
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max - keep high for smooth animation
     let scrollListenerActive = true
+    const INTERPOLATION_SPEED = 0.2 // Slightly faster than Stats (0.15) for Contact
+    
+    // Smooth interpolation loop for ultra-smooth Contact animation
+    const interpolateContact = () => {
+      if (window.__scrollNavigationLock || buttonNavigationUsed.current) return
+      
+      const current = lastContactSlideRef.current
+      const target = targetContactSlideRef.current
+      const diff = target - current
+
+      if (Math.abs(diff) > 0.1) {
+        // Smooth interpolation
+        const newValue = current + diff * INTERPOLATION_SPEED
+        lastContactSlideRef.current = newValue
+        setContactSlide(newValue)
+        contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
+      } else {
+        // Snap to final value
+        lastContactSlideRef.current = target
+        setContactSlide(target)
+        contactAnimationFrameRef.current = null
+      }
+    }
     
     const handleContactScroll = () => {
       // DEBUG: Log every scroll event
@@ -418,7 +446,11 @@ export default function Home() {
           console.log('Contact animation LOCKED at final position')
         }
 
-        setContactSlide(slideValue)
+        // Set target and start interpolation for ultra-smooth motion
+        targetContactSlideRef.current = slideValue
+        if (!contactAnimationFrameRef.current) {
+          contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
+        }
         
         if (process.env.NODE_ENV === 'development') {
           console.log('Contact scroll:', {
@@ -440,6 +472,10 @@ export default function Home() {
         cancelAnimationFrame(rafId)
         rafId = null
       }
+      if (contactAnimationFrameRef.current) {
+        cancelAnimationFrame(contactAnimationFrameRef.current)
+        contactAnimationFrameRef.current = null
+      }
       console.warn('[DEBUG] Contact: Cancelled pending animation frames')
     }
     
@@ -450,6 +486,7 @@ export default function Home() {
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
+      if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
       if (scrollListenerActive) {
         window.removeEventListener('scroll', handleContactScroll)
         window.removeEventListener('resize', handleContactScroll)
