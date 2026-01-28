@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, memo } from 'react'
-
 import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
+import { navigateToSection } from '../utils/scrollToSection'
 import DrawerMenu from './DrawerMenu'
 import './Header.css'
 
@@ -36,27 +36,8 @@ function Header() {
   }, [logo])
 
   const handleLogoClick = () => {
-    if (location.pathname === '/') {
-      // If already on home page, scroll to hero section
-      const heroElement = document.querySelector('#hero')
-      if (heroElement) {
-        heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    } else {
-      // Navigate to home page and scroll to hero
-      navigate('/')
-      // Use requestAnimationFrame for smoother, faster execution
-      requestAnimationFrame(() => {
-        const heroElement = document.querySelector('#hero')
-        if (heroElement) {
-          heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }
-      })
-    }
+    // Use the centralized navigation utility to scroll to hero section
+    navigateToSection('hero', navigate, location.pathname)
   }
 
   return (

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { client } from '../utils/sanity'
+import { navigateToSection } from '../utils/scrollToSection'
 import './DrawerMenu.css'
 
 const DrawerMenu = () => {
@@ -74,63 +75,16 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section with instant navigation
+  // Handle scroll to section using utility function
   const handleLinkClick = href => {
     // Close drawer first
     setIsOpen(false)
 
-    const scrollWithInstant = () => {
-      const element = document.querySelector(href)
-      if (!element) return false
-      
-      const sectionOffsets = {
-        '#services': 80,     // pt-12 (48px) → title visible at ~32px from viewport top
-        '#portfolio': 100,   // pt-24 (96px) → title visible at ~4px from viewport top
-        '#contact': 160,     // py-20 (80px) + buffer to show title near top
-        '#about': 60,        // py-20 (80px) → content visible at ~20px from viewport top
-        '#safety': 60,       // (same as about)
-        '#careers': 80,      // pt-8 (32px) → accounting for negative margin
-      }
-      const headerOffset = sectionOffsets[href] || 180
-      const rect = element.getBoundingClientRect()
-      const targetPosition = window.scrollY + rect.top - headerOffset
-      
-      // Use instant scroll for immediate, clean navigation
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'instant',
-      })
-      
-      return true
-    }
-
-    // If we're on a different page, navigate to home first
-    if (location.pathname !== '/') {
-      const sectionName = href.replace('#', '')
-      sessionStorage.setItem('scrollTo', sectionName)
-      navigate('/')
-
-      // Use requestAnimationFrame for faster execution with retry mechanism
-      let retryCount = 0
-      const maxRetries = 20
-      const attemptScroll = () => {
-        if (scrollWithInstant()) {
-          sessionStorage.removeItem('scrollTo')
-        } else if (retryCount < maxRetries) {
-          retryCount++
-          requestAnimationFrame(() => setTimeout(attemptScroll, 100))
-        }
-      }
-      requestAnimationFrame(() => setTimeout(attemptScroll, 150))
-    } else {
-      // Already on home page, scroll instantly
-      const sectionName = href.replace('#', '')
-      if (sectionName === 'contact') {
-        // Flag to skip Contact animation
-        sessionStorage.setItem('skipContactAnimation', 'true')
-      }
-      scrollWithInstant()
-    }
+    // Extract section ID from href (remove # prefix)
+    const sectionId = href.replace('#', '')
+    
+    // Use the centralized navigation utility
+    navigateToSection(sectionId, navigate, location.pathname)
   }
 
   // Toggle drawer open/closed
