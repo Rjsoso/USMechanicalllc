@@ -199,7 +199,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                   }
                   
                   const headingRect = heading.getBoundingClientRect()
-                  const desiredHeadingPos = 50
+                  const desiredHeadingPos = 65
                   const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
                   
                   console.warn(`[CORRECTION] Scroll settled, measuring`, {
