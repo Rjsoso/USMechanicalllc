@@ -310,7 +310,7 @@ export default function Home() {
   useEffect(() => {
     let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 8 // 120fps max
+    const THROTTLE = 150 // Reduced frequency to avoid conflicts with scroll settling/correction
     
     // Cancel handler for lock event
     const cancelPendingAnimations = () => {
