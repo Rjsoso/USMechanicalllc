@@ -126,7 +126,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           const sectionOffsets = {
             'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
             'portfolio': 72,    // pt-24 (96px padding) → title at ~24px from viewport top
-            'contact': -60,     // py-20 (80px padding) - negative offset to scroll INTO section → title at ~20px from top
+            'contact': 221,     // Adjusted from -60 to 221 to account for section padding and position heading at ~20px from top
             'about': 10,        // py-20 but title near top → title at ~20px from viewport top
             'safety': 10,       // same structure as about → title at ~20px from viewport top
             'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
@@ -250,7 +250,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
   const sectionOffsets = {
     'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
     'portfolio': 72,    // pt-24 (96px padding) → title at ~24px from viewport top
-    'contact': -60,     // py-20 (80px padding) - negative offset to scroll INTO section → title at ~20px from top
+    'contact': 221,     // Adjusted from -60 to 221 to account for section padding and position heading at ~20px from top
     'about': 10,        // py-20 but title near top → title at ~20px from viewport top
     'safety': 10,       // same structure as about → title at ~20px from viewport top
     'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
