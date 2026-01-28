@@ -197,6 +197,11 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     setTimeout(attemptScroll, 150)
   } else {
     // Already on home page - use robust scroll with retry mechanism for all sections
+    // For contact, set flag to skip animation during scroll
+    if (sectionId === 'contact') {
+      sessionStorage.setItem('skipContactAnimation', 'true')
+    }
+    
     const headerOffset = sectionOffsets[sectionId] || 180
     scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
       if (process.env.NODE_ENV === 'development') {

@@ -29,6 +29,7 @@ export default function Home() {
   // Contact slide animation state
   const [contactSlide, setContactSlide] = useState(-600)
   const contactAnimationComplete = useRef(false)
+  const skipContactAnimationOnce = useRef(false)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -136,8 +137,32 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
-  // Note: Animation skip logic removed to allow contact slide animation to always play
-  // The retry mechanism in scrollToSection handles timing and positioning correctly
+  // Skip contact animation ONCE when navigating directly
+  useEffect(() => {
+    const shouldSkipAnimation = 
+      sessionStorage.getItem('skipContactAnimation') === 'true' ||
+      location.state?.scrollTo === 'contact' || 
+      window.location.hash === '#contact'
+    
+    if (shouldSkipAnimation && !skipContactAnimationOnce.current) {
+      // Set slide to 0 for direct navigation
+      setContactSlide(0)
+      skipContactAnimationOnce.current = true
+      sessionStorage.removeItem('skipContactAnimation')
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Contact: Animation skipped for direct navigation')
+      }
+      
+      // Clear the flag after a delay to allow animation on subsequent scrolls
+      setTimeout(() => {
+        skipContactAnimationOnce.current = false
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Contact: Animation skip flag cleared')
+        }
+      }, 2000) // 2 second delay
+    }
+  }, [location.state?.scrollTo, location.hash])
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
@@ -228,6 +253,14 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
+        // If we're skipping animation for direct navigation, keep at 0
+        if (skipContactAnimationOnce.current) {
+          if (contactSlide !== 0) {
+            setContactSlide(0)
+          }
+          return // Don't run animation logic while skip is active
+        }
+        
         // If animation already completed, keep it locked at 0
         if (contactAnimationComplete.current) {
           if (contactSlide !== 0) {
