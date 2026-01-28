@@ -490,10 +490,12 @@ export default function Home() {
               WebkitTransformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              willChange: 'transform',
+              willChange: buttonNavigationUsed.current ? 'auto' : 'transform',
               WebkitFontSmoothing: 'antialiased',
               MozOsxFontSmoothing: 'grayscale',
               transition: buttonNavigationUsed.current ? 'none' : undefined,
+              contain: 'layout style paint',
+              isolation: 'isolate',
               position: 'relative',
               zIndex: 2,
             }}
