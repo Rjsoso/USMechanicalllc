@@ -200,13 +200,23 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
       sessionStorage.setItem('skipContactAnimation', 'true')
+      console.warn('[DEBUG] Contact navigation: Flag set, waiting 150ms for React state update...')
+      
+      // Wait for polling to detect flag and React to update contactSlide state
+      setTimeout(() => {
+        const headerOffset = sectionOffsets[sectionId] || 180
+        console.warn('[DEBUG] Contact navigation: Starting scroll after state update delay')
+        scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+          console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
+        })
+      }, 150) // Wait for polling (50ms) + React render (100ms buffer)
+    } else {
+      const headerOffset = sectionOffsets[sectionId] || 180
+      scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+        }
+      })
     }
-    
-    const headerOffset = sectionOffsets[sectionId] || 180
-    scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-      }
-    })
   }
 }
