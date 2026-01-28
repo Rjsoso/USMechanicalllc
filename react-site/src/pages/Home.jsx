@@ -514,9 +514,9 @@ export default function Home() {
                     zIndex: 2,
                   }
                 : {
-                    // Animation active - apply all transform properties
-                    transform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
-                    WebkitTransform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
+                    // Animation active - use smooth sub-pixel values
+                    transform: `translate3d(0, ${contactSlide}px, 0)`,
+                    WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
                     transformStyle: 'preserve-3d',
                     WebkitTransformStyle: 'preserve-3d',
                     backfaceVisibility: 'hidden',
