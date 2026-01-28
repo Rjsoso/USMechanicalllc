@@ -136,6 +136,20 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
+  // Handle direct navigation to Contact - skip animation
+  useEffect(() => {
+    const isDirectContactNavigation = 
+      location.state?.scrollTo === 'contact' || 
+      window.location.hash === '#contact'
+    
+    if (isDirectContactNavigation && !contactAnimationComplete.current) {
+      // User clicked Contact link - show it immediately
+      setContactSlide(0)
+      contactAnimationComplete.current = true
+      console.log('Direct Contact navigation detected - skipping animation')
+    }
+  }, [location.state?.scrollTo, location.hash])
+
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
   useEffect(() => {
