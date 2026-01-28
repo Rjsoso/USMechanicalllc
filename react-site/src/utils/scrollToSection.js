@@ -157,6 +157,16 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             top: targetPosition,
             behavior: 'instant',
           })
+          
+          // For contact, verify where we actually landed
+          if (sectionId === 'contact') {
+            setTimeout(() => {
+              const finalScrollY = window.scrollY
+              const heading = document.querySelector('#contact h1, #contact h2')
+              const headingTop = heading ? heading.getBoundingClientRect().top : 'not found'
+              console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
+            }, 100)
+          }
 
           if (process.env.NODE_ENV === 'development') {
             console.log(`✓ Successfully scrolled to section: ${sectionId}`)
