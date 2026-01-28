@@ -242,6 +242,72 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             requestAnimationFrame(checkScrollSettled)
           }
           
+          // For careers section, wait for scroll to settle then apply correction
+          if (sectionId === 'careers') {
+            // Wait for scroll to settle using stability detection
+            let lastScrollY = -1
+            let stableFrames = 0
+            const requiredStableFrames = 2 // Need 2 consecutive frames with same scrollY
+            
+            const checkScrollSettled = () => {
+              const currentScrollY = window.scrollY
+              
+              if (currentScrollY === lastScrollY) {
+                stableFrames++
+                console.warn(`[SETTLE-CAREERS] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
+                
+                if (stableFrames >= requiredStableFrames) {
+                  // Scroll has settled, now measure and correct
+                  const heading = document.querySelector('#careers h2')
+                  if (!heading) {
+                    console.warn(`[CORRECTION-CAREERS] Heading not found`)
+                    return
+                  }
+                  
+                  const headingRect = heading.getBoundingClientRect()
+                  const desiredHeadingPos = 110
+                  const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
+                  
+                  console.warn(`[CORRECTION-CAREERS] Scroll settled, measuring`, {
+                    currentHeadingPos: headingRect.top,
+                    desiredPos: desiredHeadingPos,
+                    currentScroll: currentScrollY,
+                    correctedTarget,
+                    discrepancy: headingRect.top - desiredHeadingPos
+                  })
+                  
+                  // Only correct if heading is not at desired position
+                  if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
+                    console.warn(`[CORRECTION-CAREERS] Applying correction to ${correctedTarget}px`)
+                    window.scrollTo({
+                      top: correctedTarget,
+                      behavior: 'instant',
+                    })
+                    
+                    // Verify final position
+                    requestAnimationFrame(() => {
+                      const finalRect = heading.getBoundingClientRect()
+                      console.warn(`[CORRECTION-CAREERS] Final position: ${finalRect.top}px from top`)
+                    })
+                  } else {
+                    console.warn(`[CORRECTION-CAREERS] No correction needed, already at ${headingRect.top}px`)
+                  }
+                  return // Done
+                }
+              } else {
+                // Scroll still moving, reset counter
+                stableFrames = 0
+                console.warn(`[SETTLE-CAREERS] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
+              }
+              
+              lastScrollY = currentScrollY
+              requestAnimationFrame(checkScrollSettled)
+            }
+            
+            // Start checking after initial scroll initiates
+            requestAnimationFrame(checkScrollSettled)
+          }
+          
           // For contact, verify where we actually landed
           if (sectionId === 'contact') {
             setTimeout(() => {
