@@ -5,7 +5,11 @@ export const client = createClient({
   projectId: '3vpl3hho',
   dataset: 'production',
   apiVersion: '2023-05-03',
-  useCdn: true,
+  useCdn: import.meta.env.DEV ? false : true, // Disable CDN in dev for fresh data
+  // Add withCredentials for CORS support
+  withCredentials: false,
+  // Use apiVersion date to avoid deprecation warnings
+  perspective: 'published', // Only fetch published documents
 })
 
 // Note: Write operations should be performed through Sanity Studio or backend APIs
