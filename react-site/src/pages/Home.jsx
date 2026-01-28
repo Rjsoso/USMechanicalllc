@@ -28,6 +28,7 @@ export default function Home() {
   const [contactSlide, setContactSlide] = useState(-600)
   const contactAnimationComplete = useRef(false)
   const skipContactAnimationOnce = useRef(false)
+  const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -165,12 +166,13 @@ export default function Home() {
       setContactSlide(0)
       skipContactAnimationOnce.current = true
       contactAnimationComplete.current = true // Mark as complete to prevent updates
+      buttonNavigationUsed.current = true // Permanently disable animation after any button nav
       console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
     }
     
     const handleUnlock = () => {
       skipContactAnimationOnce.current = false
-      // Keep contactAnimationComplete true - animation should stay at 0
+      // Keep contactAnimationComplete and buttonNavigationUsed true - animation stays disabled
       console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
     }
     
@@ -310,7 +312,7 @@ export default function Home() {
   useEffect(() => {
     let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 150 // Reduced frequency to avoid conflicts with scroll settling/correction
+    const THROTTLE = 8 // 120fps max - keep high for smooth animation
     
     // Cancel handler for lock event
     const cancelPendingAnimations = () => {
@@ -345,6 +347,14 @@ export default function Home() {
         if (window.__scrollNavigationLock) {
           if (contactSlide !== 0) setContactSlide(0)
           return
+        }
+        // If any button navigation was used, permanently disable animation
+        if (buttonNavigationUsed.current) {
+          if (contactSlide !== 0) {
+            setContactSlide(0)
+            contactAnimationComplete.current = true
+          }
+          return // Exit early - animation permanently disabled
         }
         // If we're skipping animation for direct navigation, keep at 0
         if (skipContactAnimationOnce.current) {
