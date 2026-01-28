@@ -178,7 +178,8 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           
           // For contact section, do a correction scroll after animations settle
           if (sectionId === 'contact') {
-            setTimeout(() => {
+            // Do correction immediately (0ms) since lock is already active
+            requestAnimationFrame(() => {
               // Measure the HEADING position, not the section
               const heading = document.querySelector('#contact h1, #contact h2')
               if (!heading) {
@@ -191,7 +192,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               const desiredHeadingPos = 20 // Want heading 20px from viewport top
               const correctedTarget = currentScroll + headingRect.top - desiredHeadingPos
               
-              console.warn(`[CORRECTION] Page settled, checking if correction needed`, {
+              console.warn(`[CORRECTION-1] First measurement`, {
                 currentHeadingPos: headingRect.top,
                 desiredHeadingPos,
                 currentScroll,
@@ -201,15 +202,21 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               
               // If heading is not at desired position, do correction scroll
               if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
-                console.warn(`[CORRECTION] Applying correction scroll to ${correctedTarget}px`)
+                console.warn(`[CORRECTION-1] Applying correction scroll to ${correctedTarget}px`)
                 window.scrollTo({
                   top: correctedTarget,
                   behavior: 'instant',
                 })
+                
+                // Verify final position after correction
+                requestAnimationFrame(() => {
+                  const finalHeadingRect = heading.getBoundingClientRect()
+                  console.warn(`[CORRECTION-2] Final heading position: ${finalHeadingRect.top}px from viewport top`)
+                })
               } else {
-                console.warn(`[CORRECTION] No correction needed, heading is at ${headingRect.top}px`)
+                console.warn(`[CORRECTION-1] No correction needed, heading is at ${headingRect.top}px`)
               }
-            }, 200) // Wait for page to settle after initial scroll
+            })
           }
           
           // For contact, verify where we actually landed
