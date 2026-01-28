@@ -36,6 +36,29 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
       const element = document.querySelector(`#${sectionId}`)
 
       if (element) {
+        // For contact section with animation transform, verify it's at 0 before scrolling
+        if (sectionId === 'contact') {
+          const parentElement = element.parentElement
+          if (parentElement) {
+            const computedStyle = window.getComputedStyle(parentElement)
+            const transform = computedStyle.transform
+            console.warn(`[DEBUG] Contact transform check: ${transform}`)
+            
+            // Check if transform is at identity (no translation)
+            // transform will be "none" or "matrix(1, 0, 0, 1, 0, 0)" when at 0
+            if (transform !== 'none' && transform !== 'matrix(1, 0, 0, 1, 0, 0)') {
+              console.warn(`[DEBUG] Contact transform not ready, retrying... (current: ${transform})`)
+              if (retryCount < effectiveMaxRetries) {
+                retryCount++
+                setTimeout(attemptScroll, retryDelay)
+                return false
+              }
+            } else {
+              console.warn(`[DEBUG] Contact transform ready: ${transform}`)
+            }
+          }
+        }
+
         // Element found - check if it's actually visible and has dimensions
         const rect = element.getBoundingClientRect()
         if (process.env.NODE_ENV === 'development') {
