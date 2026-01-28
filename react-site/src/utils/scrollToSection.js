@@ -343,13 +343,23 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
         return `${id}: ${el ? el.offsetHeight + 'px' : 'NOT FOUND'}`
       }).join(', ')
       console.warn(`[DIAG] Page height: ${document.documentElement.scrollHeight}px | Sections: ${sections}`)
+      console.warn(`[DEBUG] Contact navigation: Dispatched lock event, waiting for React to flush state...`)
       
+      // Wait longer for React to flush the setContactSlide(0) state update to DOM
       setTimeout(() => {
+        // Verify the transform is actually at 0 before scrolling
+        const contactWrapper = document.querySelector('#contact')?.parentElement
+        if (contactWrapper) {
+          const transform = window.getComputedStyle(contactWrapper).transform
+          console.warn(`[DEBUG] Contact wrapper transform after React flush: ${transform}`)
+        }
+        
         const headerOffset = sectionOffsets[sectionId] || 180
+        console.warn(`[DEBUG] Contact navigation: Starting scroll with offset ${headerOffset}`)
         scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
           console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
-      }, 150)
+      }, 300) // Increased from 150ms to 300ms to ensure React has time to flush state
     } else {
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
