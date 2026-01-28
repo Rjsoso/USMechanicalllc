@@ -136,6 +136,16 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
+  // Check sessionStorage flag on mount for same-page navigation
+  useEffect(() => {
+    if (sessionStorage.getItem('skipContactAnimation') === 'true') {
+      setContactSlide(0)
+      contactAnimationComplete.current = true
+      sessionStorage.removeItem('skipContactAnimation')
+      console.log('Direct Contact navigation detected (sessionStorage) - skipping animation')
+    }
+  }, [])
+
   // Handle direct navigation to Contact - skip animation
   useEffect(() => {
     const isDirectContactNavigation = 

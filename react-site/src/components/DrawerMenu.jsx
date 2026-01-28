@@ -124,6 +124,11 @@ const DrawerMenu = () => {
       requestAnimationFrame(() => setTimeout(attemptScroll, 150))
     } else {
       // Already on home page, scroll instantly
+      const sectionName = href.replace('#', '')
+      if (sectionName === 'contact') {
+        // Flag to skip Contact animation
+        sessionStorage.setItem('skipContactAnimation', 'true')
+      }
       scrollWithInstant()
     }
   }
