@@ -136,8 +136,8 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
-  // Check sessionStorage flag on mount for same-page navigation
-  useEffect(() => {
+  // Check sessionStorage flag BEFORE paint for faster detection
+  useLayoutEffect(() => {
     if (sessionStorage.getItem('skipContactAnimation') === 'true') {
       setContactSlide(0)
       contactAnimationComplete.current = true

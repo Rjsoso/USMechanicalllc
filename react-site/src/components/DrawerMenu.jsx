@@ -86,7 +86,7 @@ const DrawerMenu = () => {
       const sectionOffsets = {
         '#services': 80,     // pt-12 (48px) → title visible at ~32px from viewport top
         '#portfolio': 100,   // pt-24 (96px) → title visible at ~4px from viewport top
-        '#contact': 60,      // py-20 (80px) → title visible at ~20px from viewport top
+        '#contact': 160,     // py-20 (80px) + buffer to show title near top
         '#about': 60,        // py-20 (80px) → content visible at ~20px from viewport top
         '#safety': 60,       // (same as about)
         '#careers': 80,      // pt-8 (32px) → accounting for negative margin
