@@ -28,6 +28,7 @@ export default function Home() {
 
   // Contact slide animation state
   const [contactSlide, setContactSlide] = useState(-600)
+  const contactAnimationComplete = useRef(false)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -224,6 +225,14 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
+        // If animation already completed, keep it locked at 0
+        if (contactAnimationComplete.current) {
+          if (contactSlide !== 0) {
+            setContactSlide(0)
+          }
+          return // Exit early - no more calculations
+        }
+
         const contactSection = document.querySelector('#contact')
         if (!contactSection) return
 
@@ -246,6 +255,8 @@ export default function Home() {
           slideValue = -600 + (progress * 600) // -600 -> 0
         } else if (scrollPosition > animationEnd) {
           slideValue = 0 // Fully visible
+          contactAnimationComplete.current = true // Lock it!
+          console.log('Contact animation LOCKED at final position')
         }
 
         setContactSlide(slideValue)
@@ -257,7 +268,8 @@ export default function Home() {
             animationEnd,
             progress: scrollPosition > animationStart ? 
               ((scrollPosition - animationStart) / (animationEnd - animationStart)).toFixed(2) : 0,
-            slideValue: slideValue.toFixed(0)
+            slideValue: slideValue.toFixed(0),
+            locked: contactAnimationComplete.current
           })
         }
       })
