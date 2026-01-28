@@ -221,6 +221,7 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
+                  console.warn(`[DEBUG] "${heroData.buttonText}" clicked → navigating to: ${sectionId}`)
                   navigateToSection(sectionId, navigate, location.pathname)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
@@ -232,6 +233,7 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.secondButtonLink || '#careers').replace('#', '')
+                  console.warn(`[DEBUG] "${heroData.secondButtonText}" clicked → navigating to: ${sectionId}`)
                   navigateToSection(sectionId, navigate, location.pathname)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"

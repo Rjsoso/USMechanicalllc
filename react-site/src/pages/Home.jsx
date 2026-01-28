@@ -150,19 +150,34 @@ export default function Home() {
       skipContactAnimationOnce.current = true
       sessionStorage.removeItem('skipContactAnimation')
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Contact: Animation skipped for direct navigation')
-      }
+      console.warn('[DEBUG] Contact: Animation skipped for direct navigation, contactSlide set to 0')
       
       // Clear the flag after a delay to allow animation on subsequent scrolls
       setTimeout(() => {
         skipContactAnimationOnce.current = false
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Contact: Animation skip flag cleared')
-        }
+        console.warn('[DEBUG] Contact: Animation skip flag cleared')
       }, 2000) // 2 second delay
     }
   }, [location.state?.scrollTo, location.hash])
+  
+  // Poll for sessionStorage flag changes (for same-page navigation)
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      if (sessionStorage.getItem('skipContactAnimation') === 'true' && !skipContactAnimationOnce.current) {
+        setContactSlide(0)
+        skipContactAnimationOnce.current = true
+        sessionStorage.removeItem('skipContactAnimation')
+        console.warn('[DEBUG] Contact: Animation skipped (polling detected), contactSlide set to 0')
+        
+        setTimeout(() => {
+          skipContactAnimationOnce.current = false
+          console.warn('[DEBUG] Contact: Animation skip flag cleared after polling')
+        }, 2000)
+      }
+    }, 50) // Poll every 50ms
+    
+    return () => clearInterval(pollInterval)
+  }, [])
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
