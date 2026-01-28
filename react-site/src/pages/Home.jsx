@@ -1,5 +1,5 @@
 /* global process */
-import { useEffect, useLayoutEffect, useState, Suspense, lazy, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -7,14 +7,12 @@ import AboutAndSafety from '../components/AboutAndSafety'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 import Contact from '../pages/Contact'
+import CompanyStats from '../components/CompanyStats'
+import ServicesSection from '../components/ServicesSection'
+import Portfolio from '../components/Portfolio'
+import LogoLoopSection from '../components/LogoLoopSection'
+import Careers from '../components/Careers'
 import { scrollToSection } from '../utils/scrollToSection'
-
-// Lazy load below-fold components for better initial load performance
-const CompanyStats = lazy(() => import('../components/CompanyStats'))
-const ServicesSection = lazy(() => import('../components/ServicesSection'))
-const Portfolio = lazy(() => import('../components/Portfolio'))
-const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
-const Careers = lazy(() => import('../components/Careers'))
 
 export default function Home() {
   const location = useLocation()
@@ -369,72 +367,20 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <Suspense fallback={<div className="bg-black" style={{ minHeight: '200px' }}></div>}>
-              <CompanyStats />
-            </Suspense>
-
-            <Suspense 
-              fallback={
-                <section 
-                  id="services" 
-                  className="bg-transparent pt-12 text-center text-white" 
-                  style={{ minHeight: '600px' }}
-                >
-                  <div className="animate-pulse">
-                    <div className="mx-auto h-8 w-64 bg-white/10 rounded mb-4"></div>
-                    <div className="mx-auto h-4 w-96 bg-white/10 rounded"></div>
-                  </div>
-                </section>
-              }
-            >
-              <ServicesSection />
-            </Suspense>
-
-            <Suspense
-              fallback={
-                <section 
-                  id="portfolio" 
-                  className="bg-transparent pt-24 pb-0 text-white" 
-                  style={{ minHeight: '700px' }}
-                >
-                  <div className="animate-pulse text-center">
-                    <div className="mx-auto h-10 w-48 bg-white/10 rounded mb-6"></div>
-                    <div className="mx-auto h-4 w-80 bg-white/10 rounded"></div>
-                  </div>
-                </section>
-              }
-            >
-              <Portfolio />
-            </Suspense>
-
-            <Suspense fallback={<div className="bg-black" style={{ minHeight: '300px' }}></div>}>
-              <LogoLoopSection />
-            </Suspense>
+            <CompanyStats />
+            <ServicesSection />
+            <Portfolio />
+            <LogoLoopSection />
           </div>
 
-          <Suspense
-            fallback={
-              <section 
-                id="careers" 
-                className="bg-white pt-0 pb-24 text-black" 
-                style={{ minHeight: '800px' }}
-              >
-                <div className="animate-pulse text-center pt-20">
-                  <div className="mx-auto h-10 w-64 bg-gray-200 rounded mb-6"></div>
-                  <div className="mx-auto h-4 w-96 bg-gray-200 rounded"></div>
-                </div>
-              </section>
-            }
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 4,
+            }}
           >
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 4,
-              }}
-            >
-              <Careers />
-            </div>
-          </Suspense>
+            <Careers />
+          </div>
 
           <div
             style={{

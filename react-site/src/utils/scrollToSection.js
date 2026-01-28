@@ -64,10 +64,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
         
           // Enhanced debug logging for contact section
         if (sectionId === 'contact') {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'scrollToSection.js:66',message:'Contact rect measured',data:{rectTop:rect.top,rectHeight:rect.height,scrollY:window.scrollY,retryCount,docHeight:document.documentElement.scrollHeight,viewportHeight:window.innerHeight},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,C'})}).catch(()=>{});
-          // #endregion
-          
           console.warn(`[DEBUG] Contact rect:`, {
             top: rect.top,
             height: rect.height,
@@ -143,12 +139,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
           // Enhanced debug for contact scroll calculation
           if (sectionId === 'contact') {
-            // #region agent log
-            const sectionsAbove = ['hero','about','services','portfolio','careers'].map(id => {const el = document.querySelector(`#${id}`); return {id, height: el?.getBoundingClientRect().height || 0, top: el?.getBoundingClientRect().top || 0};});
-            const suspenseCount = document.querySelectorAll('[data-suspense-fallback]').length;
-            fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'scrollToSection.js:141',message:'Pre-scroll section heights',data:{sectionsAbove,suspenseCount,contactTop:rect.top,pageHeight:document.documentElement.scrollHeight},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,B,C,D'})}).catch(()=>{});
-            // #endregion
-            
             console.warn(`[DEBUG] Contact scroll calculation:`, {
               currentScroll,
               rectTop: rect.top,
@@ -295,10 +285,6 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     // Already on home page - use robust scroll with retry mechanism for all sections
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'scrollToSection.js:287',message:'Contact nav started',data:{pageHeight:document.documentElement.scrollHeight,scrollY:window.scrollY,timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
-      // #endregion
-      
       sessionStorage.setItem('skipContactAnimation', 'true')
       console.warn('[DEBUG] Contact navigation: Flag set, waiting 150ms for React state update...')
       
@@ -307,9 +293,6 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
         const headerOffset = sectionOffsets[sectionId] || 180
         console.warn('[DEBUG] Contact navigation: Starting scroll after state update delay')
         scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-          // #region agent log
-          setTimeout(() => {fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'scrollToSection.js:295',message:'Post-scroll page state',data:{success,finalScrollY:window.scrollY,finalPageHeight:document.documentElement.scrollHeight,contactTop:document.querySelector('#contact')?.getBoundingClientRect().top},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,C'})}).catch(()=>{});}, 500);
-          // #endregion
           console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
       }, 150) // Wait for polling (50ms) + React render (100ms buffer)

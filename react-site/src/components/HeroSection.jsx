@@ -221,11 +221,6 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
-                  // #region agent log
-                  const allSections = ['hero','about','services','portfolio','careers','contact'].map(id => {const el = document.querySelector(`#${id}`); return {id, exists: !!el, height: el?.offsetHeight || 0};});
-                  fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'HeroSection.jsx:223',message:'Button clicked',data:{buttonText:heroData.buttonText,targetSection:sectionId,pageHeight:document.documentElement.scrollHeight,allSections,suspenseCount:document.querySelectorAll('[data-suspense-fallback]').length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,D,E'})}).catch(()=>{});
-                  // #endregion
-                  console.warn(`[DEBUG] "${heroData.buttonText}" clicked → navigating to: ${sectionId}`)
                   navigateToSection(sectionId, navigate, location.pathname)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
