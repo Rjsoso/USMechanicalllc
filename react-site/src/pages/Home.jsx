@@ -161,13 +161,16 @@ export default function Home() {
   // Listen for lock/unlock events (synchronous)
   useEffect(() => {
     const handleLock = () => {
+      // FREEZE contactSlide at 0 - do NOT allow it to change
       setContactSlide(0)
       skipContactAnimationOnce.current = true
-      console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide forced to 0')
+      contactAnimationComplete.current = true // Mark as complete to prevent updates
+      console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
     }
     
     const handleUnlock = () => {
       skipContactAnimationOnce.current = false
+      // Keep contactAnimationComplete true - animation should stay at 0
       console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
     }
     
@@ -206,9 +209,25 @@ export default function Home() {
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max for high refresh rate displays
     const INTERPOLATION_SPEED = 0.15 // Smooth interpolation factor
+    
+    // Cancel handler for lock event
+    const cancelPendingScrollAnimations = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+    }
+    
+    window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
     // Smooth interpolation loop for buttery transforms
     const interpolate = () => {
+      // Check lock inside interpolation loop
+      if (window.__scrollNavigationLock) return
       const current = lastScrollSlideRef.current
       const target = targetScrollSlideRef.current
       const diff = target - current
@@ -229,7 +248,13 @@ export default function Home() {
 
     const handleScroll = () => {
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
-      if (window.__scrollNavigationLock) return
+      if (window.__scrollNavigationLock) {
+        if (rafId) {
+          cancelAnimationFrame(rafId)
+          rafId = null
+        }
+        return
+      }
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       
       const now = Date.now()
@@ -239,6 +264,8 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
+        // Double-check lock inside RAF callback
+        if (window.__scrollNavigationLock) return
         const safetySection = document.querySelector('#safety')
         if (!safetySection) return
 
@@ -275,6 +302,7 @@ export default function Home() {
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
+      window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
 
@@ -283,10 +311,27 @@ export default function Home() {
     let rafId = null
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max
+    
+    // Cancel handler for lock event
+    const cancelPendingAnimations = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
+      console.warn('[DEBUG] Contact: Cancelled pending animation frames')
+    }
+    
+    window.addEventListener('lockContactAnimation', cancelPendingAnimations)
 
     const handleContactScroll = () => {
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
-      if (window.__scrollNavigationLock) return
+      if (window.__scrollNavigationLock) {
+        if (rafId) {
+          cancelAnimationFrame(rafId)
+          rafId = null
+        }
+        return
+      }
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       
       const now = Date.now()
@@ -296,6 +341,11 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
+        // Double-check lock inside RAF callback
+        if (window.__scrollNavigationLock) {
+          if (contactSlide !== 0) setContactSlide(0)
+          return
+        }
         // If we're skipping animation for direct navigation, keep at 0
         if (skipContactAnimationOnce.current) {
           if (contactSlide !== 0) {
@@ -362,6 +412,7 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', handleContactScroll)
       window.removeEventListener('resize', handleContactScroll)
+      window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }
   }, [])
 
