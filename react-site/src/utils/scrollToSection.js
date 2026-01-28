@@ -196,11 +196,19 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     }
     setTimeout(attemptScroll, 150)
   } else {
-    // Already on home page, scroll instantly
+    // Already on home page - use robust scroll with retry mechanism
     if (sectionId === 'contact') {
       // Flag to skip Contact animation
       sessionStorage.setItem('skipContactAnimation', 'true')
     }
-    scrollWithInstant()
+    
+    // Use the full scrollToSection function with retry mechanism
+    // This waits for lazy-loaded content and verifies stable dimensions
+    const headerOffset = sectionOffsets[sectionId] || 180
+    scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+      }
+    })
   }
 }
