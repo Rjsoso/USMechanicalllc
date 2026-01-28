@@ -54,7 +54,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             'contact': -60,     // py-20 (80px padding) - negative offset to scroll INTO section → title at ~20px from top
             'about': 10,        // py-20 but title near top → title at ~20px from viewport top
             'safety': 10,       // same structure as about → title at ~20px from viewport top
-            'careers': 8,       // pt-8 (32px padding) → title at ~24px from viewport top
+            'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
             'hero': 0,          // full viewport, no adjustment needed
           }
           const effectiveOffset = sectionOffsets[sectionId] || headerOffset
@@ -157,7 +157,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     'contact': -60,     // py-20 (80px padding) - negative offset to scroll INTO section → title at ~20px from top
     'about': 10,        // py-20 but title near top → title at ~20px from viewport top
     'safety': 10,       // same structure as about → title at ~20px from viewport top
-    'careers': 8,       // pt-8 (32px padding) → title at ~24px from viewport top
+    'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
     'hero': 0,          // full viewport, no adjustment needed
   }
   
@@ -200,15 +200,25 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     if (sectionId === 'contact') {
       // Flag to skip Contact animation
       sessionStorage.setItem('skipContactAnimation', 'true')
+      
+      // Give React time to process the animation skip (check Home.jsx useLayoutEffect)
+      // This ensures contactSlide is set to 0 before we calculate scroll position
+      setTimeout(() => {
+        const headerOffset = sectionOffsets[sectionId] || 180
+        scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+          }
+        })
+      }, 100) // 100ms delay for animation state to update
+    } else {
+      // For other sections, scroll immediately
+      const headerOffset = sectionOffsets[sectionId] || 180
+      scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+        }
+      })
     }
-    
-    // Use the full scrollToSection function with retry mechanism
-    // This waits for lazy-loaded content and verifies stable dimensions
-    const headerOffset = sectionOffsets[sectionId] || 180
-    scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-      }
-    })
   }
 }
