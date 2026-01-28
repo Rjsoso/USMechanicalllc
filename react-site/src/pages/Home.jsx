@@ -6,6 +6,7 @@ import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import Contact from '../pages/Contact'
 import { scrollToSection } from '../utils/scrollToSection'
 
 // Lazy load below-fold components for better initial load performance
@@ -14,7 +15,6 @@ const ServicesSection = lazy(() => import('../components/ServicesSection'))
 const Portfolio = lazy(() => import('../components/Portfolio'))
 const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
 const Careers = lazy(() => import('../components/Careers'))
-const Contact = lazy(() => import('../pages/Contact'))
 
 export default function Home() {
   const location = useLocation()
@@ -436,40 +436,20 @@ export default function Home() {
             </div>
           </Suspense>
 
-          <Suspense
-            fallback={
-              <section
-                className="bg-black py-20 text-white"
-                style={{ minHeight: '80vh' }}
-              >
-                <div className="animate-pulse text-center">
-                  <div className="mx-auto h-10 w-72 bg-white/10 rounded mb-6"></div>
-                  <div className="mx-auto h-4 w-96 bg-white/10 rounded mb-8"></div>
-                  <div className="mx-auto max-w-2xl space-y-4">
-                    <div className="h-12 bg-white/10 rounded"></div>
-                    <div className="h-12 bg-white/10 rounded"></div>
-                    <div className="h-32 bg-white/10 rounded"></div>
-                    <div className="h-12 bg-white/10 rounded w-40"></div>
-                  </div>
-                </div>
-              </section>
-            }
+          <div
+            style={{
+              transform: `translate3d(0, ${contactSlide}px, 0)`,
+              WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
+              transformStyle: 'preserve-3d',
+              WebkitTransformStyle: 'preserve-3d',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              position: 'relative',
+              zIndex: 2,
+            }}
           >
-            <div
-              style={{
-                transform: `translate3d(0, ${contactSlide}px, 0)`,
-                WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
-                transformStyle: 'preserve-3d',
-                WebkitTransformStyle: 'preserve-3d',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                position: 'relative',
-                zIndex: 2,
-              }}
-            >
-              <Contact />
-            </div>
-          </Suspense>
+            <Contact />
+          </div>
         </div>
       </main>
 
