@@ -27,7 +27,7 @@ export default function Home() {
   const animationFrameRef = useRef(null)
 
   // Contact slide animation state
-  const [contactSlide, setContactSlide] = useState(-400)
+  const [contactSlide, setContactSlide] = useState(-600)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -238,12 +238,12 @@ export default function Home() {
         // Animation completes at 95% through Contact section
         const animationEnd = contactTop + (contactHeight * 0.95)
 
-        let slideValue = -400 // Start hidden behind Careers
+        let slideValue = -600 // Start hidden behind Careers
 
         if (scrollPosition >= animationStart && scrollPosition <= animationEnd) {
-          // Progressive animation - interpolate from -400 to 0
+          // Progressive animation - interpolate from -600 to 0
           const progress = (scrollPosition - animationStart) / (animationEnd - animationStart)
-          slideValue = -400 + (progress * 400) // -400 -> 0
+          slideValue = -600 + (progress * 600) // -600 -> 0
         } else if (scrollPosition > animationEnd) {
           slideValue = 0 // Fully visible
         }

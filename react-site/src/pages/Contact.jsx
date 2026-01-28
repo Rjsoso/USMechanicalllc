@@ -295,7 +295,7 @@ export default function Contact() {
         style={{
           backgroundColor: '#1a1a1a',
           minHeight: '100vh',
-          marginTop: '-15rem',
+          marginTop: '-25rem',
         }}
       >
         {/* Background removed - hero's fixed background shows through */}
