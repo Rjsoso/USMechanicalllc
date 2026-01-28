@@ -158,6 +158,28 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
   
+  // Listen for lock/unlock events (synchronous)
+  useEffect(() => {
+    const handleLock = () => {
+      setContactSlide(0)
+      skipContactAnimationOnce.current = true
+      console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide forced to 0')
+    }
+    
+    const handleUnlock = () => {
+      skipContactAnimationOnce.current = false
+      console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
+    }
+    
+    window.addEventListener('lockContactAnimation', handleLock)
+    window.addEventListener('unlockContactAnimation', handleUnlock)
+    
+    return () => {
+      window.removeEventListener('lockContactAnimation', handleLock)
+      window.removeEventListener('unlockContactAnimation', handleUnlock)
+    }
+  }, [])
+  
   // Poll for sessionStorage flag changes (for same-page navigation)
   useEffect(() => {
     const pollInterval = setInterval(() => {
@@ -206,7 +228,8 @@ export default function Home() {
     }
 
     const handleScroll = () => {
-      // Skip scroll animations during navigation
+      // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
+      if (window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       
       const now = Date.now()
@@ -262,7 +285,8 @@ export default function Home() {
     const THROTTLE = 8 // 120fps max
 
     const handleContactScroll = () => {
-      // Skip scroll animations during navigation
+      // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
+      if (window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       
       const now = Date.now()

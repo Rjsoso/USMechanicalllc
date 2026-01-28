@@ -1,4 +1,8 @@
 /* global process */
+
+// Global flag to lock animations during navigation (synchronous, not async like sessionStorage)
+window.__scrollNavigationLock = false
+
 /**
  * Scrolls to a section with instant behavior (no animation)
  * @param {string} sectionId - The ID of the section to scroll to (without #)
@@ -190,8 +194,10 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               
               console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
               
-              // Clear navigation flag after scroll completes
+              // Clear navigation flags after scroll completes
               sessionStorage.removeItem('scrollNavigationInProgress')
+              window.__scrollNavigationLock = false
+              window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
             }, 100)
           }
 
@@ -320,10 +326,16 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     setTimeout(attemptScroll, 150)
   } else {
     // Already on home page - use robust scroll with retry mechanism for all sections
+    // LOCK ANIMATIONS IMMEDIATELY (synchronous global flag)
+    window.__scrollNavigationLock = true
+    
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
       sessionStorage.setItem('skipContactAnimation', 'true')
       sessionStorage.setItem('scrollNavigationInProgress', 'true')
+      
+      // Dispatch event to force contactSlide to 0 immediately
+      window.dispatchEvent(new CustomEvent('lockContactAnimation'))
       
       // Diagnostic: Log section heights at button click
       const sections = ['hero', 'about', 'services', 'portfolio', 'careers', 'contact'].map(id => {
