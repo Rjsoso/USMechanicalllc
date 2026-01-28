@@ -475,12 +475,15 @@ export default function Home() {
 
           <div
             style={{
-              transform: `translate3d(0, ${contactSlide}px, 0)`,
-              WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
+              transform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
+              WebkitTransform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
               transformStyle: 'preserve-3d',
               WebkitTransformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
+              willChange: 'transform',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
               position: 'relative',
               zIndex: 2,
             }}
