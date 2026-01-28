@@ -484,6 +484,7 @@ export default function Home() {
               willChange: 'transform',
               WebkitFontSmoothing: 'antialiased',
               MozOsxFontSmoothing: 'grayscale',
+              transition: buttonNavigationUsed.current ? 'none' : undefined,
               position: 'relative',
               zIndex: 2,
             }}
