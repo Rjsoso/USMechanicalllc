@@ -152,6 +152,20 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             console.log(`Scrolling instantly to ${sectionId} with ${effectiveOffset}px offset`)
           }
 
+          // For contact section, add additional diagnostics
+          if (sectionId === 'contact') {
+            const beforeScrollY = window.scrollY
+            const beforePageHeight = document.documentElement.scrollHeight
+            const beforeContactRect = element.getBoundingClientRect()
+            
+            console.warn(`[PRE-SCROLL] About to scroll to ${targetPosition}px`, {
+              currentScroll: beforeScrollY,
+              pageHeight: beforePageHeight,
+              contactTop: beforeContactRect.top,
+              maxScroll: beforePageHeight - window.innerHeight
+            })
+          }
+          
           // Use instant scroll for immediate, clean navigation
           window.scrollTo({
             top: targetPosition,
@@ -162,9 +176,22 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           if (sectionId === 'contact') {
             setTimeout(() => {
               const finalScrollY = window.scrollY
+              const finalPageHeight = document.documentElement.scrollHeight
+              const finalContactRect = element.getBoundingClientRect()
               const heading = document.querySelector('#contact h1, #contact h2')
               const headingTop = heading ? heading.getBoundingClientRect().top : 'not found'
+              
+              console.warn(`[POST-SCROLL] Landed at ${finalScrollY}px (target was ${targetPosition}px)`, {
+                discrepancy: targetPosition - finalScrollY,
+                pageHeight: finalPageHeight,
+                contactTop: finalContactRect.top,
+                maxScroll: finalPageHeight - window.innerHeight
+              })
+              
               console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
+              
+              // Clear navigation flag after scroll completes
+              sessionStorage.removeItem('scrollNavigationInProgress')
             }, 100)
           }
 
@@ -296,6 +323,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
       sessionStorage.setItem('skipContactAnimation', 'true')
+      sessionStorage.setItem('scrollNavigationInProgress', 'true')
       
       // Diagnostic: Log section heights at button click
       const sections = ['hero', 'about', 'services', 'portfolio', 'careers', 'contact'].map(id => {

@@ -206,6 +206,9 @@ export default function Home() {
     }
 
     const handleScroll = () => {
+      // Skip scroll animations during navigation
+      if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
+      
       const now = Date.now()
       if (now - lastScrollTime < THROTTLE) return
       lastScrollTime = now
@@ -259,6 +262,9 @@ export default function Home() {
     const THROTTLE = 8 // 120fps max
 
     const handleContactScroll = () => {
+      // Skip scroll animations during navigation
+      if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
+      
       const now = Date.now()
       if (now - lastScrollTime < THROTTLE) return
       lastScrollTime = now
