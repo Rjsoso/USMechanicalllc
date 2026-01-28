@@ -347,12 +347,24 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
       
       // Wait longer for React to flush the setContactSlide(0) state update to DOM
       setTimeout(() => {
-        // Verify the transform is actually at 0 before scrolling
+        // Verify BOTH transforms are at 0 before scrolling
         const contactWrapper = document.querySelector('#contact')?.parentElement
+        const scrollAnimWrapper = document.querySelector('.has-scroll-animation')
+        
+        let contactTransform = 'not found'
+        let scrollTransform = 'not found'
+        
         if (contactWrapper) {
-          const transform = window.getComputedStyle(contactWrapper).transform
-          console.warn(`[DEBUG] Contact wrapper transform after React flush: ${transform}`)
+          contactTransform = window.getComputedStyle(contactWrapper).transform
         }
+        if (scrollAnimWrapper) {
+          scrollTransform = window.getComputedStyle(scrollAnimWrapper).transform
+        }
+        
+        console.warn(`[DEBUG] Transforms after React flush:`, {
+          contactWrapper: contactTransform,
+          scrollAnimWrapper: scrollTransform
+        })
         
         const headerOffset = sectionOffsets[sectionId] || 180
         console.warn(`[DEBUG] Contact navigation: Starting scroll with offset ${headerOffset}`)
