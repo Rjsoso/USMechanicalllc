@@ -313,18 +313,8 @@ export default function Home() {
     let rafId = null
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max - keep high for smooth animation
+    let scrollListenerActive = true
     
-    // Cancel handler for lock event
-    const cancelPendingAnimations = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId)
-        rafId = null
-      }
-      console.warn('[DEBUG] Contact: Cancelled pending animation frames')
-    }
-    
-    window.addEventListener('lockContactAnimation', cancelPendingAnimations)
-
     const handleContactScroll = () => {
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
@@ -353,6 +343,13 @@ export default function Home() {
           if (contactSlide !== 0) {
             setContactSlide(0)
             contactAnimationComplete.current = true
+          }
+          // Remove scroll listener to stop all processing
+          if (scrollListenerActive) {
+            window.removeEventListener('scroll', handleContactScroll)
+            window.removeEventListener('resize', handleContactScroll)
+            scrollListenerActive = false
+            console.warn('[DEBUG] Contact: Scroll listener removed after button navigation')
           }
           return // Exit early - animation permanently disabled
         }
@@ -414,14 +411,26 @@ export default function Home() {
       })
     }
 
+    // Cancel handler for lock event
+    const cancelPendingAnimations = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
+      console.warn('[DEBUG] Contact: Cancelled pending animation frames')
+    }
+    
+    window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScroll, { passive: true })
     window.addEventListener('resize', handleContactScroll)
     handleContactScroll() // Check initial state
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
-      window.removeEventListener('scroll', handleContactScroll)
-      window.removeEventListener('resize', handleContactScroll)
+      if (scrollListenerActive) {
+        window.removeEventListener('scroll', handleContactScroll)
+        window.removeEventListener('resize', handleContactScroll)
+      }
       window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }
   }, [])
