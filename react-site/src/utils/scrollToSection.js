@@ -196,29 +196,12 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     }
     setTimeout(attemptScroll, 150)
   } else {
-    // Already on home page - use robust scroll with retry mechanism
-    if (sectionId === 'contact') {
-      // Flag to skip Contact animation
-      sessionStorage.setItem('skipContactAnimation', 'true')
-      
-      // Give React time to process the animation skip (check Home.jsx useLayoutEffect)
-      // This ensures contactSlide is set to 0 before we calculate scroll position
-      setTimeout(() => {
-        const headerOffset = sectionOffsets[sectionId] || 180
-        scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-          }
-        })
-      }, 100) // 100ms delay for animation state to update
-    } else {
-      // For other sections, scroll immediately
-      const headerOffset = sectionOffsets[sectionId] || 180
-      scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-        }
-      })
-    }
+    // Already on home page - use robust scroll with retry mechanism for all sections
+    const headerOffset = sectionOffsets[sectionId] || 180
+    scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+      }
+    })
   }
 }

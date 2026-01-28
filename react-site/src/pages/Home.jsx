@@ -136,29 +136,8 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
-  // Check sessionStorage flag BEFORE paint for faster detection
-  useLayoutEffect(() => {
-    if (sessionStorage.getItem('skipContactAnimation') === 'true') {
-      setContactSlide(0)
-      contactAnimationComplete.current = true
-      sessionStorage.removeItem('skipContactAnimation')
-      console.log('Direct Contact navigation detected (sessionStorage) - skipping animation')
-    }
-  }, [])
-
-  // Handle direct navigation to Contact - skip animation
-  useEffect(() => {
-    const isDirectContactNavigation = 
-      location.state?.scrollTo === 'contact' || 
-      window.location.hash === '#contact'
-    
-    if (isDirectContactNavigation && !contactAnimationComplete.current) {
-      // User clicked Contact link - show it immediately
-      setContactSlide(0)
-      contactAnimationComplete.current = true
-      console.log('Direct Contact navigation detected - skipping animation')
-    }
-  }, [location.state?.scrollTo, location.hash])
+  // Note: Animation skip logic removed to allow contact slide animation to always play
+  // The retry mechanism in scrollToSection handles timing and positioning correctly
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
