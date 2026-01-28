@@ -483,22 +483,30 @@ export default function Home() {
           </div>
 
           <div
-            style={{
-              transform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
-              WebkitTransform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
-              transformStyle: 'preserve-3d',
-              WebkitTransformStyle: 'preserve-3d',
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              willChange: buttonNavigationUsed.current ? 'auto' : 'transform',
-              WebkitFontSmoothing: 'antialiased',
-              MozOsxFontSmoothing: 'grayscale',
-              transition: buttonNavigationUsed.current ? 'none' : undefined,
-              contain: 'layout style paint',
-              isolation: 'isolate',
-              position: 'relative',
-              zIndex: 2,
-            }}
+            style={
+              buttonNavigationUsed.current
+                ? {
+                    // No transform - Contact in natural position after button nav
+                    position: 'relative',
+                    zIndex: 2,
+                  }
+                : {
+                    // Animation active - apply all transform properties
+                    transform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
+                    WebkitTransform: `translate3d(0, ${Math.round(contactSlide)}px, 0)`,
+                    transformStyle: 'preserve-3d',
+                    WebkitTransformStyle: 'preserve-3d',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    willChange: 'transform',
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    contain: 'layout style paint',
+                    isolation: 'isolate',
+                    position: 'relative',
+                    zIndex: 2,
+                  }
+            }
           >
             <Contact />
           </div>
