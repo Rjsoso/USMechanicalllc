@@ -176,47 +176,70 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             behavior: 'instant',
           })
           
-          // For contact section, do a correction scroll after animations settle
+          // For contact section, wait for scroll to settle then apply correction
           if (sectionId === 'contact') {
-            // Do correction immediately (0ms) since lock is already active
-            requestAnimationFrame(() => {
-              // Measure the HEADING position, not the section
-              const heading = document.querySelector('#contact h1, #contact h2')
-              if (!heading) {
-                console.warn(`[CORRECTION] Heading not found, skipping correction`)
-                return
-              }
+            // Wait for scroll to settle using stability detection
+            let lastScrollY = -1
+            let stableFrames = 0
+            const requiredStableFrames = 2 // Need 2 consecutive frames with same scrollY
+            
+            const checkScrollSettled = () => {
+              const currentScrollY = window.scrollY
               
-              const headingRect = heading.getBoundingClientRect()
-              const currentScroll = window.scrollY
-              const desiredHeadingPos = 20 // Want heading 20px from viewport top
-              const correctedTarget = currentScroll + headingRect.top - desiredHeadingPos
-              
-              console.warn(`[CORRECTION-1] First measurement`, {
-                currentHeadingPos: headingRect.top,
-                desiredHeadingPos,
-                currentScroll,
-                correctedTarget,
-                discrepancy: headingRect.top - desiredHeadingPos
-              })
-              
-              // If heading is not at desired position, do correction scroll
-              if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
-                console.warn(`[CORRECTION-1] Applying correction scroll to ${correctedTarget}px`)
-                window.scrollTo({
-                  top: correctedTarget,
-                  behavior: 'instant',
-                })
+              if (currentScrollY === lastScrollY) {
+                stableFrames++
+                console.warn(`[SETTLE] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
                 
-                // Verify final position after correction
-                requestAnimationFrame(() => {
-                  const finalHeadingRect = heading.getBoundingClientRect()
-                  console.warn(`[CORRECTION-2] Final heading position: ${finalHeadingRect.top}px from viewport top`)
-                })
+                if (stableFrames >= requiredStableFrames) {
+                  // Scroll has settled, now measure and correct
+                  const heading = document.querySelector('#contact h1, #contact h2')
+                  if (!heading) {
+                    console.warn(`[CORRECTION] Heading not found`)
+                    return
+                  }
+                  
+                  const headingRect = heading.getBoundingClientRect()
+                  const desiredHeadingPos = 20
+                  const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
+                  
+                  console.warn(`[CORRECTION] Scroll settled, measuring`, {
+                    currentHeadingPos: headingRect.top,
+                    desiredPos: desiredHeadingPos,
+                    currentScroll: currentScrollY,
+                    correctedTarget,
+                    discrepancy: headingRect.top - desiredHeadingPos
+                  })
+                  
+                  // Only correct if heading is not at desired position
+                  if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
+                    console.warn(`[CORRECTION] Applying correction to ${correctedTarget}px`)
+                    window.scrollTo({
+                      top: correctedTarget,
+                      behavior: 'instant',
+                    })
+                    
+                    // Verify final position
+                    requestAnimationFrame(() => {
+                      const finalRect = heading.getBoundingClientRect()
+                      console.warn(`[CORRECTION] Final position: ${finalRect.top}px from top`)
+                    })
+                  } else {
+                    console.warn(`[CORRECTION] No correction needed, already at ${headingRect.top}px`)
+                  }
+                  return // Done
+                }
               } else {
-                console.warn(`[CORRECTION-1] No correction needed, heading is at ${headingRect.top}px`)
+                // Scroll still moving, reset counter
+                stableFrames = 0
+                console.warn(`[SETTLE] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
               }
-            })
+              
+              lastScrollY = currentScrollY
+              requestAnimationFrame(checkScrollSettled)
+            }
+            
+            // Start checking after initial scroll initiates
+            requestAnimationFrame(checkScrollSettled)
           }
           
           // For contact, verify where we actually landed
