@@ -29,6 +29,16 @@ export default function Home() {
   const contactAnimationComplete = useRef(false)
   const skipContactAnimationOnce = useRef(false)
   const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
+  
+  // DEBUG: Track Contact wrapper renders
+  useEffect(() => {
+    console.warn('[RENDER-DEBUG] Contact wrapper rendered', {
+      contactSlide,
+      buttonNavigationUsed: buttonNavigationUsed.current,
+      hasTransform: !buttonNavigationUsed.current,
+      timestamp: Date.now()
+    })
+  }, [contactSlide])
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -168,6 +178,7 @@ export default function Home() {
       contactAnimationComplete.current = true // Mark as complete to prevent updates
       buttonNavigationUsed.current = true // Permanently disable animation after any button nav
       console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
+      console.warn('[BUTTON-NAV] buttonNavigationUsed set to TRUE - animation permanently disabled')
     }
     
     const handleUnlock = () => {
@@ -316,6 +327,14 @@ export default function Home() {
     let scrollListenerActive = true
     
     const handleContactScroll = () => {
+      // DEBUG: Log every scroll event
+      console.warn('[SCROLL-EVENT] Fired', {
+        buttonNavigationUsed: buttonNavigationUsed.current,
+        contactSlide,
+        scrollListenerActive,
+        timestamp: Date.now()
+      })
+      
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
         if (rafId) {
@@ -349,7 +368,11 @@ export default function Home() {
             window.removeEventListener('scroll', handleContactScroll)
             window.removeEventListener('resize', handleContactScroll)
             scrollListenerActive = false
-            console.warn('[DEBUG] Contact: Scroll listener removed after button navigation')
+            console.warn('[LISTENER] Scroll listener REMOVED', {
+              contactSlide,
+              buttonNavigationUsed: buttonNavigationUsed.current,
+              timestamp: Date.now()
+            })
           }
           return // Exit early - animation permanently disabled
         }
