@@ -221,6 +221,41 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
+                  
+                  // Capture page state at button click
+                  const sections = ['hero', 'about', 'services', 'portfolio', 'careers', 'contact'].map(id => {
+                    const el = document.querySelector(`#${id}`)
+                    return {
+                      id,
+                      exists: !!el,
+                      offsetHeight: el?.offsetHeight || 0,
+                      scrollHeight: el?.scrollHeight || 0,
+                      clientHeight: el?.clientHeight || 0,
+                      rectTop: el?.getBoundingClientRect().top || 0,
+                      rectHeight: el?.getBoundingClientRect().height || 0
+                    }
+                  })
+                  
+                  const scrollWrapper = document.querySelector('.has-scroll-animation')
+                  const scrollWrapperTransform = scrollWrapper ? window.getComputedStyle(scrollWrapper).transform : 'not found'
+                  
+                  const images = Array.from(document.querySelectorAll('img'))
+                  const imageStats = {
+                    total: images.length,
+                    complete: images.filter(img => img.complete).length,
+                    loading: images.filter(img => !img.complete).length
+                  }
+                  
+                  console.warn('[DIAG] Button click state:', {
+                    pageHeight: document.documentElement.scrollHeight,
+                    viewportHeight: window.innerHeight,
+                    scrollY: window.scrollY,
+                    sections,
+                    scrollWrapperTransform,
+                    imageStats,
+                    timeSinceLoad: performance.now()
+                  })
+                  
                   navigateToSection(sectionId, navigate, location.pathname)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
