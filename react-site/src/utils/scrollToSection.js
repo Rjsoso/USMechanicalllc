@@ -176,6 +176,33 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             behavior: 'instant',
           })
           
+          // For contact section, do a correction scroll after animations settle
+          if (sectionId === 'contact') {
+            setTimeout(() => {
+              const newRect = element.getBoundingClientRect()
+              const currentScroll = window.scrollY
+              const correctedTarget = currentScroll + newRect.top - effectiveOffset
+              
+              console.warn(`[CORRECTION] Page settled, checking if correction needed`, {
+                currentHeadingPos: newRect.top,
+                desiredOffset: effectiveOffset,
+                currentScroll,
+                correctedTarget
+              })
+              
+              // If heading is not at desired position, do correction scroll
+              if (Math.abs(newRect.top - effectiveOffset) > 10) {
+                console.warn(`[CORRECTION] Applying correction scroll to ${correctedTarget}px`)
+                window.scrollTo({
+                  top: correctedTarget,
+                  behavior: 'instant',
+                })
+              } else {
+                console.warn(`[CORRECTION] No correction needed, position is accurate`)
+              }
+            }, 200) // Wait for page to settle after initial scroll
+          }
+          
           // For contact, verify where we actually landed
           if (sectionId === 'contact') {
             setTimeout(() => {
@@ -194,10 +221,13 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               
               console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
               
-              // Clear navigation flags after scroll completes
-              sessionStorage.removeItem('scrollNavigationInProgress')
-              window.__scrollNavigationLock = false
-              window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
+              // Keep lock active longer to prevent animations from running during/after scroll
+              setTimeout(() => {
+                sessionStorage.removeItem('scrollNavigationInProgress')
+                window.__scrollNavigationLock = false
+                window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
+                console.warn('[DEBUG] Navigation lock released after extended delay')
+              }, 500) // Extended delay to ensure all scroll events have settled
             }, 100)
           }
 
