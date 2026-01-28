@@ -325,16 +325,16 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               })
               
               console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
-              
-              // Keep lock active longer to prevent animations from running during/after scroll
-              setTimeout(() => {
-                sessionStorage.removeItem('scrollNavigationInProgress')
-                window.__scrollNavigationLock = false
-                window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
-                console.warn('[DEBUG] Navigation lock released after extended delay')
-              }, 500) // Extended delay to ensure all scroll events have settled
             }, 100)
           }
+          
+          // Release lock and unlock animation for ALL sections after scroll completes
+          setTimeout(() => {
+            sessionStorage.removeItem('scrollNavigationInProgress')
+            window.__scrollNavigationLock = false
+            window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
+            console.warn(`[DEBUG] Navigation lock released for ${sectionId}`)
+          }, 500) // Extended delay to ensure all scroll events have settled
 
           if (process.env.NODE_ENV === 'development') {
             console.log(`✓ Successfully scrolled to section: ${sectionId}`)
@@ -465,13 +465,14 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     window.__scrollNavigationLock = true
     console.warn(`[DEBUG] Navigation lock SET for section: ${sectionId}`)
     
+    // Dispatch lock event for ALL button navigations to disable Contact animation
+    window.dispatchEvent(new CustomEvent('lockContactAnimation'))
+    console.warn(`[DEBUG] lockContactAnimation event dispatched for ${sectionId} navigation`)
+    
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
       sessionStorage.setItem('skipContactAnimation', 'true')
       sessionStorage.setItem('scrollNavigationInProgress', 'true')
-      
-      // Dispatch event to force contactSlide to 0 immediately
-      window.dispatchEvent(new CustomEvent('lockContactAnimation'))
       
       // Diagnostic: Log section heights at button click
       const sections = ['hero', 'about', 'services', 'portfolio', 'careers', 'contact'].map(id => {
