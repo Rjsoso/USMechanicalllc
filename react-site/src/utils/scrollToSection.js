@@ -61,6 +61,18 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Element found - check if it's actually visible and has dimensions
         const rect = element.getBoundingClientRect()
+        
+        // Enhanced debug logging for contact section
+        if (sectionId === 'contact') {
+          console.warn(`[DEBUG] Contact rect:`, {
+            top: rect.top,
+            height: rect.height,
+            bottom: rect.bottom,
+            currentScroll: window.scrollY,
+            retryCount: retryCount,
+          })
+        }
+        
         if (process.env.NODE_ENV === 'development') {
           console.log(
             `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
@@ -69,6 +81,46 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
+          // For contact section, verify position stability
+          if (sectionId === 'contact') {
+            // Store position from previous check
+            if (!attemptScroll.lastContactTop) {
+              attemptScroll.lastContactTop = rect.top
+              attemptScroll.lastContactHeight = rect.height
+              console.warn(`[DEBUG] Contact: First position check, storing baseline`)
+              if (retryCount < effectiveMaxRetries) {
+                retryCount++
+                setTimeout(attemptScroll, retryDelay)
+                return false
+              }
+            }
+            
+            // Check if position has stabilized
+            const topDiff = Math.abs(rect.top - attemptScroll.lastContactTop)
+            const heightDiff = Math.abs(rect.height - attemptScroll.lastContactHeight)
+            
+            if (topDiff > 5 || heightDiff > 10) {
+              // Position still changing - content still loading
+              console.warn(`[DEBUG] Contact position unstable, retrying...`, {
+                topDiff,
+                heightDiff,
+                previousTop: attemptScroll.lastContactTop,
+                currentTop: rect.top,
+                previousHeight: attemptScroll.lastContactHeight,
+                currentHeight: rect.height
+              })
+              attemptScroll.lastContactTop = rect.top
+              attemptScroll.lastContactHeight = rect.height
+              if (retryCount < effectiveMaxRetries) {
+                retryCount++
+                setTimeout(attemptScroll, retryDelay)
+                return false
+              }
+            } else {
+              console.warn(`[DEBUG] Contact position stable, proceeding with scroll`)
+            }
+          }
+          
           // Section-specific offset adjustments for optimal title visibility
           // Precise offsets calculated to position titles at 20-25px from viewport top
           const sectionOffsets = {
@@ -84,6 +136,17 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
           const currentScroll = window.scrollY || window.pageYOffset
           const targetPosition = currentScroll + rect.top - effectiveOffset
+
+          // Enhanced debug for contact scroll calculation
+          if (sectionId === 'contact') {
+            console.warn(`[DEBUG] Contact scroll calculation:`, {
+              currentScroll,
+              rectTop: rect.top,
+              effectiveOffset,
+              targetPosition,
+              calculation: `${currentScroll} + ${rect.top} - ${effectiveOffset} = ${targetPosition}`
+            })
+          }
 
           if (process.env.NODE_ENV === 'development') {
             console.log(`Scrolling instantly to ${sectionId} with ${effectiveOffset}px offset`)
