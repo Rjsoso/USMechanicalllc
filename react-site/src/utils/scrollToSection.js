@@ -181,7 +181,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             // Wait for scroll to settle using stability detection
             let lastScrollY = -1
             let stableFrames = 0
-            const requiredStableFrames = 2 // Need 2 consecutive frames with same scrollY
+            const requiredStableFrames = 4 // Need 4 consecutive frames to ensure all transforms settled
             
             const checkScrollSettled = () => {
               const currentScrollY = window.scrollY
