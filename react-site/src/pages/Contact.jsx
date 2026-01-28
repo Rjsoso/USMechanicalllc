@@ -12,17 +12,12 @@ import {
   getRemainingSubmissions,
 } from '../utils/rateLimit'
 
-export default function Contact({ disableInternalAnimations = false }) {
+export default function Contact() {
   const [contactData, setContactData] = useState(null)
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const headerOffset = 180
-
-  // Debug: Log when component mounts
-  useEffect(() => {
-    console.log('Contact component mounted, disableInternalAnimations:', disableInternalAnimations);
-  }, [disableInternalAnimations])
 
   // Form state
   const [formData, setFormData] = useState({
@@ -334,8 +329,8 @@ export default function Contact({ disableInternalAnimations = false }) {
           {!loading && contactData && (
             <>
               <motion.h1
-                initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 className="section-title mb-8 text-center text-5xl text-white md:text-6xl"
@@ -345,8 +340,8 @@ export default function Contact({ disableInternalAnimations = false }) {
 
               <motion.p
                 className="mb-12 text-center text-white"
-                initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
               >
@@ -361,8 +356,8 @@ export default function Contact({ disableInternalAnimations = false }) {
                       <motion.div
                         key={index}
                         className="mb-8"
-                        initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '0px' }}
                         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                       >
@@ -384,8 +379,8 @@ export default function Contact({ disableInternalAnimations = false }) {
                   {contactData.affiliates && contactData.affiliates.length > 0 && (
                     <motion.div
                       className="mt-8"
-                      initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '0px' }}
                       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                     >
@@ -396,8 +391,8 @@ export default function Contact({ disableInternalAnimations = false }) {
                         <motion.div
                           key={i}
                           className="mb-6"
-                          initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true, margin: '0px' }}
                           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                         >
@@ -427,8 +422,8 @@ export default function Contact({ disableInternalAnimations = false }) {
                 {/* RIGHT SIDE — FORM */}
                 <motion.div
                   className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm"
-                  initial={disableInternalAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 >

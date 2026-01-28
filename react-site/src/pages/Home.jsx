@@ -28,8 +28,6 @@ export default function Home() {
 
   // Contact slide animation state
   const [contactSlide, setContactSlide] = useState(-400)
-  const contactAnimationTriggered = useRef(false)
-  const [contactTransitionEnabled, setContactTransitionEnabled] = useState(false)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -212,36 +210,13 @@ export default function Home() {
     }
   }, [])
 
-  // Enable Contact transition after initial render
+  // Contact section progressive slide animation
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setContactTransitionEnabled(true)
-      console.log('Contact transition enabled')
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Contact section slide-out animation - triggers once at 50% through Careers
-  useEffect(() => {
-    // Skip animation if navigating directly to contact
-    const isDirectContactNavigation = 
-      location.state?.scrollTo === 'contact' || 
-      window.location.hash === '#contact'
-    
-    if (isDirectContactNavigation) {
-      contactAnimationTriggered.current = true
-      setContactSlide(0)
-      return
-    }
-
     let rafId = null
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max
 
     const handleContactScroll = () => {
-      // Only run once per page load
-      if (contactAnimationTriggered.current) return
-
       const now = Date.now()
       if (now - lastScrollTime < THROTTLE) return
       lastScrollTime = now
@@ -249,31 +224,41 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
-        const careersSection = document.querySelector('#careers')
-        if (!careersSection) return
+        const contactSection = document.querySelector('#contact')
+        if (!contactSection) return
 
-        const rect = careersSection.getBoundingClientRect()
-        const careersTop = rect.top + window.scrollY
-        const careersHeight = rect.height
+        const rect = contactSection.getBoundingClientRect()
+        const contactTop = rect.top + window.scrollY
+        const contactHeight = rect.height
         const scrollPosition = window.scrollY + window.innerHeight
+        const viewportHeight = window.innerHeight
 
-        // Trigger at 50% through careers section
-        const triggerPoint = careersTop + (careersHeight * 0.5)
+        // Animation starts when Contact enters viewport
+        const animationStart = contactTop + viewportHeight * 0.2 // 20% into viewport
+        // Animation completes at 95% through Contact section
+        const animationEnd = contactTop + (contactHeight * 0.95)
 
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Contact scroll check:', {
-            scrollPosition,
-            triggerPoint,
-            careersTop,
-            careersHeight,
-            triggered: contactAnimationTriggered.current
-          })
+        let slideValue = -400 // Start hidden behind Careers
+
+        if (scrollPosition >= animationStart && scrollPosition <= animationEnd) {
+          // Progressive animation - interpolate from -400 to 0
+          const progress = (scrollPosition - animationStart) / (animationEnd - animationStart)
+          slideValue = -400 + (progress * 400) // -400 -> 0
+        } else if (scrollPosition > animationEnd) {
+          slideValue = 0 // Fully visible
         }
 
-        if (scrollPosition >= triggerPoint) {
-          contactAnimationTriggered.current = true
-          setContactSlide(0)
-          console.log('Contact animation TRIGGERED - setting slideOffset to 0')
+        setContactSlide(slideValue)
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Contact scroll:', {
+            scrollPosition,
+            animationStart,
+            animationEnd,
+            progress: scrollPosition > animationStart ? 
+              ((scrollPosition - animationStart) / (animationEnd - animationStart)).toFixed(2) : 0,
+            slideValue: slideValue.toFixed(0)
+          })
         }
       })
     }
@@ -287,7 +272,7 @@ export default function Home() {
       window.removeEventListener('scroll', handleContactScroll)
       window.removeEventListener('resize', handleContactScroll)
     }
-  }, [location.state?.scrollTo])
+  }, [])
 
   return (
     <>
@@ -412,7 +397,6 @@ export default function Home() {
               style={{
                 transform: `translate3d(0, ${contactSlide}px, 0)`,
                 WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
-                transition: contactTransitionEnabled ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
                 transformStyle: 'preserve-3d',
                 WebkitTransformStyle: 'preserve-3d',
                 backfaceVisibility: 'hidden',
@@ -421,9 +405,7 @@ export default function Home() {
                 zIndex: 2,
               }}
             >
-              <Contact 
-                disableInternalAnimations={!contactAnimationTriggered.current}
-              />
+              <Contact />
             </div>
           </Suspense>
         </div>
