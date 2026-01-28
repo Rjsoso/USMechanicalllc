@@ -286,16 +286,59 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
       sessionStorage.setItem('skipContactAnimation', 'true')
-      console.warn('[DEBUG] Contact navigation: Flag set, waiting 150ms for React state update...')
+      console.warn('[DEBUG] Contact navigation: Flag set, waiting for images to load...')
       
-      // Wait for polling to detect flag and React to update contactSlide state
-      setTimeout(() => {
-        const headerOffset = sectionOffsets[sectionId] || 180
-        console.warn('[DEBUG] Contact navigation: Starting scroll after state update delay')
-        scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-          console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
+      // CRITICAL: Wait for ALL images to load before scrolling
+      // Images loading asynchronously expand sections, shifting Contact's position
+      const waitForImages = () => {
+        return new Promise((resolve) => {
+          const images = Array.from(document.querySelectorAll('img'))
+          const unloadedImages = images.filter(img => !img.complete)
+          
+          if (unloadedImages.length === 0) {
+            console.warn(`[DEBUG] All ${images.length} images loaded, starting scroll`)
+            resolve()
+            return
+          }
+          
+          console.warn(`[DEBUG] Waiting for ${unloadedImages.length}/${images.length} images to load...`)
+          
+          let loadedCount = 0
+          const checkComplete = () => {
+            loadedCount++
+            if (loadedCount === unloadedImages.length) {
+              console.warn('[DEBUG] All images loaded, starting scroll')
+              resolve()
+            }
+          }
+          
+          unloadedImages.forEach(img => {
+            if (img.complete) {
+              checkComplete()
+            } else {
+              img.addEventListener('load', checkComplete, { once: true })
+              img.addEventListener('error', checkComplete, { once: true })
+            }
+          })
+          
+          // Fallback timeout: don't wait forever
+          setTimeout(() => {
+            console.warn('[DEBUG] Image load timeout, proceeding with scroll anyway')
+            resolve()
+          }, 3000)
         })
-      }, 150) // Wait for polling (50ms) + React render (100ms buffer)
+      }
+      
+      // Wait for images, then wait for React state update, then scroll
+      waitForImages().then(() => {
+        setTimeout(() => {
+          const headerOffset = sectionOffsets[sectionId] || 180
+          console.warn('[DEBUG] Contact navigation: Starting scroll after images loaded')
+          scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+            console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
+          })
+        }, 150) // Wait for polling (50ms) + React render (100ms buffer)
+      })
     } else {
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
