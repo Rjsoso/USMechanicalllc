@@ -243,7 +243,7 @@ const ServicesSection = () => {
 
   if (!servicesData) {
     return (
-      <section id="services" className="bg-transparent pb-0 pt-12 text-center text-white">
+      <section id="services" className="bg-transparent pb-0 pt-12 text-center text-white" style={{ minHeight: '936px' }}>
         <p>Loading services...</p>
       </section>
     )

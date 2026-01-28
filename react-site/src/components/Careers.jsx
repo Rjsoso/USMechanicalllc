@@ -36,7 +36,7 @@ export default function Careers() {
   // Loading state
   if (loading) {
     return (
-      <section id="careers" className="bg-white pb-24 pt-0 text-black">
+      <section id="careers" className="bg-white pb-24 pt-0 text-black" style={{ minHeight: '879px' }}>
         <div className="mx-auto max-w-5xl px-6 text-center">
           <div className="text-black">Loading careers...</div>
         </div>
@@ -93,6 +93,7 @@ export default function Careers() {
         overflow: 'hidden',
         position: 'relative',
         zIndex: 4,
+        minHeight: '879px',
         ...(backgroundImageUrl && {
           backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
