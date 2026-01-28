@@ -179,26 +179,35 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           // For contact section, do a correction scroll after animations settle
           if (sectionId === 'contact') {
             setTimeout(() => {
-              const newRect = element.getBoundingClientRect()
+              // Measure the HEADING position, not the section
+              const heading = document.querySelector('#contact h1, #contact h2')
+              if (!heading) {
+                console.warn(`[CORRECTION] Heading not found, skipping correction`)
+                return
+              }
+              
+              const headingRect = heading.getBoundingClientRect()
               const currentScroll = window.scrollY
-              const correctedTarget = currentScroll + newRect.top - effectiveOffset
+              const desiredHeadingPos = 20 // Want heading 20px from viewport top
+              const correctedTarget = currentScroll + headingRect.top - desiredHeadingPos
               
               console.warn(`[CORRECTION] Page settled, checking if correction needed`, {
-                currentHeadingPos: newRect.top,
-                desiredOffset: effectiveOffset,
+                currentHeadingPos: headingRect.top,
+                desiredHeadingPos,
                 currentScroll,
-                correctedTarget
+                correctedTarget,
+                discrepancy: headingRect.top - desiredHeadingPos
               })
               
               // If heading is not at desired position, do correction scroll
-              if (Math.abs(newRect.top - effectiveOffset) > 10) {
+              if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
                 console.warn(`[CORRECTION] Applying correction scroll to ${correctedTarget}px`)
                 window.scrollTo({
                   top: correctedTarget,
                   behavior: 'instant',
                 })
               } else {
-                console.warn(`[CORRECTION] No correction needed, position is accurate`)
+                console.warn(`[CORRECTION] No correction needed, heading is at ${headingRect.top}px`)
               }
             }, 200) // Wait for page to settle after initial scroll
           }
@@ -358,6 +367,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     // Already on home page - use robust scroll with retry mechanism for all sections
     // LOCK ANIMATIONS IMMEDIATELY (synchronous global flag)
     window.__scrollNavigationLock = true
+    console.warn(`[DEBUG] Navigation lock SET for section: ${sectionId}`)
     
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
@@ -403,11 +413,18 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
         })
       }, 300) // Increased from 150ms to 300ms to ensure React has time to flush state
     } else {
+      // For non-contact sections, still need to clear lock after scroll
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
         if (process.env.NODE_ENV === 'development') {
           console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
         }
+        
+        // Clear lock after non-contact scroll completes
+        setTimeout(() => {
+          window.__scrollNavigationLock = false
+          console.warn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
+        }, 500)
       })
     }
   }
