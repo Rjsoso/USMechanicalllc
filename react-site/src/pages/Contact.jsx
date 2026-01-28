@@ -12,27 +12,17 @@ import {
   getRemainingSubmissions,
 } from '../utils/rateLimit'
 
-export default function Contact({ slideOffset = 0, disableInternalAnimations = false }) {
+export default function Contact({ disableInternalAnimations = false }) {
   const [contactData, setContactData] = useState(null)
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const headerOffset = 180
-  const [enableTransition, setEnableTransition] = useState(false)
 
-  // Enable transition after component mounts (prevents flash on initial render)
+  // Debug: Log when component mounts
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setEnableTransition(true)
-      console.log('Transitions enabled')
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Debug: Log slideOffset changes
-  useEffect(() => {
-    console.log('Contact slideOffset:', slideOffset, 'disableInternalAnimations:', disableInternalAnimations);
-  }, [slideOffset, disableInternalAnimations])
+    console.log('Contact component mounted, disableInternalAnimations:', disableInternalAnimations);
+  }, [disableInternalAnimations])
 
   // Form state
   const [formData, setFormData] = useState({
@@ -311,23 +301,10 @@ export default function Contact({ slideOffset = 0, disableInternalAnimations = f
           backgroundColor: '#1a1a1a',
           minHeight: '100vh',
           marginTop: '-15rem',
-          position: 'relative',
-          zIndex: 2,
         }}
       >
         {/* Background removed - hero's fixed background shows through */}
-        <div 
-          className="relative z-10 mx-auto max-w-6xl"
-          style={{
-            transform: `translate3d(0, ${slideOffset}px, 0)`,
-            WebkitTransform: `translate3d(0, ${slideOffset}px, 0)`,
-            transition: enableTransition ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
-            transformStyle: 'preserve-3d',
-            WebkitTransformStyle: 'preserve-3d',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-          }}
-        >
+        <div className="relative z-10 mx-auto max-w-6xl">
           {loading && (
             <div className="flex items-center justify-center py-12">
               <p className="text-center text-lg text-white">Loading contact...</p>

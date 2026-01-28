@@ -29,6 +29,7 @@ export default function Home() {
   // Contact slide animation state
   const [contactSlide, setContactSlide] = useState(-400)
   const contactAnimationTriggered = useRef(false)
+  const [contactTransitionEnabled, setContactTransitionEnabled] = useState(false)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -211,7 +212,16 @@ export default function Home() {
     }
   }, [])
 
-  // Contact section slide-out animation - triggers once at 75% through Careers
+  // Enable Contact transition after initial render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContactTransitionEnabled(true)
+      console.log('Contact transition enabled')
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Contact section slide-out animation - triggers once at 50% through Careers
   useEffect(() => {
     // Skip animation if navigating directly to contact
     const isDirectContactNavigation = 
@@ -398,10 +408,23 @@ export default function Home() {
               </section>
             }
           >
-            <Contact 
-              slideOffset={contactSlide}
-              disableInternalAnimations={!contactAnimationTriggered.current}
-            />
+            <div
+              style={{
+                transform: `translate3d(0, ${contactSlide}px, 0)`,
+                WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
+                transition: contactTransitionEnabled ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
+                transformStyle: 'preserve-3d',
+                WebkitTransformStyle: 'preserve-3d',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                position: 'relative',
+                zIndex: 2,
+              }}
+            >
+              <Contact 
+                disableInternalAnimations={!contactAnimationTriggered.current}
+              />
+            </div>
           </Suspense>
         </div>
       </main>
