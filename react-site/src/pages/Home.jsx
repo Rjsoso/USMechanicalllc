@@ -472,24 +472,6 @@ export default function Home() {
       console.warn('[DEBUG] Contact: Cancelled pending animation frames')
     }
     
-    // Use Intersection Observer for cleanup when section is far away
-    const careersSection = document.querySelector('#careers')
-    
-    const observer = careersSection ? new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          // Cleanup when section is far from viewport
-          if (rafId) cancelAnimationFrame(rafId)
-          if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
-        }
-      },
-      { threshold: 0, rootMargin: '800px' } // Large margin for performance
-    ) : null
-    
-    if (observer && careersSection) {
-      observer.observe(careersSection)
-    }
-
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScroll, { passive: true })
     window.addEventListener('resize', handleContactScroll, { passive: true })
@@ -498,7 +480,6 @@ export default function Home() {
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
-      if (observer) observer.disconnect()
       window.removeEventListener('scroll', handleContactScroll)
       window.removeEventListener('resize', handleContactScroll)
       window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
