@@ -36,6 +36,7 @@ export default function Home() {
   const lastContactSlideRef = useRef(-600)
   const targetContactSlideRef = useRef(-600)
   const contactAnimationFrameRef = useRef(null)
+  const contactInitialLoad = useRef(true) // Prevent animation jump on initial load
   
   // DEBUG: Track Contact wrapper renders
   useEffect(() => {
@@ -439,6 +440,12 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
+        // Skip initial load calculation to prevent jump
+        if (contactInitialLoad.current) {
+          contactInitialLoad.current = false
+          return // Keep initial -600px position
+        }
+        
         // Double-check lock inside RAF callback
         if (window.__scrollNavigationLock) {
           if (contactSlide !== 0) setContactSlide(0)
@@ -569,7 +576,7 @@ export default function Home() {
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScrollOptimized, { passive: true })
     window.addEventListener('resize', handleContactScrollOptimized, { passive: true })
-    handleContactScroll() // Check initial state
+    // Don't call handleContactScroll() on mount - let scroll trigger it
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
