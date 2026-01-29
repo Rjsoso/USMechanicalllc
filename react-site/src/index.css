@@ -193,6 +193,33 @@ body,
 /* Main element background is controlled via inline styles in Home.jsx for dynamic Sanity images */
 /* Do not add background rules here as they will override the dynamic background */
 
+/* Fixed background layer - optimized for scroll performance */
+.main-with-fixed-bg::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1e293b;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: var(--bg-url, linear-gradient(135deg, #1e293b 0%, #334155 100%));
+  z-index: -1;
+  /* GPU acceleration for smooth scrolling */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Apply gradient overlay when background image exists */
+.main-with-fixed-bg:not([style*="--bg-url: none"])::before {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)),
+    var(--bg-url, linear-gradient(135deg, #1e293b 0%, #334155 100%));
+}
+
 /* Wrapper div must also be transparent to allow hero image to show through */
 body > main > div.bg-gray-50,
 body > main > div {
