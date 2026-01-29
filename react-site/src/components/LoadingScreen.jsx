@@ -32,10 +32,10 @@ export default function LoadingScreen({ minimal = false }) {
           gap: '24px',
         }}
       >
-        {/* Logo with rotation animation */}
+        {/* Logo without rotation */}
         <div
           style={{
-            animation: 'logoRotate 3.5s linear infinite, fadeInLoader 0.5s ease-out',
+            animation: 'fadeInLoader 0.5s ease-out',
             width: window.innerWidth < 768 ? '120px' : '180px',
             height: 'auto',
           }}
