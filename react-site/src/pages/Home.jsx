@@ -36,7 +36,6 @@ export default function Home() {
   const lastContactSlideRef = useRef(-600)
   const targetContactSlideRef = useRef(-600)
   const contactAnimationFrameRef = useRef(null)
-  const contactInitialLoad = useRef(true) // Prevent animation jump on initial load
   
   // DEBUG: Track Contact wrapper renders
   useEffect(() => {
@@ -415,14 +414,6 @@ export default function Home() {
     }
     
     const handleContactScroll = () => {
-      // DEBUG: Log every scroll event
-      console.warn('[SCROLL-EVENT] Fired', {
-        buttonNavigationUsed: buttonNavigationUsed.current,
-        contactSlide,
-        scrollListenerActive,
-        timestamp: Date.now()
-      })
-      
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
         if (rafId) {
@@ -440,12 +431,6 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
-        // Skip initial load calculation to prevent jump
-        if (contactInitialLoad.current) {
-          contactInitialLoad.current = false
-          return // Keep initial -600px position
-        }
-        
         // Double-check lock inside RAF callback
         if (window.__scrollNavigationLock) {
           if (contactSlide !== 0) setContactSlide(0)
@@ -486,48 +471,32 @@ export default function Home() {
           return // Exit early - no more calculations
         }
 
-        const contactSection = document.querySelector('#contact')
-        if (!contactSection) return
+        const careersSection = document.querySelector('#careers')
+        if (!careersSection) return
 
-        const rect = contactSection.getBoundingClientRect()
-        const contactTop = rect.top + window.scrollY
-        const contactHeight = rect.height
-        const scrollPosition = window.scrollY + window.innerHeight
+        const rect = careersSection.getBoundingClientRect()
+        const careersBottom = rect.bottom
         const viewportHeight = window.innerHeight
 
-        // Animation starts when Contact enters viewport
-        const animationStart = contactTop + viewportHeight * 0.2 // 20% into viewport
-        // Animation completes at 95% through Contact section
-        const animationEnd = contactTop + (contactHeight * 0.95)
+        // Animation triggers based on careers section bottom position
+        const slideStart = viewportHeight * 0.6 // Start when careers bottom is 60% down viewport
+        const slideEnd = viewportHeight * 0.2   // Complete when careers bottom is 20% down viewport
 
         let slideValue = -600 // Start hidden behind Careers
 
-        if (scrollPosition >= animationStart && scrollPosition <= animationEnd) {
-          // Progressive animation - interpolate from -600 to 0
-          const progress = (scrollPosition - animationStart) / (animationEnd - animationStart)
+        if (careersBottom <= slideStart && careersBottom >= slideEnd) {
+          // Progressive animation as careers slides up
+          const progress = 1 - (careersBottom - slideEnd) / (slideStart - slideEnd)
           slideValue = -600 + (progress * 600) // -600 -> 0
-        } else if (scrollPosition > animationEnd) {
+        } else if (careersBottom < slideEnd) {
           slideValue = 0 // Fully visible
           contactAnimationComplete.current = true // Lock it!
-          console.log('Contact animation LOCKED at final position')
         }
 
         // Set target and start interpolation for ultra-smooth motion
         targetContactSlideRef.current = slideValue
         if (!contactAnimationFrameRef.current) {
           contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
-        }
-        
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Contact scroll:', {
-            scrollPosition,
-            animationStart,
-            animationEnd,
-            progress: scrollPosition > animationStart ? 
-              ((scrollPosition - animationStart) / (animationEnd - animationStart)).toFixed(2) : 0,
-            slideValue: slideValue.toFixed(0),
-            locked: contactAnimationComplete.current
-          })
         }
       })
     }
@@ -545,11 +514,11 @@ export default function Home() {
       console.warn('[DEBUG] Contact: Cancelled pending animation frames')
     }
     
-    // Use Intersection Observer to only animate when Contact section is nearby
-    const contactSection = document.querySelector('#contact')
+    // Use Intersection Observer to only animate when Careers section is nearby
+    const careersSection = document.querySelector('#careers')
     let isNearViewport = true // Start as true to handle initial render
     
-    const observer = contactSection ? new IntersectionObserver(
+    const observer = careersSection ? new IntersectionObserver(
       ([entry]) => {
         isNearViewport = entry.isIntersecting
         if (!isNearViewport) {
@@ -560,11 +529,11 @@ export default function Home() {
           handleContactScroll() // Trigger update when becoming visible
         }
       },
-      { threshold: 0, rootMargin: '400px' } // Large margin for Contact section
+      { threshold: 0, rootMargin: '400px' } // Large margin to start animation early
     ) : null
     
-    if (observer && contactSection) {
-      observer.observe(contactSection)
+    if (observer && careersSection) {
+      observer.observe(careersSection)
     }
 
     // Optimized scroll handler that checks visibility first
@@ -576,7 +545,7 @@ export default function Home() {
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScrollOptimized, { passive: true })
     window.addEventListener('resize', handleContactScrollOptimized, { passive: true })
-    // Don't call handleContactScroll() on mount - let scroll trigger it
+    handleContactScrollOptimized() // Check initial state (like stats animation)
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
