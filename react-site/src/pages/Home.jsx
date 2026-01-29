@@ -13,11 +13,13 @@ import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
 import Careers from '../components/Careers'
 import { scrollToSection } from '../utils/scrollToSection'
+import { client, urlFor } from '../utils/sanity'
 
 export default function Home() {
   const location = useLocation()
   const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
+  const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
 
   // Refs for smooth scroll interpolation
   const lastScrollSlideRef = useRef(0)
@@ -150,6 +152,32 @@ export default function Home() {
       }, initialDelay)
     }
   }, [location.state?.scrollTo, location.hash])
+
+  // Fetch hero background image from Sanity
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "heroSection" && _id == "heroSection"][0]{
+          backgroundImage {
+            asset-> {
+              _id,
+              url
+            }
+          }
+        }`
+      )
+      .then(data => {
+        if (data?.backgroundImage?.asset?.url) {
+          setHeroBackgroundUrl(`${data.backgroundImage.asset.url}?w=1920&q=85&auto=format`)
+        } else if (data?.backgroundImage) {
+          const url = urlFor(data.backgroundImage)?.width(1920).quality(85).auto('format').url()
+          if (url) setHeroBackgroundUrl(url)
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching hero background:', error)
+      })
+  }, [])
 
   // Skip contact animation ONCE when navigating directly
   useEffect(() => {
@@ -563,7 +591,18 @@ export default function Home() {
       />
       <Header />
 
-      <main>
+      <main
+        style={{
+          backgroundImage: heroBackgroundUrl 
+            ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(${heroBackgroundUrl})` 
+            : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '100vh',
+        }}
+      >
         <section id="hero" style={{ position: 'relative', top: 0, left: 0, width: '100%' }}>
           <HeroSection />
         </section>

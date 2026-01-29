@@ -122,38 +122,9 @@ function HeroSection() {
         paddingTop: 0,
         position: 'relative',
         top: 0,
+        background: 'transparent',
       }}
     >
-      {/* Background image */}
-      <div
-        className="fixed bg-cover bg-center brightness-75"
-        style={{
-          backgroundImage: heroData.backgroundImage?.asset?.url
-            ? `url(${heroData.backgroundImage.asset.url}?w=1600&q=80&auto=format)`
-            : heroData.backgroundImage && urlFor(heroData.backgroundImage)
-              ? `url(${urlFor(heroData.backgroundImage).width(1600).quality(80).auto('format').url()})`
-              : undefined,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          width: '100%',
-          zIndex: -2,
-        }}
-      ></div>
-
-      <div
-        className="fixed bg-gradient-to-b from-black/30 via-black/10 to-black/40"
-        style={{
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          width: '100%',
-          zIndex: -1,
-        }}
-      ></div>
-
       <div
         className="relative z-10 mx-auto max-w-4xl px-6 text-center"
         style={{ marginTop: '60px' }}
