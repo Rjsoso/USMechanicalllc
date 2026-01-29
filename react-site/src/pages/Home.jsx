@@ -474,21 +474,27 @@ export default function Home() {
         const careersSection = document.querySelector('#careers')
         if (!careersSection) return
 
-        const rect = careersSection.getBoundingClientRect()
-        const careersBottom = rect.bottom
-        const viewportHeight = window.innerHeight
+        // Get careers section position in document (not viewport!)
+        const careersRect = careersSection.getBoundingClientRect()
+        const careersTop = careersRect.top + window.scrollY
+        const careersHeight = careersRect.height
 
-        // Animation triggers based on careers section bottom position
-        const slideStart = viewportHeight * 0.6 // Start when careers bottom is 60% down viewport
-        const slideEnd = viewportHeight * 0.2   // Complete when careers bottom is 20% down viewport
+        // Calculate animation start/end as SCROLL POSITIONS (direct relationship with scrolling)
+        const animationStartScroll = careersTop - window.innerHeight * 0.4 // Start 40% before careers enters
+        const animationEndScroll = careersTop + careersHeight * 0.3 // Complete at 30% through careers
 
-        let slideValue = -600 // Start hidden behind Careers
+        // Get current scroll position
+        const currentScroll = window.scrollY
 
-        if (careersBottom <= slideStart && careersBottom >= slideEnd) {
-          // Progressive animation as careers slides up
-          const progress = 1 - (careersBottom - slideEnd) / (slideStart - slideEnd)
-          slideValue = -600 + (progress * 600) // -600 -> 0
-        } else if (careersBottom < slideEnd) {
+        let slideValue = -600 // Start hidden
+
+        if (currentScroll >= animationStartScroll && currentScroll <= animationEndScroll) {
+          // Direct mapping: scroll distance -> animation progress (1:1 relationship)
+          const scrollRange = animationEndScroll - animationStartScroll
+          const scrolled = currentScroll - animationStartScroll
+          const progress = scrolled / scrollRange // 0 to 1
+          slideValue = -600 + (progress * 600) // -600px -> 0px
+        } else if (currentScroll > animationEndScroll) {
           slideValue = 0 // Fully visible
           contactAnimationComplete.current = true // Lock it!
         }
