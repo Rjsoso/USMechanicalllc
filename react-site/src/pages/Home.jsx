@@ -441,23 +441,24 @@ export default function Home() {
           return
         }
 
-        // Use viewport-based calculation (matching stats animation pattern)
+        // Use viewport-based calculation
         const careersRect = careersSection.getBoundingClientRect()
         const careersBottom = careersRect.bottom
         const viewportHeight = window.innerHeight
 
-        // Animation range based on careers bottom position in viewport
-        const slideStart = viewportHeight * 0.8 // Start when careers bottom is 80% down viewport
-        const slideEnd = viewportHeight * 0.1   // Complete when careers bottom is 10% down viewport
+        // Animation range - MUCH WIDER to catch the scroll earlier
+        // Start animation when careers bottom is still well into viewport (not near top yet)
+        const slideStart = viewportHeight * 1.2  // Start when bottom is 120% down (below viewport or just entering)
+        const slideEnd = viewportHeight * 0.3    // Complete when bottom is 30% down (still visible mid-upper viewport)
 
         let slideValue = -600 // Default: hidden
 
         if (careersBottom <= slideStart && careersBottom >= slideEnd) {
-          // Progressive animation as careers slides up (matching stats pattern)
+          // Progressive animation as careers slides up through viewport
           const progress = 1 - (careersBottom - slideEnd) / (slideStart - slideEnd)
           slideValue = -600 + (progress * 600) // -600px -> 0px
         } else if (careersBottom < slideEnd) {
-          slideValue = 0 // Fully visible
+          slideValue = 0 // Fully visible once careers bottom reaches upper 30%
         }
 
         console.log('[Contact Animation]', {
