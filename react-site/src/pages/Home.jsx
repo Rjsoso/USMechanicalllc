@@ -388,12 +388,11 @@ export default function Home() {
     let rafId = null
     let lastScrollTime = 0
     const THROTTLE = 8 // 120fps max - keep high for smooth animation
-    let scrollListenerActive = true
-    const INTERPOLATION_SPEED = 0.2 // Slightly faster than Stats (0.15) for Contact
+    const INTERPOLATION_SPEED = 0.15 // Match stats animation for consistency
     
     // Smooth interpolation loop for ultra-smooth Contact animation
     const interpolateContact = () => {
-      if (window.__scrollNavigationLock || buttonNavigationUsed.current) return
+      if (window.__scrollNavigationLock) return
       
       const current = lastContactSlideRef.current
       const target = targetContactSlideRef.current
@@ -431,75 +430,37 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
 
       rafId = requestAnimationFrame(() => {
-        // Double-check lock inside RAF callback
-        if (window.__scrollNavigationLock) {
-          if (contactSlide !== 0) setContactSlide(0)
-          return
-        }
-        // If any button navigation was used, permanently disable animation
-        if (buttonNavigationUsed.current) {
-          if (contactSlide !== 0) {
-            setContactSlide(0)
-            contactAnimationComplete.current = true
-          }
-          // Remove scroll listener to stop all processing
-          if (scrollListenerActive) {
-            window.removeEventListener('scroll', handleContactScroll)
-            window.removeEventListener('resize', handleContactScroll)
-            scrollListenerActive = false
-            console.warn('[LISTENER] Scroll listener REMOVED', {
-              contactSlide,
-              buttonNavigationUsed: buttonNavigationUsed.current,
-              timestamp: Date.now()
-            })
-          }
-          return // Exit early - animation permanently disabled
-        }
-        // If we're skipping animation for direct navigation, keep at 0
-        if (skipContactAnimationOnce.current) {
-          if (contactSlide !== 0) {
-            setContactSlide(0)
-          }
-          return // Don't run animation logic while skip is active
-        }
+        // Skip calculations during navigation lock
+        if (window.__scrollNavigationLock) return
         
-        // If animation already completed, keep it locked at 0
-        if (contactAnimationComplete.current) {
-          if (contactSlide !== 0) {
-            setContactSlide(0)
-          }
-          return // Exit early - no more calculations
-        }
-
         const careersSection = document.querySelector('#careers')
         if (!careersSection) return
 
-        // Get careers section position in document (not viewport!)
+        // Get careers section position in document
         const careersRect = careersSection.getBoundingClientRect()
         const careersTop = careersRect.top + window.scrollY
         const careersHeight = careersRect.height
 
-        // Calculate animation start/end as SCROLL POSITIONS (direct relationship with scrolling)
-        const animationStartScroll = careersTop - window.innerHeight * 0.4 // Start 40% before careers enters
-        const animationEndScroll = careersTop + careersHeight * 0.3 // Complete at 30% through careers
+        // Calculate animation start/end as scroll positions
+        const animationStartScroll = careersTop - window.innerHeight * 0.4
+        const animationEndScroll = careersTop + careersHeight * 0.3
 
         // Get current scroll position
         const currentScroll = window.scrollY
 
-        let slideValue = -600 // Start hidden
+        let slideValue = -600 // Default: hidden
 
         if (currentScroll >= animationStartScroll && currentScroll <= animationEndScroll) {
-          // Direct mapping: scroll distance -> animation progress (1:1 relationship)
+          // Direct mapping: scroll distance -> animation progress
           const scrollRange = animationEndScroll - animationStartScroll
           const scrolled = currentScroll - animationStartScroll
           const progress = scrolled / scrollRange // 0 to 1
           slideValue = -600 + (progress * 600) // -600px -> 0px
         } else if (currentScroll > animationEndScroll) {
           slideValue = 0 // Fully visible
-          contactAnimationComplete.current = true // Lock it!
         }
 
-        // Set target and start interpolation for ultra-smooth motion
+        // ALWAYS set target, never call setContactSlide directly
         targetContactSlideRef.current = slideValue
         if (!contactAnimationFrameRef.current) {
           contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
@@ -547,10 +508,8 @@ export default function Home() {
       if (rafId) cancelAnimationFrame(rafId)
       if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
       if (observer) observer.disconnect()
-      if (scrollListenerActive) {
-        window.removeEventListener('scroll', handleContactScroll)
-        window.removeEventListener('resize', handleContactScroll)
-      }
+      window.removeEventListener('scroll', handleContactScroll)
+      window.removeEventListener('resize', handleContactScroll)
       window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }
   }, [])
