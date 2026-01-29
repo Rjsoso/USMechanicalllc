@@ -137,7 +137,6 @@ function HeroSection() {
           left: 0,
           right: 0,
           bottom: 0,
-          height: '100vh',
           width: '100%',
           zIndex: -2,
         }}
@@ -150,7 +149,6 @@ function HeroSection() {
           left: 0,
           right: 0,
           bottom: 0,
-          height: '100vh',
           width: '100%',
           zIndex: -1,
         }}
