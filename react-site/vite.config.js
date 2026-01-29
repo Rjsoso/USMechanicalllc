@@ -27,6 +27,10 @@ export default defineConfig({
     chunkSizeWarningLimit: 500,
     // Enable source maps for production debugging (optional)
     sourcemap: false,
+    // Strip console statements in production
+    esbuild: {
+      drop: ['console', 'debugger'],
+    },
   },
   // Optimize dependencies
   optimizeDeps: {
