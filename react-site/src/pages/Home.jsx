@@ -595,7 +595,8 @@ export default function Home() {
         style={{
           backgroundImage: heroBackgroundUrl 
             ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(${heroBackgroundUrl})` 
-            : 'none',
+            : 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+          backgroundColor: '#1e293b',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
