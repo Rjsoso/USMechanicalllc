@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
+import LoadingScreen from './components/LoadingScreen'
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -14,11 +15,7 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
 
 function LoadingFallback() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-900">
-      <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-    </div>
-  )
+  return <LoadingScreen minimal />
 }
 
 function App() {

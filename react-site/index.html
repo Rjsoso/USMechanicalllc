@@ -167,6 +167,107 @@
       body.loaded-complete .bg-gray-100 {
         opacity: 1;
       }
+      
+      /* Branded initial loader */
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 99998;
+        background: #1a1a1a;
+        opacity: 1;
+        transition: opacity 0.15s ease-out;
+      }
+      
+      body.loaded #initial-loader {
+        opacity: 0;
+      }
+      
+      body.loaded-complete #initial-loader {
+        display: none;
+      }
+      
+      /* Logo rotation animation */
+      @keyframes logoRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Dot bounce animation */
+      @keyframes dotBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+      
+      /* Fade in animation */
+      @keyframes fadeInLoader {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      #initial-loader .logo-container {
+        animation: logoRotate 3.5s linear infinite, fadeInLoader 0.5s ease-out;
+        width: 120px;
+        height: auto;
+      }
+      
+      @media (min-width: 768px) {
+        #initial-loader .logo-container {
+          width: 180px;
+        }
+      }
+      
+      #initial-loader .loading-text {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        animation: fadeInLoader 0.6s ease-out;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #ffffff;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 24px;
+      }
+      
+      @media (min-width: 768px) {
+        #initial-loader .loading-text {
+          font-size: 2rem;
+        }
+      }
+      
+      #initial-loader .dot {
+        display: inline-block;
+        animation: dotBounce 0.6s ease-in-out infinite;
+      }
+      
+      #initial-loader .dot:nth-child(2) {
+        animation-delay: 0s;
+      }
+      
+      #initial-loader .dot:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      
+      #initial-loader .dot:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      
+      /* Respect prefers-reduced-motion */
+      @media (prefers-reduced-motion: reduce) {
+        #initial-loader .logo-container,
+        #initial-loader .loading-text,
+        #initial-loader .dot {
+          animation: none !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -201,6 +302,20 @@
         }, 1);
       }
     </script>
+    
+    <!-- Branded Loading Screen -->
+    <div id="initial-loader" role="status" aria-live="polite" aria-label="Loading content">
+      <div class="logo-container">
+        <img src="/logo.png" alt="US Mechanical Logo" style="width: 100%; height: auto; display: block;">
+      </div>
+      <div class="loading-text">
+        <span>LOADING</span>
+        <span class="dot">.</span>
+        <span class="dot">.</span>
+        <span class="dot">.</span>
+      </div>
+    </div>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
