@@ -25,10 +25,10 @@
   }
 }
 
-/* Ensure HTML element has dark background */
+/* Ensure HTML element has transparent background to show hero image */
 html {
-  background-color: #1a1a1a !important;
-  background: #1a1a1a !important;
+  background-color: transparent !important;
+  background: transparent !important;
   /* Native smooth scrolling for better performance */
   scroll-behavior: smooth;
   /* Optimize scrolling performance */
@@ -42,10 +42,10 @@ html {
 
 /* IMMEDIATE OVERRIDE: Prevent Tailwind Preflight from setting white backgrounds */
 /* Tailwind Preflight includes: body { background-color: white; } */
-/* We must override this immediately to prevent white backgrounds */
+/* Set to transparent so hero image shows through */
 body {
-  background-color: #1a1a1a !important;
-  background: #1a1a1a !important;
+  background-color: transparent !important;
+  background: transparent !important;
   /* Optimize scroll performance */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -156,7 +156,7 @@ video {
 
 /* Ensure no white bar appears above header - hero section extends to top */
 #root {
-  background-color: #1a1a1a;
+  background-color: transparent;
   min-height: 100vh;
 }
 
