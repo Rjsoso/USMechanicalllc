@@ -514,46 +514,36 @@ export default function Home() {
       console.warn('[DEBUG] Contact: Cancelled pending animation frames')
     }
     
-    // Use Intersection Observer to only animate when Careers section is nearby
+    // Use Intersection Observer for cleanup when section is far away
     const careersSection = document.querySelector('#careers')
-    let isNearViewport = true // Start as true to handle initial render
     
     const observer = careersSection ? new IntersectionObserver(
       ([entry]) => {
-        isNearViewport = entry.isIntersecting
-        if (!isNearViewport) {
+        if (!entry.isIntersecting) {
           // Cleanup when section is far from viewport
           if (rafId) cancelAnimationFrame(rafId)
           if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
-        } else {
-          handleContactScroll() // Trigger update when becoming visible
         }
       },
-      { threshold: 0, rootMargin: '400px' } // Large margin to start animation early
+      { threshold: 0, rootMargin: '800px' } // Large margin for performance
     ) : null
     
     if (observer && careersSection) {
       observer.observe(careersSection)
     }
 
-    // Optimized scroll handler that checks visibility first
-    const handleContactScrollOptimized = () => {
-      if (!isNearViewport) return // Skip if section not nearby
-      handleContactScroll()
-    }
-
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
-    window.addEventListener('scroll', handleContactScrollOptimized, { passive: true })
-    window.addEventListener('resize', handleContactScrollOptimized, { passive: true })
-    handleContactScrollOptimized() // Check initial state (like stats animation)
+    window.addEventListener('scroll', handleContactScroll, { passive: true })
+    window.addEventListener('resize', handleContactScroll, { passive: true })
+    handleContactScroll() // Check initial state
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
       if (observer) observer.disconnect()
       if (scrollListenerActive) {
-        window.removeEventListener('scroll', handleContactScrollOptimized)
-        window.removeEventListener('resize', handleContactScrollOptimized)
+        window.removeEventListener('scroll', handleContactScroll)
+        window.removeEventListener('resize', handleContactScroll)
       }
       window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }
