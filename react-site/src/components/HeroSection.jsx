@@ -127,7 +127,7 @@ function HeroSection() {
     >
       <div
         className="relative z-10 mx-auto max-w-4xl px-6 text-center"
-        style={{ marginTop: '90px' }}
+        style={{ marginTop: '140px' }}
       >
         <motion.h1
           className="hero-3d-text"
