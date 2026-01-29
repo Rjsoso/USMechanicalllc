@@ -567,7 +567,7 @@ export default function Home() {
         <section id="hero" style={{ position: 'relative', top: 0, left: 0, width: '100%', zIndex: 0 }}>
           <HeroSection />
         </section>
-        <div style={{ marginTop: '100vh', position: 'relative', zIndex: 1 }}>
+        <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutAndSafety />
 
           <div
