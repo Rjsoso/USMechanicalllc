@@ -435,37 +435,38 @@ export default function Home() {
         // Skip calculations during navigation lock
         if (window.__scrollNavigationLock) return
         
-        const careersSection = document.querySelector('#careers')
-        if (!careersSection) {
-          console.log('[Contact] ERROR: Careers section not found!')
+        const contactSection = document.querySelector('#contact')
+        if (!contactSection) {
+          console.log('[Contact] ERROR: Contact section not found!')
           return
         }
 
-        // Use viewport-based calculation
-        const careersRect = careersSection.getBoundingClientRect()
-        const careersBottom = careersRect.bottom
+        // Track the CONTACT section itself as it enters viewport
+        const contactRect = contactSection.getBoundingClientRect()
+        const contactTop = contactRect.top
         const viewportHeight = window.innerHeight
 
-        // Animation range - MUCH WIDER to catch the scroll earlier
-        // Start animation when careers bottom is still well into viewport (not near top yet)
-        const slideStart = viewportHeight * 1.2  // Start when bottom is 120% down (below viewport or just entering)
-        const slideEnd = viewportHeight * 0.3    // Complete when bottom is 30% down (still visible mid-upper viewport)
+        // Animation based on contact section's top position
+        // Start: Contact top is below viewport (1.5x viewport height = well below)
+        // End: Contact top is at middle of viewport (0.5x = 50% down screen)
+        const animationStart = viewportHeight * 1.5  // Start when contact is well below viewport
+        const animationEnd = viewportHeight * 0.5    // Complete when contact top reaches middle of screen
 
         let slideValue = -600 // Default: hidden
 
-        if (careersBottom <= slideStart && careersBottom >= slideEnd) {
-          // Progressive animation as careers slides up through viewport
-          const progress = 1 - (careersBottom - slideEnd) / (slideStart - slideEnd)
+        if (contactTop <= animationStart && contactTop >= animationEnd) {
+          // Progressive animation as contact enters viewport
+          const progress = 1 - (contactTop - animationEnd) / (animationStart - animationEnd)
           slideValue = -600 + (progress * 600) // -600px -> 0px
-        } else if (careersBottom < slideEnd) {
-          slideValue = 0 // Fully visible once careers bottom reaches upper 30%
+        } else if (contactTop < animationEnd) {
+          slideValue = 0 // Fully visible once contact reaches middle of viewport
         }
 
         console.log('[Contact Animation]', {
-          careersBottom: careersBottom.toFixed(2),
-          slideStart: slideStart.toFixed(2),
-          slideEnd: slideEnd.toFixed(2),
-          inAnimationRange: careersBottom <= slideStart && careersBottom >= slideEnd,
+          contactTop: contactTop.toFixed(2),
+          animationStart: animationStart.toFixed(2),
+          animationEnd: animationEnd.toFixed(2),
+          inAnimationRange: contactTop <= animationStart && contactTop >= animationEnd,
           slideValue: slideValue.toFixed(2),
           targetRef: targetContactSlideRef.current.toFixed(2),
           currentRef: lastContactSlideRef.current.toFixed(2)
