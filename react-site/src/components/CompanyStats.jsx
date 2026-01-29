@@ -11,12 +11,13 @@ const AnimatedNumber = memo(function AnimatedNumber({
 }) {
   const [count, setCount] = useState(startValue)
   const animationRef = useRef(null)
-  const intervalRef = useRef(null)
   const startedRef = useRef(false)
   const completedRef = useRef(false)
   const cancelledRef = useRef(false)
   const targetValueRef = useRef(null)
   const startValueRef = useRef(startValue)
+  const currentValueRef = useRef(startValue)
+  const interpolationFrameRef = useRef(null)
 
   // Extract numeric part and suffix (e.g., "150M", "62 Years", "150 M" → 150/62 and "M"/"Years"/" M")
   const match = String(value)
@@ -43,14 +44,14 @@ const AnimatedNumber = memo(function AnimatedNumber({
 
     // If target value changed and animation was started, cancel old animation
     if (startedRef.current && targetValueRef.current !== numericValue) {
+      cancelledRef.current = true
       if (animationRef.current) {
-        cancelledRef.current = true
         cancelAnimationFrame(animationRef.current)
         animationRef.current = null
       }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
+      if (interpolationFrameRef.current) {
+        cancelAnimationFrame(interpolationFrameRef.current)
+        interpolationFrameRef.current = null
       }
       startedRef.current = false
       completedRef.current = false
@@ -63,48 +64,74 @@ const AnimatedNumber = memo(function AnimatedNumber({
     cancelledRef.current = false
     targetValueRef.current = numericValue
     startValueRef.current = startValue
+    currentValueRef.current = startValue
+    
     // Use requestAnimationFrame to avoid setState during render
     requestAnimationFrame(() => setCount(startValue))
 
     const startTime = Date.now()
     const targetValue = numericValue // Capture value at start
     const animationStartValue = startValue // Capture start value
-    const updateInterval = 20 // 50fps - smoother perceived animation
+    const INTERPOLATION_SPEED = 0.12 // Slightly slower than contact for smooth number counting
 
-    // Use setInterval for throttled updates (better for iOS/Safari performance)
-    intervalRef.current = setInterval(() => {
-      // Don't continue if cancelled
-      if (cancelledRef.current) {
-        if (intervalRef.current) clearInterval(intervalRef.current)
-        return
+    // Smooth interpolation function - makes numbers count smoothly
+    const interpolate = () => {
+      if (cancelledRef.current) return
+      
+      const current = currentValueRef.current
+      const target = targetValueRef.current
+      const diff = target - current
+      
+      if (Math.abs(diff) > 0.5) {
+        const newValue = current + diff * INTERPOLATION_SPEED
+        currentValueRef.current = newValue
+        setCount(Math.floor(newValue))
+        interpolationFrameRef.current = requestAnimationFrame(interpolate)
+      } else {
+        currentValueRef.current = target
+        setCount(Math.floor(target))
+        interpolationFrameRef.current = null
       }
+    }
 
+    // Update target value over time using easing curve
+    const updateTarget = () => {
+      if (cancelledRef.current) return
+      
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
-
-      // Gentle ease-out for smooth, natural animation (matches contact animation feel)
+      
+      // Gentle ease-out for smooth, natural animation
       const easeProgress = 1 - Math.pow(1 - progress, 2)
-
-      const currentValue = Math.floor(
-        animationStartValue + (targetValue - animationStartValue) * easeProgress
-      )
-
-      setCount(currentValue)
-
-      if (progress >= 1) {
-        // Ensure we reach the exact final value
-        setCount(targetValue)
-        completedRef.current = true
-        if (intervalRef.current) clearInterval(intervalRef.current)
-        intervalRef.current = null
+      
+      const newTarget = animationStartValue + (targetValue - animationStartValue) * easeProgress
+      targetValueRef.current = newTarget
+      
+      // Start interpolation if not running
+      if (!interpolationFrameRef.current) {
+        interpolationFrameRef.current = requestAnimationFrame(interpolate)
       }
-    }, updateInterval)
+      
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(updateTarget)
+      } else {
+        completedRef.current = true
+        animationRef.current = null
+      }
+    }
+
+    animationRef.current = requestAnimationFrame(updateTarget)
 
     return () => {
       // Cleanup on unmount
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
+      cancelledRef.current = true
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+      if (interpolationFrameRef.current) {
+        cancelAnimationFrame(interpolationFrameRef.current)
+        interpolationFrameRef.current = null
       }
     }
   }, [inView, numericValue, duration, startValue])
