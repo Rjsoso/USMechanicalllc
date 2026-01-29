@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { client } from '../utils/sanity'
-import { navigateToSection } from '../utils/scrollToSection'
+import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
 import './DrawerMenu.css'
 
 const DrawerMenu = () => {
@@ -91,13 +91,20 @@ const DrawerMenu = () => {
     } else if (href.startsWith('/') && href.includes('#')) {
       // Link to section on specific page (e.g., /about#safety)
       const [path, section] = href.split('#')
+      
+      // Navigate to the page first
       navigate(path)
+      
+      // Use scrollToSection utility for proper offset handling
       setTimeout(() => {
-        const element = document.getElementById(section)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 100)
+        scrollToSection(section, 180, 50, 200)
+          .then(() => {
+            console.log(`Successfully scrolled to ${section}`)
+          })
+          .catch(err => {
+            console.error(`Error scrolling to ${section}:`, err)
+          })
+      }, 300) // Increased delay for page render
     } else if (href.startsWith('#')) {
       // Legacy anchor link - treat as home page section
       const sectionId = href.replace('#', '')
