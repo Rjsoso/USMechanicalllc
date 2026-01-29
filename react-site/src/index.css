@@ -195,12 +195,11 @@ main {
   background-color: transparent !important;
 }
 
-/* Set wrapper div to grey for scrollable content area */
-/* This fills in any white gaps between sections */
+/* Wrapper div must also be transparent to allow hero image to show through */
 body > main > div.bg-gray-50,
 body > main > div {
-  background-color: #374151 !important;
-  background: #374151 !important;
+  background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* These rules are now handled by the comprehensive rule below */
