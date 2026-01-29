@@ -132,7 +132,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             'portfolio': 72,    // pt-24 (96px padding) → title at ~24px from viewport top
             'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
             'about': 10,        // py-20 but title near top → title at ~20px from viewport top
-            'safety': 80,       // Adjusted +30px total (50→65→80) for optimal logo clearance
+            'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
             'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
             'hero': 0,          // full viewport, no adjustment needed
           }
@@ -420,7 +420,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     'portfolio': 72,    // pt-24 (96px padding) → title at ~24px from viewport top
     'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
     'about': 10,        // py-20 but title near top → title at ~20px from viewport top
-    'safety': 80,       // Adjusted +30px total (50→65→80) for optimal logo clearance
+    'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
     'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
     'hero': 0,          // full viewport, no adjustment needed
   }
