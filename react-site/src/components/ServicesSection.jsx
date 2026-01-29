@@ -361,11 +361,11 @@ const ServicesSection = () => {
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="flex flex-1 flex-col px-6 md:w-1/2 md:px-0">
             {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-            <div className="relative flex flex-1 flex-col overflow-hidden rounded-l-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-2xl">
+            <div className="relative flex flex-1 flex-col overflow-hidden rounded-l-2xl border border-white/20 bg-transparent shadow-2xl">
               {/* HEADER - Full Width Centered */}
               {servicesData.deliveryMethodsHeading && (
-                <div className="w-full border-b border-gray-200 bg-white/60 px-8 py-6">
-                  <h2 className="section-title text-center text-4xl text-gray-900 md:text-5xl">
+                <div className="w-full border-b border-white/20 bg-transparent px-8 py-6">
+                  <h2 className="section-title text-center text-4xl text-white md:text-5xl">
                     {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
                   </h2>
                 </div>
@@ -374,7 +374,7 @@ const ServicesSection = () => {
               {/* CONTENT AREA - Horizontal Split */}
               <div className="flex flex-1 flex-row">
                 {/* LEFT SIDEBAR - 25% Navigation */}
-                <div className="flex w-1/4 flex-col border-r border-gray-200 bg-white/50">
+                <div className="flex w-1/4 flex-col border-r border-white/20 bg-transparent">
                   {[
                     ...servicesData.deliveryMethods,
                     { title: 'Request a Quote', isQuote: true },
@@ -385,10 +385,10 @@ const ServicesSection = () => {
                       <button
                         key={idx}
                         onClick={() => handleExpand(idx)}
-                        className={`flex w-full items-center justify-center border-b border-gray-200 px-4 py-6 text-center transition-all ${
+                        className={`flex w-full items-center justify-center border-b border-white/20 px-4 py-6 text-center transition-all ${
                           isActive
-                            ? 'bg-gray-100 font-bold text-gray-900'
-                            : 'bg-white/30 text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            ? 'bg-white/20 font-bold text-white'
+                            : 'bg-transparent text-white/70 hover:bg-white/10 hover:text-white'
                         }`}
                       >
                         <span className="text-2xl font-bold">
@@ -400,7 +400,7 @@ const ServicesSection = () => {
                 </div>
 
                 {/* RIGHT CONTENT AREA - 75% */}
-                <div className="w-3/4 overflow-y-auto bg-white/80">
+                <div className="w-3/4 overflow-y-auto bg-transparent">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTab}
@@ -450,7 +450,7 @@ const ServicesSection = () => {
                             {/* Method Title and Badge */}
                             <div className="mb-6">
                               <div className="mb-2 flex items-center gap-3">
-                                <h3 className="text-2xl font-bold text-gray-900">
+                                <h3 className="text-2xl font-bold text-white">
                                   {method?.title}
                                 </h3>
                                 {!method?.isQuote && method?.badge && (
@@ -469,41 +469,41 @@ const ServicesSection = () => {
                             {/* Content */}
                             {!method?.isQuote ? (
                               <div className="flex-1 space-y-4">
-                                <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                <p className="mb-2 text-xs uppercase tracking-[0.25em] text-white/70">
                                   Delivery Method Details
                                 </p>
                                 {method?.summary && (
-                                  <p className="text-lg leading-relaxed text-gray-900">
+                                  <p className="text-lg leading-relaxed text-white">
                                     {method.summary}
                                   </p>
                                 )}
                                 {bodyPreview && (
-                                  <p className="text-base leading-relaxed text-gray-700">
+                                  <p className="text-base leading-relaxed text-white/90">
                                     {bodyPreview}
                                   </p>
                                 )}
 
-                                <div className="mt-6 border border-gray-200 bg-gray-50 p-5">
-                                  <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                <div className="mt-6 border border-white/20 bg-white/10 p-5">
+                                  <p className="mb-2 text-xs uppercase tracking-[0.25em] text-white/70">
                                     Interested?
                                   </p>
-                                  <p className="text-sm text-gray-900">
+                                  <p className="text-sm text-white">
                                     Click &quot;5&quot; tab to inquire about this method.
                                   </p>
                                 </div>
                               </div>
                             ) : (
                               <div className="flex-1">
-                                <div className="border border-gray-200 bg-gray-50 p-5 shadow-sm">
+                                <div className="border border-white/20 bg-white/10 p-5 shadow-sm">
                                   <div className="mb-4">
-                                    <p className="mb-1 text-xs uppercase tracking-[0.25em] text-gray-500">
+                                    <p className="mb-1 text-xs uppercase tracking-[0.25em] text-white/70">
                                       Request a Quote
                                     </p>
-                                    <h5 className="text-xl font-semibold text-gray-900">
+                                    <h5 className="text-xl font-semibold text-white">
                                       {servicesData.deliveryMethodsFormHeadline ||
                                         'Tell us about your project'}
                                     </h5>
-                                    <p className="mt-2 text-sm text-gray-700">
+                                    <p className="mt-2 text-sm text-white/90">
                                       {servicesData.deliveryMethodsFormCopy ||
                                         'Share a few details and we will follow up quickly.'}
                                     </p>
@@ -517,25 +517,25 @@ const ServicesSection = () => {
                                       type="text"
                                       required
                                       placeholder="Name"
-                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                      className="w-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
                                     />
                                     <input
                                       name="email"
                                       type="email"
                                       required
                                       placeholder="Email"
-                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                      className="w-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
                                     />
                                     <input
                                       name="phone"
                                       type="tel"
                                       placeholder="Phone"
-                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                      className="w-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
                                     />
                                     <select
                                       name="deliveryMethod"
                                       defaultValue="General Inquiry"
-                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                      className="w-full border border-white/30 bg-white/20 px-4 py-3 text-white focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
                                     >
                                       <option value="General Inquiry">General Inquiry</option>
                                       {servicesData.deliveryMethods.map((m, optionIdx) => (
@@ -552,14 +552,14 @@ const ServicesSection = () => {
                                       required
                                       rows="4"
                                       placeholder="Project details, timelines, and any specifics"
-                                      className="w-full border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                      className="w-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
                                     />
                                     <input type="hidden" name="targetEmail" value={emailTarget} />
                                     <div className="flex flex-wrap items-center gap-3">
                                       <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="inline-flex items-center justify-center gap-2 bg-gray-900 px-5 py-3 font-semibold text-white transition hover:bg-gray-800 disabled:opacity-60"
+                                        className="inline-flex items-center justify-center gap-2 bg-white px-5 py-3 font-semibold text-gray-900 transition hover:bg-white/90 disabled:opacity-60"
                                       >
                                         {submitting ? 'Sending...' : 'Send Request'}
                                       </button>
