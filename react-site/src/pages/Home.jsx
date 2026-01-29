@@ -444,21 +444,26 @@ export default function Home() {
         const rect = contactWrapper.getBoundingClientRect()
         const viewportHeight = window.innerHeight
 
-        // Super simple: animate from -600 to 0 as element enters viewport
-        let slideValue = -600
+        // Animate over a LARGE range - start when wrapper is far below viewport
+        const animationStartDistance = viewportHeight * 2.5  // Start when 2.5x viewport below (e.g., 2142px)
+        const animationEndDistance = 0  // Complete when wrapper reaches top of viewport
 
-        if (rect.top < viewportHeight && rect.top > 0) {
-          // Linear progress from bottom to top of viewport
-          const progress = 1 - (rect.top / viewportHeight)
-          slideValue = -600 + (progress * 600)
-        } else if (rect.top <= 0) {
+        let slideValue = -600 // Default: hidden
+
+        if (rect.top <= animationStartDistance && rect.top >= animationEndDistance) {
+          // Progressive animation as wrapper scrolls from far below into viewport
+          const progress = 1 - (rect.top / animationStartDistance)
+          slideValue = -600 + (progress * 600) // -600px -> 0px
+        } else if (rect.top < animationEndDistance) {
           slideValue = 0 // Fully visible
         }
 
         console.log('[Contact Animation]', {
           wrapperTop: rect.top,
           viewportHeight: viewportHeight,
-          progress: 1 - (rect.top / viewportHeight),
+          animationStartDistance: animationStartDistance,
+          animationEndDistance: animationEndDistance,
+          progress: 1 - (rect.top / animationStartDistance),
           slideValue: slideValue
         })
 
