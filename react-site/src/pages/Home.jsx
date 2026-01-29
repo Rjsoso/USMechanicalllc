@@ -168,21 +168,16 @@ export default function Home() {
         }`
       )
       .then(data => {
-        console.log('[Home] Hero background fetch result:', data)
         if (data?.backgroundImage?.asset?.url) {
           const bgUrl = `${data.backgroundImage.asset.url}?w=1920&q=85&auto=format`
-          console.log('[Home] Setting background URL:', bgUrl)
           setHeroBackgroundUrl(bgUrl)
         } else if (data?.backgroundImage) {
           const url = urlFor(data.backgroundImage)?.width(1920).quality(85).auto('format').url()
-          console.log('[Home] Setting background URL (via urlFor):', url)
           if (url) setHeroBackgroundUrl(url)
-        } else {
-          console.warn('[Home] No background image found in Sanity heroSection document')
         }
       })
       .catch(error => {
-        console.error('[Home] Error fetching hero background:', error)
+        console.error('Error fetching hero background:', error)
       })
   }, [])
 
