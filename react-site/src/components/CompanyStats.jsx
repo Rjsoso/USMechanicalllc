@@ -85,11 +85,11 @@ const AnimatedNumber = memo(function AnimatedNumber({
       if (Math.abs(diff) > 0.5) {
         const newValue = current + diff * INTERPOLATION_SPEED
         currentValueRef.current = newValue
-        setCount(Math.floor(newValue))
+        setCount(newValue) // Keep decimal precision for smooth updates
         interpolationFrameRef.current = requestAnimationFrame(interpolate)
       } else {
         currentValueRef.current = target
-        setCount(Math.floor(target))
+        setCount(target)
         interpolationFrameRef.current = null
       }
     }
@@ -150,7 +150,7 @@ const AnimatedNumber = memo(function AnimatedNumber({
         WebkitFontSmoothing: 'antialiased',
       }}
     >
-      {count.toLocaleString()}
+      {Math.floor(count).toLocaleString()}
       {suffix}
     </span>
   )
