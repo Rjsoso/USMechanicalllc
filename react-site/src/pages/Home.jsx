@@ -564,7 +564,7 @@ export default function Home() {
       <Header />
 
       <main>
-        <section id="hero" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 0 }}>
+        <section id="hero" style={{ position: 'relative', top: 0, left: 0, width: '100%', zIndex: 0 }}>
           <HeroSection />
         </section>
         <div style={{ marginTop: '100vh', position: 'relative', zIndex: 1 }}>
