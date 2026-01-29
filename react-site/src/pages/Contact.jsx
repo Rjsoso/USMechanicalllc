@@ -293,7 +293,7 @@ export default function Contact() {
         id="contact"
         className="relative w-full px-6 py-20"
         style={{
-          backgroundColor: '#1a1a1a',
+          backgroundColor: 'transparent',
           minHeight: '100vh',
         }}
       >

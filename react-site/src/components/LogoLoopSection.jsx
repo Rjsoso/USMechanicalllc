@@ -81,7 +81,7 @@ export default function LogoLoopSection() {
   }
 
   return (
-    <section className="bg-white py-8 xl:py-6 2xl:py-4">
+    <section className="bg-transparent py-8 xl:py-6 2xl:py-4">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
@@ -91,8 +91,7 @@ export default function LogoLoopSection() {
           logoHeight={getLogoHeight()}
           gap={getGap()}
           hoverSpeed={30}
-          fadeOut={true}
-          fadeOutColor="#ffffff"
+          fadeOut={false}
           scaleOnHover={false}
           ariaLabel="Partner and client logos"
         />
