@@ -189,7 +189,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
   return (
     <>
-      <section id="about" className="relative z-0 overflow-hidden bg-black py-20 text-white">
+      <section id="about" className="relative z-0 overflow-hidden py-20 text-white" style={{ backgroundColor: 'transparent' }}>
         {/* ABOUT SECTION - Side-by-side carousel and text */}
         {carouselItems.length > 0 && (
           <div
@@ -430,7 +430,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
 
       <section
         id="safety"
-        className="-mt-10 bg-white py-20 text-gray-900"
+        className="-mt-10 py-20 text-gray-900"
         style={{
           position: 'relative',
           zIndex: 20,
@@ -439,6 +439,7 @@ Our goal is always simple: complete every project with zero safety issues.`,
           WebkitTransform: 'translateZ(0)',
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
         }}
       >
         <div className={isMobile ? 'w-full px-0' : 'mx-auto max-w-7xl px-6'}>

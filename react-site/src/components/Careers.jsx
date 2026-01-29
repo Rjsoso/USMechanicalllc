@@ -89,7 +89,7 @@ export default function Careers() {
       className="relative pb-24 pt-8 text-black"
       style={{
         marginTop: '-20rem',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'rgba(245, 245, 245, 0.95)',
         overflow: 'hidden',
         position: 'relative',
         zIndex: 4,
