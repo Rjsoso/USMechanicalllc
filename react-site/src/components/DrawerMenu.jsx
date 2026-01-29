@@ -18,22 +18,22 @@ const DrawerMenu = () => {
     {
       label: 'Company',
       links: [
-        { label: 'About Us', href: '#about', ariaLabel: 'Learn about us' },
-        { label: 'Safety', href: '#safety', ariaLabel: 'Our safety practices' },
+        { label: 'About Us', href: '/about', ariaLabel: 'Learn about us' },
+        { label: 'Safety', href: '/about#safety', ariaLabel: 'Our safety practices' },
       ],
     },
     {
       label: 'Services',
       links: [
-        { label: 'Our Services', href: '#services', ariaLabel: 'View our services' },
-        { label: 'Portfolio', href: '#portfolio', ariaLabel: 'View our portfolio' },
+        { label: 'Our Services', href: '/#services', ariaLabel: 'View our services' },
+        { label: 'Portfolio', href: '/portfolio', ariaLabel: 'View our portfolio' },
       ],
     },
     {
       label: 'Connect',
       links: [
-        { label: 'Careers at US Mechanical', href: '#careers', ariaLabel: 'View career opportunities' },
-        { label: 'Contact', href: '#contact', ariaLabel: 'Contact us' },
+        { label: 'Careers', href: '/careers', ariaLabel: 'View career opportunities' },
+        { label: 'Contact', href: '/contact', ariaLabel: 'Contact us' },
       ],
     },
   ]
@@ -75,16 +75,34 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section using utility function
+  // Handle scroll to section or page navigation
   const handleLinkClick = href => {
     // Close drawer first
     setIsOpen(false)
 
-    // Extract section ID from href (remove # prefix)
-    const sectionId = href.replace('#', '')
-    
-    // Use the centralized navigation utility
-    navigateToSection(sectionId, navigate, location.pathname)
+    // Check if it's a full page link (starts with /) or an anchor link (starts with #)
+    if (href.startsWith('/') && !href.includes('#')) {
+      // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
+      navigate(href)
+    } else if (href.startsWith('/#')) {
+      // Link to section on home page (e.g., /#services)
+      const sectionId = href.replace('/#', '')
+      navigateToSection(sectionId, navigate, location.pathname)
+    } else if (href.startsWith('/') && href.includes('#')) {
+      // Link to section on specific page (e.g., /about#safety)
+      const [path, section] = href.split('#')
+      navigate(path)
+      setTimeout(() => {
+        const element = document.getElementById(section)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    } else if (href.startsWith('#')) {
+      // Legacy anchor link - treat as home page section
+      const sectionId = href.replace('#', '')
+      navigateToSection(sectionId, navigate, location.pathname)
+    }
   }
 
   // Toggle drawer open/closed

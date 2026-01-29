@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 /**
  * StructuredData Component
@@ -7,6 +8,8 @@ import { useEffect } from 'react'
  * and rich snippets in search results.
  */
 const StructuredData = () => {
+  const location = useLocation()
+  
   useEffect(() => {
     // LocalBusiness Schema
     const localBusinessSchema = {
@@ -168,22 +171,171 @@ const StructuredData = () => {
       },
     }
 
-    // BreadcrumbList Schema (for homepage)
-    const breadcrumbSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
+    // BreadcrumbList Schema (dynamic based on current page)
+    const getBreadcrumbSchema = () => {
+      const breadcrumbs = [
         {
           '@type': 'ListItem',
           position: 1,
           name: 'Home',
           item: 'https://usmechanical.com',
         },
+      ]
+
+      const path = location.pathname
+      if (path === '/about') {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'About Us',
+          item: 'https://usmechanical.com/about',
+        })
+      } else if (path === '/careers') {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Careers',
+          item: 'https://usmechanical.com/careers',
+        })
+      } else if (path === '/portfolio') {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Portfolio',
+          item: 'https://usmechanical.com/portfolio',
+        })
+      } else if (path === '/contact') {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Contact',
+          item: 'https://usmechanical.com/contact',
+        })
+      }
+
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs,
+      }
+    }
+
+    // SiteNavigationElement Schema - helps Google understand main navigation
+    const siteNavigationSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Main Navigation',
+      itemListElement: [
+        {
+          '@type': 'SiteNavigationElement',
+          position: 1,
+          name: 'Home',
+          url: 'https://usmechanical.com',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 2,
+          name: 'About Us',
+          url: 'https://usmechanical.com/about',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 3,
+          name: 'Services',
+          url: 'https://usmechanical.com/#services',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 4,
+          name: 'Portfolio',
+          url: 'https://usmechanical.com/portfolio',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 5,
+          name: 'Careers',
+          url: 'https://usmechanical.com/careers',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 6,
+          name: 'Contact',
+          url: 'https://usmechanical.com/contact',
+        },
       ],
     }
 
+    // WebPage Schema - specific to current page
+    const getWebPageSchema = () => {
+      const baseSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        '@id': `https://usmechanical.com${location.pathname}`,
+        url: `https://usmechanical.com${location.pathname}`,
+        isPartOf: {
+          '@id': 'https://usmechanical.com/#website',
+        },
+        about: {
+          '@id': 'https://usmechanical.com/#organization',
+        },
+        inLanguage: 'en-US',
+      }
+
+      const path = location.pathname
+      if (path === '/') {
+        return {
+          ...baseSchema,
+          '@type': 'WebPage',
+          name: 'US Mechanical - Plumbing & HVAC Experts Since 1963',
+          description:
+            'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists.',
+        }
+      } else if (path === '/about') {
+        return {
+          ...baseSchema,
+          '@type': 'AboutPage',
+          name: 'About Us - Company Background',
+          description:
+            "Learn about U.S. Mechanical's history since 1963, our team, offices, and commitment to safety.",
+        }
+      } else if (path === '/careers') {
+        return {
+          ...baseSchema,
+          '@type': 'WebPage',
+          name: 'Careers - Join Our Team',
+          description:
+            'Join the U.S. Mechanical team. Competitive pay, great benefits, and career growth opportunities.',
+        }
+      } else if (path === '/portfolio') {
+        return {
+          ...baseSchema,
+          '@type': 'CollectionPage',
+          name: 'Portfolio - Our Projects',
+          description:
+            'Explore our portfolio of completed commercial and industrial projects including manufacturing, healthcare, education, and more.',
+        }
+      } else if (path === '/contact') {
+        return {
+          ...baseSchema,
+          '@type': 'ContactPage',
+          name: 'Contact Us - Get a Quote',
+          description:
+            'Contact US Mechanical for plumbing, HVAC, and mechanical contracting services. Get a free quote today.',
+        }
+      }
+
+      return baseSchema
+    }
+
     // Create script elements for each schema
-    const schemas = [localBusinessSchema, organizationSchema, websiteSchema, breadcrumbSchema]
+    const schemas = [
+      localBusinessSchema,
+      organizationSchema,
+      websiteSchema,
+      getBreadcrumbSchema(),
+      siteNavigationSchema,
+      getWebPageSchema(),
+    ]
 
     const scriptElements = schemas.map((schema, index) => {
       const script = document.createElement('script')
@@ -206,7 +358,7 @@ const StructuredData = () => {
         }
       })
     }
-  }, [])
+  }, [location.pathname])
 
   return null // This component doesn't render anything visible
 }

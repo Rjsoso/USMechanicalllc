@@ -135,7 +135,13 @@ function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <button 
-                  onClick={() => handleNavClick('about')}
+                  onClick={() => {
+                    if (location.pathname !== '/about') {
+                      navigate('/about')
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
                   className="transition-colors hover:text-white"
                 >
                   About
@@ -143,10 +149,33 @@ function Footer() {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavClick('safety')}
+                  onClick={() => {
+                    if (location.pathname !== '/about') {
+                      navigate('/about')
+                      setTimeout(() => {
+                        const element = document.getElementById('safety')
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' })
+                        }
+                      }, 100)
+                    } else {
+                      const element = document.getElementById('safety')
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' })
+                      }
+                    }
+                  }}
                   className="transition-colors hover:text-white"
                 >
                   Safety & Risk Management
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigate('/careers')}
+                  className="transition-colors hover:text-white"
+                >
+                  Careers
                 </button>
               </li>
             </ul>
@@ -166,7 +195,7 @@ function Footer() {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavClick('portfolio')}
+                  onClick={() => navigate('/portfolio')}
                   className="transition-colors hover:text-white"
                 >
                   Portfolio
@@ -174,7 +203,7 @@ function Footer() {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavClick('contact')}
+                  onClick={() => navigate('/contact')}
                   className="transition-colors hover:text-white"
                 >
                   Contact Us
