@@ -5,7 +5,7 @@ import { client } from '../utils/sanity'
 // Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
 const AnimatedNumber = memo(function AnimatedNumber({
   value,
-  duration = 2000,
+  duration = 3500,
   inView,
   startValue = 0,
 }) {
@@ -69,7 +69,7 @@ const AnimatedNumber = memo(function AnimatedNumber({
     const startTime = Date.now()
     const targetValue = numericValue // Capture value at start
     const animationStartValue = startValue // Capture start value
-    const updateInterval = 16 // 60fps - ultra-smooth for desktop/Chrome (matches refresh rate)
+    const updateInterval = 20 // 50fps - smoother perceived animation
 
     // Use setInterval for throttled updates (better for iOS/Safari performance)
     intervalRef.current = setInterval(() => {
@@ -82,9 +82,8 @@ const AnimatedNumber = memo(function AnimatedNumber({
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
 
-      // Add cubic ease-in-out for smoother perceived motion
-      const easeProgress =
-        progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2
+      // Gentle ease-out for smooth, natural animation (matches contact animation feel)
+      const easeProgress = 1 - Math.pow(1 - progress, 2)
 
       const currentValue = Math.floor(
         animationStartValue + (targetValue - animationStartValue) * easeProgress
@@ -266,7 +265,7 @@ const CompanyStats = () => {
                 <AnimatedNumber
                   value={item.value}
                   startValue={item.enableCustomStart ? item.animateFromValue : 0}
-                  duration={item.animationDuration || 2000}
+                  duration={item.animationDuration || 3500}
                   inView={inView}
                 />
               </div>
