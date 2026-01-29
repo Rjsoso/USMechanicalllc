@@ -39,12 +39,21 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 // Mark body as loaded after React renders and content is in DOM
 // Use requestAnimationFrame to ensure content is painted
+// Track when page load started for minimum display time
+const loadStartTime = Date.now()
+
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    document.body.classList.add('loaded')
-    // Remove overlay completely after fade completes
+    // Calculate how long to wait to reach minimum 800ms display time
+    const elapsed = Date.now() - loadStartTime
+    const remainingTime = Math.max(0, 800 - elapsed)
+    
     setTimeout(() => {
-      document.body.classList.add('loaded-complete')
-    }, 150)
+      document.body.classList.add('loaded')
+      // Remove overlay completely after fade completes
+      setTimeout(() => {
+        document.body.classList.add('loaded-complete')
+      }, 150)
+    }, remainingTime)
   })
 })
