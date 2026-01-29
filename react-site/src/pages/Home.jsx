@@ -436,27 +436,22 @@ export default function Home() {
         const careersSection = document.querySelector('#careers')
         if (!careersSection) return
 
-        // Get careers section position in document
+        // Use viewport-based calculation (matching stats animation pattern)
         const careersRect = careersSection.getBoundingClientRect()
-        const careersTop = careersRect.top + window.scrollY
-        const careersHeight = careersRect.height
+        const careersBottom = careersRect.bottom
+        const viewportHeight = window.innerHeight
 
-        // Calculate animation start/end as scroll positions
-        const animationStartScroll = careersTop - window.innerHeight * 0.4
-        const animationEndScroll = careersTop + careersHeight * 0.3
-
-        // Get current scroll position
-        const currentScroll = window.scrollY
+        // Animation range based on careers bottom position in viewport
+        const slideStart = viewportHeight * 0.8 // Start when careers bottom is 80% down viewport
+        const slideEnd = viewportHeight * 0.1   // Complete when careers bottom is 10% down viewport
 
         let slideValue = -600 // Default: hidden
 
-        if (currentScroll >= animationStartScroll && currentScroll <= animationEndScroll) {
-          // Direct mapping: scroll distance -> animation progress
-          const scrollRange = animationEndScroll - animationStartScroll
-          const scrolled = currentScroll - animationStartScroll
-          const progress = scrolled / scrollRange // 0 to 1
+        if (careersBottom <= slideStart && careersBottom >= slideEnd) {
+          // Progressive animation as careers slides up (matching stats pattern)
+          const progress = 1 - (careersBottom - slideEnd) / (slideStart - slideEnd)
           slideValue = -600 + (progress * 600) // -600px -> 0px
-        } else if (currentScroll > animationEndScroll) {
+        } else if (careersBottom < slideEnd) {
           slideValue = 0 // Fully visible
         }
 
