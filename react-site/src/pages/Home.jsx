@@ -413,7 +413,7 @@ export default function Home() {
     }
     
     const handleContactScroll = () => {
-      console.log('[Contact] Scroll handler called', { scrollY: window.scrollY })
+      console.log('[Contact] Scroll handler called', `scrollY: ${window.scrollY}`)
       
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
@@ -435,41 +435,31 @@ export default function Home() {
         // Skip calculations during navigation lock
         if (window.__scrollNavigationLock) return
         
-        const contactSection = document.querySelector('#contact')
-        if (!contactSection) {
-          console.log('[Contact] ERROR: Contact section not found!')
+        const contactWrapper = document.querySelector('#contact-wrapper')
+        if (!contactWrapper) {
+          console.log('[Contact] ERROR: Wrapper not found!')
           return
         }
 
-        // Track the CONTACT section itself as it enters viewport
-        const contactRect = contactSection.getBoundingClientRect()
-        const contactTop = contactRect.top
+        const rect = contactWrapper.getBoundingClientRect()
         const viewportHeight = window.innerHeight
 
-        // Animation based on contact section's top position
-        // Start: Contact top is below viewport (1.5x viewport height = well below)
-        // End: Contact top is at middle of viewport (0.5x = 50% down screen)
-        const animationStart = viewportHeight * 1.5  // Start when contact is well below viewport
-        const animationEnd = viewportHeight * 0.5    // Complete when contact top reaches middle of screen
+        // Super simple: animate from -600 to 0 as element enters viewport
+        let slideValue = -600
 
-        let slideValue = -600 // Default: hidden
-
-        if (contactTop <= animationStart && contactTop >= animationEnd) {
-          // Progressive animation as contact enters viewport
-          const progress = 1 - (contactTop - animationEnd) / (animationStart - animationEnd)
-          slideValue = -600 + (progress * 600) // -600px -> 0px
-        } else if (contactTop < animationEnd) {
-          slideValue = 0 // Fully visible once contact reaches middle of viewport
+        if (rect.top < viewportHeight && rect.top > 0) {
+          // Linear progress from bottom to top of viewport
+          const progress = 1 - (rect.top / viewportHeight)
+          slideValue = -600 + (progress * 600)
+        } else if (rect.top <= 0) {
+          slideValue = 0 // Fully visible
         }
 
         console.log('[Contact Animation]', {
-          contactTop: contactTop.toFixed(2),
-          animationStart: animationStart.toFixed(2),
-          animationEnd: animationEnd.toFixed(2),
-          inAnimationRange: contactTop <= animationStart && contactTop >= animationEnd,
-          slideValue: slideValue.toFixed(2),
-          targetRef: targetContactSlideRef.current.toFixed(2),
-          currentRef: lastContactSlideRef.current.toFixed(2)
+          wrapperTop: rect.top,
+          viewportHeight: viewportHeight,
+          progress: 1 - (rect.top / viewportHeight),
+          slideValue: slideValue
         })
 
         // ALWAYS set target, never call setContactSlide directly
@@ -582,6 +572,7 @@ export default function Home() {
           </div>
 
           <div
+            id="contact-wrapper"
             style={
               buttonNavigationUsed.current
                 ? {
