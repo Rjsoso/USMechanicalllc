@@ -190,10 +190,8 @@ body,
 
 /* Ensure main element doesn't have white background */
 /* But allow wrapper div to have grey background */
-main {
-  background: transparent !important;
-  background-color: transparent !important;
-}
+/* Main element background is controlled via inline styles in Home.jsx for dynamic Sanity images */
+/* Do not add background rules here as they will override the dynamic background */
 
 /* Wrapper div must also be transparent to allow hero image to show through */
 body > main > div.bg-gray-50,
