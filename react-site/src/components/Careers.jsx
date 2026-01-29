@@ -44,7 +44,7 @@ export default function Careers() {
     )
   }
 
-  // Fallback content if no data from Sanity
+  // Fallback content if no data from Sanity - Last updated: 2026-01-29
   const heading = careersData?.mainHeading || 'Careers at U.S. Mechanical'
   const jobTitle = careersData?.jobTitle || 'Now hiring Plumbing and HVAC Installers'
   const jobOverview = careersData?.jobOverview || [
@@ -56,11 +56,11 @@ export default function Careers() {
     careersData?.jobDescription ||
     'Demolish and install plumbing and HVAC systems in new commercial and institutional construction throughout the Intermountain West including Utah, Nevada and Wyoming.'
   const qualifications = careersData?.qualifications || [
-    { item: '18 years or older (Required)', required: true },
-    { item: 'US work authorization (Required)', required: true },
-    { item: 'High school or equivalent (Preferred)', required: false },
+    { item: '18 years or older', required: true },
+    { item: 'US work authorization', required: true },
+    { item: 'High school or equivalent', required: false },
     {
-      item: 'Interest in plumbing, pipe fitting or sheet metal career (Preferred)',
+      item: 'Interest in plumbing, pipe fitting or sheet metal career',
       required: false,
     },
     { item: 'OSHA 10/30 card holder', required: false },
@@ -72,9 +72,9 @@ export default function Careers() {
     'Free employee medical, dental, vision, and life insurance',
     'Up to 3.5% 401(k) match',
   ]
-  const indeedUrl = careersData?.indeedUrl || 'https://www.indeed.com/cmp/U.s.-Mechanical,-LLC/jobs'
+  const indeedUrl = careersData?.indeedUrl || 'https://www.indeed.com/cmp/US-Mechanical'
   const pdfUrl = careersData?.applicationPdfUrl || '/application.pdf'
-  const submissionEmail = careersData?.submissionEmail || 'admin@usmechanicalllc.com'
+  const submissionEmail = careersData?.submissionEmail || 'info@usmechanicalllc.com'
   const submissionFax = careersData?.submissionFax || '(801) 785-6029'
   const backgroundImage = careersData?.backgroundImage
 

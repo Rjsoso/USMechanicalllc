@@ -4,13 +4,13 @@ import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 
-// Fallback contact data in case Sanity fetch fails
+// Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
 const FALLBACK_DATA = {
-  address: '472 South 640 West Pleasant Grove, UT 84062',
+  address: '472 South 640 West\nPleasant Grove, UT 84062',
   phone: '(801) 785-6028',
   email: null,
-  licenseInfo: null,
-  footerCompanyDescription: 'Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction throughout Utah.',
+  licenseInfo: 'Licensed in UT, NV, CA, AZ, WY',
+  footerCompanyDescription: 'Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction primarily throughout Utah & Nevada',
   businessHours: {
     days: 'Monday - Friday',
     hours: '8:00 AM - 5:00 PM'

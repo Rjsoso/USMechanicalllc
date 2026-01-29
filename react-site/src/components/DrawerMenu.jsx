@@ -13,27 +13,27 @@ const DrawerMenu = () => {
   const hamburgerRef = useRef(null)
   const drawerRef = useRef(null)
 
-  // Default fallback navigation structure
+  // Default fallback navigation structure - Last updated: 2026-01-29
   const defaultSections = [
     {
-      label: 'Company',
+      label: 'COMPANY',
       links: [
-        { label: 'About Us', href: '/about', ariaLabel: 'Learn about us' },
-        { label: 'Safety', href: '/about#safety', ariaLabel: 'Our safety practices' },
+        { label: 'About Us', href: '#about', ariaLabel: null },
+        { label: 'Safety', href: '#safety', ariaLabel: null },
       ],
     },
     {
-      label: 'Services',
+      label: 'SERVICES',
       links: [
-        { label: 'Our Services', href: '/#services', ariaLabel: 'View our services' },
-        { label: 'Portfolio', href: '/portfolio', ariaLabel: 'View our portfolio' },
+        { label: 'Our Services', href: '#services', ariaLabel: null },
+        { label: 'Portfolio', href: '#portfolio', ariaLabel: null },
       ],
     },
     {
-      label: 'Connect',
+      label: 'CONNECT',
       links: [
-        { label: 'Careers', href: '/careers', ariaLabel: 'View career opportunities' },
-        { label: 'Contact', href: '/contact', ariaLabel: 'Contact us' },
+        { label: 'Careers at US Mechanical', href: '#careers', ariaLabel: null },
+        { label: 'Contact', href: '#contact', ariaLabel: null },
       ],
     },
   ]

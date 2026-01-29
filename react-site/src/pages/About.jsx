@@ -33,18 +33,14 @@ export default function About() {
   }, [])
 
   const defaultData = {
-    aboutTitle: 'About U.S. Mechanical',
-    aboutText: `U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. The U.S. Mechanical name was adopted 25 years ago and continues to represent our company owners and employees.
-
-We pursue projects in the Intermountain and Southwest regions via hard bid, design build, CMAR, and cost plus. Our team includes journeyman and apprentice plumbers, sheet metal installers, pipefitters, welders, and administrative staff—all with unmatched experience.
-
-We maintain offices in Pleasant Grove, Utah, and Las Vegas, Nevada, as well as Snyder Mechanical in Elko, Nevada, which serves the mining industry. U.S. Mechanical is fully licensed, bonded, and insured in Nevada, Utah, Arizona, California, and Wyoming.`,
+    aboutTitle: 'ABOUT',
+    aboutText: `U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. U.S. Mechanical secures projects in the Intermountain and Southwest regions via open bid, design build, CMAR, and the cost-plus method. We employ experienced and competent project managers, superintendents, foreman,  journeyman, and apprentices in the professional fields of plumbing, sheet metal, pipefitting, and welding. We are confident that our employees at U.S. Mechanical are the key to our success, and we are proud to offer our teams experience and abilities to meet the needs of your projects.
+U.S. Mechanical currently has offices in Pleasant Grove, Utah and Las Vegas, Nevada.  We also offer our expertise at Snyder Mechanical located in Elko, Nevada, where we predominately serve the mining industry in the northern Nevada area. U.S. Mechanical is fully licensed, bonded, and insured in the states of Nevada, Utah, Arizona, California, and Wyoming.
+With over 60 years of project experience, we have built an undeniable reputation, enabling us to build an enviable list of clientele and business associates. In turn, U.S. Mechanical's current bonding capacity for a single project is $35,000,000, while its aggregate limit exceeds $150,000,000.`,
     safetyTitle: 'Safety & Risk Management',
-    safetyText: `U.S. Mechanical conducts all projects with safety as our top priority. We employ a company-wide safety program led by a full-time OSHA and MSHA accredited safety director. Our focus on safety ensures properly trained employees and a work environment that prioritizes everyone's well-being.
-
-Our experience modification rate (EMR) remains below the national average, qualifying us for self-insured insurance programs that reduce risk management costs. These savings, combined with our dedication to safety, provide added value on every project.
-
-Our goal is always simple: complete every project with zero safety issues.`,
+    safetyText: `U.S. Mechanical conducts the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program manager that is OSHA and MSHA accredited, provide site specific safety programs, fall and operational programs and personal PPE incentives.  These measures ensure not only properly trained employees, but the required focus of safety from all our team members on our projects. 
+The result of this commitment to safety is an Experience Modification Rate (EMR) lower than the national average. This accomplishment has enabled U.S. Mechanical to qualify for self-insured insurance programs that lower the overall risk management costs associated with the general construction industry. These financial savings coupled with our continued commitment to safety provide our client-base added value on every project.
+All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
   }
 
   useEffect(() => {

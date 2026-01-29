@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-01-29T22:59:26.910Z",
+  "note": "This file contains current Sanity content to be used as fallback data in React components",
+  "hero": {
+    "headline": "Trusted Mechanical Contractors Since 1963",
+    "subtext": "",
+    "buttonText": "REQUEST A QUOTE",
+    "buttonLink": "#contact",
+    "secondButtonText": "APPLY TO WORK WITH US",
+    "secondButtonLink": "#careers"
+  },
+  "footer": {
+    "address": "472 South 640 West\nPleasant Grove, UT 84062",
+    "phone": "(801) 785-6028",
+    "email": null,
+    "licenseInfo": "Licensed in UT, NV, CA, AZ, WY",
+    "footerCompanyDescription": "Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction primarily throughout Utah & Nevada",
+    "businessHours": {
+      "days": "Monday - Friday",
+      "hours": "8:00 AM - 5:00 PM"
+    },
+    "serviceArea": "Serving Northern Utah",
+    "footerBadge": "Fully Licensed & Insured"
+  },
+  "about": {
+    "aboutTitle": "ABOUT",
+    "aboutText": "U.S. Mechanical’s foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. U.S. Mechanical secures projects in the Intermountain and Southwest regions via open bid, design build, CMAR, and the cost-plus method. We employ experienced and competent project managers, superintendents, foreman,  journeyman, and apprentices in the professional fields of plumbing, sheet metal, pipefitting, and welding. We are confident that our employees at U.S. Mechanical are the key to our success, and we are proud to offer our teams experience and abilities to meet the needs of your projects.\nU.S. Mechanical currently has offices in Pleasant Grove, Utah and Las Vegas, Nevada.  We also offer our expertise at Snyder Mechanical located in Elko, Nevada, where we predominately serve the mining industry in the northern Nevada area. U.S. Mechanical is fully licensed, bonded, and insured in the states of Nevada, Utah, Arizona, California, and Wyoming.\nWith over 60 years of project experience, we have built an undeniable reputation, enabling us to build an enviable list of clientele and business associates. In turn, U.S. Mechanical's current bonding capacity for a single project is $35,000,000, while its aggregate limit exceeds $150,000,000.\n",
+    "safetyTitle": "Safety & Risk Management",
+    "safetyText": "U.S. Mechanical conducts the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program manager that is OSHA and MSHA accredited, provide site specific safety programs, fall and operational programs and personal PPE incentives.  These measures ensure not only properly trained employees, but the required focus of safety from all our team members on our projects. \nThe result of this commitment to safety is an Experience Modification Rate (EMR) lower than the national average. This accomplishment has enabled U.S. Mechanical to qualify for self-insured insurance programs that lower the overall risk management costs associated with the general construction industry. These financial savings coupled with our continued commitment to safety provide our client-base added value on every project.\nAll of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment."
+  },
+  "drawer": {
+    "sections": [
+      {
+        "label": "COMPANY",
+        "links": [
+          {
+            "ariaLabel": null,
+            "href": "#about",
+            "label": "About Us"
+          },
+          {
+            "ariaLabel": null,
+            "href": "#safety",
+            "label": "Safety"
+          }
+        ]
+      },
+      {
+        "label": "SERVICES",
+        "links": [
+          {
+            "ariaLabel": null,
+            "href": "#services",
+            "label": "Our Services"
+          },
+          {
+            "ariaLabel": null,
+            "href": "#portfolio",
+            "label": "Portfolio"
+          }
+        ]
+      },
+      {
+        "label": "CONNECT",
+        "links": [
+          {
+            "ariaLabel": null,
+            "href": "#careers",
+            "label": "Careers at US Mechanical"
+          },
+          {
+            "ariaLabel": null,
+            "href": "#contact",
+            "label": "Contact"
+          }
+        ]
+      }
+    ]
+  },
+  "careers": {
+    "mainHeading": "Careers at U.S. Mechanical",
+    "jobTitle": "Now hiring Plumbing and HVAC Installers",
+    "jobOverview": [
+      "Full-time",
+      "Entry- to mid-level experience",
+      "Competitive pay and benefits"
+    ],
+    "jobDescription": "Demolish and install plumbing and HVAC systems in new commercial and institutional construction throughout the Intermountain West including Utah, Nevada and Wyoming.\n\n",
+    "qualifications": [
+      {
+        "_key": "7177199164c6",
+        "item": "18 years or older",
+        "required": true
+      },
+      {
+        "_key": "7ec7e967202d",
+        "item": "US work authorization ",
+        "required": true
+      },
+      {
+        "_key": "ba33da1912bf",
+        "item": "High school or equivalent",
+        "required": false
+      },
+      {
+        "_key": "19c681ca0845",
+        "item": "Interest in plumbing, pipe fitting or sheet metal career",
+        "required": false
+      },
+      {
+        "_key": "86ce9f5adafe",
+        "item": "OSHA 10/30 card holder",
+        "required": false
+      }
+    ],
+    "benefits": [
+      "$500 referral bonus",
+      "Tuition reimbursement for apprentices",
+      "Paid time off starts accruing after 90 days",
+      "Free employee medical, dental, vision, and life insurance",
+      "Up to 3.5% 401(k) match"
+    ],
+    "indeedUrl": "https://www.indeed.com/cmp/US-Mechanical",
+    "submissionEmail": "info@usmechanicalllc.com",
+    "submissionFax": "(801) 785-6029"
+  }
+}

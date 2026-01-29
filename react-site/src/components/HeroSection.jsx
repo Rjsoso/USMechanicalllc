@@ -4,15 +4,15 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
 
-// Fallback hero data
+// Fallback hero data - Last updated: 2026-01-29
 const defaultHeroData = {
   // Keep defaults aligned with the published CMS values to avoid “mismatch” confusion
   headline: 'Trusted Mechanical Contractors Since 1963',
   subtext: '',
-  buttonText: '',
+  buttonText: 'REQUEST A QUOTE',
   buttonLink: '#contact',
-  secondButtonText: '',
-  secondButtonLink: '',
+  secondButtonText: 'APPLY TO WORK WITH US',
+  secondButtonLink: '#careers',
   backgroundImage: null,
 }
 
