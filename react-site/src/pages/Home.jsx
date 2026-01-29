@@ -37,15 +37,7 @@ export default function Home() {
   const targetContactSlideRef = useRef(-600)
   const contactAnimationFrameRef = useRef(null)
   
-  // DEBUG: Track Contact wrapper renders
-  useEffect(() => {
-    console.warn('[RENDER-DEBUG] Contact wrapper rendered', {
-      contactSlide,
-      buttonNavigationUsed: buttonNavigationUsed.current,
-      hasTransform: !buttonNavigationUsed.current,
-      timestamp: Date.now()
-    })
-  }, [contactSlide])
+  // Remove excessive debug logging - causes console flood
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -398,14 +390,14 @@ export default function Home() {
       const target = targetContactSlideRef.current
       const diff = target - current
 
-      if (Math.abs(diff) > 0.1) {
-        // Smooth interpolation
+      if (Math.abs(diff) > 1) {
+        // Smooth interpolation - using 1px threshold to prevent micro-updates
         const newValue = current + diff * INTERPOLATION_SPEED
         lastContactSlideRef.current = newValue
         setContactSlide(newValue)
         contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
       } else {
-        // Snap to final value
+        // Snap to exact final value when within 1px
         lastContactSlideRef.current = target
         setContactSlide(target)
         contactAnimationFrameRef.current = null
@@ -413,8 +405,6 @@ export default function Home() {
     }
     
     const handleContactScroll = () => {
-      console.log('[Contact] Scroll handler called', `scrollY: ${window.scrollY}`)
-      
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
         if (rafId) {
@@ -455,22 +445,14 @@ export default function Home() {
           const progress = 1 - (rect.top / animationStartDistance)
           slideValue = -600 + (progress * 600) // -600px -> 0px
         } else if (rect.top < animationEndDistance) {
-          slideValue = 0 // Fully visible
+          slideValue = 0 // Fully visible - wrapper has scrolled past top
+        } else {
+          slideValue = -600 // Hidden - wrapper is still far below (scrolled back up)
         }
-
-        console.log('[Contact Animation]', {
-          wrapperTop: rect.top,
-          viewportHeight: viewportHeight,
-          animationStartDistance: animationStartDistance,
-          animationEndDistance: animationEndDistance,
-          progress: 1 - (rect.top / animationStartDistance),
-          slideValue: slideValue
-        })
 
         // ALWAYS set target, never call setContactSlide directly
         targetContactSlideRef.current = slideValue
         if (!contactAnimationFrameRef.current) {
-          console.log('[Contact] Starting interpolation loop')
           contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
         }
       })
