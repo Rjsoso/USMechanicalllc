@@ -27,14 +27,14 @@ export default function Home() {
   const animationFrameRef = useRef(null)
 
   // Contact slide animation state
-  const [contactSlide, setContactSlide] = useState(0)
+  const [contactSlide, setContactSlide] = useState(-600)
   const contactAnimationComplete = useRef(false)
   const skipContactAnimationOnce = useRef(false)
   const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
   
   // Contact interpolation refs for ultra-smooth motion
-  const lastContactSlideRef = useRef(0)
-  const targetContactSlideRef = useRef(0)
+  const lastContactSlideRef = useRef(-600)
+  const targetContactSlideRef = useRef(-600)
   const contactAnimationFrameRef = useRef(null)
   
   // Remove excessive debug logging - causes console flood
@@ -438,17 +438,17 @@ export default function Home() {
         const animationStartDistance = viewportHeight * 2.5  // Start when 2.5x viewport below (e.g., 2142px)
         const animationEndDistance = 0  // Complete when wrapper reaches top of viewport
 
-        let slideValue = 0 // Default: hidden behind careers (no offset)
+        let slideValue = -600 // Default: hidden (top portion behind careers)
 
         if (rect.top <= animationStartDistance && rect.top >= animationEndDistance) {
           // Progressive animation as wrapper scrolls from far below into viewport
-          // Contact slides DOWN from behind careers
+          // Contact slides DOWN from behind careers (-600px → 0px)
           const progress = 1 - (rect.top / animationStartDistance)
-          slideValue = 0 + (progress * 600) // 0px -> +600px (slide DOWN)
+          slideValue = -600 + (progress * 600) // -600px -> 0px (slide DOWN to reveal)
         } else if (rect.top < animationEndDistance) {
-          slideValue = 600 // Fully slid down and visible
+          slideValue = 0 // Fully visible at natural position
         } else {
-          slideValue = 0 // Hidden behind careers (scrolled back up)
+          slideValue = -600 // Hidden (top behind careers when scrolled back up)
         }
 
         // ALWAYS set target, never call setContactSlide directly
