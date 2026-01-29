@@ -69,12 +69,9 @@ header {
   box-sizing: border-box;
 }
 
+/* Additional HTML properties (background already set above) */
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 180px; /* Account for fixed header */
-  background: transparent;
-  /* Prevent browser default white background */
-  background-color: transparent !important;
 }
 
 /* Smoother scrolling on supported browsers */
@@ -84,15 +81,11 @@ html {
   }
 }
 
+/* Additional body properties (background and font smoothing already set above) */
 body {
   font-family:
     'Fjalla One',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: transparent;
-  /* Prevent browser default white background */
-  background-color: transparent !important;
 }
 
 /* Performance optimizations for all interactive elements */
@@ -163,13 +156,8 @@ video {
 
 /* Ensure no white bar appears above header - hero section extends to top */
 #root {
-  background: transparent;
-}
-
-/* Remove any white space above header */
-/* Exclude sections so they can have their own backgrounds */
-body > *:not(section) {
-  background: transparent;
+  background-color: #1a1a1a;
+  min-height: 100vh;
 }
 
 /* Ensure hero section starts at very top with no white space */
