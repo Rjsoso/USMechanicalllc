@@ -311,15 +311,44 @@ export default function Home() {
       })
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
+    // Use Intersection Observer to only animate when Safety section is nearby
+    const safetySection = document.querySelector('#safety')
+    let isNearViewport = true // Start as true to handle initial render
+    
+    const observer = safetySection ? new IntersectionObserver(
+      ([entry]) => {
+        isNearViewport = entry.isIntersecting
+        if (!isNearViewport) {
+          // Cleanup when section is far from viewport
+          if (rafId) cancelAnimationFrame(rafId)
+          if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
+        } else {
+          handleScroll() // Trigger update when becoming visible
+        }
+      },
+      { threshold: 0, rootMargin: '300px' } // Generous margin for smooth animation
+    ) : null
+    
+    if (observer && safetySection) {
+      observer.observe(safetySection)
+    }
+
+    // Optimized scroll handler that checks visibility first
+    const handleScrollOptimized = () => {
+      if (!isNearViewport) return // Skip if section not nearby
+      handleScroll()
+    }
+
+    window.addEventListener('scroll', handleScrollOptimized, { passive: true })
+    window.addEventListener('resize', handleScrollOptimized, { passive: true })
     handleScroll()
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
+      if (observer) observer.disconnect()
+      window.removeEventListener('scroll', handleScrollOptimized)
+      window.removeEventListener('resize', handleScrollOptimized)
       window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
@@ -479,17 +508,46 @@ export default function Home() {
       console.warn('[DEBUG] Contact: Cancelled pending animation frames')
     }
     
+    // Use Intersection Observer to only animate when Contact section is nearby
+    const contactSection = document.querySelector('#contact')
+    let isNearViewport = true // Start as true to handle initial render
+    
+    const observer = contactSection ? new IntersectionObserver(
+      ([entry]) => {
+        isNearViewport = entry.isIntersecting
+        if (!isNearViewport) {
+          // Cleanup when section is far from viewport
+          if (rafId) cancelAnimationFrame(rafId)
+          if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
+        } else {
+          handleContactScroll() // Trigger update when becoming visible
+        }
+      },
+      { threshold: 0, rootMargin: '400px' } // Large margin for Contact section
+    ) : null
+    
+    if (observer && contactSection) {
+      observer.observe(contactSection)
+    }
+
+    // Optimized scroll handler that checks visibility first
+    const handleContactScrollOptimized = () => {
+      if (!isNearViewport) return // Skip if section not nearby
+      handleContactScroll()
+    }
+
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
-    window.addEventListener('scroll', handleContactScroll, { passive: true })
-    window.addEventListener('resize', handleContactScroll)
+    window.addEventListener('scroll', handleContactScrollOptimized, { passive: true })
+    window.addEventListener('resize', handleContactScrollOptimized, { passive: true })
     handleContactScroll() // Check initial state
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
+      if (observer) observer.disconnect()
       if (scrollListenerActive) {
-        window.removeEventListener('scroll', handleContactScroll)
-        window.removeEventListener('resize', handleContactScroll)
+        window.removeEventListener('scroll', handleContactScrollOptimized)
+        window.removeEventListener('resize', handleContactScrollOptimized)
       }
       window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }

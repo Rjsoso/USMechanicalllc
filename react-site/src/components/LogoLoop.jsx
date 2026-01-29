@@ -69,6 +69,7 @@ const useAnimationLoop = (
   const lastTimestampRef = useRef(null)
   const offsetRef = useRef(0)
   const velocityRef = useRef(0)
+  const isVisibleRef = useRef(true) // Track visibility for performance
 
   useEffect(() => {
     const track = trackRef.current
@@ -85,6 +86,12 @@ const useAnimationLoop = (
     }
 
     const animate = timestamp => {
+      // Skip animation frame if not visible
+      if (!isVisibleRef.current) {
+        rafRef.current = requestAnimationFrame(animate)
+        return
+      }
+
       if (lastTimestampRef.current === null) {
         lastTimestampRef.current = timestamp
       }
@@ -111,6 +118,22 @@ const useAnimationLoop = (
       rafRef.current = requestAnimationFrame(animate)
     }
 
+    // Intersection Observer to pause animation when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+        // Reset timestamp when becoming visible again to prevent jumps
+        if (entry.isIntersecting) {
+          lastTimestampRef.current = null
+        }
+      },
+      { threshold: 0, rootMargin: '50px' } // Start animation slightly before visible
+    )
+
+    if (track.parentElement) {
+      observer.observe(track.parentElement)
+    }
+
     rafRef.current = requestAnimationFrame(animate)
 
     return () => {
@@ -119,6 +142,7 @@ const useAnimationLoop = (
         rafRef.current = null
       }
       lastTimestampRef.current = null
+      observer.disconnect()
     }
   }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef])
 }

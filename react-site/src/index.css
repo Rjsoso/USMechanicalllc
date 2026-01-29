@@ -29,6 +29,11 @@
 html {
   background-color: #1a1a1a !important;
   background: #1a1a1a !important;
+  /* Native smooth scrolling for better performance */
+  scroll-behavior: smooth;
+  /* Optimize scrolling performance */
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* CRITICAL: Override Tailwind Preflight white backgrounds immediately after utilities */
@@ -41,6 +46,10 @@ html {
 body {
   background-color: #1a1a1a !important;
   background: #1a1a1a !important;
+  /* Optimize scroll performance */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
 }
 
 /* Removed - handled by comprehensive rule below */
@@ -92,6 +101,21 @@ a,
 [role='button'] {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* GPU acceleration for smoother scrolling and animations */
+.scroll-optimized,
+[data-scroll-section],
+section {
+  transform: translateZ(0);
+  will-change: auto;
+  contain: layout;
+}
+
+/* Optimize transforms for smooth animations */
+[style*="transform"] {
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Prevent white flash during image loading */
