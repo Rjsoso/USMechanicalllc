@@ -413,6 +413,8 @@ export default function Home() {
     }
     
     const handleContactScroll = () => {
+      console.log('[Contact] Scroll handler called', { scrollY: window.scrollY })
+      
       // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
       if (window.__scrollNavigationLock) {
         if (rafId) {
@@ -434,7 +436,10 @@ export default function Home() {
         if (window.__scrollNavigationLock) return
         
         const careersSection = document.querySelector('#careers')
-        if (!careersSection) return
+        if (!careersSection) {
+          console.log('[Contact] ERROR: Careers section not found!')
+          return
+        }
 
         // Use viewport-based calculation (matching stats animation pattern)
         const careersRect = careersSection.getBoundingClientRect()
@@ -455,9 +460,20 @@ export default function Home() {
           slideValue = 0 // Fully visible
         }
 
+        console.log('[Contact Animation]', {
+          careersBottom: careersBottom.toFixed(2),
+          slideStart: slideStart.toFixed(2),
+          slideEnd: slideEnd.toFixed(2),
+          inAnimationRange: careersBottom <= slideStart && careersBottom >= slideEnd,
+          slideValue: slideValue.toFixed(2),
+          targetRef: targetContactSlideRef.current.toFixed(2),
+          currentRef: lastContactSlideRef.current.toFixed(2)
+        })
+
         // ALWAYS set target, never call setContactSlide directly
         targetContactSlideRef.current = slideValue
         if (!contactAnimationFrameRef.current) {
+          console.log('[Contact] Starting interpolation loop')
           contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
         }
       })
