@@ -510,7 +510,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
         scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
           console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
-      }, 300) // Increased from 150ms to 300ms to ensure React has time to flush state
+      }, 600) // Increased to 600ms to let page settle to final height after animation lock
     } else if (sectionId === 'portfolio') {
       // For portfolio, pre-calculate scroll animation state to prevent aggressive pop
       // Portfolio is below Safety, so scroll animation should be at max (-300px)
