@@ -24,7 +24,7 @@ export default function LoadingScreen({ minimal = false }) {
         bottom: 0,
         backgroundColor: '#1a1a1a',
         opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.2s ease-in-out',
+        transition: 'opacity 0.15s ease-in-out',
         zIndex: 99999,
       }}
       role="status"
@@ -58,7 +58,7 @@ export default function LoadingScreen({ minimal = false }) {
           <span
             style={{
               display: 'inline-block',
-              animation: 'dotBounce 0.6s ease-in-out infinite',
+              animation: 'dotBounce 0.4s ease-in-out infinite',
               animationDelay: '0s',
             }}
           >
@@ -67,7 +67,7 @@ export default function LoadingScreen({ minimal = false }) {
           <span
             style={{
               display: 'inline-block',
-              animation: 'dotBounce 0.6s ease-in-out infinite',
+              animation: 'dotBounce 0.4s ease-in-out infinite',
               animationDelay: '0.2s',
             }}
           >
@@ -76,7 +76,7 @@ export default function LoadingScreen({ minimal = false }) {
           <span
             style={{
               display: 'inline-block',
-              animation: 'dotBounce 0.6s ease-in-out infinite',
+              animation: 'dotBounce 0.4s ease-in-out infinite',
               animationDelay: '0.4s',
             }}
           >

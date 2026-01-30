@@ -41,7 +41,7 @@ export default function ProjectModal({ project, onClose }) {
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.7 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           onClick={e => e.stopPropagation()}
         >
           {/* Close Button */}

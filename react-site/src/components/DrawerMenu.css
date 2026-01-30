@@ -17,6 +17,8 @@
   padding: 0;
   outline: none;
   transition: transform 0.2s ease;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .drawer-hamburger:hover {
@@ -39,11 +41,12 @@
   height: 3px;
   background-color: #ffffff;
   border-radius: 2px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: center;
   /* Performance optimizations */
   will-change: transform, opacity;
   backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Hamburger to X animation */

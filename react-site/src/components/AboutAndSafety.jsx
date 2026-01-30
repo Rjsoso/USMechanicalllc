@@ -209,7 +209,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                       width: isExpanded ? '45%' : '75%',
                       transform: isExpanded ? 'translate3d(-15%, 0, 0)' : 'translate3d(0, 0, 0)',
                       transition:
-                        'width 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                        'width 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                       willChange: 'width, transform',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
@@ -240,7 +240,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                   ? {}
                   : {
                       width: isExpanded ? '55%' : '25%',
-                      transition: 'width 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                      transition: 'width 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                       willChange: 'width',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
@@ -292,7 +292,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                                 display: 'grid',
                                 gridTemplateRows: isExpanded ? '1fr' : '0fr',
                                 transition:
-                                  'grid-template-rows 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                                  'grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                                 willChange: 'grid-template-rows',
                                 position: 'relative',
                                 transform: 'translate3d(0, 0, 0)', // GPU acceleration
@@ -308,7 +308,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                               : {
                                   overflow: 'hidden',
                                   minHeight: isExpanded ? 'auto' : '28em',
-                                  transition: 'min-height 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                                  transition: 'min-height 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                                   transform: 'translate3d(0, 0, 0)', // GPU acceleration
                                   backfaceVisibility: 'hidden',
                                 }
@@ -329,7 +329,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                                     textRendering: 'optimizeLegibility',
                                     paddingBottom: isExpanded ? '2rem' : '0',
                                     transition:
-                                      'padding-bottom 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+                                      'padding-bottom 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                                     contain: 'layout style',
                                   }
                             }
@@ -349,7 +349,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                               'linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.98) 20%, rgba(0, 0, 0, 0.95) 35%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.6) 70%, transparent 100%)',
                             opacity: isExpanded ? 0 : 1,
                             visibility: isExpanded ? 'hidden' : 'visible',
-                            transition: `opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '400ms'}, visibility 0ms ${isExpanded ? '800ms' : '0ms'}`,
+                            transition: `opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) ${isExpanded ? '0ms' : '200ms'}, visibility 0ms ${isExpanded ? '400ms' : '0ms'}`,
                             transform: 'translate3d(0, 0, 0)', // GPU acceleration
                             backfaceVisibility: 'hidden',
                             willChange: 'opacity',

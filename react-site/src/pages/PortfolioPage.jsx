@@ -126,7 +126,7 @@ export default function PortfolioPage() {
                     <img
                       src={urlFor(category.image).width(800).quality(90).auto('format').url()}
                       alt={category.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300"
+                      className="absolute inset-0 h-full w-full object-cover transition-opacity duration-200"
                       loading="lazy"
                       decoding="async"
                       style={{
@@ -140,7 +140,7 @@ export default function PortfolioPage() {
                     />
                   )}
 
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                     <h2 className="mb-4 px-6 text-center text-3xl font-bold text-white md:text-4xl lg:text-5xl">
                       {category.title}
                     </h2>
@@ -152,7 +152,7 @@ export default function PortfolioPage() {
                     <div className="flex items-center text-lg font-medium text-white">
                       <span>View Projects</span>
                       <svg
-                        className="ml-2 h-6 w-6 transform transition-transform duration-300 group-hover:translate-x-2"
+                        className="ml-2 h-6 w-6 transform transition-transform duration-150 group-hover:translate-x-2"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
