@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
+import LoadingScreen from './LoadingScreen'
 
 // Fallback hero data - Last updated: 2026-01-29
 const defaultHeroData = {
@@ -25,8 +26,30 @@ const generateYearColor = () => {
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [yearColor] = useState(() => generateYearColor())
+  const [showLoader, setShowLoader] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+
+  const handleButtonClick = (sectionId) => {
+    console.log('[HERO] Button click:', sectionId)
+    
+    // Show loading screen
+    setShowLoader(true)
+    
+    // Wait 700ms (matching drawer navigation timing), then navigate
+    setTimeout(() => {
+      console.log('[HERO] Navigating to:', sectionId)
+      navigateToSection(sectionId, navigate, location.pathname)
+      
+      // Hide loader after navigation completes
+      // Different delays based on section (same as drawer)
+      const hideDelay = sectionId === 'contact' ? 600 : 150
+      setTimeout(() => {
+        console.log('[HERO] Hiding loader')
+        setShowLoader(false)
+      }, hideDelay)
+    }, 700)
+  }
 
   useEffect(() => {
     const fetchHero = () => {
@@ -190,7 +213,7 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
-                  navigateToSection(sectionId, navigate, location.pathname)
+                  handleButtonClick(sectionId)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
               >
@@ -202,7 +225,7 @@ function HeroSection() {
                 onClick={() => {
                   const sectionId = (heroData.secondButtonLink || '#careers').replace('#', '')
                   console.warn(`[DEBUG] "${heroData.secondButtonText}" clicked → navigating to: ${sectionId}`)
-                  navigateToSection(sectionId, navigate, location.pathname)
+                  handleButtonClick(sectionId)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
               >
@@ -212,6 +235,9 @@ function HeroSection() {
           </motion.div>
         )}
       </div>
+      
+      {/* Loading Screen Overlay */}
+      {showLoader && <LoadingScreen />}
     </section>
   )
 }
