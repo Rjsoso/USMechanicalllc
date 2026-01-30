@@ -177,8 +177,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           })
           
           // For contact section, wait for scroll to settle then apply correction
-          // SKIP correction if heroButtonNavigation flag is set
-          if (sectionId === 'contact' && !sessionStorage.getItem('heroButtonNavigation')) {
+          if (sectionId === 'contact') {
             // Wait for scroll to settle using stability detection
             let lastScrollY = -1
             let stableFrames = 0
