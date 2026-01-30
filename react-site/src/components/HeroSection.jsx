@@ -45,10 +45,10 @@ function HeroSection() {
       // Contact needs longer delay due to:
       // - 300ms React flush + scroll settlement + correction scroll
       // - 500ms unlock delay
+      // - Additional buffer for any delayed scroll corrections
       // - 150ms LoadingScreen fade-out transition (during which page is visible)
-      // - Buffer to ensure no flash during fade
-      // Total: ~1500ms ensures everything settles before fade starts
-      const hideDelay = sectionId === 'contact' ? 1500 : 150
+      // Total: 2000ms ensures ALL operations complete before fade starts
+      const hideDelay = sectionId === 'contact' ? 2000 : 150
       setTimeout(() => {
         console.log('[HERO] Hiding loader')
         setShowLoader(false)
