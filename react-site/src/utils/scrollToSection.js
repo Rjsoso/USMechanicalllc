@@ -130,7 +130,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           const sectionOffsets = {
             'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
             'portfolio': -65,   // Negative offset to scroll past title and show grid prominently
-            'contact': 0,       // No offset - heading at absolute top of viewport
+            'contact': 20,      // 20px from top - prevents heading cutoff while keeping it near top
             'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
             'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
             'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
