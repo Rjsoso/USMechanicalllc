@@ -44,9 +44,9 @@ const loadStartTime = Date.now()
 
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    // Calculate how long to wait to reach minimum 2500ms display time
+    // Calculate how long to wait to reach minimum 2000ms display time
     const elapsed = Date.now() - loadStartTime
-    const remainingTime = Math.max(0, 2500 - elapsed)
+    const remainingTime = Math.max(0, 2000 - elapsed)
     
     setTimeout(() => {
       document.body.classList.add('loaded')
