@@ -147,14 +147,18 @@ const DrawerMenu = () => {
         // Legacy anchor link - treat as home page section
         const sectionId = href.replace('#', '')
         console.log('[DRAWER NAV] Navigating to section:', sectionId)
-        navigateToSection(sectionId, navigate, location.pathname)
-        // Keep loader visible during scroll
-        console.log('[DRAWER NAV] Will hide loader in 300ms')
+        
+        // navigateToSection has built-in delays (300ms+ for React flush, retries, position checks)
+        // We need to wait longer for scroll to actually complete
+        // Keep loader visible for 1200ms to cover the scroll time
         setTimeout(() => {
           console.log('[DRAWER NAV] Hiding loader after legacy anchor scroll')
           console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
           setShowLoader(false)
-        }, 300)
+        }, 1200) // Increased from 300ms to 1200ms
+        
+        // Start navigation (this has its own internal delays)
+        navigateToSection(sectionId, navigate, location.pathname)
       }
       }, 1000)
     }, 250) // Delay to let drawer close smoothly
