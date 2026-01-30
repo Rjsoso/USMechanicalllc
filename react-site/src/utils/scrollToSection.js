@@ -215,7 +215,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                     console.warn(`[CORRECTION] Applying correction to ${correctedTarget}px`)
                     window.scrollTo({
                       top: correctedTarget,
-                      behavior: 'instant',
+                      behavior: 'smooth',
                     })
                     
                     // Verify final position
