@@ -36,31 +36,27 @@ function HeroSection() {
     // Show loading screen
     setShowLoader(true)
     
+    // Set flag to disable correction for hero button navigation
+    // The correction loop causes unpredictable timing - use precise offset instead
+    if (sectionId === 'contact') {
+      sessionStorage.setItem('heroButtonNavigation', 'true')
+    }
+    
     // Wait 700ms (matching drawer navigation timing), then navigate
     setTimeout(() => {
       console.log('[HERO] Navigating to:', sectionId)
       
-      // For contact, wait for unlock event to know correction is complete
-      if (sectionId === 'contact') {
-        const handleUnlock = () => {
-          // Wait additional 1000ms after unlock to ensure ALL corrections settle
-          // The correction loop can take variable time, so we need extra buffer
-          setTimeout(() => {
-            console.log('[HERO] Hiding loader after correction complete')
-            setShowLoader(false)
-          }, 1000)
-          window.removeEventListener('unlockContactAnimation', handleUnlock)
+      // Simple fixed delay - correction is disabled for contact
+      const hideDelay = sectionId === 'contact' ? 1200 : 150
+      setTimeout(() => {
+        console.log('[HERO] Hiding loader')
+        setShowLoader(false)
+        if (sectionId === 'contact') {
+          sessionStorage.removeItem('heroButtonNavigation')
         }
-        window.addEventListener('unlockContactAnimation', handleUnlock)
-        navigateToSection(sectionId, navigate, location.pathname)
-      } else {
-        // For other sections, use simple delay
-        navigateToSection(sectionId, navigate, location.pathname)
-        setTimeout(() => {
-          console.log('[HERO] Hiding loader')
-          setShowLoader(false)
-        }, 150)
-      }
+      }, hideDelay)
+      
+      navigateToSection(sectionId, navigate, location.pathname)
     }, 700)
   }
 
