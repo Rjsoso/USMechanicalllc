@@ -4,8 +4,13 @@ export default function LoadingScreen({ minimal = false }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    console.log('[LOADER] Component mounted, making visible')
     // Immediate fade-in for smooth transition
     setIsVisible(true)
+    
+    return () => {
+      console.log('[LOADER] Component unmounting')
+    }
   }, [])
 
   return (

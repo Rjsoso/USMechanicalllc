@@ -79,30 +79,48 @@ const DrawerMenu = () => {
 
   // Handle scroll to section or page navigation with 1-second loading screen
   const handleLinkClick = href => {
+    console.log('[DRAWER NAV] Click detected:', href)
+    
     // Close drawer first
     setIsOpen(false)
+    console.log('[DRAWER NAV] Drawer closing...')
     
     // Small delay to let drawer close animation complete (250ms)
     // Then show loading screen with fade-in
     setTimeout(() => {
+      console.log('[DRAWER NAV] Drawer closed, showing loader at', Date.now())
       setShowLoader(true)
       
       setTimeout(() => {
+      console.log('[DRAWER NAV] Starting navigation at', Date.now())
+      console.log('[DRAWER NAV] Current scroll position:', window.scrollY)
+      console.log('[DRAWER NAV] Current pathname:', location.pathname)
       // Check if it's a full page link (starts with /) or an anchor link (starts with #)
       if (href.startsWith('/') && !href.includes('#')) {
+        console.log('[DRAWER NAV] Branch: Full page route')
         // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
         navigate(href)
         // Hide loader immediately for page routes
+        console.log('[DRAWER NAV] Hiding loader immediately for page route')
         setShowLoader(false)
       } else if (href.startsWith('/#')) {
+        console.log('[DRAWER NAV] Branch: Section on home (/#)')
         // Link to section on home page (e.g., /#services)
         const sectionId = href.replace('/#', '')
+        console.log('[DRAWER NAV] Navigating to section:', sectionId)
         navigateToSection(sectionId, navigate, location.pathname)
         // Keep loader visible during scroll
-        setTimeout(() => setShowLoader(false), 300)
+        console.log('[DRAWER NAV] Will hide loader in 300ms')
+        setTimeout(() => {
+          console.log('[DRAWER NAV] Hiding loader after section scroll')
+          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
+          setShowLoader(false)
+        }, 300)
       } else if (href.startsWith('/') && href.includes('#')) {
+        console.log('[DRAWER NAV] Branch: Page + section (/page#section)')
         // Link to section on specific page (e.g., /about#safety)
         const [path, section] = href.split('#')
+        console.log('[DRAWER NAV] Path:', path, 'Section:', section)
         
         // Navigate to the page first
         navigate(path)
@@ -118,13 +136,25 @@ const DrawerMenu = () => {
             })
         }, 300) // Increased delay for page render
         // Keep loader visible during page load and scroll
-        setTimeout(() => setShowLoader(false), 600)
+        console.log('[DRAWER NAV] Will hide loader in 600ms')
+        setTimeout(() => {
+          console.log('[DRAWER NAV] Hiding loader after page+section navigation')
+          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
+          setShowLoader(false)
+        }, 600)
       } else if (href.startsWith('#')) {
+        console.log('[DRAWER NAV] Branch: Legacy anchor (#section)')
         // Legacy anchor link - treat as home page section
         const sectionId = href.replace('#', '')
+        console.log('[DRAWER NAV] Navigating to section:', sectionId)
         navigateToSection(sectionId, navigate, location.pathname)
         // Keep loader visible during scroll
-        setTimeout(() => setShowLoader(false), 300)
+        console.log('[DRAWER NAV] Will hide loader in 300ms')
+        setTimeout(() => {
+          console.log('[DRAWER NAV] Hiding loader after legacy anchor scroll')
+          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
+          setShowLoader(false)
+        }, 300)
       }
       }, 1000)
     }, 250) // Delay to let drawer close smoothly
