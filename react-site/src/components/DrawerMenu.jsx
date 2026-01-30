@@ -110,12 +110,12 @@ const DrawerMenu = () => {
         console.log('[DRAWER NAV] Navigating to section:', sectionId)
         navigateToSection(sectionId, navigate, location.pathname)
         // Keep loader visible during scroll
-        console.log('[DRAWER NAV] Will hide loader in 300ms')
+        console.log('[DRAWER NAV] Will hide loader in 150ms')
         setTimeout(() => {
           console.log('[DRAWER NAV] Hiding loader after section scroll')
           console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
           setShowLoader(false)
-        }, 300)
+        }, 150)
       } else if (href.startsWith('/') && href.includes('#')) {
         console.log('[DRAWER NAV] Branch: Page + section (/page#section)')
         // Link to section on specific page (e.g., /about#safety)
@@ -136,12 +136,12 @@ const DrawerMenu = () => {
             })
         }, 300) // Increased delay for page render
         // Keep loader visible during page load and scroll
-        console.log('[DRAWER NAV] Will hide loader in 600ms')
+        console.log('[DRAWER NAV] Will hide loader in 300ms')
         setTimeout(() => {
           console.log('[DRAWER NAV] Hiding loader after page+section navigation')
           console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
           setShowLoader(false)
-        }, 600)
+        }, 300)
       } else if (href.startsWith('#')) {
         console.log('[DRAWER NAV] Branch: Legacy anchor (#section)')
         // Legacy anchor link - treat as home page section
@@ -150,12 +150,12 @@ const DrawerMenu = () => {
         
         // navigateToSection has built-in delays (300ms+ for React flush, retries, position checks)
         // We need to wait longer for scroll to actually complete
-        // Keep loader visible for 1200ms to cover the scroll time
+        // Keep loader visible for 600ms to cover the scroll time
         setTimeout(() => {
           console.log('[DRAWER NAV] Hiding loader after legacy anchor scroll')
           console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
           setShowLoader(false)
-        }, 1200) // Increased from 300ms to 1200ms
+        }, 600) // Reduced from 1200ms to 600ms
         
         // Start navigation (this has its own internal delays)
         navigateToSection(sectionId, navigate, location.pathname)
