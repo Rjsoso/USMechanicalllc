@@ -29,28 +29,8 @@ export default function LoadingScreen({ minimal = false }) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '24px',
         }}
       >
-        {/* Logo without rotation */}
-        <div
-          style={{
-            animation: 'fadeInLoader 0.5s ease-out',
-            width: window.innerWidth < 768 ? '120px' : '180px',
-            height: 'auto',
-          }}
-        >
-          <img
-            src="/logo.png"
-            alt="US Mechanical Logo"
-            style={{
-              width: '100%',
-              height: 'auto',
-              display: 'block',
-            }}
-          />
-        </div>
-
         {/* Loading text with bouncing dots */}
         <div
           style={{

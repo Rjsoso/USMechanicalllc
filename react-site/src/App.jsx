@@ -5,7 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import LoadingScreen from './components/LoadingScreen'
 
 // Helper function to ensure minimum display time for loading animation
-const delayedImport = (importFunc, minDelay = 1600) => {
+const delayedImport = (importFunc, minDelay = 2500) => {
   return Promise.all([
     importFunc(),
     new Promise(resolve => setTimeout(resolve, minDelay))
