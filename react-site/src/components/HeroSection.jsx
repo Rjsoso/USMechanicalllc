@@ -42,13 +42,16 @@ function HeroSection() {
       navigateToSection(sectionId, navigate, location.pathname)
       
       // Hide loader after navigation completes
-      // Contact needs longer delay due to:
-      // - 300ms React flush + scroll settlement + correction scroll
+      // Contact needs extended delay due to async scroll correction loop:
+      // - 300ms React flush
+      // - ~150-300ms scroll execution
+      // - 60-200ms scroll stability detection (4 frames)
+      // - Correction scroll application
       // - 500ms unlock delay
-      // - Additional buffer for any delayed scroll corrections
-      // - 150ms LoadingScreen fade-out transition (during which page is visible)
-      // Total: 2000ms ensures ALL operations complete before fade starts
-      const hideDelay = sectionId === 'contact' ? 2000 : 150
+      // - Additional 500ms buffer for any post-unlock corrections
+      // - 150ms LoadingScreen fade-out transition
+      // Total: 3000ms ensures ALL async corrections complete before fade
+      const hideDelay = sectionId === 'contact' ? 3000 : 150
       setTimeout(() => {
         console.log('[HERO] Hiding loader')
         setShowLoader(false)
