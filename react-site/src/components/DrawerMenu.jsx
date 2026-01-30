@@ -77,7 +77,7 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section or page navigation with 1-second loading screen
+  // Handle scroll to section or page navigation with 700ms loading screen
   const handleLinkClick = href => {
     console.log('[DRAWER NAV] Click detected:', href)
     
@@ -160,7 +160,7 @@ const DrawerMenu = () => {
         // Start navigation (this has its own internal delays)
         navigateToSection(sectionId, navigate, location.pathname)
       }
-      }, 1000)
+      }, 700)
     }, 250) // Delay to let drawer close smoothly
   }
 
