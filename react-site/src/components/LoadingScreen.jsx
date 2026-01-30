@@ -4,11 +4,8 @@ export default function LoadingScreen({ minimal = false }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    // Minimum display time to prevent flash
-    const timer = setTimeout(() => {
-      setIsVisible(true)
-    }, 50)
-    return () => clearTimeout(timer)
+    // Immediate fade-in for smooth transition
+    setIsVisible(true)
   }, [])
 
   return (
@@ -17,7 +14,7 @@ export default function LoadingScreen({ minimal = false }) {
       style={{
         backgroundColor: '#1a1a1a',
         opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.3s ease-out',
+        transition: 'opacity 0.2s ease-in-out',
       }}
       role="status"
       aria-live="polite"

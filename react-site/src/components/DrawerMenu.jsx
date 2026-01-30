@@ -77,15 +77,17 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section or page navigation with 2-second loading screen
+  // Handle scroll to section or page navigation with 1-second loading screen
   const handleLinkClick = href => {
     // Close drawer first
     setIsOpen(false)
     
-    // Show loading screen for 2 seconds before navigating
-    setShowLoader(true)
-    
+    // Small delay to let drawer close animation complete (250ms)
+    // Then show loading screen with fade-in
     setTimeout(() => {
+      setShowLoader(true)
+      
+      setTimeout(() => {
       // Check if it's a full page link (starts with /) or an anchor link (starts with #)
       if (href.startsWith('/') && !href.includes('#')) {
         // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
@@ -117,9 +119,10 @@ const DrawerMenu = () => {
         navigateToSection(sectionId, navigate, location.pathname)
       }
       
-      // Hide loader after navigation completes
-      setShowLoader(false)
-    }, 2000) // 2-second delay
+        // Hide loader after navigation completes
+        setShowLoader(false)
+      }, 1000) // 1-second delay
+    }, 250) // Delay to let drawer close smoothly
   }
 
   // Toggle drawer open/closed
