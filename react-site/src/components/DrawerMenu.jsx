@@ -92,10 +92,14 @@ const DrawerMenu = () => {
       if (href.startsWith('/') && !href.includes('#')) {
         // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
         navigate(href)
+        // Hide loader immediately for page routes
+        setShowLoader(false)
       } else if (href.startsWith('/#')) {
         // Link to section on home page (e.g., /#services)
         const sectionId = href.replace('/#', '')
         navigateToSection(sectionId, navigate, location.pathname)
+        // Keep loader visible during scroll
+        setTimeout(() => setShowLoader(false), 300)
       } else if (href.startsWith('/') && href.includes('#')) {
         // Link to section on specific page (e.g., /about#safety)
         const [path, section] = href.split('#')
@@ -113,15 +117,16 @@ const DrawerMenu = () => {
               console.error(`Error scrolling to ${section}:`, err)
             })
         }, 300) // Increased delay for page render
+        // Keep loader visible during page load and scroll
+        setTimeout(() => setShowLoader(false), 600)
       } else if (href.startsWith('#')) {
         // Legacy anchor link - treat as home page section
         const sectionId = href.replace('#', '')
         navigateToSection(sectionId, navigate, location.pathname)
+        // Keep loader visible during scroll
+        setTimeout(() => setShowLoader(false), 300)
       }
-      
-        // Hide loader after navigation completes
-        setShowLoader(false)
-      }, 1000) // 1s for all sections (Contact animations will be skipped)
+      }, 1000)
     }, 250) // Delay to let drawer close smoothly
   }
 
