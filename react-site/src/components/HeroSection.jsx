@@ -43,12 +43,12 @@ function HeroSection() {
       // For contact, wait for unlock event to know correction is complete
       if (sectionId === 'contact') {
         const handleUnlock = () => {
-          // Wait additional 2000ms after unlock to ensure ALL visual settling completes
-          // The correction applies but needs time for browser repaints and any micro-adjustments
+          // Wait additional 3000ms after unlock to ensure ALL visual settling completes
+          // Testing if correction needs more time or if it's a fade transition issue
           setTimeout(() => {
             console.log('[HERO] Hiding loader after correction complete')
             setShowLoader(false)
-          }, 2000)
+          }, 3000)
           window.removeEventListener('unlockContactAnimation', handleUnlock)
         }
         window.addEventListener('unlockContactAnimation', handleUnlock)
