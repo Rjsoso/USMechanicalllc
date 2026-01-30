@@ -86,7 +86,6 @@ const DrawerMenu = () => {
     const isContactNavigation = href === '#contact' || href === '/#contact'
     
     // Small delay to let drawer close animation complete (250ms)
-    // Then show loading screen with fade-in
     setTimeout(() => {
       setShowLoader(true)
       
@@ -95,41 +94,45 @@ const DrawerMenu = () => {
         sessionStorage.setItem('skipContactAnimations', 'true')
       }
       
+      // Small delay to ensure LoadingScreen component renders before navigation
+      // This prevents race condition where navigation starts before loader appears
       setTimeout(() => {
-      // Check if it's a full page link (starts with /) or an anchor link (starts with #)
-      if (href.startsWith('/') && !href.includes('#')) {
-        // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
-        navigate(href)
-      } else if (href.startsWith('/#')) {
-        // Link to section on home page (e.g., /#services)
-        const sectionId = href.replace('/#', '')
-        navigateToSection(sectionId, navigate, location.pathname)
-      } else if (href.startsWith('/') && href.includes('#')) {
-        // Link to section on specific page (e.g., /about#safety)
-        const [path, section] = href.split('#')
-        
-        // Navigate to the page first
-        navigate(path)
-        
-        // Use scrollToSection utility for proper offset handling
-        setTimeout(() => {
-          scrollToSection(section, 180, 50, 200)
-            .then(() => {
-              console.log(`Successfully scrolled to ${section}`)
-            })
-            .catch(err => {
-              console.error(`Error scrolling to ${section}:`, err)
-            })
-        }, 300) // Increased delay for page render
-      } else if (href.startsWith('#')) {
-        // Legacy anchor link - treat as home page section
-        const sectionId = href.replace('#', '')
-        navigateToSection(sectionId, navigate, location.pathname)
-      }
+        // Check if it's a full page link (starts with /) or an anchor link (starts with #)
+        if (href.startsWith('/') && !href.includes('#')) {
+          // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
+          navigate(href)
+        } else if (href.startsWith('/#')) {
+          // Link to section on home page (e.g., /#services)
+          const sectionId = href.replace('/#', '')
+          navigateToSection(sectionId, navigate, location.pathname)
+        } else if (href.startsWith('/') && href.includes('#')) {
+          // Link to section on specific page (e.g., /about#safety)
+          const [path, section] = href.split('#')
+          
+          // Navigate to the page first
+          navigate(path)
+          
+          // Use scrollToSection utility for proper offset handling
+          setTimeout(() => {
+            scrollToSection(section, 180, 50, 200)
+              .then(() => {
+                console.log(`Successfully scrolled to ${section}`)
+              })
+              .catch(err => {
+                console.error(`Error scrolling to ${section}:`, err)
+              })
+          }, 300) // Increased delay for page render
+        } else if (href.startsWith('#')) {
+          // Legacy anchor link - treat as home page section
+          const sectionId = href.replace('#', '')
+          navigateToSection(sectionId, navigate, location.pathname)
+        }
+      }, 50) // Small delay to let React render LoadingScreen component
       
-        // Hide loader after navigation completes
+      // Hide loader after full loading duration (navigation already started above)
+      setTimeout(() => {
         setShowLoader(false)
-      }, 1000) // 1s for all sections (Contact animations will be skipped)
+      }, 1000) // Keep loader visible for full 1 second while content loads
     }, 250) // Delay to let drawer close smoothly
   }
 
