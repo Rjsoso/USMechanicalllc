@@ -129,7 +129,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           // Precise offsets calculated to position titles at 20-25px from viewport top
           const sectionOffsets = {
             'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
-            'portfolio': -80,   // Negative offset to scroll past title and show grid prominently
+            'portfolio': -85,   // Negative offset to scroll past title and show grid prominently
             'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
             'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
             'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
@@ -419,7 +419,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
   // Precise offsets calculated to position titles at 20-25px from viewport top
   const sectionOffsets = {
     'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
-    'portfolio': -80,   // Negative offset to scroll past title and show grid prominently
+    'portfolio': -85,   // Negative offset to scroll past title and show grid prominently
     'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
     'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
     'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
