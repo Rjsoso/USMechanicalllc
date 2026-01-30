@@ -123,31 +123,6 @@
         min-height: 100vh;
       }
       
-      /* Loading state styling - covers screen until content ready */
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #1a1a1a;
-        z-index: 99999;
-        pointer-events: none;
-        opacity: 1;
-      }
-      
-      /* Fast fade-out when content is loaded */
-      body.loaded::before {
-        opacity: 0;
-        transition: opacity 0.15s ease-out;
-      }
-      
-      /* Remove loading overlay completely after fade */
-      body.loaded-complete::before {
-        display: none;
-      }
-      
       /* Re-enable scrolling once loaded */
       body.loaded {
         overflow: visible;
@@ -179,7 +154,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        z-index: 99998;
+        z-index: 99999;
         background: #1a1a1a;
         opacity: 1;
         transition: opacity 0.15s ease-out;
