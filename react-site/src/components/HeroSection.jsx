@@ -39,23 +39,17 @@ function HeroSection() {
     // Wait 700ms (matching drawer navigation timing), then navigate
     setTimeout(() => {
       console.log('[HERO] Navigating to:', sectionId)
-      navigateToSection(sectionId, navigate, location.pathname)
       
-      // Hide loader after navigation completes
-      // Contact needs extended delay due to async scroll correction loop:
-      // - 300ms React flush
-      // - ~150-300ms scroll execution
-      // - 60-200ms scroll stability detection (4 frames)
-      // - Correction scroll application
-      // - 500ms unlock delay
-      // - Additional 500ms buffer for any post-unlock corrections
-      // - 150ms LoadingScreen fade-out transition
-      // Total: 3000ms ensures ALL async corrections complete before fade
-      const hideDelay = sectionId === 'contact' ? 3000 : 150
+      // Match drawer pattern EXACTLY: set hide timer, THEN call navigateToSection
+      // Both operations start simultaneously, not sequentially
+      const hideDelay = sectionId === 'contact' ? 1200 : 150
       setTimeout(() => {
         console.log('[HERO] Hiding loader')
         setShowLoader(false)
       }, hideDelay)
+      
+      // Start navigation (has its own internal delays)
+      navigateToSection(sectionId, navigate, location.pathname)
     }, 700)
   }
 
