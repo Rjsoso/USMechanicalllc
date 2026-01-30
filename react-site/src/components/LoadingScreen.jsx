@@ -24,7 +24,7 @@ export default function LoadingScreen({ minimal = false }) {
         bottom: 0,
         backgroundColor: '#1a1a1a',
         opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.15s ease-in-out',
+        transition: isVisible ? 'opacity 0.15s ease-in-out' : 'none',
         zIndex: 99999,
       }}
       role="status"
