@@ -42,8 +42,10 @@ function HeroSection() {
       navigateToSection(sectionId, navigate, location.pathname)
       
       // Hide loader after navigation completes
-      // Different delays based on section (same as drawer)
-      const hideDelay = sectionId === 'contact' ? 600 : 150
+      // Contact needs longer delay due to animation locking complexity
+      // Contact: 300ms React flush + scroll + 500ms lock = need ~1200ms total
+      // Other sections: much faster
+      const hideDelay = sectionId === 'contact' ? 1200 : 150
       setTimeout(() => {
         console.log('[HERO] Hiding loader')
         setShowLoader(false)
