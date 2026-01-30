@@ -8,7 +8,8 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "populate-contact": "sanity exec scripts/populateContactData.ts --with-user-token",
-    "print-hero-header": "sanity exec scripts/printHeroAndHeader.ts"
+    "print-hero-header": "sanity exec scripts/printHeroAndHeader.ts",
+    "update-portfolio-link": "sanity exec scripts/updatePortfolioLink.mjs --with-user-token"
   },
   "keywords": [],
   "author": "",

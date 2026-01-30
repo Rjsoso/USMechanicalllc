@@ -129,7 +129,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           // Precise offsets calculated to position titles at 20-25px from viewport top
           const sectionOffsets = {
             'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
-            'portfolio': 80,    // Balanced offset to prevent Careers overlap while maintaining good positioning
+            'portfolio': 110,   // Increased offset to reduce top space and position title closer to header
             'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
             'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
             'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
@@ -329,12 +329,14 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           }
           
           // Release lock and unlock animation for ALL sections after scroll completes
+          // Extended delay for portfolio to allow scroll animation to settle
+          const lockDuration = sectionId === 'portfolio' ? 800 : 500
           setTimeout(() => {
             sessionStorage.removeItem('scrollNavigationInProgress')
             window.__scrollNavigationLock = false
             window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
             console.warn(`[DEBUG] Navigation lock released for ${sectionId}`)
-          }, 500) // Extended delay to ensure all scroll events have settled
+          }, lockDuration)
 
           if (process.env.NODE_ENV === 'development') {
             console.log(`✓ Successfully scrolled to section: ${sectionId}`)
@@ -417,7 +419,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
   // Precise offsets calculated to position titles at 20-25px from viewport top
   const sectionOffsets = {
     'services': 25,     // pt-12 (48px padding) → title at ~23px from viewport top
-    'portfolio': 80,    // Balanced offset to prevent Careers overlap while maintaining good positioning
+    'portfolio': 110,   // Increased offset to reduce top space and position title closer to header
     'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
     'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
     'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
@@ -509,8 +511,26 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
           console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
       }, 300) // Increased from 150ms to 300ms to ensure React has time to flush state
+    } else if (sectionId === 'portfolio') {
+      // For portfolio, pre-calculate scroll animation state to prevent aggressive pop
+      // Portfolio is below Safety, so scroll animation should be at max (-300px)
+      window.dispatchEvent(new CustomEvent('setScrollSlide', { detail: { value: -300 } }))
+      console.warn(`[DEBUG] Portfolio navigation: Pre-set scroll slide to -300px`)
+      
+      const headerOffset = sectionOffsets[sectionId] || 180
+      scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
+        }
+        
+        // Clear lock after portfolio scroll completes (extended duration)
+        setTimeout(() => {
+          window.__scrollNavigationLock = false
+          console.warn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
+        }, 800)
+      })
     } else {
-      // For non-contact sections, still need to clear lock after scroll
+      // For other non-contact sections, still need to clear lock after scroll
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
         if (process.env.NODE_ENV === 'development') {

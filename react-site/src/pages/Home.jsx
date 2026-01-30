@@ -241,6 +241,25 @@ export default function Home() {
     
     return () => clearInterval(pollInterval)
   }, [])
+  
+  // Listen for pre-set scroll slide values (for navigation)
+  useEffect(() => {
+    const handleSetScrollSlide = (event) => {
+      const value = event.detail?.value
+      if (typeof value === 'number') {
+        setScrollSlide(value)
+        lastScrollSlideRef.current = value
+        targetScrollSlideRef.current = value
+        console.warn(`[DEBUG] Scroll slide preset to ${value}px`)
+      }
+    }
+    
+    window.addEventListener('setScrollSlide', handleSetScrollSlide)
+    
+    return () => {
+      window.removeEventListener('setScrollSlide', handleSetScrollSlide)
+    }
+  }, [])
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
   // Hypersmooth with interpolation for 120Hz displays
