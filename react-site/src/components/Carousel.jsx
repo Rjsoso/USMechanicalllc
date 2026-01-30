@@ -7,7 +7,7 @@ import './Carousel.css'
 const DRAG_BUFFER = 0
 const VELOCITY_THRESHOLD = 500
 const GAP = 16
-const SPRING_OPTIONS = { type: 'spring', stiffness: 400, damping: 25 }
+const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
 function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
   const range = [
