@@ -36,6 +36,11 @@ function HeroSection() {
     // Show loading screen
     setShowLoader(true)
     
+    // Set flag to skip scroll correction for contact when navigating from hero
+    if (sectionId === 'contact') {
+      sessionStorage.setItem('heroButtonNavigation', 'true')
+    }
+    
     // Wait 700ms (matching drawer navigation timing), then navigate
     setTimeout(() => {
       console.log('[HERO] Navigating to:', sectionId)
@@ -46,6 +51,10 @@ function HeroSection() {
       setTimeout(() => {
         console.log('[HERO] Hiding loader')
         setShowLoader(false)
+        // Clear the flag after loader hides
+        if (sectionId === 'contact') {
+          sessionStorage.removeItem('heroButtonNavigation')
+        }
       }, hideDelay)
       
       // Start navigation (has its own internal delays)
