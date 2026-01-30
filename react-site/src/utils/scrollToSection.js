@@ -177,8 +177,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           })
           
           // For contact section, wait for scroll to settle then apply correction
-          // SKIP correction if navigating with loader (from hero button)
-          if (sectionId === 'contact' && !sessionStorage.getItem('heroButtonNavigation')) {
+          if (sectionId === 'contact') {
             // Wait for scroll to settle using stability detection
             let lastScrollY = -1
             let stableFrames = 0
@@ -241,8 +240,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             
             // Start checking after initial scroll initiates
             requestAnimationFrame(checkScrollSettled)
-          } else if (sectionId === 'contact') {
-            console.warn(`[CORRECTION] Skipping scroll correction for hero button navigation`)
           }
           
           // For careers section, wait for scroll to settle then apply correction

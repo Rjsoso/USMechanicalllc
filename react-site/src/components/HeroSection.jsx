@@ -36,29 +36,30 @@ function HeroSection() {
     // Show loading screen
     setShowLoader(true)
     
-    // Set flag to skip scroll correction for contact when navigating from hero
-    if (sectionId === 'contact') {
-      sessionStorage.setItem('heroButtonNavigation', 'true')
-    }
-    
     // Wait 700ms (matching drawer navigation timing), then navigate
     setTimeout(() => {
       console.log('[HERO] Navigating to:', sectionId)
       
-      // Match drawer pattern EXACTLY: set hide timer, THEN call navigateToSection
-      // Both operations start simultaneously, not sequentially
-      const hideDelay = sectionId === 'contact' ? 1200 : 150
-      setTimeout(() => {
-        console.log('[HERO] Hiding loader')
-        setShowLoader(false)
-        // Clear the flag after loader hides
-        if (sectionId === 'contact') {
-          sessionStorage.removeItem('heroButtonNavigation')
+      // For contact, wait for unlock event to know correction is complete
+      if (sectionId === 'contact') {
+        const handleUnlock = () => {
+          // Wait additional 200ms after unlock for correction to settle
+          setTimeout(() => {
+            console.log('[HERO] Hiding loader after correction complete')
+            setShowLoader(false)
+          }, 200)
+          window.removeEventListener('unlockContactAnimation', handleUnlock)
         }
-      }, hideDelay)
-      
-      // Start navigation (has its own internal delays)
-      navigateToSection(sectionId, navigate, location.pathname)
+        window.addEventListener('unlockContactAnimation', handleUnlock)
+        navigateToSection(sectionId, navigate, location.pathname)
+      } else {
+        // For other sections, use simple delay
+        navigateToSection(sectionId, navigate, location.pathname)
+        setTimeout(() => {
+          console.log('[HERO] Hiding loader')
+          setShowLoader(false)
+        }, 150)
+      }
     }, 700)
   }
 
