@@ -338,10 +338,10 @@ export default function Home() {
         let targetValue = 0
         if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
           const progress = 1 - safetyBottom / slideStart
-          const maxSlide = 300
+          const maxSlide = 150
           targetValue = -progress * maxSlide
         } else if (safetyBottom < slideEnd) {
-          targetValue = -300
+          targetValue = -150
         }
 
         // Set target and start interpolation
