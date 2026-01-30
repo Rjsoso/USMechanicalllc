@@ -85,36 +85,40 @@ const DrawerMenu = () => {
     // Show loading screen
     setShowLoader(true)
     
-    // Start navigation IMMEDIATELY (loads in background during animation)
-    if (href.startsWith('/') && !href.includes('#')) {
-      // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
-      navigate(href)
-    } else if (href.startsWith('/#')) {
-      // Link to section on home page (e.g., /#services)
-      const sectionId = href.replace('/#', '')
-      navigateToSection(sectionId, navigate, location.pathname)
-    } else if (href.startsWith('/') && href.includes('#')) {
-      // Link to section on specific page (e.g., /about#safety)
-      const [path, section] = href.split('#')
-      
-      // Navigate to the page first
-      navigate(path)
-      
-      // Use scrollToSection utility for proper offset handling
-      setTimeout(() => {
-        scrollToSection(section, 180, 50, 200)
-          .then(() => {
-            console.log(`Successfully scrolled to ${section}`)
-          })
-          .catch(err => {
-            console.error(`Error scrolling to ${section}:`, err)
-          })
-      }, 300) // Increased delay for page render
-    } else if (href.startsWith('#')) {
-      // Legacy anchor link - treat as home page section
-      const sectionId = href.replace('#', '')
-      navigateToSection(sectionId, navigate, location.pathname)
-    }
+    // Small delay to ensure loader renders, then start navigation
+    // This allows content to load in background during the 2-second animation
+    setTimeout(() => {
+      // Start navigation (loads in background during animation)
+      if (href.startsWith('/') && !href.includes('#')) {
+        // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
+        navigate(href)
+      } else if (href.startsWith('/#')) {
+        // Link to section on home page (e.g., /#services)
+        const sectionId = href.replace('/#', '')
+        navigateToSection(sectionId, navigate, location.pathname)
+      } else if (href.startsWith('/') && href.includes('#')) {
+        // Link to section on specific page (e.g., /about#safety)
+        const [path, section] = href.split('#')
+        
+        // Navigate to the page first
+        navigate(path)
+        
+        // Use scrollToSection utility for proper offset handling
+        setTimeout(() => {
+          scrollToSection(section, 180, 50, 200)
+            .then(() => {
+              console.log(`Successfully scrolled to ${section}`)
+            })
+            .catch(err => {
+              console.error(`Error scrolling to ${section}:`, err)
+            })
+        }, 300) // Increased delay for page render
+      } else if (href.startsWith('#')) {
+        // Legacy anchor link - treat as home page section
+        const sectionId = href.replace('#', '')
+        navigateToSection(sectionId, navigate, location.pathname)
+      }
+    }, 100) // Small delay to ensure loader renders before navigation
     
     // Hide loader after 2 seconds minimum
     // Content will have loaded during this time for smooth transition
