@@ -4,23 +4,15 @@ import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
 import LoadingScreen from './components/LoadingScreen'
 
-// Helper function to ensure minimum display time for loading animation
-const delayedImport = (importFunc, minDelay = 1000) => {
-  return Promise.all([
-    importFunc(),
-    new Promise(resolve => setTimeout(resolve, minDelay))
-  ]).then(([module]) => module)
-}
-
-// Lazy load pages for code splitting with minimum loader display time
-const Home = lazy(() => delayedImport(() => import('./pages/Home')))
-const About = lazy(() => delayedImport(() => import('./pages/About')))
-const CareersPage = lazy(() => delayedImport(() => import('./pages/CareersPage')))
-const PortfolioPage = lazy(() => delayedImport(() => import('./pages/PortfolioPage')))
-const ServiceDetail = lazy(() => delayedImport(() => import('./pages/ServiceDetail')))
-const CategoryDetail = lazy(() => delayedImport(() => import('./pages/CategoryDetail')))
-const ProjectDetail = lazy(() => delayedImport(() => import('./pages/ProjectDetail')))
-const Contact = lazy(() => delayedImport(() => import('./pages/Contact')))
+// Lazy load pages for code splitting
+const Home = lazy(() => import('./pages/Home'))
+const About = lazy(() => import('./pages/About'))
+const CareersPage = lazy(() => import('./pages/CareersPage'))
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'))
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
+const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Contact = lazy(() => import('./pages/Contact'))
 
 function LoadingFallback() {
   return <LoadingScreen minimal />

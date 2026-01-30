@@ -96,10 +96,8 @@
     <link rel="dns-prefetch" href="https://cdn.sanity.io">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Rubik:wght@900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Load fonts - consolidated into single request with only needed weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Rubik:wght@900&family=Pirata+One&family=Corinthia:wght@700&display=swap" rel="stylesheet">
     
     <!-- Critical CSS to prevent flash of white background on load -->
     <style>
@@ -270,7 +268,7 @@
     </div>
     
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx" fetchpriority="high"></script>
   </body>
 </html>
 

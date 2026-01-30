@@ -44,9 +44,9 @@ const loadStartTime = Date.now()
 
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    // Calculate how long to wait to reach minimum 1000ms display time
+    // Calculate how long to wait to reach minimum 300ms display time (just enough for smooth fade)
     const elapsed = Date.now() - loadStartTime
-    const remainingTime = Math.max(0, 1000 - elapsed)
+    const remainingTime = Math.max(0, 300 - elapsed)
     
     setTimeout(() => {
       document.body.classList.add('loaded')
