@@ -82,18 +82,10 @@ const DrawerMenu = () => {
     // Close drawer first
     setIsOpen(false)
     
-    // Determine if navigating to Contact section (needs longer loading time for animations)
-    const isContactNavigation = href === '#contact' || href === '/#contact'
-    
     // Small delay to let drawer close animation complete (250ms)
     // Then show loading screen with fade-in
     setTimeout(() => {
       setShowLoader(true)
-      
-      // Set flag to skip Contact animations for smoother drawer navigation
-      if (isContactNavigation) {
-        sessionStorage.setItem('skipContactAnimations', 'true')
-      }
       
       setTimeout(() => {
       // Check if it's a full page link (starts with /) or an anchor link (starts with #)
