@@ -5,7 +5,7 @@ import { client } from '../utils/sanity'
 // Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
 const AnimatedNumber = memo(function AnimatedNumber({
   value,
-  duration = 3500,
+  duration = 5500,
   inView,
   startValue = 0,
 }) {
@@ -236,7 +236,7 @@ const CompanyStats = () => {
         }
       },
       {
-        threshold: 0.4, // Trigger when 40% visible to avoid interfering with programmatic scrolls
+        threshold: 0.15, // Trigger when 15% visible for smoother, longer scroll animation
         rootMargin: '0px', // No pre-trigger margin to prevent animation during scroll to nearby sections
         // Use passive observation for better scroll performance
       }
@@ -292,7 +292,7 @@ const CompanyStats = () => {
                 <AnimatedNumber
                   value={item.value}
                   startValue={item.enableCustomStart ? item.animateFromValue : 0}
-                  duration={item.animationDuration || 3500}
+                  duration={item.animationDuration || 5500}
                   inView={inView}
                 />
               </div>
