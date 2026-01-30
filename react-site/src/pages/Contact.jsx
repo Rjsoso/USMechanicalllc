@@ -31,8 +31,22 @@ export default function Contact() {
   const [formSuccess, setFormSuccess] = useState(false)
   const [formError, setFormError] = useState(null)
   const [rateLimitError, setRateLimitError] = useState(null)
+  const [skipAnimations, setSkipAnimations] = useState(false)
 
   useEffect(() => {
+    // Check if we should skip animations (from drawer navigation)
+    const shouldSkip = sessionStorage.getItem('skipContactAnimations') === 'true'
+    if (shouldSkip) {
+      setSkipAnimations(true)
+      // Clear flag immediately
+      sessionStorage.removeItem('skipContactAnimations')
+      
+      // Reset after animations would have completed
+      setTimeout(() => {
+        setSkipAnimations(false)
+      }, 100)
+    }
+    
     const fetchContact = async () => {
       try {
         setLoading(true)
@@ -328,10 +342,10 @@ export default function Contact() {
           {!loading && contactData && (
             <>
               <motion.h1
-                initial={{ opacity: 0, y: 50 }}
+                initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
-                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 className="section-title mb-8 text-center text-5xl text-white md:text-6xl"
               >
                 {contactData.heroTitle || 'Contact Us'}
@@ -339,10 +353,10 @@ export default function Contact() {
 
               <motion.p
                 className="mb-12 text-center text-white"
-                initial={{ opacity: 0, y: 50 }}
+                initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
-                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 {contactData.description}
               </motion.p>
@@ -355,10 +369,10 @@ export default function Contact() {
                       <motion.div
                         key={index}
                         className="mb-8"
-                        initial={{ opacity: 0, y: 50 }}
+                        initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '0px' }}
-                        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                        transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                       >
                         <h2 className="mb-4 text-2xl font-semibold text-white">
                           {office.locationName}
@@ -378,10 +392,10 @@ export default function Contact() {
                   {contactData.affiliates && contactData.affiliates.length > 0 && (
                     <motion.div
                       className="mt-8"
-                      initial={{ opacity: 0, y: 50 }}
+                      initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '0px' }}
-                      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                      transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                     >
                       <h2 className="mb-4 text-2xl font-semibold text-white">
                         Affiliate Companies
@@ -390,10 +404,10 @@ export default function Contact() {
                         <motion.div
                           key={i}
                           className="mb-6"
-                          initial={{ opacity: 0, y: 50 }}
+                          initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true, margin: '0px' }}
-                          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                          transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                         >
                           {affiliate.logo && urlFor(affiliate.logo) && (
                             <img
@@ -421,10 +435,10 @@ export default function Contact() {
                 {/* RIGHT SIDE — FORM */}
                 <motion.div
                   className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm"
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={skipAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '0px' }}
-                  transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                  transition={{ duration: skipAnimations ? 0 : 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   <h3 className="mb-4 text-2xl font-semibold text-white">
                     {contactData.formSettings?.headline || 'Send Us a Message'}

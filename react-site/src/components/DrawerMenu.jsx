@@ -90,6 +90,11 @@ const DrawerMenu = () => {
     setTimeout(() => {
       setShowLoader(true)
       
+      // Set flag to skip Contact animations for smoother drawer navigation
+      if (isContactNavigation) {
+        sessionStorage.setItem('skipContactAnimations', 'true')
+      }
+      
       setTimeout(() => {
       // Check if it's a full page link (starts with /) or an anchor link (starts with #)
       if (href.startsWith('/') && !href.includes('#')) {
@@ -124,7 +129,7 @@ const DrawerMenu = () => {
       
         // Hide loader after navigation completes
         setShowLoader(false)
-      }, isContactNavigation ? 1800 : 1000) // 1.8s for Contact (allows animations to complete), 1s for others
+      }, 1000) // 1s for all sections (Contact animations will be skipped)
     }, 250) // Delay to let drawer close smoothly
   }
 
