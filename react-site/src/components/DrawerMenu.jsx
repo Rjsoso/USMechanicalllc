@@ -3,11 +3,13 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { client } from '../utils/sanity'
 import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
+import LoadingScreen from './LoadingScreen'
 import './DrawerMenu.css'
 
 const DrawerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [sections, setSections] = useState([])
+  const [showLoader, setShowLoader] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const hamburgerRef = useRef(null)
@@ -75,41 +77,49 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section or page navigation
+  // Handle scroll to section or page navigation with 2-second loading screen
   const handleLinkClick = href => {
     // Close drawer first
     setIsOpen(false)
-
-    // Check if it's a full page link (starts with /) or an anchor link (starts with #)
-    if (href.startsWith('/') && !href.includes('#')) {
-      // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
-      navigate(href)
-    } else if (href.startsWith('/#')) {
-      // Link to section on home page (e.g., /#services)
-      const sectionId = href.replace('/#', '')
-      navigateToSection(sectionId, navigate, location.pathname)
-    } else if (href.startsWith('/') && href.includes('#')) {
-      // Link to section on specific page (e.g., /about#safety)
-      const [path, section] = href.split('#')
+    
+    // Show loading screen for 2 seconds before navigating
+    setShowLoader(true)
+    
+    setTimeout(() => {
+      // Check if it's a full page link (starts with /) or an anchor link (starts with #)
+      if (href.startsWith('/') && !href.includes('#')) {
+        // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
+        navigate(href)
+      } else if (href.startsWith('/#')) {
+        // Link to section on home page (e.g., /#services)
+        const sectionId = href.replace('/#', '')
+        navigateToSection(sectionId, navigate, location.pathname)
+      } else if (href.startsWith('/') && href.includes('#')) {
+        // Link to section on specific page (e.g., /about#safety)
+        const [path, section] = href.split('#')
+        
+        // Navigate to the page first
+        navigate(path)
+        
+        // Use scrollToSection utility for proper offset handling
+        setTimeout(() => {
+          scrollToSection(section, 180, 50, 200)
+            .then(() => {
+              console.log(`Successfully scrolled to ${section}`)
+            })
+            .catch(err => {
+              console.error(`Error scrolling to ${section}:`, err)
+            })
+        }, 300) // Increased delay for page render
+      } else if (href.startsWith('#')) {
+        // Legacy anchor link - treat as home page section
+        const sectionId = href.replace('#', '')
+        navigateToSection(sectionId, navigate, location.pathname)
+      }
       
-      // Navigate to the page first
-      navigate(path)
-      
-      // Use scrollToSection utility for proper offset handling
-      setTimeout(() => {
-        scrollToSection(section, 180, 50, 200)
-          .then(() => {
-            console.log(`Successfully scrolled to ${section}`)
-          })
-          .catch(err => {
-            console.error(`Error scrolling to ${section}:`, err)
-          })
-      }, 300) // Increased delay for page render
-    } else if (href.startsWith('#')) {
-      // Legacy anchor link - treat as home page section
-      const sectionId = href.replace('#', '')
-      navigateToSection(sectionId, navigate, location.pathname)
-    }
+      // Hide loader after navigation completes
+      setShowLoader(false)
+    }, 2000) // 2-second delay
   }
 
   // Toggle drawer open/closed
@@ -178,6 +188,9 @@ const DrawerMenu = () => {
 
   return (
     <>
+      {/* Loading Screen Overlay */}
+      {showLoader && <LoadingScreen />}
+      
       {/* Hamburger Button */}
       <button
         ref={hamburgerRef}
