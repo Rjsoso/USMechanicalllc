@@ -82,6 +82,9 @@ const DrawerMenu = () => {
     // Close drawer first
     setIsOpen(false)
     
+    // Determine if navigating to Contact section (needs longer loading time for animations)
+    const isContactNavigation = href === '#contact' || href === '/#contact'
+    
     // Small delay to let drawer close animation complete (250ms)
     // Then show loading screen with fade-in
     setTimeout(() => {
@@ -121,7 +124,7 @@ const DrawerMenu = () => {
       
         // Hide loader after navigation completes
         setShowLoader(false)
-      }, 1000) // 1-second delay
+      }, isContactNavigation ? 1800 : 1000) // 1.8s for Contact (allows animations to complete), 1s for others
     }, 250) // Delay to let drawer close smoothly
   }
 
