@@ -10,7 +10,7 @@ Allow: /
 # Disallow: /api/
 
 # Sitemap location
-Sitemap: https://usmechanical.com/sitemap.xml
+Sitemap: https://us-mechanicalllc.vercel.app/sitemap.xml
 
 # Crawl-delay (optional, uncomment if needed to prevent overload)
 # Crawl-delay: 1

@@ -6,7 +6,7 @@
 
   <!-- Homepage -->
   <url>
-    <loc>https://usmechanical.com/</loc>
+    <loc>https://us-mechanicalllc.vercel.app/</loc>
     <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
 
   <!-- About Page -->
   <url>
-    <loc>https://usmechanical.com/about</loc>
+    <loc>https://us-mechanicalllc.vercel.app/about</loc>
     <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -22,7 +22,7 @@
 
   <!-- Careers Page -->
   <url>
-    <loc>https://usmechanical.com/careers</loc>
+    <loc>https://us-mechanicalllc.vercel.app/careers</loc>
     <lastmod>2026-01-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -30,7 +30,7 @@
 
   <!-- Portfolio Landing Page -->
   <url>
-    <loc>https://usmechanical.com/portfolio</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio</loc>
     <lastmod>2026-01-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -38,7 +38,7 @@
 
   <!-- Contact Page -->
   <url>
-    <loc>https://usmechanical.com/contact</loc>
+    <loc>https://us-mechanicalllc.vercel.app/contact</loc>
     <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -46,31 +46,31 @@
 
   <!-- Service Pages -->
   <url>
-    <loc>https://usmechanical.com/services/plumbing%20services</loc>
+    <loc>https://us-mechanicalllc.vercel.app/services/plumbing%20services</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/services/HVAC</loc>
+    <loc>https://us-mechanicalllc.vercel.app/services/HVAC</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/services/Processed%20Piping</loc>
+    <loc>https://us-mechanicalllc.vercel.app/services/Processed%20Piping</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/services/BIM</loc>
+    <loc>https://us-mechanicalllc.vercel.app/services/BIM</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/services/In%20House%20Fabrication</loc>
+    <loc>https://us-mechanicalllc.vercel.app/services/In%20House%20Fabrication</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -78,37 +78,37 @@
 
   <!-- Portfolio Category Pages -->
   <url>
-    <loc>https://usmechanical.com/portfolio/1dc3cafe-7655-4e78-a2db-0356a61da3ef</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/1dc3cafe-7655-4e78-a2db-0356a61da3ef</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/portfolio/6287e13a-fa93-4d95-91d0-1aba255b5adb</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/6287e13a-fa93-4d95-91d0-1aba255b5adb</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/portfolio/6f83ab00-7708-4df6-8a23-dbcda25e4d9f</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/6f83ab00-7708-4df6-8a23-dbcda25e4d9f</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/portfolio/8e8237dc-0def-4047-8a50-7f2a2420cf81</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/8e8237dc-0def-4047-8a50-7f2a2420cf81</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/portfolio/96296536-d861-491e-86d8-608e2b18c6cf</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/96296536-d861-491e-86d8-608e2b18c6cf</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/portfolio/f8697146-770e-4d4b-b417-59f8d462bf43</loc>
+    <loc>https://us-mechanicalllc.vercel.app/portfolio/f8697146-770e-4d4b-b417-59f8d462bf43</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -116,19 +116,19 @@
 
   <!-- Portfolio Project Pages -->
   <url>
-    <loc>https://usmechanical.com/projects/84418a09-4894-4b71-8f71-de932b02f8fc</loc>
+    <loc>https://us-mechanicalllc.vercel.app/projects/84418a09-4894-4b71-8f71-de932b02f8fc</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/projects/84ffd849-62a7-42db-bca3-bf84f6b1d454</loc>
+    <loc>https://us-mechanicalllc.vercel.app/projects/84ffd849-62a7-42db-bca3-bf84f6b1d454</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://usmechanical.com/projects/f97e1919-f2f1-416e-b791-0ca2173af3ac</loc>
+    <loc>https://us-mechanicalllc.vercel.app/projects/f97e1919-f2f1-416e-b791-0ca2173af3ac</loc>
     <lastmod>2026-01-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
