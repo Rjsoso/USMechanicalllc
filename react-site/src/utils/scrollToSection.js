@@ -3,6 +3,19 @@
 // Global flag to lock animations during navigation (synchronous, not async like sessionStorage)
 window.__scrollNavigationLock = false
 
+// Debug helper - only logs in development
+const debug = (...args) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(...args)
+  }
+}
+
+const debugWarn = (...args) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(...args)
+  }
+}
+
 /**
  * Scrolls to a section with instant behavior (no animation)
  * @param {string} sectionId - The ID of the section to scroll to (without #)
@@ -20,16 +33,12 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
     const effectiveMaxRetries = isLazySection ? Math.max(maxRetries, 100) : maxRetries
 
     const attemptScroll = () => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`Attempt ${retryCount + 1}/${effectiveMaxRetries} - Looking for #${sectionId}`)
-      }
+      debug(`Attempt ${retryCount + 1}/${effectiveMaxRetries} - Looking for #${sectionId}`)
 
       // Check if we're waiting for a Suspense fallback to complete
       const suspenseFallbacks = document.querySelectorAll('[data-suspense-fallback]')
       if (suspenseFallbacks.length > 0 && isLazySection) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Suspense fallback detected, waiting for lazy components to load...`)
-        }
+        debug(`Suspense fallback detected, waiting for lazy components to load...`)
         if (retryCount < effectiveMaxRetries) {
           retryCount++
           setTimeout(attemptScroll, retryDelay)
@@ -46,19 +55,19 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           if (parentElement) {
             const computedStyle = window.getComputedStyle(parentElement)
             const transform = computedStyle.transform
-            console.warn(`[DEBUG] Contact transform check: ${transform}`)
+            debugWarn(`[DEBUG] Contact transform check: ${transform}`)
             
             // Check if transform is at identity (no translation)
             // transform will be "none" or "matrix(1, 0, 0, 1, 0, 0)" when at 0
             if (transform !== 'none' && transform !== 'matrix(1, 0, 0, 1, 0, 0)') {
-              console.warn(`[DEBUG] Contact transform not ready, retrying... (current: ${transform})`)
+              debugWarn(`[DEBUG] Contact transform not ready, retrying... (current: ${transform})`)
               if (retryCount < effectiveMaxRetries) {
                 retryCount++
                 setTimeout(attemptScroll, retryDelay)
                 return false
               }
             } else {
-              console.warn(`[DEBUG] Contact transform ready: ${transform}`)
+              debugWarn(`[DEBUG] Contact transform ready: ${transform}`)
             }
           }
         }
@@ -68,7 +77,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
         
           // Enhanced debug logging for contact section
         if (sectionId === 'contact') {
-          console.warn(`[DEBUG] Contact rect:`, {
+          debugWarn(`[DEBUG] Contact rect:`, {
             top: rect.top,
             height: rect.height,
             bottom: rect.bottom,
@@ -77,11 +86,9 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           })
         }
         
-        if (process.env.NODE_ENV === 'development') {
-          console.log(
-            `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
-          )
-        }
+        debug(
+          `Found #${sectionId} - height: ${rect.height}, top: ${rect.top}, bottom: ${rect.bottom}`
+        )
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
@@ -91,7 +98,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             if (!attemptScroll.lastContactTop) {
               attemptScroll.lastContactTop = rect.top
               attemptScroll.lastContactHeight = rect.height
-              console.warn(`[DEBUG] Contact: First position check, storing baseline`)
+              debugWarn(`[DEBUG] Contact: First position check, storing baseline`)
               if (retryCount < effectiveMaxRetries) {
                 retryCount++
                 setTimeout(attemptScroll, retryDelay)
@@ -105,7 +112,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             
             if (topDiff > 5 || heightDiff > 10) {
               // Position still changing - content still loading
-              console.warn(`[DEBUG] Contact position unstable, retrying...`, {
+              debugWarn(`[DEBUG] Contact position unstable, retrying...`, {
                 topDiff,
                 heightDiff,
                 previousTop: attemptScroll.lastContactTop,
@@ -121,7 +128,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                 return false
               }
             } else {
-              console.warn(`[DEBUG] Contact position stable, proceeding with scroll`)
+              debugWarn(`[DEBUG] Contact position stable, proceeding with scroll`)
             }
           }
           
@@ -143,7 +150,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
           // Enhanced debug for contact scroll calculation
           if (sectionId === 'contact') {
-            console.warn(`[DEBUG] Contact scroll calculation:`, {
+            debugWarn(`[DEBUG] Contact scroll calculation:`, {
               currentScroll,
               rectTop: rect.top,
               effectiveOffset,
@@ -152,9 +159,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             })
           }
 
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`Scrolling instantly to ${sectionId} with ${effectiveOffset}px offset`)
-          }
+          debug(`Scrolling instantly to ${sectionId} with ${effectiveOffset}px offset`)
 
           // For contact section, add additional diagnostics
           if (sectionId === 'contact') {
@@ -162,7 +167,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             const beforePageHeight = document.documentElement.scrollHeight
             const beforeContactRect = element.getBoundingClientRect()
             
-            console.warn(`[PRE-SCROLL] About to scroll to ${targetPosition}px`, {
+            debugWarn(`[PRE-SCROLL] About to scroll to ${targetPosition}px`, {
               currentScroll: beforeScrollY,
               pageHeight: beforePageHeight,
               contactTop: beforeContactRect.top,
@@ -188,13 +193,13 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               
               if (currentScrollY === lastScrollY) {
                 stableFrames++
-                console.warn(`[SETTLE] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
+                debugWarn(`[SETTLE] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
                 
                 if (stableFrames >= requiredStableFrames) {
                   // Scroll has settled, now measure and correct
                   const heading = document.querySelector('#contact h1, #contact h2')
                   if (!heading) {
-                    console.warn(`[CORRECTION] Heading not found`)
+                    debugWarn(`[CORRECTION] Heading not found`)
                     return
                   }
                   
@@ -202,7 +207,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                   const desiredHeadingPos = 80
                   const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
                   
-                  console.warn(`[CORRECTION] Scroll settled, measuring`, {
+                  debugWarn(`[CORRECTION] Scroll settled, measuring`, {
                     currentHeadingPos: headingRect.top,
                     desiredPos: desiredHeadingPos,
                     currentScroll: currentScrollY,
@@ -212,7 +217,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                   
                   // Only correct if heading is not at desired position
                   if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
-                    console.warn(`[CORRECTION] Applying correction to ${correctedTarget}px`)
+                    debugWarn(`[CORRECTION] Applying correction to ${correctedTarget}px`)
                     window.scrollTo({
                       top: correctedTarget,
                       behavior: 'smooth',
@@ -221,17 +226,17 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                     // Verify final position
                     requestAnimationFrame(() => {
                       const finalRect = heading.getBoundingClientRect()
-                      console.warn(`[CORRECTION] Final position: ${finalRect.top}px from top`)
+                      debugWarn(`[CORRECTION] Final position: ${finalRect.top}px from top`)
                     })
                   } else {
-                    console.warn(`[CORRECTION] No correction needed, already at ${headingRect.top}px`)
+                    debugWarn(`[CORRECTION] No correction needed, already at ${headingRect.top}px`)
                   }
                   return // Done
                 }
               } else {
                 // Scroll still moving, reset counter
                 stableFrames = 0
-                console.warn(`[SETTLE] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
+                debugWarn(`[SETTLE] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
               }
               
               lastScrollY = currentScrollY
@@ -254,13 +259,13 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               
               if (currentScrollY === lastScrollY) {
                 stableFrames++
-                console.warn(`[SETTLE-CAREERS] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
+                debugWarn(`[SETTLE-CAREERS] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
                 
                 if (stableFrames >= requiredStableFrames) {
                   // Scroll has settled, now measure and correct
                   const heading = document.querySelector('#careers h2')
                   if (!heading) {
-                    console.warn(`[CORRECTION-CAREERS] Heading not found`)
+                    debugWarn(`[CORRECTION-CAREERS] Heading not found`)
                     return
                   }
                   
@@ -268,7 +273,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                   const desiredHeadingPos = 70
                   const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
                   
-                  console.warn(`[CORRECTION-CAREERS] Scroll settled, measuring`, {
+                  debugWarn(`[CORRECTION-CAREERS] Scroll settled, measuring`, {
                     currentHeadingPos: headingRect.top,
                     desiredPos: desiredHeadingPos,
                     currentScroll: currentScrollY,
@@ -278,7 +283,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                   
                   // Only correct if heading is not at desired position
                   if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
-                    console.warn(`[CORRECTION-CAREERS] Applying correction to ${correctedTarget}px`)
+                    debugWarn(`[CORRECTION-CAREERS] Applying correction to ${correctedTarget}px`)
                     window.scrollTo({
                       top: correctedTarget,
                       behavior: 'instant',
@@ -287,17 +292,17 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                     // Verify final position
                     requestAnimationFrame(() => {
                       const finalRect = heading.getBoundingClientRect()
-                      console.warn(`[CORRECTION-CAREERS] Final position: ${finalRect.top}px from top`)
+                      debugWarn(`[CORRECTION-CAREERS] Final position: ${finalRect.top}px from top`)
                     })
                   } else {
-                    console.warn(`[CORRECTION-CAREERS] No correction needed, already at ${headingRect.top}px`)
+                    debugWarn(`[CORRECTION-CAREERS] No correction needed, already at ${headingRect.top}px`)
                   }
                   return // Done
                 }
               } else {
                 // Scroll still moving, reset counter
                 stableFrames = 0
-                console.warn(`[SETTLE-CAREERS] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
+                debugWarn(`[SETTLE-CAREERS] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
               }
               
               lastScrollY = currentScrollY
@@ -317,14 +322,14 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               const heading = document.querySelector('#contact h1, #contact h2')
               const headingTop = heading ? heading.getBoundingClientRect().top : 'not found'
               
-              console.warn(`[POST-SCROLL] Landed at ${finalScrollY}px (target was ${targetPosition}px)`, {
+              debugWarn(`[POST-SCROLL] Landed at ${finalScrollY}px (target was ${targetPosition}px)`, {
                 discrepancy: targetPosition - finalScrollY,
                 pageHeight: finalPageHeight,
                 contactTop: finalContactRect.top,
                 maxScroll: finalPageHeight - window.innerHeight
               })
               
-              console.warn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
+              debugWarn(`[LANDING] Scrolled to ${finalScrollY}px | Contact heading is ${headingTop}px from viewport top`)
             }, 100)
           }
           
@@ -335,19 +340,18 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             sessionStorage.removeItem('scrollNavigationInProgress')
             window.__scrollNavigationLock = false
             window.dispatchEvent(new CustomEvent('unlockContactAnimation'))
-            console.warn(`[DEBUG] Navigation lock released for ${sectionId}`)
+            debugWarn(`[DEBUG] Navigation lock released for ${sectionId}`)
           }, lockDuration)
 
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`✓ Successfully scrolled to section: ${sectionId}`)
-          }
+          // Update URL hash to reflect current section
+          window.history.pushState(null, '', `/#${sectionId}`)
+          
+          debug(`✓ Successfully scrolled to section: ${sectionId}`)
           resolve(true)
           return true
         } else {
           // Element exists but not rendered yet - keep retrying
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`Element #${sectionId} found but height is 0, retrying...`)
-          }
+          debug(`Element #${sectionId} found but height is 0, retrying...`)
           if (retryCount < effectiveMaxRetries) {
             retryCount++
             setTimeout(attemptScroll, retryDelay)
@@ -362,9 +366,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
         }
       } else {
         // Element not found - retry if attempts remaining
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Element #${sectionId} not found in DOM, retrying...`)
-        }
+        debug(`Element #${sectionId} not found in DOM, retrying...`)
         if (retryCount < effectiveMaxRetries) {
           retryCount++
           setTimeout(attemptScroll, retryDelay)
@@ -372,7 +374,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           // Max retries reached - give up
           if (process.env.NODE_ENV === 'development') {
             console.error(`✗ Failed to find section: ${sectionId} after ${effectiveMaxRetries} attempts`)
-            console.log(
+            debug(
               'Available sections:',
               Array.from(document.querySelectorAll('[id]')).map(el => el.id)
             )
@@ -395,17 +397,11 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
  * @param {function} navigate - React Router navigate function
  */
 export function navigateAndScroll(sectionId, navigate) {
-  if (process.env.NODE_ENV === 'development') {
-    if (process.env.NODE_ENV === 'development')
-      console.log(`navigateAndScroll called with sectionId: ${sectionId}`)
-  }
+  debug(`navigateAndScroll called with sectionId: ${sectionId}`)
 
   // Use React Router state to pass the section (more reliable than sessionStorage)
   navigate('/', { state: { scrollTo: sectionId } })
-  if (process.env.NODE_ENV === 'development') {
-    if (process.env.NODE_ENV === 'development')
-      console.log(`Navigated with state: { scrollTo: ${sectionId} }`)
-  }
+  debug(`Navigated with state: { scrollTo: ${sectionId} }`)
 }
 
 /**
@@ -446,30 +442,23 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
 
   // If we're on a different page, navigate to home first
   if (currentPath !== '/') {
-    sessionStorage.setItem('scrollTo', sectionId)
-    navigate('/')
-
-    // Retry mechanism for lazy-loaded sections
-    let retryCount = 0
-    const maxRetries = 20
-    const attemptScroll = () => {
-      if (scrollWithInstant()) {
-        sessionStorage.removeItem('scrollTo')
-      } else if (retryCount < maxRetries) {
-        retryCount++
-        setTimeout(attemptScroll, 100)
-      }
-    }
-    setTimeout(attemptScroll, 150)
+    // Navigate to home with hash
+    navigate(`/#${sectionId}`)
+    
+    // The hash will be picked up by Home.jsx's useEffect
+    // which will handle the scroll with proper timing
   } else {
+    // Already on homepage - update hash immediately and scroll
+    window.history.pushState(null, '', `/#${sectionId}`)
+    
     // Already on home page - use robust scroll with retry mechanism for all sections
     // LOCK ANIMATIONS IMMEDIATELY (synchronous global flag)
     window.__scrollNavigationLock = true
-    console.warn(`[DEBUG] Navigation lock SET for section: ${sectionId}`)
+    debugWarn(`[DEBUG] Navigation lock SET for section: ${sectionId}`)
     
     // Dispatch lock event for ALL button navigations to disable Contact animation
     window.dispatchEvent(new CustomEvent('lockContactAnimation'))
-    console.warn(`[DEBUG] lockContactAnimation event dispatched for ${sectionId} navigation`)
+    debugWarn(`[DEBUG] lockContactAnimation event dispatched for ${sectionId} navigation`)
     
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
@@ -481,8 +470,8 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
         const el = document.querySelector(`#${id}`)
         return `${id}: ${el ? el.offsetHeight + 'px' : 'NOT FOUND'}`
       }).join(', ')
-      console.warn(`[DIAG] Page height: ${document.documentElement.scrollHeight}px | Sections: ${sections}`)
-      console.warn(`[DEBUG] Contact navigation: Dispatched lock event, waiting for React to flush state...`)
+      debugWarn(`[DIAG] Page height: ${document.documentElement.scrollHeight}px | Sections: ${sections}`)
+      debugWarn(`[DEBUG] Contact navigation: Dispatched lock event, waiting for React to flush state...`)
       
       // Wait longer for React to flush the setContactSlide(0) state update to DOM
       setTimeout(() => {
@@ -500,47 +489,43 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
           scrollTransform = window.getComputedStyle(scrollAnimWrapper).transform
         }
         
-        console.warn(`[DEBUG] Transforms after React flush:`, {
+        debugWarn(`[DEBUG] Transforms after React flush:`, {
           contactWrapper: contactTransform,
           scrollAnimWrapper: scrollTransform
         })
         
         const headerOffset = sectionOffsets[sectionId] || 180
-        console.warn(`[DEBUG] Contact navigation: Starting scroll with offset ${headerOffset}`)
+        debugWarn(`[DEBUG] Contact navigation: Starting scroll with offset ${headerOffset}`)
         scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-          console.warn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
+          debugWarn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
       }, 300) // React flush delay to freeze animations before scroll
     } else if (sectionId === 'portfolio') {
       // For portfolio, pre-calculate scroll animation state to prevent aggressive pop
       // Portfolio is below Safety, so scroll animation should be at max (-300px)
       window.dispatchEvent(new CustomEvent('setScrollSlide', { detail: { value: -300 } }))
-      console.warn(`[DEBUG] Portfolio navigation: Pre-set scroll slide to -300px`)
+      debugWarn(`[DEBUG] Portfolio navigation: Pre-set scroll slide to -300px`)
       
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-        }
+        debug(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
         
         // Clear lock after portfolio scroll completes (extended duration)
         setTimeout(() => {
           window.__scrollNavigationLock = false
-          console.warn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
+          debugWarn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
         }, 800)
       })
     } else {
       // For other non-contact sections, still need to clear lock after scroll
       const headerOffset = sectionOffsets[sectionId] || 180
       scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
-        }
+        debug(`Same-page scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)
         
         // Clear lock after non-contact scroll completes
         setTimeout(() => {
           window.__scrollNavigationLock = false
-          console.warn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
+          debugWarn(`[DEBUG] Navigation lock CLEARED for section: ${sectionId}`)
         }, 500)
       })
     }

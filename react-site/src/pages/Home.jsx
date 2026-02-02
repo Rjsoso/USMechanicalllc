@@ -145,6 +145,35 @@ export default function Home() {
     }
   }, [location.state?.scrollTo, location.hash])
 
+  // Handle browser back/forward navigation with hash URLs
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '')
+      if (hash) {
+        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'careers', 'contact']
+        if (validSections.includes(hash)) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`Hash changed to #${hash}, scrolling to section`)
+          }
+          
+          // Use scrollToSection with appropriate settings for the section
+          const isLazySection = hash === 'contact'
+          scrollToSection(hash, 180, isLazySection ? 100 : 50, isLazySection ? 50 : 200)
+        }
+      } else {
+        // No hash means scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+
+    // Listen for hashchange events (browser back/forward buttons)
+    window.addEventListener('hashchange', handleHashChange)
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [])
+
   // Fetch hero background image from Sanity
   useEffect(() => {
     client
@@ -186,12 +215,16 @@ export default function Home() {
       skipContactAnimationOnce.current = true
       sessionStorage.removeItem('skipContactAnimation')
       
-      console.warn('[DEBUG] Contact: Animation skipped for direct navigation, contactSlide set to 0')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[DEBUG] Contact: Animation skipped for direct navigation, contactSlide set to 0')
+      }
       
       // Clear the flag after a delay to allow animation on subsequent scrolls
       setTimeout(() => {
         skipContactAnimationOnce.current = false
-        console.warn('[DEBUG] Contact: Animation skip flag cleared')
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[DEBUG] Contact: Animation skip flag cleared')
+        }
       }, 2000) // 2 second delay
     }
   }, [location.state?.scrollTo, location.hash])
@@ -204,14 +237,18 @@ export default function Home() {
       skipContactAnimationOnce.current = true
       contactAnimationComplete.current = true // Mark as complete to prevent updates
       buttonNavigationUsed.current = true // Permanently disable animation after any button nav
-      console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
-      console.warn('[BUTTON-NAV] buttonNavigationUsed set to TRUE - animation permanently disabled')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
+        console.warn('[BUTTON-NAV] buttonNavigationUsed set to TRUE - animation permanently disabled')
+      }
     }
     
     const handleUnlock = () => {
       skipContactAnimationOnce.current = false
       // Keep contactAnimationComplete and buttonNavigationUsed true - animation stays disabled
-      console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
+      }
     }
     
     window.addEventListener('lockContactAnimation', handleLock)
@@ -230,11 +267,15 @@ export default function Home() {
         setContactSlide(0)
         skipContactAnimationOnce.current = true
         sessionStorage.removeItem('skipContactAnimation')
-        console.warn('[DEBUG] Contact: Animation skipped (polling detected), contactSlide set to 0')
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[DEBUG] Contact: Animation skipped (polling detected), contactSlide set to 0')
+        }
         
         setTimeout(() => {
           skipContactAnimationOnce.current = false
-          console.warn('[DEBUG] Contact: Animation skip flag cleared after polling')
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[DEBUG] Contact: Animation skip flag cleared after polling')
+          }
         }, 2000)
       }
     }, 50) // Poll every 50ms
@@ -250,7 +291,9 @@ export default function Home() {
         setScrollSlide(value)
         lastScrollSlideRef.current = value
         targetScrollSlideRef.current = value
-        console.warn(`[DEBUG] Scroll slide preset to ${value}px`)
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`[DEBUG] Scroll slide preset to ${value}px`)
+        }
       }
     }
     
@@ -446,9 +489,11 @@ export default function Home() {
         
         const contactWrapper = document.querySelector('#contact-wrapper')
         if (!contactWrapper) {
+        if (process.env.NODE_ENV === 'development') {
           console.log('[Contact] ERROR: Wrapper not found!')
-          return
         }
+        return
+      }
 
         const rect = contactWrapper.getBoundingClientRect()
         const viewportHeight = window.innerHeight
@@ -488,7 +533,9 @@ export default function Home() {
         cancelAnimationFrame(contactAnimationFrameRef.current)
         contactAnimationFrameRef.current = null
       }
-      console.warn('[DEBUG] Contact: Cancelled pending animation frames')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[DEBUG] Contact: Cancelled pending animation frames')
+      }
     }
     
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)

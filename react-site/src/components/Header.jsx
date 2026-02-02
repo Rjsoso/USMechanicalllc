@@ -36,8 +36,14 @@ function Header() {
   }, [logo])
 
   const handleLogoClick = () => {
-    // Use the centralized navigation utility to scroll to hero section
-    navigateToSection('hero', navigate, location.pathname)
+    if (location.pathname === '/') {
+      // Already on homepage - scroll to top and update hash
+      window.history.pushState(null, '', '/')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // On different page - navigate to homepage
+      navigate('/')
+    }
   }
 
   return (
