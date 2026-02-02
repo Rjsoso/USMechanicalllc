@@ -3,7 +3,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
-import { navigateToSection } from '../utils/scrollToSection'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -179,7 +178,7 @@ export default function CategoryDetail() {
           {/* Back + Prev/Next */}
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <button
-              onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
+              onClick={() => navigate('/', { state: { scrollTo: 'portfolio' } })}
               className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
