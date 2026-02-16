@@ -66,8 +66,7 @@
   transition: width 0.3s ease;
 }
 
-.desktop-nav-link:hover::after,
-.desktop-nav-link:focus::after {
+.desktop-nav-link:hover::after {
   width: 80%;
 }
 
@@ -76,10 +75,20 @@
   transform: translateY(-2px);
 }
 
+/* Remove outline on mouse click */
 .desktop-nav-link:focus {
+  outline: none;
+}
+
+/* Only show outline for keyboard navigation */
+.desktop-nav-link:focus-visible {
   outline: 2px solid #3404f6;
   outline-offset: 4px;
   color: #3404f6;
+}
+
+.desktop-nav-link:focus-visible::after {
+  width: 80%;
 }
 
 .desktop-nav-link:active {
