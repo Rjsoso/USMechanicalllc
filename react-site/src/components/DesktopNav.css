@@ -1,0 +1,120 @@
+/* Desktop Navigation Bar */
+.desktop-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.desktop-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+}
+
+.desktop-nav-list {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.desktop-nav-item {
+  margin: 0;
+  padding: 0;
+}
+
+.desktop-nav-link {
+  display: inline-block;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+/* Hover effect - subtle underline */
+.desktop-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #3404f6;
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.desktop-nav-link:hover::after,
+.desktop-nav-link:focus::after {
+  width: 80%;
+}
+
+.desktop-nav-link:hover {
+  color: #3404f6;
+  transform: translateY(-2px);
+}
+
+.desktop-nav-link:focus {
+  outline: 2px solid #3404f6;
+  outline-offset: 4px;
+  color: #3404f6;
+}
+
+.desktop-nav-link:active {
+  transform: translateY(0);
+}
+
+/* Responsive: Hide on mobile and tablet, show on desktop */
+@media (max-width: 767px) {
+  .desktop-nav {
+    display: none !important;
+  }
+}
+
+/* Large screens: adjust spacing */
+@media (min-width: 1440px) {
+  .desktop-nav-list {
+    gap: 3rem;
+  }
+  
+  .desktop-nav-link {
+    font-size: 1rem;
+  }
+}
+
+/* Extra large screens: max spacing */
+@media (min-width: 1920px) {
+  .desktop-nav-container {
+    max-width: 1600px;
+  }
+  
+  .desktop-nav-list {
+    gap: 3.5rem;
+  }
+  
+  .desktop-nav-link {
+    font-size: 1.05rem;
+  }
+}

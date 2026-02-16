@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
 import DrawerMenu from './DrawerMenu'
+import DesktopNav from './DesktopNav'
 import './Header.css'
 
 function Header() {
@@ -48,7 +49,10 @@ function Header() {
 
   return (
     <>
-      {/* Logo with 3D shadow effect */}
+      {/* Desktop Navigation Bar - Below logo, above content */}
+      <DesktopNav />
+
+      {/* Logo with 3D shadow effect - Overlaps the nav bar */}
       {logoUrl && (
         <div className="plaque-perspective fixed left-4 top-4 z-50">
           <div
@@ -79,7 +83,7 @@ function Header() {
         </div>
       )}
 
-      {/* Drawer Menu - replaces Dock and CardNav */}
+      {/* Drawer Menu - Mobile only */}
       <DrawerMenu />
     </>
   )
