@@ -285,9 +285,8 @@ const ServicesSection = () => {
           {servicesData.sectionTitle || 'Our Services'}
         </motion.h2>
         <p className="mb-8 text-left text-lg text-white">{servicesData.descriptionText}</p>
-      </div>
 
-      <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-12">
+        <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-12">
         {/* LEFT — DESCRIPTION TEXT + SERVICE BOXES (full-bleed to the left edge) */}
         <div className="flex-1 pr-6 md:w-1/2 md:pr-10">
           <div className="space-y-4">
@@ -588,6 +587,7 @@ const ServicesSection = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
     </section>
   )

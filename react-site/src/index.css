@@ -617,24 +617,13 @@ footer {
    Prevent excessive width on 4K+ displays
    ============================================ */
 @media (min-width: 2560px) {
-  /* Constrain max-w-7xl containers */
+  /* Constrain max-w-7xl containers for content readability */
   .max-w-7xl {
     max-width: 1800px;
   }
 
-  /* Prevent sections from stretching too wide */
-  section {
-    max-width: 2560px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* Constrain main content area */
-  main {
-    max-width: 2560px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  /* Sections now span full width to match fixed background */
+  /* Inner content containers use max-w-7xl for readability */
 }
 
 /* ============================================

@@ -1,19 +1,18 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, memo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
+import { debounce } from '../utils/debounce'
 import FadeInNative from './FadeInNative'
 import Carousel from './Carousel'
 import LogoLoop from './LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
 
-export default function AboutAndSafety() {
+function AboutAndSafety() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  // eslint-disable-next-line no-unused-vars
-  const [isAnimating, setIsAnimating] = useState(false) // Used for expand/collapse animations
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -21,12 +20,12 @@ export default function AboutAndSafety() {
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   )
 
-  // Track window width for responsive logo sizing
+  // Track window width for responsive logo sizing with debouncing
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = debounce(() => {
       setWindowWidth(window.innerWidth)
       setIsMobile(window.innerWidth < 768)
-    }
+    }, 150)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -437,14 +436,14 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
           WebkitBackfaceVisibility: 'hidden',
         }}
       >
-        <div className={isMobile ? 'w-full px-0' : 'mx-auto max-w-7xl px-6'}>
+        <div className={isMobile ? 'w-full px-0' : 'w-full px-6'}>
           {/* SAFETY SECTION - Text + LogoLoops Horizontal (reversed layout, side-by-side on desktop, stacked on mobile) */}
           {/* All content (text and logos) comes from Sanity CMS */}
           <div
             className={
               isMobile
                 ? 'flex flex-col gap-8 px-6'
-                : 'relative flex flex-col items-center gap-8 md:flex-row md:gap-12'
+                : 'relative mx-auto flex max-w-7xl flex-col items-center gap-8 md:flex-row md:gap-12'
             }
           >
             {/* Text on left */}
@@ -578,3 +577,5 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     </>
   )
 }
+
+export default memo(AboutAndSafety)
