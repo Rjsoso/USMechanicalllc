@@ -87,13 +87,7 @@ const AnimatedNumber = memo(function AnimatedNumber({
 
   // Return animated count with suffix
   return (
-    <span
-      style={{
-        willChange: 'contents',
-        transform: 'translateZ(0)', // GPU acceleration for smoother number updates
-        WebkitFontSmoothing: 'antialiased',
-      }}
-    >
+    <span>
       {Math.floor(count).toLocaleString()}
       {suffix}
     </span>
@@ -170,30 +164,23 @@ const CompanyStats = ({ data: statsDataProp }) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Only trigger animation once on first intersection
         if (entry.isIntersecting && !hasAnimated) {
           hasAnimated = true
           setInView(true)
-          // Disconnect observer after first trigger to prevent retriggering
           observer.disconnect()
         }
       },
       {
-        threshold: 0.15, // Trigger when 15% visible for smoother, longer scroll animation
-        rootMargin: '0px', // No pre-trigger margin to prevent animation during scroll to nearby sections
-        // Use passive observation for better scroll performance
+        threshold: 0.05,
+        rootMargin: '50px 0px',
       }
     )
 
-    // Brief delay to allow programmatic scrolls to settle before enabling observer
-    const timeoutId = setTimeout(() => {
-      if (sectionRef.current) {
-        observer.observe(sectionRef.current)
-      }
-    }, 150)
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
 
     return () => {
-      clearTimeout(timeoutId)
       observer.disconnect()
     }
   }, [statsData])
@@ -208,10 +195,6 @@ const CompanyStats = ({ data: statsDataProp }) => {
     <section
       ref={sectionRef}
       className="w-full bg-transparent py-16 xl:py-12 2xl:py-10"
-      style={{
-        transform: 'translateZ(0)',
-        WebkitFontSmoothing: 'antialiased',
-      }}
     >
       <div className="mx-auto max-w-6xl text-center">
         {statsData.title && (

@@ -13,18 +13,17 @@ function FadeInNative({ children, delay = 0, className = '' }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTriggered) {
-          // Use requestAnimationFrame for smoother timing
-          requestAnimationFrame(() => {
-            setTimeout(() => {
-              setIsVisible(true)
-              hasTriggered = true
-              observer.disconnect() // Disconnect immediately after trigger
-            }, delay * 1000)
-          })
+          hasTriggered = true
+          observer.disconnect()
+          if (delay > 0) {
+            setTimeout(() => setIsVisible(true), delay * 1000)
+          } else {
+            setIsVisible(true)
+          }
         }
       },
       {
-        threshold: 0.05,
+        threshold: 0.02,
         rootMargin: '50px 0px',
       }
     )

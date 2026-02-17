@@ -14,12 +14,6 @@ function FadeInWhenVisible({ children, delay = 0, className = '' }) {
         ease: [0.16, 1, 0.3, 1],
       }}
       viewport={viewportPreset}
-      style={{
-        transform: 'translateZ(0)', // Force GPU acceleration
-        willChange: 'transform, opacity',
-        WebkitFontSmoothing: 'antialiased',
-        isolation: 'isolate', // Create stacking context for better compositing
-      }}
     >
       {children}
     </motion.div>
