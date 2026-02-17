@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
 import { canSubmitForm, recordSubmission, formatTimeRemaining } from '../utils/rateLimit'
+import { viewportPreset } from '../utils/viewport'
 
 const ServicesSection = ({ data: servicesDataProp }) => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody'
@@ -198,7 +199,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
           className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           {servicesData.sectionTitle || 'Our Services'}
@@ -207,7 +208,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
           className="mb-0 text-left text-lg text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
           {servicesData.descriptionText}
@@ -255,7 +256,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     }}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
+                    viewport={viewportPreset}
                     transition={{
                       duration: 0.4,
                       ease: [0.16, 1, 0.3, 1],
@@ -300,7 +301,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     className="section-title text-center text-4xl text-gray-900 md:text-5xl"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
+                    viewport={viewportPreset}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                   >
                     {servicesData.deliveryMethodsHeading || 'Delivery Methods'}

@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 
 function Portfolio({ data: portfolioDataProp }) {
   const navigate = useNavigate()
@@ -32,7 +33,7 @@ function Portfolio({ data: portfolioDataProp }) {
           className="section-title text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           {sectionData?.sectionTitle || 'Portfolio'}
@@ -42,7 +43,7 @@ function Portfolio({ data: portfolioDataProp }) {
             className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
             {sectionData.sectionDescription}
@@ -61,7 +62,7 @@ function Portfolio({ data: portfolioDataProp }) {
               key={category._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={viewportPreset}
               transition={{
                 duration: 0.5,
                 ease: [0.16, 1, 0.3, 1],

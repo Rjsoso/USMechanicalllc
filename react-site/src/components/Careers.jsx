@@ -1,6 +1,7 @@
 import { useEffect, useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 
 function Careers() {
   const [careersData, setCareersData] = useState(null)
@@ -93,7 +94,7 @@ function Careers() {
           className="section-title mb-4 text-center text-5xl text-black md:text-6xl"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           {heading}
@@ -104,7 +105,7 @@ function Careers() {
           className="mb-8 text-center text-2xl font-bold text-black md:text-3xl"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           {jobTitle}
@@ -115,7 +116,7 @@ function Careers() {
           className="mb-8 text-center"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           <ul className="inline-block space-y-2 text-left text-lg">
@@ -130,7 +131,7 @@ function Careers() {
           className="mx-auto mb-10 max-w-3xl text-center text-lg leading-relaxed text-black"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           {jobDescription}
@@ -141,7 +142,7 @@ function Careers() {
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <h4 className="mb-4 text-xl font-bold text-black">Qualifications:</h4>
@@ -156,7 +157,7 @@ function Careers() {
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <h4 className="mb-4 text-xl font-bold text-black">Benefits:</h4>
@@ -173,7 +174,7 @@ function Careers() {
           className="mb-6 flex flex-col justify-center gap-4 sm:flex-row"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={viewportPreset}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           {indeedUrl && (
@@ -203,7 +204,7 @@ function Careers() {
             className="text-center text-sm text-gray-600"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {submissionEmail && `Email to ${submissionEmail}`}

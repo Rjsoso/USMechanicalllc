@@ -700,8 +700,8 @@ footer {
     contain-intrinsic-size: auto 500px;
   }
 
-  /* Disable content-visibility for sections inside scroll-animated containers */
-  .has-scroll-animation section {
+  /* Disable content-visibility only inside scroll-animated wrappers */
+  .scroll-animated-wrapper section {
     content-visibility: visible;
   }
 }
@@ -737,11 +737,10 @@ body {
   }
 }
 
-/* Force GPU acceleration on all animated elements */
+/* Force GPU acceleration only on scroll-animated wrappers (Safety + Contact) */
 [class*='animate'],
 [class*='transition'],
-.has-scroll-animation *,
-.has-scroll-animation {
+.scroll-animated-wrapper {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   will-change: transform;

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 
 // Animate only when visible in viewport - only once per page visit
 // Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
@@ -242,13 +243,12 @@ const CompanyStats = ({ data: statsDataProp }) => {
       }
     )
 
-    // Delay to allow programmatic scrolls to complete before enabling observer
-    // Prevents bouncy scroll when navigating to services section
+    // Brief delay to allow programmatic scrolls to settle before enabling observer
     const timeoutId = setTimeout(() => {
       if (sectionRef.current) {
         observer.observe(sectionRef.current)
       }
-    }, 800) // Increased delay ensures smooth scrolls complete first
+    }, 150)
 
     return () => {
       clearTimeout(timeoutId)
@@ -277,7 +277,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
             className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {statsData.title}
@@ -290,7 +290,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
               className="flex flex-col items-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={viewportPreset}
               transition={{
                 duration: 0.5,
                 ease: [0.16, 1, 0.3, 1],

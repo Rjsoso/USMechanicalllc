@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -190,7 +191,7 @@ export default function ProjectDetail() {
               className="mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               <span className="inline-block rounded-full bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800">
@@ -204,7 +205,7 @@ export default function ProjectDetail() {
             className="section-title mb-8 text-5xl text-black md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             {projectData.title}
@@ -216,7 +217,7 @@ export default function ProjectDetail() {
               className="mb-12 text-xl leading-relaxed text-black"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {projectData.description}
@@ -228,7 +229,7 @@ export default function ProjectDetail() {
             className="mb-12 flex flex-col items-start gap-8 lg:flex-row lg:gap-12"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             {/* Carousel on left */}
@@ -383,7 +384,7 @@ export default function ProjectDetail() {
             className="mb-8 mt-16 flex justify-center"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             <a

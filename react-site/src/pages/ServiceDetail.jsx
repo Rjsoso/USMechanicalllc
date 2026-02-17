@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
@@ -230,7 +231,7 @@ export default function ServiceDetail() {
             className="section-title mb-8 text-5xl text-black md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             {serviceData.title}
@@ -242,7 +243,7 @@ export default function ServiceDetail() {
               className="mb-12 text-xl leading-relaxed text-black"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {serviceData.description}
@@ -255,7 +256,7 @@ export default function ServiceDetail() {
               className="prose prose-lg mb-12 max-w-none"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               <PortableText value={serviceData.fullDescription} />
@@ -269,7 +270,7 @@ export default function ServiceDetail() {
               className="mb-6 flex flex-col items-center gap-8 md:flex-row md:gap-12"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {/* Carousel on left, features on right (or reverse on mobile) */}

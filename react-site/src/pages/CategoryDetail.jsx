@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -217,7 +218,7 @@ export default function CategoryDetail() {
             className="section-title mb-6 text-5xl text-black md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             {categoryData.title}
@@ -229,7 +230,7 @@ export default function CategoryDetail() {
               className="mb-12 max-w-3xl text-xl leading-relaxed text-gray-700"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {categoryData.description}
@@ -242,7 +243,7 @@ export default function CategoryDetail() {
               className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {sortedProjects.map((project, index) => (

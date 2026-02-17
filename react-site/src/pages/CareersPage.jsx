@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -114,7 +115,7 @@ export default function CareersPage() {
             className="section-title mb-4 text-center text-5xl text-black md:text-6xl"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {heading}
@@ -124,7 +125,7 @@ export default function CareersPage() {
             className="mb-8 text-center text-2xl font-bold text-black md:text-3xl"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {jobTitle}
@@ -134,7 +135,7 @@ export default function CareersPage() {
             className="mb-8 text-center"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <ul className="inline-block space-y-2 text-left text-lg">
@@ -148,7 +149,7 @@ export default function CareersPage() {
             className="mx-auto mb-10 max-w-3xl text-center text-lg leading-relaxed text-black"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {jobDescription}
@@ -158,7 +159,7 @@ export default function CareersPage() {
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '0px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               <h3 className="mb-4 text-xl font-bold text-black">Qualifications:</h3>
@@ -173,7 +174,7 @@ export default function CareersPage() {
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '0px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               <h3 className="mb-4 text-xl font-bold text-black">Benefits:</h3>
@@ -189,7 +190,7 @@ export default function CareersPage() {
             className="mb-6 flex flex-col justify-center gap-4 sm:flex-row"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {indeedUrl && (
@@ -218,7 +219,7 @@ export default function CareersPage() {
               className="text-center text-sm text-gray-600"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '0px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               {submissionEmail && `Email to ${submissionEmail}`}

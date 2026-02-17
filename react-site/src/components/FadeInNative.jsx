@@ -24,8 +24,8 @@ function FadeInNative({ children, delay = 0, className = '' }) {
         }
       },
       {
-        threshold: 0.1, // Lower threshold for earlier trigger
-        rootMargin: '100px 0px', // Larger margin for anticipatory feel
+        threshold: 0.05,
+        rootMargin: '50px 0px',
       }
     )
 

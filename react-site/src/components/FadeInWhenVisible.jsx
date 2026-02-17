@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { motion } from 'framer-motion'
+import { viewportPreset } from '../utils/viewport'
 
 function FadeInWhenVisible({ children, delay = 0, className = '' }) {
   return (
@@ -8,15 +9,11 @@ function FadeInWhenVisible({ children, delay = 0, className = '' }) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.25, // Optimized for snappy modern feel
+        duration: 0.25,
         delay,
-        ease: [0.16, 1, 0.3, 1], // Snappier acceleration curve
+        ease: [0.16, 1, 0.3, 1],
       }}
-      viewport={{
-        once: true,
-        margin: '0px 0px -100px 0px', // Trigger slightly before element enters viewport
-        amount: 0.2, // Trigger when 20% visible for better performance
-      }}
+      viewport={viewportPreset}
       style={{
         transform: 'translateZ(0)', // Force GPU acceleration
         willChange: 'transform, opacity',

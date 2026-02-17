@@ -26,7 +26,6 @@ export default function Home() {
   const [portfolioData, setPortfolioData] = useState(null)
   const [statsData, setStatsData] = useState(null)
   const [aboutData, setAboutData] = useState(null)
-  const [allDataLoaded, setAllDataLoaded] = useState(false)
 
   // DOM refs for direct manipulation (no React re-renders)
   const scrollAnimatedElementRef = useRef(null)
@@ -185,99 +184,47 @@ export default function Home() {
     }
   }, [])
 
-  // Centralized data fetching - fetch ALL component data upfront in parallel
+  // Progressive data fetching - set state as each request completes so UI paints incrementally
   useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const [heroData, services, portfolio, stats, about] = await Promise.all([
-          // Hero background
-          client.fetch(`*[_type == "heroSection"][0]{
-            _id,
-            backgroundImage {
-              asset-> { _id, url }
-            }
-          }`),
-          // Services data (with full fields)
-          client.fetch(`*[_type == "ourServices"][0]{
-            sectionTitle,
-            descriptionText,
-            deliveryMethodsHeading,
-            deliveryMethodsFormHeadline,
-            deliveryMethodsFormCopy,
-            deliveryMethodsEmail,
-            deliveryMethods[] {
-              title, summary, badge, badgeTone,
-              backgroundImage { asset-> { url, _id }, alt },
-              body
-            },
-            servicesInfo[] {
-              title, description, backgroundType, backgroundColor, textColor,
-              backgroundImage { asset-> { _id, url }, alt },
-              slug { current },
-              fullDescription,
-              images[] {
-                asset-> { _id, url },
-                alt,
-                caption
-              },
-              features[] {
-                title,
-                description
-              }
-            }
-          }`),
-          // Portfolio data
-          Promise.all([
-            client.fetch(`*[_type == "portfolioCategory"] | order(order asc) {
-              _id, title, description,
-              image { asset-> { _id, url }, alt },
-              order
-            }`),
-            client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
-          ]).then(([categories, section]) => ({ categories, section })),
-          // Stats data
-          client.fetch(`*[_type == "companyStats"][0]{ 
-            sectionTitle, 
-            stats[]{ label, value, highlighted } 
-          }`),
-          // About and Safety data
-          client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
-            aboutTitle, aboutText,
-            aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption },
-            safetyTitle, safetyText,
-            safetyLogos[] {
-              image { asset-> { _id, url, originalFilename }, alt, caption },
-              icon, title, href
-            }
-          }`)
-        ])
+    let cancelled = false
 
-        // Set hero background
+    client
+      .fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`)
+      .then(heroData => {
+        if (cancelled) return
         if (heroData?.backgroundImage?.asset?.url) {
-          const bgUrl = `${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`
-          setHeroBackgroundUrl(bgUrl)
+          setHeroBackgroundUrl(`${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`)
         } else if (heroData?.backgroundImage) {
           const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
           if (url) setHeroBackgroundUrl(url)
         }
+      })
+      .catch(err => { if (!cancelled) console.error('[Home] Hero fetch error:', err) })
 
-        // Set all component data
-        setServicesData(services)
-        setPortfolioData(portfolio)
-        setStatsData(stats)
-        setAboutData(about)
-        setAllDataLoaded(true)
+    client
+      .fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`)
+      .then(services => { if (!cancelled) setServicesData(services) })
+      .catch(err => { if (!cancelled) console.error('[Home] Services fetch error:', err) })
 
-        if (process.env.NODE_ENV === 'development') {
-          console.log('[Home] All data loaded centrally:', { services, portfolio, stats, about })
-        }
-      } catch (error) {
-        console.error('[Home] Error fetching centralized data:', error)
-        setAllDataLoaded(true) // Still mark as loaded to show components with fallback data
-      }
-    }
+    Promise.all([
+      client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
+      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+    ])
+      .then(([categories, section]) => ({ categories, section }))
+      .then(portfolio => { if (!cancelled) setPortfolioData(portfolio) })
+      .catch(err => { if (!cancelled) console.error('[Home] Portfolio fetch error:', err) })
 
-    fetchAllData()
+    client
+      .fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`)
+      .then(stats => { if (!cancelled) setStatsData(stats) })
+      .catch(err => { if (!cancelled) console.error('[Home] Stats fetch error:', err) })
+
+    client
+      .fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
+      .then(about => { if (!cancelled) setAboutData(about) })
+      .catch(err => { if (!cancelled) console.error('[Home] About fetch error:', err) })
+
+    return () => { cancelled = true }
   }, [])
 
   // Skip contact animation ONCE when navigating directly
@@ -407,7 +354,10 @@ export default function Home() {
 
     // Smooth interpolation loop for buttery transforms
     const interpolate = () => {
-      // Check lock inside interpolation loop
+      if (document.hidden) {
+        animationFrameRef.current = null
+        return
+      }
       if (window.__scrollNavigationLock) return
       const current = lastScrollSlideRef.current
       const target = targetScrollSlideRef.current
@@ -432,7 +382,7 @@ export default function Home() {
     }
 
     const handleScroll = () => {
-      // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
+      if (document.hidden) return
       if (window.__scrollNavigationLock) {
         if (rafId) {
           cancelAnimationFrame(rafId)
@@ -506,11 +456,24 @@ export default function Home() {
       handleScroll()
     }
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = null
+        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      } else {
+        handleScroll()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('scroll', handleScrollOptimized, { passive: true })
     window.addEventListener('resize', handleScrollOptimized, { passive: true })
     handleScroll()
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       if (rafId) cancelAnimationFrame(rafId)
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
       if (observer) observer.disconnect()
@@ -529,6 +492,10 @@ export default function Home() {
     
     // Smooth interpolation loop for ultra-smooth Contact animation
     const interpolateContact = () => {
+      if (document.hidden) {
+        contactAnimationFrameRef.current = null
+        return
+      }
       if (window.__scrollNavigationLock) return
       
       const current = lastContactSlideRef.current
@@ -554,7 +521,7 @@ export default function Home() {
     }
     
     const handleContactScroll = () => {
-      // Skip scroll animations during navigation (check global flag FIRST - synchronous!)
+      if (document.hidden) return
       if (window.__scrollNavigationLock) {
         if (rafId) {
           cancelAnimationFrame(rafId)
@@ -576,11 +543,11 @@ export default function Home() {
         
         const contactWrapper = document.querySelector('#contact-wrapper')
         if (!contactWrapper) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('[Contact] ERROR: Wrapper not found!')
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[Contact] ERROR: Wrapper not found!')
+          }
+          return
         }
-        return
-      }
 
         const rect = contactWrapper.getBoundingClientRect()
         const viewportHeight = window.innerHeight
@@ -625,12 +592,25 @@ export default function Home() {
       }
     }
     
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = null
+        if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
+        contactAnimationFrameRef.current = null
+      } else {
+        handleContactScroll()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScroll, { passive: true })
     window.addEventListener('resize', handleContactScroll, { passive: true })
     handleContactScroll() // Check initial state
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       if (rafId) cancelAnimationFrame(rafId)
       if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
       window.removeEventListener('scroll', handleContactScroll)
@@ -649,44 +629,6 @@ export default function Home() {
       />
       <Header />
       
-      {/* Wait for all Sanity data to load before rendering main content - prevents blank sections and fallback messages */}
-      {!allDataLoaded && (
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
-        }}>
-          <div style={{
-            textAlign: 'center',
-            color: '#ffffff'
-          }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              border: '3px solid rgba(255,255,255,0.1)',
-              borderTopColor: '#ffffff',
-              borderRadius: '50%',
-              margin: '0 auto 20px',
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            <p style={{
-              fontSize: '16px',
-              fontWeight: 500,
-              opacity: 0.9
-            }}>Loading...</p>
-          </div>
-          <style>{`
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
-      )}
-      
-      {allDataLoaded && (
-      <>
       <main
         className="main-with-fixed-bg"
         style={{
@@ -703,7 +645,7 @@ export default function Home() {
 
           <div
             ref={scrollAnimatedElementRef}
-            className="has-scroll-animation"
+            className="has-scroll-animation scroll-animated-wrapper"
             style={{
               position: 'relative',
               transform: 'translate3d(0, 0px, 0)',
@@ -735,6 +677,7 @@ export default function Home() {
           <div
             ref={contactWrapperRef}
             id="contact-wrapper"
+            className="scroll-animated-wrapper"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -756,8 +699,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-      </>
-      )}
     </>
   )
 }

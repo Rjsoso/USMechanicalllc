@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
+import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -58,7 +59,7 @@ export default function PortfolioPage() {
             className="section-title text-center text-5xl text-white md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
             {sectionData?.sectionTitle || 'Portfolio'}
@@ -68,7 +69,7 @@ export default function PortfolioPage() {
               className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 0.9, y: 0 }}
-              viewport={{ once: true, margin: '500px' }}
+              viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
               {sectionData.sectionDescription}
@@ -78,7 +79,7 @@ export default function PortfolioPage() {
             className="mx-auto mt-6 max-w-3xl text-center text-base text-gray-300"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={viewportPreset}
             transition={{ duration: 0.25, delay: 0.1 }}
           >
             Browse our completed projects by category to see examples of our work in manufacturing facilities, healthcare centers, educational institutions, hospitality venues, data centers, and more.
@@ -95,7 +96,7 @@ export default function PortfolioPage() {
                 key={category._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '200px' }}
+                viewport={viewportPreset}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <div
