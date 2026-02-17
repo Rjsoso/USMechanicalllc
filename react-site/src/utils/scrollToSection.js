@@ -49,29 +49,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
       const element = document.querySelector(`#${sectionId}`)
 
       if (element) {
-        // For contact section with animation transform, verify it's at 0 before scrolling
-        if (sectionId === 'contact') {
-          const parentElement = element.parentElement
-          if (parentElement) {
-            const computedStyle = window.getComputedStyle(parentElement)
-            const transform = computedStyle.transform
-            debugWarn(`[DEBUG] Contact transform check: ${transform}`)
-            
-            // Check if transform is at identity (no translation)
-            // transform will be "none" or "matrix(1, 0, 0, 1, 0, 0)" when at 0
-            if (transform !== 'none' && transform !== 'matrix(1, 0, 0, 1, 0, 0)') {
-              debugWarn(`[DEBUG] Contact transform not ready, retrying... (current: ${transform})`)
-              if (retryCount < effectiveMaxRetries) {
-                retryCount++
-                setTimeout(attemptScroll, retryDelay)
-                return false
-              }
-            } else {
-              debugWarn(`[DEBUG] Contact transform ready: ${transform}`)
-            }
-          }
-        }
-
         // Element found - check if it's actually visible and has dimensions
         const rect = element.getBoundingClientRect()
         
@@ -92,46 +69,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 
         // Make sure element is actually rendered (has height)
         if (rect.height > 0) {
-          // For contact section, verify position stability
-          if (sectionId === 'contact') {
-            // Store position from previous check
-            if (!attemptScroll.lastContactTop) {
-              attemptScroll.lastContactTop = rect.top
-              attemptScroll.lastContactHeight = rect.height
-              debugWarn(`[DEBUG] Contact: First position check, storing baseline`)
-              if (retryCount < effectiveMaxRetries) {
-                retryCount++
-                setTimeout(attemptScroll, retryDelay)
-                return false
-              }
-            }
-            
-            // Check if position has stabilized
-            const topDiff = Math.abs(rect.top - attemptScroll.lastContactTop)
-            const heightDiff = Math.abs(rect.height - attemptScroll.lastContactHeight)
-            
-            if (topDiff > 5 || heightDiff > 10) {
-              // Position still changing - content still loading
-              debugWarn(`[DEBUG] Contact position unstable, retrying...`, {
-                topDiff,
-                heightDiff,
-                previousTop: attemptScroll.lastContactTop,
-                currentTop: rect.top,
-                previousHeight: attemptScroll.lastContactHeight,
-                currentHeight: rect.height
-              })
-              attemptScroll.lastContactTop = rect.top
-              attemptScroll.lastContactHeight = rect.height
-              if (retryCount < effectiveMaxRetries) {
-                retryCount++
-                setTimeout(attemptScroll, retryDelay)
-                return false
-              }
-            } else {
-              debugWarn(`[DEBUG] Contact position stable, proceeding with scroll`)
-            }
-          }
-          
           // Section-specific offset adjustments for optimal title visibility
           // Precise offsets calculated to position titles at 20-25px from viewport top
           const sectionOffsets = {
@@ -394,44 +331,22 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     
     // For contact, set flag to skip animation during scroll
     if (sectionId === 'contact') {
-      sessionStorage.setItem('skipContactAnimation', 'true')
       sessionStorage.setItem('scrollNavigationInProgress', 'true')
       
-      // Diagnostic: Log section heights at button click
-      const sections = ['hero', 'about', 'services', 'portfolio', 'contact'].map(id => {
-        const el = document.querySelector(`#${id}`)
-        return `${id}: ${el ? el.offsetHeight + 'px' : 'NOT FOUND'}`
-      }).join(', ')
-      debugWarn(`[DIAG] Page height: ${document.documentElement.scrollHeight}px | Sections: ${sections}`)
-      debugWarn(`[DEBUG] Contact navigation: Dispatched lock event, waiting for React to flush state...`)
+      // Reset contact wrapper transform via DOM for accurate position measurement
+      const contactWrapper = document.querySelector('#contact-wrapper')
+      if (contactWrapper) {
+        contactWrapper.style.transform = 'translate3d(0, 0px, 0)'
+        contactWrapper.style.webkitTransform = 'translate3d(0, 0px, 0)'
+      }
       
-      // Wait longer for React to flush the setContactSlide(0) state update to DOM
-      setTimeout(() => {
-        // Verify BOTH transforms are at 0 before scrolling
-        const contactWrapper = document.querySelector('#contact')?.parentElement
-        const scrollAnimWrapper = document.querySelector('.has-scroll-animation')
-        
-        let contactTransform = 'not found'
-        let scrollTransform = 'not found'
-        
-        if (contactWrapper) {
-          contactTransform = window.getComputedStyle(contactWrapper).transform
-        }
-        if (scrollAnimWrapper) {
-          scrollTransform = window.getComputedStyle(scrollAnimWrapper).transform
-        }
-        
-        debugWarn(`[DEBUG] Transforms after React flush:`, {
-          contactWrapper: contactTransform,
-          scrollAnimWrapper: scrollTransform
-        })
-        
+      // Scroll after next paint so the transform reset is applied before measuring
+      requestAnimationFrame(() => {
         const headerOffset = sectionOffsets[sectionId] || 180
-        debugWarn(`[DEBUG] Contact navigation: Starting scroll with offset ${headerOffset}`)
-        scrollToSection(sectionId, headerOffset, 100, 150).then(success => {
-          debugWarn(`[DEBUG] Contact scroll ${success ? 'succeeded' : 'failed'}`)
+        scrollToSection(sectionId, headerOffset, 50, 100).then(success => {
+          debug(`Contact scroll ${success ? 'succeeded' : 'failed'}`)
         })
-      }, 300) // React flush delay to freeze animations before scroll
+      })
     } else if (sectionId === 'portfolio') {
       // For portfolio, pre-calculate scroll animation state to prevent aggressive pop
       // Portfolio is below Safety, so scroll animation should be at max (-300px)

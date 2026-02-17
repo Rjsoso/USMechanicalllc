@@ -299,7 +299,6 @@ export default function Home() {
   // Listen for lock/unlock events (synchronous)
   useEffect(() => {
     const handleLock = () => {
-      setContactSlide(0)
       setContactWrapperToZero()
       skipContactAnimationOnce.current = true
       contactAnimationComplete.current = true
