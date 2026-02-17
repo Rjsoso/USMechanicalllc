@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, memo } from 'react'
 import { client, urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import Header from '../components/Header'
@@ -9,13 +9,11 @@ import Carousel from '../components/Carousel'
 import LogoLoop from '../components/LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
 
-export default function About() {
+function About() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  // eslint-disable-next-line no-unused-vars
-  const [isAnimating, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -575,3 +573,5 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     </>
   )
 }
+
+export default memo(About)

@@ -1,5 +1,5 @@
 /* global process */
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, memo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
@@ -11,7 +11,7 @@ import {
   getRemainingSubmissions,
 } from '../utils/rateLimit'
 
-export default function Contact() {
+function Contact() {
   const [contactData, setContactData] = useState(null)
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -509,3 +509,5 @@ export default function Contact() {
     </>
   )
 }
+
+export default memo(Contact)

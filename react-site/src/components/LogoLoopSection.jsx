@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { client, urlFor } from '../utils/sanity'
+import { debounce } from '../utils/debounce'
 import LogoLoop from './LogoLoop'
 
-export default function LogoLoopSection() {
+function LogoLoopSection() {
   const [logoData, setLogoData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
 
-  // Track window width for responsive logo sizing
+  // Track window width for responsive logo sizing with debouncing
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth)
+    const handleResize = debounce(() => setWindowWidth(window.innerWidth), 150)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -99,3 +100,5 @@ export default function LogoLoopSection() {
     </section>
   )
 }
+
+export default memo(LogoLoopSection)

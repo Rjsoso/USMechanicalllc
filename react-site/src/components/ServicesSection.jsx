@@ -257,7 +257,7 @@ const ServicesSection = () => {
             className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '500px' }}
+            viewport={{ once: true, margin: '100px' }}
             transition={{ duration: 0.25 }}
           >
             {servicesData.sectionTitle || 'Our Services'}
@@ -280,7 +280,7 @@ const ServicesSection = () => {
           className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '500px' }}
+          viewport={{ once: true, margin: '100px' }}
           transition={{ duration: 0.25 }}
         >
           {servicesData.sectionTitle || 'Our Services'}
@@ -291,10 +291,9 @@ const ServicesSection = () => {
       {/* Service Boxes and Delivery Methods - Full Width */}
       <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-0">
         {/* LEFT — SERVICE BOXES (full-bleed to the left edge) */}
-        <div className="flex-1 md:w-1/2">
-          <div className="ml-auto max-w-3xl space-y-4 px-6 md:pr-8 lg:pr-12">
-            {servicesData.servicesInfo &&
-              servicesData.servicesInfo.map((box, index) => {
+        <div className="flex-1 space-y-4 md:w-1/2">
+          {servicesData.servicesInfo &&
+            servicesData.servicesInfo.map((box, index) => {
                 // Calculate background style based on type
                 const getBoxBackgroundStyle = () => {
                   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
@@ -324,7 +323,7 @@ const ServicesSection = () => {
                 return (
                   <div
                     key={index}
-                    className="group relative transform overflow-hidden rounded-r-xl p-8 shadow transition-transform duration-200 ease-out focus-within:scale-105 hover:scale-105"
+                    className="group relative transform overflow-hidden p-8 shadow transition-transform duration-200 ease-out focus-within:scale-105 hover:scale-105"
                     style={{
                       ...backgroundStyle,
                       transform: 'translateZ(0)',
@@ -356,15 +355,13 @@ const ServicesSection = () => {
                   </div>
                 )
               })}
-          </div>
         </div>
 
         {/* RIGHT — DELIVERY METHODS CONTENT */}
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="flex flex-1 flex-col md:w-1/2">
-            <div className="mr-auto max-w-3xl px-6 md:pl-8 lg:pl-12">
-              {/* Horizontal Split Layout: 25% Nav | 75% Content */}
-              <div className="relative flex flex-1 flex-col overflow-hidden rounded-l-2xl border border-gray-200 bg-white shadow-2xl">
+            {/* Horizontal Split Layout: 25% Nav | 75% Content */}
+            <div className="relative flex flex-1 flex-col overflow-hidden border border-gray-200 bg-white shadow-2xl">
               {/* HEADER - Full Width Centered */}
               {servicesData.deliveryMethodsHeading && (
                 <div className="w-full border-b border-gray-200 bg-white px-8 py-6">
@@ -590,7 +587,6 @@ const ServicesSection = () => {
               </div>
             </div>
           </div>
-        </div>
         )}
       </div>
     </section>

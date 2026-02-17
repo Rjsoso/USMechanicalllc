@@ -18,8 +18,7 @@
   "dependencies": {
     "@sanity/structure": "^2.36.2",
     "@sanity/vision": "^4.22.0",
-    "sanity": "^4.22.0",
-    "styled-components": "^6.1.19"
+    "sanity": "^4.22.0"
   },
   "devDependencies": {
     "@sanity/cli": "^4.22.0",

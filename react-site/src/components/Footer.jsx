@@ -21,56 +21,44 @@ const FALLBACK_DATA = {
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
-  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true) // Tracks loading state for contact data
   const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
-    const fetchInfo = () => {
-      setLoading(true)
-      // Fetch contact data - exclude drafts to ensure consistency
-      client
-        .fetch(
-          `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
-          email,
-          licenseInfo,
-          footerCompanyDescription,
-          businessHours {
-            days,
-            hours
-          },
-          serviceArea,
-          footerBadge,
-          offices[] {
-            locationName,
-            address,
-            phone
-          }
-        }`
-        )
-        .then(res => {
-          setContactData(res)
-          setLoading(false)
-          if (!res) {
+    // Fetch contact data - exclude drafts to ensure consistency
+    client
+      .fetch(
+        `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
+        email,
+        licenseInfo,
+        footerCompanyDescription,
+        businessHours {
+          days,
+          hours
+        },
+        serviceArea,
+        footerBadge,
+        offices[] {
+          locationName,
+          address,
+          phone
+        }
+      }`
+      )
+      .then(res => {
+        setContactData(res)
+        setLoading(false)
+        if (!res) {
+          if (process.env.NODE_ENV === 'development') {
             console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
           }
-        })
-        .catch(err => {
-          console.error('Footer: Failed to fetch contact data from Sanity:', err)
-          setLoading(false)
-        })
-    }
-
-    fetchInfo()
-
-    // Refresh data when window regains focus
-    const handleFocus = () => {
-      fetchInfo()
-    }
-
-    window.addEventListener('focus', handleFocus)
-    return () => window.removeEventListener('focus', handleFocus)
+        }
+      })
+      .catch(err => {
+        console.error('Footer: Failed to fetch contact data from Sanity:', err)
+        setLoading(false)
+      })
   }, [])
 
   // Use Sanity data if available, otherwise use fallback

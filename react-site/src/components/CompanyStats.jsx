@@ -208,14 +208,6 @@ const CompanyStats = () => {
     }
 
     fetchData()
-
-    // Refresh data when window regains focus (helps catch updates)
-    const handleFocus = () => {
-      fetchData()
-    }
-
-    window.addEventListener('focus', handleFocus)
-    return () => window.removeEventListener('focus', handleFocus)
   }, [])
 
   // Watch when the section scrolls into view (only after data is loaded)

@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { client } from '../utils/sanity'
 import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
-import LoadingScreen from './LoadingScreen'
 import './DrawerMenu.css'
 
 const DrawerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [sections, setSections] = useState([])
-  const [showLoader, setShowLoader] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const hamburgerRef = useRef(null)
@@ -79,89 +77,41 @@ const DrawerMenu = () => {
 
   // Handle scroll to section or page navigation with 700ms loading screen
   const handleLinkClick = href => {
-    console.log('[DRAWER NAV] Click detected:', href)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DRAWER NAV] Click detected:', href)
+    }
     
     // Close drawer first
     setIsOpen(false)
-    console.log('[DRAWER NAV] Drawer closing...')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DRAWER NAV] Drawer closing...')
+    }
     
-    // Small delay to let drawer close animation complete (250ms)
-    // Then show loading screen with fade-in
+    // Small delay to let drawer close animation start (100ms for visual feedback)
     setTimeout(() => {
-      console.log('[DRAWER NAV] Drawer closed, showing loader at', Date.now())
-      setShowLoader(true)
-      
-      setTimeout(() => {
-      console.log('[DRAWER NAV] Starting navigation at', Date.now())
-      console.log('[DRAWER NAV] Current scroll position:', window.scrollY)
-      console.log('[DRAWER NAV] Current pathname:', location.pathname)
       // Check if it's a full page link (starts with /) or an anchor link (starts with #)
       if (href.startsWith('/') && !href.includes('#')) {
-        console.log('[DRAWER NAV] Branch: Full page route')
         // Full page navigation (e.g., /about, /careers, /portfolio, /contact)
         navigate(href)
-        // Hide loader immediately for page routes
-        console.log('[DRAWER NAV] Hiding loader immediately for page route')
-        setShowLoader(false)
       } else if (href.startsWith('/#')) {
-        console.log('[DRAWER NAV] Branch: Section on home (/#)')
         // Link to section on home page (e.g., /#services)
         const sectionId = href.replace('/#', '')
-        console.log('[DRAWER NAV] Navigating to section:', sectionId)
         navigateToSection(sectionId, navigate, location.pathname)
-        // Keep loader visible during scroll
-        console.log('[DRAWER NAV] Will hide loader in 150ms')
-        setTimeout(() => {
-          console.log('[DRAWER NAV] Hiding loader after section scroll')
-          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
-          setShowLoader(false)
-        }, 150)
       } else if (href.startsWith('/') && href.includes('#')) {
-        console.log('[DRAWER NAV] Branch: Page + section (/page#section)')
         // Link to section on specific page (e.g., /about#safety)
         const [path, section] = href.split('#')
-        console.log('[DRAWER NAV] Path:', path, 'Section:', section)
-        
-        // Navigate to the page first
         navigate(path)
         
-        // Use scrollToSection utility for proper offset handling
+        // Scroll to section after page loads
         setTimeout(() => {
           scrollToSection(section, 180, 50, 200)
-            .then(() => {
-              console.log(`Successfully scrolled to ${section}`)
-            })
-            .catch(err => {
-              console.error(`Error scrolling to ${section}:`, err)
-            })
-        }, 300) // Increased delay for page render
-        // Keep loader visible during page load and scroll
-        console.log('[DRAWER NAV] Will hide loader in 300ms')
-        setTimeout(() => {
-          console.log('[DRAWER NAV] Hiding loader after page+section navigation')
-          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
-          setShowLoader(false)
-        }, 300)
+        }, 100)
       } else if (href.startsWith('#')) {
-        console.log('[DRAWER NAV] Branch: Legacy anchor (#section)')
-        // Legacy anchor link - treat as home page section
+        // Simple anchor link on current page (e.g., #services)
         const sectionId = href.replace('#', '')
-        console.log('[DRAWER NAV] Navigating to section:', sectionId)
-        
-        // navigateToSection has built-in delays (300ms+ for React flush, retries, position checks)
-        // We need to wait longer for scroll to actually complete
-        // Keep loader visible for 600ms to cover the scroll time
-        setTimeout(() => {
-          console.log('[DRAWER NAV] Hiding loader after legacy anchor scroll')
-          console.log('[DRAWER NAV] Final scroll position:', window.scrollY)
-          setShowLoader(false)
-        }, 600) // Reduced from 1200ms to 600ms
-        
-        // Start navigation (this has its own internal delays)
         navigateToSection(sectionId, navigate, location.pathname)
       }
-      }, 700)
-    }, 250) // Delay to let drawer close smoothly
+    }, 100)
   }
 
   // Toggle drawer open/closed
@@ -230,9 +180,6 @@ const DrawerMenu = () => {
 
   return (
     <>
-      {/* Loading Screen Overlay */}
-      {showLoader && <LoadingScreen />}
-      
       {/* Hamburger Button */}
       <button
         ref={hamburgerRef}

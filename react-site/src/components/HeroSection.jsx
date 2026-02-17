@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
-import LoadingScreen from './LoadingScreen'
 
 // Fallback hero data - Last updated: 2026-01-29
 const defaultHeroData = {
@@ -26,42 +25,16 @@ const generateYearColor = () => {
 function HeroSection() {
   const [heroData, setHeroData] = useState(defaultHeroData)
   const [yearColor] = useState(() => generateYearColor())
-  const [showLoader, setShowLoader] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
   const handleButtonClick = (sectionId) => {
-    console.log('[HERO] Button click:', sectionId)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[HERO] Button click:', sectionId)
+    }
     
-    // Show loading screen
-    setShowLoader(true)
-    
-    // Wait 700ms (matching drawer navigation timing), then navigate
-    setTimeout(() => {
-      console.log('[HERO] Navigating to:', sectionId)
-      
-      // For contact, wait for unlock event to know correction is complete
-      if (sectionId === 'contact') {
-        const handleUnlock = () => {
-          // Wait 2000ms after unlock for smooth correction scroll to complete
-          // Smooth behavior makes correction invisible but takes more time
-          setTimeout(() => {
-            console.log('[HERO] Hiding loader after correction complete')
-            setShowLoader(false)
-          }, 2000)
-          window.removeEventListener('unlockContactAnimation', handleUnlock)
-        }
-        window.addEventListener('unlockContactAnimation', handleUnlock)
-        navigateToSection(sectionId, navigate, location.pathname)
-      } else {
-        // For other sections, use simple delay
-        navigateToSection(sectionId, navigate, location.pathname)
-        setTimeout(() => {
-          console.log('[HERO] Hiding loader')
-          setShowLoader(false)
-        }, 150)
-      }
-    }, 700)
+    // Navigate immediately without loading screen
+    navigateToSection(sectionId, navigate, location.pathname)
   }
 
   useEffect(() => {
@@ -122,31 +95,27 @@ function HeroSection() {
             setHeroData(heroDataWithDefaults)
           } else {
             // Use default data if Sanity returns null
-            console.warn(
-              'HeroSection: No published heroSection document found; using default fallback content.'
-            )
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(
+                'HeroSection: No published heroSection document found; using default fallback content.'
+              )
+            }
             setHeroData(defaultHeroData)
           }
         })
         .catch(error => {
           console.error('Error fetching hero section:', error)
           // On error, use default data
-          console.warn(
-            'HeroSection: Failed to fetch hero data from Sanity; using default fallback content.'
-          )
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(
+              'HeroSection: Failed to fetch hero data from Sanity; using default fallback content.'
+            )
+          }
           setHeroData(defaultHeroData)
         })
     }
 
     fetchHero()
-
-    // Refresh data when window regains focus (helps catch updates)
-    const handleFocus = () => {
-      fetchHero()
-    }
-
-    window.addEventListener('focus', handleFocus)
-    return () => window.removeEventListener('focus', handleFocus)
   }, [])
 
   return (
@@ -237,7 +206,9 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const sectionId = (heroData.secondButtonLink || '#careers').replace('#', '')
-                  console.warn(`[DEBUG] "${heroData.secondButtonText}" clicked → navigating to: ${sectionId}`)
+                  if (process.env.NODE_ENV === 'development') {
+                    console.warn(`[DEBUG] "${heroData.secondButtonText}" clicked → navigating to: ${sectionId}`)
+                  }
                   handleButtonClick(sectionId)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
@@ -248,9 +219,6 @@ function HeroSection() {
           </motion.div>
         )}
       </div>
-      
-      {/* Loading Screen Overlay */}
-      {showLoader && <LoadingScreen />}
     </section>
   )
 }

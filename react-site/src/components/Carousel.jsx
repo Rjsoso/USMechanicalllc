@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useMotionValue, useTransform } from 'motion/react'
+import { useEffect, useMemo, useRef, useState, memo } from 'react'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import './Carousel.css'
@@ -9,7 +9,7 @@ const VELOCITY_THRESHOLD = 500
 const GAP = 16
 const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
-function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
+const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
   const range = [
     -(index + 1) * trackItemOffset,
     -index * trackItemOffset,
@@ -46,7 +46,7 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
       </div>
     </motion.div>
   )
-}
+})
 
 export default function Carousel({
   items = [],
