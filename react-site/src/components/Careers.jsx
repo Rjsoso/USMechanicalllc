@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 
-export default function Careers() {
+function Careers() {
   const [careersData, setCareersData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -229,3 +229,5 @@ export default function Careers() {
     </section>
   )
 }
+
+export default memo(Careers)

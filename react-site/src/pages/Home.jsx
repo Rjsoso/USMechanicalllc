@@ -260,27 +260,28 @@ export default function Home() {
     }
   }, [])
   
-  // Poll for sessionStorage flag changes (for same-page navigation)
+  // Event-based communication instead of polling for better performance
   useEffect(() => {
-    const pollInterval = setInterval(() => {
-      if (sessionStorage.getItem('skipContactAnimation') === 'true' && !skipContactAnimationOnce.current) {
+    const handleSkipAnimation = () => {
+      if (!skipContactAnimationOnce.current) {
         setContactSlide(0)
         skipContactAnimationOnce.current = true
         sessionStorage.removeItem('skipContactAnimation')
         if (process.env.NODE_ENV === 'development') {
-          console.warn('[DEBUG] Contact: Animation skipped (polling detected), contactSlide set to 0')
+          console.warn('[DEBUG] Contact: Animation skipped (event-based), contactSlide set to 0')
         }
         
         setTimeout(() => {
           skipContactAnimationOnce.current = false
           if (process.env.NODE_ENV === 'development') {
-            console.warn('[DEBUG] Contact: Animation skip flag cleared after polling')
+            console.warn('[DEBUG] Contact: Animation skip flag cleared')
           }
         }, 2000)
       }
-    }, 50) // Poll every 50ms
+    }
     
-    return () => clearInterval(pollInterval)
+    window.addEventListener('skipContactAnimation', handleSkipAnimation)
+    return () => window.removeEventListener('skipContactAnimation', handleSkipAnimation)
   }, [])
   
   // Listen for pre-set scroll slide values (for navigation)
@@ -309,7 +310,7 @@ export default function Home() {
   useEffect(() => {
     let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 8 // 120fps max for high refresh rate displays
+    const THROTTLE = 16 // 60fps - smoother and more efficient than 120fps
     const INTERPOLATION_SPEED = 0.15 // Smooth interpolation factor
     
     // Cancel handler for lock event
@@ -441,7 +442,7 @@ export default function Home() {
   useEffect(() => {
     let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 8 // 120fps max - keep high for smooth animation
+    const THROTTLE = 16 // 60fps - smoother and more efficient
     const INTERPOLATION_SPEED = 0.15 // Match stats animation for consistency
     
     // Smooth interpolation loop for ultra-smooth Contact animation
