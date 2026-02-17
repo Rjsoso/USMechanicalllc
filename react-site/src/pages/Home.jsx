@@ -639,6 +639,11 @@ export default function Home() {
     }
   }, [])
 
+  // Wait for all Sanity data to load before rendering - prevents blank sections and fallback messages
+  if (!allDataLoaded) {
+    return null
+  }
+
   return (
     <>
       <SEO
