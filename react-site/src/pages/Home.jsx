@@ -1,23 +1,19 @@
 /* global process */
-import { useEffect, useLayoutEffect, useState, useRef, lazy, Suspense } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
-import SEO from '../components/SEO'
-import { scrollToSection } from '../utils/scrollToSection'
-import { client, urlFor } from '../utils/sanity'
-
-// Eager load - immediately visible above fold
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
-
-// Lazy load - below fold, loads on demand as user scrolls
-const CompanyStats = lazy(() => import('../components/CompanyStats'))
-const ServicesSection = lazy(() => import('../components/ServicesSection'))
-const Portfolio = lazy(() => import('../components/Portfolio'))
-const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
-const Careers = lazy(() => import('../components/Careers'))
-const Contact = lazy(() => import('../pages/Contact'))
-const Footer = lazy(() => import('../components/Footer'))
+import Footer from '../components/Footer'
+import SEO from '../components/SEO'
+import Contact from '../pages/Contact'
+import CompanyStats from '../components/CompanyStats'
+import ServicesSection from '../components/ServicesSection'
+import Portfolio from '../components/Portfolio'
+import LogoLoopSection from '../components/LogoLoopSection'
+import Careers from '../components/Careers'
+import { scrollToSection } from '../utils/scrollToSection'
+import { client, urlFor } from '../utils/sanity'
 
 export default function Home() {
   const location = useLocation()
@@ -609,18 +605,10 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <Suspense fallback={<div className="h-64 bg-transparent" />}>
-              <CompanyStats />
-            </Suspense>
-            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
-              <ServicesSection />
-            </Suspense>
-            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
-              <Portfolio />
-            </Suspense>
-            <Suspense fallback={<div className="h-40 bg-transparent" />}>
-              <LogoLoopSection />
-            </Suspense>
+            <CompanyStats />
+            <ServicesSection />
+            <Portfolio />
+            <LogoLoopSection />
           </div>
 
           <div
@@ -629,9 +617,7 @@ export default function Home() {
               zIndex: 4,
             }}
           >
-            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
-              <Careers />
-            </Suspense>
+            <Careers />
           </div>
 
           <div
@@ -653,16 +639,12 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
-              <Contact />
-            </Suspense>
+            <Contact />
           </div>
         </div>
       </main>
 
-      <Suspense fallback={<div className="h-96 bg-black" />}>
-        <Footer />
-      </Suspense>
+      <Footer />
     </>
   )
 }
