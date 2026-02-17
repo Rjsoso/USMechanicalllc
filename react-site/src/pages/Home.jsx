@@ -16,7 +16,6 @@ import { client, urlFor } from '../utils/sanity'
 
 export default function Home() {
   const location = useLocation()
-  const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
   const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
   
@@ -27,25 +26,8 @@ export default function Home() {
   const [aboutData, setAboutData] = useState(null)
   const [allDataLoaded, setAllDataLoaded] = useState(false)
 
-  // DOM refs for direct manipulation (no React re-renders)
+  // DOM ref for scroll-animated wrapper (direct manipulation, no React re-renders)
   const scrollAnimatedElementRef = useRef(null)
-  const contactWrapperRef = useRef(null)
-
-  // Refs for smooth scroll interpolation
-  const lastScrollSlideRef = useRef(0)
-  const targetScrollSlideRef = useRef(0)
-
-  // Contact slide animation state
-  const [contactSlide, setContactSlide] = useState(-150)
-  const contactAnimationComplete = useRef(false)
-  const skipContactAnimationOnce = useRef(false)
-  const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
-  
-  // Contact interpolation refs
-  const lastContactSlideRef = useRef(-150)
-  const targetContactSlideRef = useRef(-150)
-  
-  // Remove excessive debug logging - causes console flood
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -259,127 +241,15 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
-  // Force contact wrapper to visible position (refs + DOM) when skipping/locking animation
-  const setContactWrapperToZero = () => {
-    targetContactSlideRef.current = 0
-    lastContactSlideRef.current = 0
-    if (contactWrapperRef.current) {
-      contactWrapperRef.current.style.transform = 'translate3d(0, 0px, 0)'
-      contactWrapperRef.current.style.webkitTransform = 'translate3d(0, 0px, 0)'
-    }
-  }
+  // (Contact animation state removed — contact wrapper is now static; reveal is handled
+  //  entirely by the scroll wrapper sliding up via applyScrollAnimations Phase 2)
 
-  // Skip contact animation ONCE when navigating directly
+  // Scroll-triggered animation for the scroll wrapper (Portfolio/LogoLoop slide-up)
+  // Phase 1 — safety parallax: 0 → -150px   (existing behaviour)
+  // Phase 2 — contact reveal:  -150 → -300px (scroll wrapper peels away to reveal contact)
+  // Contact wrapper is static (permanent -150px transform) so the reveal is
+  // entirely driven by the wrapper above sliding upward.
   useEffect(() => {
-    const shouldSkipAnimation = 
-      sessionStorage.getItem('skipContactAnimation') === 'true' ||
-      location.state?.scrollTo === 'contact' || 
-      window.location.hash === '#contact'
-    
-    if (shouldSkipAnimation && !skipContactAnimationOnce.current) {
-      setContactSlide(0)
-      setContactWrapperToZero()
-      requestAnimationFrame(() => setContactWrapperToZero()) // in case wrapper not mounted yet
-      skipContactAnimationOnce.current = true
-      sessionStorage.removeItem('skipContactAnimation')
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[DEBUG] Contact: Animation skipped for direct navigation, contactSlide set to 0')
-      }
-      
-      setTimeout(() => {
-        skipContactAnimationOnce.current = false
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('[DEBUG] Contact: Animation skip flag cleared')
-        }
-      }, 2000)
-    }
-  }, [location.state?.scrollTo, location.hash])
-  
-  // Listen for lock/unlock events (synchronous)
-  useEffect(() => {
-    const handleLock = () => {
-      setContactWrapperToZero()
-      skipContactAnimationOnce.current = true
-      contactAnimationComplete.current = true
-      buttonNavigationUsed.current = true
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
-        console.warn('[BUTTON-NAV] buttonNavigationUsed set to TRUE - animation permanently disabled')
-      }
-    }
-    
-    const handleUnlock = () => {
-      skipContactAnimationOnce.current = false
-      contactAnimationComplete.current = false
-      buttonNavigationUsed.current = false
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[DEBUG] Contact: Animation UNLOCKED (event), scroll animation re-enabled')
-      }
-    }
-    
-    window.addEventListener('lockContactAnimation', handleLock)
-    window.addEventListener('unlockContactAnimation', handleUnlock)
-    
-    return () => {
-      window.removeEventListener('lockContactAnimation', handleLock)
-      window.removeEventListener('unlockContactAnimation', handleUnlock)
-    }
-  }, [])
-  
-  // Event-based communication instead of polling for better performance
-  useEffect(() => {
-    const handleSkipAnimation = () => {
-      if (!skipContactAnimationOnce.current) {
-        setContactSlide(0)
-        setContactWrapperToZero()
-        skipContactAnimationOnce.current = true
-        sessionStorage.removeItem('skipContactAnimation')
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('[DEBUG] Contact: Animation skipped (event-based), contactSlide set to 0')
-        }
-        
-        setTimeout(() => {
-          skipContactAnimationOnce.current = false
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('[DEBUG] Contact: Animation skip flag cleared')
-          }
-        }, 2000)
-      }
-    }
-    
-    window.addEventListener('skipContactAnimation', handleSkipAnimation)
-    return () => window.removeEventListener('skipContactAnimation', handleSkipAnimation)
-  }, [])
-  
-  // Listen for pre-set scroll slide values (for navigation)
-  useEffect(() => {
-    const handleSetScrollSlide = (event) => {
-      const value = event.detail?.value
-      if (typeof value === 'number') {
-        setScrollSlide(value)
-        lastScrollSlideRef.current = value
-        targetScrollSlideRef.current = value
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`[DEBUG] Scroll slide preset to ${value}px`)
-        }
-      }
-    }
-    
-    window.addEventListener('setScrollSlide', handleSetScrollSlide)
-    
-    return () => {
-      window.removeEventListener('setScrollSlide', handleSetScrollSlide)
-    }
-  }, [])
-
-  // Combined scroll-triggered animation for Safety parallax + Contact slide
-  // Caches layout positions (transforms don't affect offsetTop) and uses scrollY during scroll
-  // so the scroll handler does zero layout reads — pure math only
-  useEffect(() => {
-    const cancelPendingScrollAnimations = () => {}
-    window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
-
     // Walk offsetParent chain to get true document-relative top
     const getDocTop = (el) => {
       let top = 0
@@ -412,11 +282,10 @@ export default function Home() {
     // --- Apply transforms from scrollY + cached positions (zero DOM reads) ---
     const applyScrollAnimations = () => {
       if (document.hidden || window.__scrollNavigationLock) return
-      if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
 
       const scrollY = window.scrollY
 
-      // Safety parallax: safetyBottom is where the bottom of #safety sits in the viewport
+      // Phase 1 — safety parallax
       const safetyBottom = (safetyDocTop + safetyHeight) - scrollY
       const slideStart = viewportHeight * 0.25
       let safetyValue = 0
@@ -426,45 +295,29 @@ export default function Home() {
       } else if (safetyBottom < 0) {
         safetyValue = -150
       }
-      safetyValue = Math.round(safetyValue)
+
+      // Phase 2 — contact reveal (scroll wrapper slides an additional -150px)
+      let revealValue = 0
+      const contactTop = contactDocTop - scrollY
+      const revealStart = viewportHeight * 0.8
+      if (contactTop <= revealStart && contactTop >= 0) {
+        const progress = 1 - (contactTop / revealStart)
+        revealValue = -150 * progress
+      } else if (contactTop < 0) {
+        revealValue = -150
+      }
+
+      const totalOffset = Math.round(safetyValue + revealValue)
       if (scrollAnimatedElementRef.current) {
-        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${safetyValue}px, 0)`
-      }
-      lastScrollSlideRef.current = safetyValue
-      targetScrollSlideRef.current = safetyValue
-
-      // Contact slide: contactTop is where the layout top of #contact-wrapper sits in viewport
-      if (!buttonNavigationUsed.current) {
-        const contactTop = contactDocTop - scrollY
-        const animationStartDistance = viewportHeight * 1.2
-        let contactValue = -150
-        if (contactTop <= animationStartDistance && contactTop >= 0) {
-          const progress = 1 - (contactTop / animationStartDistance)
-          contactValue = -150 + (progress * 150)
-        } else if (contactTop < 0) {
-          contactValue = 0
-        }
-        contactValue = Math.round(contactValue)
-        if (contactWrapperRef.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${contactValue}px, 0)`
-        }
-        lastContactSlideRef.current = contactValue
-        targetContactSlideRef.current = contactValue
-      }
-    }
-
-    // --- Handle direct navigation to #contact ---
-    const handleMount = () => {
-      cachePositions()
-      if (window.location.hash === '#contact' || buttonNavigationUsed.current) {
-        targetContactSlideRef.current = 0
-        lastContactSlideRef.current = 0
-      } else {
-        applyScrollAnimations()
+        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${totalOffset}px, 0)`
       }
     }
 
     // Initial cache after React paint settles
+    const handleMount = () => {
+      cachePositions()
+      applyScrollAnimations()
+    }
     requestAnimationFrame(() => requestAnimationFrame(handleMount))
 
     // Recache on resize
@@ -503,7 +356,6 @@ export default function Home() {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
-      window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
 
@@ -566,23 +418,12 @@ export default function Home() {
           </div>
 
           <div
-            ref={contactWrapperRef}
             id="contact-wrapper"
-            className="scroll-animated-wrapper"
             style={{
               position: 'relative',
               zIndex: 1,
               transform: 'translate3d(0, -150px, 0)',
               WebkitTransform: 'translate3d(0, -150px, 0)',
-              transformStyle: 'preserve-3d',
-              WebkitTransformStyle: 'preserve-3d',
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              willChange: 'transform',
-              WebkitFontSmoothing: 'antialiased',
-              MozOsxFontSmoothing: 'grayscale',
-              contain: 'layout style paint',
-              isolation: 'isolate',
             }}
           >
             <Contact />
