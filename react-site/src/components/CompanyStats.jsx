@@ -156,13 +156,24 @@ const AnimatedNumber = memo(function AnimatedNumber({
   )
 })
 
-const CompanyStats = () => {
-  const [statsData, setStatsData] = useState(null)
+const CompanyStats = ({ data: statsDataProp }) => {
+  const [statsData, setStatsData] = useState(statsDataProp || null)
   const [inView, setInView] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!statsDataProp)
   const sectionRef = useRef(null)
 
+  // Update state when prop changes
   useEffect(() => {
+    if (statsDataProp) {
+      setStatsData(statsDataProp)
+      setLoading(false)
+    }
+  }, [statsDataProp])
+
+  useEffect(() => {
+    // Only fetch if no data provided via props (backward compatibility)
+    if (statsDataProp) return
+    
     const fetchData = async () => {
       try {
         // Fetch by specific document ID (matching deskStructure.ts)

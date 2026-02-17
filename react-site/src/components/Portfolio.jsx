@@ -3,40 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 
-function Portfolio() {
+function Portfolio({ data: portfolioDataProp }) {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState([])
-  const [sectionData, setSectionData] = useState(null)
+  const [categories, setCategories] = useState(portfolioDataProp?.categories || [])
+  const [sectionData, setSectionData] = useState(portfolioDataProp?.section || null)
   const [loadedImages, setLoadedImages] = useState(new Set())
 
+  // Update state when prop changes
   useEffect(() => {
-    // Fetch both portfolio categories and section data
-    Promise.all([
-      client.fetch(
-        `*[_type == "portfolioCategory"] | order(order asc) {
-          _id,
-          title,
-          description,
-          image {
-            asset-> {
-              _id,
-              url
-            },
-            alt
-          },
-          order
-        }`
-      ),
-      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`),
-    ])
-      .then(([categoriesData, sectionInfo]) => {
-        setCategories(categoriesData)
-        setSectionData(sectionInfo)
-      })
-      .catch(error => {
-        console.error('Error fetching portfolio data:', error)
-      })
-  }, [])
+    if (portfolioDataProp) {
+      setCategories(portfolioDataProp.categories || [])
+      setSectionData(portfolioDataProp.section || null)
+    }
+  }, [portfolioDataProp])
 
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])

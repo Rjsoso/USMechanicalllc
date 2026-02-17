@@ -8,9 +8,9 @@ import Carousel from './Carousel'
 import LogoLoop from './LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
 
-function AboutAndSafety() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
+function AboutAndSafety({ data: aboutDataProp }) {
+  const [data, setData] = useState(aboutDataProp || null)
+  const [loading, setLoading] = useState(!aboutDataProp)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -43,8 +43,18 @@ The result of this commitment to safety is an Experience Modification Rate (EMR)
 All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
   }
 
-  // Fetch all content from Sanity (text and images)
+  // Update state when prop changes
   useEffect(() => {
+    if (aboutDataProp) {
+      setData({ ...defaultData, ...aboutDataProp })
+      setLoading(false)
+    }
+  }, [aboutDataProp])
+
+  // Fetch all content from Sanity (text and images) - only if no prop data
+  useEffect(() => {
+    if (aboutDataProp) return // Skip fetch if data provided via props
+
     let isCancelled = false
 
     const fetchData = async () => {

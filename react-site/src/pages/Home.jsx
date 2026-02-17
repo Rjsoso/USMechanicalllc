@@ -20,6 +20,13 @@ export default function Home() {
   const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
   const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
+  
+  // Centralized data states for all components
+  const [servicesData, setServicesData] = useState(null)
+  const [portfolioData, setPortfolioData] = useState(null)
+  const [statsData, setStatsData] = useState(null)
+  const [aboutData, setAboutData] = useState(null)
+  const [allDataLoaded, setAllDataLoaded] = useState(false)
 
   // DOM refs for direct manipulation (no React re-renders)
   const scrollAnimatedElementRef = useRef(null)
@@ -178,32 +185,99 @@ export default function Home() {
     }
   }, [])
 
-  // Fetch hero background image from Sanity
+  // Centralized data fetching - fetch ALL component data upfront in parallel
   useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "heroSection"][0]{
-          _id,
-          backgroundImage {
-            asset-> {
-              _id,
-              url
+    const fetchAllData = async () => {
+      try {
+        const [heroData, services, portfolio, stats, about] = await Promise.all([
+          // Hero background
+          client.fetch(`*[_type == "heroSection"][0]{
+            _id,
+            backgroundImage {
+              asset-> { _id, url }
             }
-          }
-        }`
-      )
-      .then(data => {
-        if (data?.backgroundImage?.asset?.url) {
-          const bgUrl = `${data.backgroundImage.asset.url}?w=1920&q=85&auto=format`
+          }`),
+          // Services data (with full fields)
+          client.fetch(`*[_type == "ourServices"][0]{
+            sectionTitle,
+            descriptionText,
+            deliveryMethodsHeading,
+            deliveryMethodsFormHeadline,
+            deliveryMethodsFormCopy,
+            deliveryMethodsEmail,
+            deliveryMethods[] {
+              title, summary, badge, badgeTone,
+              backgroundImage { asset-> { url, _id }, alt },
+              body
+            },
+            servicesInfo[] {
+              title, description, backgroundType, backgroundColor, textColor,
+              backgroundImage { asset-> { _id, url }, alt },
+              slug { current },
+              fullDescription,
+              images[] {
+                asset-> { _id, url },
+                alt,
+                caption
+              },
+              features[] {
+                title,
+                description
+              }
+            }
+          }`),
+          // Portfolio data
+          Promise.all([
+            client.fetch(`*[_type == "portfolioCategory"] | order(order asc) {
+              _id, title, description,
+              image { asset-> { _id, url }, alt },
+              order
+            }`),
+            client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+          ]).then(([categories, section]) => ({ categories, section })),
+          // Stats data
+          client.fetch(`*[_type == "companyStats"][0]{ 
+            sectionTitle, 
+            stats[]{ label, value, highlighted } 
+          }`),
+          // About and Safety data
+          client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
+            aboutTitle, aboutText,
+            aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption },
+            safetyTitle, safetyText,
+            safetyLogos[] {
+              image { asset-> { _id, url, originalFilename }, alt, caption },
+              icon, title, href
+            }
+          }`)
+        ])
+
+        // Set hero background
+        if (heroData?.backgroundImage?.asset?.url) {
+          const bgUrl = `${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`
           setHeroBackgroundUrl(bgUrl)
-        } else if (data?.backgroundImage) {
-          const url = urlFor(data.backgroundImage)?.width(1920).quality(85).auto('format').url()
+        } else if (heroData?.backgroundImage) {
+          const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
           if (url) setHeroBackgroundUrl(url)
         }
-      })
-      .catch(error => {
-        console.error('Error fetching hero background:', error)
-      })
+
+        // Set all component data
+        setServicesData(services)
+        setPortfolioData(portfolio)
+        setStatsData(stats)
+        setAboutData(about)
+        setAllDataLoaded(true)
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Home] All data loaded centrally:', { services, portfolio, stats, about })
+        }
+      } catch (error) {
+        console.error('[Home] Error fetching centralized data:', error)
+        setAllDataLoaded(true) // Still mark as loaded to show components with fallback data
+      }
+    }
+
+    fetchAllData()
   }, [])
 
   // Skip contact animation ONCE when navigating directly
@@ -587,7 +661,7 @@ export default function Home() {
           <HeroSection />
         </section>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
-          <AboutAndSafety />
+          <AboutAndSafety data={aboutData} />
 
           <div
             ref={scrollAnimatedElementRef}
@@ -605,9 +679,9 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <CompanyStats />
-            <ServicesSection />
-            <Portfolio />
+            <CompanyStats data={statsData} />
+            <ServicesSection data={servicesData} />
+            <Portfolio data={portfolioData} />
             <LogoLoopSection />
           </div>
 

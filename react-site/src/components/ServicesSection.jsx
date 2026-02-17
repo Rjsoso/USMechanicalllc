@@ -5,9 +5,9 @@ import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
 import { canSubmitForm, recordSubmission, formatTimeRemaining } from '../utils/rateLimit'
 
-const ServicesSection = () => {
+const ServicesSection = ({ data: servicesDataProp }) => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody'
-  const [servicesData, setServicesData] = useState(null)
+  const [servicesData, setServicesData] = useState(servicesDataProp || null)
   const [expandedIndex, setExpandedIndex] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
   const [submitting, setSubmitting] = useState(false)
@@ -17,73 +17,12 @@ const ServicesSection = () => {
   const rotationIntervalRef = useRef(null)
   const userInteractionTimeoutRef = useRef(null)
 
+  // Update servicesData when prop changes
   useEffect(() => {
-    const fetchServices = () => {
-      client
-        .fetch(
-          `*[_type == "ourServices"][0]{
-            sectionTitle,
-            descriptionText,
-            deliveryMethodsHeading,
-            deliveryMethodsFormHeadline,
-            deliveryMethodsFormCopy,
-            deliveryMethodsEmail,
-            deliveryMethods[] {
-              title,
-              summary,
-              badge,
-              badgeTone,
-              backgroundImage {
-                asset-> {
-                  url,
-                  _id
-                },
-                alt
-              },
-              body
-            },
-            servicesInfo[] {
-              title,
-              description,
-              backgroundType,
-              backgroundColor,
-              textColor,
-              backgroundImage {
-                asset-> {
-                  _id,
-                  url
-                },
-                alt
-              },
-              slug {
-                current
-              },
-              fullDescription,
-              images[] {
-                asset-> {
-                  _id,
-                  url
-                },
-                alt,
-                caption
-              },
-              features[] {
-                title,
-                description
-              }
-            }
-          }`
-        )
-        .then(data => {
-          setServicesData(data)
-        })
-        .catch(error => {
-          console.error('Error fetching services from Sanity:', error)
-        })
+    if (servicesDataProp) {
+      setServicesData(servicesDataProp)
     }
-
-    fetchServices()
-  }, [])
+  }, [servicesDataProp])
 
   const handleLearnMore = useCallback(
     service => {
