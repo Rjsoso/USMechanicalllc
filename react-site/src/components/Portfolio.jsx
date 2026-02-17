@@ -53,7 +53,7 @@ function Portfolio() {
           className="section-title text-center text-5xl text-white md:text-6xl"
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '100px' }}
+          viewport={{ once: true, margin: '500px' }}
           transition={{ duration: 0.25 }}
         >
           {sectionData?.sectionTitle || 'Portfolio'}
@@ -63,7 +63,7 @@ function Portfolio() {
             className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={{ once: true, margin: '100px' }}
+            viewport={{ once: true, margin: '500px' }}
             transition={{ duration: 0.25 }}
           >
             {sectionData.sectionDescription}
