@@ -75,7 +75,7 @@ const DrawerMenu = () => {
     import('../pages/Contact').catch(() => {})
   }
 
-  // Handle scroll to section or page navigation with 700ms loading screen
+  // Handle scroll to section or page navigation
   const handleLinkClick = href => {
     if (process.env.NODE_ENV === 'development') {
       console.log('[DRAWER NAV] Click detected:', href)

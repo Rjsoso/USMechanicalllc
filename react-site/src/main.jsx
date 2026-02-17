@@ -36,24 +36,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 )
-
-// Mark body as loaded after React renders and content is in DOM
-// Use requestAnimationFrame to ensure content is painted
-// Track when page load started for minimum display time
-const loadStartTime = Date.now()
-
-requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    // Calculate how long to wait to reach minimum 300ms display time (just enough for smooth fade)
-    const elapsed = Date.now() - loadStartTime
-    const remainingTime = Math.max(0, 300 - elapsed)
-    
-    setTimeout(() => {
-      document.body.classList.add('loaded')
-      // Remove overlay completely after fade completes
-      setTimeout(() => {
-        document.body.classList.add('loaded-complete')
-      }, 150)
-    }, remainingTime)
-  })
-})
