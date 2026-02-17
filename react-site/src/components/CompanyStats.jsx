@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
-import { motion } from 'framer-motion'
 import { client } from '../utils/sanity'
-import { viewportPreset } from '../utils/viewport'
 
 // Animate only when visible in viewport - only once per page visit
 // Optimized for iOS/Safari: throttled updates every 50ms instead of every frame
@@ -273,30 +271,13 @@ const CompanyStats = ({ data: statsDataProp }) => {
     >
       <div className="mx-auto max-w-6xl text-center">
         {statsData.title && (
-          <motion.h2
-            className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <h2 className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl">
             {statsData.title}
-          </motion.h2>
+          </h2>
         )}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {statsData.stats?.map((item, idx) => (
-            <motion.div
-              key={idx}
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportPreset}
-              transition={{
-                duration: 0.5,
-                ease: [0.16, 1, 0.3, 1],
-                delay: idx * 0.15
-              }}
-            >
+            <div key={idx} className="flex flex-col items-center">
               <div className="mb-2 text-5xl font-extrabold text-[#dc2626]">
                 <AnimatedNumber
                   value={item.value}
@@ -306,7 +287,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
                 />
               </div>
               <p className="text-lg font-medium text-white">{item.label}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

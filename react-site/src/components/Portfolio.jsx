@@ -1,8 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import { viewportPreset } from '../utils/viewport'
 
 function Portfolio({ data: portfolioDataProp }) {
   const navigate = useNavigate()
@@ -29,25 +27,13 @@ function Portfolio({ data: portfolioDataProp }) {
     >
       {/* Portfolio Title */}
       <div className="mx-auto mb-12 max-w-7xl px-6">
-        <motion.h2
-          className="section-title text-center text-5xl text-white md:text-6xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportPreset}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <h2 className="section-title text-center text-5xl text-white md:text-6xl">
           {sectionData?.sectionTitle || 'Portfolio'}
-        </motion.h2>
+        </h2>
         {sectionData?.sectionDescription && (
-          <motion.p
-            className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 0.9, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          >
+          <p className="mx-auto mt-4 max-w-3xl text-center text-lg text-white opacity-90">
             {sectionData.sectionDescription}
-          </motion.p>
+          </p>
         )}
       </div>
 
@@ -57,18 +43,8 @@ function Portfolio({ data: portfolioDataProp }) {
           className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
         >
-          {displayCategories.map((category, index) => (
-            <motion.div
-              key={category._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportPreset}
-              transition={{
-                duration: 0.5,
-                ease: [0.16, 1, 0.3, 1],
-                delay: index * 0.1
-              }}
-            >
+          {displayCategories.map((category) => (
+            <div key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
                 className="group relative cursor-pointer overflow-hidden bg-gray-200"
@@ -116,7 +92,7 @@ function Portfolio({ data: portfolioDataProp }) {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

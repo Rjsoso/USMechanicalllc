@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
 import { canSubmitForm, recordSubmission, formatTimeRemaining } from '../utils/rateLimit'
-import { viewportPreset } from '../utils/viewport'
 
 const ServicesSection = ({ data: servicesDataProp }) => {
   const FORM_ENDPOINT = 'https://formspree.io/f/xgvrvody'
@@ -251,24 +250,12 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     >
       {/* Title and Description - Centered */}
       <div className="mx-auto max-w-7xl px-6 mb-12">
-        <motion.h2
-          className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportPreset}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <h2 className="section-title mb-12 text-center text-5xl text-white md:text-6xl">
           {servicesData.sectionTitle || 'Our Services'}
-        </motion.h2>
-        <motion.p
-          className="mb-0 text-left text-lg text-white"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportPreset}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        >
+        </h2>
+        <p className="mb-0 text-left text-lg text-white">
           {servicesData.descriptionText}
-        </motion.p>
+        </p>
       </div>
 
       {/* Service Boxes and Delivery Methods - Full Width */}
@@ -304,19 +291,11 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                 const backgroundStyle = getBoxBackgroundStyle()
 
                 return (
-                  <motion.div
+                  <div
                     key={index}
                     className="group relative overflow-hidden p-8 shadow transition-opacity duration-150 ease-out hover:opacity-90"
                     style={{
                       ...backgroundStyle,
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewportPreset}
-                    transition={{
-                      duration: 0.4,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: index * 0.1
                     }}
                   >
                     <h3
@@ -340,7 +319,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                       Learn More
                       <FiArrowRight className="h-4 w-4" />
                     </button>
-                  </motion.div>
+                  </div>
                 )
               })}
         </div>
@@ -353,15 +332,9 @@ const ServicesSection = ({ data: servicesDataProp }) => {
               {/* HEADER - Full Width Centered */}
               {servicesData.deliveryMethodsHeading && (
                 <div className="w-full border-b border-gray-200 bg-white px-8 py-6">
-                  <motion.h2
-                    className="section-title text-center text-4xl text-gray-900 md:text-5xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewportPreset}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                  >
+                  <h2 className="section-title text-center text-4xl text-gray-900 md:text-5xl">
                     {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
-                  </motion.h2>
+                  </h2>
                 </div>
               )}
 
