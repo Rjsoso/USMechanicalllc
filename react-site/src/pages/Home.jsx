@@ -311,9 +311,10 @@ export default function Home() {
     
     const handleUnlock = () => {
       skipContactAnimationOnce.current = false
-      // Keep contactAnimationComplete and buttonNavigationUsed true - animation stays disabled
+      contactAnimationComplete.current = false
+      buttonNavigationUsed.current = false
       if (process.env.NODE_ENV === 'development') {
-        console.warn('[DEBUG] Contact: Animation UNLOCKED (event)')
+        console.warn('[DEBUG] Contact: Animation UNLOCKED (event), scroll animation re-enabled')
       }
     }
     
