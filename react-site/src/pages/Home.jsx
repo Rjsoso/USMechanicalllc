@@ -35,7 +35,6 @@ export default function Home() {
   // Refs for smooth scroll interpolation
   const lastScrollSlideRef = useRef(0)
   const targetScrollSlideRef = useRef(0)
-  const animationFrameRef = useRef(null)
 
   // Contact slide animation state
   const [contactSlide, setContactSlide] = useState(-600)
@@ -43,10 +42,9 @@ export default function Home() {
   const skipContactAnimationOnce = useRef(false)
   const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
   
-  // Contact interpolation refs for ultra-smooth motion
+  // Contact interpolation refs
   const lastContactSlideRef = useRef(-600)
   const targetContactSlideRef = useRef(-600)
-  const contactAnimationFrameRef = useRef(null)
   
   // Remove excessive debug logging - causes console flood
 
@@ -377,52 +375,55 @@ export default function Home() {
   }, [])
 
   // Combined scroll-triggered animation for Safety parallax + Contact slide
-  // Reads positions on every scroll event (cheap for 2 elements) and smoothly interpolates
+  // Uses requestAnimationFrame so interpolation syncs with the display's native refresh rate
   useEffect(() => {
-    const INTERPOLATION_SPEED = 0.25
-    const INTERP_MS = 16 // ~60fps interpolation for smooth catch-up
+    const INTERPOLATION_SPEED = 0.2
+    let rafId = null
 
     const cancelPendingScrollAnimations = () => {}
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
-    // --- Single interval for both safety + contact interpolation ---
-    const intervalId = setInterval(() => {
-      if (document.hidden || window.__scrollNavigationLock) return
-
-      // Safety interpolation
-      const sCurrent = lastScrollSlideRef.current
-      const sTarget = targetScrollSlideRef.current
-      const sDiff = sTarget - sCurrent
-      if (Math.abs(sDiff) > 0.1) {
-        const sNew = sCurrent + sDiff * INTERPOLATION_SPEED
-        lastScrollSlideRef.current = sNew
-        if (scrollAnimatedElementRef.current) {
-          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sNew}px, 0)`
+    // --- RAF loop: interpolate both safety + contact every frame at native refresh rate ---
+    const interpolate = () => {
+      if (!document.hidden && !window.__scrollNavigationLock) {
+        // Safety interpolation
+        const sCurrent = lastScrollSlideRef.current
+        const sTarget = targetScrollSlideRef.current
+        const sDiff = sTarget - sCurrent
+        if (Math.abs(sDiff) > 0.1) {
+          const sNew = sCurrent + sDiff * INTERPOLATION_SPEED
+          lastScrollSlideRef.current = sNew
+          if (scrollAnimatedElementRef.current) {
+            scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sNew}px, 0)`
+          }
+        } else if (sCurrent !== sTarget) {
+          lastScrollSlideRef.current = sTarget
+          if (scrollAnimatedElementRef.current) {
+            scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sTarget}px, 0)`
+          }
         }
-      } else if (sCurrent !== sTarget) {
-        lastScrollSlideRef.current = sTarget
-        if (scrollAnimatedElementRef.current) {
-          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sTarget}px, 0)`
+
+        // Contact interpolation
+        const cCurrent = lastContactSlideRef.current
+        const cTarget = targetContactSlideRef.current
+        const cDiff = cTarget - cCurrent
+        if (Math.abs(cDiff) > 1) {
+          const cNew = cCurrent + cDiff * INTERPOLATION_SPEED
+          lastContactSlideRef.current = cNew
+          if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+            contactWrapperRef.current.style.transform = `translate3d(0, ${cNew}px, 0)`
+          }
+        } else if (cCurrent !== cTarget) {
+          lastContactSlideRef.current = cTarget
+          if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+            contactWrapperRef.current.style.transform = `translate3d(0, ${cTarget}px, 0)`
+          }
         }
       }
 
-      // Contact interpolation
-      const cCurrent = lastContactSlideRef.current
-      const cTarget = targetContactSlideRef.current
-      const cDiff = cTarget - cCurrent
-      if (Math.abs(cDiff) > 1) {
-        const cNew = cCurrent + cDiff * INTERPOLATION_SPEED
-        lastContactSlideRef.current = cNew
-        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${cNew}px, 0)`
-        }
-      } else if (cCurrent !== cTarget) {
-        lastContactSlideRef.current = cTarget
-        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${cTarget}px, 0)`
-        }
-      }
-    }, INTERP_MS)
+      rafId = requestAnimationFrame(interpolate)
+    }
+    rafId = requestAnimationFrame(interpolate)
 
     // --- Safety target updater (runs every scroll event — 1 getBoundingClientRect is cheap) ---
     const updateSafetyTarget = () => {
@@ -507,7 +508,7 @@ export default function Home() {
     updateContactTarget('mount')
 
     return () => {
-      clearInterval(intervalId)
+      if (rafId) cancelAnimationFrame(rafId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       if (safetyObserver) safetyObserver.disconnect()
       window.removeEventListener('scroll', onScroll)
