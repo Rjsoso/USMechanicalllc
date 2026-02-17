@@ -11,7 +11,6 @@ import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
-import Careers from '../components/Careers'
 import { scrollToSection } from '../utils/scrollToSection'
 import { client, urlFor } from '../utils/sanity'
 
@@ -78,7 +77,7 @@ export default function Home() {
       if (!scrollTo || isPageReload.current) {
         // Clear any URL hash only if it's not a valid section
         if (window.location.hash) {
-          const validSections = ['contact', 'services', 'portfolio', 'about', 'safety', 'careers', 'hero']
+          const validSections = ['contact', 'services', 'portfolio', 'about', 'safety', 'hero']
           if (!validSections.includes(urlHash)) {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
@@ -159,7 +158,7 @@ export default function Home() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '')
       if (hash) {
-        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'careers', 'contact']
+        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'contact']
         if (validSections.includes(hash)) {
           if (process.env.NODE_ENV === 'development') {
             console.log(`Hash changed to #${hash}, scrolling to section`)
@@ -553,15 +552,6 @@ export default function Home() {
             <ServicesSection data={servicesData} />
             <Portfolio data={portfolioData} />
             <LogoLoopSection />
-          </div>
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 4,
-            }}
-          >
-            <Careers />
           </div>
 
           <div

@@ -13,15 +13,22 @@ const DesktopNav = () => {
     { label: 'Safety', sectionId: 'safety' },
     { label: 'Services', sectionId: 'services' },
     { label: 'Portfolio', sectionId: 'portfolio' },
-    { label: 'Careers', sectionId: 'careers' },
+    { label: 'Careers', path: '/careers' },
     { label: 'Contact', sectionId: 'contact' },
   ]
 
-  const handleNavClick = (sectionId) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[DESKTOP NAV] Navigating to:', sectionId)
+  const handleNavClick = (link) => {
+    if (link.path) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DESKTOP NAV] Navigating to page:', link.path)
+      }
+      navigate(link.path)
+    } else {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DESKTOP NAV] Navigating to section:', link.sectionId)
+      }
+      navigateToSection(link.sectionId, navigate, location.pathname)
     }
-    navigateToSection(sectionId, navigate, location.pathname)
   }
 
   return (
@@ -29,10 +36,10 @@ const DesktopNav = () => {
       <div className="desktop-nav-container">
         <ul className="desktop-nav-list">
           {navLinks.map((link) => (
-            <li key={link.sectionId} className="desktop-nav-item">
+            <li key={link.sectionId || link.path} className="desktop-nav-item">
               <button
                 className="desktop-nav-link"
-                onClick={() => handleNavClick(link.sectionId)}
+                onClick={() => handleNavClick(link)}
                 aria-label={`Navigate to ${link.label}`}
               >
                 {link.label}

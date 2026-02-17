@@ -140,7 +140,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
             'contact': 80,      // 80px from top - optimal positioning with correction loop
             'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
             'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
-            'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
             'hero': 0,          // full viewport, no adjustment needed
           }
           const effectiveOffset = sectionOffsets[sectionId] || headerOffset
@@ -237,72 +236,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
                 // Scroll still moving, reset counter
                 stableFrames = 0
                 debugWarn(`[SETTLE] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
-              }
-              
-              lastScrollY = currentScrollY
-              requestAnimationFrame(checkScrollSettled)
-            }
-            
-            // Start checking after initial scroll initiates
-            requestAnimationFrame(checkScrollSettled)
-          }
-          
-          // For careers section, wait for scroll to settle then apply correction
-          if (sectionId === 'careers') {
-            // Wait for scroll to settle using stability detection
-            let lastScrollY = -1
-            let stableFrames = 0
-            const requiredStableFrames = 2 // Need 2 consecutive frames with same scrollY
-            
-            const checkScrollSettled = () => {
-              const currentScrollY = window.scrollY
-              
-              if (currentScrollY === lastScrollY) {
-                stableFrames++
-                debugWarn(`[SETTLE-CAREERS] Scroll stable for ${stableFrames} frames at ${currentScrollY}px`)
-                
-                if (stableFrames >= requiredStableFrames) {
-                  // Scroll has settled, now measure and correct
-                  const heading = document.querySelector('#careers h2')
-                  if (!heading) {
-                    debugWarn(`[CORRECTION-CAREERS] Heading not found`)
-                    return
-                  }
-                  
-                  const headingRect = heading.getBoundingClientRect()
-                  const desiredHeadingPos = 70
-                  const correctedTarget = currentScrollY + headingRect.top - desiredHeadingPos
-                  
-                  debugWarn(`[CORRECTION-CAREERS] Scroll settled, measuring`, {
-                    currentHeadingPos: headingRect.top,
-                    desiredPos: desiredHeadingPos,
-                    currentScroll: currentScrollY,
-                    correctedTarget,
-                    discrepancy: headingRect.top - desiredHeadingPos
-                  })
-                  
-                  // Only correct if heading is not at desired position
-                  if (Math.abs(headingRect.top - desiredHeadingPos) > 10) {
-                    debugWarn(`[CORRECTION-CAREERS] Applying correction to ${correctedTarget}px`)
-                    window.scrollTo({
-                      top: correctedTarget,
-                      behavior: 'instant',
-                    })
-                    
-                    // Verify final position
-                    requestAnimationFrame(() => {
-                      const finalRect = heading.getBoundingClientRect()
-                      debugWarn(`[CORRECTION-CAREERS] Final position: ${finalRect.top}px from top`)
-                    })
-                  } else {
-                    debugWarn(`[CORRECTION-CAREERS] No correction needed, already at ${headingRect.top}px`)
-                  }
-                  return // Done
-                }
-              } else {
-                // Scroll still moving, reset counter
-                stableFrames = 0
-                debugWarn(`[SETTLE-CAREERS] Scroll moving: ${lastScrollY}px -> ${currentScrollY}px`)
               }
               
               lastScrollY = currentScrollY
@@ -419,7 +352,6 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     'contact': 190,     // User-guided: 180→-61.38px, adding +10 more per user observation
     'about': 60,        // Adjusted +50px total (10→25→45→60) for optimal logo clearance
     'safety': 90,       // Adjusted +40px total (50→65→80→90) for optimal logo clearance
-    'careers': 328,     // pt-8 (32px) + negative margin -20rem (320px) = 352px, adjusted to ~328px for 20-25px from top
     'hero': 0,          // full viewport, no adjustment needed
   }
   
@@ -466,7 +398,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
       sessionStorage.setItem('scrollNavigationInProgress', 'true')
       
       // Diagnostic: Log section heights at button click
-      const sections = ['hero', 'about', 'services', 'portfolio', 'careers', 'contact'].map(id => {
+      const sections = ['hero', 'about', 'services', 'portfolio', 'contact'].map(id => {
         const el = document.querySelector(`#${id}`)
         return `${id}: ${el ? el.offsetHeight + 'px' : 'NOT FOUND'}`
       }).join(', ')
