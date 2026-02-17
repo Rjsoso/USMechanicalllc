@@ -160,14 +160,12 @@ const AnimatedNumber = memo(function AnimatedNumber({
 const CompanyStats = ({ data: statsDataProp }) => {
   const [statsData, setStatsData] = useState(statsDataProp || null)
   const [inView, setInView] = useState(false)
-  const [loading, setLoading] = useState(!statsDataProp)
   const sectionRef = useRef(null)
 
   // Update state when prop changes
   useEffect(() => {
     if (statsDataProp) {
       setStatsData(statsDataProp)
-      setLoading(false)
     }
   }, [statsDataProp])
 
@@ -212,10 +210,8 @@ const CompanyStats = ({ data: statsDataProp }) => {
         }
 
         setStatsData(data)
-        setLoading(false)
       } catch (error) {
         console.error('Error fetching company stats:', error)
-        setLoading(false)
       }
     }
 

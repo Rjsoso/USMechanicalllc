@@ -101,9 +101,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
           setData(defaultData)
         }
       } finally {
-        if (!isCancelled) {
-          setLoading(false)
-        }
+        // Data fetch complete
       }
     }
 
