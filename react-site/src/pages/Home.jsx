@@ -185,39 +185,54 @@ export default function Home() {
     }
   }, [])
 
-  // Batched data fetch - single re-render when all data is ready (avoids jank from 5 updates during scroll)
+  // Batched data fetch - use allSettled so one failed fetch does not wipe hero/portfolio/etc.
   useEffect(() => {
     let cancelled = false
     const fetchAll = async () => {
-      try {
-        const [heroData, services, portfolio, stats, about] = await Promise.all([
-          client.fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`),
-          client.fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`),
-          Promise.all([
-            client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
-            client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
-          ]).then(([categories, section]) => ({ categories, section })),
-          client.fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`),
-          client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
-        ])
-        if (cancelled) return
+      const heroPromise = client.fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`)
+      const servicesPromise = client.fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`)
+      const portfolioPromise = Promise.all([
+        client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
+        client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+      ]).then(([categories, section]) => ({ categories, section }))
+      const statsPromise = client.fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`)
+      const aboutPromise = client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
+
+      const [heroResult, servicesResult, portfolioResult, statsResult, aboutResult] = await Promise.allSettled([
+        heroPromise,
+        servicesPromise,
+        portfolioPromise,
+        statsPromise,
+        aboutPromise
+      ])
+
+      if (cancelled) return
+
+      if (heroResult.status === 'fulfilled' && heroResult.value) {
+        const heroData = heroResult.value
         if (heroData?.backgroundImage?.asset?.url) {
           setHeroBackgroundUrl(`${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`)
         } else if (heroData?.backgroundImage) {
           const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
           if (url) setHeroBackgroundUrl(url)
         }
-        setServicesData(services)
-        setPortfolioData(portfolio)
-        setStatsData(stats)
-        setAboutData(about)
-        setAllDataLoaded(true)
-      } catch (err) {
-        if (!cancelled) {
-          console.error('[Home] Fetch error:', err)
-          setAllDataLoaded(true)
-        }
+      } else if (heroResult.status === 'rejected') {
+        console.error('[Home] Hero fetch error:', heroResult.reason)
       }
+
+      if (servicesResult.status === 'fulfilled' && servicesResult.value != null) setServicesData(servicesResult.value)
+      else if (servicesResult.status === 'rejected') console.error('[Home] Services fetch error:', servicesResult.reason)
+
+      if (portfolioResult.status === 'fulfilled' && portfolioResult.value != null) setPortfolioData(portfolioResult.value)
+      else if (portfolioResult.status === 'rejected') console.error('[Home] Portfolio fetch error:', portfolioResult.reason)
+
+      if (statsResult.status === 'fulfilled' && statsResult.value != null) setStatsData(statsResult.value)
+      else if (statsResult.status === 'rejected') console.error('[Home] Stats fetch error:', statsResult.reason)
+
+      if (aboutResult.status === 'fulfilled' && aboutResult.value != null) setAboutData(aboutResult.value)
+      else if (aboutResult.status === 'rejected') console.error('[Home] About fetch error:', aboutResult.reason)
+
+      setAllDataLoaded(true)
     }
     fetchAll()
     return () => { cancelled = true }
