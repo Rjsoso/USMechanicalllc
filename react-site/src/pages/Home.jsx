@@ -1,25 +1,33 @@
 /* global process */
-import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef, lazy, Suspense } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
-import HeroSection from '../components/HeroSection'
-import AboutAndSafety from '../components/AboutAndSafety'
-import Footer from '../components/Footer'
 import SEO from '../components/SEO'
-import Contact from '../pages/Contact'
-import CompanyStats from '../components/CompanyStats'
-import ServicesSection from '../components/ServicesSection'
-import Portfolio from '../components/Portfolio'
-import LogoLoopSection from '../components/LogoLoopSection'
-import Careers from '../components/Careers'
 import { scrollToSection } from '../utils/scrollToSection'
 import { client, urlFor } from '../utils/sanity'
+
+// Eager load - immediately visible above fold
+import HeroSection from '../components/HeroSection'
+import AboutAndSafety from '../components/AboutAndSafety'
+
+// Lazy load - below fold, loads on demand as user scrolls
+const CompanyStats = lazy(() => import('../components/CompanyStats'))
+const ServicesSection = lazy(() => import('../components/ServicesSection'))
+const Portfolio = lazy(() => import('../components/Portfolio'))
+const LogoLoopSection = lazy(() => import('../components/LogoLoopSection'))
+const Careers = lazy(() => import('../components/Careers'))
+const Contact = lazy(() => import('../pages/Contact'))
+const Footer = lazy(() => import('../components/Footer'))
 
 export default function Home() {
   const location = useLocation()
   const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
   const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
+
+  // DOM refs for direct manipulation (no React re-renders)
+  const scrollAnimatedElementRef = useRef(null)
+  const contactWrapperRef = useRef(null)
 
   // Refs for smooth scroll interpolation
   const lastScrollSlideRef = useRef(0)
@@ -336,15 +344,19 @@ export default function Home() {
       const diff = target - current
 
       if (Math.abs(diff) > 0.1) {
-        // Smooth interpolation
+        // Smooth interpolation - direct DOM manipulation (no React re-render)
         const newValue = current + diff * INTERPOLATION_SPEED
         lastScrollSlideRef.current = newValue
-        setScrollSlide(newValue)
+        if (scrollAnimatedElementRef.current) {
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+        }
         animationFrameRef.current = requestAnimationFrame(interpolate)
       } else {
         // Snap to final value
         lastScrollSlideRef.current = target
-        setScrollSlide(target)
+        if (scrollAnimatedElementRef.current) {
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${target}px, 0)`
+        }
         animationFrameRef.current = null
       }
     }
@@ -454,15 +466,19 @@ export default function Home() {
       const diff = target - current
 
       if (Math.abs(diff) > 1) {
-        // Smooth interpolation - using 1px threshold to prevent micro-updates
+        // Smooth interpolation - direct DOM manipulation (no React re-render)
         const newValue = current + diff * INTERPOLATION_SPEED
         lastContactSlideRef.current = newValue
-        setContactSlide(newValue)
+        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+          contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+        }
         contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
       } else {
         // Snap to exact final value when within 1px
         lastContactSlideRef.current = target
-        setContactSlide(target)
+        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+          contactWrapperRef.current.style.transform = `translate3d(0, ${target}px, 0)`
+        }
         contactAnimationFrameRef.current = null
       }
     }
@@ -578,11 +594,12 @@ export default function Home() {
           <AboutAndSafety />
 
           <div
+            ref={scrollAnimatedElementRef}
             className="has-scroll-animation"
             style={{
               position: 'relative',
-              transform: `translate3d(0, ${scrollSlide}px, 0)`,
-              WebkitTransform: `translate3d(0, ${scrollSlide}px, 0)`,
+              transform: 'translate3d(0, 0px, 0)',
+              WebkitTransform: 'translate3d(0, 0px, 0)',
               transformStyle: 'preserve-3d',
               WebkitTransformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
@@ -592,10 +609,18 @@ export default function Home() {
               isolation: 'isolate',
             }}
           >
-            <CompanyStats />
-            <ServicesSection />
-            <Portfolio />
-            <LogoLoopSection />
+            <Suspense fallback={<div className="h-64 bg-transparent" />}>
+              <CompanyStats />
+            </Suspense>
+            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
+              <ServicesSection />
+            </Suspense>
+            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
+              <Portfolio />
+            </Suspense>
+            <Suspense fallback={<div className="h-40 bg-transparent" />}>
+              <LogoLoopSection />
+            </Suspense>
           </div>
 
           <div
@@ -604,42 +629,40 @@ export default function Home() {
               zIndex: 4,
             }}
           >
-            <Careers />
+            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
+              <Careers />
+            </Suspense>
           </div>
 
           <div
+            ref={contactWrapperRef}
             id="contact-wrapper"
-            style={
-              buttonNavigationUsed.current
-                ? {
-                    // No transform - Contact in natural position after button nav
-                    position: 'relative',
-                    zIndex: 2,
-                  }
-                : {
-                    // Animation active - use smooth sub-pixel values
-                    transform: `translate3d(0, ${contactSlide}px, 0)`,
-                    WebkitTransform: `translate3d(0, ${contactSlide}px, 0)`,
-                    transformStyle: 'preserve-3d',
-                    WebkitTransformStyle: 'preserve-3d',
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                    willChange: 'transform',
-                    WebkitFontSmoothing: 'antialiased',
-                    MozOsxFontSmoothing: 'grayscale',
-                    contain: 'layout style paint',
-                    isolation: 'isolate',
-                    position: 'relative',
-                    zIndex: 2,
-                  }
-            }
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              transform: 'translate3d(0, -600px, 0)',
+              WebkitTransform: 'translate3d(0, -600px, 0)',
+              transformStyle: 'preserve-3d',
+              WebkitTransformStyle: 'preserve-3d',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              willChange: 'transform',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              contain: 'layout style paint',
+              isolation: 'isolate',
+            }}
           >
-            <Contact />
+            <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
+              <Contact />
+            </Suspense>
           </div>
         </div>
       </main>
 
-      <Footer />
+      <Suspense fallback={<div className="h-96 bg-black" />}>
+        <Footer />
+      </Suspense>
     </>
   )
 }
