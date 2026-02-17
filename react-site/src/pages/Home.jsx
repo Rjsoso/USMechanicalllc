@@ -376,9 +376,9 @@ export default function Home() {
   // Use setInterval for interpolation so RAF is left for stats + logo loop (no competing loops)
   useEffect(() => {
     let lastScrollTime = 0
-    const THROTTLE = 16
+    const THROTTLE = 50 // Fewer getBoundingClientRect calls during scroll = less jank for stats/logo
     const INTERPOLATION_SPEED = 0.15
-    const SCROLL_INTERP_MS = 40 // ~25fps - leaves RAF budget for stats and logo
+    const SCROLL_INTERP_MS = 40
 
     const cancelPendingScrollAnimations = () => {
       // Interval keeps running; lock just prevents updates
@@ -467,7 +467,7 @@ export default function Home() {
   // Contact section progressive slide - setInterval so RAF is left for stats + logo loop
   useEffect(() => {
     let lastScrollTime = 0
-    const THROTTLE = 16
+    const THROTTLE = 50
     const INTERPOLATION_SPEED = 0.15
     const CONTACT_INTERP_MS = 40
 
