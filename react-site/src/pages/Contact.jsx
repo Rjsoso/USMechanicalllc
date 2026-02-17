@@ -294,11 +294,6 @@ function Contact() {
       >
         {/* Background removed - hero's fixed background shows through */}
         <div className="relative z-10 mx-auto max-w-6xl">
-          {loading && (
-            <div className="flex items-center justify-center py-12">
-              <p className="text-center text-lg text-white">Loading contact...</p>
-            </div>
-          )}
 
           {(error || !contactData) && (
             <div className="flex items-center justify-center py-12">
