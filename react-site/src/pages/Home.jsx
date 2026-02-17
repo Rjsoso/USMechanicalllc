@@ -394,8 +394,11 @@ export default function Home() {
     
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
-    // Smooth interpolation loop for buttery transforms
-    const interpolate = () => {
+    // Throttle so stats and logo loop get frame time (run at ~30fps instead of 60)
+    const SCROLL_INTERP_INTERVAL_MS = 33
+    const lastScrollInterpRef = { current: 0 }
+
+    const interpolate = (timestamp) => {
       if (document.hidden) {
         animationFrameRef.current = null
         return
@@ -406,15 +409,17 @@ export default function Home() {
       const diff = target - current
 
       if (Math.abs(diff) > 0.1) {
-        // Smooth interpolation - direct DOM manipulation (no React re-render)
-        const newValue = current + diff * INTERPOLATION_SPEED
-        lastScrollSlideRef.current = newValue
-        if (scrollAnimatedElementRef.current) {
-          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+        const now = timestamp ?? performance.now()
+        if (now - lastScrollInterpRef.current >= SCROLL_INTERP_INTERVAL_MS) {
+          lastScrollInterpRef.current = now
+          const newValue = current + diff * INTERPOLATION_SPEED
+          lastScrollSlideRef.current = newValue
+          if (scrollAnimatedElementRef.current) {
+            scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+          }
         }
         animationFrameRef.current = requestAnimationFrame(interpolate)
       } else {
-        // Snap to final value
         lastScrollSlideRef.current = target
         if (scrollAnimatedElementRef.current) {
           scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${target}px, 0)`
@@ -462,9 +467,9 @@ export default function Home() {
           targetValue = -150
         }
 
-        // Set target and start interpolation
         targetScrollSlideRef.current = targetValue
         if (!animationFrameRef.current) {
+          lastScrollInterpRef.current = 0
           animationFrameRef.current = requestAnimationFrame(interpolate)
         }
       })
@@ -525,35 +530,38 @@ export default function Home() {
     }
   }, [])
 
-  // Contact section progressive slide animation
+  // Contact section progressive slide animation (throttled so stats/logo loop get frame time)
   useEffect(() => {
     let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 16 // 60fps - smoother and more efficient
-    const INTERPOLATION_SPEED = 0.15 // Match stats animation for consistency
-    
-    // Smooth interpolation loop for ultra-smooth Contact animation
-    const interpolateContact = () => {
+    const THROTTLE = 16
+    const INTERPOLATION_SPEED = 0.15
+    const CONTACT_INTERP_INTERVAL_MS = 33
+    const lastContactInterpRef = { current: 0 }
+
+    const interpolateContact = (timestamp) => {
       if (document.hidden) {
         contactAnimationFrameRef.current = null
         return
       }
       if (window.__scrollNavigationLock) return
-      
+
       const current = lastContactSlideRef.current
       const target = targetContactSlideRef.current
       const diff = target - current
 
       if (Math.abs(diff) > 1) {
-        // Smooth interpolation - direct DOM manipulation (no React re-render)
-        const newValue = current + diff * INTERPOLATION_SPEED
-        lastContactSlideRef.current = newValue
-        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+        const now = timestamp ?? performance.now()
+        if (now - lastContactInterpRef.current >= CONTACT_INTERP_INTERVAL_MS) {
+          lastContactInterpRef.current = now
+          const newValue = current + diff * INTERPOLATION_SPEED
+          lastContactSlideRef.current = newValue
+          if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+            contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+          }
         }
         contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
       } else {
-        // Snap to exact final value when within 1px
         lastContactSlideRef.current = target
         if (contactWrapperRef.current && !buttonNavigationUsed.current) {
           contactWrapperRef.current.style.transform = `translate3d(0, ${target}px, 0)`
@@ -614,6 +622,7 @@ export default function Home() {
         // ALWAYS set target, never call setContactSlide directly
         targetContactSlideRef.current = slideValue
         if (!contactAnimationFrameRef.current) {
+          lastContactInterpRef.current = 0
           contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
         }
       })
