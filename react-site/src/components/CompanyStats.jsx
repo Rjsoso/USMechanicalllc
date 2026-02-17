@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef, memo } from 'react'
 import { client } from '../utils/sanity'
 
+// #region agent log
+const _dbg = (message, data, hypothesisId) => { fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'af1d91' }, body: JSON.stringify({ sessionId: 'af1d91', location: 'CompanyStats.jsx', message, data: data || {}, hypothesisId, timestamp: Date.now() }) }).catch(() => {}); };
+// #endregion
+
 // Animate only when visible in viewport - only once per page visit.
 // Uses setInterval so scrolling (and other RAF work) doesn't starve or jank the count.
 const TICK_MS = 48 // ~20fps for count - smooth and independent of scroll/RAF
@@ -43,8 +47,13 @@ const AnimatedNumber = memo(function AnimatedNumber({
     startTimeRef.current = Date.now()
     setCount(startValue)
 
+    let tickCount = 0
     const intervalId = setInterval(() => {
       if (cancelledRef.current) return
+      tickCount += 1
+      // #region agent log
+      if (tickCount === 1 || tickCount % 15 === 0) _dbg('stats interval tick', { tick: tickCount, elapsed: Date.now() - startTimeRef.current }, 'H4');
+      // #endregion
       const elapsed = Date.now() - startTimeRef.current
       const progress = Math.min(elapsed / duration, 1)
       const easeProgress = 1 - Math.pow(1 - progress, 2)
@@ -173,6 +182,9 @@ const CompanyStats = ({ data: statsDataProp }) => {
         // Only trigger animation once on first intersection
         if (entry.isIntersecting && !hasAnimated) {
           hasAnimated = true
+          // #region agent log
+          _dbg('stats inView true', { timestamp: Date.now() }, 'H4');
+          // #endregion
           setInView(true)
           // Disconnect observer after first trigger to prevent retriggering
           observer.disconnect()

@@ -1,5 +1,9 @@
 /* global process */
 import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+
+// #region agent log
+const _dbg = (message, data, hypothesisId) => { fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'af1d91' }, body: JSON.stringify({ sessionId: 'af1d91', location: 'Home.jsx', message, data: data || {}, hypothesisId, timestamp: Date.now() }) }).catch(() => {}); };
+// #endregion
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -17,6 +21,8 @@ import { client, urlFor } from '../utils/sanity'
 
 export default function Home() {
   const location = useLocation()
+  const renderCountRef = useRef(0)
+  renderCountRef.current += 1
   const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
   const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
@@ -56,6 +62,13 @@ export default function Home() {
       (performance.getEntriesByType('navigation')[0]?.type === 'reload' ||
         performance.navigation?.type === 1)
   )
+
+  // #region agent log
+  useEffect(() => {
+    const c = renderCountRef.current
+    if (c <= 15 && (c === 1 || c % 5 === 0)) _dbg('Home render', { count: c }, 'H5')
+  })
+  // #endregion
 
   // Disable browser scroll restoration
   useLayoutEffect(() => {
@@ -252,6 +265,9 @@ export default function Home() {
       if (aboutResult.status === 'fulfilled' && aboutResult.value != null) setAboutData(aboutResult.value)
       else if (aboutResult.status === 'rejected') console.error('[Home] About fetch error:', aboutResult.reason)
 
+      // #region agent log
+      _dbg('allDataLoaded true', { navStart: typeof performance !== 'undefined' && performance.timing ? performance.timing.navigationStart : 0, timeToData: typeof performance !== 'undefined' && performance.timing ? Date.now() - performance.timing.navigationStart : 0 }, 'H1');
+      // #endregion
       setAllDataLoaded(true)
     }
     fetchAll()
@@ -260,6 +276,9 @@ export default function Home() {
 
   // Force contact wrapper to visible position (refs + DOM) when skipping/locking animation
   const setContactWrapperToZero = () => {
+    // #region agent log
+    _dbg('setContactWrapperToZero', { hash: typeof window !== 'undefined' ? window.location.hash : '' }, 'H3');
+    // #endregion
     targetContactSlideRef.current = 0
     lastContactSlideRef.current = 0
     if (contactWrapperRef.current) {
@@ -401,12 +420,15 @@ export default function Home() {
       }
     }, SCROLL_INTERP_MS)
 
-    const updateSafetyTarget = () => {
+    const updateSafetyTarget = (source) => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       const safetySection = document.querySelector('#safety')
       if (!safetySection) return
       const rect = safetySection.getBoundingClientRect()
+      // #region agent log
+      _dbg('updateSafetyTarget ran', { source: source || 'unknown' }, 'H2');
+      // #endregion
       const safetyBottom = rect.bottom
       const viewportHeight = window.innerHeight
       const slideStart = viewportHeight * 0.25
@@ -427,7 +449,7 @@ export default function Home() {
       if (scrollEndTimer) clearTimeout(scrollEndTimer)
       scrollEndTimer = setTimeout(() => {
         scrollEndTimer = null
-        updateSafetyTarget()
+        updateSafetyTarget('timeout')
       }, SCROLL_END_DEBOUNCE_MS)
     }
 
@@ -444,6 +466,9 @@ export default function Home() {
 
     const onScroll = () => {
       if (!isNearViewport) return
+      // #region agent log
+      _dbg('scheduleScrollEndUpdate (safety)', {}, 'H2');
+      // #endregion
       scheduleScrollEndUpdate()
     }
     const handleVisibilityChange = () => {
@@ -453,10 +478,11 @@ export default function Home() {
     document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
+    const safetyScrollEndHandler = () => updateSafetyTarget('scrollend')
     if ('onscrollend' in window) {
-      window.addEventListener('scrollend', updateSafetyTarget, { passive: true })
+      window.addEventListener('scrollend', safetyScrollEndHandler, { passive: true })
     }
-    updateSafetyTarget()
+    updateSafetyTarget('mount')
 
     return () => {
       clearInterval(intervalId)
@@ -465,7 +491,7 @@ export default function Home() {
       if (observer) observer.disconnect()
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      window.removeEventListener('scrollend', updateSafetyTarget)
+      window.removeEventListener('scrollend', safetyScrollEndHandler)
       window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
@@ -495,9 +521,15 @@ export default function Home() {
       }
     }, CONTACT_INTERP_MS)
 
-    const updateContactTarget = () => {
+    const updateContactTarget = (source) => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
+      // When user landed on #contact, skip effect already set refs/DOM to 0 — don't overwrite with -600 on mount
+      if (source === 'mount' && (window.location.hash === '#contact' || buttonNavigationUsed.current)) {
+        targetContactSlideRef.current = 0
+        lastContactSlideRef.current = 0
+        return
+      }
       const contactWrapper = document.querySelector('#contact-wrapper')
       if (!contactWrapper) return
       const rect = contactWrapper.getBoundingClientRect()
@@ -513,29 +545,37 @@ export default function Home() {
       } else {
         slideValue = -600
       }
+      // #region agent log
+      _dbg('updateContactTarget ran', { source: source || 'unknown', slideValue, rectTop: rect.top, hash: window.location.hash }, 'H2');
+      // #endregion
       targetContactSlideRef.current = slideValue
     }
 
     let scrollEndTimer = null
     const scheduleScrollEndUpdate = () => {
+      // #region agent log
+      _dbg('scheduleScrollEndUpdate (contact)', {}, 'H2');
+      // #endregion
       if (scrollEndTimer) clearTimeout(scrollEndTimer)
       scrollEndTimer = setTimeout(() => {
         scrollEndTimer = null
-        updateContactTarget()
+        updateContactTarget('timeout')
       }, SCROLL_END_DEBOUNCE_MS)
     }
 
     const handleVisibilityChange = () => {
-      if (!document.hidden) updateContactTarget()
+      if (!document.hidden) updateContactTarget('visibility')
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('scroll', scheduleScrollEndUpdate, { passive: true })
     window.addEventListener('resize', scheduleScrollEndUpdate, { passive: true })
+    const contactScrollEndHandler = () => updateContactTarget('scrollend')
     if ('onscrollend' in window) {
-      window.addEventListener('scrollend', updateContactTarget, { passive: true })
+      window.addEventListener('scrollend', contactScrollEndHandler, { passive: true })
     }
-    updateContactTarget()
+    updateContactTarget('mount')
+
 
     return () => {
       clearInterval(intervalId)
@@ -543,7 +583,7 @@ export default function Home() {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('scroll', scheduleScrollEndUpdate)
       window.removeEventListener('resize', scheduleScrollEndUpdate)
-      window.removeEventListener('scrollend', updateContactTarget)
+      window.removeEventListener('scrollend', contactScrollEndHandler)
     }
   }, [])
 
