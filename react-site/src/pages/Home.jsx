@@ -36,14 +36,14 @@ export default function Home() {
   const targetScrollSlideRef = useRef(0)
 
   // Contact slide animation state
-  const [contactSlide, setContactSlide] = useState(-600)
+  const [contactSlide, setContactSlide] = useState(-150)
   const contactAnimationComplete = useRef(false)
   const skipContactAnimationOnce = useRef(false)
   const buttonNavigationUsed = useRef(false) // Track if any button navigation happened
   
   // Contact interpolation refs
-  const lastContactSlideRef = useRef(-600)
-  const targetContactSlideRef = useRef(-600)
+  const lastContactSlideRef = useRef(-150)
+  const targetContactSlideRef = useRef(-150)
   
   // Remove excessive debug logging - causes console flood
 
@@ -436,11 +436,11 @@ export default function Home() {
       // Contact slide: contactTop is where the layout top of #contact-wrapper sits in viewport
       if (!buttonNavigationUsed.current) {
         const contactTop = contactDocTop - scrollY
-        const animationStartDistance = viewportHeight * 2.5
-        let contactValue = -600
+        const animationStartDistance = viewportHeight * 1.2
+        let contactValue = -150
         if (contactTop <= animationStartDistance && contactTop >= 0) {
           const progress = 1 - (contactTop / animationStartDistance)
-          contactValue = -600 + (progress * 600)
+          contactValue = -150 + (progress * 150)
         } else if (contactTop < 0) {
           contactValue = 0
         }
@@ -572,8 +572,8 @@ export default function Home() {
             style={{
               position: 'relative',
               zIndex: 1,
-              transform: 'translate3d(0, -600px, 0)',
-              WebkitTransform: 'translate3d(0, -600px, 0)',
+              transform: 'translate3d(0, -150px, 0)',
+              WebkitTransform: 'translate3d(0, -150px, 0)',
               transformStyle: 'preserve-3d',
               WebkitTransformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
