@@ -253,15 +253,9 @@ const ServicesSection = () => {
     return (
       <section id="services" className="bg-transparent pb-1 pt-12 text-white">
         <div className="mx-auto max-w-7xl px-6">
-          <motion.h2
-            className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '100px' }}
-            transition={{ duration: 0.25 }}
-          >
+          <h2 className="section-title mb-12 text-center text-5xl text-white md:text-6xl">
             {servicesData.sectionTitle || 'Our Services'}
-          </motion.h2>
+          </h2>
           <p className="text-center text-white">No services available.</p>
         </div>
       </section>
@@ -276,20 +270,14 @@ const ServicesSection = () => {
     >
       {/* Title and Description - Centered */}
       <div className="mx-auto max-w-7xl px-6 mb-12">
-        <motion.h2
-          className="section-title mb-12 text-center text-5xl text-white md:text-6xl"
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '100px' }}
-          transition={{ duration: 0.25 }}
-        >
+        <h2 className="section-title mb-12 text-center text-5xl text-white md:text-6xl">
           {servicesData.sectionTitle || 'Our Services'}
-        </motion.h2>
+        </h2>
         <p className="mb-0 text-left text-lg text-white">{servicesData.descriptionText}</p>
       </div>
 
       {/* Service Boxes and Delivery Methods - Full Width */}
-      <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-0">
+      <div className="flex flex-col items-stretch justify-center gap-10 md:flex-row md:gap-8">
         {/* LEFT — SERVICE BOXES (full-bleed to the left edge) */}
         <div className="flex-1 space-y-4 md:w-1/2">
           {servicesData.servicesInfo &&
@@ -323,12 +311,9 @@ const ServicesSection = () => {
                 return (
                   <div
                     key={index}
-                    className="group relative transform overflow-hidden p-8 shadow transition-transform duration-200 ease-out focus-within:scale-105 hover:scale-105"
+                    className="group relative overflow-hidden p-8 shadow transition-opacity duration-150 ease-out hover:opacity-90"
                     style={{
                       ...backgroundStyle,
-                      transform: 'translateZ(0)',
-                      WebkitFontSmoothing: 'antialiased',
-                      willChange: 'transform',
                     }}
                   >
                     <h3
@@ -347,7 +332,7 @@ const ServicesSection = () => {
                     )}
                     <button
                       onClick={() => handleLearnMore(box)}
-                      className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-white transition-all hover:-translate-y-1"
+                      className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-white transition-opacity duration-150 hover:opacity-80"
                     >
                       Learn More
                       <FiArrowRight className="h-4 w-4" />
@@ -404,17 +389,12 @@ const ServicesSection = () => {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTab}
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
                       transition={{
-                        duration: 0.25,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      style={{
-                        transform: 'translateZ(0)',
-                        willChange: 'transform, opacity',
-                        WebkitFontSmoothing: 'antialiased',
+                        duration: 0.15,
+                        ease: 'easeInOut',
                       }}
                       className="flex-1"
                     >
