@@ -376,35 +376,56 @@ export default function Home() {
     }
   }, [])
 
-  // Scroll-triggered animation for Stats + Services sliding under Safety
-  // Use setInterval for interpolation so RAF is left for stats + logo loop (no competing loops)
+  // Combined scroll-triggered animation for Safety parallax + Contact slide
+  // Single setInterval handles both interpolations to halve timer overhead
   useEffect(() => {
     const INTERPOLATION_SPEED = 0.15
-    const SCROLL_INTERP_MS = 33 // ~30fps for parallax catch-up
+    const INTERP_MS = 33 // ~30fps for both parallax animations
     const SCROLL_END_DEBOUNCE_MS = 120
 
     const cancelPendingScrollAnimations = () => {}
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
+    // --- Single interval for both safety + contact interpolation ---
     const intervalId = setInterval(() => {
       if (document.hidden || window.__scrollNavigationLock) return
-      const current = lastScrollSlideRef.current
-      const target = targetScrollSlideRef.current
-      const diff = target - current
-      if (Math.abs(diff) > 0.1) {
-        const newValue = current + diff * INTERPOLATION_SPEED
-        lastScrollSlideRef.current = newValue
+
+      // Safety interpolation
+      const sCurrent = lastScrollSlideRef.current
+      const sTarget = targetScrollSlideRef.current
+      const sDiff = sTarget - sCurrent
+      if (Math.abs(sDiff) > 0.1) {
+        const sNew = sCurrent + sDiff * INTERPOLATION_SPEED
+        lastScrollSlideRef.current = sNew
         if (scrollAnimatedElementRef.current) {
-          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sNew}px, 0)`
         }
-      } else {
-        lastScrollSlideRef.current = target
+      } else if (sCurrent !== sTarget) {
+        lastScrollSlideRef.current = sTarget
         if (scrollAnimatedElementRef.current) {
-          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${target}px, 0)`
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${sTarget}px, 0)`
         }
       }
-    }, SCROLL_INTERP_MS)
 
+      // Contact interpolation
+      const cCurrent = lastContactSlideRef.current
+      const cTarget = targetContactSlideRef.current
+      const cDiff = cTarget - cCurrent
+      if (Math.abs(cDiff) > 1) {
+        const cNew = cCurrent + cDiff * INTERPOLATION_SPEED
+        lastContactSlideRef.current = cNew
+        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+          contactWrapperRef.current.style.transform = `translate3d(0, ${cNew}px, 0)`
+        }
+      } else if (cCurrent !== cTarget) {
+        lastContactSlideRef.current = cTarget
+        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+          contactWrapperRef.current.style.transform = `translate3d(0, ${cTarget}px, 0)`
+        }
+      }
+    }, INTERP_MS)
+
+    // --- Safety target updater (getBoundingClientRect only when scroll stops) ---
     const updateSafetyTarget = (source) => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
@@ -426,84 +447,35 @@ export default function Home() {
       targetScrollSlideRef.current = targetValue
     }
 
-    let scrollEndTimer = null
-    const scheduleScrollEndUpdate = () => {
-      if (scrollEndTimer) clearTimeout(scrollEndTimer)
-      scrollEndTimer = setTimeout(() => {
-        scrollEndTimer = null
+    let safetyScrollEndTimer = null
+    const scheduleSafetyScrollEnd = () => {
+      if (safetyScrollEndTimer) clearTimeout(safetyScrollEndTimer)
+      safetyScrollEndTimer = setTimeout(() => {
+        safetyScrollEndTimer = null
         updateSafetyTarget('timeout')
       }, SCROLL_END_DEBOUNCE_MS)
     }
 
     const safetySection = document.querySelector('#safety')
     let isNearViewport = true
-    const observer = safetySection ? new IntersectionObserver(
+    const safetyObserver = safetySection ? new IntersectionObserver(
       ([entry]) => {
         isNearViewport = entry.isIntersecting
         if (isNearViewport) updateSafetyTarget()
       },
       { threshold: 0, rootMargin: '300px' }
     ) : null
-    if (observer && safetySection) observer.observe(safetySection)
+    if (safetyObserver && safetySection) safetyObserver.observe(safetySection)
 
-    const onScroll = () => {
+    const onSafetyScroll = () => {
       if (!isNearViewport) return
-      scheduleScrollEndUpdate()
-    }
-    const handleVisibilityChange = () => {
-      if (!document.hidden) updateSafetyTarget()
+      scheduleSafetyScrollEnd()
     }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-    const safetyScrollEndHandler = () => updateSafetyTarget('scrollend')
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', safetyScrollEndHandler, { passive: true })
-    }
-    updateSafetyTarget('mount')
-
-    return () => {
-      clearInterval(intervalId)
-      if (scrollEndTimer) clearTimeout(scrollEndTimer)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      if (observer) observer.disconnect()
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      window.removeEventListener('scrollend', safetyScrollEndHandler)
-      window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
-    }
-  }, [])
-
-  // Contact section progressive slide — update target only when scroll stops (no getBoundingClientRect during scroll)
-  useEffect(() => {
-    const INTERPOLATION_SPEED = 0.15
-    const CONTACT_INTERP_MS = 33
-    const SCROLL_END_DEBOUNCE_MS = 120
-
-    const intervalId = setInterval(() => {
-      if (document.hidden || window.__scrollNavigationLock) return
-      const current = lastContactSlideRef.current
-      const target = targetContactSlideRef.current
-      const diff = target - current
-      if (Math.abs(diff) > 1) {
-        const newValue = current + diff * INTERPOLATION_SPEED
-        lastContactSlideRef.current = newValue
-        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
-        }
-      } else {
-        lastContactSlideRef.current = target
-        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${target}px, 0)`
-        }
-      }
-    }, CONTACT_INTERP_MS)
-
+    // --- Contact target updater (getBoundingClientRect only when scroll stops) ---
     const updateContactTarget = (source) => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
-      // When user landed on #contact, skip effect already set refs/DOM to 0 — don't overwrite with -600 on mount
       if (source === 'mount' && (window.location.hash === '#contact' || buttonNavigationUsed.current)) {
         targetContactSlideRef.current = 0
         lastContactSlideRef.current = 0
@@ -527,36 +499,56 @@ export default function Home() {
       targetContactSlideRef.current = slideValue
     }
 
-    let scrollEndTimer = null
-    const scheduleScrollEndUpdate = () => {
-      if (scrollEndTimer) clearTimeout(scrollEndTimer)
-      scrollEndTimer = setTimeout(() => {
-        scrollEndTimer = null
+    let contactScrollEndTimer = null
+    const scheduleContactScrollEnd = () => {
+      if (contactScrollEndTimer) clearTimeout(contactScrollEndTimer)
+      contactScrollEndTimer = setTimeout(() => {
+        contactScrollEndTimer = null
         updateContactTarget('timeout')
       }, SCROLL_END_DEBOUNCE_MS)
     }
 
+    // --- Shared visibility handler ---
     const handleVisibilityChange = () => {
-      if (!document.hidden) updateContactTarget('visibility')
+      if (!document.hidden) {
+        updateSafetyTarget('visibility')
+        updateContactTarget('visibility')
+      }
     }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('scroll', scheduleScrollEndUpdate, { passive: true })
-    window.addEventListener('resize', scheduleScrollEndUpdate, { passive: true })
+    // --- Shared scroll handler (debounces both targets) ---
+    const onScroll = () => {
+      if (isNearViewport) scheduleSafetyScrollEnd()
+      scheduleContactScrollEnd()
+    }
+
+    // --- scrollend handlers ---
+    const safetyScrollEndHandler = () => updateSafetyTarget('scrollend')
     const contactScrollEndHandler = () => updateContactTarget('scrollend')
+
+    // --- Attach listeners ---
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     if ('onscrollend' in window) {
+      window.addEventListener('scrollend', safetyScrollEndHandler, { passive: true })
       window.addEventListener('scrollend', contactScrollEndHandler, { passive: true })
     }
-    updateContactTarget('mount')
 
+    updateSafetyTarget('mount')
+    updateContactTarget('mount')
 
     return () => {
       clearInterval(intervalId)
-      if (scrollEndTimer) clearTimeout(scrollEndTimer)
+      if (safetyScrollEndTimer) clearTimeout(safetyScrollEndTimer)
+      if (contactScrollEndTimer) clearTimeout(contactScrollEndTimer)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('scroll', scheduleScrollEndUpdate)
-      window.removeEventListener('resize', scheduleScrollEndUpdate)
+      if (safetyObserver) safetyObserver.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      window.removeEventListener('scrollend', safetyScrollEndHandler)
       window.removeEventListener('scrollend', contactScrollEndHandler)
+      window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
 

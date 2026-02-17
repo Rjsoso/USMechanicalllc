@@ -96,19 +96,11 @@ a,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* GPU acceleration for smoother scrolling and animations */
+/* Layout containment for sections (no broad GPU hints) */
 .scroll-optimized,
 [data-scroll-section],
 section {
-  transform: translateZ(0);
-  will-change: auto;
   contain: layout;
-}
-
-/* Optimize transforms for smooth animations */
-[style*="transform"] {
-  backface-visibility: hidden;
-  perspective: 1000px;
 }
 
 /* Prevent white flash during image loading */
@@ -655,28 +647,11 @@ footer {
   }
 }
 
-/* Force hardware acceleration on animated elements */
+/* GPU hints only for specific animated elements, not broad wildcards */
 @media (prefers-reduced-motion: no-preference) {
-  /* Apply GPU acceleration hints to common animated elements */
-  [class*='motion-'],
-  [class*='animate-'],
-  [class*='transition-'],
-  .hero-button-3d,
-  section:not(#hero) {
+  .hero-button-3d {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-  }
-
-  /* Optimize transforms for iOS/Safari */
-  [class*='transform'],
-  [class*='scale'],
-  [class*='translate'] {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
   }
 }
 
@@ -721,7 +696,6 @@ body {
 .overflow-y-auto,
 .overflow-auto {
   -webkit-overflow-scrolling: touch;
-  will-change: scroll-position;
 }
 
 /* ============================================
@@ -737,17 +711,13 @@ body {
   }
 }
 
-/* Force GPU acceleration only on scroll-animated wrappers (Safety + Contact) */
-[class*='animate'],
-[class*='transition'],
+/* GPU acceleration only on scroll-animated wrappers (Safety + Contact) */
 .scroll-animated-wrapper {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   will-change: transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
 }
 
 /* Prevent iOS Safari from flickering during animations */
@@ -1462,12 +1432,7 @@ body {
     -webkit-transform: translateZ(0) !important;
   }
 
-  /* Only use will-change on actively animating elements */
-  *:hover,
-  *:focus,
-  *:active {
-    will-change: transform, opacity;
-  }
+  /* Removed: *:hover/*:focus/*:active will-change — caused too many GPU layers */
 
   /* Simplify transforms - use translate instead of translate3d */
   [style*='translate3d']:not(.logoloop__track):not(.logoloop *) {

@@ -58,6 +58,7 @@ const useImageLoader = (seqRef, onLoad, dependencies) => {
 
 const useAnimationLoop = (
   trackRef,
+  containerRef,
   targetVelocity,
   seqWidth,
   seqHeight,
@@ -69,6 +70,7 @@ const useAnimationLoop = (
   const lastTimestampRef = useRef(null)
   const offsetRef = useRef(0)
   const velocityRef = useRef(0)
+  const isVisibleRef = useRef(true)
 
   useEffect(() => {
     const track = trackRef.current
@@ -85,6 +87,8 @@ const useAnimationLoop = (
     }
 
     const animate = timestamp => {
+      if (!isVisibleRef.current) return
+
       if (lastTimestampRef.current === null) {
         lastTimestampRef.current = timestamp
       }
@@ -111,16 +115,48 @@ const useAnimationLoop = (
       rafRef.current = requestAnimationFrame(animate)
     }
 
-    rafRef.current = requestAnimationFrame(animate)
+    const startLoop = () => {
+      if (rafRef.current !== null) return
+      lastTimestampRef.current = null
+      rafRef.current = requestAnimationFrame(animate)
+    }
 
-    return () => {
+    const stopLoop = () => {
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
       lastTimestampRef.current = null
     }
-  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef])
+
+    // IntersectionObserver: only run RAF when near viewport (200px margin)
+    const observerTarget = containerRef?.current
+    let observer = null
+    if (observerTarget) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisibleRef.current = entry.isIntersecting
+          if (entry.isIntersecting) {
+            startLoop()
+          } else {
+            stopLoop()
+          }
+        },
+        { rootMargin: '200px' }
+      )
+      observer.observe(observerTarget)
+    }
+
+    // Start immediately if visible (or no observer target)
+    if (isVisibleRef.current) {
+      startLoop()
+    }
+
+    return () => {
+      stopLoop()
+      if (observer) observer.disconnect()
+    }
+  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef, containerRef])
 }
 
 export const LogoLoop = memo(
@@ -209,6 +245,7 @@ export const LogoLoop = memo(
     // Only use JS animation if useCssAnimation is false (desktop mode)
     useAnimationLoop(
       useCssAnimation ? { current: null } : trackRef,
+      containerRef,
       targetVelocity,
       seqWidth,
       seqHeight,

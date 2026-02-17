@@ -27,7 +27,7 @@ export default function GradientText({ children }) {
     let progress = 0
     const interval = setInterval(() => {
       // Slow smooth progress (~10 seconds for full cycle)
-      progress += 0.008
+      progress += 0.016
 
       // Use sine wave for smooth back-and-forth motion
       const sineValue = (Math.sin(progress) + 1) / 2 // 0 to 1
@@ -35,7 +35,7 @@ export default function GradientText({ children }) {
       // Smooth transition: Blue → Red → Blue
       const newColor = interpolateColor(blue, red, sineValue)
       setColor(newColor)
-    }, 50)
+    }, 100)
 
     return () => clearInterval(interval)
   }, [children])
