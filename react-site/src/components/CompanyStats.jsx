@@ -2,11 +2,10 @@ import { useEffect, useState, useRef, memo } from 'react'
 import { client } from '../utils/sanity'
 
 // Animate only when visible in viewport - only once per page visit.
-// Uses setInterval so scrolling (and other RAF work) doesn't starve or jank the count.
-const TICK_MS = 33 // ~30fps for count - smoother while still light on main thread
+const TICK_MS = 16 // ~60fps for smooth counting
 const AnimatedNumber = memo(function AnimatedNumber({
   value,
-  duration = 5500,
+  duration = 2000,
   inView,
   startValue = 0,
 }) {
@@ -15,7 +14,6 @@ const AnimatedNumber = memo(function AnimatedNumber({
   const startedRef = useRef(false)
   const completedRef = useRef(false)
   const cancelledRef = useRef(false)
-  const currentValueRef = useRef(startValue)
   const startTimeRef = useRef(0)
 
   const match = String(value)
@@ -33,13 +31,11 @@ const AnimatedNumber = memo(function AnimatedNumber({
     if (!inView || !numericValue) return
 
     if (startedRef.current) {
-      // Same value already animating
       if (intervalRef.current != null) return
     }
 
     startedRef.current = true
     cancelledRef.current = false
-    currentValueRef.current = startValue
     startTimeRef.current = Date.now()
     setCount(startValue)
 
@@ -47,22 +43,13 @@ const AnimatedNumber = memo(function AnimatedNumber({
       if (cancelledRef.current) return
       const elapsed = Date.now() - startTimeRef.current
       const progress = Math.min(elapsed / duration, 1)
-      const easeProgress = 1 - Math.pow(1 - progress, 2)
-      const targetValue = numericValue
-      const animationStartValue = startValue
-      const easedTarget =
-        animationStartValue + (targetValue - animationStartValue) * easeProgress
-      const current = currentValueRef.current
-      const diff = easedTarget - current
-      const INTERPOLATION_SPEED = 0.2
-      const newValue =
-        Math.abs(diff) <= 0.5 ? easedTarget : current + diff * INTERPOLATION_SPEED
-      currentValueRef.current = newValue
-      setCount(newValue)
+      // Single ease-out curve — no double-easing
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const currentValue = startValue + (numericValue - startValue) * eased
+      setCount(currentValue)
       if (progress >= 1) {
         completedRef.current = true
-        currentValueRef.current = targetValue
-        setCount(targetValue)
+        setCount(numericValue)
         if (intervalRef.current === intervalId) {
           clearInterval(intervalId)
           intervalRef.current = null

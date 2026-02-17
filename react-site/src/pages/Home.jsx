@@ -377,11 +377,10 @@ export default function Home() {
   }, [])
 
   // Combined scroll-triggered animation for Safety parallax + Contact slide
-  // Single setInterval handles both interpolations to halve timer overhead
+  // Reads positions on every scroll event (cheap for 2 elements) and smoothly interpolates
   useEffect(() => {
-    const INTERPOLATION_SPEED = 0.15
-    const INTERP_MS = 33 // ~30fps for both parallax animations
-    const SCROLL_END_DEBOUNCE_MS = 120
+    const INTERPOLATION_SPEED = 0.25
+    const INTERP_MS = 16 // ~60fps interpolation for smooth catch-up
 
     const cancelPendingScrollAnimations = () => {}
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
@@ -425,8 +424,8 @@ export default function Home() {
       }
     }, INTERP_MS)
 
-    // --- Safety target updater (getBoundingClientRect only when scroll stops) ---
-    const updateSafetyTarget = (source) => {
+    // --- Safety target updater (runs every scroll event — 1 getBoundingClientRect is cheap) ---
+    const updateSafetyTarget = () => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
       const safetySection = document.querySelector('#safety')
@@ -447,32 +446,18 @@ export default function Home() {
       targetScrollSlideRef.current = targetValue
     }
 
-    let safetyScrollEndTimer = null
-    const scheduleSafetyScrollEnd = () => {
-      if (safetyScrollEndTimer) clearTimeout(safetyScrollEndTimer)
-      safetyScrollEndTimer = setTimeout(() => {
-        safetyScrollEndTimer = null
-        updateSafetyTarget('timeout')
-      }, SCROLL_END_DEBOUNCE_MS)
-    }
-
     const safetySection = document.querySelector('#safety')
-    let isNearViewport = true
+    let isSafetyNear = true
     const safetyObserver = safetySection ? new IntersectionObserver(
       ([entry]) => {
-        isNearViewport = entry.isIntersecting
-        if (isNearViewport) updateSafetyTarget()
+        isSafetyNear = entry.isIntersecting
+        if (isSafetyNear) updateSafetyTarget()
       },
       { threshold: 0, rootMargin: '300px' }
     ) : null
     if (safetyObserver && safetySection) safetyObserver.observe(safetySection)
 
-    const onSafetyScroll = () => {
-      if (!isNearViewport) return
-      scheduleSafetyScrollEnd()
-    }
-
-    // --- Contact target updater (getBoundingClientRect only when scroll stops) ---
+    // --- Contact target updater (runs every scroll event) ---
     const updateContactTarget = (source) => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
@@ -499,55 +484,34 @@ export default function Home() {
       targetContactSlideRef.current = slideValue
     }
 
-    let contactScrollEndTimer = null
-    const scheduleContactScrollEnd = () => {
-      if (contactScrollEndTimer) clearTimeout(contactScrollEndTimer)
-      contactScrollEndTimer = setTimeout(() => {
-        contactScrollEndTimer = null
-        updateContactTarget('timeout')
-      }, SCROLL_END_DEBOUNCE_MS)
-    }
-
     // --- Shared visibility handler ---
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        updateSafetyTarget('visibility')
+        updateSafetyTarget()
         updateContactTarget('visibility')
       }
     }
 
-    // --- Shared scroll handler (debounces both targets) ---
+    // --- Scroll handler: update both targets immediately (no debounce) ---
     const onScroll = () => {
-      if (isNearViewport) scheduleSafetyScrollEnd()
-      scheduleContactScrollEnd()
+      if (isSafetyNear) updateSafetyTarget()
+      updateContactTarget('scroll')
     }
-
-    // --- scrollend handlers ---
-    const safetyScrollEndHandler = () => updateSafetyTarget('scrollend')
-    const contactScrollEndHandler = () => updateContactTarget('scrollend')
 
     // --- Attach listeners ---
     document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', safetyScrollEndHandler, { passive: true })
-      window.addEventListener('scrollend', contactScrollEndHandler, { passive: true })
-    }
 
-    updateSafetyTarget('mount')
+    updateSafetyTarget()
     updateContactTarget('mount')
 
     return () => {
       clearInterval(intervalId)
-      if (safetyScrollEndTimer) clearTimeout(safetyScrollEndTimer)
-      if (contactScrollEndTimer) clearTimeout(contactScrollEndTimer)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       if (safetyObserver) safetyObserver.disconnect()
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      window.removeEventListener('scrollend', safetyScrollEndHandler)
-      window.removeEventListener('scrollend', contactScrollEndHandler)
       window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
