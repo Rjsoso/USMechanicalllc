@@ -190,7 +190,27 @@ export default function Home() {
     let cancelled = false
     const fetchAll = async () => {
       const heroPromise = client.fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`)
-      const servicesPromise = client.fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`)
+      const servicesPromise = client.fetch(`*[_type == "ourServices"][0]{
+        sectionTitle,
+        descriptionText,
+        deliveryMethodsHeading,
+        deliveryMethodsFormHeadline,
+        deliveryMethodsFormCopy,
+        deliveryMethodsEmail,
+        deliveryMethods[] {
+          title, summary, badge, badgeTone,
+          backgroundImage { asset-> { url, _id }, alt },
+          body
+        },
+        servicesInfo[] {
+          title, description, backgroundType, backgroundColor, textColor,
+          backgroundImage { asset-> { _id, url }, alt },
+          slug { current },
+          fullDescription,
+          images[] { asset-> { _id, url }, alt, caption },
+          features[] { title, description }
+        }
+      }`)
       const portfolioPromise = Promise.all([
         client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
         client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
