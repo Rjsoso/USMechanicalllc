@@ -113,6 +113,9 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Use displayData fallback pattern - MUST be before useMemos that use it
+  const displayData = data || defaultData
+
   // Map aboutPhotos to carousel items format
   const carouselItems = useMemo(() => {
     if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
@@ -184,9 +187,6 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     if (windowWidth >= 1440) return 36 // xl
     return 40 // default
   }
-
-  // Use displayData fallback pattern
-  const displayData = data || defaultData
 
   return (
     <>
