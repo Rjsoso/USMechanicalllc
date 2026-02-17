@@ -543,7 +543,7 @@ export default function Home() {
               WebkitTransformStyle: 'preserve-3d',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              zIndex: 2,
+              zIndex: 3,
               willChange: 'transform',
               isolation: 'isolate',
             }}
@@ -560,7 +560,7 @@ export default function Home() {
             className="scroll-animated-wrapper"
             style={{
               position: 'relative',
-              zIndex: 2,
+              zIndex: 1,
               transform: 'translate3d(0, -600px, 0)',
               WebkitTransform: 'translate3d(0, -600px, 0)',
               transformStyle: 'preserve-3d',
