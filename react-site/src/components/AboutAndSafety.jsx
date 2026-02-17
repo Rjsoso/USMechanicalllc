@@ -13,6 +13,7 @@ function AboutAndSafety() {
   const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
