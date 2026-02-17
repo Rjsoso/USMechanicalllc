@@ -143,7 +143,7 @@ function Contact() {
     scrollToContact()
 
     return () => clearInterval(timer)
-  }, [loading, contactData, headerOffset])
+  }, [contactData, headerOffset])
 
   // Determine which background image to use (contact's own or hero's as fallback)
   // Note: Currently not used but kept for future implementation
