@@ -639,11 +639,6 @@ export default function Home() {
     }
   }, [])
 
-  // Wait for all Sanity data to load before rendering - prevents blank sections and fallback messages
-  if (!allDataLoaded) {
-    return null
-  }
-
   return (
     <>
       <SEO
@@ -653,7 +648,45 @@ export default function Home() {
         url="https://usmechanical.com/"
       />
       <Header />
-
+      
+      {/* Wait for all Sanity data to load before rendering main content - prevents blank sections and fallback messages */}
+      {!allDataLoaded && (
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            color: '#ffffff'
+          }}>
+            <div style={{
+              width: '50px',
+              height: '50px',
+              border: '3px solid rgba(255,255,255,0.1)',
+              borderTopColor: '#ffffff',
+              borderRadius: '50%',
+              margin: '0 auto 20px',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <p style={{
+              fontSize: '16px',
+              fontWeight: 500,
+              opacity: 0.9
+            }}>Loading...</p>
+          </div>
+          <style>{`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      )}
+      
+      {allDataLoaded && (
+      <>
       <main
         className="main-with-fixed-bg"
         style={{
@@ -722,8 +755,9 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       <Footer />
+      </>
+      )}
     </>
   )
 }
