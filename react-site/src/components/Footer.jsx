@@ -21,7 +21,6 @@ const FALLBACK_DATA = {
 
 function Footer() {
   const [contactData, setContactData] = useState(null)
-  const [loading, setLoading] = useState(true) // Tracks loading state for contact data
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -48,7 +47,6 @@ function Footer() {
       )
       .then(res => {
         setContactData(res)
-        setLoading(false)
         if (!res) {
           if (process.env.NODE_ENV === 'development') {
             console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
@@ -57,7 +55,6 @@ function Footer() {
       })
       .catch(err => {
         console.error('Footer: Failed to fetch contact data from Sanity:', err)
-        setLoading(false)
       })
   }, [])
 

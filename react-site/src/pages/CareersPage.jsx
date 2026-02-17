@@ -7,7 +7,6 @@ import SEO from '../components/SEO'
 
 export default function CareersPage() {
   const [careersData, setCareersData] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     client
@@ -28,11 +27,9 @@ export default function CareersPage() {
       )
       .then(data => {
         setCareersData(data)
-        setLoading(false)
       })
       .catch(error => {
         console.error('Error fetching careers data:', error)
-        setLoading(false)
       })
   }, [])
 

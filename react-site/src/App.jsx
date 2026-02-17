@@ -1,22 +1,17 @@
-import { Suspense, lazy, useEffect } from 'react'
+import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
-import LoadingScreen from './components/LoadingScreen'
 
-// Lazy load pages for code splitting
-const Home = lazy(() => import('./pages/Home'))
-const About = lazy(() => import('./pages/About'))
-const CareersPage = lazy(() => import('./pages/CareersPage'))
-const PortfolioPage = lazy(() => import('./pages/PortfolioPage'))
-const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
-const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
-const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
-const Contact = lazy(() => import('./pages/Contact'))
-
-function LoadingFallback() {
-  return <LoadingScreen minimal />
-}
+// Regular imports for instant page navigation
+import Home from './pages/Home'
+import About from './pages/About'
+import CareersPage from './pages/CareersPage'
+import PortfolioPage from './pages/PortfolioPage'
+import ServiceDetail from './pages/ServiceDetail'
+import CategoryDetail from './pages/CategoryDetail'
+import ProjectDetail from './pages/ProjectDetail'
+import Contact from './pages/Contact'
 
 function App() {
   // Disable browser scroll restoration globally
@@ -37,18 +32,16 @@ function App() {
         {/* Add Schema.org structured data for SEO */}
         <StructuredData />
 
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/careers" element={<CareersPage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/services/:slug" element={<ServiceDetail />} />
-            <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
-            <Route path="/projects/:id" element={<ProjectDetail />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services/:slug" element={<ServiceDetail />} />
+          <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
+        </Routes>
       </Router>
     </ErrorBoundary>
   )

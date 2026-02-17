@@ -16,13 +16,11 @@ export default function ServiceDetail() {
   const location = useLocation()
   const [serviceData, setServiceData] = useState(null)
   const [servicesList, setServicesList] = useState([])
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchService = async () => {
       try {
-        setLoading(true)
         // Fetch the ourServices document and find the service with matching slug
         const data = await client.fetch(
           `*[_type == "ourServices"][0]{
@@ -51,7 +49,6 @@ export default function ServiceDetail() {
 
         if (!data || !data.servicesInfo) {
           setError('Service not found')
-          setLoading(false)
           return
         }
 
@@ -60,17 +57,14 @@ export default function ServiceDetail() {
 
         if (!service) {
           setError('Service not found')
-          setLoading(false)
           return
         }
 
         setServicesList(Array.isArray(data.servicesInfo) ? data.servicesInfo : [])
         setServiceData(service)
-        setLoading(false)
       } catch (err) {
         console.error('Error fetching service:', err)
         setError('Failed to load service')
-        setLoading(false)
       }
     }
 

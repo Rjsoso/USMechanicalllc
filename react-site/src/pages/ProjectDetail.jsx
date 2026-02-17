@@ -13,13 +13,11 @@ export default function ProjectDetail() {
   const navigate = useNavigate()
   const location = useLocation()
   const [projectData, setProjectData] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        setLoading(true)
         const data = await client.fetch(
           `*[_type == "portfolioProject" && _id == $projectId][0]{
             _id,
@@ -47,16 +45,13 @@ export default function ProjectDetail() {
 
         if (!data) {
           setError('Project not found')
-          setLoading(false)
           return
         }
 
         setProjectData(data)
-        setLoading(false)
       } catch (err) {
         console.error('Error fetching project:', err)
         setError('Failed to load project')
-        setLoading(false)
       }
     }
 

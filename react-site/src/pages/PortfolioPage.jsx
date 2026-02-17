@@ -11,7 +11,6 @@ export default function PortfolioPage() {
   const [categories, setCategories] = useState([])
   const [sectionData, setSectionData] = useState(null)
   const [loadedImages, setLoadedImages] = useState(new Set())
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     Promise.all([
@@ -35,31 +34,13 @@ export default function PortfolioPage() {
       .then(([categoriesData, sectionInfo]) => {
         setCategories(categoriesData)
         setSectionData(sectionInfo)
-        setLoading(false)
       })
       .catch(error => {
         console.error('Error fetching portfolio data:', error)
-        setLoading(false)
       })
   }, [])
 
   const displayCategories = useMemo(() => categories, [categories])
-
-  if (loading) {
-    return (
-      <>
-        <SEO
-          title="Portfolio - Our Projects | US Mechanical"
-          description="Explore U.S. Mechanical's portfolio of completed commercial and industrial projects including manufacturing, healthcare, education, and more."
-          keywords="mechanical contractor portfolio, HVAC projects, plumbing projects, commercial construction, industrial projects, process piping projects"
-          url="https://usmechanical.com/portfolio"
-        />
-        <Header />
-        <div className="min-h-screen bg-black py-40 text-center text-white">Loading portfolio...</div>
-        <Footer />
-      </>
-    )
-  }
 
   return (
     <>

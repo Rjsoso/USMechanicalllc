@@ -5,7 +5,6 @@ import LogoLoop from './LogoLoop'
 
 function LogoLoopSection() {
   const [logoData, setLogoData] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -42,16 +41,14 @@ function LogoLoopSection() {
           const sortedLogos = [...data.logos].sort((a, b) => (a.order || 0) - (b.order || 0))
           setLogoData(sortedLogos)
         }
-        setLoading(false)
       })
       .catch(error => {
         console.error('Error fetching logo loop data:', error)
-        setLoading(false)
       })
   }, [])
 
-  // Don't render anything if loading, disabled, or no logos
-  if (loading || !logoData || logoData.length === 0) {
+  // Don't render anything if disabled or no logos
+  if (!logoData || logoData.length === 0) {
     return null
   }
 

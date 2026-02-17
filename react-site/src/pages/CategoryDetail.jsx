@@ -14,14 +14,11 @@ export default function CategoryDetail() {
   const location = useLocation()
   const [categoryData, setCategoryData] = useState(null)
   const [categoriesList, setCategoriesList] = useState([])
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        setLoading(true)
-
         // Fetch category and all projects that reference this category
         const [category, projects, categories] = await Promise.all([
           client.fetch(
@@ -70,7 +67,6 @@ export default function CategoryDetail() {
 
         if (!category) {
           setError('Category not found')
-          setLoading(false)
           return
         }
 
@@ -82,11 +78,9 @@ export default function CategoryDetail() {
           ...category,
           projects: projects || [],
         })
-        setLoading(false)
       } catch (err) {
         console.error('Error fetching category:', err)
         setError('Failed to load category')
-        setLoading(false)
       }
     }
 

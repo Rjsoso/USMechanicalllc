@@ -4,7 +4,6 @@ import { client, urlFor } from '../utils/sanity'
 
 function Careers() {
   const [careersData, setCareersData] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     client
@@ -25,24 +24,11 @@ function Careers() {
       )
       .then(data => {
         setCareersData(data)
-        setLoading(false)
       })
       .catch(error => {
         console.error('Error fetching careers data:', error)
-        setLoading(false)
       })
   }, [])
-
-  // Loading state
-  if (loading) {
-    return (
-      <section id="careers" className="bg-white pb-24 pt-0 text-black" style={{ minHeight: '879px' }}>
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <div className="text-black">Loading careers...</div>
-        </div>
-      </section>
-    )
-  }
 
   // Fallback content if no data from Sanity - Last updated: 2026-01-29
   const heading = careersData?.mainHeading || 'Careers at U.S. Mechanical'

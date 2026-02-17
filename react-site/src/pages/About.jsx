@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react'
+import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
 import { PortableText } from '@portabletext/react'
 import Header from '../components/Header'
@@ -11,9 +12,9 @@ import { FiArrowRight } from 'react-icons/fi'
 
 function About() {
   const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -85,13 +86,10 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         } else {
           setData({ ...defaultData, ...aboutData })
         }
-      } catch {
+      } catch (error) {
         if (!isCancelled) {
+          console.error('Error fetching about data:', error)
           setData(defaultData)
-        }
-      } finally {
-        if (!isCancelled) {
-          setLoading(false)
         }
       }
     }
@@ -105,11 +103,11 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
   }, [])
 
   const carouselItems = useMemo(() => {
-    if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
+    if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
       return []
     }
 
-    return data.aboutPhotos
+    return displayData.aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -151,7 +149,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         return null
       })
       .filter(Boolean)
-  }, [data?.safetyLogos])
+  }, [data, displayData?.safetyLogos])
 
   const getSafetyLogoHeight = () => {
     if (windowWidth < 768) return 50
@@ -169,21 +167,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     return 40
   }
 
-  if (loading || !data) {
-    return (
-      <>
-        <SEO
-          title="About Us - Company Background | US Mechanical"
-          description="Learn about U.S. Mechanical's history since 1963, our team, offices, and commitment to safety in mechanical contracting."
-          keywords="US Mechanical history, company background, mechanical contractor Utah, HVAC company Nevada, plumbing contractor history, construction company about"
-          url="https://usmechanical.com/about"
-        />
-        <Header />
-        <div className="min-h-screen bg-black py-20 text-center text-white">Loading content...</div>
-        <Footer />
-      </>
-    )
-  }
+  // Set default data if none loaded yet
+  const displayData = data || defaultData
 
   return (
     <>
@@ -195,7 +180,12 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
       />
       <Header />
 
-      <main className="bg-black pt-20">
+      <motion.main
+        className="bg-black pt-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
         <section className="relative z-0 overflow-hidden bg-black py-20 text-white">
           {carouselItems.length > 0 && (
             <div
@@ -273,7 +263,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                             }
                       }
                     >
-                      {data.aboutTitle}
+                      {displayData.aboutTitle}
                     </h1>
                   </FadeInNative>
 
@@ -340,7 +330,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                                     }
                               }
                             >
-                              {data.aboutText}
+                              {displayData.aboutText}
                             </div>
                           </div>
                         </div>
@@ -452,15 +442,15 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
               >
                 <FadeInNative delay={0.3}>
                   <h2 className="section-title mb-4 text-5xl text-gray-900 md:text-6xl">
-                    {data.safetyTitle}
+                    {displayData.safetyTitle}
                   </h2>
                 </FadeInNative>
                 <FadeInNative delay={0.4}>
                   <div className="text-lg leading-relaxed text-gray-700">
-                    {Array.isArray(data.safetyText) ? (
-                      <PortableText value={data.safetyText} />
+                    {Array.isArray(displayData.safetyText) ? (
+                      <PortableText value={displayData.safetyText} />
                     ) : (
-                      <p className="whitespace-pre-line">{data.safetyText}</p>
+                      <p className="whitespace-pre-line">{displayData.safetyText}</p>
                     )}
                   </div>
                 </FadeInNative>
@@ -567,7 +557,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
             </div>
           </div>
         </section>
-      </main>
+      </motion.main>
 
       <Footer />
     </>

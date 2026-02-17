@@ -14,7 +14,6 @@ import {
 function Contact() {
   const [contactData, setContactData] = useState(null)
   const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const headerOffset = 180
 
@@ -34,7 +33,6 @@ function Contact() {
   useEffect(() => {
     const fetchContact = async () => {
       try {
-        setLoading(true)
         // Fetch contact data - explicitly target published document (not drafts)
         // This ensures webhooks fire correctly when content is published
         let contactQuery = `*[_type == "contact" && _id == "contact"][0]{
@@ -99,8 +97,6 @@ function Contact() {
       } catch (err) {
         console.error('Error fetching contact data:', err)
         setError('Failed to load contact page. Please check your Sanity connection.')
-      } finally {
-        setLoading(false)
       }
     }
     fetchContact()
