@@ -426,6 +426,7 @@ export default function Home() {
       } else if (safetyBottom < 0) {
         safetyValue = -150
       }
+      safetyValue = Math.round(safetyValue)
       if (scrollAnimatedElementRef.current) {
         scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${safetyValue}px, 0)`
       }
@@ -443,6 +444,7 @@ export default function Home() {
         } else if (contactTop < 0) {
           contactValue = 0
         }
+        contactValue = Math.round(contactValue)
         if (contactWrapperRef.current) {
           contactWrapperRef.current.style.transform = `translate3d(0, ${contactValue}px, 0)`
         }
@@ -475,8 +477,16 @@ export default function Home() {
     // Recache periodically (catches lazy-loaded images shifting layout)
     const recacheId = setInterval(cachePositions, 1500)
 
-    // Scroll handler — pure math, no DOM reads
-    window.addEventListener('scroll', applyScrollAnimations, { passive: true })
+    // Scroll handler — coalesce to one update per animation frame
+    let scrollRafId = null
+    const onScroll = () => {
+      if (scrollRafId) return
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = null
+        applyScrollAnimations()
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
 
     // Visibility handler
     const handleVisibilityChange = () => {
@@ -489,8 +499,9 @@ export default function Home() {
 
     return () => {
       clearInterval(recacheId)
+      if (scrollRafId) cancelAnimationFrame(scrollRafId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('scroll', applyScrollAnimations)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
