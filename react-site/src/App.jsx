@@ -1,9 +1,16 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
-
 import Home from './pages/Home'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 const About = lazy(() => import('./pages/About'))
 const CareersPage = lazy(() => import('./pages/CareersPage'))
@@ -29,6 +36,9 @@ function App() {
           v7_relativeSplatPath: true,
         }}
       >
+        {/* Reset scroll position on route change */}
+        <ScrollToTop />
+
         {/* Add Schema.org structured data for SEO */}
         <StructuredData />
 
