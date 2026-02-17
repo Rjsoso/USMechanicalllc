@@ -25,6 +25,48 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     }
   }, [servicesDataProp])
 
+  // Fallback fetch when prop is null (e.g. Home fetch failed or is slow)
+  useEffect(() => {
+    if (servicesDataProp) return
+    let cancelled = false
+    const timeoutId = setTimeout(() => {
+      client
+        .fetch(
+          `*[_type == "ourServices"][0]{
+            sectionTitle,
+            descriptionText,
+            deliveryMethodsHeading,
+            deliveryMethodsFormHeadline,
+            deliveryMethodsFormCopy,
+            deliveryMethodsEmail,
+            deliveryMethods[] {
+              title, summary, badge, badgeTone,
+              backgroundImage { asset-> { url, _id }, alt },
+              body
+            },
+            servicesInfo[] {
+              title, description, backgroundType, backgroundColor, textColor,
+              backgroundImage { asset-> { _id, url }, alt },
+              slug { current },
+              fullDescription,
+              images[] { asset-> { _id, url }, alt, caption },
+              features[] { title, description }
+            }
+          }`
+        )
+        .then(data => {
+          if (!cancelled) setServicesData(data)
+        })
+        .catch(err => {
+          if (!cancelled) console.error('[ServicesSection] Fallback fetch error:', err)
+        })
+    }, 800)
+    return () => {
+      cancelled = true
+      clearTimeout(timeoutId)
+    }
+  }, [servicesDataProp])
+
   const handleLearnMore = useCallback(
     service => {
       if (service?.slug?.current) {
@@ -181,10 +223,24 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     }
   }
 
-  // Render section structure immediately - no loading states
-  // Content will fade in smoothly via whileInView animations
+  // Loading: reserve space and keep id="services" for nav/scroll targets
+  if (servicesData === null) {
+    return (
+      <section
+        id="services"
+        className="bg-transparent pb-20 pt-12 text-white"
+        style={{ position: 'relative', minHeight: '200px' }}
+      >
+        <div className="mx-auto max-w-7xl px-6 flex items-center justify-center py-12">
+          <p className="text-white/70 text-lg">Loading services…</p>
+        </div>
+      </section>
+    )
+  }
+
+  // No services content after data loaded
   if (!servicesData?.servicesInfo || servicesData?.servicesInfo.length === 0) {
-    return null // Don't render section if truly no data
+    return null
   }
 
   return (

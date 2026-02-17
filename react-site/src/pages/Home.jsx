@@ -227,6 +227,16 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
+  // Force contact wrapper to visible position (refs + DOM) when skipping/locking animation
+  const setContactWrapperToZero = () => {
+    targetContactSlideRef.current = 0
+    lastContactSlideRef.current = 0
+    if (contactWrapperRef.current) {
+      contactWrapperRef.current.style.transform = 'translate3d(0, 0px, 0)'
+      contactWrapperRef.current.style.webkitTransform = 'translate3d(0, 0px, 0)'
+    }
+  }
+
   // Skip contact animation ONCE when navigating directly
   useEffect(() => {
     const shouldSkipAnimation = 
@@ -235,8 +245,9 @@ export default function Home() {
       window.location.hash === '#contact'
     
     if (shouldSkipAnimation && !skipContactAnimationOnce.current) {
-      // Set slide to 0 for direct navigation
       setContactSlide(0)
+      setContactWrapperToZero()
+      requestAnimationFrame(() => setContactWrapperToZero()) // in case wrapper not mounted yet
       skipContactAnimationOnce.current = true
       sessionStorage.removeItem('skipContactAnimation')
       
@@ -244,24 +255,23 @@ export default function Home() {
         console.warn('[DEBUG] Contact: Animation skipped for direct navigation, contactSlide set to 0')
       }
       
-      // Clear the flag after a delay to allow animation on subsequent scrolls
       setTimeout(() => {
         skipContactAnimationOnce.current = false
         if (process.env.NODE_ENV === 'development') {
           console.warn('[DEBUG] Contact: Animation skip flag cleared')
         }
-      }, 2000) // 2 second delay
+      }, 2000)
     }
   }, [location.state?.scrollTo, location.hash])
   
   // Listen for lock/unlock events (synchronous)
   useEffect(() => {
     const handleLock = () => {
-      // FREEZE contactSlide at 0 - do NOT allow it to change
       setContactSlide(0)
+      setContactWrapperToZero()
       skipContactAnimationOnce.current = true
-      contactAnimationComplete.current = true // Mark as complete to prevent updates
-      buttonNavigationUsed.current = true // Permanently disable animation after any button nav
+      contactAnimationComplete.current = true
+      buttonNavigationUsed.current = true
       if (process.env.NODE_ENV === 'development') {
         console.warn('[DEBUG] Contact: Animation LOCKED (event), contactSlide FROZEN at 0')
         console.warn('[BUTTON-NAV] buttonNavigationUsed set to TRUE - animation permanently disabled')
@@ -290,6 +300,7 @@ export default function Home() {
     const handleSkipAnimation = () => {
       if (!skipContactAnimationOnce.current) {
         setContactSlide(0)
+        setContactWrapperToZero()
         skipContactAnimationOnce.current = true
         sessionStorage.removeItem('skipContactAnimation')
         if (process.env.NODE_ENV === 'development') {
