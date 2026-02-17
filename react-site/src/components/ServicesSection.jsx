@@ -180,25 +180,10 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     }
   }
 
-  if (!servicesData) {
-    return (
-      <section id="services" className="bg-transparent pb-0 pt-12 text-center text-white" style={{ minHeight: '936px' }}>
-        <p>Loading services...</p>
-      </section>
-    )
-  }
-
-  if (!servicesData?.servicesInfo || servicesData.servicesInfo.length === 0) {
-    return (
-      <section id="services" className="bg-transparent pb-1 pt-12 text-white">
-        <div className="mx-auto max-w-7xl px-6">
-          <h2 className="section-title mb-12 text-center text-5xl text-white md:text-6xl">
-            {servicesData.sectionTitle || 'Our Services'}
-          </h2>
-          <p className="text-center text-white">No services available.</p>
-        </div>
-      </section>
-    )
+  // Render section structure immediately - no loading states
+  // Content will fade in smoothly via whileInView animations
+  if (!servicesData?.servicesInfo || servicesData?.servicesInfo.length === 0) {
+    return null // Don't render section if truly no data
   }
 
   return (

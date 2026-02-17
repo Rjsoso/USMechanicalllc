@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
+import { motion } from 'framer-motion'
 import { client } from '../utils/sanity'
 
 // Animate only when visible in viewport - only once per page visit
@@ -259,18 +260,10 @@ const CompanyStats = ({ data: statsDataProp }) => {
     }
   }, [statsData])
 
-  if (loading) {
-    return (
-      <section className="w-full bg-transparent py-16">
-        <div className="mx-auto max-w-6xl text-center">
-          <div className="text-white">Loading stats...</div>
-        </div>
-      </section>
-    )
-  }
-
+  // Render section structure immediately - no loading states
+  // Content will animate in smoothly when data is ready
   if (!statsData || !statsData.stats || statsData.stats.length === 0) {
-    return null
+    return null // Don't render if truly no data
   }
 
   return (
@@ -284,13 +277,30 @@ const CompanyStats = ({ data: statsDataProp }) => {
     >
       <div className="mx-auto max-w-6xl text-center">
         {statsData.title && (
-          <h2 className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl">
+          <motion.h2
+            className="section-title mb-10 text-5xl text-white md:text-6xl xl:text-5xl 2xl:text-6xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
             {statsData.title}
-          </h2>
+          </motion.h2>
         )}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {statsData.stats?.map((item, idx) => (
-            <div key={idx} className="flex flex-col items-center">
+            <motion.div
+              key={idx}
+              className="flex flex-col items-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{
+                duration: 0.5,
+                ease: [0.16, 1, 0.3, 1],
+                delay: idx * 0.15
+              }}
+            >
               <div className="mb-2 text-5xl font-extrabold text-[#dc2626]">
                 <AnimatedNumber
                   value={item.value}
@@ -300,7 +310,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
                 />
               </div>
               <p className="text-lg font-medium text-white">{item.label}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
