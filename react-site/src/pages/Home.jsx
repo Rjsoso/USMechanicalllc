@@ -375,70 +375,66 @@ export default function Home() {
   }, [])
 
   // Combined scroll-triggered animation for Safety parallax + Contact slide
-  // Zero-lag: caches element offsets and uses scrollY (no getBoundingClientRect during scroll)
-  // Applies transforms directly in scroll handler — 1:1 with scroll position, no interpolation lag
+  // Direct 1:1 tracking: reads positions and applies transforms in one RAF per scroll event
   useEffect(() => {
     const cancelPendingScrollAnimations = () => {}
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
-    // Cached layout values (updated on mount + resize only, never during scroll)
-    let safetySectionTop = 0
-    let safetySectionHeight = 0
-    let contactWrapperTop = 0
-    let viewportHeight = window.innerHeight
+    let pendingRaf = null
 
-    const cachePositions = () => {
-      viewportHeight = window.innerHeight
-      const safetyEl = document.querySelector('#safety')
-      if (safetyEl) {
-        safetySectionTop = safetyEl.offsetTop
-        safetySectionHeight = safetyEl.offsetHeight
-      }
-      const contactEl = document.querySelector('#contact-wrapper')
-      if (contactEl) {
-        contactWrapperTop = contactEl.offsetTop
-      }
-    }
-
-    // --- Compute and apply both transforms directly from scrollY (no forced layout) ---
+    // --- Compute and apply both transforms directly (one layout read + write per frame) ---
     const applyScrollAnimations = () => {
       if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
-      const scrollY = window.scrollY
 
-      // Safety parallax: slide the stats/services wrapper when safety bottom nears viewport top
-      const safetyBottom = (safetySectionTop + safetySectionHeight) - scrollY
-      const slideStart = viewportHeight * 0.25
-      let safetyValue = 0
-      if (safetyBottom <= slideStart && safetyBottom >= 0) {
-        const progress = 1 - safetyBottom / slideStart
-        safetyValue = -progress * 150
-      } else if (safetyBottom < 0) {
-        safetyValue = -150
-      }
-      if (scrollAnimatedElementRef.current) {
-        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${safetyValue}px, 0)`
-      }
-      lastScrollSlideRef.current = safetyValue
-      targetScrollSlideRef.current = safetyValue
+      const viewportHeight = window.innerHeight
 
-      // Contact slide: slide from -600 to 0 as user scrolls toward contact
+      // Safety parallax
+      const safetySection = document.querySelector('#safety')
+      if (safetySection) {
+        const safetyBottom = safetySection.getBoundingClientRect().bottom
+        const slideStart = viewportHeight * 0.25
+        let safetyValue = 0
+        if (safetyBottom <= slideStart && safetyBottom >= 0) {
+          const progress = 1 - safetyBottom / slideStart
+          safetyValue = -progress * 150
+        } else if (safetyBottom < 0) {
+          safetyValue = -150
+        }
+        if (scrollAnimatedElementRef.current) {
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${safetyValue}px, 0)`
+        }
+        lastScrollSlideRef.current = safetyValue
+        targetScrollSlideRef.current = safetyValue
+      }
+
+      // Contact slide
       if (!buttonNavigationUsed.current) {
-        const contactTop = contactWrapperTop - scrollY
-        const animationStartDistance = viewportHeight * 2.5
-        let contactValue = -600
-        if (contactTop <= animationStartDistance && contactTop >= 0) {
-          const progress = 1 - (contactTop / animationStartDistance)
-          contactValue = -600 + (progress * 600)
-        } else if (contactTop < 0) {
-          contactValue = 0
+        const contactWrapper = document.querySelector('#contact-wrapper')
+        if (contactWrapper) {
+          const contactTop = contactWrapper.getBoundingClientRect().top
+          const animationStartDistance = viewportHeight * 2.5
+          let contactValue = -600
+          if (contactTop <= animationStartDistance && contactTop >= 0) {
+            const progress = 1 - (contactTop / animationStartDistance)
+            contactValue = -600 + (progress * 600)
+          } else if (contactTop < 0) {
+            contactValue = 0
+          }
+          contactWrapper.style.transform = `translate3d(0, ${contactValue}px, 0)`
+          lastContactSlideRef.current = contactValue
+          targetContactSlideRef.current = contactValue
         }
-        if (contactWrapperRef.current) {
-          contactWrapperRef.current.style.transform = `translate3d(0, ${contactValue}px, 0)`
-        }
-        lastContactSlideRef.current = contactValue
-        targetContactSlideRef.current = contactValue
       }
+    }
+
+    // Coalesce scroll events into one RAF per frame
+    const onScroll = () => {
+      if (pendingRaf) return
+      pendingRaf = requestAnimationFrame(() => {
+        pendingRaf = null
+        applyScrollAnimations()
+      })
     }
 
     // --- Handle direct navigation to #contact ---
@@ -451,41 +447,24 @@ export default function Home() {
       applyScrollAnimations()
     }
 
-    // --- Cache positions then apply ---
-    const onResize = () => {
-      cachePositions()
-      applyScrollAnimations()
-    }
-
-    // Initial cache (slight delay to ensure layout is stable after React render)
-    requestAnimationFrame(() => {
-      cachePositions()
-      applyContactMount()
-    })
-
-    // Recache on resize
-    window.addEventListener('resize', onResize, { passive: true })
-
-    // Also recache periodically to catch lazy-loaded content shifting layout
-    const recacheInterval = setInterval(cachePositions, 2000)
-
-    // --- Scroll handler: pure math, zero layout reads ---
-    window.addEventListener('scroll', applyScrollAnimations, { passive: true })
+    // Initial apply after React paint
+    requestAnimationFrame(applyContactMount)
 
     // --- Visibility handler ---
     const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        cachePositions()
-        applyScrollAnimations()
-      }
+      if (!document.hidden) applyScrollAnimations()
     }
+
+    // --- Attach listeners ---
     document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
 
     return () => {
-      clearInterval(recacheInterval)
+      if (pendingRaf) cancelAnimationFrame(pendingRaf)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('scroll', applyScrollAnimations)
-      window.removeEventListener('resize', onResize)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
       window.removeEventListener('lockContactAnimation', cancelPendingScrollAnimations)
     }
   }, [])
