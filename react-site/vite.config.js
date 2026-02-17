@@ -14,7 +14,7 @@ export default defineConfig({
           // Vendor chunks - more granular splitting
           'react-core': ['react', 'react-dom'],
           'react-router': ['react-router-dom'],
-          'animation': ['framer-motion', 'gsap'],
+          'animation': ['framer-motion'],
           'sanity': ['@sanity/client', '@sanity/image-url', '@portabletext/react'],
           'icons': ['react-icons', 'lucide-react'],
         }
