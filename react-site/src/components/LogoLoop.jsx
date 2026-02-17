@@ -56,10 +56,6 @@ const useImageLoader = (seqRef, onLoad, dependencies) => {
   }, [onLoad, seqRef, dependencies])
 }
 
-// #region agent log
-const _dbg = (message, data, hypothesisId) => { fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'af1d91' }, body: JSON.stringify({ sessionId: 'af1d91', location: 'LogoLoop.jsx', message, data: data || {}, hypothesisId, timestamp: Date.now() }) }).catch(() => {}); };
-// #endregion
-
 const useAnimationLoop = (
   trackRef,
   targetVelocity,
@@ -88,7 +84,6 @@ const useAnimationLoop = (
       track.style.transform = transformValue
     }
 
-    let frameCount = 0
     const animate = timestamp => {
       if (lastTimestampRef.current === null) {
         lastTimestampRef.current = timestamp
@@ -96,10 +91,6 @@ const useAnimationLoop = (
 
       const deltaTime = Math.max(0, timestamp - lastTimestampRef.current) / 1000
       lastTimestampRef.current = timestamp
-      frameCount += 1
-      // #region agent log
-      if (frameCount === 1 || frameCount % 60 === 0) _dbg('logo RAF frame', { frame: frameCount, deltaMs: Math.round(deltaTime * 1000), timestamp }, 'H4');
-      // #endregion
 
       const target = isHovered && hoverSpeed !== undefined ? hoverSpeed : targetVelocity
 

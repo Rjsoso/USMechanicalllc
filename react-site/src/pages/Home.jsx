@@ -1,9 +1,5 @@
 /* global process */
 import { useEffect, useLayoutEffect, useState, useRef } from 'react'
-
-// #region agent log
-const _dbg = (message, data, hypothesisId) => { fetch('http://127.0.0.1:7242/ingest/9705fb86-1c33-4819-90c1-c4bb10602baa', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'af1d91' }, body: JSON.stringify({ sessionId: 'af1d91', location: 'Home.jsx', message, data: data || {}, hypothesisId, timestamp: Date.now() }) }).catch(() => {}); };
-// #endregion
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -21,8 +17,6 @@ import { client, urlFor } from '../utils/sanity'
 
 export default function Home() {
   const location = useLocation()
-  const renderCountRef = useRef(0)
-  renderCountRef.current += 1
   const [scrollSlide, setScrollSlide] = useState(0)
   const initialScrollDone = useRef(false)
   const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
@@ -62,13 +56,6 @@ export default function Home() {
       (performance.getEntriesByType('navigation')[0]?.type === 'reload' ||
         performance.navigation?.type === 1)
   )
-
-  // #region agent log
-  useEffect(() => {
-    const c = renderCountRef.current
-    if (c <= 15 && (c === 1 || c % 5 === 0)) _dbg('Home render', { count: c }, 'H5')
-  })
-  // #endregion
 
   // Disable browser scroll restoration
   useLayoutEffect(() => {
@@ -231,13 +218,8 @@ export default function Home() {
       const statsPromise = client.fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`)
       const aboutPromise = client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
 
-      const [heroResult, servicesResult, portfolioResult, statsResult, aboutResult] = await Promise.allSettled([
-        heroPromise,
-        servicesPromise,
-        portfolioPromise,
-        statsPromise,
-        aboutPromise
-      ])
+      // First paint after hero + about so the page appears faster
+      const [heroResult, aboutResult] = await Promise.allSettled([heroPromise, aboutPromise])
 
       if (cancelled) return
 
@@ -253,6 +235,20 @@ export default function Home() {
         console.error('[Home] Hero fetch error:', heroResult.reason)
       }
 
+      if (aboutResult.status === 'fulfilled' && aboutResult.value != null) setAboutData(aboutResult.value)
+      else if (aboutResult.status === 'rejected') console.error('[Home] About fetch error:', aboutResult.reason)
+
+      setAllDataLoaded(true)
+
+      // Stream in services, portfolio, stats when ready (no longer block first paint)
+      const [servicesResult, portfolioResult, statsResult] = await Promise.allSettled([
+        servicesPromise,
+        portfolioPromise,
+        statsPromise
+      ])
+
+      if (cancelled) return
+
       if (servicesResult.status === 'fulfilled' && servicesResult.value != null) setServicesData(servicesResult.value)
       else if (servicesResult.status === 'rejected') console.error('[Home] Services fetch error:', servicesResult.reason)
 
@@ -261,14 +257,6 @@ export default function Home() {
 
       if (statsResult.status === 'fulfilled' && statsResult.value != null) setStatsData(statsResult.value)
       else if (statsResult.status === 'rejected') console.error('[Home] Stats fetch error:', statsResult.reason)
-
-      if (aboutResult.status === 'fulfilled' && aboutResult.value != null) setAboutData(aboutResult.value)
-      else if (aboutResult.status === 'rejected') console.error('[Home] About fetch error:', aboutResult.reason)
-
-      // #region agent log
-      _dbg('allDataLoaded true', { navStart: typeof performance !== 'undefined' && performance.timing ? performance.timing.navigationStart : 0, timeToData: typeof performance !== 'undefined' && performance.timing ? Date.now() - performance.timing.navigationStart : 0 }, 'H1');
-      // #endregion
-      setAllDataLoaded(true)
     }
     fetchAll()
     return () => { cancelled = true }
@@ -276,9 +264,6 @@ export default function Home() {
 
   // Force contact wrapper to visible position (refs + DOM) when skipping/locking animation
   const setContactWrapperToZero = () => {
-    // #region agent log
-    _dbg('setContactWrapperToZero', { hash: typeof window !== 'undefined' ? window.location.hash : '' }, 'H3');
-    // #endregion
     targetContactSlideRef.current = 0
     lastContactSlideRef.current = 0
     if (contactWrapperRef.current) {
@@ -395,7 +380,7 @@ export default function Home() {
   // Use setInterval for interpolation so RAF is left for stats + logo loop (no competing loops)
   useEffect(() => {
     const INTERPOLATION_SPEED = 0.15
-    const SCROLL_INTERP_MS = 40
+    const SCROLL_INTERP_MS = 33 // ~30fps for parallax catch-up
     const SCROLL_END_DEBOUNCE_MS = 120
 
     const cancelPendingScrollAnimations = () => {}
@@ -426,9 +411,6 @@ export default function Home() {
       const safetySection = document.querySelector('#safety')
       if (!safetySection) return
       const rect = safetySection.getBoundingClientRect()
-      // #region agent log
-      _dbg('updateSafetyTarget ran', { source: source || 'unknown' }, 'H2');
-      // #endregion
       const safetyBottom = rect.bottom
       const viewportHeight = window.innerHeight
       const slideStart = viewportHeight * 0.25
@@ -466,9 +448,6 @@ export default function Home() {
 
     const onScroll = () => {
       if (!isNearViewport) return
-      // #region agent log
-      _dbg('scheduleScrollEndUpdate (safety)', {}, 'H2');
-      // #endregion
       scheduleScrollEndUpdate()
     }
     const handleVisibilityChange = () => {
@@ -499,7 +478,7 @@ export default function Home() {
   // Contact section progressive slide — update target only when scroll stops (no getBoundingClientRect during scroll)
   useEffect(() => {
     const INTERPOLATION_SPEED = 0.15
-    const CONTACT_INTERP_MS = 40
+    const CONTACT_INTERP_MS = 33
     const SCROLL_END_DEBOUNCE_MS = 120
 
     const intervalId = setInterval(() => {
@@ -545,17 +524,11 @@ export default function Home() {
       } else {
         slideValue = -600
       }
-      // #region agent log
-      _dbg('updateContactTarget ran', { source: source || 'unknown', slideValue, rectTop: rect.top, hash: window.location.hash }, 'H2');
-      // #endregion
       targetContactSlideRef.current = slideValue
     }
 
     let scrollEndTimer = null
     const scheduleScrollEndUpdate = () => {
-      // #region agent log
-      _dbg('scheduleScrollEndUpdate (contact)', {}, 'H2');
-      // #endregion
       if (scrollEndTimer) clearTimeout(scrollEndTimer)
       scrollEndTimer = setTimeout(() => {
         scrollEndTimer = null
