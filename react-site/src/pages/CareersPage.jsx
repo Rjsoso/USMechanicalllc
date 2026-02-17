@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { client, urlFor } from '../utils/sanity'
-import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -111,57 +109,28 @@ export default function CareersPage() {
         }}
       >
         <div className="relative z-10 mx-auto max-w-5xl px-6">
-          <motion.h1
-            className="section-title mb-4 text-center text-5xl text-black md:text-6xl"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <h1 className="section-title mb-4 text-center text-5xl text-black md:text-6xl">
             {heading}
-          </motion.h1>
+          </h1>
 
-          <motion.h2
-            className="mb-8 text-center text-2xl font-bold text-black md:text-3xl"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <h2 className="mb-8 text-center text-2xl font-bold text-black md:text-3xl">
             {jobTitle}
-          </motion.h2>
+          </h2>
 
-          <motion.div
-            className="mb-8 text-center"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div className="mb-8 text-center">
             <ul className="inline-block space-y-2 text-left text-lg">
               {jobOverview.map((item, idx) => (
                 <li key={idx}>• {item}</li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
-          <motion.p
-            className="mx-auto mb-10 max-w-3xl text-center text-lg leading-relaxed text-black"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <p className="mx-auto mb-10 max-w-3xl text-center text-lg leading-relaxed text-black">
             {jobDescription}
-          </motion.p>
+          </p>
 
           <div className="mb-10 grid gap-8 text-left md:grid-cols-2">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportPreset}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
+            <div>
               <h3 className="mb-4 text-xl font-bold text-black">Qualifications:</h3>
               <ul className="space-y-2 text-lg">
                 {qualifications.map((qual, idx) => (
@@ -170,29 +139,18 @@ export default function CareersPage() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportPreset}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
+            </div>
+            <div>
               <h3 className="mb-4 text-xl font-bold text-black">Benefits:</h3>
               <ul className="space-y-2 text-lg">
                 {benefits.map((benefit, idx) => (
                   <li key={idx}>• {benefit}</li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            className="mb-6 flex flex-col justify-center gap-4 sm:flex-row"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div className="mb-6 flex flex-col justify-center gap-4 sm:flex-row">
             {indeedUrl && (
               <a
                 href={indeedUrl}
@@ -212,20 +170,14 @@ export default function CareersPage() {
                 Download Fillable PDF
               </a>
             )}
-          </motion.div>
+          </div>
 
           {(submissionEmail || submissionFax) && (
-            <motion.p
-              className="text-center text-sm text-gray-600"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportPreset}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
+            <p className="text-center text-sm text-gray-600">
               {submissionEmail && `Email to ${submissionEmail}`}
               {submissionEmail && submissionFax && ' or '}
               {submissionFax && `fax to ${submissionFax}`}
-            </motion.p>
+            </p>
           )}
         </div>
       </main>

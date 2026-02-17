@@ -397,18 +397,12 @@ export default function Home() {
 
           <div
             ref={scrollAnimatedElementRef}
-            className="has-scroll-animation scroll-animated-wrapper"
+            className="has-scroll-animation"
             style={{
               position: 'relative',
-              transform: 'translate3d(0, 0px, 0)',
-              WebkitTransform: 'translate3d(0, 0px, 0)',
-              transformStyle: 'preserve-3d',
-              WebkitTransformStyle: 'preserve-3d',
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
               zIndex: 3,
               willChange: 'transform',
-              isolation: 'isolate',
+              transform: 'translate3d(0, 0px, 0)',
             }}
           >
             <CompanyStats data={statsData} />

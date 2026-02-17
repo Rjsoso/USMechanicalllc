@@ -323,7 +323,7 @@ export default function ServiceDetail() {
           {/* Request a Quote Button */}
           <motion.div
             className="mb-8 mt-8 flex justify-center"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >

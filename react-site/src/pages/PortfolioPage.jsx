@@ -94,7 +94,7 @@ export default function PortfolioPage() {
             {displayCategories.map((category, index) => (
               <motion.div
                 key={category._id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={viewportPreset}
                 transition={{ duration: 0.4, delay: index * 0.1 }}

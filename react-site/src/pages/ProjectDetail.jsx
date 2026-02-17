@@ -382,7 +382,7 @@ export default function ProjectDetail() {
           {/* Request a Quote Button */}
           <motion.div
             className="mb-8 mt-16 flex justify-center"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportPreset}
             transition={{ duration: 0.25 }}
