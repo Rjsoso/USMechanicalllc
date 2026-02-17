@@ -108,7 +108,8 @@ export default function CategoryDetail() {
     return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
   }, [categoryData?.projects])
 
-  if (loading) {
+  // Render immediately - no loading check
+  if (!categoryData && error) {
     return (
       <>
         <Header />

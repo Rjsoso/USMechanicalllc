@@ -70,7 +70,8 @@ export default function CareersPage() {
     ? urlFor(backgroundImage).width(1920).quality(90).url()
     : null
 
-  if (loading) {
+  // Render immediately - no loading check
+  if (!careersData) {
     return (
       <>
         <SEO

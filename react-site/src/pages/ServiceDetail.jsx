@@ -117,7 +117,8 @@ export default function ServiceDetail() {
       .filter(Boolean)
   }, [serviceData])
 
-  if (loading) {
+  // Render immediately - no loading check
+  if (!serviceData && error) {
     return (
       <>
         <Header />

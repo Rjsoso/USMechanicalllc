@@ -300,7 +300,7 @@ function Contact() {
             </div>
           )}
 
-          {!loading && (error || !contactData) && (
+          {(error || !contactData) && (
             <div className="flex items-center justify-center py-12">
               <div className="max-w-2xl px-6 text-center">
                 <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
@@ -320,7 +320,7 @@ function Contact() {
             </div>
           )}
 
-          {!loading && contactData && (
+          {contactData && (
             <>
               <h1 className="section-title mb-8 text-center text-5xl text-white md:text-6xl">
                 {contactData.heroTitle || 'Contact Us'}

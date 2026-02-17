@@ -87,7 +87,8 @@ export default function ProjectDetail() {
       .filter(Boolean)
   }, [projectData])
 
-  if (loading) {
+  // Render immediately - no loading check
+  if (!projectData && error) {
     return (
       <>
         <Header />

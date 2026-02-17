@@ -10,7 +10,6 @@ import { FiArrowRight } from 'react-icons/fi'
 
 function AboutAndSafety({ data: aboutDataProp }) {
   const [data, setData] = useState(aboutDataProp || null)
-  const [loading, setLoading] = useState(!aboutDataProp)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -47,7 +46,6 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
   useEffect(() => {
     if (aboutDataProp) {
       setData({ ...defaultData, ...aboutDataProp })
-      setLoading(false)
     }
   }, [aboutDataProp])
 
@@ -119,11 +117,11 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
 
   // Map aboutPhotos to carousel items format
   const carouselItems = useMemo(() => {
-    if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
+    if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
       return []
     }
 
-    return data.aboutPhotos
+    return displayData.aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -170,7 +168,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         return null
       })
       .filter(Boolean)
-  }, [data?.safetyLogos])
+  }, [data, displayData?.safetyLogos])
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {
@@ -189,9 +187,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     return 40 // default
   }
 
-  if (loading || !data) {
-    return <div className="bg-black py-20 text-center text-white">Loading content...</div>
-  }
+  // Use displayData fallback pattern
+  const displayData = data || defaultData
 
   return (
     <>
@@ -276,7 +273,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                           }
                     }
                   >
-                    {data.aboutTitle}
+                    {displayData.aboutTitle}
                   </h2>
                 </FadeInNative>
 
@@ -344,7 +341,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                                   }
                             }
                           >
-                            {data.aboutText}
+                            {displayData.aboutText}
                           </div>
                         </div>
                       </div>
@@ -464,15 +461,15 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
             >
               <FadeInNative delay={0.3}>
                 <h3 className="section-title mb-4 text-5xl text-gray-900 md:text-6xl">
-                  {data.safetyTitle}
+                  {displayData.safetyTitle}
                 </h3>
               </FadeInNative>
               <FadeInNative delay={0.4}>
                 <div className="text-lg leading-relaxed text-gray-700">
-                  {Array.isArray(data.safetyText) ? (
-                    <PortableText value={data.safetyText} />
+                  {Array.isArray(displayData.safetyText) ? (
+                    <PortableText value={displayData.safetyText} />
                   ) : (
-                    <p className="whitespace-pre-line">{data.safetyText}</p>
+                    <p className="whitespace-pre-line">{displayData.safetyText}</p>
                   )}
                 </div>
               </FadeInNative>
