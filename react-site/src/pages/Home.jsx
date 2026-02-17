@@ -26,8 +26,9 @@ export default function Home() {
   const [aboutData, setAboutData] = useState(null)
   const [allDataLoaded, setAllDataLoaded] = useState(false)
 
-  // DOM ref for scroll-animated wrapper (direct manipulation, no React re-renders)
+  // DOM refs for scroll-animated wrapper and contact (direct manipulation, no React re-renders)
   const scrollAnimatedElementRef = useRef(null)
+  const contactWrapperRef = useRef(null)
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -241,51 +242,54 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
-  // (Contact animation state removed — contact wrapper is now static; reveal is handled
-  //  entirely by the scroll wrapper sliding up via applyScrollAnimations Phase 2)
-
-  // Scroll-triggered animation for the scroll wrapper (Portfolio/LogoLoop slide-up)
-  // Phase 1 — safety parallax: 0 → -150px   (existing behaviour)
-  // Phase 2 — contact reveal:  -150 → -300px (scroll wrapper peels away to reveal contact)
-  // Contact wrapper is static (permanent -150px transform) so the reveal is
-  // entirely driven by the wrapper above sliding upward.
+  // Scroll-driven animation
+  // Phase 1 — safety parallax: scroll wrapper slides 0 → -150 px as safety exits
+  // Phase 2 — contact reveal:  scroll wrapper slides an extra `overlap` px so it
+  //           peels away and reveals the contact section sitting underneath.
+  //           The overlap and contact wrapper transform are calculated dynamically
+  //           from the viewport height so the effect scales to any screen size.
   useEffect(() => {
-    // Walk offsetParent chain to get true document-relative top
     const getDocTop = (el) => {
       let top = 0
-      while (el) {
-        top += el.offsetTop
-        el = el.offsetParent
-      }
+      while (el) { top += el.offsetTop; el = el.offsetParent }
       return top
     }
 
-    // Cached layout values (offsetTop is unaffected by CSS transforms)
     let safetyDocTop = 0
     let safetyHeight = 0
     let contactDocTop = 0
     let viewportHeight = window.innerHeight
+    let overlap = 0          // dynamically calculated each resize/cache
 
     const cachePositions = () => {
       viewportHeight = window.innerHeight
+
       const safetyEl = document.querySelector('#safety')
       if (safetyEl) {
         safetyDocTop = getDocTop(safetyEl)
         safetyHeight = safetyEl.offsetHeight
       }
+
       const contactEl = document.querySelector('#contact-wrapper')
       if (contactEl) {
         contactDocTop = getDocTop(contactEl)
       }
+
+      // Overlap = 45% of viewport so the reveal is clearly visible on any screen
+      overlap = Math.round(viewportHeight * 0.45)
+
+      // Apply the overlap transform to the contact wrapper so it sits underneath
+      if (contactWrapperRef.current) {
+        contactWrapperRef.current.style.transform = `translate3d(0, -${overlap}px, 0)`
+      }
     }
 
-    // --- Apply transforms from scrollY + cached positions (zero DOM reads) ---
     const applyScrollAnimations = () => {
       if (document.hidden || window.__scrollNavigationLock) return
 
       const scrollY = window.scrollY
 
-      // Phase 1 — safety parallax
+      // Phase 1 — safety parallax (scroll wrapper slides up to -150px)
       const safetyBottom = (safetyDocTop + safetyHeight) - scrollY
       const slideStart = viewportHeight * 0.25
       let safetyValue = 0
@@ -296,15 +300,17 @@ export default function Home() {
         safetyValue = -150
       }
 
-      // Phase 2 — contact reveal (scroll wrapper slides an additional -150px)
+      // Phase 2 — contact reveal (scroll wrapper slides an additional `overlap` px)
+      // Triggers when the contact wrapper's document position enters the lower
+      // half of the viewport; completes when it reaches the top.
       let revealValue = 0
       const contactTop = contactDocTop - scrollY
-      const revealStart = viewportHeight * 0.8
+      const revealStart = viewportHeight * 0.55
       if (contactTop <= revealStart && contactTop >= 0) {
-        const progress = 1 - (contactTop / revealStart)
-        revealValue = -150 * progress
+        const progress = 1 - contactTop / revealStart
+        revealValue = -overlap * progress
       } else if (contactTop < 0) {
-        revealValue = -150
+        revealValue = -overlap
       }
 
       const totalOffset = Math.round(safetyValue + revealValue)
@@ -314,39 +320,24 @@ export default function Home() {
     }
 
     // Initial cache after React paint settles
-    const handleMount = () => {
-      cachePositions()
-      applyScrollAnimations()
-    }
+    const handleMount = () => { cachePositions(); applyScrollAnimations() }
     requestAnimationFrame(() => requestAnimationFrame(handleMount))
 
-    // Recache on resize
-    const onResize = () => {
-      cachePositions()
-      applyScrollAnimations()
-    }
+    const onResize = () => { cachePositions(); applyScrollAnimations() }
     window.addEventListener('resize', onResize, { passive: true })
 
     // Recache periodically (catches lazy-loaded images shifting layout)
-    const recacheId = setInterval(cachePositions, 1500)
+    const recacheId = setInterval(cachePositions, 2000)
 
-    // Scroll handler — coalesce to one update per animation frame
     let scrollRafId = null
     const onScroll = () => {
       if (scrollRafId) return
-      scrollRafId = requestAnimationFrame(() => {
-        scrollRafId = null
-        applyScrollAnimations()
-      })
+      scrollRafId = requestAnimationFrame(() => { scrollRafId = null; applyScrollAnimations() })
     }
     window.addEventListener('scroll', onScroll, { passive: true })
 
-    // Visibility handler
     const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        cachePositions()
-        applyScrollAnimations()
-      }
+      if (!document.hidden) { cachePositions(); applyScrollAnimations() }
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
@@ -413,11 +404,11 @@ export default function Home() {
 
           <div
             id="contact-wrapper"
+            ref={contactWrapperRef}
             style={{
               position: 'relative',
               zIndex: 1,
-              transform: 'translate3d(0, -150px, 0)',
-              WebkitTransform: 'translate3d(0, -150px, 0)',
+              transform: 'translate3d(0, 0px, 0)',
             }}
           >
             <Contact />

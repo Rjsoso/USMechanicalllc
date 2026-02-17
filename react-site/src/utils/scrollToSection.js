@@ -88,13 +88,14 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
   window.history.pushState(null, '', `/#${sectionId}`)
   window.__scrollNavigationLock = true
 
-  // For contact, set the scroll wrapper to full reveal (-300px) so position
-  // measurement sees the final layout (contact wrapper has a permanent -150px
-  // transform that shifts it under the scroll wrapper)
+  // For contact, set the scroll wrapper to full reveal so position measurement
+  // sees the final layout (contact wrapper sits `overlap` px behind the wrapper)
   if (sectionId === 'contact') {
     const scrollWrapper = document.querySelector('.has-scroll-animation')
     if (scrollWrapper) {
-      scrollWrapper.style.transform = 'translate3d(0, -300px, 0)'
+      const overlap = Math.round(window.innerHeight * 0.45)
+      const totalOffset = -(150 + overlap)
+      scrollWrapper.style.transform = `translate3d(0, ${totalOffset}px, 0)`
     }
   }
 
