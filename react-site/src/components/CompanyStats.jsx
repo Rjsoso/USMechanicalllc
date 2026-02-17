@@ -2,19 +2,17 @@ import { useEffect, useState, useRef, memo } from 'react'
 import { client } from '../utils/sanity'
 
 // Animate only when visible in viewport - only once per page visit.
-const TICK_MS = 16 // ~60fps for smooth counting
+// Uses direct DOM writes (no React re-renders) so counting doesn't block the main thread during scroll.
 const AnimatedNumber = memo(function AnimatedNumber({
   value,
   duration = 2000,
   inView,
   startValue = 0,
 }) {
-  const [count, setCount] = useState(startValue)
-  const intervalRef = useRef(null)
+  const spanRef = useRef(null)
+  const rafRef = useRef(null)
   const startedRef = useRef(false)
   const completedRef = useRef(false)
-  const cancelledRef = useRef(false)
-  const startTimeRef = useRef(0)
 
   const match = String(value)
     .trim()
@@ -23,60 +21,49 @@ const AnimatedNumber = memo(function AnimatedNumber({
   const suffix = match && match[2] ? match[2].trim() : ''
 
   useEffect(() => {
-    if (!numericValue) return
+    if (!numericValue || !spanRef.current) return
     if (completedRef.current) {
-      setCount(numericValue)
+      spanRef.current.textContent = Math.floor(numericValue).toLocaleString() + suffix
       return
     }
-    if (!inView || !numericValue) return
-
-    if (startedRef.current) {
-      if (intervalRef.current != null) return
-    }
+    if (!inView) return
+    if (startedRef.current) return
 
     startedRef.current = true
-    cancelledRef.current = false
-    startTimeRef.current = Date.now()
-    setCount(startValue)
+    const startTime = performance.now()
+    spanRef.current.textContent = Math.floor(startValue).toLocaleString() + suffix
 
-    const intervalId = setInterval(() => {
-      if (cancelledRef.current) return
-      const elapsed = Date.now() - startTimeRef.current
+    const animate = (now) => {
+      const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      // Single ease-out curve — no double-easing
       const eased = 1 - Math.pow(1 - progress, 3)
-      const currentValue = startValue + (numericValue - startValue) * eased
-      setCount(currentValue)
-      if (progress >= 1) {
+      const current = startValue + (numericValue - startValue) * eased
+      if (spanRef.current) {
+        spanRef.current.textContent = Math.floor(current).toLocaleString() + suffix
+      }
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(animate)
+      } else {
         completedRef.current = true
-        setCount(numericValue)
-        if (intervalRef.current === intervalId) {
-          clearInterval(intervalId)
-          intervalRef.current = null
+        if (spanRef.current) {
+          spanRef.current.textContent = Math.floor(numericValue).toLocaleString() + suffix
         }
       }
-    }, TICK_MS)
-    intervalRef.current = intervalId
+    }
+    rafRef.current = requestAnimationFrame(animate)
 
     return () => {
-      cancelledRef.current = true
-      if (intervalRef.current != null) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
     }
-  }, [inView, numericValue, duration, startValue])
+  }, [inView, numericValue, duration, startValue, suffix])
 
-  // If no numeric value, just return the value as-is
   if (!numericValue) {
     return <span>{value}</span>
   }
 
-  // Return animated count with suffix
   return (
-    <span>
-      {Math.floor(count).toLocaleString()}
-      {suffix}
+    <span ref={spanRef}>
+      {Math.floor(startValue).toLocaleString()}{suffix}
     </span>
   )
 })

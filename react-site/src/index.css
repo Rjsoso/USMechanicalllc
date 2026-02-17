@@ -199,7 +199,9 @@ body,
   background-repeat: no-repeat;
   background-image: var(--bg-url, linear-gradient(135deg, #1e293b 0%, #334155 100%));
   z-index: -1;
+  transform: translateZ(0);
   backface-visibility: hidden;
+  pointer-events: none;
 }
 
 /* Apply gradient overlay when background image exists */
