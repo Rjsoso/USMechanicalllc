@@ -373,145 +373,80 @@ export default function Home() {
   }, [])
 
   // Scroll-triggered animation for Stats + Services sliding under Safety
-  // Hypersmooth with interpolation for 120Hz displays
+  // Use setInterval for interpolation so RAF is left for stats + logo loop (no competing loops)
   useEffect(() => {
-    let rafId = null
     let lastScrollTime = 0
-    const THROTTLE = 16 // 60fps - smoother and more efficient than 120fps
-    const INTERPOLATION_SPEED = 0.15 // Smooth interpolation factor
-    
-    // Cancel handler for lock event
+    const THROTTLE = 16
+    const INTERPOLATION_SPEED = 0.15
+    const SCROLL_INTERP_MS = 40 // ~25fps - leaves RAF budget for stats and logo
+
     const cancelPendingScrollAnimations = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId)
-        rafId = null
-      }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
-        animationFrameRef.current = null
-      }
+      // Interval keeps running; lock just prevents updates
     }
-    
     window.addEventListener('lockContactAnimation', cancelPendingScrollAnimations)
 
-    // Throttle so stats and logo loop get frame time (run at ~30fps instead of 60)
-    const SCROLL_INTERP_INTERVAL_MS = 33
-    const lastScrollInterpRef = { current: 0 }
-
-    const interpolate = (timestamp) => {
-      if (document.hidden) {
-        animationFrameRef.current = null
-        return
-      }
-      if (window.__scrollNavigationLock) return
+    const intervalId = setInterval(() => {
+      if (document.hidden || window.__scrollNavigationLock) return
       const current = lastScrollSlideRef.current
       const target = targetScrollSlideRef.current
       const diff = target - current
-
       if (Math.abs(diff) > 0.1) {
-        const now = timestamp ?? performance.now()
-        if (now - lastScrollInterpRef.current >= SCROLL_INTERP_INTERVAL_MS) {
-          lastScrollInterpRef.current = now
-          const newValue = current + diff * INTERPOLATION_SPEED
-          lastScrollSlideRef.current = newValue
-          if (scrollAnimatedElementRef.current) {
-            scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
-          }
+        const newValue = current + diff * INTERPOLATION_SPEED
+        lastScrollSlideRef.current = newValue
+        if (scrollAnimatedElementRef.current) {
+          scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
         }
-        animationFrameRef.current = requestAnimationFrame(interpolate)
       } else {
         lastScrollSlideRef.current = target
         if (scrollAnimatedElementRef.current) {
           scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${target}px, 0)`
         }
-        animationFrameRef.current = null
       }
-    }
+    }, SCROLL_INTERP_MS)
 
     const handleScroll = () => {
       if (document.hidden) return
-      if (window.__scrollNavigationLock) {
-        if (rafId) {
-          cancelAnimationFrame(rafId)
-          rafId = null
-        }
-        return
-      }
+      if (window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
-      
       const now = Date.now()
       if (now - lastScrollTime < THROTTLE) return
       lastScrollTime = now
 
-      if (rafId) cancelAnimationFrame(rafId)
-
-      rafId = requestAnimationFrame(() => {
-        // Double-check lock inside RAF callback
-        if (window.__scrollNavigationLock) return
-        const safetySection = document.querySelector('#safety')
-        if (!safetySection) return
-
-        const rect = safetySection.getBoundingClientRect()
-        const safetyBottom = rect.bottom
-        const viewportHeight = window.innerHeight
-
-        const slideStart = viewportHeight * 0.25
-        const slideEnd = 0
-
-        let targetValue = 0
-        if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
-          const progress = 1 - safetyBottom / slideStart
-          const maxSlide = 150
-          targetValue = -progress * maxSlide
-        } else if (safetyBottom < slideEnd) {
-          targetValue = -150
-        }
-
-        targetScrollSlideRef.current = targetValue
-        if (!animationFrameRef.current) {
-          lastScrollInterpRef.current = 0
-          animationFrameRef.current = requestAnimationFrame(interpolate)
-        }
-      })
+      const safetySection = document.querySelector('#safety')
+      if (!safetySection) return
+      const rect = safetySection.getBoundingClientRect()
+      const safetyBottom = rect.bottom
+      const viewportHeight = window.innerHeight
+      const slideStart = viewportHeight * 0.25
+      const slideEnd = 0
+      let targetValue = 0
+      if (safetyBottom <= slideStart && safetyBottom >= slideEnd) {
+        const progress = 1 - safetyBottom / slideStart
+        const maxSlide = 150
+        targetValue = -progress * maxSlide
+      } else if (safetyBottom < slideEnd) {
+        targetValue = -150
+      }
+      targetScrollSlideRef.current = targetValue
     }
 
-    // Use Intersection Observer to only animate when Safety section is nearby
     const safetySection = document.querySelector('#safety')
-    let isNearViewport = true // Start as true to handle initial render
-    
+    let isNearViewport = true
     const observer = safetySection ? new IntersectionObserver(
       ([entry]) => {
         isNearViewport = entry.isIntersecting
-        if (!isNearViewport) {
-          // Cleanup when section is far from viewport
-          if (rafId) cancelAnimationFrame(rafId)
-          if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
-        } else {
-          handleScroll() // Trigger update when becoming visible
-        }
+        if (isNearViewport) handleScroll()
       },
-      { threshold: 0, rootMargin: '300px' } // Generous margin for smooth animation
+      { threshold: 0, rootMargin: '300px' }
     ) : null
-    
-    if (observer && safetySection) {
-      observer.observe(safetySection)
-    }
+    if (observer && safetySection) observer.observe(safetySection)
 
-    // Optimized scroll handler that checks visibility first
     const handleScrollOptimized = () => {
-      if (!isNearViewport) return // Skip if section not nearby
+      if (!isNearViewport) return
       handleScroll()
     }
-
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        if (rafId) cancelAnimationFrame(rafId)
-        rafId = null
-        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
-        animationFrameRef.current = null
-      } else {
-        handleScroll()
-      }
+      if (!document.hidden) handleScroll()
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
@@ -520,9 +455,8 @@ export default function Home() {
     handleScroll()
 
     return () => {
+      clearInterval(intervalId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      if (rafId) cancelAnimationFrame(rafId)
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
       if (observer) observer.disconnect()
       window.removeEventListener('scroll', handleScrollOptimized)
       window.removeEventListener('resize', handleScrollOptimized)
@@ -530,143 +464,71 @@ export default function Home() {
     }
   }, [])
 
-  // Contact section progressive slide animation (throttled so stats/logo loop get frame time)
+  // Contact section progressive slide - setInterval so RAF is left for stats + logo loop
   useEffect(() => {
-    let rafId = null
     let lastScrollTime = 0
     const THROTTLE = 16
     const INTERPOLATION_SPEED = 0.15
-    const CONTACT_INTERP_INTERVAL_MS = 33
-    const lastContactInterpRef = { current: 0 }
+    const CONTACT_INTERP_MS = 40
 
-    const interpolateContact = (timestamp) => {
-      if (document.hidden) {
-        contactAnimationFrameRef.current = null
-        return
-      }
-      if (window.__scrollNavigationLock) return
-
+    const intervalId = setInterval(() => {
+      if (document.hidden || window.__scrollNavigationLock) return
       const current = lastContactSlideRef.current
       const target = targetContactSlideRef.current
       const diff = target - current
-
       if (Math.abs(diff) > 1) {
-        const now = timestamp ?? performance.now()
-        if (now - lastContactInterpRef.current >= CONTACT_INTERP_INTERVAL_MS) {
-          lastContactInterpRef.current = now
-          const newValue = current + diff * INTERPOLATION_SPEED
-          lastContactSlideRef.current = newValue
-          if (contactWrapperRef.current && !buttonNavigationUsed.current) {
-            contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
-          }
+        const newValue = current + diff * INTERPOLATION_SPEED
+        lastContactSlideRef.current = newValue
+        if (contactWrapperRef.current && !buttonNavigationUsed.current) {
+          contactWrapperRef.current.style.transform = `translate3d(0, ${newValue}px, 0)`
         }
-        contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
       } else {
         lastContactSlideRef.current = target
         if (contactWrapperRef.current && !buttonNavigationUsed.current) {
           contactWrapperRef.current.style.transform = `translate3d(0, ${target}px, 0)`
         }
-        contactAnimationFrameRef.current = null
       }
-    }
-    
+    }, CONTACT_INTERP_MS)
+
     const handleContactScroll = () => {
-      if (document.hidden) return
-      if (window.__scrollNavigationLock) {
-        if (rafId) {
-          cancelAnimationFrame(rafId)
-          rafId = null
-        }
-        return
-      }
+      if (document.hidden || window.__scrollNavigationLock) return
       if (sessionStorage.getItem('scrollNavigationInProgress') === 'true') return
-      
       const now = Date.now()
       if (now - lastScrollTime < THROTTLE) return
       lastScrollTime = now
 
-      if (rafId) cancelAnimationFrame(rafId)
-
-      rafId = requestAnimationFrame(() => {
-        // Skip calculations during navigation lock
-        if (window.__scrollNavigationLock) return
-        
-        const contactWrapper = document.querySelector('#contact-wrapper')
-        if (!contactWrapper) {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('[Contact] ERROR: Wrapper not found!')
-          }
-          return
-        }
-
-        const rect = contactWrapper.getBoundingClientRect()
-        const viewportHeight = window.innerHeight
-
-        // Animate over a LARGE range - start when wrapper is far below viewport
-        const animationStartDistance = viewportHeight * 2.5  // Start when 2.5x viewport below (e.g., 2142px)
-        const animationEndDistance = 0  // Complete when wrapper reaches top of viewport
-
-        let slideValue = -600 // Default: hidden (top portion behind careers)
-
-        if (rect.top <= animationStartDistance && rect.top >= animationEndDistance) {
-          // Progressive animation as wrapper scrolls from far below into viewport
-          // Contact slides DOWN from behind careers (-600px → 0px)
-          const progress = 1 - (rect.top / animationStartDistance)
-          slideValue = -600 + (progress * 600) // -600px -> 0px (slide DOWN to reveal)
-        } else if (rect.top < animationEndDistance) {
-          slideValue = 0 // Fully visible at natural position
-        } else {
-          slideValue = -600 // Hidden (top behind careers when scrolled back up)
-        }
-
-        // ALWAYS set target, never call setContactSlide directly
-        targetContactSlideRef.current = slideValue
-        if (!contactAnimationFrameRef.current) {
-          lastContactInterpRef.current = 0
-          contactAnimationFrameRef.current = requestAnimationFrame(interpolateContact)
-        }
-      })
-    }
-
-    // Cancel handler for lock event
-    const cancelPendingAnimations = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId)
-        rafId = null
-      }
-      if (contactAnimationFrameRef.current) {
-        cancelAnimationFrame(contactAnimationFrameRef.current)
-        contactAnimationFrameRef.current = null
-      }
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[DEBUG] Contact: Cancelled pending animation frames')
-      }
-    }
-    
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        if (rafId) cancelAnimationFrame(rafId)
-        rafId = null
-        if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
-        contactAnimationFrameRef.current = null
+      const contactWrapper = document.querySelector('#contact-wrapper')
+      if (!contactWrapper) return
+      const rect = contactWrapper.getBoundingClientRect()
+      const viewportHeight = window.innerHeight
+      const animationStartDistance = viewportHeight * 2.5
+      const animationEndDistance = 0
+      let slideValue = -600
+      if (rect.top <= animationStartDistance && rect.top >= animationEndDistance) {
+        const progress = 1 - (rect.top / animationStartDistance)
+        slideValue = -600 + (progress * 600)
+      } else if (rect.top < animationEndDistance) {
+        slideValue = 0
       } else {
-        handleContactScroll()
+        slideValue = -600
       }
+      targetContactSlideRef.current = slideValue
+    }
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) handleContactScroll()
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('lockContactAnimation', cancelPendingAnimations)
     window.addEventListener('scroll', handleContactScroll, { passive: true })
     window.addEventListener('resize', handleContactScroll, { passive: true })
-    handleContactScroll() // Check initial state
+    handleContactScroll()
 
     return () => {
+      clearInterval(intervalId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      if (rafId) cancelAnimationFrame(rafId)
-      if (contactAnimationFrameRef.current) cancelAnimationFrame(contactAnimationFrameRef.current)
       window.removeEventListener('scroll', handleContactScroll)
       window.removeEventListener('resize', handleContactScroll)
-      window.removeEventListener('lockContactAnimation', cancelPendingAnimations)
     }
   }, [])
 
