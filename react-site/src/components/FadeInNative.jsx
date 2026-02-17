@@ -23,8 +23,8 @@ function FadeInNative({ children, delay = 0, className = '' }) {
         }
       },
       {
-        threshold: 0.02,
-        rootMargin: '50px 0px',
+        threshold: 0.01,
+        rootMargin: '100px 0px',
       }
     )
 

@@ -171,8 +171,8 @@ const CompanyStats = ({ data: statsDataProp }) => {
         }
       },
       {
-        threshold: 0.05,
-        rootMargin: '50px 0px',
+        threshold: 0.01,
+        rootMargin: '100px 0px',
       }
     )
 

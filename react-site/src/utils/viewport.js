@@ -4,6 +4,6 @@
  */
 export const viewportPreset = {
   once: true,
-  amount: 0.05,
-  margin: '50px 0px',
+  amount: 0.01,
+  margin: '100px 0px',
 }

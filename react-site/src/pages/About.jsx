@@ -249,7 +249,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                 }
               >
                 <div className="w-full px-6 pb-8 pt-8 lg:px-8">
-                  <FadeInNative delay={0.1}>
+                  <FadeInNative delay={0}>
                     <h1
                       className="section-title mb-4 text-3xl text-white md:text-4xl lg:text-5xl"
                       style={
@@ -267,7 +267,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                     </h1>
                   </FadeInNative>
 
-                  <FadeInNative delay={0.2}>
+                  <FadeInNative delay={0.05}>
                     <div>
                       <div
                         className="relative"
@@ -440,12 +440,12 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
               <div
                 className={`${safetyLogoItems.length > 0 ? 'md:w-1/2' : 'w-full'} relative z-10 bg-white`}
               >
-                <FadeInNative delay={0.3}>
+                <FadeInNative delay={0}>
                   <h2 className="section-title mb-4 text-5xl text-gray-900 md:text-6xl">
                     {displayData.safetyTitle}
                   </h2>
                 </FadeInNative>
-                <FadeInNative delay={0.4}>
+                <FadeInNative delay={0.05}>
                   <div className="text-lg leading-relaxed text-gray-700">
                     {Array.isArray(displayData.safetyText) ? (
                       <PortableText value={displayData.safetyText} />
