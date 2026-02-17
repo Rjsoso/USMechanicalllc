@@ -1,10 +1,9 @@
 /**
  * Shared viewport config for scroll-triggered animations (Framer Motion whileInView).
- * Triggers when a small part of the element enters the viewport so animations
- * fire reliably even when scrolling quickly. Avoid large margins (e.g. 500px).
+ * Less aggressive trigger (15% visible) to avoid too many animations firing at once during scroll.
  */
 export const viewportPreset = {
   once: true,
-  amount: 0.05,
-  margin: '50px',
+  amount: 0.15,
+  margin: '0px',
 }

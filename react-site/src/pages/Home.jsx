@@ -26,6 +26,7 @@ export default function Home() {
   const [portfolioData, setPortfolioData] = useState(null)
   const [statsData, setStatsData] = useState(null)
   const [aboutData, setAboutData] = useState(null)
+  const [allDataLoaded, setAllDataLoaded] = useState(false)
 
   // DOM refs for direct manipulation (no React re-renders)
   const scrollAnimatedElementRef = useRef(null)
@@ -184,13 +185,21 @@ export default function Home() {
     }
   }, [])
 
-  // Progressive data fetching - set state as each request completes so UI paints incrementally
+  // Batched data fetch - single re-render when all data is ready (avoids jank from 5 updates during scroll)
   useEffect(() => {
     let cancelled = false
-
-    client
-      .fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`)
-      .then(heroData => {
+    const fetchAll = async () => {
+      try {
+        const [heroData, services, portfolio, stats, about] = await Promise.all([
+          client.fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`),
+          client.fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`),
+          Promise.all([
+            client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
+            client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
+          ]).then(([categories, section]) => ({ categories, section })),
+          client.fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`),
+          client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
+        ])
         if (cancelled) return
         if (heroData?.backgroundImage?.asset?.url) {
           setHeroBackgroundUrl(`${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`)
@@ -198,32 +207,19 @@ export default function Home() {
           const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
           if (url) setHeroBackgroundUrl(url)
         }
-      })
-      .catch(err => { if (!cancelled) console.error('[Home] Hero fetch error:', err) })
-
-    client
-      .fetch(`*[_type == "ourServices"][0]{ sectionTitle, descriptionText, deliveryMethodsHeading, deliveryMethodsFormHeadline, deliveryMethodsFormCopy, deliveryMethodsEmail, deliveryMethods[] { title, summary, badge, badgeTone, backgroundImage { asset-> { url, _id }, alt }, body }, servicesInfo[] { title, description, backgroundType, backgroundColor, textColor, backgroundImage { asset-> { _id, url }, alt }, slug { current }, fullDescription, images[] { asset-> { _id, url }, alt, caption }, features[] { title, description } } } }`)
-      .then(services => { if (!cancelled) setServicesData(services) })
-      .catch(err => { if (!cancelled) console.error('[Home] Services fetch error:', err) })
-
-    Promise.all([
-      client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
-      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
-    ])
-      .then(([categories, section]) => ({ categories, section }))
-      .then(portfolio => { if (!cancelled) setPortfolioData(portfolio) })
-      .catch(err => { if (!cancelled) console.error('[Home] Portfolio fetch error:', err) })
-
-    client
-      .fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`)
-      .then(stats => { if (!cancelled) setStatsData(stats) })
-      .catch(err => { if (!cancelled) console.error('[Home] Stats fetch error:', err) })
-
-    client
-      .fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
-      .then(about => { if (!cancelled) setAboutData(about) })
-      .catch(err => { if (!cancelled) console.error('[Home] About fetch error:', err) })
-
+        setServicesData(services)
+        setPortfolioData(portfolio)
+        setStatsData(stats)
+        setAboutData(about)
+        setAllDataLoaded(true)
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[Home] Fetch error:', err)
+          setAllDataLoaded(true)
+        }
+      }
+    }
+    fetchAll()
     return () => { cancelled = true }
   }, [])
 
@@ -639,7 +635,19 @@ export default function Home() {
         url="https://usmechanical.com/"
       />
       <Header />
-      
+
+      {!allDataLoaded && (
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
+          <div style={{ textAlign: 'center', color: '#ffffff' }}>
+            <div style={{ width: '50px', height: '50px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#ffffff', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }} />
+            <p style={{ fontSize: '16px', fontWeight: 500, opacity: 0.9 }}>Loading…</p>
+          </div>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {allDataLoaded && (
+      <>
       <main
         className="main-with-fixed-bg"
         style={{
@@ -710,6 +718,8 @@ export default function Home() {
         </div>
       </main>
       <Footer />
+      </>
+      )}
     </>
   )
 }
