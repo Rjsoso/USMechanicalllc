@@ -152,9 +152,9 @@ const ServicesSection = ({ data: servicesDataProp }) => {
         {/* Split: list left, preview right */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[5fr_6fr] lg:gap-0">
 
-          {/* LEFT — numbered list */}
+          {/* LEFT — list */}
           <div className="flex flex-col border-t border-white/20">
-            {cards.map((card, index) => {
+            {cards.map((card) => {
               const isActive = card.id === (hoveredId ?? cards[0].id)
               return (
                 <motion.button
@@ -167,11 +167,6 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                   animate={{ opacity: hoveredId && !isActive ? 0.55 : 1 }}
                   transition={{ duration: 0.18 }}
                 >
-                  {/* Index number */}
-                  <span className="w-8 shrink-0 text-xs font-mono text-white/60 tabular-nums">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-
                   {/* Title */}
                   <span
                     className="flex-1 text-lg font-semibold leading-tight tracking-tight"
@@ -220,9 +215,6 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     }}
                   />
                   <div className="relative">
-                    <p className="mb-1 text-xs font-mono text-white/50 uppercase tracking-widest">
-                      {String((cards.findIndex(c => c.id === activeCard.id) + 1)).padStart(2, '0')}
-                    </p>
                     <h3 className="mb-3 text-3xl font-bold text-white leading-tight">
                       {activeCard.title}
                     </h3>
