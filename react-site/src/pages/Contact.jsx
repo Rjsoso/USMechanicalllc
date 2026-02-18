@@ -167,11 +167,7 @@ function Contact() {
 
     const initTurnstile = () => {
       if (typeof window.turnstile !== 'undefined') {
-        if (window.turnstile.ready) {
-          window.turnstile.ready(renderWidget)
-        } else {
-          renderWidget()
-        }
+        renderWidget()
         return true
       }
       return false
