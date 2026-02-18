@@ -289,7 +289,33 @@ export default function Home() {
       }
     }
 
-    const applyScrollAnimations = () => {
+    // Lerp animation state — keeps currentOffset chasing targetOffset each frame
+    // instead of jumping instantly or using a CSS transition (which conflicts
+    // with rapid scroll updates and causes stutter).
+    let targetOffset = 0
+    let currentOffset = 0
+    let animRafId = null
+
+    const applyToDOM = (value) => {
+      if (scrollAnimatedElementRef.current) {
+        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${value}px, 0)`
+      }
+    }
+
+    const animLoop = () => {
+      const delta = targetOffset - currentOffset
+      if (Math.abs(delta) > 0.05) {
+        currentOffset += delta * 0.15
+        applyToDOM(currentOffset)
+        animRafId = requestAnimationFrame(animLoop)
+      } else {
+        currentOffset = targetOffset
+        applyToDOM(currentOffset)
+        animRafId = null
+      }
+    }
+
+    const calcTargetOffset = () => {
       if (document.hidden || window.__scrollNavigationLock) return
 
       const scrollY = window.scrollY
@@ -318,37 +344,40 @@ export default function Home() {
         revealValue = -overlap
       }
 
-      const totalOffset = safetyValue + revealValue
-      if (scrollAnimatedElementRef.current) {
-        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${totalOffset}px, 0)`
-      }
+      targetOffset = safetyValue + revealValue
+    }
+
+    // On mount and resize: jump immediately (no lerp) so initial position is instant
+    const jumpToTarget = () => {
+      calcTargetOffset()
+      currentOffset = targetOffset
+      applyToDOM(currentOffset)
     }
 
     // Initial cache after React paint settles
-    const handleMount = () => { cachePositions(); applyScrollAnimations() }
+    const handleMount = () => { cachePositions(); jumpToTarget() }
     requestAnimationFrame(() => requestAnimationFrame(handleMount))
 
-    const onResize = () => { cachePositions(); applyScrollAnimations() }
+    const onResize = () => { cachePositions(); jumpToTarget() }
     window.addEventListener('resize', onResize, { passive: true })
 
     // Recache periodically (catches lazy-loaded images shifting layout)
     const recacheId = setInterval(cachePositions, 2000)
 
-    let scrollRafId = null
     const onScroll = () => {
-      if (scrollRafId) return
-      scrollRafId = requestAnimationFrame(() => { scrollRafId = null; applyScrollAnimations() })
+      calcTargetOffset()
+      if (!animRafId) animRafId = requestAnimationFrame(animLoop)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
 
     const handleVisibilityChange = () => {
-      if (!document.hidden) { cachePositions(); applyScrollAnimations() }
+      if (!document.hidden) { cachePositions(); jumpToTarget() }
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
       clearInterval(recacheId)
-      if (scrollRafId) cancelAnimationFrame(scrollRafId)
+      if (animRafId) cancelAnimationFrame(animRafId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
@@ -399,7 +428,6 @@ export default function Home() {
               zIndex: 3,
               willChange: 'transform',
               transform: 'translate3d(0, 0px, 0)',
-              transition: 'transform 60ms linear',
             }}
           >
             <CompanyStats data={statsData} />
