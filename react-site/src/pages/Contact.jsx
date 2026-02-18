@@ -300,7 +300,7 @@ function Contact() {
     const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
 
     try {
-      const response = await fetch('https://formspree.io/f/xgvrvody', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
