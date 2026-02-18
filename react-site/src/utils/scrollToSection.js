@@ -35,7 +35,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
           const sectionOffsets = {
             'services': 25,
             'portfolio': -65,
-            'contact': 80,
+            'contact': 180,
             'about': 60,
             'safety': 90,
             'hero': 0,
@@ -93,7 +93,7 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
   if (sectionId === 'contact') {
     const scrollWrapper = document.querySelector('.has-scroll-animation')
     if (scrollWrapper) {
-      const overlap = Math.round(window.innerHeight * 0.45)
+      const overlap = Math.max(Math.round(window.innerHeight * 0.45), 350)
       const totalOffset = -(150 + overlap)
       scrollWrapper.style.transform = `translate3d(0, ${totalOffset}px, 0)`
     }

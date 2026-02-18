@@ -275,8 +275,8 @@ export default function Home() {
         contactDocTop = getDocTop(contactEl)
       }
 
-      // Overlap = 45% of viewport so the reveal is clearly visible on any screen
-      overlap = Math.round(viewportHeight * 0.45)
+      // Overlap = 45% of viewport, minimum 350px so the reveal is always noticeable
+      overlap = Math.max(Math.round(viewportHeight * 0.45), 350)
 
       // Apply the overlap transform to the contact wrapper so it sits underneath
       if (contactWrapperRef.current) {
@@ -302,10 +302,10 @@ export default function Home() {
 
       // Phase 2 — contact reveal (scroll wrapper slides an additional `overlap` px)
       // Triggers when the contact wrapper's document position enters the lower
-      // half of the viewport; completes when it reaches the top.
+      // 90% of the viewport; completes when it reaches the top (animation spans full page).
       let revealValue = 0
       const contactTop = contactDocTop - scrollY
-      const revealStart = viewportHeight * 0.55
+      const revealStart = viewportHeight * 0.9
       if (contactTop <= revealStart && contactTop >= 0) {
         const progress = 1 - contactTop / revealStart
         revealValue = -overlap * progress
