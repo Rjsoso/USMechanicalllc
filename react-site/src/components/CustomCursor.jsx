@@ -15,23 +15,13 @@ export default function CustomCursor() {
     let ringX = -100
     let ringY = -100
     let rafId = null
+    let idleTimer = null
 
-    const onMove = (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-      if (!visible) setVisible(true)
-    }
-
-    const onEnter = () => setVisible(true)
-    const onLeave = () => setVisible(false)
-
-    const onHoverStart = (e) => {
-      const el = e.target.closest('a, button, [role="button"], input, textarea, select, label')
-      if (el) setIsHovering(true)
-    }
-    const onHoverEnd = (e) => {
-      const el = e.target.closest('a, button, [role="button"], input, textarea, select, label')
-      if (el) setIsHovering(false)
+    const stopLoop = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
     }
 
     const animate = () => {
@@ -48,7 +38,43 @@ export default function CustomCursor() {
         ringRef.current.style.transform = `translate(${ringX}px, ${ringY}px)`
       }
 
+      // Stop when ring has fully caught up (saves GPU when idle)
+      const dx = Math.abs(mouseX - ringX)
+      const dy = Math.abs(mouseY - ringY)
+      if (dx < 0.15 && dy < 0.15) {
+        rafId = null
+        return
+      }
+
       rafId = requestAnimationFrame(animate)
+    }
+
+    const startLoop = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(animate)
+      }
+    }
+
+    const onMove = (e) => {
+      mouseX = e.clientX
+      mouseY = e.clientY
+      if (!visible) setVisible(true)
+      startLoop()
+      // Stop the loop 200ms after last movement if ring has caught up
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(stopLoop, 200)
+    }
+
+    const onEnter = () => setVisible(true)
+    const onLeave = () => setVisible(false)
+
+    const onHoverStart = (e) => {
+      const el = e.target.closest('a, button, [role="button"], input, textarea, select, label')
+      if (el) setIsHovering(true)
+    }
+    const onHoverEnd = (e) => {
+      const el = e.target.closest('a, button, [role="button"], input, textarea, select, label')
+      if (el) setIsHovering(false)
     }
 
     window.addEventListener('mousemove', onMove, { passive: true })
@@ -57,33 +83,31 @@ export default function CustomCursor() {
     document.addEventListener('mouseover', onHoverStart, { passive: true })
     document.addEventListener('mouseout', onHoverEnd, { passive: true })
 
-    rafId = requestAnimationFrame(animate)
-
     // Hide native cursor
     document.body.style.cursor = 'none'
 
     return () => {
+      stopLoop()
+      clearTimeout(idleTimer)
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseenter', onEnter)
       document.removeEventListener('mouseleave', onLeave)
       document.removeEventListener('mouseover', onHoverStart)
       document.removeEventListener('mouseout', onHoverEnd)
-      cancelAnimationFrame(rafId)
       document.body.style.cursor = ''
     }
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Don't render on touch devices (checked at runtime above, but also skip SSR/touch)
+  // Don't render on touch devices
   if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
     return null
   }
 
   const ringSize = isHovering ? 52 : 36
-  const ringOpacity = isHovering ? 0.6 : 0.4
 
   return (
     <>
-      {/* Instant dot */}
+      {/* Instant dot — no mix-blend-mode */}
       <div
         ref={dotRef}
         style={{
@@ -93,17 +117,16 @@ export default function CustomCursor() {
           width: 6,
           height: 6,
           borderRadius: '50%',
-          background: 'white',
+          background: 'rgba(255,255,255,0.9)',
           pointerEvents: 'none',
           zIndex: 99999,
           opacity: visible ? 1 : 0,
           transition: 'opacity 0.2s',
           willChange: 'transform',
-          mixBlendMode: 'difference',
         }}
       />
 
-      {/* Lagging ring */}
+      {/* Lagging ring — no mix-blend-mode */}
       <div
         ref={ringRef}
         style={{
@@ -113,14 +136,13 @@ export default function CustomCursor() {
           width: ringSize,
           height: ringSize,
           borderRadius: '50%',
-          border: '1.5px solid rgba(255,255,255,0.7)',
+          border: '1.5px solid rgba(255,255,255,0.6)',
           background: isHovering ? 'rgba(255,255,255,0.08)' : 'transparent',
           pointerEvents: 'none',
           zIndex: 99998,
-          opacity: visible ? ringOpacity : 0,
+          opacity: visible ? (isHovering ? 0.7 : 0.45) : 0,
           transition: 'opacity 0.2s, width 0.25s ease, height 0.25s ease, top 0.25s ease, left 0.25s ease, background 0.2s',
           willChange: 'transform',
-          mixBlendMode: 'difference',
         }}
       />
     </>

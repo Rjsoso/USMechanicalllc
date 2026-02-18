@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* GradientText color cycle — replaces JS setInterval for zero CPU overhead */
+@keyframes gradientTextCycle {
+  0%, 100% { color: #3404f6; }
+  50%       { color: #f40101; }
+}
+
 /* Logo Loop Keyframes - Must be outside Tailwind layers to prevent purging */
 @keyframes scrollLeft {
   from {
@@ -54,10 +60,10 @@ body {
 
 /* Removed - handled by comprehensive rule below */
 
-/* Enhanced glassmorphism for header */
+/* Glassmorphism for header — reduced blur for scroll performance */
 header {
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition:
     background-color 0.9s ease,
     color 0.9s ease;
@@ -124,10 +130,8 @@ img[src] {
   opacity: 1;
 }
 
-/* Optimize font rendering for smoothness */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Optimize font rendering for smoothness — only on headings to avoid slowing every text node */
+.section-title, h1, h2, h3 {
   text-rendering: optimizeLegibility;
 }
 
@@ -482,28 +486,26 @@ section#contact > div[class*='absolute'] {
   text-transform: uppercase;
 }
 
-/* Hero Button 3D Effect */
+/* Hero Button 3D Effect — box-shadow replaces expensive 6-chain drop-shadow() filter */
 .hero-button-3d {
   transform-style: preserve-3d;
   transform: translateZ(0) rotateY(-3deg) rotateX(2deg);
-  will-change: transform, filter;
+  will-change: transform;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   transition:
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.7))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.6)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.5))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.4)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.3))
-    drop-shadow(7px 9px 14px rgba(0, 0, 0, 0.3));
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    2px 2px 0px rgba(58, 62, 66, 0.5),
+    5px 5px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hero-button-3d:hover {
   transform: translateZ(0) rotateY(-3deg) rotateX(2deg) translateY(-3px) scale(1.05);
-  filter: drop-shadow(1px 1px 0px rgba(58, 62, 66, 0.8))
-    drop-shadow(2px 2px 0px rgba(58, 62, 66, 0.7)) drop-shadow(3px 3px 0px rgba(58, 62, 66, 0.6))
-    drop-shadow(4px 4px 0px rgba(58, 62, 66, 0.5)) drop-shadow(5px 5px 0px rgba(58, 62, 66, 0.4))
-    drop-shadow(10px 12px 18px rgba(0, 0, 0, 0.4));
+  box-shadow:
+    3px 3px 0px rgba(58, 62, 66, 0.6),
+    8px 10px 18px rgba(0, 0, 0, 0.4);
 }
 
 /* Ensure prose content sections have grey backgrounds instead of white */
@@ -1327,44 +1329,7 @@ body {
     -webkit-transform: translateZ(0) !important;
   }
 
-  /* GPU acceleration for page load transitions - target specific children to avoid breaking fixed backgrounds */
-  /* Apply to animated elements within sections, not the sections themselves */
-  .bg-white,
-  .bg-gray-100,
-  #careers > *,
-  #portfolio > *,
-  #hero > div:not(.fixed),
-  #contact > * {
-    will-change: opacity, transform !important;
-    backface-visibility: hidden !important;
-    -webkit-backface-visibility: hidden !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
-  }
-
-  /* Ensure Hero text elements specifically get GPU acceleration */
-  #hero .hero-3d-text,
-  #hero .motion-div,
-  #hero [class*="motion"] {
-    will-change: opacity, transform !important;
-    backface-visibility: hidden !important;
-    -webkit-backface-visibility: hidden !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
-  }
-
-  /* Ensure Portfolio and Contact text elements get GPU acceleration */
-  #portfolio .section-title,
-  #contact .section-title,
-  #contact h1,
-  #careers .section-title,
-  #careers h2 {
-    will-change: opacity, transform !important;
-    backface-visibility: hidden !important;
-    -webkit-backface-visibility: hidden !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
-  }
+  /* Removed: broad will-change/translateZ(0) on section children — promoted too many GPU layers */
 
   /* Removed: *:hover/*:focus/*:active will-change — caused too many GPU layers */
 
