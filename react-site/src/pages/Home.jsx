@@ -305,7 +305,7 @@ export default function Home() {
     const animLoop = () => {
       const delta = targetOffset - currentOffset
       if (Math.abs(delta) > 0.05) {
-        currentOffset += delta * 0.15
+        currentOffset += delta * 0.25
         applyToDOM(currentOffset)
         animRafId = requestAnimationFrame(animLoop)
       } else {

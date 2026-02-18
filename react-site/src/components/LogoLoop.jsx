@@ -93,7 +93,7 @@ const useAnimationLoop = (
         lastTimestampRef.current = timestamp
       }
 
-      const deltaTime = Math.max(0, timestamp - lastTimestampRef.current) / 1000
+      const deltaTime = Math.min(Math.max(0, timestamp - lastTimestampRef.current) / 1000, 0.033)
       lastTimestampRef.current = timestamp
 
       const target = isHovered && hoverSpeed !== undefined ? hoverSpeed : targetVelocity
