@@ -511,18 +511,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                       }}
                     >
                       <LogoLoop
-                        logos={
-                          isMobile && safetyLogoItems.length > 0
-                            ? // Manually duplicate logos for mobile to ensure enough copies
-                              [
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                              ]
-                            : safetyLogoItems
-                        }
-                        speed={isMobile ? 200 : 120}
+                        logos={safetyLogoItems}
+                        speed={isMobile ? 180 : 120}
                         direction="left"
                         logoHeight={getSafetyLogoHeight()}
                         gap={getSafetyGap()}
@@ -532,7 +522,6 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                         pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={false}
-                        useCssAnimation={isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>
@@ -548,18 +537,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                       }}
                     >
                       <LogoLoop
-                        logos={
-                          isMobile && safetyLogoItems.length > 0
-                            ? // Manually duplicate logos for mobile to ensure enough copies
-                              [
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                                ...safetyLogoItems,
-                              ]
-                            : safetyLogoItems
-                        }
-                        speed={isMobile ? 200 : 120}
+                        logos={safetyLogoItems}
+                        speed={isMobile ? 180 : 120}
                         direction="right"
                         logoHeight={getSafetyLogoHeight()}
                         gap={getSafetyGap()}
@@ -569,7 +548,6 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                         pauseOnHover={isMobile ? false : undefined}
                         externalHoverState={isMobile ? undefined : isLoopsHovered}
                         scaleOnHover={false}
-                        useCssAnimation={isMobile}
                         ariaLabel="Safety logos and certifications"
                       />
                     </div>

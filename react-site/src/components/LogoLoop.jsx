@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react'
 import './LogoLoop.css'
 
-const ANIMATION_CONFIG = { SMOOTH_TAU: 0.2, MIN_COPIES: 2, COPY_HEADROOM: 2 }
+const ANIMATION_CONFIG = { SMOOTH_TAU: 0.25, MIN_COPIES: 2, COPY_HEADROOM: 2 }
 
 const toCssLength = value => (typeof value === 'number' ? `${value}px` : (value ?? undefined))
 
-const useResizeObserver = (callback, elements, dependencies) => {
+// Refs are stable objects — pass them directly so deps array never changes
+const useResizeObserver = (callback, containerRef, seqRef) => {
   useEffect(() => {
     if (!window.ResizeObserver) {
-      const handleResize = () => callback()
-      window.addEventListener('resize', handleResize)
+      window.addEventListener('resize', callback)
       callback()
-      return () => window.removeEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', callback)
     }
-    const observers = elements.map(ref => {
+    const observers = [containerRef, seqRef].map(ref => {
       if (!ref.current) return null
       const observer = new ResizeObserver(callback)
       observer.observe(ref.current)
@@ -23,37 +23,37 @@ const useResizeObserver = (callback, elements, dependencies) => {
     return () => {
       observers.forEach(observer => observer?.disconnect())
     }
-  }, [callback, elements, dependencies])
+  }, [callback, containerRef, seqRef])
 }
 
-const useImageLoader = (seqRef, onLoad, dependencies) => {
+// logoCount as a primitive dep so the effect re-runs only when logo count changes
+const useImageLoader = (seqRef, onLoad, logoCount) => {
   useEffect(() => {
     const images = seqRef.current?.querySelectorAll('img') ?? []
     if (images.length === 0) {
       onLoad()
       return
     }
-    let remainingImages = images.length
-    const handleImageLoad = () => {
-      remainingImages -= 1
-      if (remainingImages === 0) onLoad()
+    let remaining = images.length
+    const handleLoad = () => {
+      remaining -= 1
+      if (remaining === 0) onLoad()
     }
     images.forEach(img => {
-      const htmlImg = img
-      if (htmlImg.complete) {
-        handleImageLoad()
+      if (img.complete) {
+        handleLoad()
       } else {
-        htmlImg.addEventListener('load', handleImageLoad, { once: true })
-        htmlImg.addEventListener('error', handleImageLoad, { once: true })
+        img.addEventListener('load', handleLoad, { once: true })
+        img.addEventListener('error', handleLoad, { once: true })
       }
     })
     return () => {
       images.forEach(img => {
-        img.removeEventListener('load', handleImageLoad)
-        img.removeEventListener('error', handleImageLoad)
+        img.removeEventListener('load', handleLoad)
+        img.removeEventListener('error', handleLoad)
       })
     }
-  }, [onLoad, seqRef, dependencies])
+  }, [onLoad, seqRef, logoCount])
 }
 
 const useAnimationLoop = (
@@ -80,24 +80,21 @@ const useAnimationLoop = (
 
     if (seqSize > 0) {
       offsetRef.current = ((offsetRef.current % seqSize) + seqSize) % seqSize
-      const transformValue = isVertical
+      track.style.transform = isVertical
         ? `translate3d(0, ${-offsetRef.current}px, 0)`
         : `translate3d(${-offsetRef.current}px, 0, 0)`
-      track.style.transform = transformValue
     }
 
     const animate = timestamp => {
       if (!isVisibleRef.current) return
 
-      if (lastTimestampRef.current === null) {
-        lastTimestampRef.current = timestamp
-      }
+      if (lastTimestampRef.current === null) lastTimestampRef.current = timestamp
 
+      // Cap delta to 33ms (one frame) to prevent large jumps after tab switch
       const deltaTime = Math.min(Math.max(0, timestamp - lastTimestampRef.current) / 1000, 0.033)
       lastTimestampRef.current = timestamp
 
       const target = isHovered && hoverSpeed !== undefined ? hoverSpeed : targetVelocity
-
       const easingFactor = 1 - Math.exp(-deltaTime / ANIMATION_CONFIG.SMOOTH_TAU)
       velocityRef.current += (target - velocityRef.current) * easingFactor
 
@@ -105,11 +102,9 @@ const useAnimationLoop = (
         let nextOffset = offsetRef.current + velocityRef.current * deltaTime
         nextOffset = ((nextOffset % seqSize) + seqSize) % seqSize
         offsetRef.current = nextOffset
-
-        const transformValue = isVertical
+        track.style.transform = isVertical
           ? `translate3d(0, ${-offsetRef.current}px, 0)`
           : `translate3d(${-offsetRef.current}px, 0, 0)`
-        track.style.transform = transformValue
       }
 
       rafRef.current = requestAnimationFrame(animate)
@@ -129,28 +124,22 @@ const useAnimationLoop = (
       lastTimestampRef.current = null
     }
 
-    // IntersectionObserver: only run RAF when near viewport.
+    // Pause RAF when logo loop is off-screen to save battery/CPU
     const observerTarget = containerRef?.current
     let observer = null
     if (observerTarget) {
       observer = new IntersectionObserver(
         ([entry]) => {
           isVisibleRef.current = entry.isIntersecting
-          if (entry.isIntersecting) {
-            startLoop()
-          } else {
-            stopLoop()
-          }
+          if (entry.isIntersecting) startLoop()
+          else stopLoop()
         },
         { rootMargin: '200px' }
       )
       observer.observe(observerTarget)
     }
 
-    // Start immediately if visible (or no observer target)
-    if (isVisibleRef.current) {
-      startLoop()
-    }
+    if (isVisibleRef.current) startLoop()
 
     return () => {
       stopLoop()
@@ -176,7 +165,9 @@ export const LogoLoop = memo(
     ariaLabel = 'Partner logos',
     className,
     style,
-    useCssAnimation = false,
+    // externalHoverState: optional boolean from a parent container that controls
+    // both loops simultaneously (e.g. safety section dual-loop hover sync)
+    externalHoverState,
   }) => {
     const containerRef = useRef(null)
     const trackRef = useRef(null)
@@ -185,7 +176,10 @@ export const LogoLoop = memo(
     const [seqWidth, setSeqWidth] = useState(0)
     const [seqHeight, setSeqHeight] = useState(0)
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES)
-    const [isHovered, setIsHovered] = useState(false)
+    const [localIsHovered, setLocalIsHovered] = useState(false)
+
+    // External hover state overrides local hover (used to sync dual loops in AboutAndSafety)
+    const isHovered = externalHoverState !== undefined ? externalHoverState : localIsHovered
 
     const effectiveHoverSpeed = useMemo(() => {
       if (hoverSpeed !== undefined) return hoverSpeed
@@ -198,12 +192,9 @@ export const LogoLoop = memo(
 
     const targetVelocity = useMemo(() => {
       const magnitude = Math.abs(speed)
-      let directionMultiplier
-      if (isVertical) {
-        directionMultiplier = direction === 'up' ? 1 : -1
-      } else {
-        directionMultiplier = direction === 'left' ? 1 : -1
-      }
+      const directionMultiplier = isVertical
+        ? direction === 'up' ? 1 : -1
+        : direction === 'left' ? 1 : -1
       const speedMultiplier = speed < 0 ? -1 : 1
       return magnitude * directionMultiplier * speedMultiplier
     }, [speed, direction, isVertical])
@@ -234,17 +225,11 @@ export const LogoLoop = memo(
       }
     }, [isVertical])
 
-    useResizeObserver(
-      updateDimensions,
-      [containerRef, seqRef],
-      [logos, gap, logoHeight, isVertical]
-    )
+    useResizeObserver(updateDimensions, containerRef, seqRef)
+    useImageLoader(seqRef, updateDimensions, logos.length)
 
-    useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical])
-
-    // Only use JS animation if useCssAnimation is false (desktop mode)
     useAnimationLoop(
-      useCssAnimation ? { current: null } : trackRef,
+      trackRef,
       containerRef,
       targetVelocity,
       seqWidth,
@@ -278,10 +263,11 @@ export const LogoLoop = memo(
     )
 
     const handleMouseEnter = useCallback(() => {
-      if (effectiveHoverSpeed !== undefined) setIsHovered(true)
+      if (effectiveHoverSpeed !== undefined) setLocalIsHovered(true)
     }, [effectiveHoverSpeed])
+
     const handleMouseLeave = useCallback(() => {
-      if (effectiveHoverSpeed !== undefined) setIsHovered(false)
+      if (effectiveHoverSpeed !== undefined) setLocalIsHovered(false)
     }, [effectiveHoverSpeed])
 
     const renderLogoItem = useCallback(
