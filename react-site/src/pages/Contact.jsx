@@ -1,5 +1,5 @@
-/* global process */
-import { useEffect, useState, useMemo, memo } from 'react'
+/* global process, turnstile */
+import { useEffect, useState, useMemo, useRef, memo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
@@ -29,6 +29,8 @@ function Contact() {
   const [formSuccess, setFormSuccess] = useState(false)
   const [formError, setFormError] = useState(null)
   const [rateLimitError, setRateLimitError] = useState(null)
+  const [turnstileError, setTurnstileError] = useState(null)
+  const turnstileWidgetIdRef = useRef(null)
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -145,6 +147,42 @@ function Contact() {
     return () => clearInterval(timer)
   }, [contactData, headerOffset])
 
+  // Render Cloudflare Turnstile widget when contact form is visible
+  useEffect(() => {
+    if (!contactData) return
+
+    const siteKey =
+      import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
+
+    const renderWidget = () => {
+      const container = document.getElementById('turnstile-container')
+      if (!container || turnstileWidgetIdRef.current !== null) return
+
+      turnstileWidgetIdRef.current = turnstile.render('#turnstile-container', {
+        sitekey: siteKey,
+        theme: 'dark',
+      })
+    }
+
+    if (typeof turnstile !== 'undefined') {
+      if (turnstile.ready) {
+        turnstile.ready(renderWidget)
+      } else {
+        renderWidget()
+      }
+    }
+
+    return () => {
+      if (
+        typeof turnstile !== 'undefined' &&
+        turnstileWidgetIdRef.current !== null
+      ) {
+        turnstile.remove(turnstileWidgetIdRef.current)
+        turnstileWidgetIdRef.current = null
+      }
+    }
+  }, [contactData])
+
   // Determine which background image to use (contact's own or hero's as fallback)
   // Note: Currently not used but kept for future implementation
   // eslint-disable-next-line no-unused-vars
@@ -175,9 +213,12 @@ function Contact() {
       }))
     }
 
-    // Clear rate limit error when user modifies form
+    // Clear rate limit and turnstile errors when user modifies form
     if (rateLimitError) {
       setRateLimitError(null)
+    }
+    if (turnstileError) {
+      setTurnstileError(null)
     }
   }
 
@@ -189,6 +230,7 @@ function Contact() {
     setFormErrors({})
     setFormError(null)
     setRateLimitError(null)
+    setTurnstileError(null)
 
     // Check rate limiting
     const rateLimitCheck = canSubmitForm()
@@ -217,6 +259,16 @@ function Contact() {
       return
     }
 
+    // Check Turnstile verification
+    const turnstileToken =
+      typeof turnstile !== 'undefined' &&
+      turnstileWidgetIdRef.current !== null &&
+      turnstile.getResponse(turnstileWidgetIdRef.current)
+    if (!turnstileToken) {
+      setTurnstileError('Please complete the verification before submitting.')
+      return
+    }
+
     // Submit form
     setFormSubmitting(true)
 
@@ -230,7 +282,10 @@ function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sanitizedData),
+        body: JSON.stringify({
+          ...sanitizedData,
+          'cf-turnstile-response': turnstileToken,
+        }),
         signal: controller.signal,
       })
 
@@ -250,6 +305,11 @@ function Contact() {
           phone: '',
           message: '',
         })
+
+        // Reset Turnstile widget for next submission
+        if (typeof turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
+          turnstile.reset(turnstileWidgetIdRef.current)
+        }
 
         // Hide success message after 5 seconds
         setTimeout(() => {
@@ -405,6 +465,14 @@ function Contact() {
                     </div>
                   )}
 
+                  {/* Turnstile Verification Error */}
+                  {turnstileError && (
+                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                      <p className="font-semibold text-white">⚠ Verification Required</p>
+                      <p className="mt-1 text-sm text-white/80">{turnstileError}</p>
+                    </div>
+                  )}
+
                   <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
                     <div>
                       <input
@@ -470,6 +538,8 @@ function Contact() {
                         {formData.message.length}/5000 characters
                       </p>
                     </div>
+
+                    <div id="turnstile-container" />
 
                     <button
                       type="submit"
