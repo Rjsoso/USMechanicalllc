@@ -361,8 +361,29 @@ export default function Home() {
     const onResize = () => { cachePositions(); jumpToTarget() }
     window.addEventListener('resize', onResize, { passive: true })
 
-    // Recache periodically (catches lazy-loaded images shifting layout)
-    const recacheId = setInterval(cachePositions, 2000)
+    // Recache when the scroll-animated wrapper changes size (fires immediately
+    // when Sanity data renders in and expands the DOM — much more precise than
+    // the old setInterval which left positions stale for up to 2 seconds).
+    // Debounced 50ms to avoid thrashing during rapid React re-renders.
+    let resizeCacheTimer = null
+    let resizeObserver = null
+    if (window.ResizeObserver && scrollAnimatedElementRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        if (resizeCacheTimer) clearTimeout(resizeCacheTimer)
+        resizeCacheTimer = setTimeout(() => {
+          cachePositions()
+          jumpToTarget()
+          resizeCacheTimer = null
+        }, 50)
+      })
+      resizeObserver.observe(scrollAnimatedElementRef.current)
+    }
+
+    // Fallback timeouts: catch font-swap reflows and late-loading images that
+    // change element heights without triggering a ResizeObserver on the wrapper.
+    const t1 = setTimeout(() => { cachePositions(); jumpToTarget() }, 500)
+    const t2 = setTimeout(() => { cachePositions(); jumpToTarget() }, 1500)
+    const t3 = setTimeout(() => { cachePositions(); jumpToTarget() }, 4000)
 
     const onScroll = () => {
       calcTargetOffset()
@@ -376,7 +397,11 @@ export default function Home() {
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
-      clearInterval(recacheId)
+      if (resizeCacheTimer) clearTimeout(resizeCacheTimer)
+      if (resizeObserver) resizeObserver.disconnect()
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
       if (animRafId) cancelAnimationFrame(animRafId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('scroll', onScroll)
@@ -442,6 +467,7 @@ export default function Home() {
             style={{
               position: 'relative',
               zIndex: 1,
+              willChange: 'transform',
               transform: 'translate3d(0, 0px, 0)',
             }}
           >

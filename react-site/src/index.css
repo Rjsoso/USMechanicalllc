@@ -74,12 +74,8 @@ html {
   scroll-padding-top: 180px; /* Account for fixed header */
 }
 
-/* Smoother scrolling on supported browsers */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/* scroll-behavior: smooth removed — it was applying to all programmatic
+   window.scrollTo() calls too, conflicting with the custom JS scroll logic */
 
 /* Additional body properties (background and font smoothing already set above) */
 body {
