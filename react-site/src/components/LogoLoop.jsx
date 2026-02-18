@@ -130,10 +130,6 @@ const useAnimationLoop = (
     }
 
     // IntersectionObserver: only run RAF when near viewport.
-    // rootMargin is set to 1000px (rather than the old 200px) because the scroll
-    // wrapper that contains this logo loop can shift up by ~555px during the
-    // contact-reveal animation. With only 200px margin the observer would fire
-    // and stop the animation mid-scroll, causing a visible glitch on resume.
     const observerTarget = containerRef?.current
     let observer = null
     if (observerTarget) {
@@ -146,7 +142,7 @@ const useAnimationLoop = (
             stopLoop()
           }
         },
-        { rootMargin: '1000px' }
+        { rootMargin: '200px' }
       )
       observer.observe(observerTarget)
     }

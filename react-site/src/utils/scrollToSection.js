@@ -84,20 +84,9 @@ export function navigateToSection(sectionId, navigate, currentPath = '/') {
     return
   }
 
-  // Already on homepage — lock scroll animation, scroll, then unlock
+  // Already on homepage — scroll directly
   window.history.pushState(null, '', `/#${sectionId}`)
   window.__scrollNavigationLock = true
-
-  // For contact, set the scroll wrapper to full reveal so position measurement
-  // sees the final layout (contact wrapper sits `overlap` px behind the wrapper)
-  if (sectionId === 'contact') {
-    const scrollWrapper = document.querySelector('.has-scroll-animation')
-    if (scrollWrapper) {
-      const overlap = Math.max(Math.round(window.innerHeight * 0.45), 350)
-      const totalOffset = -(150 + overlap)
-      scrollWrapper.style.transform = `translate3d(0, ${totalOffset}px, 0)`
-    }
-  }
 
   scrollToSection(sectionId, 180, 50, 100).then(success => {
     debug(`Scroll to ${sectionId} ${success ? 'succeeded' : 'failed'}`)

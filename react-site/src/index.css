@@ -653,15 +653,9 @@ footer {
 }
 
 /* CSS Containment for better rendering performance on iOS */
-/* Exclude sections with scroll-triggered transforms to prevent conflicts */
 @supports (contain: layout style paint) {
   section:not(#hero):not(#contact) {
     contain: layout style paint;
-  }
-
-  /* Disable containment for sections inside scroll-animated containers */
-  .has-scroll-animation section {
-    contain: none;
   }
 }
 
@@ -670,11 +664,6 @@ footer {
   section:not(#hero):not(#contact) {
     content-visibility: auto;
     contain-intrinsic-size: auto 500px;
-  }
-
-  /* Disable content-visibility only inside scroll-animated wrappers */
-  .scroll-animated-wrapper section {
-    content-visibility: visible;
   }
 }
 
@@ -731,11 +720,6 @@ body {
    ============================================ */
 
 @media (max-width: 767px) {
-  /* Disable parallax slide animation on mobile for better performance */
-  .has-scroll-animation {
-    transform: none !important;
-  }
-
   /* Safety Section Mobile Layout */
   /* Stack safety section vertically */
   #safety > div > div {
@@ -1293,12 +1277,6 @@ body {
   *:not(.logoloop__track) {
     animation-duration: 0.2s !important;
     transition-duration: 0.2s !important;
-  }
-
-  /* Disable parallax and scroll-based animations, except LogoLoop */
-  .has-scroll-animation:not(.logoloop):not(.logoloop *),
-  [style*='transform: translate3d']:not(.logoloop__track):not(.logoloop *) {
-    transform: none !important;
   }
 
   /* Reduce motion on framer-motion elements */

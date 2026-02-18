@@ -26,10 +26,6 @@ export default function Home() {
   const [aboutData, setAboutData] = useState(null)
   const [allDataLoaded, setAllDataLoaded] = useState(false)
 
-  // DOM refs for scroll-animated wrapper and contact (direct manipulation, no React re-renders)
-  const scrollAnimatedElementRef = useRef(null)
-  const contactWrapperRef = useRef(null)
-
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
     !location.state?.scrollTo &&
@@ -242,172 +238,7 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
-  // Scroll-driven animation
-  // Phase 1 — safety parallax: scroll wrapper slides 0 → -150 px as safety exits
-  // Phase 2 — contact reveal:  scroll wrapper slides an extra `overlap` px so it
-  //           peels away and reveals the contact section sitting underneath.
-  //           The overlap and contact wrapper transform are calculated dynamically
-  //           from the viewport height so the effect scales to any screen size.
-  useEffect(() => {
-    const getDocTop = (el) => {
-      let top = 0
-      while (el) { top += el.offsetTop; el = el.offsetParent }
-      return top
-    }
-
-    let safetyDocTop = 0
-    let safetyHeight = 0
-    let contactDocTop = 0
-    let viewportHeight = window.innerHeight
-    let overlap = 0          // dynamically calculated each resize/cache
-
-    const cachePositions = () => {
-      viewportHeight = window.innerHeight
-
-      const safetyEl = document.querySelector('#safety')
-      if (safetyEl) {
-        safetyDocTop = getDocTop(safetyEl)
-        safetyHeight = safetyEl.offsetHeight
-      }
-
-      const contactEl = document.querySelector('#contact-wrapper')
-      if (contactEl) {
-        contactDocTop = getDocTop(contactEl)
-      }
-
-      // Overlap = 45% of viewport, minimum 350px so the reveal is always noticeable
-      overlap = Math.max(Math.round(viewportHeight * 0.45), 350)
-
-      // Apply the overlap transform to the contact wrapper so it sits underneath.
-      // Also apply a matching negative marginBottom so the footer (which comes after
-      // in the DOM) moves up to meet the visual bottom of the translated contact section.
-      // CSS transforms don't affect layout flow, so without this the footer stays
-      // at its original document position, creating a gap equal to `overlap`.
-      if (contactWrapperRef.current) {
-        contactWrapperRef.current.style.transform = `translate3d(0, -${overlap}px, 0)`
-        contactWrapperRef.current.style.marginBottom = `-${overlap}px`
-      }
-    }
-
-    // Lerp animation state — keeps currentOffset chasing targetOffset each frame
-    // instead of jumping instantly or using a CSS transition (which conflicts
-    // with rapid scroll updates and causes stutter).
-    let targetOffset = 0
-    let currentOffset = 0
-    let animRafId = null
-
-    const applyToDOM = (value) => {
-      if (scrollAnimatedElementRef.current) {
-        scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${value}px, 0)`
-      }
-    }
-
-    const animLoop = () => {
-      const delta = targetOffset - currentOffset
-      if (Math.abs(delta) > 0.05) {
-        currentOffset += delta * 0.25
-        applyToDOM(currentOffset)
-        animRafId = requestAnimationFrame(animLoop)
-      } else {
-        currentOffset = targetOffset
-        applyToDOM(currentOffset)
-        animRafId = null
-      }
-    }
-
-    const calcTargetOffset = () => {
-      if (document.hidden || window.__scrollNavigationLock) return
-
-      const scrollY = window.scrollY
-
-      // Phase 1 — safety parallax (scroll wrapper slides up to -150px)
-      const safetyBottom = (safetyDocTop + safetyHeight) - scrollY
-      const slideStart = viewportHeight * 0.25
-      let safetyValue = 0
-      if (safetyBottom <= slideStart && safetyBottom >= 0) {
-        const progress = 1 - safetyBottom / slideStart
-        safetyValue = -progress * 150
-      } else if (safetyBottom < 0) {
-        safetyValue = -150
-      }
-
-      // Phase 2 — contact reveal (scroll wrapper slides an additional `overlap` px)
-      // Triggers as soon as contact wrapper approaches viewport bottom (just past logo loop);
-      // completes when it reaches the top.
-      let revealValue = 0
-      const contactTop = contactDocTop - scrollY
-      const revealStart = viewportHeight * 1.15
-      if (contactTop <= revealStart && contactTop > 0) {
-        const progress = 1 - contactTop / revealStart
-        revealValue = -overlap * progress
-      } else if (contactTop < 0) {
-        revealValue = -overlap
-      }
-
-      targetOffset = safetyValue + revealValue
-    }
-
-    // On mount and resize: jump immediately (no lerp) so initial position is instant
-    const jumpToTarget = () => {
-      calcTargetOffset()
-      currentOffset = targetOffset
-      applyToDOM(currentOffset)
-    }
-
-    // Initial cache after React paint settles
-    const handleMount = () => { cachePositions(); jumpToTarget() }
-    requestAnimationFrame(() => requestAnimationFrame(handleMount))
-
-    const onResize = () => { cachePositions(); jumpToTarget() }
-    window.addEventListener('resize', onResize, { passive: true })
-
-    // Recache when the scroll-animated wrapper changes size (fires immediately
-    // when Sanity data renders in and expands the DOM — much more precise than
-    // the old setInterval which left positions stale for up to 2 seconds).
-    // Debounced 50ms to avoid thrashing during rapid React re-renders.
-    let resizeCacheTimer = null
-    let resizeObserver = null
-    if (window.ResizeObserver && scrollAnimatedElementRef.current) {
-      resizeObserver = new ResizeObserver(() => {
-        if (resizeCacheTimer) clearTimeout(resizeCacheTimer)
-        resizeCacheTimer = setTimeout(() => {
-          cachePositions()
-          jumpToTarget()
-          resizeCacheTimer = null
-        }, 50)
-      })
-      resizeObserver.observe(scrollAnimatedElementRef.current)
-    }
-
-    // Fallback timeouts: catch font-swap reflows and late-loading images that
-    // change element heights without triggering a ResizeObserver on the wrapper.
-    const t1 = setTimeout(() => { cachePositions(); jumpToTarget() }, 500)
-    const t2 = setTimeout(() => { cachePositions(); jumpToTarget() }, 1500)
-    const t3 = setTimeout(() => { cachePositions(); jumpToTarget() }, 4000)
-
-    const onScroll = () => {
-      calcTargetOffset()
-      if (!animRafId) animRafId = requestAnimationFrame(animLoop)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    const handleVisibilityChange = () => {
-      if (!document.hidden) { cachePositions(); jumpToTarget() }
-    }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    return () => {
-      if (resizeCacheTimer) clearTimeout(resizeCacheTimer)
-      if (resizeObserver) resizeObserver.disconnect()
-      clearTimeout(t1)
-      clearTimeout(t2)
-      clearTimeout(t3)
-      if (animRafId) cancelAnimationFrame(animRafId)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
+  // Parallax scroll animation removed — sections now scroll naturally
 
   return (
     <>
@@ -447,31 +278,9 @@ export default function Home() {
 
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
-
-          <div
-            ref={scrollAnimatedElementRef}
-            className="has-scroll-animation"
-            style={{
-              position: 'relative',
-              zIndex: 3,
-              willChange: 'transform',
-              transform: 'translate3d(0, 0px, 0)',
-            }}
-          >
-            <Portfolio data={portfolioData} />
-            <LogoLoopSection />
-          </div>
-
-          <div
-            id="contact-wrapper"
-            ref={contactWrapperRef}
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              willChange: 'transform',
-              transform: 'translate3d(0, 0px, 0)',
-            }}
-          >
+          <Portfolio data={portfolioData} />
+          <LogoLoopSection />
+          <div id="contact-wrapper">
             <Contact />
           </div>
         </div>
