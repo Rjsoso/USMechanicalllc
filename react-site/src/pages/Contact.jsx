@@ -286,7 +286,7 @@ function Contact() {
       />
       <section
         id="contact"
-        className="relative w-full px-6 pt-20 pb-6"
+        className="relative w-full px-6 pt-20 pb-3"
         style={{
           backgroundColor: 'transparent',
         }}
