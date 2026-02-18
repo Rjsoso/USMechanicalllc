@@ -129,7 +129,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
   return (
     <section
       id="services"
-      className="bg-transparent pb-20 pt-12 text-white"
+      className="bg-transparent pb-32 pt-12 text-white"
       style={{
         position: 'relative',
         opacity: navigatingTo ? 0 : 1,
