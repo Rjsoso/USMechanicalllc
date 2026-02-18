@@ -19,6 +19,7 @@ const ServiceDetail = lazy(() => import('./pages/ServiceDetail'))
 const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
+const DeliveryMethodsPage = lazy(() => import('./pages/DeliveryMethodsPage'))
 
 function App() {
   // Disable browser scroll restoration globally
@@ -52,6 +53,7 @@ function App() {
             <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
             <Route path="/projects/:id" element={<ProjectDetail />} />
+            <Route path="/delivery-methods" element={<DeliveryMethodsPage />} />
           </Routes>
         </Suspense>
       </Router>
