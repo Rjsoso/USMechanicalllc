@@ -289,7 +289,6 @@ function Contact() {
         className="relative w-full px-6 py-20"
         style={{
           backgroundColor: 'transparent',
-          minHeight: '100vh',
         }}
       >
         {/* Background removed - hero's fixed background shows through */}
