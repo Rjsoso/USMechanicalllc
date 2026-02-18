@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { FiArrowRight, FiX } from 'react-icons/fi'
+import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
 
 const TEASER_LENGTH = 80
@@ -32,7 +32,6 @@ function truncate(str, len) {
 
 const ServicesSection = ({ data: servicesDataProp }) => {
   const [servicesData, setServicesData] = useState(servicesDataProp || null)
-  const [expandedId, setExpandedId] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -70,20 +69,16 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     return () => { cancelled = true; clearTimeout(timeoutId) }
   }, [servicesDataProp])
 
-  const handleCardClick = useCallback((id) => {
-    setExpandedId(prev => (prev === id ? null : id))
-  }, [])
-
-  const handleReadFullStory = useCallback(
-    (slug) => {
-      if (slug) navigate(`/services/${slug}`)
+  const handleCardClick = useCallback(
+    (card) => {
+      if (card.type === 'delivery-methods') {
+        navigate('/delivery-methods')
+      } else if (card.slug) {
+        navigate(`/services/${card.slug}`)
+      }
     },
     [navigate]
   )
-
-  const handleDeliveryMethodsNav = useCallback(() => {
-    navigate('/delivery-methods')
-  }, [navigate])
 
   if (servicesData === null) {
     return (
@@ -128,7 +123,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
             id: 'delivery-methods',
             title: servicesData.deliveryMethodsHeading || 'Delivery Methods',
             description: deliverySummary || 'Explore how we deliver projects.',
-            backgroundStyle: { backgroundColor: '#111111' },
+            backgroundStyle: { backgroundColor: '#2d2d2d' },
             textColor: '#ffffff',
             textColorMuted: '#d1d5db',
           },
@@ -145,10 +140,10 @@ const ServicesSection = ({ data: servicesDataProp }) => {
       {/* Compact sign label — no big centered title */}
       <div className="mx-auto max-w-7xl px-6 mb-8">
         <div
-          className="inline-block border border-white/30 bg-white/5 px-4 py-2"
+          className="inline-block border border-white/30 bg-white/5 px-5 py-2.5"
           style={{ transform: 'rotate(-0.5deg)' }}
         >
-          <span className="text-sm font-bold uppercase tracking-widest text-white/90">
+          <span className="text-lg font-bold uppercase tracking-widest text-white/90">
             {servicesData.sectionTitle || 'Services'}
           </span>
         </div>
@@ -167,33 +162,27 @@ const ServicesSection = ({ data: servicesDataProp }) => {
           perspectiveOrigin: '50% 50%',
         }}
       >
-        <div className="flex flex-wrap items-stretch gap-6">
+        <div className="flex flex-wrap items-stretch justify-center gap-6">
           {cards.map((card, index) => {
-            const isExpanded = expandedId === card.id
             const rotation = ROTATIONS[index % ROTATIONS.length]
-            const staggerOffset = index % 2 === 0 ? { marginRight: 12 } : { marginLeft: 12 }
 
             return (
               <motion.div
                 key={card.id}
                 className="flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
-                style={{
-                  ...staggerOffset,
-                  transformStyle: 'preserve-3d',
-                }}
+                style={{ transformStyle: 'preserve-3d' }}
                 layout
               >
                 <motion.div
                   layout
                   role="button"
                   tabIndex={0}
-                  onClick={() => handleCardClick(card.id)}
+                  onClick={() => handleCardClick(card)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault()
-                      handleCardClick(card.id)
+                      handleCardClick(card)
                     }
-                    if (e.key === 'Escape') setExpandedId(null)
                   }}
                   className="group relative cursor-pointer overflow-hidden rounded-lg border border-white/10"
                   style={{
@@ -222,75 +211,23 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     >
                       {card.title}
                     </h3>
-                    {!isExpanded && (
-                      <p
-                        className="text-sm leading-relaxed opacity-80"
-                        style={{ color: card.textColorMuted }}
-                      >
-                        {truncate(card.description || '', TEASER_LENGTH)}
-                      </p>
-                    )}
-                    <AnimatePresence mode="wait">
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <p
-                            className="mb-4 text-sm leading-relaxed"
-                            style={{ color: card.textColorMuted }}
-                          >
-                            {card.description}
-                          </p>
-                          <div className="flex flex-wrap items-center gap-3">
-                            {card.type === 'delivery-methods' ? (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleDeliveryMethodsNav()
-                                }}
-                                className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                              >
-                                Learn more
-                                <FiArrowRight className="h-4 w-4" />
-                              </button>
-                            ) : (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleReadFullStory(card.slug)
-                                }}
-                                className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                              >
-                                Read full story
-                                <FiArrowRight className="h-4 w-4" />
-                              </button>
-                            )}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setExpandedId(null)
-                              }}
-                              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium text-white/70 transition-opacity hover:text-white"
-                              aria-label="Close"
-                            >
-                              <FiX className="h-4 w-4" />
-                              Close
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    {!isExpanded && (
-                      <span
-                        className="absolute bottom-4 right-4 text-xs font-semibold uppercase tracking-wider text-white/80"
-                        style={{ color: card.textColor }}
-                      >
-                        More
-                      </span>
-                    )}
+                    <p
+                      className="text-sm leading-relaxed opacity-80"
+                      style={{ color: card.textColorMuted }}
+                    >
+                      {truncate(card.description || '', TEASER_LENGTH)}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCardClick(card)
+                      }}
+                      className="absolute bottom-4 right-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/90 transition-opacity hover:opacity-100"
+                      style={{ color: card.textColor }}
+                    >
+                      Learn more
+                      <FiArrowRight className="h-4 w-4" />
+                    </button>
                   </div>
                 </motion.div>
               </motion.div>
