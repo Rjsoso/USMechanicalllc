@@ -143,8 +143,8 @@ const ServicesSection = ({ data: servicesDataProp }) => {
             {servicesData.sectionTitle || 'Services'}
           </h2>
           {servicesData.descriptionText && (
-            <p className="mt-2 max-w-xl text-sm text-white/60">
-              {truncate(servicesData.descriptionText, 120)}
+            <p className="mt-2 max-w-xl text-sm text-white/75">
+              {servicesData.descriptionText}
             </p>
           )}
         </div>
@@ -153,7 +153,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[5fr_6fr] lg:gap-0">
 
           {/* LEFT — numbered list */}
-          <div className="flex flex-col border-t border-white/10">
+          <div className="flex flex-col border-t border-white/20">
             {cards.map((card, index) => {
               const isActive = card.id === (hoveredId ?? cards[0].id)
               return (
@@ -163,12 +163,12 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                   onMouseEnter={() => setHoveredId(card.id)}
                   onFocus={() => setHoveredId(card.id)}
                   onClick={() => handleNavigate(card)}
-                  className="group flex w-full items-center gap-5 border-b border-white/10 px-2 py-5 text-left outline-none"
-                  animate={{ opacity: hoveredId && !isActive ? 0.3 : 1 }}
+                  className="group flex w-full items-center gap-5 border-b border-white/20 px-2 py-5 text-left outline-none"
+                  animate={{ opacity: hoveredId && !isActive ? 0.55 : 1 }}
                   transition={{ duration: 0.18 }}
                 >
                   {/* Index number */}
-                  <span className="w-8 shrink-0 text-xs font-mono text-white/40 tabular-nums">
+                  <span className="w-8 shrink-0 text-xs font-mono text-white/60 tabular-nums">
                     {String(index + 1).padStart(2, '0')}
                   </span>
 
