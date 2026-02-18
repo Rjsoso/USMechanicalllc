@@ -35,9 +35,9 @@
 html {
   background-color: transparent !important;
   background: transparent !important;
-  /* Native smooth scrolling for better performance */
-  scroll-behavior: smooth;
-  /* Optimize scrolling performance */
+  /* scroll-behavior: smooth removed — CSS smooth scrolling fights with the app's
+     programmatic scroll system (scrollToSection uses behavior:'instant') and causes
+     navigation jitter. All smooth scrolling is handled by the JS scroll utility. */
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -660,10 +660,14 @@ footer {
 }
 
 /* Content visibility for off-screen sections (Safari 17+) */
+/* contain-intrinsic-size raised to 1500px — the old 500px was too small for
+   tall sections (About, Services, Portfolio are 900–2000px). When the browser
+   activates a section and discovers it is much taller than the hint it
+   immediately re-lays out the document, causing a visible scrollbar jump. */
 @supports (content-visibility: auto) {
   section:not(#hero):not(#contact) {
     content-visibility: auto;
-    contain-intrinsic-size: auto 500px;
+    contain-intrinsic-size: auto 1500px;
   }
 }
 
@@ -675,7 +679,7 @@ html {
 body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain; /* Smoother than 'none' for Chrome */
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth removed — same reason as html above */
 }
 
 /* Optimize scrollable containers */

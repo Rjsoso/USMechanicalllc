@@ -215,7 +215,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                       transform: isExpanded ? 'translate3d(-15%, 0, 0)' : 'translate3d(0, 0, 0)',
                       transition:
                         'width 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
-                      willChange: 'width, transform',
+                      willChange: 'transform',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
                       contain: 'layout style paint', // Isolate layout calculations
