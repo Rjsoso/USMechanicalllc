@@ -318,7 +318,7 @@ export default function Home() {
         revealValue = -overlap
       }
 
-      const totalOffset = Math.round(safetyValue + revealValue)
+      const totalOffset = safetyValue + revealValue
       if (scrollAnimatedElementRef.current) {
         scrollAnimatedElementRef.current.style.transform = `translate3d(0, ${totalOffset}px, 0)`
       }
@@ -399,6 +399,7 @@ export default function Home() {
               zIndex: 3,
               willChange: 'transform',
               transform: 'translate3d(0, 0px, 0)',
+              transition: 'transform 60ms linear',
             }}
           >
             <CompanyStats data={statsData} />
