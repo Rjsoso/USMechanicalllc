@@ -1,4 +1,4 @@
-/* global process, turnstile */
+/* global process */
 import { useEffect, useState, useMemo, useRef, memo } from 'react'
 import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
@@ -158,26 +158,53 @@ function Contact() {
       const container = document.getElementById('turnstile-container')
       if (!container || turnstileWidgetIdRef.current !== null) return
 
-      turnstileWidgetIdRef.current = turnstile.render('#turnstile-container', {
+      const widgetId = window.turnstile.render('#turnstile-container', {
         sitekey: siteKey,
         theme: 'dark',
       })
+      turnstileWidgetIdRef.current = widgetId
     }
 
-    if (typeof turnstile !== 'undefined') {
-      if (turnstile.ready) {
-        turnstile.ready(renderWidget)
-      } else {
-        renderWidget()
+    const initTurnstile = () => {
+      if (typeof window.turnstile !== 'undefined') {
+        if (window.turnstile.ready) {
+          window.turnstile.ready(renderWidget)
+        } else {
+          renderWidget()
+        }
+        return true
+      }
+      return false
+    }
+
+    // Script may load after component; poll until available
+    if (!initTurnstile()) {
+      const poll = setInterval(() => {
+        if (initTurnstile()) {
+          clearInterval(poll)
+        }
+      }, 100)
+      const timeout = setTimeout(() => clearInterval(poll), 10000)
+
+      return () => {
+        clearInterval(poll)
+        clearTimeout(timeout)
+        if (
+          typeof window.turnstile !== 'undefined' &&
+          turnstileWidgetIdRef.current !== null
+        ) {
+          window.turnstile.remove(turnstileWidgetIdRef.current)
+          turnstileWidgetIdRef.current = null
+        }
       }
     }
 
     return () => {
       if (
-        typeof turnstile !== 'undefined' &&
+        typeof window.turnstile !== 'undefined' &&
         turnstileWidgetIdRef.current !== null
       ) {
-        turnstile.remove(turnstileWidgetIdRef.current)
+        window.turnstile.remove(turnstileWidgetIdRef.current)
         turnstileWidgetIdRef.current = null
       }
     }
@@ -261,9 +288,9 @@ function Contact() {
 
     // Check Turnstile verification
     const turnstileToken =
-      typeof turnstile !== 'undefined' &&
+      typeof window.turnstile !== 'undefined' &&
       turnstileWidgetIdRef.current !== null &&
-      turnstile.getResponse(turnstileWidgetIdRef.current)
+      window.turnstile.getResponse(turnstileWidgetIdRef.current)
     if (!turnstileToken) {
       setTurnstileError('Please complete the verification before submitting.')
       return
@@ -307,8 +334,8 @@ function Contact() {
         })
 
         // Reset Turnstile widget for next submission
-        if (typeof turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
-          turnstile.reset(turnstileWidgetIdRef.current)
+        if (typeof window.turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
+          window.turnstile.reset(turnstileWidgetIdRef.current)
         }
 
         // Hide success message after 5 seconds
@@ -539,7 +566,11 @@ function Contact() {
                       </p>
                     </div>
 
-                    <div id="turnstile-container" />
+                    <div
+                      id="turnstile-container"
+                      className="min-h-[78px]"
+                      aria-label="Cloudflare Turnstile verification"
+                    />
 
                     <button
                       type="submit"

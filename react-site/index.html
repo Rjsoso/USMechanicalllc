@@ -92,6 +92,7 @@
     
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://challenges.cloudflare.com">
+    <link rel="dns-prefetch" href="https://challenges.cloudflare.com">
     <!-- Preconnect to Sanity CDN for faster API calls -->
     <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.sanity.io">
@@ -122,6 +123,8 @@
         min-height: 100vh;
       }
     </style>
+    <!-- Load Turnstile early for contact form verification -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
   </head>
   <body>
     <!-- Force scroll to top immediately on page load -->
@@ -157,7 +160,6 @@
     </script>
     
     <div id="root"></div>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
     <script type="module" src="/src/main.jsx" fetchpriority="high"></script>
   </body>
 </html>
