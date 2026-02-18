@@ -445,6 +445,8 @@ export default function Home() {
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutAndSafety data={aboutData} />
 
+          <CompanyStats data={statsData} />
+
           <div
             ref={scrollAnimatedElementRef}
             className="has-scroll-animation"
@@ -455,7 +457,6 @@ export default function Home() {
               transform: 'translate3d(0, 0px, 0)',
             }}
           >
-            <CompanyStats data={statsData} />
             <ServicesSection data={servicesData} />
             <Portfolio data={portfolioData} />
             <LogoLoopSection />
