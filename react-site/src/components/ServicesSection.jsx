@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback, memo } from 'react'
-import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import { client } from '../utils/sanity'
@@ -166,24 +165,14 @@ const ServicesSection = ({ data: servicesDataProp }) => {
         {/* RIGHT — DELIVERY METHODS CARD */}
         {servicesData.deliveryMethods?.length > 0 && (
           <div className="flex flex-1 flex-col md:w-1/2">
-            <motion.div
-              className="group relative flex flex-1 cursor-pointer overflow-hidden p-8 shadow transition-opacity duration-150 ease-out hover:opacity-90"
+            <div
+              className="group relative cursor-pointer overflow-hidden p-8 shadow transition-opacity duration-150 ease-out hover:opacity-90"
               style={{ backgroundColor: '#111111' }}
               onClick={() => navigate('/delivery-methods')}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
             >
-              <div className="flex flex-col justify-between h-full w-full">
-                <div>
-                  <h3 className="mb-3 text-xl font-semibold text-white">
-                    {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-gray-300 opacity-75">
-                    {servicesData.deliveryMethods.map(m => m.title).filter(Boolean).join(' · ')}
-                  </p>
-                </div>
-              </div>
+              <h3 className="mb-3 text-xl font-semibold text-white">
+                {servicesData.deliveryMethodsHeading || 'Delivery Methods'}
+              </h3>
               <button
                 onClick={e => { e.stopPropagation(); navigate('/delivery-methods') }}
                 className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-white transition-opacity duration-150 hover:opacity-80"
@@ -191,7 +180,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                 Learn More
                 <FiArrowRight className="h-4 w-4" />
               </button>
-            </motion.div>
+            </div>
           </div>
         )}
       </div>
