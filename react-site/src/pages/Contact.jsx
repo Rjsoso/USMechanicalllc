@@ -324,7 +324,7 @@ function Contact() {
                 {contactData.description}
               </p>
 
-              <div className="grid gap-12 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 {/* LEFT SIDE — OFFICE INFO */}
                 <div>
                   {contactData.offices && contactData.offices.length > 0 ? (
