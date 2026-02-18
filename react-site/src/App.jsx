@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
+import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
 
 function ScrollToTop() {
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <CustomCursor />
       <Router
         future={{
           v7_startTransition: true,
