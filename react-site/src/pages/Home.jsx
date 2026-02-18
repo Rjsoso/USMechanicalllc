@@ -446,6 +446,7 @@ export default function Home() {
           <AboutAndSafety data={aboutData} />
 
           <CompanyStats data={statsData} />
+          <ServicesSection data={servicesData} />
 
           <div
             ref={scrollAnimatedElementRef}
@@ -457,7 +458,6 @@ export default function Home() {
               transform: 'translate3d(0, 0px, 0)',
             }}
           >
-            <ServicesSection data={servicesData} />
             <Portfolio data={portfolioData} />
             <LogoLoopSection />
           </div>
