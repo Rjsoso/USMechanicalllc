@@ -278,9 +278,14 @@ export default function Home() {
       // Overlap = 45% of viewport, minimum 350px so the reveal is always noticeable
       overlap = Math.max(Math.round(viewportHeight * 0.45), 350)
 
-      // Apply the overlap transform to the contact wrapper so it sits underneath
+      // Apply the overlap transform to the contact wrapper so it sits underneath.
+      // Also apply a matching negative marginBottom so the footer (which comes after
+      // in the DOM) moves up to meet the visual bottom of the translated contact section.
+      // CSS transforms don't affect layout flow, so without this the footer stays
+      // at its original document position, creating a gap equal to `overlap`.
       if (contactWrapperRef.current) {
         contactWrapperRef.current.style.transform = `translate3d(0, -${overlap}px, 0)`
+        contactWrapperRef.current.style.marginBottom = `-${overlap}px`
       }
     }
 

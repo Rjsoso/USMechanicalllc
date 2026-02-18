@@ -102,7 +102,7 @@ function Footer() {
   return (
     <footer className="bg-black text-gray-300">
       {/* Main Footer Content */}
-      <div className="mx-auto max-w-7xl px-6 pt-4 pb-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Company Information */}
           <div className="space-y-4">
