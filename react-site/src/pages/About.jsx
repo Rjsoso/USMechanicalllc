@@ -510,7 +510,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                           hoverSpeed={isMobile ? undefined : 20}
                           pauseOnHover={isMobile ? false : undefined}
                           externalHoverState={isMobile ? undefined : isLoopsHovered}
-                          scaleOnHover={!isMobile}
+                          scaleOnHover={false}
                           useCssAnimation={isMobile}
                           ariaLabel="Safety logos and certifications"
                         />
@@ -545,7 +545,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                           hoverSpeed={isMobile ? undefined : 20}
                           pauseOnHover={isMobile ? false : undefined}
                           externalHoverState={isMobile ? undefined : isLoopsHovered}
-                          scaleOnHover={!isMobile}
+                          scaleOnHover={false}
                           useCssAnimation={isMobile}
                           ariaLabel="Safety logos and certifications"
                         />

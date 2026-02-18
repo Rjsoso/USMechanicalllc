@@ -80,7 +80,6 @@
   image-rendering: -webkit-optimize-contrast;
   -webkit-user-drag: none;
   pointer-events: none;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .logoloop--scale-hover .logoloop__item {
