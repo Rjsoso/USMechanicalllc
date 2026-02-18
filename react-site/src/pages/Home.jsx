@@ -301,12 +301,12 @@ export default function Home() {
       }
 
       // Phase 2 — contact reveal (scroll wrapper slides an additional `overlap` px)
-      // Triggers when the contact wrapper's document position enters the lower
-      // 90% of the viewport; completes when it reaches the top (animation spans full page).
+      // Triggers as soon as contact wrapper approaches viewport bottom (just past logo loop);
+      // completes when it reaches the top.
       let revealValue = 0
       const contactTop = contactDocTop - scrollY
-      const revealStart = viewportHeight * 0.9
-      if (contactTop <= revealStart && contactTop >= 0) {
+      const revealStart = viewportHeight * 1.15
+      if (contactTop <= revealStart && contactTop > 0) {
         const progress = 1 - contactTop / revealStart
         revealValue = -overlap * progress
       } else if (contactTop < 0) {
