@@ -205,11 +205,14 @@ function HeroSection() {
             {heroData.secondButtonText && heroData.secondButtonText.trim() !== '' && (
               <button
                 onClick={() => {
-                  const sectionId = (heroData.secondButtonLink || '#careers').replace('#', '')
-                  if (process.env.NODE_ENV === 'development') {
-                    console.warn(`[DEBUG] "${heroData.secondButtonText}" clicked → navigating to: ${sectionId}`)
+                  const raw = heroData.secondButtonLink || '#careers'
+                  const homeSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'contact']
+                  const sectionId = raw.replace('#', '')
+                  if (!homeSections.includes(sectionId)) {
+                    navigate(`/${sectionId}`)
+                  } else {
+                    handleButtonClick(sectionId)
                   }
-                  handleButtonClick(sectionId)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
               >
