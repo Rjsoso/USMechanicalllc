@@ -1117,7 +1117,7 @@ body {
 
   /* Footer padding for home indicator */
   footer {
-    padding-bottom: max(40px, env(safe-area-inset-bottom)) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
   }
 
   /* Full-screen modals respect safe areas */
