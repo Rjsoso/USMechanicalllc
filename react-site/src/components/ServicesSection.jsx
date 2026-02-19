@@ -228,7 +228,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                         e.stopPropagation()
                         handleNavigate(activeCard)
                       }}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                      className="inline-flex items-center gap-2 rounded-md bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                     >
                       {activeCard.type === 'delivery-methods' ? 'Explore methods' : 'View service'}
                       <FiArrowRight className="h-4 w-4" />
