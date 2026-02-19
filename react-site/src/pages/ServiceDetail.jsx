@@ -18,6 +18,7 @@ export default function ServiceDetail() {
   const [serviceData, setServiceData] = useState(null)
   const [servicesList, setServicesList] = useState([])
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchService = async () => {
@@ -66,6 +67,8 @@ export default function ServiceDetail() {
       } catch (err) {
         console.error('Error fetching service:', err)
         setError('Failed to load service')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -118,21 +121,7 @@ export default function ServiceDetail() {
       .filter(Boolean)
   }, [serviceData])
 
-  // Render immediately - no loading check
-  if (!serviceData && error) {
-    return (
-      <>
-        <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
-          <p>Loading service...</p>
-        </div>
-        <Footer />
-      </>
-    )
-  }
+  if (loading) return null
 
   if (error || !serviceData) {
     return (

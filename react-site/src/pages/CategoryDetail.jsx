@@ -16,6 +16,7 @@ export default function CategoryDetail() {
   const [categoryData, setCategoryData] = useState(null)
   const [categoriesList, setCategoriesList] = useState([])
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -82,6 +83,8 @@ export default function CategoryDetail() {
       } catch (err) {
         console.error('Error fetching category:', err)
         setError('Failed to load category')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -109,21 +112,7 @@ export default function CategoryDetail() {
     return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
   }, [categoryData?.projects])
 
-  // Render immediately - no loading check
-  if (!categoryData && error) {
-    return (
-      <>
-        <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
-          <p>Loading category...</p>
-        </div>
-        <Footer />
-      </>
-    )
-  }
+  if (loading) return null
 
   if (error || !categoryData) {
     return (
