@@ -1,52 +1,67 @@
 /* 3D Plaque Perspective Container */
 .plaque-perspective {
-  perspective: 600px;
+  perspective: 1000px;
 }
 
-/* Logo Container */
+/* Logo Container — subtle tilt, no distortion */
 .logo-3d-card {
   position: relative;
   width: 200px;
   height: 124px;
   background: transparent;
   transform-style: preserve-3d;
-  transform: rotateY(-10deg) rotateX(6deg);
+  transform: rotateY(-4deg) rotateX(2deg);
   cursor: pointer;
   overflow: visible;
-  transition: all 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   backface-visibility: hidden;
 }
 
-/* Hover — diagonal lift reinforces the tilt direction */
+/* Hover — lift diagonally, matching tilt direction */
 .plaque-perspective:hover .logo-3d-card {
-  transform: translate(-4px, -4px) rotateY(-10deg) rotateX(6deg);
+  transform: translate(-3px, -3px) rotateY(-4deg) rotateX(2deg);
 }
 
-/* Logo image with bold stacked extrusion shadow */
+/*
+  Professional 5-layer shadow system:
+  Layers 1–2: Hard-edged zero-blur offsets — simulate physical thickness of the logo plate
+  Layer 3:    Transition layer with 1px blur — edge softening as depth recedes
+  Layer 4:    Mid-range with growing blur — contact shadow deepening
+  Layer 5:    Wide soft ambient — overall lift off the surface
+
+  Blur progression (0 → 0 → 1 → 5 → 22) mirrors real-world light physics.
+  Opacity progression (1.0 → 0.85 → 0.65 → 0.45 → 0.60) keeps near edges crisp
+  while the far ambient stays visible.
+*/
 .stamped-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 
-  filter: drop-shadow(2px 2px 0px rgba(20, 20, 30, 0.9))
-    drop-shadow(4px 4px 0px rgba(20, 20, 30, 0.75))
-    drop-shadow(7px 7px 0px rgba(20, 20, 30, 0.5))
-    drop-shadow(10px 10px 0px rgba(20, 20, 30, 0.3))
-    drop-shadow(14px 18px 28px rgba(0, 0, 0, 0.6));
+  filter:
+    drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
+    drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
+    drop-shadow(5px 5px 1px rgba(10, 10, 22, 0.65))
+    drop-shadow(8px 9px 5px rgba(5, 5, 15, 0.45))
+    drop-shadow(13px 17px 22px rgba(0, 0, 0, 0.60));
 
-  transition: filter 0.3s ease;
+  transition: filter 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   backface-visibility: hidden;
 }
 
-/* Hover — offset and ambient shadow increase to match lift */
+/*
+  Hover: thickness layers stay identical (the plate doesn't get thicker),
+  only the ambient shadow lifts and spreads — conveying the logo rising off the surface.
+*/
 .plaque-perspective:hover .stamped-logo {
-  filter: drop-shadow(2px 2px 0px rgba(20, 20, 30, 0.9))
-    drop-shadow(5px 5px 0px rgba(20, 20, 30, 0.75))
-    drop-shadow(9px 9px 0px rgba(20, 20, 30, 0.5))
-    drop-shadow(13px 13px 0px rgba(20, 20, 30, 0.3))
-    drop-shadow(20px 26px 40px rgba(0, 0, 0, 0.7));
+  filter:
+    drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
+    drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
+    drop-shadow(5px 5px 1px rgba(10, 10, 22, 0.65))
+    drop-shadow(10px 11px 7px rgba(5, 5, 15, 0.5))
+    drop-shadow(18px 24px 36px rgba(0, 0, 0, 0.72));
 }
 
 /* Desktop size */
@@ -57,23 +72,25 @@
   }
 
   .plaque-perspective:hover .logo-3d-card {
-    transform: translate(-5px, -5px) rotateY(-10deg) rotateX(6deg);
+    transform: translate(-4px, -4px) rotateY(-4deg) rotateX(2deg);
   }
 
   .stamped-logo {
-    filter: drop-shadow(2px 2px 0px rgba(20, 20, 30, 0.9))
-      drop-shadow(5px 5px 0px rgba(20, 20, 30, 0.75))
-      drop-shadow(8px 8px 0px rgba(20, 20, 30, 0.5))
-      drop-shadow(11px 11px 0px rgba(20, 20, 30, 0.3))
-      drop-shadow(16px 20px 32px rgba(0, 0, 0, 0.65));
+    filter:
+      drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
+      drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
+      drop-shadow(6px 6px 1px rgba(10, 10, 22, 0.65))
+      drop-shadow(9px 10px 6px rgba(5, 5, 15, 0.45))
+      drop-shadow(15px 20px 26px rgba(0, 0, 0, 0.62));
   }
 
   .plaque-perspective:hover .stamped-logo {
-    filter: drop-shadow(2px 2px 0px rgba(20, 20, 30, 0.9))
-      drop-shadow(6px 6px 0px rgba(20, 20, 30, 0.75))
-      drop-shadow(10px 10px 0px rgba(20, 20, 30, 0.5))
-      drop-shadow(14px 14px 0px rgba(20, 20, 30, 0.3))
-      drop-shadow(22px 28px 44px rgba(0, 0, 0, 0.72));
+    filter:
+      drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
+      drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
+      drop-shadow(6px 6px 1px rgba(10, 10, 22, 0.65))
+      drop-shadow(12px 13px 8px rgba(5, 5, 15, 0.5))
+      drop-shadow(22px 28px 42px rgba(0, 0, 0, 0.75));
   }
 }
 
