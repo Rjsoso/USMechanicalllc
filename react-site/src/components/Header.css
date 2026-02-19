@@ -24,15 +24,10 @@
 }
 
 /*
-  Professional 5-layer shadow system:
-  Layers 1–2: Hard-edged zero-blur offsets — simulate physical thickness of the logo plate
-  Layer 3:    Transition layer with 1px blur — edge softening as depth recedes
-  Layer 4:    Mid-range with growing blur — contact shadow deepening
-  Layer 5:    Wide soft ambient — overall lift off the surface
-
-  Blur progression (0 → 0 → 1 → 5 → 22) mirrors real-world light physics.
-  Opacity progression (1.0 → 0.85 → 0.65 → 0.45 → 0.60) keeps near edges crisp
-  while the far ambient stays visible.
+  5-layer shadow with smooth blur progression (0 → 1 → 4 → 9 → 20px).
+  No abrupt hard/soft jump — each layer transitions naturally into the next,
+  like a real light source illuminating a plate from the top-left.
+  Color: very dark cool-grey that blends into the dark page background.
 */
 .stamped-logo {
   width: 100%;
@@ -41,27 +36,24 @@
   display: block;
 
   filter:
-    drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
-    drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
-    drop-shadow(5px 5px 1px rgba(10, 10, 22, 0.65))
-    drop-shadow(8px 9px 5px rgba(5, 5, 15, 0.45))
-    drop-shadow(13px 17px 22px rgba(0, 0, 0, 0.60));
+    drop-shadow(1px 2px 0px rgba(10, 10, 18, 0.88))
+    drop-shadow(2px 4px 1px rgba(10, 10, 18, 0.65))
+    drop-shadow(4px 7px 4px rgba(8, 8, 16, 0.45))
+    drop-shadow(7px 11px 9px rgba(5, 5, 12, 0.35))
+    drop-shadow(12px 18px 20px rgba(0, 0, 8, 0.55));
 
   transition: filter 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   backface-visibility: hidden;
 }
 
-/*
-  Hover: thickness layers stay identical (the plate doesn't get thicker),
-  only the ambient shadow lifts and spreads — conveying the logo rising off the surface.
-*/
+/* Hover: near layers stay — only the ambient spreads to show the logo lifting */
 .plaque-perspective:hover .stamped-logo {
   filter:
-    drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
-    drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
-    drop-shadow(5px 5px 1px rgba(10, 10, 22, 0.65))
-    drop-shadow(10px 11px 7px rgba(5, 5, 15, 0.5))
-    drop-shadow(18px 24px 36px rgba(0, 0, 0, 0.72));
+    drop-shadow(1px 2px 0px rgba(10, 10, 18, 0.88))
+    drop-shadow(2px 4px 1px rgba(10, 10, 18, 0.65))
+    drop-shadow(5px 8px 5px rgba(8, 8, 16, 0.48))
+    drop-shadow(9px 14px 12px rgba(5, 5, 12, 0.38))
+    drop-shadow(16px 24px 32px rgba(0, 0, 8, 0.68));
 }
 
 /* Desktop size */
@@ -77,20 +69,20 @@
 
   .stamped-logo {
     filter:
-      drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
-      drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
-      drop-shadow(6px 6px 1px rgba(10, 10, 22, 0.65))
-      drop-shadow(9px 10px 6px rgba(5, 5, 15, 0.45))
-      drop-shadow(15px 20px 26px rgba(0, 0, 0, 0.62));
+      drop-shadow(1px 2px 0px rgba(10, 10, 18, 0.88))
+      drop-shadow(3px 5px 1px rgba(10, 10, 18, 0.65))
+      drop-shadow(5px 8px 4px rgba(8, 8, 16, 0.45))
+      drop-shadow(8px 12px 10px rgba(5, 5, 12, 0.35))
+      drop-shadow(14px 20px 24px rgba(0, 0, 8, 0.58));
   }
 
   .plaque-perspective:hover .stamped-logo {
     filter:
-      drop-shadow(1px 1px 0px rgba(5, 5, 15, 1.0))
-      drop-shadow(3px 3px 0px rgba(8, 8, 20, 0.85))
-      drop-shadow(6px 6px 1px rgba(10, 10, 22, 0.65))
-      drop-shadow(12px 13px 8px rgba(5, 5, 15, 0.5))
-      drop-shadow(22px 28px 42px rgba(0, 0, 0, 0.75));
+      drop-shadow(1px 2px 0px rgba(10, 10, 18, 0.88))
+      drop-shadow(3px 5px 1px rgba(10, 10, 18, 0.65))
+      drop-shadow(6px 10px 6px rgba(8, 8, 16, 0.48))
+      drop-shadow(11px 16px 14px rgba(5, 5, 12, 0.38))
+      drop-shadow(20px 28px 38px rgba(0, 0, 8, 0.72));
   }
 }
 
