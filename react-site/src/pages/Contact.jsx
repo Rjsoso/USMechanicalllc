@@ -151,8 +151,7 @@ function Contact() {
   useEffect(() => {
     if (!contactData) return
 
-    const siteKey =
-      import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
+    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
     const renderWidget = () => {
       const container = document.getElementById('turnstile-container')
@@ -383,14 +382,14 @@ function Contact() {
                 <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
                 <p className="mb-4 text-white">{error || 'No contact page data found.'}</p>
                 <p className="text-sm text-gray-300">
-                  Please create a &quot;Contact Page&quot; document in Sanity Studio at{' '}
+                  Please create a &quot;Contact Page&quot; document in{' '}
                   <a
-                    href="http://localhost:3333"
+                    href="https://usmechanical.sanity.studio"
                     className="text-blue-400 underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    http://localhost:3333
+                    Sanity Studio
                   </a>
                 </p>
               </div>

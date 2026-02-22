@@ -15,20 +15,20 @@ const StructuredData = () => {
     const localBusinessSchema = {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      '@id': 'https://us-mechanicalllc.vercel.app/#organization',
+      '@id': 'https://usmechanical.com/#organization',
       name: 'U.S. Mechanical LLC',
       alternateName: 'US Mechanical',
       description:
         'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Specializing in HVAC, Plumbing, and Process Piping.',
-      url: 'https://us-mechanicalllc.vercel.app',
+      url: 'https://usmechanical.com',
       telephone: '+1-801-785-6028',
       email: 'info@usmechanicalllc.com',
       foundingDate: '1963',
       priceRange: '$$',
-      image: 'https://us-mechanicalllc.vercel.app/logo.png',
+      image: 'https://usmechanical.com/logo.png',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://us-mechanicalllc.vercel.app/logo.png',
+        url: 'https://usmechanical.com/logo.png',
         width: '192',
         height: '192',
       },
@@ -133,8 +133,8 @@ const StructuredData = () => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'U.S. Mechanical LLC',
-      url: 'https://us-mechanicalllc.vercel.app',
-      logo: 'https://us-mechanicalllc.vercel.app/logo.png',
+      url: 'https://usmechanical.com',
+      logo: 'https://usmechanical.com/logo.png',
       foundingDate: '1963',
       contactPoint: {
         '@type': 'ContactPoint',
@@ -151,21 +151,21 @@ const StructuredData = () => {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'U.S. Mechanical LLC',
-      url: 'https://us-mechanicalllc.vercel.app',
+      url: 'https://usmechanical.com',
       description: 'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond.',
       publisher: {
         '@type': 'Organization',
         name: 'U.S. Mechanical LLC',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://us-mechanicalllc.vercel.app/logo.png',
+          url: 'https://usmechanical.com/logo.png',
         },
       },
         potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://us-mechanicalllc.vercel.app/search?q={search_term_string}',
+          urlTemplate: 'https://usmechanical.com/search?q={search_term_string}',
         },
         'query-input': 'required name=search_term_string',
       },
@@ -178,7 +178,7 @@ const StructuredData = () => {
           '@type': 'ListItem',
           position: 1,
           name: 'Home',
-          item: 'https://us-mechanicalllc.vercel.app',
+          item: 'https://usmechanical.com',
         },
       ]
 
@@ -188,28 +188,28 @@ const StructuredData = () => {
           '@type': 'ListItem',
           position: 2,
           name: 'About Us',
-          item: 'https://us-mechanicalllc.vercel.app/about',
+          item: 'https://usmechanical.com/about',
         })
       } else if (path === '/careers') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Careers',
-          item: 'https://us-mechanicalllc.vercel.app/careers',
+          item: 'https://usmechanical.com/careers',
         })
       } else if (path === '/portfolio') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Portfolio',
-          item: 'https://us-mechanicalllc.vercel.app/portfolio',
+          item: 'https://usmechanical.com/portfolio',
         })
       } else if (path === '/contact') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Contact',
-          item: 'https://us-mechanicalllc.vercel.app/contact',
+          item: 'https://usmechanical.com/contact',
         })
       }
 
@@ -230,37 +230,37 @@ const StructuredData = () => {
           '@type': 'SiteNavigationElement',
           position: 1,
           name: 'Home',
-          url: 'https://us-mechanicalllc.vercel.app',
+          url: 'https://usmechanical.com',
         },
         {
           '@type': 'SiteNavigationElement',
           position: 2,
           name: 'About Us',
-          url: 'https://us-mechanicalllc.vercel.app/about',
+          url: 'https://usmechanical.com/about',
         },
         {
           '@type': 'SiteNavigationElement',
           position: 3,
           name: 'Services',
-          url: 'https://us-mechanicalllc.vercel.app/#services',
+          url: 'https://usmechanical.com/#services',
         },
         {
           '@type': 'SiteNavigationElement',
           position: 4,
           name: 'Portfolio',
-          url: 'https://us-mechanicalllc.vercel.app/portfolio',
+          url: 'https://usmechanical.com/portfolio',
         },
         {
           '@type': 'SiteNavigationElement',
           position: 5,
           name: 'Careers',
-          url: 'https://us-mechanicalllc.vercel.app/careers',
+          url: 'https://usmechanical.com/careers',
         },
         {
           '@type': 'SiteNavigationElement',
           position: 6,
           name: 'Contact',
-          url: 'https://us-mechanicalllc.vercel.app/contact',
+          url: 'https://usmechanical.com/contact',
         },
       ],
     }
@@ -270,13 +270,13 @@ const StructuredData = () => {
       const baseSchema = {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        '@id': `https://us-mechanicalllc.vercel.app${location.pathname}`,
-        url: `https://us-mechanicalllc.vercel.app${location.pathname}`,
+        '@id': `https://usmechanical.com${location.pathname}`,
+        url: `https://usmechanical.com${location.pathname}`,
         isPartOf: {
-          '@id': 'https://us-mechanicalllc.vercel.app/#website',
+          '@id': 'https://usmechanical.com/#website',
         },
         about: {
-          '@id': 'https://us-mechanicalllc.vercel.app/#organization',
+          '@id': 'https://usmechanical.com/#organization',
         },
         inLanguage: 'en-US',
       }

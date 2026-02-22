@@ -21,6 +21,7 @@ const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
 const DeliveryMethodsPage = lazy(() => import('./pages/DeliveryMethodsPage'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 function App() {
   // Disable browser scroll restoration globally
@@ -56,6 +57,7 @@ function App() {
             <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/delivery-methods" element={<DeliveryMethodsPage />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </Router>
