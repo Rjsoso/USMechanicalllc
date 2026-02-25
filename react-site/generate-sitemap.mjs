@@ -88,6 +88,30 @@ async function generateSitemap() {
     <priority>0.9</priority>
   </url>
 
+  <!-- About Page -->
+  <url>
+    <loc>${DOMAIN}/about</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Careers Page -->
+  <url>
+    <loc>${DOMAIN}/careers</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Portfolio Page -->
+  <url>
+    <loc>${DOMAIN}/portfolio</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Service Pages -->
 ${services?.map(service => {
   if (!service.slug) return '';
@@ -127,9 +151,9 @@ ${projects?.map(project => `  <url>
     console.log(`📁 Saved to: ${sitemapPath}\n`);
     
     console.log('📋 URLs included:');
-    const totalUrls = 2 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
+    const totalUrls = 5 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
     console.log(`   - Total: ${totalUrls} URLs`);
-    console.log(`   - Core pages: 2 (home, contact)`);
+    console.log(`   - Core pages: 5 (home, contact, about, careers, portfolio)`);
     console.log(`   - Services: ${services?.length || 0}`);
     console.log(`   - Categories: ${categories?.length || 0}`);
     console.log(`   - Projects: ${projects?.length || 0}\n`);
