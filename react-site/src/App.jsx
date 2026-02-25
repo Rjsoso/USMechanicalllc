@@ -6,12 +6,12 @@ import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
 
 function ScrollToTop() {
-  const { pathname, hash } = useLocation()
+  const location = useLocation()
   useEffect(() => {
-    if (!hash) {
+    if (!location.hash && !location.state?.scrollTo) {
       window.scrollTo(0, 0)
     }
-  }, [pathname, hash])
+  }, [location.pathname, location.hash, location.state?.scrollTo])
   return null
 }
 

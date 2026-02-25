@@ -80,7 +80,7 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
 export function navigateToSection(sectionId, navigate, currentPath = '/') {
   // If we're on a different page, navigate to home first
   if (currentPath !== '/') {
-    navigate(`/#${sectionId}`)
+    navigate('/', { state: { scrollTo: sectionId } })
     return
   }
 
