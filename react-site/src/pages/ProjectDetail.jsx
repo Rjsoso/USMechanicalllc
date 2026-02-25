@@ -379,21 +379,6 @@ export default function ProjectDetail() {
             </div>
           </motion.div>
 
-          {/* Request a Quote Button */}
-          <motion.div
-            className="mb-8 mt-16 flex justify-center"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportPreset}
-            transition={{ duration: 0.25 }}
-          >
-            <a
-              href="mailto:info@usmechanicalllc.com?subject=Quote%20Request%20from%20US%20Mechanical%20Website"
-              className="transform rounded-lg bg-black px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-gray-800"
-            >
-              Request a Quote
-            </a>
-          </motion.div>
         </div>
       </motion.main>
       <Footer />

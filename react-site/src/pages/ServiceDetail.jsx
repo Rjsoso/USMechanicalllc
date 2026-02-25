@@ -309,20 +309,6 @@ export default function ServiceDetail() {
             </motion.div>
           ) : null}
 
-          {/* Request a Quote Button */}
-          <motion.div
-            className="mb-8 mt-8 flex justify-center"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <a
-              href="mailto:info@usmechanicalllc.com?subject=Quote%20Request%20from%20US%20Mechanical%20Website"
-              className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100"
-            >
-              Request a Quote
-            </a>
-          </motion.div>
         </div>
       </motion.main>
       <Footer />
