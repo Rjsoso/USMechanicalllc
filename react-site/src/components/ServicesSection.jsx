@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback, memo } from 'react'
+import { useState, useCallback, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
-import { client } from '../utils/sanity'
+import { useSanityLive } from '../hooks/useSanityLive'
 
 function getBoxBackgroundStyle(box) {
   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
@@ -25,46 +25,34 @@ function truncate(str, len) {
   return str.length <= len ? str : str.slice(0, len).trim() + '…'
 }
 
+const SERVICES_QUERY = `*[_type == "ourServices"][0]{
+  sectionTitle,
+  descriptionText,
+  deliveryMethodsHeading,
+  deliveryMethods[] {
+    title, summary, badge, badgeTone,
+    backgroundImage { asset-> { url, _id }, alt },
+    body
+  },
+  servicesInfo[] {
+    title, description, backgroundType, backgroundColor, textColor,
+    backgroundImage { asset-> { _id, url }, alt },
+    slug { current },
+    fullDescription,
+    images[] { asset-> { _id, url }, alt, caption },
+    features[] { title, description }
+  }
+}`
+
 const ServicesSection = ({ data: servicesDataProp }) => {
-  const [servicesData, setServicesData] = useState(servicesDataProp || null)
   const [hoveredId, setHoveredId] = useState(null)
   const [navigatingTo, setNavigatingTo] = useState(null)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (servicesDataProp) setServicesData(servicesDataProp)
-  }, [servicesDataProp])
-
-  useEffect(() => {
-    if (servicesDataProp) return
-    let cancelled = false
-    const timeoutId = setTimeout(() => {
-      client
-        .fetch(
-          `*[_type == "ourServices"][0]{
-            sectionTitle,
-            descriptionText,
-            deliveryMethodsHeading,
-            deliveryMethods[] {
-              title, summary, badge, badgeTone,
-              backgroundImage { asset-> { url, _id }, alt },
-              body
-            },
-            servicesInfo[] {
-              title, description, backgroundType, backgroundColor, textColor,
-              backgroundImage { asset-> { _id, url }, alt },
-              slug { current },
-              fullDescription,
-              images[] { asset-> { _id, url }, alt, caption },
-              features[] { title, description }
-            }
-          }`
-        )
-        .then(data => { if (!cancelled) setServicesData(data) })
-        .catch(err => { if (!cancelled) console.error('[ServicesSection] Fallback fetch error:', err) })
-    }, 800)
-    return () => { cancelled = true; clearTimeout(timeoutId) }
-  }, [servicesDataProp])
+  const { data: servicesData, loading } = useSanityLive(SERVICES_QUERY, {}, {
+    initialData: servicesDataProp,
+    listenFilter: `*[_type == "ourServices"]`,
+  })
 
   const handleNavigate = useCallback((card) => {
     const target =
@@ -75,7 +63,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
     setTimeout(() => navigate(target), 200)
   }, [navigate])
 
-  if (servicesData === null) {
+  if (loading || servicesData === null) {
     return (
       <section
         id="services"

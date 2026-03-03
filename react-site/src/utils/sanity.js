@@ -12,6 +12,15 @@ export const client = createClient({
   perspective: 'published', // Only fetch published documents
 })
 
+// Live client for real-time listeners and fresh re-fetches (bypasses CDN)
+export const liveClient = createClient({
+  projectId: '3vpl3hho',
+  dataset: 'production',
+  apiVersion: '2023-05-03',
+  useCdn: false,
+  perspective: 'published',
+})
+
 // Note: Write operations should be performed through Sanity Studio or backend APIs
 // NEVER expose write tokens in client-side code
 

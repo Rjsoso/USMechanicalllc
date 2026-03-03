@@ -1,8 +1,9 @@
-import { useEffect, useState, memo } from 'react'
+import { useMemo, useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
+import { useSanityLive } from '../hooks/useSanityLive'
 
 // Fallback hero data - Last updated: 2026-01-29
 const defaultHeroData = {
@@ -22,101 +23,40 @@ const generateYearColor = () => {
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
+const HERO_QUERY = `*[_type == "heroSection" && _id == "heroSection"][0]{
+  _id,
+  backgroundImage { asset-> { _id, url } },
+  headline,
+  subtext,
+  buttonText,
+  buttonLink,
+  secondButtonText,
+  secondButtonLink
+}`
+
 function HeroSection() {
-  const [heroData, setHeroData] = useState(defaultHeroData)
   const [yearColor] = useState(() => generateYearColor())
   const navigate = useNavigate()
   const location = useLocation()
+
+  const { data: rawHero } = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
+  const heroData = useMemo(() => {
+    if (!rawHero) return defaultHeroData
+    return {
+      ...rawHero,
+      buttonText: rawHero.buttonText || '',
+      buttonLink: rawHero.buttonLink || defaultHeroData.buttonLink,
+      secondButtonText: rawHero.secondButtonText || '',
+      secondButtonLink: rawHero.secondButtonLink || '',
+    }
+  }, [rawHero])
 
   const handleButtonClick = (sectionId) => {
     if (process.env.NODE_ENV === 'development') {
       console.log('[HERO] Button click:', sectionId)
     }
-    
-    // Navigate immediately without loading screen
     navigateToSection(sectionId, navigate, location.pathname)
   }
-
-  useEffect(() => {
-    const fetchHero = () => {
-      // Fetch hero section data from Sanity
-      client
-        .fetch(
-          `*[_type == "heroSection" && _id == "heroSection"][0]{
-            _id,
-            backgroundImage {
-              asset-> {
-                _id,
-                url
-              }
-            },
-            headline,
-            subtext,
-            buttonText,
-            buttonLink,
-            secondButtonText,
-            secondButtonLink
-          }`
-        )
-        .then(data => {
-          // If document with specific ID not found, try first document
-          if (!data || !data._id) {
-            return client.fetch(
-              `*[_type == "heroSection" && !(_id in path("drafts.**"))][0]{
-                _id,
-                backgroundImage {
-                  asset-> {
-                    _id,
-                    url
-                  }
-                },
-                headline,
-                subtext,
-                buttonText,
-                buttonLink,
-                secondButtonText,
-                secondButtonLink
-              }`
-            )
-          }
-          return Promise.resolve(data)
-        })
-        .then(data => {
-          if (data) {
-            // Use data from Sanity, respecting empty values for optional fields
-            const heroDataWithDefaults = {
-              ...data,
-              buttonText: data.buttonText || '',
-              buttonLink: data.buttonLink || defaultHeroData.buttonLink,
-              secondButtonText: data.secondButtonText || '',
-              secondButtonLink: data.secondButtonLink || '',
-            }
-
-            setHeroData(heroDataWithDefaults)
-          } else {
-            // Use default data if Sanity returns null
-            if (process.env.NODE_ENV === 'development') {
-              console.warn(
-                'HeroSection: No published heroSection document found; using default fallback content.'
-              )
-            }
-            setHeroData(defaultHeroData)
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching hero section:', error)
-          // On error, use default data
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(
-              'HeroSection: Failed to fetch hero data from Sanity; using default fallback content.'
-            )
-          }
-          setHeroData(defaultHeroData)
-        })
-    }
-
-    fetchHero()
-  }, [])
 
   return (
     <section

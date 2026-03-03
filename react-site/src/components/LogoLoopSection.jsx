@@ -1,58 +1,43 @@
-import { useEffect, useState, memo } from 'react'
-import { client, urlFor } from '../utils/sanity'
+import { useEffect, useState, useMemo, memo } from 'react'
+import { urlFor } from '../utils/sanity'
 import { debounce } from '../utils/debounce'
 import LogoLoop from './LogoLoop'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const LOGO_LOOP_QUERY = `*[_type == "logoLoop" && _id == "logoLoop"][0] {
+  enabled,
+  logos[] {
+    companyName,
+    logo { asset-> { _id, url }, alt },
+    url,
+    order
+  }
+}`
 
 function LogoLoopSection() {
-  const [logoData, setLogoData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
 
-  // Track window width for responsive logo sizing with debouncing
+  const { data } = useSanityLive(LOGO_LOOP_QUERY, {}, {
+    listenFilter: `*[_type == "logoLoop"]`,
+  })
+
+  const logoData = useMemo(() => {
+    if (!data?.enabled || !data?.logos) return null
+    return [...data.logos].sort((a, b) => (a.order || 0) - (b.order || 0))
+  }, [data])
+
   useEffect(() => {
     const handleResize = debounce(() => setWindowWidth(window.innerWidth), 150)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "logoLoop" && _id == "logoLoop"][0] {
-          enabled,
-          logos[] {
-            companyName,
-            logo {
-              asset-> {
-                _id,
-                url
-              },
-              alt
-            },
-            url,
-            order
-          }
-        }`
-      )
-      .then(data => {
-        if (data && data.enabled && data.logos) {
-          // Sort logos by order field
-          const sortedLogos = [...data.logos].sort((a, b) => (a.order || 0) - (b.order || 0))
-          setLogoData(sortedLogos)
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching logo loop data:', error)
-      })
-  }, [])
-
-  // Don't render anything if disabled or no logos
   if (!logoData || logoData.length === 0) {
     return null
   }
 
-  // Transform Sanity data to LogoLoop format
   const logos = logoData.map((item, index) => ({
     src: urlFor(item.logo).width(800).url(),
     alt: item.logo.alt || item.companyName,

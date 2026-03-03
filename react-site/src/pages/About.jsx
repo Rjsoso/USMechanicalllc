@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
+import { useSanityLive } from '../hooks/useSanityLive'
 import { PortableText } from '@portabletext/react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -10,8 +11,16 @@ import Carousel from '../components/Carousel'
 import LogoLoop from '../components/LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
 
+const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
+  aboutTitle,
+  aboutText,
+  aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption },
+  safetyTitle,
+  safetyText,
+  safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href }
+}`
+
 function About() {
-  const [data, setData] = useState(null)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -42,72 +51,17 @@ The result of this commitment to safety is an Experience Modification Rate (EMR)
 All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
   }
 
-  useEffect(() => {
-    let isCancelled = false
-
-    const fetchData = async () => {
-      try {
-        const aboutData = await client.fetch(
-          `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
-            aboutTitle,
-            aboutText,
-            aboutPhotos[] {
-              asset-> {
-                _id,
-                url,
-                originalFilename
-              },
-              alt,
-              caption
-            },
-            safetyTitle,
-            safetyText,
-            safetyLogos[] {
-              image {
-                asset-> {
-                  _id,
-                  url,
-                  originalFilename
-                },
-                alt,
-                caption
-              },
-              icon,
-              title,
-              href
-            }
-          }`
-        )
-
-        if (isCancelled) return
-
-        if (!aboutData) {
-          setData(defaultData)
-        } else {
-          setData({ ...defaultData, ...aboutData })
-        }
-      } catch (error) {
-        if (!isCancelled) {
-          console.error('Error fetching about data:', error)
-          setData(defaultData)
-        }
-      }
-    }
-
-    fetchData()
-
-    return () => {
-      isCancelled = true
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { data: liveData } = useSanityLive(ABOUT_QUERY, {}, {
+    listenFilter: `*[_type == "aboutAndSafety"]`,
+  })
+  const data = liveData ? { ...defaultData, ...liveData } : defaultData
 
   const carouselItems = useMemo(() => {
-    if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
+    if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
       return []
     }
 
-    return displayData.aboutPhotos
+    return data.aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -149,7 +103,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         return null
       })
       .filter(Boolean)
-  }, [data, displayData?.safetyLogos])
+  }, [data, data?.safetyLogos])
 
   const getSafetyLogoHeight = () => {
     if (windowWidth < 768) return 50

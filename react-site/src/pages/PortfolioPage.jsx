@@ -1,46 +1,31 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const CATEGORIES_QUERY = `*[_type == "portfolioCategory"] | order(order asc) {
+  _id,
+  title,
+  description,
+  image { asset-> { _id, url }, alt },
+  order
+}`
+const SECTION_QUERY = `*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`
 
 export default function PortfolioPage() {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState([])
-  const [sectionData, setSectionData] = useState(null)
   const [loadedImages, setLoadedImages] = useState(new Set())
 
-  useEffect(() => {
-    Promise.all([
-      client.fetch(
-        `*[_type == "portfolioCategory"] | order(order asc) {
-          _id,
-          title,
-          description,
-          image {
-            asset-> {
-              _id,
-              url
-            },
-            alt
-          },
-          order
-        }`
-      ),
-      client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`),
-    ])
-      .then(([categoriesData, sectionInfo]) => {
-        setCategories(categoriesData)
-        setSectionData(sectionInfo)
-      })
-      .catch(error => {
-        console.error('Error fetching portfolio data:', error)
-      })
-  }, [])
+  const categoriesRes = useSanityLive(CATEGORIES_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
+  const sectionRes = useSanityLive(SECTION_QUERY, {}, { listenFilter: `*[_id == "portfolioSection"]` })
 
+  const categories = categoriesRes.data ?? []
+  const sectionData = sectionRes.data
   const displayCategories = useMemo(() => categories, [categories])
 
   return (

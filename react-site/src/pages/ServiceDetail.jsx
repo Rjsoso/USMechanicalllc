@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
@@ -10,72 +10,42 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const SERVICES_INFO_QUERY = `*[_type == "ourServices"][0]{
+  servicesInfo[] {
+    title,
+    description,
+    slug { current },
+    fullDescription,
+    images[] { asset-> { _id, url }, alt, caption },
+    features[] { title, description }
+  }
+}`
 
 export default function ServiceDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const [serviceData, setServiceData] = useState(null)
-  const [servicesList, setServicesList] = useState([])
   const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
+
+  const { data, loading } = useSanityLive(SERVICES_INFO_QUERY, {}, {
+    listenFilter: `*[_type == "ourServices"]`,
+  })
+
+  const servicesList = useMemo(() => Array.isArray(data?.servicesInfo) ? data.servicesInfo : [], [data])
+  const serviceData = useMemo(() => {
+    if (!slug || !data?.servicesInfo) return null
+    return data.servicesInfo.find(s => s.slug?.current === slug) ?? null
+  }, [data, slug])
 
   useEffect(() => {
-    const fetchService = async () => {
-      try {
-        // Fetch the ourServices document and find the service with matching slug
-        const data = await client.fetch(
-          `*[_type == "ourServices"][0]{
-            servicesInfo[] {
-              title,
-              description,
-              slug {
-                current
-              },
-              fullDescription,
-              images[] {
-                asset-> {
-                  _id,
-                  url
-                },
-                alt,
-                caption
-              },
-              features[] {
-                title,
-                description
-              }
-            }
-          }`
-        )
-
-        if (!data || !data.servicesInfo) {
-          setError('Service not found')
-          return
-        }
-
-        // Find the service with matching slug
-        const service = data.servicesInfo.find(s => s.slug?.current === slug)
-
-        if (!service) {
-          setError('Service not found')
-          return
-        }
-
-        setServicesList(Array.isArray(data.servicesInfo) ? data.servicesInfo : [])
-        setServiceData(service)
-      } catch (err) {
-        console.error('Error fetching service:', err)
-        setError('Failed to load service')
-      } finally {
-        setLoading(false)
-      }
+    if (data && slug) {
+      if (!data.servicesInfo) setError('Service not found')
+      else if (!serviceData) setError('Service not found')
+      else setError(null)
     }
-
-    if (slug) {
-      fetchService()
-    }
-  }, [slug])
+  }, [data, slug, serviceData])
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {

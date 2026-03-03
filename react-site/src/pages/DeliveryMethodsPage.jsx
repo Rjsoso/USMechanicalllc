@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { client } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { useSanityLive } from '../hooks/useSanityLive'
 
 const badgeToneClasses = {
   sky: 'bg-sky-100 text-sky-800 border-sky-300',
@@ -16,35 +15,22 @@ const badgeToneClasses = {
   slate: 'bg-gray-100 text-gray-700 border-gray-300',
 }
 
+const DELIVERY_METHODS_QUERY = `*[_type == "ourServices"][0]{
+  deliveryMethodsHeading,
+  deliveryMethods[] {
+    title, summary, badge, badgeTone,
+    backgroundImage { asset-> { url, _id }, alt },
+    body
+  }
+}`
+
 export default function DeliveryMethodsPage() {
   const navigate = useNavigate()
-  const [data, setData] = useState(null)
-  const [error, setError] = useState(null)
 
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "ourServices"][0]{
-          deliveryMethodsHeading,
-          deliveryMethods[] {
-            title, summary, badge, badgeTone,
-            backgroundImage { asset-> { url, _id }, alt },
-            body
-          }
-        }`
-      )
-      .then(result => {
-        if (!result) {
-          setError('Could not load delivery methods.')
-          return
-        }
-        setData(result)
-      })
-      .catch(err => {
-        console.error('[DeliveryMethodsPage] Fetch error:', err)
-        setError('Failed to load delivery methods.')
-      })
-  }, [])
+  const { data, loading, error: fetchError } = useSanityLive(DELIVERY_METHODS_QUERY, {}, {
+    listenFilter: `*[_type == "ourServices"]`,
+  })
+  const error = fetchError ? 'Failed to load delivery methods.' : (!data && !loading ? 'Could not load delivery methods.' : null)
 
   if (error) {
     return (

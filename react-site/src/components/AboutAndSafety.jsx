@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react'
-import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
+import { useSanityLive } from '../hooks/useSanityLive'
 import { PortableText } from '@portabletext/react'
 import { debounce } from '../utils/debounce'
 import FadeInNative from './FadeInNative'
@@ -8,8 +8,25 @@ import Carousel from './Carousel'
 import LogoLoop from './LogoLoop'
 import { FiArrowRight } from 'react-icons/fi'
 
+const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
+  aboutTitle,
+  aboutText,
+  aboutPhotos[] {
+    asset-> { _id, url, originalFilename },
+    alt,
+    caption
+  },
+  safetyTitle,
+  safetyText,
+  safetyLogos[] {
+    image { asset-> { _id, url, originalFilename }, alt, caption },
+    icon,
+    title,
+    href
+  }
+}`
+
 function AboutAndSafety({ data: aboutDataProp }) {
-  const [data, setData] = useState(aboutDataProp || null)
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -19,6 +36,11 @@ function AboutAndSafety({ data: aboutDataProp }) {
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   )
+
+  const { data: liveData } = useSanityLive(ABOUT_QUERY, {}, {
+    initialData: aboutDataProp,
+    listenFilter: `*[_type == "aboutAndSafety"]`,
+  })
 
   // Track window width for responsive logo sizing with debouncing
   useEffect(() => {
@@ -42,79 +64,7 @@ The result of this commitment to safety is an Experience Modification Rate (EMR)
 All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
   }
 
-  // Update state when prop changes
-  useEffect(() => {
-    if (aboutDataProp) {
-      setData({ ...defaultData, ...aboutDataProp })
-    }
-  }, [aboutDataProp])
-
-  // Fetch all content from Sanity (text and images) - only if no prop data
-  useEffect(() => {
-    if (aboutDataProp) return // Skip fetch if data provided via props
-
-    let isCancelled = false
-
-    const fetchData = async () => {
-      try {
-        const aboutData = await client.fetch(
-          `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
-            aboutTitle,
-            aboutText,
-            aboutPhotos[] {
-              asset-> {
-                _id,
-                url,
-                originalFilename
-              },
-              alt,
-              caption
-            },
-            safetyTitle,
-            safetyText,
-            safetyLogos[] {
-              image {
-                asset-> {
-                  _id,
-                  url,
-                  originalFilename
-                },
-                alt,
-                caption
-              },
-              icon,
-              title,
-              href
-            }
-          }`
-        )
-
-        if (isCancelled) return
-
-        if (!aboutData) {
-          setData(defaultData)
-        } else {
-          setData({ ...defaultData, ...aboutData })
-        }
-      } catch {
-        if (!isCancelled) {
-          setData(defaultData)
-        }
-      } finally {
-        // Data fetch complete
-      }
-    }
-
-    fetchData()
-
-    return () => {
-      isCancelled = true
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Use displayData fallback pattern - MUST be before useMemos that use it
-  const displayData = data || defaultData
+  const displayData = liveData ? { ...defaultData, ...liveData } : defaultData
 
   // Map aboutPhotos to carousel items format
   const carouselItems = useMemo(() => {

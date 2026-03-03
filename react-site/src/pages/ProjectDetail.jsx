@@ -1,65 +1,39 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const PROJECT_QUERY = `*[_type == "portfolioProject" && _id == $projectId][0]{
+  _id,
+  title,
+  description,
+  images[] { asset-> { _id, url }, alt, caption },
+  location,
+  year,
+  client,
+  projectType,
+  category-> { _id, title }
+}`
 
 export default function ProjectDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const [projectData, setProjectData] = useState(null)
-  const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const data = await client.fetch(
-          `*[_type == "portfolioProject" && _id == $projectId][0]{
-            _id,
-            title,
-            description,
-            images[] {
-              asset-> {
-                _id,
-                url
-              },
-              alt,
-              caption
-            },
-            location,
-            year,
-            client,
-            projectType,
-            category-> {
-              _id,
-              title
-            }
-          }`,
-          { projectId: id }
-        )
+  const { data: projectData, loading, error: fetchError } = useSanityLive(
+    PROJECT_QUERY,
+    { projectId: id ?? '' },
+    { listenFilter: `*[_type == "portfolioProject"]` }
+  )
 
-        if (!data) {
-          setError('Project not found')
-          return
-        }
-
-        setProjectData(data)
-      } catch (err) {
-        console.error('Error fetching project:', err)
-        setError('Failed to load project')
-      }
-    }
-
-    if (id) {
-      fetchProject()
-    }
-  }, [id])
+  const error = fetchError ? 'Failed to load project' : (!projectData && !loading && id ? 'Project not found' : null)
 
 
   // Map images to carousel items format

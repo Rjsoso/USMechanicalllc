@@ -1,74 +1,34 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { client } from '../utils/sanity'
 import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
+import { useSanityLive } from '../hooks/useSanityLive'
 import './DrawerMenu.css'
+
+const HEADER_QUERY = `*[_type == "headerSection"][0]{
+  sections[] { label, links[] { label, href, ariaLabel } }
+}`
+
+const defaultSections = [
+  { label: 'COMPANY', links: [{ label: 'About Us', href: '#about', ariaLabel: null }, { label: 'Safety', href: '#safety', ariaLabel: null }] },
+  { label: 'SERVICES', links: [{ label: 'Our Services', href: '#services', ariaLabel: null }, { label: 'Portfolio', href: '#portfolio', ariaLabel: null }] },
+  { label: 'CONNECT', links: [{ label: 'Careers at US Mechanical', href: '/careers', ariaLabel: null }, { label: 'Contact', href: '#contact', ariaLabel: null }] },
+]
 
 const DrawerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [sections, setSections] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
   const hamburgerRef = useRef(null)
   const drawerRef = useRef(null)
 
-  // Default fallback navigation structure - Last updated: 2026-01-29
-  const defaultSections = [
-    {
-      label: 'COMPANY',
-      links: [
-        { label: 'About Us', href: '#about', ariaLabel: null },
-        { label: 'Safety', href: '#safety', ariaLabel: null },
-      ],
-    },
-    {
-      label: 'SERVICES',
-      links: [
-        { label: 'Our Services', href: '#services', ariaLabel: null },
-        { label: 'Portfolio', href: '#portfolio', ariaLabel: null },
-      ],
-    },
-    {
-      label: 'CONNECT',
-      links: [
-        { label: 'Careers at US Mechanical', href: '/careers', ariaLabel: null },
-        { label: 'Contact', href: '#contact', ariaLabel: null },
-      ],
-    },
-  ]
-
-  // Fetch navigation data from Sanity
-  useEffect(() => {
-    const fetchNavData = async () => {
-      try {
-        const headerData = await client.fetch(
-          `*[_type == "headerSection"][0]{
-            sections[] {
-              label,
-              links[] {
-                label,
-                href,
-                ariaLabel
-              }
-            }
-          }`
-        )
-
-        const fetchedSections =
-          headerData?.sections && headerData.sections.length > 0
-            ? headerData.sections
-            : defaultSections
-
-        setSections(fetchedSections)
-      } catch (error) {
-        console.error('Error fetching navigation data:', error)
-        setSections(defaultSections)
-      }
-    }
-
-    fetchNavData()
-  }, [])
+  const { data: headerData } = useSanityLive(HEADER_QUERY, {}, {
+    listenFilter: `*[_type == "headerSection"]`,
+  })
+  const sections =
+    headerData?.sections && headerData.sections.length > 0
+      ? headerData.sections
+      : defaultSections
 
   // Preload Contact component on hover for faster navigation
   const preloadContact = () => {

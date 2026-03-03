@@ -1,5 +1,5 @@
 /* global process */
-import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -12,19 +12,71 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
 import { scrollToSection } from '../utils/scrollToSection'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const HERO_QUERY = `*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`
+const SERVICES_QUERY = `*[_type == "ourServices"][0]{
+  sectionTitle,
+  descriptionText,
+  deliveryMethodsHeading,
+  deliveryMethodsFormHeadline,
+  deliveryMethodsFormCopy,
+  deliveryMethodsEmail,
+  deliveryMethods[] {
+    title, summary, badge, badgeTone,
+    backgroundImage { asset-> { url, _id }, alt },
+    body
+  },
+  servicesInfo[] {
+    title, description, backgroundType, backgroundColor, textColor,
+    backgroundImage { asset-> { _id, url }, alt },
+    slug { current },
+    fullDescription,
+    images[] { asset-> { _id, url }, alt, caption },
+    features[] { title, description }
+  }
+}`
+const PORTFOLIO_CATEGORIES_QUERY = `*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`
+const PORTFOLIO_SECTION_QUERY = `*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`
+const STATS_QUERY = `*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`
+const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`
 
 export default function Home() {
   const location = useLocation()
   const initialScrollDone = useRef(false)
-  const [heroBackgroundUrl, setHeroBackgroundUrl] = useState(null)
-  
-  // Centralized data states for all components
-  const [servicesData, setServicesData] = useState(null)
-  const [portfolioData, setPortfolioData] = useState(null)
-  const [statsData, setStatsData] = useState(null)
-  const [aboutData, setAboutData] = useState(null)
-  const [allDataLoaded, setAllDataLoaded] = useState(false)
+
+  const hero = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
+  const services = useSanityLive(SERVICES_QUERY, {}, { listenFilter: `*[_type == "ourServices"]` })
+  const portfolioCat = useSanityLive(PORTFOLIO_CATEGORIES_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
+  const portfolioSec = useSanityLive(PORTFOLIO_SECTION_QUERY, {}, { listenFilter: `*[_id == "portfolioSection"]` })
+  const stats = useSanityLive(STATS_QUERY, {}, { listenFilter: `*[_type == "companyStats"]` })
+  const about = useSanityLive(ABOUT_QUERY, {}, { listenFilter: `*[_type == "aboutAndSafety"]` })
+
+  const heroBackgroundUrl = useMemo(() => {
+    const heroData = hero.data
+    if (!heroData) return null
+    if (heroData?.backgroundImage?.asset?.url) {
+      return `${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`
+    }
+    if (heroData?.backgroundImage) {
+      const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
+      return url || null
+    }
+    return null
+  }, [hero.data])
+
+  const portfolioData = useMemo(() => {
+    if (portfolioCat.data && portfolioSec.data) {
+      return { categories: portfolioCat.data, section: portfolioSec.data }
+    }
+    return null
+  }, [portfolioCat.data, portfolioSec.data])
+
+  const servicesData = services.data
+  const statsData = stats.data
+  const aboutData = about.data
+  const allDataLoaded = !hero.loading && !about.loading
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -159,83 +211,6 @@ export default function Home() {
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
     }
-  }, [])
-
-  // Batched data fetch - use allSettled so one failed fetch does not wipe hero/portfolio/etc.
-  useEffect(() => {
-    let cancelled = false
-    const fetchAll = async () => {
-      const heroPromise = client.fetch(`*[_type == "heroSection"][0]{ _id, backgroundImage { asset-> { _id, url } } }`)
-      const servicesPromise = client.fetch(`*[_type == "ourServices"][0]{
-        sectionTitle,
-        descriptionText,
-        deliveryMethodsHeading,
-        deliveryMethodsFormHeadline,
-        deliveryMethodsFormCopy,
-        deliveryMethodsEmail,
-        deliveryMethods[] {
-          title, summary, badge, badgeTone,
-          backgroundImage { asset-> { url, _id }, alt },
-          body
-        },
-        servicesInfo[] {
-          title, description, backgroundType, backgroundColor, textColor,
-          backgroundImage { asset-> { _id, url }, alt },
-          slug { current },
-          fullDescription,
-          images[] { asset-> { _id, url }, alt, caption },
-          features[] { title, description }
-        }
-      }`)
-      const portfolioPromise = Promise.all([
-        client.fetch(`*[_type == "portfolioCategory"] | order(order asc) { _id, title, description, image { asset-> { _id, url }, alt }, order }`),
-        client.fetch(`*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`)
-      ]).then(([categories, section]) => ({ categories, section }))
-      const statsPromise = client.fetch(`*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`)
-      const aboutPromise = client.fetch(`*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`)
-
-      // First paint after hero + about so the page appears faster
-      const [heroResult, aboutResult] = await Promise.allSettled([heroPromise, aboutPromise])
-
-      if (cancelled) return
-
-      if (heroResult.status === 'fulfilled' && heroResult.value) {
-        const heroData = heroResult.value
-        if (heroData?.backgroundImage?.asset?.url) {
-          setHeroBackgroundUrl(`${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`)
-        } else if (heroData?.backgroundImage) {
-          const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
-          if (url) setHeroBackgroundUrl(url)
-        }
-      } else if (heroResult.status === 'rejected') {
-        console.error('[Home] Hero fetch error:', heroResult.reason)
-      }
-
-      if (aboutResult.status === 'fulfilled' && aboutResult.value != null) setAboutData(aboutResult.value)
-      else if (aboutResult.status === 'rejected') console.error('[Home] About fetch error:', aboutResult.reason)
-
-      setAllDataLoaded(true)
-
-      // Stream in services, portfolio, stats when ready (no longer block first paint)
-      const [servicesResult, portfolioResult, statsResult] = await Promise.allSettled([
-        servicesPromise,
-        portfolioPromise,
-        statsPromise
-      ])
-
-      if (cancelled) return
-
-      if (servicesResult.status === 'fulfilled' && servicesResult.value != null) setServicesData(servicesResult.value)
-      else if (servicesResult.status === 'rejected') console.error('[Home] Services fetch error:', servicesResult.reason)
-
-      if (portfolioResult.status === 'fulfilled' && portfolioResult.value != null) setPortfolioData(portfolioResult.value)
-      else if (portfolioResult.status === 'rejected') console.error('[Home] Portfolio fetch error:', portfolioResult.reason)
-
-      if (statsResult.status === 'fulfilled' && statsResult.value != null) setStatsData(statsResult.value)
-      else if (statsResult.status === 'rejected') console.error('[Home] Stats fetch error:', statsResult.reason)
-    }
-    fetchAll()
-    return () => { cancelled = true }
   }, [])
 
   // Parallax scroll animation removed — sections now scroll naturally

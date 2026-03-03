@@ -1,8 +1,8 @@
 /* global process */
 import { useEffect, useState, useMemo, useRef, memo } from 'react'
-import { client } from '../utils/sanity'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
+import { useSanityLive } from '../hooks/useSanityLive'
 import { validateContactForm, sanitizeFormData, detectSpam } from '../utils/validation'
 import {
   canSubmitForm,
@@ -11,11 +11,37 @@ import {
   getRemainingSubmissions,
 } from '../utils/rateLimit'
 
+const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
+  ...,
+  backgroundImage { asset-> { _id, url } }
+}`
+const HERO_BG_QUERY = `*[_type == "heroSection"][0]{
+  backgroundImage { asset-> { _id, url } },
+  carouselImages[0] { image { asset-> { _id, url } }, "imageUrl": image.asset->url }
+}`
+
 function Contact() {
-  const [contactData, setContactData] = useState(null)
-  const [heroBackgroundImage, setHeroBackgroundImage] = useState(null)
-  const [error, setError] = useState(null)
   const headerOffset = 180
+
+  const { data: contactData, loading: contactLoading, error: contactError } = useSanityLive(CONTACT_QUERY, {}, {
+    listenFilter: `*[_type == "contact"]`,
+  })
+  const { data: heroData } = useSanityLive(HERO_BG_QUERY, {}, {
+    listenFilter: `*[_type == "heroSection"]`,
+  })
+
+  const heroBackgroundImage = useMemo(() => {
+    if (!heroData) return null
+    return (
+      heroData?.carouselImages?.imageUrl ||
+      heroData?.carouselImages?.image?.asset?.url ||
+      heroData?.backgroundImage?.asset?.url
+    )
+  }, [heroData])
+
+  const error = contactError
+    ? 'Failed to load contact page. Please check your Sanity connection.'
+    : (!contactLoading && !contactData ? 'No contact page data found. Please create a Contact Page document in Sanity Studio.' : null)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -31,78 +57,6 @@ function Contact() {
   const [rateLimitError, setRateLimitError] = useState(null)
   const [turnstileError, setTurnstileError] = useState(null)
   const turnstileWidgetIdRef = useRef(null)
-
-  useEffect(() => {
-    const fetchContact = async () => {
-      try {
-        // Fetch contact data - explicitly target published document (not drafts)
-        // This ensures webhooks fire correctly when content is published
-        let contactQuery = `*[_type == "contact" && _id == "contact"][0]{
-          ...,
-          backgroundImage {
-            asset-> {
-              _id,
-              url
-            }
-          }
-        }`
-        let contactData = await client.fetch(contactQuery)
-
-        // Fallback: If specific ID not found, get first published document (exclude drafts)
-        if (!contactData) {
-          contactQuery = `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
-            ...,
-            backgroundImage {
-              asset-> {
-                _id,
-                url
-              }
-            }
-          }`
-          contactData = await client.fetch(contactQuery)
-        }
-
-        setContactData(contactData)
-
-        // Fetch hero background image as fallback
-        const heroQuery = `*[_type == "heroSection"][0]{
-          backgroundImage {
-            asset-> {
-              _id,
-              url
-            }
-          },
-          carouselImages[0] {
-            image {
-              asset-> {
-                _id,
-                url
-              }
-            },
-            "imageUrl": image.asset->url
-          }
-        }`
-        const heroData = await client.fetch(heroQuery)
-
-        // Use carousel image if available, otherwise use backgroundImage
-        const heroImageUrl =
-          heroData?.carouselImages?.imageUrl ||
-          heroData?.carouselImages?.image?.asset?.url ||
-          heroData?.backgroundImage?.asset?.url
-        setHeroBackgroundImage(heroImageUrl)
-
-        if (!contactData) {
-          setError(
-            'No contact page data found. Please create a Contact Page document in Sanity Studio.'
-          )
-        }
-      } catch (err) {
-        console.error('Error fetching contact data:', err)
-        setError('Failed to load contact page. Please check your Sanity connection.')
-      }
-    }
-    fetchContact()
-  }, [])
 
   // Attempt smooth scroll to contact when this component is ready
   useEffect(() => {

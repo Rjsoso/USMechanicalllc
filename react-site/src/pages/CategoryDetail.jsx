@@ -1,97 +1,51 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const CATEGORY_QUERY = `*[_type == "portfolioCategory" && _id == $categoryId][0]{
+  _id,
+  title,
+  description,
+  image { asset-> { _id, url }, alt }
+}`
+const PROJECTS_QUERY = `*[_type == "portfolioProject" && category._ref == $categoryId] | order(order asc) {
+  _id,
+  title,
+  description,
+  images[] { asset-> { _id, url }, alt },
+  location,
+  year,
+  client,
+  projectType,
+  order
+}`
+const CATEGORIES_LIST_QUERY = `*[_type == "portfolioCategory"] | order(order asc) { _id, title, order }`
 
 export default function CategoryDetail() {
   const { categoryId } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const [categoryData, setCategoryData] = useState(null)
-  const [categoriesList, setCategoriesList] = useState([])
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        // Fetch category and all projects that reference this category
-        const [category, projects, categories] = await Promise.all([
-          client.fetch(
-            `*[_type == "portfolioCategory" && _id == $categoryId][0]{
-              _id,
-              title,
-              description,
-              image {
-                asset-> {
-                  _id,
-                  url
-                },
-                alt
-              }
-            }`,
-            { categoryId }
-          ),
-          client.fetch(
-            `*[_type == "portfolioProject" && category._ref == $categoryId] | order(order asc) {
-              _id,
-              title,
-              description,
-              images[] {
-                asset-> {
-                  _id,
-                  url
-                },
-                alt
-              },
-              location,
-              year,
-              client,
-              projectType,
-              order
-            }`,
-            { categoryId }
-          ),
-          client.fetch(
-            `*[_type == "portfolioCategory"] | order(order asc) {
-              _id,
-              title,
-              order
-            }`
-          ),
-        ])
+  const params = { categoryId: categoryId ?? '' }
+  const category = useSanityLive(CATEGORY_QUERY, params, { listenFilter: `*[_type == "portfolioCategory"]` })
+  const projects = useSanityLive(PROJECTS_QUERY, params, { listenFilter: `*[_type == "portfolioProject"]` })
+  const categories = useSanityLive(CATEGORIES_LIST_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
 
-        if (!category) {
-          setError('Category not found')
-          return
-        }
-
-        const navCategories = Array.isArray(categories) ? categories.slice(0, 6) : []
-        setCategoriesList(navCategories)
-
-        // Combine category data with projects
-        setCategoryData({
-          ...category,
-          projects: projects || [],
-        })
-      } catch (err) {
-        console.error('Error fetching category:', err)
-        setError('Failed to load category')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    if (categoryId) {
-      fetchCategory()
-    }
-  }, [categoryId])
+  const loading = category.loading || projects.loading || categories.loading
+  const error = category.error ? 'Failed to load category' : (!category.loading && !category.data && categoryId ? 'Category not found' : null)
+  const categoriesList = useMemo(() => Array.isArray(categories.data) ? categories.data.slice(0, 6) : [], [categories.data])
+  const categoryData = useMemo(() => {
+    if (!category.data) return null
+    return { ...category.data, projects: projects.data || [] }
+  }, [category.data, projects.data])
 
   const { prevCategory, nextCategory } = useMemo(() => {
     if (!Array.isArray(categoriesList) || categoriesList.length === 0) {

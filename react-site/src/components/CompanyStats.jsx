@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
-import { client } from '../utils/sanity'
+import { useSanityLive } from '../hooks/useSanityLive'
 
 // Animate only when visible in viewport - only once per page visit.
 // Uses direct DOM writes (no React re-renders) so counting doesn't block the main thread during scroll.
@@ -68,66 +68,27 @@ const AnimatedNumber = memo(function AnimatedNumber({
   )
 })
 
+const STATS_QUERY = `*[_type == "companyStats" && _id == "companyStats"][0]{
+  _id,
+  _updatedAt,
+  title,
+  stats[]{
+    label,
+    value,
+    enableCustomStart,
+    animateFromValue,
+    animationDuration
+  }
+}`
+
 const CompanyStats = ({ data: statsDataProp }) => {
-  const [statsData, setStatsData] = useState(statsDataProp || null)
   const [inView, setInView] = useState(false)
   const sectionRef = useRef(null)
 
-  // Update state when prop changes
-  useEffect(() => {
-    if (statsDataProp) {
-      setStatsData(statsDataProp)
-    }
-  }, [statsDataProp])
-
-  useEffect(() => {
-    // Only fetch if no data provided via props (backward compatibility)
-    if (statsDataProp) return
-    
-    const fetchData = async () => {
-      try {
-        // Fetch by specific document ID (matching deskStructure.ts)
-        // First try: Get document with specific ID "companyStats"
-        let query = `*[_type == "companyStats" && _id == "companyStats"][0]{
-          _id,
-          _updatedAt,
-          title,
-          stats[]{
-            label,
-            value,
-            enableCustomStart,
-            animateFromValue,
-            animationDuration
-          }
-        }`
-
-        let data = await client.fetch(query)
-
-        // Fallback: Get first published document if specific ID not found
-        if (!data) {
-          query = `*[_type == "companyStats" && !(_id in path("drafts.**"))][0]{
-            _id,
-            _updatedAt,
-            title,
-            stats[]{
-              label,
-              value,
-              enableCustomStart,
-              animateFromValue,
-              animationDuration
-            }
-          }`
-          data = await client.fetch(query)
-        }
-
-        setStatsData(data)
-      } catch (error) {
-        console.error('Error fetching company stats:', error)
-      }
-    }
-
-    fetchData()
-  }, [])
+  const { data: statsData } = useSanityLive(STATS_QUERY, {}, {
+    initialData: statsDataProp,
+    listenFilter: `*[_type == "companyStats"]`,
+  })
 
   // Watch when the section scrolls into view (only after data is loaded)
   // Once animated, never retriggers (prevents jitter on scroll up/down)

@@ -1,36 +1,27 @@
-import { useEffect, useState } from 'react'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { useSanityLive } from '../hooks/useSanityLive'
+
+const CAREERS_QUERY = `*[_type == "careers"][0]{
+  mainHeading,
+  jobTitle,
+  jobOverview,
+  jobDescription,
+  qualifications,
+  benefits,
+  indeedUrl,
+  "applicationPdfUrl": applicationPdf.asset->url,
+  submissionEmail,
+  submissionFax,
+  backgroundImage
+}`
 
 export default function CareersPage() {
-  const [careersData, setCareersData] = useState(null)
-
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "careers"][0]{
-        mainHeading,
-        jobTitle,
-        jobOverview,
-        jobDescription,
-        qualifications,
-        benefits,
-        indeedUrl,
-        "applicationPdfUrl": applicationPdf.asset->url,
-        submissionEmail,
-        submissionFax,
-        backgroundImage
-      }`
-      )
-      .then(data => {
-        setCareersData(data)
-      })
-      .catch(error => {
-        console.error('Error fetching careers data:', error)
-      })
-  }, [])
+  const { data: careersData } = useSanityLive(CAREERS_QUERY, {}, {
+    listenFilter: `*[_type == "careers"]`,
+  })
 
   const heading = careersData?.mainHeading || 'Careers at U.S. Mechanical'
   const jobTitle = careersData?.jobTitle || 'Now hiring Plumbing and HVAC Installers'
