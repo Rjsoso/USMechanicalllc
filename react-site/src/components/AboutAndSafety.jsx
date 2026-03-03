@@ -86,15 +86,15 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         }
       })
       .filter(Boolean)
-  }, [data?.aboutPhotos])
+  }, [displayData?.aboutPhotos])
 
   // Transform safetyLogos to LogoLoop format
   const safetyLogoItems = useMemo(() => {
-    if (!data?.safetyLogos || !Array.isArray(data.safetyLogos) || data.safetyLogos.length === 0) {
+    if (!displayData?.safetyLogos || !Array.isArray(displayData.safetyLogos) || displayData.safetyLogos.length === 0) {
       return []
     }
 
-    return data.safetyLogos
+    return displayData.safetyLogos
       .map((item, index) => {
         if (!item) return null
 
@@ -119,7 +119,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         return null
       })
       .filter(Boolean)
-  }, [data, displayData?.safetyLogos])
+  }, [displayData, displayData?.safetyLogos])
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {
