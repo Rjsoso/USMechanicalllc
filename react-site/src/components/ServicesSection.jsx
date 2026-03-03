@@ -143,7 +143,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
             {servicesData.sectionTitle || 'Services'}
           </h2>
           {servicesData.descriptionText && (
-            <p className="mt-2 max-w-xl text-sm text-white/75">
+            <p className="mt-2 max-w-xl text-lg text-white/75">
               {servicesData.descriptionText}
             </p>
           )}
