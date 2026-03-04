@@ -141,7 +141,8 @@ const ServicesSection = ({ data: servicesDataProp }) => {
           height: '100vh',
           overflow: 'hidden',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-end',
+          paddingBottom: '8vh',
           opacity: navigatingTo ? 0 : 1,
           transition: 'opacity 0.2s ease',
         }}
@@ -163,7 +164,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[5fr_6fr] lg:gap-0">
 
             {/* LEFT — list */}
-            <div className="flex flex-col border-t border-white/20">
+            <div className="flex flex-col">
               {cards.map((card, index) => {
                 const isActive = card.id === (hoveredId ?? cards[0].id)
                 return (
