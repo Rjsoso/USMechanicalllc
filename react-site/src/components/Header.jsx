@@ -9,8 +9,17 @@ import './Header.css'
 function Header() {
   const [logo, setLogo] = useState(null)
   const [logoLoading, setLogoLoading] = useState(true)
+  const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 80)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Fetch logo from Sanity headerSection
   useEffect(() => {
@@ -54,7 +63,7 @@ function Header() {
 
       {/* Logo with 3D shadow effect - Overlaps the nav bar */}
       {logoUrl && (
-        <div className="plaque-perspective fixed left-4 top-4 z-50">
+        <div className={`plaque-perspective fixed left-4 top-4 z-50${scrolled ? ' header-scrolled' : ''}`}>
           <div
             className="logo-3d-card"
             onClick={handleLogoClick}

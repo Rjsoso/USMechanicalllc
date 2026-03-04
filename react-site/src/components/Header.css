@@ -1,6 +1,12 @@
 /* 3D Plaque Perspective Container */
 .plaque-perspective {
   perspective: 1000px;
+  transform-origin: top left;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.plaque-perspective.header-scrolled {
+  transform: scale(0.55);
 }
 
 /* Logo Container — subtle tilt, no distortion */
