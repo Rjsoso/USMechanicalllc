@@ -64,7 +64,7 @@ function LogoLoopSection() {
   }
 
   return (
-    <section className="bg-white pt-0 pb-8 xl:pb-6 2xl:pb-4">
+    <section className="bg-white py-8 xl:py-6 2xl:py-4">
       <div className="w-full overflow-hidden">
         <LogoLoop
           logos={logos}
