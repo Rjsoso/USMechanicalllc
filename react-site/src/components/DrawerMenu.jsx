@@ -7,8 +7,8 @@ import { useSanityLive } from '../hooks/useSanityLive'
 import './DrawerMenu.css'
 
 const offices = [
-  { name: 'Pleasant Grove, UT', phone: '(801) 785-6028', href: 'tel:+18017856028' },
-  { name: 'Las Vegas, NV', phone: '(702) 870-9609', href: 'tel:+17028709609' },
+  { name: 'Pleasant Grove, UT', phone: '(801) 785-6028', address: '472 S 640 W, Pleasant Grove, UT 84062' },
+  { name: 'Las Vegas, NV', phone: '(702) 870-9609', address: '4344 E Alexander Rd, Las Vegas, NV 89115' },
 ]
 
 const HEADER_QUERY = `*[_type == "headerSection"][0]{
@@ -243,9 +243,11 @@ const DrawerMenu = () => {
                   {offices.map((office) => (
                     <a
                       key={office.name}
-                      href={office.href}
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="drawer-link drawer-location-link"
-                      aria-label={`Call ${office.name}`}
+                      aria-label={`View ${office.name} on Google Maps`}
                     >
                       <span>{office.name}</span>
                       <span className="drawer-location-phone">

@@ -5,8 +5,8 @@ import { navigateToSection } from '../utils/scrollToSection'
 import './DesktopNav.css'
 
 const offices = [
-  { name: 'Pleasant Grove, UT', phone: '(801) 785-6028', href: 'tel:+18017856028' },
-  { name: 'Las Vegas, NV', phone: '(702) 870-9609', href: 'tel:+17028709609' },
+  { name: 'Pleasant Grove, UT', phone: '(801) 785-6028', address: '472 S 640 W, Pleasant Grove, UT 84062' },
+  { name: 'Las Vegas, NV', phone: '(702) 870-9609', address: '4344 E Alexander Rd, Las Vegas, NV 89115' },
 ]
 
 const DesktopNav = () => {
@@ -60,7 +60,19 @@ const DesktopNav = () => {
     <nav className="desktop-nav" role="navigation" aria-label="Main navigation">
       <div className="desktop-nav-container">
         <ul className="desktop-nav-list">
-          {/* Locations dropdown */}
+          {navLinks.map((link) => (
+            <li key={link.sectionId || link.path} className="desktop-nav-item">
+              <button
+                className="desktop-nav-link"
+                onClick={() => handleNavClick(link)}
+                aria-label={`Navigate to ${link.label}`}
+              >
+                {link.label}
+              </button>
+            </li>
+          ))}
+
+          {/* Locations dropdown — right side */}
           <li
             className="desktop-nav-item"
             ref={dropdownRef}
@@ -84,7 +96,9 @@ const DesktopNav = () => {
                 {offices.map((office) => (
                   <a
                     key={office.name}
-                    href={office.href}
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="desktop-nav-dropdown-item"
                     role="menuitem"
                   >
@@ -98,18 +112,6 @@ const DesktopNav = () => {
               </div>
             )}
           </li>
-
-          {navLinks.map((link) => (
-            <li key={link.sectionId || link.path} className="desktop-nav-item">
-              <button
-                className="desktop-nav-link"
-                onClick={() => handleNavClick(link)}
-                aria-label={`Navigate to ${link.label}`}
-              >
-                {link.label}
-              </button>
-            </li>
-          ))}
         </ul>
       </div>
     </nav>
