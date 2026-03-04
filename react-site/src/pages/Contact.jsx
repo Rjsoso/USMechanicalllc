@@ -554,44 +554,45 @@ function Contact() {
                           )}
                         </AnimatePresence>
                       </div>
+
+                      {contactData.affiliates && contactData.affiliates.length > 0 && (
+                        <div className="mt-6 border-t border-white/10 pt-6">
+                          <h3 className="mb-3 text-sm font-semibold text-white/70">
+                            Affiliate Companies
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-6">
+                            {contactData.affiliates.map((affiliate, i) => (
+                              <div key={i} className="flex items-center gap-3">
+                                {affiliate.logo && urlFor(affiliate.logo) && (
+                                  <img
+                                    src={urlFor(affiliate.logo)
+                                      .width(200)
+                                      .quality(80)
+                                      .auto('format')
+                                      .url()}
+                                    alt={affiliate.name}
+                                    className="h-10 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                )}
+                                <div>
+                                  <p className="text-sm font-semibold text-white">{affiliate.name}</p>
+                                  {affiliate.description && (
+                                    <p className="text-xs text-white/60">{affiliate.description}</p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <p className="text-white">No office locations available.</p>
                   )}
                 </div>
               </div>
-
-              {/* AFFILIATES — full-width row below the grid */}
-              {contactData.affiliates && contactData.affiliates.length > 0 && (
-                <div className="mt-14 border-t border-white/10 pt-10">
-                  <h2 className="mb-6 text-center text-xl font-semibold text-white/90">
-                    Affiliate Companies
-                  </h2>
-                  <div className="flex flex-wrap items-center justify-center gap-10">
-                    {contactData.affiliates.map((affiliate, i) => (
-                      <div key={i} className="flex flex-col items-center text-center">
-                        {affiliate.logo && urlFor(affiliate.logo) && (
-                          <img
-                            src={urlFor(affiliate.logo)
-                              .width(200)
-                              .quality(80)
-                              .auto('format')
-                              .url()}
-                            alt={affiliate.name}
-                            className="mb-2 h-12 object-contain"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        )}
-                        <p className="text-sm font-semibold text-white">{affiliate.name}</p>
-                        {affiliate.description && (
-                          <p className="mt-0.5 max-w-[200px] text-xs text-white/70">{affiliate.description}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </>
           )}
         </div>
