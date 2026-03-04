@@ -1,5 +1,6 @@
 /* global process */
 import { useEffect, useState, useMemo, useRef, memo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
 import { useSanityLive } from '../hooks/useSanityLive'
@@ -56,6 +57,7 @@ function Contact() {
   const [formError, setFormError] = useState(null)
   const [rateLimitError, setRateLimitError] = useState(null)
   const [turnstileError, setTurnstileError] = useState(null)
+  const [activeOfficeTab, setActiveOfficeTab] = useState(0)
   const turnstileWidgetIdRef = useRef(null)
 
   // Attempt smooth scroll to contact when this component is ready
@@ -361,76 +363,12 @@ function Contact() {
               </p>
 
               <div className="grid gap-12 md:grid-cols-2">
-                {/* LEFT SIDE — OFFICE INFO */}
-                <div>
-                  {contactData.offices && contactData.offices.length > 0 ? (
-                    contactData.offices.map((office, index) => (
-                      <div key={index} className="mb-8">
-                        <h2 className="mb-4 text-2xl font-semibold text-white">
-                          {office.locationName}
-                        </h2>
-                        {office.address && (
-                          <iframe
-                            title={`${office.locationName} location`}
-                            src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
-                            width="100%"
-                            height="200"
-                            style={{ border: 0, borderRadius: '0.5rem' }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                            sandbox="allow-scripts allow-same-origin allow-popups"
-                            className="mb-3"
-                          />
-                        )}
-                        <p className="text-white">
-                          Phone: <span className="text-blue-300">{office.phone}</span>
-                        </p>
-                        {office.fax && <p className="text-white">Fax: {office.fax}</p>}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-white">No office locations available.</p>
-                  )}
-
-                  {/* AFFILIATES */}
-                  {contactData.affiliates && contactData.affiliates.length > 0 && (
-                    <div className="mt-8">
-                      <h2 className="mb-4 text-2xl font-semibold text-white">
-                        Affiliate Companies
-                      </h2>
-                      {contactData.affiliates.map((affiliate, i) => (
-                        <div key={i} className="mb-6">
-                          {affiliate.logo && urlFor(affiliate.logo) && (
-                            <img
-                              src={urlFor(affiliate.logo)
-                                .width(200)
-                                .quality(80)
-                                .auto('format')
-                                .url()}
-                              alt={affiliate.name}
-                              className="mb-2 h-12 object-contain"
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          )}
-                          <p className="font-semibold text-white">{affiliate.name}</p>
-                          {affiliate.description && (
-                            <p className="text-white">{affiliate.description}</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* RIGHT SIDE — FORM */}
+                {/* LEFT SIDE — FORM */}
                 <div className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
                   <h3 className="mb-4 text-2xl font-semibold text-white">
                     {contactData.formSettings?.headline || 'Send Us a Message'}
                   </h3>
 
-                  {/* Success Message */}
                   {formSuccess && (
                     <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
                       <p className="font-semibold text-white">✓ Message sent successfully!</p>
@@ -438,7 +376,6 @@ function Contact() {
                     </div>
                   )}
 
-                  {/* Rate Limit Error */}
                   {rateLimitError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
                       <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
@@ -446,7 +383,6 @@ function Contact() {
                     </div>
                   )}
 
-                  {/* General Form Error */}
                   {formError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
                       <p className="font-semibold text-white">⚠ Error</p>
@@ -454,7 +390,6 @@ function Contact() {
                     </div>
                   )}
 
-                  {/* Turnstile Verification Error */}
                   {turnstileError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
                       <p className="font-semibold text-white">⚠ Verification Required</p>
@@ -544,7 +479,6 @@ function Contact() {
                       {formSubmitting ? 'Sending...' : 'Submit'}
                     </button>
 
-                    {/* Rate limit info */}
                     {remainingSubmissions < 3 && !rateLimitError && (
                       <p className="text-center text-xs text-white/60">
                         {remainingSubmissions > 0
@@ -554,7 +488,110 @@ function Contact() {
                     )}
                   </form>
                 </div>
+
+                {/* RIGHT SIDE — TABBED OFFICES */}
+                <div>
+                  {contactData.offices && contactData.offices.length > 0 ? (
+                    <>
+                      <div className="mb-6 flex gap-1 rounded-lg bg-white/5 p-1">
+                        {contactData.offices.map((office, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => setActiveOfficeTab(index)}
+                            className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-all ${
+                              activeOfficeTab === index
+                                ? 'bg-white/15 text-white shadow-sm'
+                                : 'text-white/60 hover:text-white/80'
+                            }`}
+                          >
+                            {office.locationName}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="relative overflow-hidden" style={{ minHeight: 380 }}>
+                        <AnimatePresence mode="wait">
+                          {contactData.offices.map((office, index) =>
+                            activeOfficeTab === index ? (
+                              <motion.div
+                                key={index}
+                                initial={{ opacity: 0, x: 12 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -12 }}
+                                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                              >
+                                {office.address && (
+                                  <iframe
+                                    title={`${office.locationName} location`}
+                                    src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
+                                    width="100%"
+                                    height="300"
+                                    style={{ border: 0, borderRadius: '0.5rem' }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    sandbox="allow-scripts allow-same-origin allow-popups"
+                                    className="mb-4"
+                                  />
+                                )}
+                                <div className="space-y-1.5">
+                                  {office.address && (
+                                    <p className="text-sm text-white/80">{office.address}</p>
+                                  )}
+                                  <p className="text-white">
+                                    Phone:{' '}
+                                    <a href={`tel:${office.phone}`} className="text-blue-300 hover:text-blue-200 transition-colors">
+                                      {office.phone}
+                                    </a>
+                                  </p>
+                                  {office.fax && (
+                                    <p className="text-white/80">Fax: {office.fax}</p>
+                                  )}
+                                </div>
+                              </motion.div>
+                            ) : null
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-white">No office locations available.</p>
+                  )}
+                </div>
               </div>
+
+              {/* AFFILIATES — full-width row below the grid */}
+              {contactData.affiliates && contactData.affiliates.length > 0 && (
+                <div className="mt-14 border-t border-white/10 pt-10">
+                  <h2 className="mb-6 text-center text-xl font-semibold text-white/90">
+                    Affiliate Companies
+                  </h2>
+                  <div className="flex flex-wrap items-center justify-center gap-10">
+                    {contactData.affiliates.map((affiliate, i) => (
+                      <div key={i} className="flex flex-col items-center text-center">
+                        {affiliate.logo && urlFor(affiliate.logo) && (
+                          <img
+                            src={urlFor(affiliate.logo)
+                              .width(200)
+                              .quality(80)
+                              .auto('format')
+                              .url()}
+                            alt={affiliate.name}
+                            className="mb-2 h-12 object-contain"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
+                        <p className="text-sm font-semibold text-white">{affiliate.name}</p>
+                        {affiliate.description && (
+                          <p className="mt-0.5 max-w-[200px] text-xs text-white/70">{affiliate.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
