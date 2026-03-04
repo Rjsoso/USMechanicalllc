@@ -15,8 +15,9 @@ import { client, liveClient } from '../utils/sanity'
  */
 export function useSanityLive(query, params = {}, options = {}) {
   const { initialData, listenFilter } = options
+  const hasInitialData = initialData != null
   const [data, setData] = useState(initialData ?? null)
-  const [loading, setLoading] = useState(typeof initialData === 'undefined')
+  const [loading, setLoading] = useState(!hasInitialData)
   const [error, setError] = useState(null)
   const subscriptionRef = useRef(null)
 
@@ -42,8 +43,8 @@ export function useSanityLive(query, params = {}, options = {}) {
         })
     }
 
-    // Initial load: use initialData if provided, otherwise fetch via CDN for speed
-    if (typeof initialData !== 'undefined') {
+    // Initial load: skip fetch only when we have usable initial data (not null/undefined)
+    if (hasInitialData) {
       setData(initialData)
       setLoading(false)
     } else {
