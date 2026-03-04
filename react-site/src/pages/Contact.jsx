@@ -369,7 +369,19 @@ function Contact() {
                         <h2 className="mb-4 text-2xl font-semibold text-white">
                           {office.locationName}
                         </h2>
-                        <p className="text-white">{office.address}</p>
+                        {office.address && (
+                          <iframe
+                            title={`${office.locationName} location`}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&output=embed`}
+                            width="100%"
+                            height="200"
+                            style={{ border: 0, borderRadius: '0.5rem' }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="mb-3"
+                          />
+                        )}
                         <p className="text-white">
                           Phone: <span className="text-blue-300">{office.phone}</span>
                         </p>
