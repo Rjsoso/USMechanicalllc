@@ -65,8 +65,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
-          ? `${photo.asset.url}?w=1200&q=82&auto=format`
-          : (photo.asset && urlFor(photo)?.width(1200).quality(82).auto('format').url()) || ''
+          ? `${photo.asset.url}?w=1200&q=75&auto=format`
+          : (photo.asset && urlFor(photo)?.width(1200).quality(75).auto('format').url()) || ''
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
@@ -76,6 +76,18 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
       })
       .filter(Boolean)
   }, [data?.aboutPhotos])
+
+  useEffect(() => {
+    if (carouselItems.length > 0 && carouselItems[0].src) {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = carouselItems[0].src
+      link.fetchPriority = 'high'
+      document.head.appendChild(link)
+      return () => { document.head.removeChild(link) }
+    }
+  }, [carouselItems])
 
   const safetyLogoItems = useMemo(() => {
     if (!data?.safetyLogos || !Array.isArray(data.safetyLogos) || data.safetyLogos.length === 0) {

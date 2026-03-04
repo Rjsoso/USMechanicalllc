@@ -9,7 +9,7 @@ const VELOCITY_THRESHOLD = 500
 const GAP = 16
 const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
-const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
+const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition, shouldLoad }) {
   const range = [
     -(index + 1) * trackItemOffset,
     -index * trackItemOffset,
@@ -31,18 +31,23 @@ const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round,
       transition={transition}
     >
       <div className="carousel-item-image-container">
-        <img
-          src={item?.src || ''}
-          alt={item?.alt || `Carousel image ${index + 1}`}
-          className="carousel-item-image"
-          loading={index === 0 ? 'eager' : 'lazy'}
-          fetchPriority={index === 0 ? 'high' : 'auto'}
-          onError={e => {
-            e.target.style.opacity = '0.3'
-            e.target.alt = 'Image failed to load'
-          }}
-        />
-        {item.caption && <div className="carousel-item-caption">{item.caption}</div>}
+        {shouldLoad ? (
+          <img
+            src={item?.src || ''}
+            alt={item?.alt || `Carousel image ${index + 1}`}
+            className="carousel-item-image"
+            loading={index <= 1 ? 'eager' : 'lazy'}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
+            decoding={index === 0 ? 'sync' : 'async'}
+            onError={e => {
+              e.target.style.opacity = '0.3'
+              e.target.alt = 'Image failed to load'
+            }}
+          />
+        ) : (
+          <div className="carousel-item-image" style={{ background: 'rgba(255,255,255,0.03)' }} />
+        )}
+        {shouldLoad && item.caption && <div className="carousel-item-caption">{item.caption}</div>}
       </div>
     </motion.div>
   )
@@ -333,6 +338,7 @@ export default function Carousel({
               trackItemOffset={trackItemOffset}
               x={x}
               transition={effectiveTransition}
+              shouldLoad={Math.abs(index - position) <= 2}
             />
           ))}
         </motion.div>
