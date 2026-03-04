@@ -1,9 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { FiMapPin, FiPhone } from 'react-icons/fi'
 import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
 import { useSanityLive } from '../hooks/useSanityLive'
 import './DrawerMenu.css'
+
+const offices = [
+  { name: 'Pleasant Grove, UT', phone: '(801) 785-6028', href: 'tel:+18017856028' },
+  { name: 'Las Vegas, NV', phone: '(702) 870-9609', href: 'tel:+17028709609' },
+]
 
 const HEADER_QUERY = `*[_type == "headerSection"][0]{
   sections[] { label, links[] { label, href, ariaLabel } }
@@ -222,6 +228,34 @@ const DrawerMenu = () => {
                   </div>
                 </motion.div>
               ))}
+
+              <motion.div
+                className="drawer-section"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: sections.length * 0.05 + 0.05, duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <h3 className="drawer-section-label">
+                  <FiMapPin style={{ display: 'inline', width: 14, height: 14, marginRight: 6, verticalAlign: '-2px' }} />
+                  LOCATIONS
+                </h3>
+                <div className="drawer-section-links">
+                  {offices.map((office) => (
+                    <a
+                      key={office.name}
+                      href={office.href}
+                      className="drawer-link drawer-location-link"
+                      aria-label={`Call ${office.name}`}
+                    >
+                      <span>{office.name}</span>
+                      <span className="drawer-location-phone">
+                        <FiPhone style={{ width: 12, height: 12 }} />
+                        {office.phone}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </motion.nav>
         )}
