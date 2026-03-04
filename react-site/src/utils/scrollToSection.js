@@ -33,14 +33,20 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
         if (rect.height > 0) {
           // Section-specific offset adjustments for optimal title visibility
           const sectionOffsets = {
-            'services': 25,
+            'services': () => {
+              const scrollRange = rect.height - window.innerHeight
+              return -(scrollRange * 0.7)
+            },
             'portfolio': -65,
             'contact': 180,
             'about': 60,
             'safety': 90,
             'hero': 0,
           }
-          const effectiveOffset = sectionOffsets[sectionId] || headerOffset
+          const offsetEntry = sectionOffsets[sectionId]
+          const effectiveOffset = typeof offsetEntry === 'function'
+            ? offsetEntry()
+            : (offsetEntry ?? headerOffset)
           const targetPosition = (window.scrollY || window.pageYOffset) + rect.top - effectiveOffset
 
           window.scrollTo({ top: targetPosition, behavior: 'instant' })

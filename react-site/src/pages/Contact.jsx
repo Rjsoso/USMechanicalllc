@@ -372,13 +372,14 @@ function Contact() {
                         {office.address && (
                           <iframe
                             title={`${office.locationName} location`}
-                            src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&output=embed`}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
                             width="100%"
                             height="200"
                             style={{ border: 0, borderRadius: '0.5rem' }}
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
+                            sandbox="allow-scripts allow-same-origin allow-popups"
                             className="mb-3"
                           />
                         )}
