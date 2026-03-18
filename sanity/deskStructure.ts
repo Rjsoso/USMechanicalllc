@@ -114,6 +114,32 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('contact')
         ),
 
+      // 10. Legal (Privacy & Terms)
+      S.listItem()
+        .title('10. Legal (Privacy & Terms)')
+        .child(
+          S.list()
+            .title('Legal Pages')
+            .items([
+              S.listItem()
+                .title('Privacy Policy')
+                .child(
+                  S.editor()
+                    .id('legalPrivacy')
+                    .schemaType('legalPage')
+                    .documentId('legalPrivacy')
+                ),
+              S.listItem()
+                .title('Terms of Service')
+                .child(
+                  S.editor()
+                    .id('legalTerms')
+                    .schemaType('legalPage')
+                    .documentId('legalTerms')
+                ),
+            ])
+        ),
+
       S.divider(),
 
       // Supporting content types

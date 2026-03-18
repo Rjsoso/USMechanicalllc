@@ -19,6 +19,7 @@ import portfolioSection from '../schemaTypes/portfolioSection'
 // import cardNav from '../schemaTypes/cardNav' // REMOVED: Merged into headerSection
 import logoLoop from '../schemaTypes/logoLoop'
 import careers from '../schemaTypes/careers'
+import legalPage from '../schemaTypes/legalPage'
 
 export const schemaTypes = [
     ourServices,
@@ -40,4 +41,5 @@ export const schemaTypes = [
     // cardNav, // REMOVED: Merged into headerSection
     logoLoop,
     careers,
+    legalPage,
 ]
