@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const TERMS_QUERY = `*[_id == "legalTerms" && !(_id in path("drafts.**"))][0]{
@@ -80,7 +81,7 @@ export default function Terms() {
       <SEO
         title="Terms of Service | US Mechanical"
         description="Terms of service for use of the U.S. Mechanical LLC website."
-        url="https://usmechanical.com/terms"
+        url={`${getSiteUrl()}/terms`}
       />
       <Header />
       <motion.main

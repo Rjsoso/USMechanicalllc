@@ -1,8 +1,34 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { readFileSync, writeFileSync } from 'fs'
+import { join } from 'path'
+
+const siteUrl = process.env.VITE_SITE_URL || 'https://usmechanical.com'
+
+function siteUrlPlugin() {
+  let outDir = 'dist'
+  return {
+    name: 'site-url-replace',
+    configResolved(config) {
+      outDir = join(config.root, config.build.outDir)
+    },
+    transformIndexHtml(html) {
+      return html.replace(/__SITE_URL__/g, siteUrl)
+    },
+    closeBundle() {
+      try {
+        const robotsPath = join(outDir, 'robots.txt')
+        const content = readFileSync(robotsPath, 'utf8')
+        writeFileSync(robotsPath, content.replace(/__SITE_URL__/g, siteUrl), 'utf8')
+      } catch (_) {
+        // robots.txt may not exist in dist yet in some build orders
+      }
+    },
+  }
+}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), siteUrlPlugin()],
   server: {
     port: 3000
   },

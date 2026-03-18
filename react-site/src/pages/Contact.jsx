@@ -14,6 +14,7 @@ import {
   formatTimeRemaining,
   getRemainingSubmissions,
 } from '../utils/rateLimit'
+import { getSiteUrl } from '../utils/siteUrl'
 
 const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   ...,
@@ -602,7 +603,7 @@ function Contact() {
         title="Contact Us | US Mechanical | Get a Quote"
         description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
         keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
-        url="https://usmechanical.com/contact"
+        url={`${getSiteUrl()}/contact`}
       />
       {isStandaloneContactPage ? (
         <>

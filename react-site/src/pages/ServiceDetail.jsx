@@ -9,6 +9,7 @@ import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
+import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -128,7 +129,7 @@ export default function ServiceDetail() {
           `Professional ${serviceData.title} services by US Mechanical. Serving Utah, Nevada, and beyond since 1963.`
         }
         keywords={`${serviceData.title}, mechanical services, HVAC, plumbing, ${serviceData.title} Utah, ${serviceData.title} Nevada`}
-        url={`https://usmechanical.com/services/${serviceData.slug.current}`}
+        url={`${getSiteUrl()}/services/${serviceData.slug.current}`}
       />
       <Header />
       <motion.main 

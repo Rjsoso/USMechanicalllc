@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import getSiteUrl from '../utils/siteUrl'
 
 /**
  * StructuredData Component
@@ -11,24 +12,25 @@ const StructuredData = () => {
   const location = useLocation()
   
   useEffect(() => {
+    const baseUrl = getSiteUrl()
     // LocalBusiness Schema
     const localBusinessSchema = {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      '@id': 'https://usmechanical.com/#organization',
+      '@id': `${baseUrl}/#organization`,
       name: 'U.S. Mechanical LLC',
       alternateName: 'US Mechanical',
       description:
         'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Specializing in HVAC, Plumbing, and Process Piping.',
-      url: 'https://usmechanical.com',
+      url: baseUrl,
       telephone: '+1-801-785-6028',
       email: 'info@usmechanicalllc.com',
       foundingDate: '1963',
       priceRange: '$$',
-      image: 'https://usmechanical.com/logo.png',
+      image: `${baseUrl}/logo.png`,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://usmechanical.com/logo.png',
+        url: `${baseUrl}/logo.png`,
         width: '192',
         height: '192',
       },
@@ -133,8 +135,8 @@ const StructuredData = () => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'U.S. Mechanical LLC',
-      url: 'https://usmechanical.com',
-      logo: 'https://usmechanical.com/logo.png',
+      url: baseUrl,
+      logo: `${baseUrl}/logo.png`,
       foundingDate: '1963',
       contactPoint: {
         '@type': 'ContactPoint',
@@ -151,21 +153,21 @@ const StructuredData = () => {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'U.S. Mechanical LLC',
-      url: 'https://usmechanical.com',
+      url: baseUrl,
       description: 'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond.',
       publisher: {
         '@type': 'Organization',
         name: 'U.S. Mechanical LLC',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://usmechanical.com/logo.png',
+          url: `${baseUrl}/logo.png`,
         },
       },
         potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://usmechanical.com/search?q={search_term_string}',
+          urlTemplate: `${baseUrl}/search?q={search_term_string}`,
         },
         'query-input': 'required name=search_term_string',
       },
@@ -178,7 +180,7 @@ const StructuredData = () => {
           '@type': 'ListItem',
           position: 1,
           name: 'Home',
-          item: 'https://usmechanical.com',
+          item: baseUrl,
         },
       ]
 
@@ -188,28 +190,28 @@ const StructuredData = () => {
           '@type': 'ListItem',
           position: 2,
           name: 'About Us',
-          item: 'https://usmechanical.com/about',
+          item: `${baseUrl}/about`,
         })
       } else if (path === '/careers') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Careers',
-          item: 'https://usmechanical.com/careers',
+          item: `${baseUrl}/careers`,
         })
       } else if (path === '/portfolio') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Portfolio',
-          item: 'https://usmechanical.com/portfolio',
+          item: `${baseUrl}/portfolio`,
         })
       } else if (path === '/contact') {
         breadcrumbs.push({
           '@type': 'ListItem',
           position: 2,
           name: 'Contact',
-          item: 'https://usmechanical.com/contact',
+          item: `${baseUrl}/contact`,
         })
       }
 
@@ -230,37 +232,37 @@ const StructuredData = () => {
           '@type': 'SiteNavigationElement',
           position: 1,
           name: 'Home',
-          url: 'https://usmechanical.com',
+          url: baseUrl,
         },
         {
           '@type': 'SiteNavigationElement',
           position: 2,
           name: 'About Us',
-          url: 'https://usmechanical.com/about',
+          url: `${baseUrl}/about`,
         },
         {
           '@type': 'SiteNavigationElement',
           position: 3,
           name: 'Services',
-          url: 'https://usmechanical.com/#services',
+          url: `${baseUrl}/#services`,
         },
         {
           '@type': 'SiteNavigationElement',
           position: 4,
           name: 'Portfolio',
-          url: 'https://usmechanical.com/portfolio',
+          url: `${baseUrl}/portfolio`,
         },
         {
           '@type': 'SiteNavigationElement',
           position: 5,
           name: 'Careers',
-          url: 'https://usmechanical.com/careers',
+          url: `${baseUrl}/careers`,
         },
         {
           '@type': 'SiteNavigationElement',
           position: 6,
           name: 'Contact',
-          url: 'https://usmechanical.com/contact',
+          url: `${baseUrl}/contact`,
         },
       ],
     }
@@ -270,13 +272,13 @@ const StructuredData = () => {
       const baseSchema = {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        '@id': `https://usmechanical.com${location.pathname}`,
-        url: `https://usmechanical.com${location.pathname}`,
+        '@id': `${baseUrl}${location.pathname}`,
+        url: `${baseUrl}${location.pathname}`,
         isPartOf: {
-          '@id': 'https://usmechanical.com/#website',
+          '@id': `${baseUrl}/#website`,
         },
         about: {
-          '@id': 'https://usmechanical.com/#organization',
+          '@id': `${baseUrl}/#organization`,
         },
         inLanguage: 'en-US',
       }

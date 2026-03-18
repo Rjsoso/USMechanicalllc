@@ -9,8 +9,8 @@ Allow: /
 # Disallow: /admin/
 # Disallow: /api/
 
-# Sitemap location
-Sitemap: https://usmechanical.com/sitemap.xml
+# Sitemap location (__SITE_URL__ replaced at build)
+Sitemap: __SITE_URL__/sitemap.xml
 
 # Crawl-delay (optional, uncomment if needed to prevent overload)
 # Crawl-delay: 1

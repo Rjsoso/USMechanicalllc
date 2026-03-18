@@ -5,6 +5,7 @@ import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const badgeToneClasses = {
@@ -64,7 +65,7 @@ export default function DeliveryMethodsPage() {
       <SEO
         title={`${heading} | US Mechanical`}
         description="Explore our delivery methods — from design-build and design-bid-build to integrated project delivery. US Mechanical has the right approach for every project."
-        url="https://usmechanical.com/delivery-methods"
+        url={`${getSiteUrl()}/delivery-methods`}
       />
       <Header />
       <motion.main

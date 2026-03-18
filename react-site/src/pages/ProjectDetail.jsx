@@ -7,6 +7,7 @@ import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
+import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -113,7 +114,7 @@ export default function ProjectDetail() {
           `View the ${projectData.title} project by US Mechanical. Professional mechanical contracting services.`
         }
         keywords={`${projectData.title}, US Mechanical portfolio, mechanical project, ${projectData.category?.title || 'construction'}`}
-        url={`https://usmechanical.com/projects/${projectData._id}`}
+        url={`${getSiteUrl()}/projects/${projectData._id}`}
       />
       <Header />
       <motion.main 

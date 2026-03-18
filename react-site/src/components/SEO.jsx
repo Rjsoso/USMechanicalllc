@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { getSiteUrl, getSiteUrlSlash } from '../utils/siteUrl'
 
 /**
  * SEO Component
@@ -20,8 +21,8 @@ const SEO = ({
   title = 'US Mechanical | Plumbing & HVAC Experts | Since 1963',
   description = 'Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists.',
   keywords = 'mechanical contractors, HVAC contractors, plumbing contractors, commercial HVAC, industrial plumbing, Utah contractors, Nevada contractors',
-  ogImage = 'https://usmechanical.com/og-image.png',
-  url = 'https://usmechanical.com/',
+  ogImage = `${getSiteUrl()}/og-image.png`,
+  url = getSiteUrlSlash(),
   type = 'website',
   author = 'U.S. Mechanical LLC',
 }) => {

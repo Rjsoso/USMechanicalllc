@@ -6,6 +6,7 @@ import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const CATEGORIES_QUERY = `*[_type == "portfolioCategory"] | order(order asc) {
@@ -34,7 +35,7 @@ export default function PortfolioPage() {
         title="Portfolio - Our Projects | US Mechanical"
         description="Explore U.S. Mechanical's portfolio of completed commercial and industrial projects including manufacturing, healthcare, education, hospitality, and data centers throughout Utah, Nevada, and the Southwest."
         keywords="mechanical contractor portfolio, HVAC projects, plumbing projects, commercial construction, industrial projects, process piping projects, Utah construction, Nevada projects"
-        url="https://usmechanical.com/portfolio"
+        url={`${getSiteUrl()}/portfolio`}
       />
       <Header />
 

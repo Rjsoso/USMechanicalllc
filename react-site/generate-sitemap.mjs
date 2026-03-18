@@ -26,7 +26,8 @@ const client = createClient({
   useCdn: false,
 });
 
-const DOMAIN = 'https://usmechanical.com';
+// Use VITE_SITE_URL or SITE_URL from env (no trailing slash). Set when running: VITE_SITE_URL=https://yourdomain.com node generate-sitemap.mjs
+const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://usmechanical.com').replace(/\/$/, '');
 const TODAY = new Date().toISOString().split('T')[0];
 
 async function generateSitemap() {
@@ -112,6 +113,30 @@ async function generateSitemap() {
     <priority>0.9</priority>
   </url>
 
+  <!-- Delivery Methods Page -->
+  <url>
+    <loc>${DOMAIN}/delivery-methods</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Privacy Page -->
+  <url>
+    <loc>${DOMAIN}/privacy</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Terms Page -->
+  <url>
+    <loc>${DOMAIN}/terms</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <!-- Service Pages -->
 ${services?.map(service => {
   if (!service.slug) return '';
@@ -151,9 +176,9 @@ ${projects?.map(project => `  <url>
     console.log(`📁 Saved to: ${sitemapPath}\n`);
     
     console.log('📋 URLs included:');
-    const totalUrls = 5 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
+    const totalUrls = 8 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
     console.log(`   - Total: ${totalUrls} URLs`);
-    console.log(`   - Core pages: 5 (home, contact, about, careers, portfolio)`);
+    console.log(`   - Core pages: 8 (home, contact, about, careers, portfolio, delivery-methods, privacy, terms)`);
     console.log(`   - Services: ${services?.length || 0}`);
     console.log(`   - Categories: ${categories?.length || 0}`);
     console.log(`   - Projects: ${projects?.length || 0}\n`);

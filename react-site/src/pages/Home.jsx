@@ -12,6 +12,7 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
 import { scrollToSection } from '../utils/scrollToSection'
+import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -221,7 +222,7 @@ export default function Home() {
         title="US Mechanical | Plumbing & HVAC Experts | Since 1963"
         description="Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists. Licensed, bonded & insured."
         keywords="mechanical contractors, HVAC contractors, plumbing contractors, commercial HVAC, industrial plumbing, process piping, Utah contractors, Nevada contractors, Pleasant Grove HVAC, Las Vegas mechanical, design build, construction services"
-        url="https://usmechanical.com/"
+        url={getSiteUrlSlash()}
       />
       <Header />
 

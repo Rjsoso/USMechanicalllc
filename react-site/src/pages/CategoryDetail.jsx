@@ -8,6 +8,7 @@ import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const CATEGORY_QUERY = `*[_type == "portfolioCategory" && _id == $categoryId][0]{
@@ -103,7 +104,7 @@ export default function CategoryDetail() {
           `View ${categoryData.title} projects by US Mechanical. Professional mechanical contracting services since 1963.`
         }
         keywords={`${categoryData.title}, US Mechanical portfolio, mechanical projects, ${categoryData.title} projects`}
-        url={`https://usmechanical.com/portfolio/${categoryData._id}`}
+        url={`${getSiteUrl()}/portfolio/${categoryData._id}`}
       />
       <Header />
       <motion.main 

@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const PRIVACY_QUERY = `*[_id == "legalPrivacy" && !(_id in path("drafts.**"))][0]{
@@ -74,7 +75,7 @@ export default function Privacy() {
       <SEO
         title="Privacy Policy | US Mechanical"
         description="Privacy policy for U.S. Mechanical LLC. Learn how we collect, use, and protect your information."
-        url="https://usmechanical.com/privacy"
+        url={`${getSiteUrl()}/privacy`}
       />
       <Header />
       <motion.main

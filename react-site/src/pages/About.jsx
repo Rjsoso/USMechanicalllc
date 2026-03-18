@@ -6,6 +6,7 @@ import { PortableText } from '@portabletext/react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { getSiteUrl } from '../utils/siteUrl'
 import FadeInNative from '../components/FadeInNative'
 import Carousel from '../components/Carousel'
 import LogoLoop from '../components/LogoLoop'
@@ -142,7 +143,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         title="About Us - Company Background | US Mechanical"
         description="Learn about U.S. Mechanical's history since 1963, our team, offices, and commitment to safety in mechanical contracting throughout Utah, Nevada, and beyond."
         keywords="US Mechanical history, company background, mechanical contractor Utah, HVAC company Nevada, plumbing contractor history, construction company about, safety management, OSHA certified"
-        url="https://usmechanical.com/about"
+        url={`${getSiteUrl()}/about`}
       />
       <Header />
 

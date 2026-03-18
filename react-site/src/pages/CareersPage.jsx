@@ -2,6 +2,7 @@ import { urlFor } from '../utils/sanity'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const CAREERS_QUERY = `*[_type == "careers"][0]{
@@ -68,7 +69,7 @@ export default function CareersPage() {
           title="Careers - Join Our Team | US Mechanical"
           description="Join the U.S. Mechanical team. We're hiring skilled plumbing and HVAC installers. Competitive pay, great benefits, and career growth opportunities."
           keywords="mechanical contractor jobs, HVAC jobs Utah, plumbing jobs Nevada, construction careers, pipefitter jobs, sheet metal jobs, apprentice positions"
-          url="https://usmechanical.com/careers"
+          url={`${getSiteUrl()}/careers`}
         />
         <Header />
         <div className="min-h-screen bg-white py-40 text-center text-black">Loading careers...</div>
@@ -83,7 +84,7 @@ export default function CareersPage() {
         title="Careers - Join Our Team | US Mechanical"
         description="Join the U.S. Mechanical team. We're hiring skilled plumbing and HVAC installers. Competitive pay, great benefits, and career growth opportunities in Utah, Nevada, and beyond."
         keywords="mechanical contractor jobs, HVAC jobs Utah, plumbing jobs Nevada, construction careers, pipefitter jobs, sheet metal jobs, apprentice positions, welding jobs"
-        url="https://usmechanical.com/careers"
+        url={`${getSiteUrl()}/careers`}
       />
       <Header />
 
