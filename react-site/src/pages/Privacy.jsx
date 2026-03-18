@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
@@ -48,7 +49,7 @@ function PrivacyFallbackContent() {
       <section>
         <h2 className="mb-3 text-xl font-semibold text-black">Contact</h2>
         <p className="leading-relaxed">
-          For privacy-related questions or to exercise your rights, please contact us via our <a href="/contact" className="text-primary-red underline hover:no-underline">Contact</a> page or by mail at: U.S. Mechanical LLC, 472 South 640 West, Pleasant Grove, UT 84062.
+          For privacy-related questions or to exercise your rights, please contact us via our <Link to="/contact" className="text-primary-red underline hover:no-underline">Contact</Link> page or by mail at: U.S. Mechanical LLC, 472 South 640 West, Pleasant Grove, UT 84062.
         </p>
       </section>
     </div>
@@ -95,7 +96,20 @@ export default function Privacy() {
             <p className="text-gray-500">Loading…</p>
           ) : hasSanityContent ? (
             <div className="prose prose-lg max-w-none text-gray-700">
-              <PortableText value={data.body} />
+              <PortableText
+                value={data.body}
+                components={{
+                  marks: {
+                    link: ({ value, children }) => {
+                      const href = value?.href || ''
+                      if (href.startsWith('/') && !href.startsWith('//')) {
+                        return <Link to={href} className="text-primary-red underline hover:no-underline">{children}</Link>
+                      }
+                      return <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary-red underline hover:no-underline">{children}</a>
+                    },
+                  },
+                }}
+              />
             </div>
           ) : (
             <PrivacyFallbackContent />

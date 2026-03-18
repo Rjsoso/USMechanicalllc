@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
@@ -54,7 +55,7 @@ function TermsFallbackContent() {
       <section>
         <h2 className="mb-3 text-xl font-semibold text-black">Changes and Contact</h2>
         <p className="leading-relaxed">
-          We may update these Terms from time to time. The “Last updated” date at the top of this page will reflect the most recent changes. Continued use of the Site after changes constitutes acceptance of the revised Terms. For questions about these Terms, please contact us via our <a href="/contact" className="text-primary-red underline hover:no-underline">Contact</a> page or at U.S. Mechanical LLC, 472 South 640 West, Pleasant Grove, UT 84062.
+          We may update these Terms from time to time. The “Last updated” date at the top of this page will reflect the most recent changes. Continued use of the Site after changes constitutes acceptance of the revised Terms. For questions about these Terms, please contact us via our <Link to="/contact" className="text-primary-red underline hover:no-underline">Contact</Link> page or at U.S. Mechanical LLC, 472 South 640 West, Pleasant Grove, UT 84062.
         </p>
       </section>
     </div>
@@ -101,7 +102,20 @@ export default function Terms() {
             <p className="text-gray-500">Loading…</p>
           ) : hasSanityContent ? (
             <div className="prose prose-lg max-w-none text-gray-700">
-              <PortableText value={data.body} />
+              <PortableText
+                value={data.body}
+                components={{
+                  marks: {
+                    link: ({ value, children }) => {
+                      const href = value?.href || ''
+                      if (href.startsWith('/') && !href.startsWith('//')) {
+                        return <Link to={href} className="text-primary-red underline hover:no-underline">{children}</Link>
+                      }
+                      return <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary-red underline hover:no-underline">{children}</a>
+                    },
+                  },
+                }}
+              />
             </div>
           ) : (
             <TermsFallbackContent />
