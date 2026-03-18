@@ -1,5 +1,5 @@
 import { useEffect, useState, memo } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
@@ -216,9 +216,20 @@ function Footer() {
       <div className="border-t border-gray-800 bg-black">
         <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-2">
-              <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" />
-              <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
+            <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-2">
+                <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" />
+                <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-400">
+                <Link to="/privacy" className="transition-colors hover:text-white">
+                  Privacy Policy
+                </Link>
+                <span aria-hidden="true">·</span>
+                <Link to="/terms" className="transition-colors hover:text-white">
+                  Terms of Service
+                </Link>
+              </div>
             </div>
             <div className="flex flex-col items-center gap-2 text-sm md:flex-row md:gap-4">
               {displayLicense && (

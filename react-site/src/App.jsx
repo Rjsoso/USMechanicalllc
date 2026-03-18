@@ -23,6 +23,8 @@ const CategoryDetail = lazy(() => import('./pages/CategoryDetail'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
 const DeliveryMethodsPage = lazy(() => import('./pages/DeliveryMethodsPage'))
+const Privacy = lazy(() => import('./pages/Privacy'))
+const Terms = lazy(() => import('./pages/Terms'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function App() {
@@ -59,6 +61,8 @@ function App() {
             <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/delivery-methods" element={<DeliveryMethodsPage />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
