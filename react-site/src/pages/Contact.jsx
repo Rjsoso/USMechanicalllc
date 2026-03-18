@@ -1,8 +1,11 @@
 /* global process */
 import { useEffect, useState, useMemo, useRef, memo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { validateContactForm, sanitizeFormData, detectSpam } from '../utils/validation'
 import {
@@ -313,24 +316,16 @@ function Contact() {
 
   // Get remaining submissions for display
   const remainingSubmissions = getRemainingSubmissions()
+  const location = useLocation()
+  const isStandaloneContactPage = location.pathname === '/contact'
 
-  return (
-    <>
-      <SEO
-        title="Contact Us | US Mechanical | Get a Quote"
-        description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
-        keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
-        url="https://usmechanical.com/contact"
-      />
-      <section
-        id="contact"
-        className="relative w-full px-6 py-20"
-        style={{
-          backgroundColor: 'transparent',
-        }}
-      >
-        {/* Background removed - hero's fixed background shows through */}
-        <div className="relative z-10 mx-auto max-w-6xl">
+  const sectionContent = (
+    <section
+      id="contact"
+      className={`relative w-full px-6 py-20 ${isStandaloneContactPage ? 'min-h-screen bg-gray-900' : ''}`}
+      style={isStandaloneContactPage ? undefined : { backgroundColor: 'transparent' }}
+    >
+      <div className="relative z-10 mx-auto max-w-6xl">
 
           {(error || !contactData) && (
             <div className="flex items-center justify-center py-12">
@@ -364,7 +359,7 @@ function Contact() {
 
               <div className="grid gap-12 md:grid-cols-2">
                 {/* LEFT SIDE — FORM */}
-                <div className="rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
+                <div className="min-w-0 rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
                   <h3 className="mb-4 text-2xl font-semibold text-white">
                     {contactData.formSettings?.headline || 'Send Us a Message'}
                   </h3>
@@ -490,7 +485,7 @@ function Contact() {
                 </div>
 
                 {/* RIGHT SIDE — TABBED OFFICES */}
-                <div>
+                <div className="min-w-0 overflow-hidden">
                   {contactData.offices && contactData.offices.length > 0 ? (
                     <>
                       <div className="mb-6 flex gap-1 rounded-lg bg-white/5 p-1">
@@ -522,18 +517,20 @@ function Contact() {
                                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                               >
                                 {office.address && (
-                                  <iframe
-                                    title={`${office.locationName} location`}
-                                    src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
-                                    width="100%"
-                                    height="300"
-                                    style={{ border: 0, borderRadius: '0.5rem' }}
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    sandbox="allow-scripts allow-same-origin allow-popups"
-                                    className="mb-4"
-                                  />
+                                  <div className="mb-4 w-full overflow-hidden rounded-lg">
+                                    <iframe
+                                      title={`${office.locationName} location`}
+                                      src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
+                                      width="100%"
+                                      height="300"
+                                      style={{ border: 0, display: 'block' }}
+                                      allowFullScreen
+                                      loading="lazy"
+                                      referrerPolicy="no-referrer-when-downgrade"
+                                      sandbox="allow-scripts allow-same-origin allow-popups"
+                                      className="max-w-full"
+                                    />
+                                  </div>
                                 )}
                                 <div className="space-y-1.5">
                                   {office.address && (
@@ -595,8 +592,29 @@ function Contact() {
               </div>
             </>
           )}
-        </div>
-      </section>
+      </div>
+    </section>
+  )
+
+  return (
+    <>
+      <SEO
+        title="Contact Us | US Mechanical | Get a Quote"
+        description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
+        keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
+        url="https://usmechanical.com/contact"
+      />
+      {isStandaloneContactPage ? (
+        <>
+          <Header />
+          <main className="min-h-screen bg-gray-900" style={{ paddingTop: '180px' }}>
+            {sectionContent}
+          </main>
+          <Footer />
+        </>
+      ) : (
+        sectionContent
+      )}
     </>
   )
 }
