@@ -20,7 +20,7 @@ function TermsFallbackContent() {
       <section>
         <h2 className="mb-3 text-xl font-semibold text-black">Acceptance of Terms</h2>
         <p className="leading-relaxed">
-          By accessing or using the website of U.S. Mechanical LLC (“we,” “us,” or “our”) at usmechanical.com (the “Site”), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Site.
+          By accessing or using the website of U.S. Mechanical LLC (“we,” “us,” or “our”) at usmechanicalllc.com (the “Site”), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Site.
         </p>
       </section>
       <section>

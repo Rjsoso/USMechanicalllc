@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
-const siteUrl = process.env.VITE_SITE_URL || 'https://usmechanical.com'
+const siteUrl = process.env.VITE_SITE_URL || 'https://usmechanicalllc.com'
 
 function siteUrlPlugin() {
   let outDir = 'dist'

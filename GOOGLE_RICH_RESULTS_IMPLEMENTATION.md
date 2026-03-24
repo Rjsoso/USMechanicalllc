@@ -19,7 +19,7 @@ Created standalone pages for better Google indexing and sitelink generation:
 
 #### **About Page** (`/about`)
 - **File:** `react-site/src/pages/About.jsx`
-- **URL:** `https://usmechanical.com/about`
+- **URL:** `https://usmechanicalllc.com/about`
 - **Content:** Company history since 1963, team info, offices, safety & risk management
 - **SEO Title:** "About Us - Company Background | US Mechanical"
 - **Features:** Photo carousel, expandable text, safety certifications
@@ -27,7 +27,7 @@ Created standalone pages for better Google indexing and sitelink generation:
 
 #### **Careers Page** (`/careers`)
 - **File:** `react-site/src/pages/CareersPage.jsx`
-- **URL:** `https://usmechanical.com/careers`
+- **URL:** `https://usmechanicalllc.com/careers`
 - **Content:** Job openings, qualifications, benefits, application process
 - **SEO Title:** "Careers - Join Our Team | US Mechanical"
 - **Features:** Job listings, Indeed integration, PDF application download
@@ -35,7 +35,7 @@ Created standalone pages for better Google indexing and sitelink generation:
 
 #### **Portfolio Landing Page** (`/portfolio`)
 - **File:** `react-site/src/pages/PortfolioPage.jsx`
-- **URL:** `https://usmechanical.com/portfolio`
+- **URL:** `https://usmechanicalllc.com/portfolio`
 - **Content:** Overview of all project categories with descriptions
 - **SEO Title:** "Portfolio - Our Projects | US Mechanical"
 - **Features:** Category grid, hover effects, direct links to category pages
@@ -43,7 +43,7 @@ Created standalone pages for better Google indexing and sitelink generation:
 
 #### **Contact Page** (`/contact`)
 - **File:** Already existed, now properly linked
-- **URL:** `https://usmechanical.com/contact`
+- **URL:** `https://usmechanicalllc.com/contact`
 - **SEO Title:** "Contact Us | US Mechanical | Get a Quote"
 
 ---
@@ -268,7 +268,7 @@ Keywords: mechanical contractor portfolio, HVAC projects, plumbing projects, com
 
 4. **Verify Deployment**
    - Wait for Vercel to deploy (1-2 minutes)
-   - Visit https://usmechanical.com
+   - Visit https://usmechanicalllc.com
    - Test all new pages in production
 
 ### Google Search Console (Day 1-3)
