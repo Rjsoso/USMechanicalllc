@@ -10,6 +10,7 @@ import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
+import ContactMapSection from '../components/ContactMapSection'
 import { scrollToSection } from '../utils/scrollToSection'
 import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
@@ -99,12 +100,6 @@ export default function Home() {
       const scrollTo = location.state?.scrollTo
       const urlHash = window.location.hash.replace('#', '')
 
-      if (urlHash === 'contact' || scrollTo === 'contact') {
-        navigate('/contact', { replace: true })
-        initialScrollDone.current = true
-        return
-      }
-
       // On page reload, clear location state immediately
       if (isPageReload.current) {
         if (process.env.NODE_ENV === 'development')
@@ -115,7 +110,7 @@ export default function Home() {
       if (!scrollTo || isPageReload.current) {
         // Clear any URL hash only if it's not a valid section
         if (window.location.hash) {
-          const validSections = ['services', 'portfolio', 'about', 'safety', 'hero']
+          const validSections = ['services', 'portfolio', 'about', 'safety', 'hero', 'contact']
           if (!validSections.includes(urlHash)) {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
@@ -157,18 +152,20 @@ export default function Home() {
       return
     }
 
-    if (targetSection === 'contact') {
-      navigate('/contact', { replace: true })
-      return
-    }
-
     if (targetSection) {
-      // We have a section to scroll to - wait for components to load
       if (process.env.NODE_ENV === 'development')
         console.log(`Home.jsx: Starting scroll to ${targetSection}`)
 
+      const isContactSection = targetSection === 'contact'
+      const initialDelay = isContactSection ? 200 : 0
+
       setTimeout(() => {
-        scrollToSection(targetSection, 180, 50, 200).then(success => {
+        scrollToSection(
+          targetSection,
+          180,
+          isContactSection ? 120 : 50,
+          isContactSection ? 80 : 200
+        ).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
 
@@ -176,8 +173,14 @@ export default function Home() {
             const currentHash = window.location.hash
             window.history.replaceState({}, document.title, window.location.pathname + currentHash)
           }
+
+          if (!success && isContactSection) {
+            setTimeout(() => {
+              scrollToSection('contact', 180, 50, 300)
+            }, 400)
+          }
         })
-      }, 0)
+      }, initialDelay)
     }
   }, [location.state?.scrollTo, location.hash, navigate])
 
@@ -185,12 +188,8 @@ export default function Home() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '')
-      if (hash === 'contact') {
-        navigate('/contact', { replace: true })
-        return
-      }
       if (hash) {
-        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio']
+        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'contact']
         if (validSections.includes(hash)) {
           if (process.env.NODE_ENV === 'development') {
             console.log(`Hash changed to #${hash}, scrolling to section`)
@@ -254,6 +253,7 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <LogoLoopSection />
+          <ContactMapSection />
         </div>
       </main>
       <Footer />

@@ -87,10 +87,6 @@ function Footer() {
 
   // Handle navigation link clicks
   const handleNavClick = (sectionId) => {
-    if (sectionId === 'contact') {
-      navigate('/contact')
-      return
-    }
     if (location.pathname !== '/') {
       navigate('/')
       setTimeout(() => {

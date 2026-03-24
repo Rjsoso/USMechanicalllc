@@ -22,7 +22,7 @@ const DesktopNav = () => {
     { label: 'Services', sectionId: 'services' },
     { label: 'Portfolio', sectionId: 'portfolio' },
     { label: 'Careers', path: '/careers' },
-    { label: 'Contact', path: '/contact' },
+    { label: 'Contact', sectionId: 'contact' },
   ]
 
   const handleNavClick = (link) => {
