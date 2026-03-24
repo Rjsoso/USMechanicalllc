@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
 import { Link } from 'react-router-dom'
-import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -273,7 +272,7 @@ function Contact() {
                 {contactData.description}
               </p>
 
-              <div className="grid gap-12 md:grid-cols-2">
+              <div className="mx-auto max-w-2xl">
                 <div className="min-w-0 rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
                   <h3 className="mb-4 text-2xl font-semibold text-white">
                     {contactData.formSettings?.headline || 'Send Us a Message'}
@@ -397,51 +396,6 @@ function Contact() {
                       </p>
                     )}
                   </form>
-                </div>
-
-                <div className="min-w-0">
-                  {contactData.affiliates && contactData.affiliates.length > 0 ? (
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-8">
-                      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white/70">
-                        Affiliate Companies
-                      </h3>
-                      <div className="flex flex-col gap-6">
-                        {contactData.affiliates.map((affiliate, i) => (
-                          <div key={i} className="flex items-center gap-3">
-                            {affiliate.logo && urlFor(affiliate.logo) && (
-                              <img
-                                src={urlFor(affiliate.logo)
-                                  .width(200)
-                                  .quality(80)
-                                  .auto('format')
-                                  .url()}
-                                alt={affiliate.name}
-                                className="h-10 object-contain"
-                                loading="lazy"
-                                decoding="async"
-                              />
-                            )}
-                            <div>
-                              <p className="text-sm font-semibold text-white">{affiliate.name}</p>
-                              {affiliate.description && (
-                                <p className="text-xs text-white/60">{affiliate.description}</p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-white/70">
-                      <p className="text-sm leading-relaxed">
-                        Visit our{' '}
-                        <Link to="/#contact" className="text-blue-300 underline hover:text-blue-200">
-                          locations on the home page
-                        </Link>
-                        .
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
