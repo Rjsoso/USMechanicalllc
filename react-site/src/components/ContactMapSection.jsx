@@ -10,6 +10,18 @@ const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
 /** Fixed header clearance — match Contact page / scroll offsets */
 const HEADER_OFFSET_PX = 180
 
+/** Tab labels with state; falls back to Sanity `locationName` */
+const OFFICE_TAB_LABEL = {
+  'pleasant grove': 'Pleasant Grove, Utah',
+  'las vegas': 'Las Vegas, Nevada',
+}
+
+function officeTabButtonLabel(locationName) {
+  if (!locationName) return ''
+  const key = locationName.trim().toLowerCase()
+  return OFFICE_TAB_LABEL[key] ?? locationName
+}
+
 /**
  * Full-viewport map, gradient, and location card for the home page `#contact` section.
  * All office maps stay mounted so tab switches are instant (no iframe reload).
@@ -51,20 +63,44 @@ function ContactMapSection() {
             className="relative w-full min-h-[320px] overflow-hidden"
             style={{ height: `calc(100svh - ${HEADER_OFFSET_PX}px)` }}
           >
-            <div className="absolute left-0 right-0 top-0 z-20 flex justify-end px-4 pt-3 md:px-6">
+            <div className="absolute left-0 right-0 top-0 z-20 flex flex-wrap items-start justify-end gap-3 px-4 pt-3 md:gap-4 md:px-6">
+              {activeOffice && (
+                <div className="max-w-[min(100%,20rem)] rounded-lg bg-black/50 px-3 py-2.5 text-right shadow-lg backdrop-blur-md md:max-w-sm md:px-4 md:py-3">
+                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-white/50 md:text-xs">
+                    Location
+                  </p>
+                  {activeOffice.address && (
+                    <p className="text-xs leading-snug text-white/90 md:text-sm">
+                      {activeOffice.address}
+                    </p>
+                  )}
+                  <p className="mt-2 text-xs text-white md:text-sm">
+                    Phone:{' '}
+                    <a
+                      href={`tel:${activeOffice.phone}`}
+                      className="text-blue-300 transition-colors hover:text-blue-200"
+                    >
+                      {activeOffice.phone}
+                    </a>
+                  </p>
+                  {activeOffice.fax && (
+                    <p className="mt-1 text-[11px] text-white/75 md:text-xs">Fax: {activeOffice.fax}</p>
+                  )}
+                </div>
+              )}
               <div className="flex shrink-0 gap-1 rounded-lg bg-black/50 p-1 shadow-lg backdrop-blur-md">
                 {offices.map((office, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => setActiveOfficeTab(index)}
-                    className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-all md:px-4 ${
+                    className={`max-w-[11rem] rounded-md px-2.5 py-2 text-left text-xs font-semibold leading-tight transition-all sm:max-w-none sm:px-3 sm:py-2.5 sm:text-sm md:px-4 ${
                       activeOfficeTab === index
                         ? 'bg-white/15 text-white shadow-sm'
                         : 'text-white/70 hover:text-white'
                     }`}
                   >
-                    {office.locationName}
+                    {officeTabButtonLabel(office.locationName)}
                   </button>
                 ))}
               </div>
@@ -118,78 +154,41 @@ function ContactMapSection() {
         )}
       </div>
 
-      {activeOffice && (
+      {activeOffice && affiliates && affiliates.length > 0 && (
         <div className="border-t border-white/5 bg-black px-6 py-10">
-          <div className="mx-auto max-w-6xl">
-            <div
-              className={`flex flex-col gap-8 ${
-                affiliates?.length
-                  ? 'md:flex-row md:items-start md:justify-between md:gap-12'
-                  : ''
-              }`}
-            >
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 md:items-end">
+            {affiliates.map((affiliate, i) => (
               <div
-                className={`min-w-0 flex-1 ${
-                  affiliates?.length ? 'text-center md:text-left' : 'text-center'
-                }`}
+                key={i}
+                className="flex max-w-md items-center gap-3 text-center md:max-w-sm md:text-right"
               >
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-white/50">
-                  Location
-                </p>
-                {activeOffice.address && (
-                  <p className="text-base text-white/90">{activeOffice.address}</p>
+                {affiliate.logo && urlFor(affiliate.logo) && (
+                  <img
+                    src={urlFor(affiliate.logo)
+                      .width(200)
+                      .quality(80)
+                      .auto('format')
+                      .url()}
+                    alt={affiliate.name || ''}
+                    className="h-10 shrink-0 object-contain md:h-11"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 )}
-                <p className="mt-3 text-white">
-                  Phone:{' '}
-                  <a
-                    href={`tel:${activeOffice.phone}`}
-                    className="text-blue-300 transition-colors hover:text-blue-200"
-                  >
-                    {activeOffice.phone}
-                  </a>
-                </p>
-                {activeOffice.fax && (
-                  <p className="mt-1 text-white/75">Fax: {activeOffice.fax}</p>
-                )}
-              </div>
-
-              {affiliates && affiliates.length > 0 && (
-                <div className="flex flex-col items-center gap-6 md:shrink-0 md:items-end">
-                  {affiliates.map((affiliate, i) => (
-                    <div
-                      key={i}
-                      className="flex max-w-md items-center gap-3 text-center md:max-w-sm md:text-right"
-                    >
-                      {affiliate.logo && urlFor(affiliate.logo) && (
-                        <img
-                          src={urlFor(affiliate.logo)
-                            .width(200)
-                            .quality(80)
-                            .auto('format')
-                            .url()}
-                          alt={affiliate.name || ''}
-                          className="h-10 shrink-0 object-contain md:h-11"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      )}
-                      <div className="min-w-0">
-                        {affiliate.name && (
-                          <p className="text-sm font-semibold text-white md:text-base">
-                            {affiliate.name}
-                          </p>
-                        )}
-                        {affiliate.description && (
-                          <p className="mt-1 text-xs leading-snug text-white/70 md:text-sm">
-                            {affiliate.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                <div className="min-w-0">
+                  {affiliate.name && (
+                    <p className="text-sm font-semibold text-white md:text-base">
+                      {affiliate.name}
+                    </p>
+                  )}
+                  {affiliate.description && (
+                    <p className="mt-1 text-xs leading-snug text-white/70 md:text-sm">
+                      {affiliate.description}
+                    </p>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
