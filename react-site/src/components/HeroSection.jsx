@@ -11,7 +11,7 @@ const defaultHeroData = {
   headline: 'Trusted Mechanical Contractors Since 1963',
   subtext: '',
   buttonText: 'REQUEST A QUOTE',
-  buttonLink: '#contact',
+  buttonLink: '/contact',
   secondButtonText: 'APPLY TO WORK WITH US',
   secondButtonLink: '#careers',
   backgroundImage: null,
@@ -54,6 +54,10 @@ function HeroSection() {
   const handleButtonClick = (sectionId) => {
     if (process.env.NODE_ENV === 'development') {
       console.log('[HERO] Button click:', sectionId)
+    }
+    if (sectionId === 'contact' || sectionId === '/contact') {
+      navigate('/contact')
+      return
     }
     navigateToSection(sectionId, navigate, location.pathname)
   }
@@ -134,7 +138,16 @@ function HeroSection() {
             {heroData.buttonText && heroData.buttonText.trim() !== '' && (
               <button
                 onClick={() => {
-                  const sectionId = (heroData.buttonLink || '#contact').replace('#', '')
+                  const raw = (heroData.buttonLink || '/contact').trim()
+                  if (raw === '/contact' || raw === '#contact') {
+                    navigate('/contact')
+                    return
+                  }
+                  if (raw.startsWith('/') && raw.length > 1) {
+                    navigate(raw)
+                    return
+                  }
+                  const sectionId = raw.replace(/^#/, '')
                   handleButtonClick(sectionId)
                 }}
                 className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"

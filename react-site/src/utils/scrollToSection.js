@@ -38,7 +38,6 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
               return -(scrollRange * 0.7)
             },
             'portfolio': -65,
-            'contact': 180,
             'about': 60,
             'safety': 90,
             'hero': 0,
@@ -84,6 +83,11 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
  * @param {string} currentPath - Current pathname (default: '/')
  */
 export function navigateToSection(sectionId, navigate, currentPath = '/') {
+  if (sectionId === 'contact') {
+    navigate('/contact')
+    return
+  }
+
   // If we're on a different page, navigate to home first
   if (currentPath !== '/') {
     navigate('/', { state: { scrollTo: sectionId } })

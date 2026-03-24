@@ -87,14 +87,16 @@ function Footer() {
 
   // Handle navigation link clicks
   const handleNavClick = (sectionId) => {
+    if (sectionId === 'contact') {
+      navigate('/contact')
+      return
+    }
     if (location.pathname !== '/') {
-      // Navigate to home first, then scroll
       navigate('/')
       setTimeout(() => {
         scrollToSection(sectionId)
       }, 100)
     } else {
-      // Already on home page, just scroll
       scrollToSection(sectionId)
     }
   }

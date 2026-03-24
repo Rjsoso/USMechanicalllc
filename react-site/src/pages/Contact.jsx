@@ -1,6 +1,4 @@
-/* global process */
-import { useEffect, useState, useMemo, useRef, memo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState, useRef, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import SEO from '../components/SEO'
@@ -20,35 +18,16 @@ const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   ...,
   backgroundImage { asset-> { _id, url } }
 }`
-const HERO_BG_QUERY = `*[_type == "heroSection"][0]{
-  backgroundImage { asset-> { _id, url } },
-  carouselImages[0] { image { asset-> { _id, url } }, "imageUrl": image.asset->url }
-}`
 
 function Contact() {
-  const headerOffset = 180
-
   const { data: contactData, loading: contactLoading, error: contactError } = useSanityLive(CONTACT_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
   })
-  const { data: heroData } = useSanityLive(HERO_BG_QUERY, {}, {
-    listenFilter: `*[_type == "heroSection"]`,
-  })
-
-  const heroBackgroundImage = useMemo(() => {
-    if (!heroData) return null
-    return (
-      heroData?.carouselImages?.imageUrl ||
-      heroData?.carouselImages?.image?.asset?.url ||
-      heroData?.backgroundImage?.asset?.url
-    )
-  }, [heroData])
 
   const error = contactError
     ? 'Failed to load contact page. Please check your Sanity connection.'
     : (!contactLoading && !contactData ? 'No contact page data found. Please create a Contact Page document in Sanity Studio.' : null)
 
-  // Form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -64,50 +43,6 @@ function Contact() {
   const [activeOfficeTab, setActiveOfficeTab] = useState(0)
   const turnstileWidgetIdRef = useRef(null)
 
-  // Attempt smooth scroll to contact when this component is ready
-  useEffect(() => {
-    // Don't scroll on page reload - only on navigation from other pages
-    const isPageReload =
-      performance.getEntriesByType('navigation')[0]?.type === 'reload' ||
-      performance.navigation?.type === 1
-
-    if (isPageReload) {
-      if (process.env.NODE_ENV === 'development')
-        console.log('Contact: Page reload detected, skipping auto-scroll')
-      return undefined
-    }
-
-    const shouldScroll =
-      sessionStorage.getItem('scrollTo') === 'contact' || window.location.hash === '#contact'
-
-    if (!shouldScroll) return undefined
-
-    const scrollToContact = () => {
-      const element = document.getElementById('contact')
-      if (!element) return false
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
-      sessionStorage.removeItem('scrollTo')
-      return true
-    }
-
-    let attempts = 0
-    const maxRetries = 20
-    const timer = setInterval(() => {
-      attempts += 1
-      if (scrollToContact() || attempts >= maxRetries) {
-        clearInterval(timer)
-      }
-    }, 150)
-
-    // Try immediately in case everything is already mounted
-    scrollToContact()
-
-    return () => clearInterval(timer)
-  }, [contactData, headerOffset])
-
-  // Render Cloudflare Turnstile widget when contact form is visible
   useEffect(() => {
     if (!contactData) return
 
@@ -132,7 +67,6 @@ function Contact() {
       return false
     }
 
-    // Script may load after component; poll until available
     if (!initTurnstile()) {
       const poll = setInterval(() => {
         if (initTurnstile()) {
@@ -165,21 +99,6 @@ function Contact() {
     }
   }, [contactData])
 
-  // Determine which background image to use (contact's own or hero's as fallback)
-  // Note: Currently not used but kept for future implementation
-  // eslint-disable-next-line no-unused-vars
-  const _backgroundImageUrl = useMemo(() => {
-    const sanityImage = contactData?.backgroundImage
-    if (sanityImage && urlFor(sanityImage)) {
-      return urlFor(sanityImage).width(1400).quality(80).auto('format').url()
-    }
-    if (heroBackgroundImage?.includes('cdn.sanity.io')) {
-      return `${heroBackgroundImage}?w=1400&q=80&auto=format`
-    }
-    return heroBackgroundImage || null
-  }, [contactData?.backgroundImage, heroBackgroundImage])
-
-  // Handle form input changes
   const handleInputChange = e => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -187,7 +106,6 @@ function Contact() {
       [name]: value,
     }))
 
-    // Clear error for this field when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({
         ...prev,
@@ -195,7 +113,6 @@ function Contact() {
       }))
     }
 
-    // Clear rate limit and turnstile errors when user modifies form
     if (rateLimitError) {
       setRateLimitError(null)
     }
@@ -204,17 +121,14 @@ function Contact() {
     }
   }
 
-  // Handle form submission
   const handleSubmit = async e => {
     e.preventDefault()
 
-    // Clear previous errors
     setFormErrors({})
     setFormError(null)
     setRateLimitError(null)
     setTurnstileError(null)
 
-    // Check rate limiting
     const rateLimitCheck = canSubmitForm()
     if (!rateLimitCheck.allowed) {
       setRateLimitError(
@@ -223,17 +137,14 @@ function Contact() {
       return
     }
 
-    // Sanitize form data
     const sanitizedData = sanitizeFormData(formData)
 
-    // Validate form data
     const validation = validateContactForm(sanitizedData)
     if (!validation.valid) {
       setFormErrors(validation.errors)
       return
     }
 
-    // Check for spam
     if (detectSpam(sanitizedData)) {
       setFormError(
         'Your message was flagged as potential spam. Please remove any suspicious content and try again.'
@@ -241,7 +152,6 @@ function Contact() {
       return
     }
 
-    // Check Turnstile verification
     const turnstileToken =
       typeof window.turnstile !== 'undefined' &&
       turnstileWidgetIdRef.current !== null &&
@@ -251,12 +161,10 @@ function Contact() {
       return
     }
 
-    // Submit form
     setFormSubmitting(true)
 
-    // Add timeout handling
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000)
 
     try {
       const response = await fetch('/api/contact', {
@@ -274,13 +182,8 @@ function Contact() {
       clearTimeout(timeoutId)
 
       if (response.ok) {
-        // Record successful submission for rate limiting
         recordSubmission()
-
-        // Show success message
         setFormSuccess(true)
-
-        // Reset form
         setFormData({
           name: '',
           email: '',
@@ -288,12 +191,10 @@ function Contact() {
           message: '',
         })
 
-        // Reset Turnstile widget for next submission
         if (typeof window.turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
           window.turnstile.reset(turnstileWidgetIdRef.current)
         }
 
-        // Hide success message after 5 seconds
         setTimeout(() => {
           setFormSuccess(false)
         }, 5000)
@@ -315,21 +216,27 @@ function Contact() {
     }
   }
 
-  // Get remaining submissions for display
   const remainingSubmissions = getRemainingSubmissions()
-  const location = useLocation()
-  const isStandaloneContactPage = location.pathname === '/contact'
 
-  const sectionContent = (
-    <section
-      id="contact"
-      className={`relative w-full px-6 py-20 ${isStandaloneContactPage ? 'min-h-screen bg-gray-900' : ''}`}
-      style={isStandaloneContactPage ? undefined : { backgroundColor: 'transparent' }}
-    >
-      <div className="relative z-10 mx-auto max-w-6xl">
+  const activeOffice =
+    contactData?.offices?.length > 0 ? contactData.offices[activeOfficeTab] : null
 
-          {(error || !contactData) && (
-            <div className="flex items-center justify-center py-12">
+  return (
+    <>
+      <SEO
+        title="Contact Us | US Mechanical | Get a Quote"
+        description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
+        keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
+        url={`${getSiteUrl()}/contact`}
+      />
+      <Header />
+      <main className="min-h-screen bg-gray-900 pt-[180px]">
+        {(error || !contactData) && (
+          <section
+            id="contact"
+            className="relative w-full px-6 py-20"
+          >
+            <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">
               <div className="max-w-2xl px-6 text-center">
                 <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
                 <p className="mb-4 text-white">{error || 'No contact page data found.'}</p>
@@ -346,276 +253,276 @@ function Contact() {
                 </p>
               </div>
             </div>
-          )}
+          </section>
+        )}
 
-          {contactData && (
-            <>
-              <h1 className="section-title mb-8 text-center text-5xl text-white md:text-6xl">
-                {contactData.heroTitle || 'Contact Us'}
-              </h1>
+        {contactData && (
+          <>
+            {/* Full-width map band */}
+            <div className="w-full border-b border-white/10 bg-neutral-950">
+              {contactData.offices && contactData.offices.length > 0 ? (
+                <>
+                  <div className="mx-auto flex max-w-6xl gap-1 px-4 pt-4 md:px-6">
+                    {contactData.offices.map((office, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => setActiveOfficeTab(index)}
+                        className={`flex-1 rounded-md px-3 py-2.5 text-sm font-semibold transition-all md:px-4 ${
+                          activeOfficeTab === index
+                            ? 'bg-white/15 text-white shadow-sm'
+                            : 'text-white/60 hover:text-white/80'
+                        }`}
+                      >
+                        {office.locationName}
+                      </button>
+                    ))}
+                  </div>
 
-              <p className="mb-12 text-center text-white">
-                {contactData.description}
-              </p>
-
-              <div className="grid gap-12 md:grid-cols-2">
-                {/* LEFT SIDE — FORM */}
-                <div className="min-w-0 rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
-                  <h3 className="mb-4 text-2xl font-semibold text-white">
-                    {contactData.formSettings?.headline || 'Send Us a Message'}
-                  </h3>
-
-                  {formSuccess && (
-                    <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
-                      <p className="font-semibold text-white">✓ Message sent successfully!</p>
-                      <p className="mt-1 text-sm text-white/80">We&apos;ll get back to you soon.</p>
-                    </div>
-                  )}
-
-                  {rateLimitError && (
-                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
-                      <p className="mt-1 text-sm text-white/80">{rateLimitError}</p>
-                    </div>
-                  )}
-
-                  {formError && (
-                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Error</p>
-                      <p className="mt-1 text-sm text-white/80">{formError}</p>
-                    </div>
-                  )}
-
-                  {turnstileError && (
-                    <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Verification Required</p>
-                      <p className="mt-1 text-sm text-white/80">{turnstileError}</p>
-                    </div>
-                  )}
-
-                  <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                    <div>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Name *"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={`w-full border ${formErrors.name ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                        maxLength="100"
-                      />
-                      {formErrors.name && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.name}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email *"
-                        required
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`w-full border ${formErrors.email ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                        maxLength="254"
-                      />
-                      {formErrors.email && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.email}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Phone (optional)"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className={`w-full border ${formErrors.phone ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                        maxLength="20"
-                      />
-                      {formErrors.phone && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.phone}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <textarea
-                        name="message"
-                        placeholder="Message * (minimum 10 characters)"
-                        required
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        className={`w-full border ${formErrors.message ? 'border-red-500' : 'border-white/30'} h-32 resize-none rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
-                        maxLength="5000"
-                      />
-                      {formErrors.message && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.message}</p>
-                      )}
-                      <p className="mt-1 text-xs text-white/60">
-                        {formData.message.length}/5000 characters
-                      </p>
-                    </div>
-
-                    <div
-                      id="turnstile-container"
-                      className="min-h-[78px]"
-                      aria-label="Cloudflare Turnstile verification"
-                    />
-
-                    <button
-                      type="submit"
-                      disabled={formSubmitting || rateLimitError}
-                      className={`rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 ${
-                        formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
-                      }`}
-                    >
-                      {formSubmitting ? 'Sending...' : 'Submit'}
-                    </button>
-
-                    {remainingSubmissions < 3 && !rateLimitError && (
-                      <p className="text-center text-xs text-white/60">
-                        {remainingSubmissions > 0
-                          ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
-                          : 'Maximum submissions reached for this hour'}
-                      </p>
-                    )}
-                  </form>
-                </div>
-
-                {/* RIGHT SIDE — TABBED OFFICES */}
-                <div className="min-w-0 overflow-hidden">
-                  {contactData.offices && contactData.offices.length > 0 ? (
-                    <>
-                      <div className="mb-6 flex gap-1 rounded-lg bg-white/5 p-1">
-                        {contactData.offices.map((office, index) => (
-                          <button
+                  <div
+                    className="relative mt-3 w-full overflow-hidden"
+                    style={{ height: 'min(50vh, 560px)', minHeight: 300 }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {contactData.offices.map((office, index) =>
+                        activeOfficeTab === index && office.address ? (
+                          <motion.div
                             key={index}
-                            type="button"
-                            onClick={() => setActiveOfficeTab(index)}
-                            className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-all ${
-                              activeOfficeTab === index
-                                ? 'bg-white/15 text-white shadow-sm'
-                                : 'text-white/60 hover:text-white/80'
-                            }`}
+                            className="absolute inset-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                           >
-                            {office.locationName}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="relative overflow-hidden" style={{ minHeight: 380 }}>
-                        <AnimatePresence mode="wait">
-                          {contactData.offices.map((office, index) =>
-                            activeOfficeTab === index ? (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, x: 12 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -12 }}
-                                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                              >
-                                {office.address && (
-                                  <div className="mb-4 w-full overflow-hidden rounded-lg">
-                                    <iframe
-                                      title={`${office.locationName} location`}
-                                      src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
-                                      width="100%"
-                                      height="300"
-                                      style={{ border: 0, display: 'block' }}
-                                      allowFullScreen
-                                      loading="lazy"
-                                      referrerPolicy="no-referrer-when-downgrade"
-                                      sandbox="allow-scripts allow-same-origin allow-popups"
-                                      className="max-w-full"
-                                    />
-                                  </div>
-                                )}
-                                <div className="space-y-1.5">
-                                  {office.address && (
-                                    <p className="text-sm text-white/80">{office.address}</p>
-                                  )}
-                                  <p className="text-white">
-                                    Phone:{' '}
-                                    <a href={`tel:${office.phone}`} className="text-blue-300 hover:text-blue-200 transition-colors">
-                                      {office.phone}
-                                    </a>
-                                  </p>
-                                  {office.fax && (
-                                    <p className="text-white/80">Fax: {office.fax}</p>
-                                  )}
-                                </div>
-                              </motion.div>
-                            ) : null
-                          )}
-                        </AnimatePresence>
-                      </div>
-
-                      {contactData.affiliates && contactData.affiliates.length > 0 && (
-                        <div className="mt-6 border-t border-white/10 pt-6">
-                          <h3 className="mb-3 text-sm font-semibold text-white/70">
-                            Affiliate Companies
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-6">
-                            {contactData.affiliates.map((affiliate, i) => (
-                              <div key={i} className="flex items-center gap-3">
-                                {affiliate.logo && urlFor(affiliate.logo) && (
-                                  <img
-                                    src={urlFor(affiliate.logo)
-                                      .width(200)
-                                      .quality(80)
-                                      .auto('format')
-                                      .url()}
-                                    alt={affiliate.name}
-                                    className="h-10 object-contain"
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
-                                )}
-                                <div>
-                                  <p className="text-sm font-semibold text-white">{affiliate.name}</p>
-                                  {affiliate.description && (
-                                    <p className="text-xs text-white/60">{affiliate.description}</p>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                            <iframe
+                              title={`${office.locationName} location`}
+                              src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0, display: 'block' }}
+                              allowFullScreen
+                              loading="lazy"
+                              referrerPolicy="no-referrer-when-downgrade"
+                              sandbox="allow-scripts allow-same-origin allow-popups"
+                              className="h-full min-h-[300px] w-full"
+                            />
+                          </motion.div>
+                        ) : null
                       )}
-                    </>
-                  ) : (
-                    <p className="text-white">No office locations available.</p>
+                    </AnimatePresence>
+                  </div>
+
+                  {activeOffice && (
+                    <div className="mx-auto max-w-6xl space-y-1.5 px-4 py-5 md:px-6">
+                      {activeOffice.address && (
+                        <p className="text-sm text-white/90">{activeOffice.address}</p>
+                      )}
+                      <p className="text-white">
+                        Phone:{' '}
+                        <a
+                          href={`tel:${activeOffice.phone}`}
+                          className="text-blue-300 transition-colors hover:text-blue-200"
+                        >
+                          {activeOffice.phone}
+                        </a>
+                      </p>
+                      {activeOffice.fax && (
+                        <p className="text-white/80">Fax: {activeOffice.fax}</p>
+                      )}
+                    </div>
                   )}
+                </>
+              ) : (
+                <div className="px-6 py-16 text-center text-white/70">
+                  No office locations available.
+                </div>
+              )}
+            </div>
+
+            <section id="contact" className="relative w-full px-6 py-16">
+              <div className="relative z-10 mx-auto max-w-6xl">
+                <h1 className="section-title mb-6 text-center text-5xl text-white md:text-6xl">
+                  {contactData.heroTitle || 'Contact Us'}
+                </h1>
+
+                <p className="mb-12 text-center text-lg text-white/90">
+                  {contactData.description}
+                </p>
+
+                <div className="grid gap-12 md:grid-cols-2">
+                  <div className="min-w-0 rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
+                    <h3 className="mb-4 text-2xl font-semibold text-white">
+                      {contactData.formSettings?.headline || 'Send Us a Message'}
+                    </h3>
+
+                    {formSuccess && (
+                      <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
+                        <p className="font-semibold text-white">✓ Message sent successfully!</p>
+                        <p className="mt-1 text-sm text-white/80">We&apos;ll get back to you soon.</p>
+                      </div>
+                    )}
+
+                    {rateLimitError && (
+                      <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                        <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
+                        <p className="mt-1 text-sm text-white/80">{rateLimitError}</p>
+                      </div>
+                    )}
+
+                    {formError && (
+                      <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                        <p className="font-semibold text-white">⚠ Error</p>
+                        <p className="mt-1 text-sm text-white/80">{formError}</p>
+                      </div>
+                    )}
+
+                    {turnstileError && (
+                      <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
+                        <p className="font-semibold text-white">⚠ Verification Required</p>
+                        <p className="mt-1 text-sm text-white/80">{turnstileError}</p>
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                      <div>
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="Name *"
+                          required
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          className={`w-full border ${formErrors.name ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                          maxLength="100"
+                        />
+                        {formErrors.name && (
+                          <p className="mt-1 text-sm text-red-300">{formErrors.name}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Email *"
+                          required
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className={`w-full border ${formErrors.email ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                          maxLength="254"
+                        />
+                        {formErrors.email && (
+                          <p className="mt-1 text-sm text-red-300">{formErrors.email}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="tel"
+                          name="phone"
+                          placeholder="Phone (optional)"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          className={`w-full border ${formErrors.phone ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                          maxLength="20"
+                        />
+                        {formErrors.phone && (
+                          <p className="mt-1 text-sm text-red-300">{formErrors.phone}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <textarea
+                          name="message"
+                          placeholder="Message * (minimum 10 characters)"
+                          required
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          className={`w-full border ${formErrors.message ? 'border-red-500' : 'border-white/30'} h-32 resize-none rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                          maxLength="5000"
+                        />
+                        {formErrors.message && (
+                          <p className="mt-1 text-sm text-red-300">{formErrors.message}</p>
+                        )}
+                        <p className="mt-1 text-xs text-white/60">
+                          {formData.message.length}/5000 characters
+                        </p>
+                      </div>
+
+                      <div
+                        id="turnstile-container"
+                        className="min-h-[78px]"
+                        aria-label="Cloudflare Turnstile verification"
+                      />
+
+                      <button
+                        type="submit"
+                        disabled={formSubmitting || rateLimitError}
+                        className={`rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 ${
+                          formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
+                        }`}
+                      >
+                        {formSubmitting ? 'Sending...' : 'Submit'}
+                      </button>
+
+                      {remainingSubmissions < 3 && !rateLimitError && (
+                        <p className="text-center text-xs text-white/60">
+                          {remainingSubmissions > 0
+                            ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
+                            : 'Maximum submissions reached for this hour'}
+                        </p>
+                      )}
+                    </form>
+                  </div>
+
+                  <div className="min-w-0">
+                    {contactData.affiliates && contactData.affiliates.length > 0 ? (
+                      <div className="rounded-xl border border-white/10 bg-white/5 p-8">
+                        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white/70">
+                          Affiliate Companies
+                        </h3>
+                        <div className="flex flex-col gap-6">
+                          {contactData.affiliates.map((affiliate, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                              {affiliate.logo && urlFor(affiliate.logo) && (
+                                <img
+                                  src={urlFor(affiliate.logo)
+                                    .width(200)
+                                    .quality(80)
+                                    .auto('format')
+                                    .url()}
+                                  alt={affiliate.name}
+                                  className="h-10 object-contain"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              )}
+                              <div>
+                                <p className="text-sm font-semibold text-white">{affiliate.name}</p>
+                                {affiliate.description && (
+                                  <p className="text-xs text-white/60">{affiliate.description}</p>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-white/70">
+                        <p className="text-sm leading-relaxed">
+                          Use the map above to find our offices. Select a location tab to switch
+                          between Pleasant Grove and Las Vegas.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </>
-          )}
-      </div>
-    </section>
-  )
-
-  return (
-    <>
-      <SEO
-        title="Contact Us | US Mechanical | Get a Quote"
-        description="Contact US Mechanical for plumbing, HVAC, and mechanical contracting services in Utah and Nevada. Get a free quote today."
-        keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
-        url={`${getSiteUrl()}/contact`}
-      />
-      {isStandaloneContactPage ? (
-        <>
-          <Header />
-          <main className="min-h-screen bg-gray-900" style={{ paddingTop: '180px' }}>
-            {sectionContent}
-          </main>
-          <Footer />
-        </>
-      ) : (
-        sectionContent
-      )}
+            </section>
+          </>
+        )}
+      </main>
+      <Footer />
     </>
   )
 }

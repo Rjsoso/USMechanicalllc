@@ -1,12 +1,11 @@
 /* global process */
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutAndSafety from '../components/AboutAndSafety'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
-import Contact from '../pages/Contact'
 import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
@@ -45,6 +44,7 @@ const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ a
 
 export default function Home() {
   const location = useLocation()
+  const navigate = useNavigate()
   const initialScrollDone = useRef(false)
 
   const hero = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
@@ -96,6 +96,15 @@ export default function Home() {
   // Scroll to top IMMEDIATELY before paint (unless navigating to a section)
   useLayoutEffect(() => {
     if (!initialScrollDone.current) {
+      const scrollTo = location.state?.scrollTo
+      const urlHash = window.location.hash.replace('#', '')
+
+      if (urlHash === 'contact' || scrollTo === 'contact') {
+        navigate('/contact', { replace: true })
+        initialScrollDone.current = true
+        return
+      }
+
       // On page reload, clear location state immediately
       if (isPageReload.current) {
         if (process.env.NODE_ENV === 'development')
@@ -103,13 +112,10 @@ export default function Home() {
         window.history.replaceState({}, document.title)
       }
 
-      const scrollTo = location.state?.scrollTo
-      const urlHash = window.location.hash.replace('#', '')
-      
       if (!scrollTo || isPageReload.current) {
         // Clear any URL hash only if it's not a valid section
         if (window.location.hash) {
-          const validSections = ['contact', 'services', 'portfolio', 'about', 'safety', 'hero']
+          const validSections = ['services', 'portfolio', 'about', 'safety', 'hero']
           if (!validSections.includes(urlHash)) {
             if (process.env.NODE_ENV === 'development')
               console.log('Clearing invalid hash:', window.location.hash)
@@ -151,54 +157,46 @@ export default function Home() {
       return
     }
 
+    if (targetSection === 'contact') {
+      navigate('/contact', { replace: true })
+      return
+    }
+
     if (targetSection) {
       // We have a section to scroll to - wait for components to load
       if (process.env.NODE_ENV === 'development')
         console.log(`Home.jsx: Starting scroll to ${targetSection}`)
-      
-      // For lazy-loaded sections like contact, give time for Suspense to resolve
-      const isLazySection = targetSection === 'contact'
-      const initialDelay = isLazySection ? 150 : 0
-      
+
       setTimeout(() => {
-        // Use smooth scroll with retry mechanism for lazy sections
-        scrollToSection(targetSection, 180, isLazySection ? 100 : 50, isLazySection ? 50 : 200).then(success => {
+        scrollToSection(targetSection, 180, 50, 200).then(success => {
           if (process.env.NODE_ENV === 'development')
             console.log(`Scroll to ${targetSection} result: ${success}`)
-          
-          // Clear only the location.state, but keep the hash in the URL for direct navigation
+
           if (scrollTo) {
             const currentHash = window.location.hash
             window.history.replaceState({}, document.title, window.location.pathname + currentHash)
           }
-          
-          // If scroll failed for contact, try one more time with a longer delay
-          if (!success && isLazySection) {
-            if (process.env.NODE_ENV === 'development')
-              console.log('Contact scroll failed, retrying once more...')
-            setTimeout(() => {
-              scrollToSection(targetSection, 180, 50, 300)
-            }, 500)
-          }
         })
-      }, initialDelay)
+      }, 0)
     }
-  }, [location.state?.scrollTo, location.hash])
+  }, [location.state?.scrollTo, location.hash, navigate])
 
   // Handle browser back/forward navigation with hash URLs
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '')
+      if (hash === 'contact') {
+        navigate('/contact', { replace: true })
+        return
+      }
       if (hash) {
-        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio', 'contact']
+        const validSections = ['hero', 'about', 'safety', 'services', 'portfolio']
         if (validSections.includes(hash)) {
           if (process.env.NODE_ENV === 'development') {
             console.log(`Hash changed to #${hash}, scrolling to section`)
           }
-          
-          // Use scrollToSection with appropriate settings for the section
-          const isLazySection = hash === 'contact'
-          scrollToSection(hash, 180, isLazySection ? 100 : 50, isLazySection ? 50 : 200)
+
+          scrollToSection(hash, 180, 50, 200)
         }
       } else {
         // No hash means scroll to top
@@ -212,7 +210,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
     }
-  }, [])
+  }, [navigate])
 
   // Parallax scroll animation removed — sections now scroll naturally
 
@@ -256,9 +254,6 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <LogoLoopSection />
-          <div id="contact-wrapper">
-            <Contact />
-          </div>
         </div>
       </main>
       <Footer />
