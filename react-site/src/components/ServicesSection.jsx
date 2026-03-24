@@ -65,8 +65,8 @@ const ServicesSection = ({ data: servicesDataProp }) => {
 
   const headingY = useTransform(scrollYProgress, [0, 0.15], [80, 0])
   const headingOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1])
-  const previewY = useTransform(scrollYProgress, [0.45, 0.65], [60, 0])
-  const previewOpacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1])
+  const previewY = useTransform(scrollYProgress, [0.2, 0.4], [60, 0])
+  const previewOpacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1])
 
   const { data: servicesData, loading } = useSanityLive(SERVICES_QUERY, {}, {
     initialData: servicesDataProp,
@@ -131,7 +131,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
   const activeCard = cards.find(c => c.id === hoveredId) ?? cards[0]
 
   return (
-    <div ref={scrollRef} id="services" style={{ height: '250vh', position: 'relative' }}>
+    <div ref={scrollRef} id="services" style={{ height: '200vh', position: 'relative' }}>
       <div
         className="bg-transparent text-white"
         style={{
@@ -299,7 +299,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                   key={card.id}
                   scrollYProgress={scrollYProgress}
                   index={index}
-                  baseStart={0.45}
+                  baseStart={0.2}
                   step={0.05}
                 >
                   <div
@@ -326,7 +326,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                   key={card.id}
                   scrollYProgress={scrollYProgress}
                   index={index}
-                  baseStart={0.45}
+                  baseStart={0.2}
                   step={0.05}
                 >
                   <button

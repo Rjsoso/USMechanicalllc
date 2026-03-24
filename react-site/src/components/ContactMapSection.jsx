@@ -171,7 +171,7 @@ function ContactMapSection() {
               return (
                 <div
                   key={i}
-                  className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-snug md:justify-start md:gap-x-4 md:text-[15px]"
+                  className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-snug md:justify-center md:gap-x-4 md:text-[15px]"
                 >
                   <span
                     className="inline-flex h-5 w-4 shrink-0 items-center justify-start"
