@@ -33,8 +33,10 @@ export function scrollToSection(sectionId, headerOffset = 180, maxRetries = 50, 
         if (rect.height > 0) {
           // Section-specific offset adjustments for optimal title visibility
           const sectionOffsets = {
-            // Tall scroll-driven section: land near top under fixed header
-            'services': 96,
+            'services': () => {
+              const scrollRange = rect.height - window.innerHeight
+              return -(scrollRange * 0.7)
+            },
             'portfolio': -65,
             'contact': 180,
             'about': 60,

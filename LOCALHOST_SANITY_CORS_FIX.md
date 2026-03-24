@@ -6,7 +6,7 @@ Localhost is showing "Loading services..." and "Contact Page Not Found" because 
 
 ## Root Cause
 
-Your Sanity project needs to explicitly allow `localhost` origins for API requests. By default, Sanity only allows requests from your production domain (usmechanicalllc.com).
+Your Sanity project needs to explicitly allow `localhost` origins for API requests. By default, Sanity only allows requests from your production domain (usmechanical.com).
 
 ## Solution: Add Localhost to Sanity CORS Origins
 

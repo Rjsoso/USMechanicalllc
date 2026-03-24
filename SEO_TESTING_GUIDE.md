@@ -60,11 +60,11 @@ Visit and verify each page works correctly:
 
 Test each page:
 
-1. **Homepage:** `https://usmechanicalllc.com/`
-2. **About Page:** `https://usmechanicalllc.com/about`
-3. **Careers Page:** `https://usmechanicalllc.com/careers`
-4. **Portfolio Page:** `https://usmechanicalllc.com/portfolio`
-5. **Contact Page:** `https://usmechanicalllc.com/contact`
+1. **Homepage:** `https://usmechanical.com/`
+2. **About Page:** `https://usmechanical.com/about`
+3. **Careers Page:** `https://usmechanical.com/careers`
+4. **Portfolio Page:** `https://usmechanical.com/portfolio`
+5. **Contact Page:** `https://usmechanical.com/contact`
 
 **How to test:**
 
@@ -114,7 +114,7 @@ git push origin main
 ### 3.2 Verify Deployment
 
 1. Wait for Vercel to deploy (usually 1-2 minutes)
-2. Visit your production site: `https://usmechanicalllc.com`
+2. Visit your production site: `https://usmechanical.com`
 3. Test all new pages in production
 4. Verify navigation works
 
@@ -126,7 +126,7 @@ git push origin main
 
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Sign in with your Google account
-3. Select your property: `usmechanicalllc.com`
+3. Select your property: `usmechanical.com`
 
 **If not set up yet:**
 
@@ -155,20 +155,20 @@ For each new page:
 
 1. Click **"URL Inspection"** in left menu
 2. Enter the full URL:
-   - `https://usmechanicalllc.com/about`
-   - `https://usmechanicalllc.com/careers`
-   - `https://usmechanicalllc.com/portfolio`
+   - `https://usmechanical.com/about`
+   - `https://usmechanical.com/careers`
+   - `https://usmechanical.com/portfolio`
 3. Click **"Request Indexing"**
 4. Wait for confirmation (may take a few minutes)
 5. Repeat for each page
 
 **Priority Order (if limited to 10/day):**
 
-1. Homepage (re-index): `https://usmechanicalllc.com/`
-2. About page: `https://usmechanicalllc.com/about`
-3. Careers page: `https://usmechanicalllc.com/careers`
-4. Portfolio page: `https://usmechanicalllc.com/portfolio`
-5. Contact page: `https://usmechanicalllc.com/contact`
+1. Homepage (re-index): `https://usmechanical.com/`
+2. About page: `https://usmechanical.com/about`
+3. Careers page: `https://usmechanical.com/careers`
+4. Portfolio page: `https://usmechanical.com/portfolio`
+5. Contact page: `https://usmechanical.com/contact`
 
 ---
 
@@ -260,7 +260,7 @@ Google automatically generates sitelinks based on:
 
 **Solution:**
 
-1. Verify sitemap accessible: `https://usmechanicalllc.com/sitemap.xml`
+1. Verify sitemap accessible: `https://usmechanical.com/sitemap.xml`
 2. Check XML syntax is correct
 3. Ensure proper `<urlset>` tags
 4. Re-submit sitemap
@@ -328,8 +328,8 @@ Before marking complete, verify:
 **Your Current Setup:**
 
 - Verification file: `googlef1125308598c4431.html` ✅
-- Sitemap: `https://usmechanicalllc.com/sitemap.xml` ✅
-- Robots.txt: `https://usmechanicalllc.com/robots.txt` ✅
+- Sitemap: `https://usmechanical.com/sitemap.xml` ✅
+- Robots.txt: `https://usmechanical.com/robots.txt` ✅
 
 ---
 

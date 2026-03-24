@@ -27,7 +27,7 @@ const client = createClient({
 });
 
 // Use VITE_SITE_URL or SITE_URL from env (no trailing slash). Set when running: VITE_SITE_URL=https://yourdomain.com node generate-sitemap.mjs
-const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://usmechanicalllc.com').replace(/\/$/, '');
+const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://usmechanical.com').replace(/\/$/, '');
 const TODAY = new Date().toISOString().split('T')[0];
 
 async function generateSitemap() {
