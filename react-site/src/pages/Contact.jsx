@@ -19,6 +19,9 @@ const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   backgroundImage { asset-> { _id, url } }
 }`
 
+/** Fixed header clearance — keep in sync with other pages using pt-[180px] */
+const HEADER_OFFSET_PX = 180
+
 function Contact() {
   const { data: contactData, loading: contactLoading, error: contactError } = useSanityLive(CONTACT_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
@@ -230,11 +233,11 @@ function Contact() {
         url={`${getSiteUrl()}/contact`}
       />
       <Header />
-      <main className="min-h-screen bg-gray-900 pt-[180px]">
+      <main className="min-h-screen bg-gray-900">
         {(error || !contactData) && (
           <section
             id="contact"
-            className="relative w-full px-6 py-20"
+            className="relative w-full px-6 py-20 pt-[180px]"
           >
             <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">
               <div className="max-w-2xl px-6 text-center">
@@ -258,89 +261,112 @@ function Contact() {
 
         {contactData && (
           <>
-            {/* Full-width map band */}
-            <div className="w-full border-b border-white/10 bg-neutral-950">
+            {/* Full-viewport map (below fixed header) + gradient into dark section */}
+            <div
+              className="w-full bg-neutral-950"
+              style={{ paddingTop: HEADER_OFFSET_PX }}
+            >
               {contactData.offices && contactData.offices.length > 0 ? (
-                <>
-                  <div className="mx-auto flex max-w-6xl gap-1 px-4 pt-4 md:px-6">
-                    {contactData.offices.map((office, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => setActiveOfficeTab(index)}
-                        className={`flex-1 rounded-md px-3 py-2.5 text-sm font-semibold transition-all md:px-4 ${
-                          activeOfficeTab === index
-                            ? 'bg-white/15 text-white shadow-sm'
-                            : 'text-white/60 hover:text-white/80'
-                        }`}
-                      >
-                        {office.locationName}
-                      </button>
-                    ))}
+                <div
+                  className="relative w-full min-h-[320px] overflow-hidden"
+                  style={{ height: `calc(100svh - ${HEADER_OFFSET_PX}px)` }}
+                >
+                  <div className="absolute left-0 right-0 top-0 z-20 flex justify-center px-4 pt-3 md:px-6">
+                    <div className="flex w-full max-w-6xl gap-1 rounded-lg bg-black/50 p-1 shadow-lg backdrop-blur-md">
+                      {contactData.offices.map((office, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => setActiveOfficeTab(index)}
+                          className={`flex-1 rounded-md px-3 py-2.5 text-sm font-semibold transition-all md:px-4 ${
+                            activeOfficeTab === index
+                              ? 'bg-white/15 text-white shadow-sm'
+                              : 'text-white/70 hover:text-white'
+                          }`}
+                        >
+                          {office.locationName}
+                        </button>
+                      ))}
+                    </div>
                   </div>
+
+                  <AnimatePresence mode="wait">
+                    {contactData.offices.map((office, index) =>
+                      activeOfficeTab === index && office.address ? (
+                        <motion.div
+                          key={index}
+                          className="absolute inset-0 z-0"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <iframe
+                            title={`${office.locationName} location`}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0, display: 'block' }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            sandbox="allow-scripts allow-same-origin allow-popups"
+                            className="h-full w-full"
+                          />
+                        </motion.div>
+                      ) : null
+                    )}
+                  </AnimatePresence>
 
                   <div
-                    className="relative mt-3 w-full overflow-hidden"
-                    style={{ height: 'min(50vh, 560px)', minHeight: 300 }}
-                  >
-                    <AnimatePresence mode="wait">
-                      {contactData.offices.map((office, index) =>
-                        activeOfficeTab === index && office.address ? (
-                          <motion.div
-                            key={index}
-                            className="absolute inset-0"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                          >
-                            <iframe
-                              title={`${office.locationName} location`}
-                              src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
-                              width="100%"
-                              height="100%"
-                              style={{ border: 0, display: 'block' }}
-                              allowFullScreen
-                              loading="lazy"
-                              referrerPolicy="no-referrer-when-downgrade"
-                              sandbox="allow-scripts allow-same-origin allow-popups"
-                              className="h-full min-h-[300px] w-full"
-                            />
-                          </motion.div>
-                        ) : null
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {activeOffice && (
-                    <div className="mx-auto max-w-6xl space-y-1.5 px-4 py-5 md:px-6">
-                      {activeOffice.address && (
-                        <p className="text-sm text-white/90">{activeOffice.address}</p>
-                      )}
-                      <p className="text-white">
-                        Phone:{' '}
-                        <a
-                          href={`tel:${activeOffice.phone}`}
-                          className="text-blue-300 transition-colors hover:text-blue-200"
-                        >
-                          {activeOffice.phone}
-                        </a>
-                      </p>
-                      {activeOffice.fax && (
-                        <p className="text-white/80">Fax: {activeOffice.fax}</p>
-                      )}
-                    </div>
-                  )}
-                </>
+                    className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900 md:h-36"
+                    aria-hidden
+                  />
+                </div>
               ) : (
-                <div className="px-6 py-16 text-center text-white/70">
-                  No office locations available.
+                <div
+                  className="relative min-h-[40vh] w-full overflow-hidden"
+                  style={{ minHeight: 320 }}
+                >
+                  <div className="flex items-center justify-center px-6 py-16 text-white/70">
+                    No office locations available.
+                  </div>
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-b from-transparent to-gray-900 md:h-36"
+                    aria-hidden
+                  />
                 </div>
               )}
             </div>
 
-            <section id="contact" className="relative w-full px-6 py-16">
+            <section
+              id="contact"
+              className="relative w-full border-t border-white/5 bg-gray-900 px-6 pb-16 pt-10"
+            >
               <div className="relative z-10 mx-auto max-w-6xl">
+                {activeOffice && (
+                  <div className="mb-10 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-6 text-center md:px-8">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-white/50">
+                      Location
+                    </p>
+                    {activeOffice.address && (
+                      <p className="text-base text-white/90">{activeOffice.address}</p>
+                    )}
+                    <p className="mt-3 text-white">
+                      Phone:{' '}
+                      <a
+                        href={`tel:${activeOffice.phone}`}
+                        className="text-blue-300 transition-colors hover:text-blue-200"
+                      >
+                        {activeOffice.phone}
+                      </a>
+                    </p>
+                    {activeOffice.fax && (
+                      <p className="mt-1 text-white/75">Fax: {activeOffice.fax}</p>
+                    )}
+                  </div>
+                )}
+
                 <h1 className="section-title mb-6 text-center text-5xl text-white md:text-6xl">
                   {contactData.heroTitle || 'Contact Us'}
                 </h1>
