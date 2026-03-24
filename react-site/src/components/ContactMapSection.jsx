@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState, memo, Fragment } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { urlFor } from '../utils/sanity'
 
@@ -20,6 +20,15 @@ function officeTabButtonLabel(locationName) {
   if (!locationName) return ''
   const key = locationName.trim().toLowerCase()
   return OFFICE_TAB_LABEL[key] ?? locationName
+}
+
+/** Split tagline / addresses: use `|` in Sanity or separate lines */
+function affiliateDescriptionSegments(description) {
+  if (!description?.trim()) return []
+  const raw = description.trim()
+  const byPipe = raw.split('|').map(s => s.trim()).filter(Boolean)
+  if (byPipe.length > 1) return byPipe
+  return raw.split(/\n+/).map(s => s.trim()).filter(Boolean)
 }
 
 /**
@@ -155,40 +164,51 @@ function ContactMapSection() {
       </div>
 
       {activeOffice && affiliates && affiliates.length > 0 && (
-        <div className="border-t border-white/5 bg-black px-6 py-10">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 md:items-end">
-            {affiliates.map((affiliate, i) => (
-              <div
-                key={i}
-                className="flex max-w-md items-center gap-3 text-center md:max-w-sm md:text-right"
-              >
-                {affiliate.logo && urlFor(affiliate.logo) && (
-                  <img
-                    src={urlFor(affiliate.logo)
-                      .width(200)
-                      .quality(80)
-                      .auto('format')
-                      .url()}
-                    alt={affiliate.name || ''}
-                    className="h-10 shrink-0 object-contain md:h-11"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                <div className="min-w-0">
+        <div className="border-t border-white/5 bg-black px-4 py-5 md:px-8 md:py-6">
+          <div className="mx-auto flex max-w-6xl flex-col gap-5">
+            {affiliates.map((affiliate, i) => {
+              const segments = affiliateDescriptionSegments(affiliate.description)
+              return (
+                <div
+                  key={i}
+                  className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-snug md:justify-start md:gap-x-4 md:text-[15px]"
+                >
+                  <span
+                    className="inline-flex h-5 w-4 shrink-0 items-center justify-start"
+                    aria-hidden
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                  </span>
+                  <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 md:text-xs">
+                    Affiliate
+                  </span>
+                  {affiliate.logo && urlFor(affiliate.logo) && (
+                    <img
+                      src={urlFor(affiliate.logo)
+                        .width(200)
+                        .quality(80)
+                        .auto('format')
+                        .url()}
+                      alt={affiliate.name ? `${affiliate.name} logo` : ''}
+                      className="h-7 w-auto shrink-0 object-contain md:h-8"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
                   {affiliate.name && (
-                    <p className="text-sm font-semibold text-white md:text-base">
-                      {affiliate.name}
-                    </p>
+                    <span className="shrink-0 font-semibold text-white">{affiliate.name}</span>
                   )}
-                  {affiliate.description && (
-                    <p className="mt-1 text-xs leading-snug text-white/70 md:text-sm">
-                      {affiliate.description}
-                    </p>
-                  )}
+                  {segments.map((seg, j) => (
+                    <Fragment key={j}>
+                      <span className="text-neutral-500 select-none" aria-hidden>
+                        ·
+                      </span>
+                      <span className="min-w-0 text-neutral-400">{seg}</span>
+                    </Fragment>
+                  ))}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
