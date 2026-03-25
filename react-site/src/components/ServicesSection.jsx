@@ -131,7 +131,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
   const activeCard = cards.find(c => c.id === hoveredId) ?? cards[0]
 
   return (
-    <div ref={scrollRef} id="services" style={{ height: '200vh', position: 'relative' }}>
+    <div ref={scrollRef} id="services" style={{ height: '250vh', position: 'relative' }}>
       <div
         className="bg-transparent text-white"
         style={{
