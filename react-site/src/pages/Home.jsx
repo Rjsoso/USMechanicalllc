@@ -10,7 +10,6 @@ import SEO from '../components/SEO'
 import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
-import LogoLoopSection from '../components/LogoLoopSection'
 import ContactMapSection from '../components/ContactMapSection'
 import WhyUsSection from '../components/WhyUsSection'
 import { scrollToSection } from '../utils/scrollToSection'
@@ -254,7 +253,6 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />
-          <LogoLoopSection />
           <SafetySection data={aboutData} />
           <div className="bg-white px-6 py-16 text-center md:py-20">
             <p className="mb-4 text-lg font-medium text-neutral-500 md:text-xl">
