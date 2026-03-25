@@ -3,7 +3,8 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
-import AboutAndSafety from '../components/AboutAndSafety'
+import AboutSection from '../components/AboutSection'
+import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 import CompanyStats from '../components/CompanyStats'
@@ -248,12 +249,13 @@ export default function Home() {
           <HeroSection />
         </section>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
+          <AboutSection data={aboutData} />
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />
-          <AboutAndSafety data={aboutData} />
           <LogoLoopSection />
+          <SafetySection data={aboutData} />
           <div className="bg-neutral-950 px-6 py-16 text-center md:py-20">
             <p className="mb-4 text-lg font-medium text-white/70 md:text-xl">
               Ready to discuss your next project?
