@@ -20,6 +20,7 @@ import portfolioSection from '../schemaTypes/portfolioSection'
 import logoLoop from '../schemaTypes/logoLoop'
 import careers from '../schemaTypes/careers'
 import legalPage from '../schemaTypes/legalPage'
+import whyUs from '../schemaTypes/whyUs'
 
 export const schemaTypes = [
     ourServices,
@@ -42,4 +43,5 @@ export const schemaTypes = [
     logoLoop,
     careers,
     legalPage,
+    whyUs,
 ]

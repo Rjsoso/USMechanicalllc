@@ -11,6 +11,7 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import LogoLoopSection from '../components/LogoLoopSection'
 import ContactMapSection from '../components/ContactMapSection'
+import WhyUsSection from '../components/WhyUsSection'
 import { scrollToSection } from '../utils/scrollToSection'
 import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
@@ -247,12 +248,26 @@ export default function Home() {
           <HeroSection />
         </section>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
-          <AboutAndSafety data={aboutData} />
-
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
+          <WhyUsSection />
+          <AboutAndSafety data={aboutData} />
           <LogoLoopSection />
+          <div className="bg-neutral-950 px-6 py-16 text-center md:py-20">
+            <p className="mb-4 text-lg font-medium text-white/70 md:text-xl">
+              Ready to discuss your next project?
+            </p>
+            <button
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-3 text-base font-semibold text-neutral-950 transition-colors duration-200 hover:bg-white/90"
+            >
+              Contact Us
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
           <ContactMapSection />
         </div>
       </main>

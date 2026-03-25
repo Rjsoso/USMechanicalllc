@@ -18,7 +18,7 @@ const HEADER_QUERY = `*[_type == "headerSection"][0]{
 const defaultSections = [
   { label: 'COMPANY', links: [{ label: 'About Us', href: '#about', ariaLabel: null }, { label: 'Safety', href: '#safety', ariaLabel: null }] },
   { label: 'SERVICES', links: [{ label: 'Our Services', href: '#services', ariaLabel: null }, { label: 'Portfolio', href: '#portfolio', ariaLabel: null }] },
-  { label: 'CONNECT', links: [{ label: 'Careers at US Mechanical', href: '/careers', ariaLabel: null }, { label: 'Contact', href: '#contact', ariaLabel: null }] },
+  { label: 'CONNECT', links: [{ label: 'Careers at US Mechanical', href: '/careers', ariaLabel: null }, { label: 'Contact', href: '/contact', ariaLabel: null }] },
 ]
 
 const DrawerMenu = () => {
