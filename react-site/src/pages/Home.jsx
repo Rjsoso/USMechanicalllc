@@ -256,13 +256,13 @@ export default function Home() {
           <WhyUsSection />
           <LogoLoopSection />
           <SafetySection data={aboutData} />
-          <div className="bg-neutral-950 px-6 py-16 text-center md:py-20">
-            <p className="mb-4 text-lg font-medium text-white/70 md:text-xl">
+          <div className="bg-white px-6 py-16 text-center md:py-20">
+            <p className="mb-4 text-lg font-medium text-neutral-500 md:text-xl">
               Ready to discuss your next project?
             </p>
             <button
               onClick={() => navigate('/contact')}
-              className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-3 text-base font-semibold text-neutral-950 transition-colors duration-200 hover:bg-white/90"
+              className="inline-flex items-center gap-2 rounded-md bg-neutral-950 px-8 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-neutral-800"
             >
               Contact Us
               <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
