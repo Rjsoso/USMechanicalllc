@@ -249,11 +249,11 @@ export default function Home() {
         </section>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
+          <SafetySection data={aboutData} />
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />
-          <SafetySection data={aboutData} />
           <div className="bg-white px-6 py-16 text-center md:py-20">
             <p className="mb-4 text-lg font-medium text-neutral-500 md:text-xl">
               Ready to discuss your next project?
