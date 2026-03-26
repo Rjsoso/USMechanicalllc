@@ -26,6 +26,9 @@ const DeliveryMethodsPage = lazy(() => import('./pages/DeliveryMethodsPage'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 const Terms = lazy(() => import('./pages/Terms'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const CompanyBackground = lazy(() => import('./pages/CompanyBackground'))
+const SafetyRiskManagement = lazy(() => import('./pages/SafetyRiskManagement'))
+const Recognition = lazy(() => import('./pages/Recognition'))
 
 function App() {
   // Disable browser scroll restoration globally
@@ -54,6 +57,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            {/* Old-site parity routes */}
+            <Route path="/about/company-background" element={<CompanyBackground />} />
+            <Route path="/about/safety-and-risk-management" element={<SafetyRiskManagement />} />
+            <Route path="/about/recognition" element={<Recognition />} />
             <Route path="/careers" element={<CareersPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/contact" element={<Contact />} />

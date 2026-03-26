@@ -27,7 +27,7 @@ const client = createClient({
 });
 
 // Use VITE_SITE_URL or SITE_URL from env (no trailing slash). Set when running: VITE_SITE_URL=https://yourdomain.com node generate-sitemap.mjs
-const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://usmechanical.com').replace(/\/$/, '');
+const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://www.usmechanicalllc.com').replace(/\/$/, '');
 const TODAY = new Date().toISOString().split('T')[0];
 
 async function generateSitemap() {
@@ -95,6 +95,26 @@ async function generateSitemap() {
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Old-site About subpages (kept for parity) -->
+  <url>
+    <loc>${DOMAIN}/about/company-background</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${DOMAIN}/about/safety-and-risk-management</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${DOMAIN}/about/recognition</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <!-- Careers Page -->
@@ -176,9 +196,11 @@ ${projects?.map(project => `  <url>
     console.log(`📁 Saved to: ${sitemapPath}\n`);
     
     console.log('📋 URLs included:');
-    const totalUrls = 8 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
+    const totalUrls = 11 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
     console.log(`   - Total: ${totalUrls} URLs`);
-    console.log(`   - Core pages: 8 (home, contact, about, careers, portfolio, delivery-methods, privacy, terms)`);
+    console.log(
+      `   - Core pages: 11 (home, contact, about, about subpages, careers, portfolio, delivery-methods, privacy, terms)`
+    );
     console.log(`   - Services: ${services?.length || 0}`);
     console.log(`   - Categories: ${categories?.length || 0}`);
     console.log(`   - Projects: ${projects?.length || 0}\n`);

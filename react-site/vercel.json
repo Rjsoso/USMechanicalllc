@@ -10,6 +10,26 @@
       "destination": "/index.html"
     }
   ],
+  "redirects": [
+    { "source": "/contact.php", "destination": "/contact", "permanent": true },
+    { "source": "/contact/", "destination": "/contact", "permanent": true },
+    { "source": "/about/company-background.php", "destination": "/about/company-background", "permanent": true },
+    { "source": "/about/company-background/", "destination": "/about/company-background", "permanent": true },
+    { "source": "/about/safety-and-risk-management.php", "destination": "/about/safety-and-risk-management", "permanent": true },
+    { "source": "/about/safety-and-risk-management/", "destination": "/about/safety-and-risk-management", "permanent": true },
+    { "source": "/about/recognition.php", "destination": "/about/recognition", "permanent": true }
+    ,
+    { "source": "/about/recognition/", "destination": "/about/recognition", "permanent": true },
+    { "source": "/about/", "destination": "/about", "permanent": true },
+    { "source": "/careers.php", "destination": "/careers", "permanent": true },
+    { "source": "/careers/", "destination": "/careers", "permanent": true },
+    { "source": "/portfolio/", "destination": "/portfolio", "permanent": true },
+    { "source": "/services.php", "destination": "/#services", "permanent": true },
+    { "source": "/services/", "destination": "/#services", "permanent": true },
+    { "source": "/delivery-methods/", "destination": "/delivery-methods", "permanent": true },
+    { "source": "/privacy/", "destination": "/privacy", "permanent": true },
+    { "source": "/terms/", "destination": "/terms", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

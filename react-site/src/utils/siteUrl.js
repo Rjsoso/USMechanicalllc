@@ -4,7 +4,7 @@
  */
 const SITE_URL =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SITE_URL) ||
-  'https://usmechanical.com'
+  'https://www.usmechanicalllc.com'
 
 /** Base URL without trailing slash */
 export const getSiteUrl = () => SITE_URL.replace(/\/$/, '')
