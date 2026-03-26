@@ -205,9 +205,9 @@ function WhyUsSection() {
   }, [data])
 
   return (
-    <section className="relative bg-transparent py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="-mx-6 bg-black px-6 pb-14 md:pb-20">
+    <section className="relative">
+      <div className="bg-black pb-14 pt-20 md:pb-20 md:pt-28">
+        <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
               <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
@@ -221,17 +221,21 @@ function WhyUsSection() {
             </div>
           </FadeInNative>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {displayData.items.map((item, index) => (
-            <DrawInCard
-              key={item.title || index}
-              index={index}
-              icon={ICON_MAP[item.icon] || ICON_MAP.tool}
-              title={item.title}
-              description={item.description}
-            />
-          ))}
+      <div className="bg-transparent pb-20 pt-5 md:pb-28">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {displayData.items.map((item, index) => (
+              <DrawInCard
+                key={item.title || index}
+                index={index}
+                icon={ICON_MAP[item.icon] || ICON_MAP.tool}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
