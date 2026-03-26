@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
+import { useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -18,6 +19,7 @@ const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
 }`
 
 function Contact() {
+  const location = useLocation()
   const { data: contactData, loading: contactLoading, error: contactError } = useSanityLive(CONTACT_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
   })
@@ -39,6 +41,16 @@ function Contact() {
   const [rateLimitError, setRateLimitError] = useState(null)
   const [turnstileError, setTurnstileError] = useState(null)
   const turnstileWidgetIdRef = useRef(null)
+
+  // If we navigated here from a CTA, scroll straight to the form.
+  useEffect(() => {
+    if (location.state?.scrollTo !== 'contact-form') return
+    const el = document.getElementById('contact-form')
+    if (!el) return
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 0)
+  }, [location.state?.scrollTo])
 
   useEffect(() => {
     if (!contactData) return

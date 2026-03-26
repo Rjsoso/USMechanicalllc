@@ -135,14 +135,19 @@ function HeroSection() {
               <button
                 onClick={() => {
                   const raw = (heroData.buttonLink || '#contact').trim()
+
+                  // "Request a quote" should always land on the real contact form page,
+                  // even if the CMS value is "#contact" (old-site behavior).
                   if (raw === '/contact' || raw === '#contact') {
-                    navigateToSection('contact', navigate, location.pathname)
+                    navigate('/contact', { state: { scrollTo: 'contact-form' } })
                     return
                   }
+
                   if (raw.startsWith('/') && raw.length > 1) {
                     navigate(raw)
                     return
                   }
+
                   const sectionId = raw.replace(/^#/, '')
                   handleButtonClick(sectionId)
                 }}
