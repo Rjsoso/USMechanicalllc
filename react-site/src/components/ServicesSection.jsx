@@ -64,7 +64,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
 
   if (loading || servicesData === null) {
     return (
-      <div id="services" className="bg-neutral-950 py-20">
+      <div id="services" className="bg-black py-20">
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-center py-12">
           <p className="text-white/70 text-lg">Loading services…</p>
         </div>
@@ -113,7 +113,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
   return (
     <section
       id="services"
-      className="bg-neutral-950 py-20 text-white md:py-28"
+      className="bg-black py-20 text-white md:py-28"
       style={{
         opacity: navigatingTo ? 0 : 1,
         transition: 'opacity 0.2s ease',

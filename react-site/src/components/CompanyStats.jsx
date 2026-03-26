@@ -129,7 +129,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
   return (
     <section
       ref={sectionRef}
-      className="w-full bg-neutral-950 py-16 xl:py-12 2xl:py-10"
+      className="w-full bg-black py-16 xl:py-12 2xl:py-10"
     >
       <div className="mx-auto max-w-6xl text-center">
         {statsData.title && (
