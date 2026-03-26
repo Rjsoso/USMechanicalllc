@@ -14,11 +14,11 @@
 }
 
 .draw-in-card--visible {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 1);
 }
 
 .draw-in-card--settled:hover {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 1);
 }
 
 /* === SVG Border Overlay === */

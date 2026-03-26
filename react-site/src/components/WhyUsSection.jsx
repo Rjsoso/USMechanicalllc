@@ -207,18 +207,20 @@ function WhyUsSection() {
   return (
     <section className="relative bg-transparent py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <FadeInNative>
-          <div className="mb-14 text-center md:mb-20">
-            <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
-              {displayData.sectionTitle}
-            </h2>
-            {displayData.sectionSubtitle && (
-              <p className="mx-auto max-w-2xl text-lg text-white/70">
-                {displayData.sectionSubtitle}
-              </p>
-            )}
-          </div>
-        </FadeInNative>
+        <div className="-mx-6 bg-black px-6 pb-14 md:pb-20">
+          <FadeInNative>
+            <div className="text-center">
+              <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
+                {displayData.sectionTitle}
+              </h2>
+              {displayData.sectionSubtitle && (
+                <p className="mx-auto max-w-2xl text-lg text-white/70">
+                  {displayData.sectionSubtitle}
+                </p>
+              )}
+            </div>
+          </FadeInNative>
+        </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {displayData.items.map((item, index) => (
