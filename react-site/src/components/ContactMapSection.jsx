@@ -143,7 +143,8 @@ function ContactMapSection() {
             )}
 
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-b from-transparent via-black/55 to-black md:h-40"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
+              style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.75) 60%, black 100%)' }}
               aria-hidden
             />
           </div>
@@ -156,7 +157,8 @@ function ContactMapSection() {
               No office locations available.
             </div>
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-b from-transparent via-black/55 to-black md:h-40"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
+              style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.75) 60%, black 100%)' }}
               aria-hidden
             />
           </div>
@@ -164,7 +166,7 @@ function ContactMapSection() {
       </div>
 
       {activeOffice && affiliates && affiliates.length > 0 && (
-        <div className="border-t border-white/5 bg-black px-4 py-5 md:px-8 md:py-6">
+        <div className="bg-black px-4 py-5 md:px-8 md:py-6">
           <div className="mx-auto flex max-w-6xl flex-col gap-5">
             {affiliates.map((affiliate, i) => {
               const segments = affiliateDescriptionSegments(affiliate.description)
