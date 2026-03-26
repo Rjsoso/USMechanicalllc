@@ -225,7 +225,7 @@ function Contact() {
       />
       <Header />
       <main className="min-h-screen bg-white">
-        {(error || !contactData) && (
+        {!contactLoading && (error || !contactData) && (
           <section
             className="relative w-full px-6 py-20 pt-[180px]"
           >
