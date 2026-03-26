@@ -174,10 +174,10 @@ function DrawInCard({ index, icon, title, description }) {
       <div className="draw-in-card__icon mb-4 inline-flex h-10 w-10 items-center justify-center text-red-500">
         {icon}
       </div>
-      <h3 className="draw-in-card__title mb-2 text-lg font-bold text-white">
+      <h3 className="draw-in-card__title mb-2 text-lg font-bold text-gray-900">
         {title}
       </h3>
-      <p className="draw-in-card__description text-sm leading-relaxed text-white/60">
+      <p className="draw-in-card__description text-sm leading-relaxed text-gray-600">
         {description}
       </p>
     </div>
