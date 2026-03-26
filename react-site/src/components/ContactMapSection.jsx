@@ -50,7 +50,7 @@ function ContactMapSection() {
     return (
       <section
         id="contact"
-        className="scroll-mt-[5.5rem] border-t border-white/10 bg-neutral-950"
+        className="scroll-mt-[5.5rem] bg-black"
         aria-label="Contact"
       >
         <div className="flex min-h-[200px] items-center justify-center px-6 py-16 text-white/60">
@@ -63,8 +63,8 @@ function ContactMapSection() {
   return (
     <section
       id="contact"
-      className="scroll-mt-[5.5rem] border-t border-white/10 bg-neutral-950"
-      aria-label="Contact locations"
+        className="scroll-mt-[5.5rem] bg-black"
+        aria-label="Contact locations"
     >
       <div className="w-full">
         {offices && offices.length > 0 ? (
