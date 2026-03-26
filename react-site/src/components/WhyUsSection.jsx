@@ -1,6 +1,7 @@
-import { useMemo, memo } from 'react'
+import { useMemo, useRef, useState, useEffect, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
+import './WhyUsSection.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
   _id,
@@ -89,6 +90,90 @@ const DEFAULT_ITEMS = [
   },
 ]
 
+function DrawInCard({ index, icon, title, description }) {
+  const cardRef = useRef(null)
+  const [dims, setDims] = useState({ w: 0, h: 0 })
+  const [isVisible, setIsVisible] = useState(false)
+  const [isSettled, setIsSettled] = useState(false)
+
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      const { width, height } = el.getBoundingClientRect()
+      setDims({ w: Math.round(width), h: Math.round(height) })
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+    let triggered = false
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !triggered) {
+          triggered = true
+          io.disconnect()
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                setIsVisible(true)
+              })
+            })
+          }, index * 150)
+        }
+      },
+      { threshold: 0.15, rootMargin: '50px 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [index])
+
+  useEffect(() => {
+    if (!isVisible) return
+    const timer = setTimeout(() => setIsSettled(true), 1400)
+    return () => clearTimeout(timer)
+  }, [isVisible])
+
+  const cls = [
+    'draw-in-card',
+    isVisible && 'draw-in-card--visible',
+    isSettled && 'draw-in-card--settled',
+  ].filter(Boolean).join(' ')
+
+  return (
+    <div ref={cardRef} className={cls}>
+      {dims.w > 0 && (
+        <svg className="draw-in-card__border" aria-hidden="true">
+          <rect
+            x="0.5"
+            y="0.5"
+            width={dims.w - 1}
+            height={dims.h - 1}
+            rx="12"
+            ry="12"
+            fill="none"
+            strokeWidth="1"
+            pathLength="1"
+            strokeDasharray="1"
+          />
+        </svg>
+      )}
+      <div className="draw-in-card__icon mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-red-600/10 text-red-500">
+        {icon}
+      </div>
+      <h3 className="draw-in-card__title mb-2 text-lg font-bold text-white">
+        {title}
+      </h3>
+      <p className="draw-in-card__description text-sm leading-relaxed text-white/60">
+        {description}
+      </p>
+    </div>
+  )
+}
+
 function WhyUsSection() {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
     listenFilter: `*[_type == "whyUs"]`,
@@ -127,19 +212,13 @@ function WhyUsSection() {
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {displayData.items.map((item, index) => (
-            <FadeInNative key={item.title || index} delay={0.05 * index}>
-              <div className="group rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 transition-colors duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] md:p-8">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-red-600/10 text-red-500">
-                  {ICON_MAP[item.icon] || ICON_MAP.tool}
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-white">
-                  {item.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/60">
-                  {item.description}
-                </p>
-              </div>
-            </FadeInNative>
+            <DrawInCard
+              key={item.title || index}
+              index={index}
+              icon={ICON_MAP[item.icon] || ICON_MAP.tool}
+              title={item.title}
+              description={item.description}
+            />
           ))}
         </div>
       </div>

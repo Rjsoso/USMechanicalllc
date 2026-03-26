@@ -1,0 +1,105 @@
+/* === Card Container === */
+.draw-in-card {
+  position: relative;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background: transparent;
+  transition: background-color 0.4s ease;
+}
+
+@media (min-width: 768px) {
+  .draw-in-card {
+    padding: 2rem;
+  }
+}
+
+.draw-in-card--visible {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.draw-in-card--settled:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* === SVG Border Overlay === */
+.draw-in-card__border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 0px transparent);
+  transition: filter 0.6s ease;
+}
+
+.draw-in-card--visible .draw-in-card__border {
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4));
+}
+
+.draw-in-card--settled .draw-in-card__border {
+  filter: none;
+  transition: filter 0.6s ease;
+}
+
+/* SVG rect stroke */
+.draw-in-card__border rect {
+  stroke: rgba(239, 68, 68, 0.5);
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.draw-in-card--visible:not(.draw-in-card--settled) .draw-in-card__border rect {
+  will-change: stroke-dashoffset;
+}
+
+.draw-in-card--visible .draw-in-card__border rect {
+  stroke-dashoffset: 0;
+}
+
+.draw-in-card--settled .draw-in-card__border rect {
+  stroke: rgba(255, 255, 255, 0.08);
+  transition: stroke 0.6s ease;
+}
+
+.draw-in-card--settled:hover .draw-in-card__border rect {
+  stroke: rgba(255, 255, 255, 0.15);
+  transition: stroke 0.3s ease;
+}
+
+/* === Content Reveal === */
+.draw-in-card__icon {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.draw-in-card--visible .draw-in-card__icon {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.4s;
+}
+
+.draw-in-card__title {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.draw-in-card--visible .draw-in-card__title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s;
+}
+
+.draw-in-card__description {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.draw-in-card--visible .draw-in-card__description {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.9s;
+}
