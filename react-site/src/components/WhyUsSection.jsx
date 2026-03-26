@@ -23,42 +23,40 @@ const ICON_MAP = {
     </svg>
   ),
   shield: (
-    // Hard hat — construction safety
+    // Hard hat — construction safety (dome + brim + ridge)
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M2 18h20" />
-      <path d="M4 18v-1a8 8 0 0 1 16 0v1" />
-      <path d="M12 5V2" />
-      <path d="M8 14h8" />
+      <path d="M2 19h20" />
+      <path d="M4 19a8 8 0 0 1 16 0" />
+      <path d="M12 5v6" />
     </svg>
   ),
   map: (
-    // Certificate/stamp — official licensing
+    // Award badge — official licensing (circle + checkmark + ribbons)
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <rect x="3" y="3" width="18" height="14" rx="1" />
-      <path d="M3 8h18" />
-      <path d="M8 21l4-4 4 4" />
-      <path d="M12 17V12" />
-      <path d="M9 12l2 2 4-4" />
+      <circle cx="12" cy="9" r="6" />
+      <polyline points="9 9 11 11 15 7" />
+      <polyline points="8 15 6 22 12 19 18 22 16 15" />
     </svg>
   ),
   dollar: (
-    // Handshake — trust and partnership
+    // Columns — financial strength (pediment + columns + base)
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M11 17l-1.5 1.5a2.12 2.12 0 0 1-3-3L10 12l2-2" />
-      <path d="M14 7l1.5-1.5a2.12 2.12 0 0 1 3 3L15 12l-2 2" />
-      <path d="M7 8H3v4l4.5 4.5" />
-      <path d="M17 16h4v-4l-4.5-4.5" />
+      <path d="M2 20h20" />
+      <path d="M2 10l10-6 10 6" />
+      <line x1="2" y1="10" x2="22" y2="10" />
+      <line x1="6" y1="10" x2="6" y2="20" />
+      <line x1="10" y1="10" x2="10" y2="20" />
+      <line x1="14" y1="10" x2="14" y2="20" />
+      <line x1="18" y1="10" x2="18" y2="20" />
     </svg>
   ),
   tool: (
-    // Blueprint/drafting — design-build process
+    // Drafting compass — design-build (pivot + legs + crossbar)
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M4 2v20" />
-      <path d="M4 4h16v14H4" />
-      <path d="M8 8h4" />
-      <path d="M8 12h8" />
-      <path d="M4 2l2 2-2 2" />
-      <path d="M4 18l2-2-2-2" />
+      <circle cx="12" cy="5" r="2" />
+      <path d="M12 7l-6 14" />
+      <path d="M12 7l6 14" />
+      <path d="M8.5 15h7" />
     </svg>
   ),
   building: (
@@ -176,7 +174,7 @@ function DrawInCard({ index, icon, title, description }) {
           />
         </svg>
       )}
-      <div className="draw-in-card__icon mb-4 inline-flex h-12 w-12 items-center justify-center rounded-none border border-red-500/30 text-red-500">
+      <div className="draw-in-card__icon mb-4 inline-flex h-10 w-10 items-center justify-center text-red-500">
         {icon}
       </div>
       <h3 className="draw-in-card__title mb-2 text-lg font-bold text-white">
