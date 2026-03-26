@@ -16,43 +16,58 @@ const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
 
 const ICON_MAP = {
   clock: (
+    // Gear/cog — mechanical industry
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
     </svg>
   ),
   shield: (
+    // Hard hat — construction safety
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M2 18h20" />
+      <path d="M4 18v-1a8 8 0 0 1 16 0v1" />
+      <path d="M12 5V2" />
+      <path d="M8 14h8" />
     </svg>
   ),
   map: (
+    // Certificate/stamp — official licensing
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-      <circle cx="12" cy="10" r="3" />
+      <rect x="3" y="3" width="18" height="14" rx="1" />
+      <path d="M3 8h18" />
+      <path d="M8 21l4-4 4 4" />
+      <path d="M12 17V12" />
+      <path d="M9 12l2 2 4-4" />
     </svg>
   ),
   dollar: (
+    // Handshake — trust and partnership
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <line x1="12" y1="1" x2="12" y2="23" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      <path d="M11 17l-1.5 1.5a2.12 2.12 0 0 1-3-3L10 12l2-2" />
+      <path d="M14 7l1.5-1.5a2.12 2.12 0 0 1 3 3L15 12l-2 2" />
+      <path d="M7 8H3v4l4.5 4.5" />
+      <path d="M17 16h4v-4l-4.5-4.5" />
     </svg>
   ),
   tool: (
+    // Blueprint/drafting — design-build process
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      <path d="M4 2v20" />
+      <path d="M4 4h16v14H4" />
+      <path d="M8 8h4" />
+      <path d="M8 12h8" />
+      <path d="M4 2l2 2-2 2" />
+      <path d="M4 18l2-2-2-2" />
     </svg>
   ),
   building: (
+    // Two map pins — two regional office locations
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-      <path d="M9 22v-4h6v4" />
-      <line x1="8" y1="6" x2="10" y2="6" />
-      <line x1="14" y1="6" x2="16" y2="6" />
-      <line x1="8" y1="10" x2="10" y2="10" />
-      <line x1="14" y1="10" x2="16" y2="10" />
-      <line x1="8" y1="14" x2="10" y2="14" />
-      <line x1="14" y1="14" x2="16" y2="14" />
+      <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+      <path d="M9 11c0 4-5 8-5 8h10s-5-4-5-8z" />
+      <path d="M17 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+      <path d="M17 8c0 3-3.5 5.5-3.5 5.5h7S17 11 17 8z" />
     </svg>
   ),
 }
