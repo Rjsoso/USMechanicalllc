@@ -223,7 +223,7 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="bg-transparent pb-20 pt-5 md:pb-28">
+      <div className="bg-transparent py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {displayData.items.map((item, index) => (
