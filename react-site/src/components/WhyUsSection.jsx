@@ -23,11 +23,10 @@ const ICON_MAP = {
     </svg>
   ),
   shield: (
-    // Hard hat — construction safety (dome + brim + ridge)
+    // Shield with checkmark — safety verified
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <path d="M2 19h20" />
-      <path d="M4 19a8 8 0 0 1 16 0" />
-      <path d="M12 5v6" />
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <polyline points="9 12 11 14 15 10" />
     </svg>
   ),
   map: (
@@ -51,12 +50,10 @@ const ICON_MAP = {
     </svg>
   ),
   tool: (
-    // Drafting compass — design-build (pivot + legs + crossbar)
+    // Pencil — design/drafting
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
-      <circle cx="12" cy="5" r="2" />
-      <path d="M12 7l-6 14" />
-      <path d="M12 7l6 14" />
-      <path d="M8.5 15h7" />
+      <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
+      <path d="M15 5l4 4" />
     </svg>
   ),
   building: (
