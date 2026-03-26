@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, memo } from 'react'
-import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -52,7 +51,7 @@ function Contact() {
 
       const widgetId = window.turnstile.render('#turnstile-container', {
         sitekey: siteKey,
-        theme: 'dark',
+        theme: 'light',
       })
       turnstileWidgetIdRef.current = widgetId
     }
@@ -225,7 +224,7 @@ function Contact() {
         url={`${getSiteUrl()}/contact`}
       />
       <Header />
-      <main className="min-h-screen bg-gray-900">
+      <main className="min-h-screen bg-white">
         {(error || !contactData) && (
           <section
             className="relative w-full px-6 py-20 pt-[180px]"
@@ -233,12 +232,12 @@ function Contact() {
             <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">
               <div className="max-w-2xl px-6 text-center">
                 <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
-                <p className="mb-4 text-white">{error || 'No contact page data found.'}</p>
-                <p className="text-sm text-gray-300">
+                <p className="mb-4 text-gray-800">{error || 'No contact page data found.'}</p>
+                <p className="text-sm text-gray-600">
                   Please create a &quot;Contact Page&quot; document in{' '}
                   <a
                     href="https://usmechanical.sanity.studio"
-                    className="text-blue-400 underline"
+                    className="text-gray-700 underline hover:text-gray-900"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -256,53 +255,45 @@ function Contact() {
             className="relative w-full px-6 pb-16 pt-[180px]"
           >
             <div className="relative z-10 mx-auto max-w-6xl">
-              <p className="mb-8 text-center text-sm text-white/60">
-                Office locations and map:{' '}
-                <Link to="/#contact" className="text-blue-300 underline hover:text-blue-200">
-                  view on the home page
-                </Link>
-                .
-              </p>
-
-              <h1 className="section-title mb-6 text-center text-5xl text-white md:text-6xl">
+              <h1 className="section-title mb-6 text-center text-5xl text-gray-900 md:text-6xl">
                 {contactData.heroTitle || 'Contact Us'}
               </h1>
 
-              <p className="mb-12 text-center text-lg text-white/90">
+              <p className="mb-12 text-center text-lg text-gray-700">
                 {contactData.description}
               </p>
 
               <div className="mx-auto max-w-2xl">
-                <div className="min-w-0 rounded-xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-sm">
-                  <h3 className="mb-4 text-2xl font-semibold text-white">
+                <div className="min-w-0 rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+                  <h3 className="mb-4 text-2xl font-semibold text-gray-900">
                     {contactData.formSettings?.headline || 'Send Us a Message'}
                   </h3>
 
                   {formSuccess && (
                     <div className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4">
-                      <p className="font-semibold text-white">✓ Message sent successfully!</p>
-                      <p className="mt-1 text-sm text-white/80">We&apos;ll get back to you soon.</p>
+                      <p className="font-semibold text-gray-900">✓ Message sent successfully!</p>
+                      <p className="mt-1 text-sm text-gray-700">We&apos;ll get back to you soon.</p>
                     </div>
                   )}
 
                   {rateLimitError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Rate Limit Exceeded</p>
-                      <p className="mt-1 text-sm text-white/80">{rateLimitError}</p>
+                      <p className="font-semibold text-gray-900">⚠ Rate Limit Exceeded</p>
+                      <p className="mt-1 text-sm text-gray-700">{rateLimitError}</p>
                     </div>
                   )}
 
                   {formError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Error</p>
-                      <p className="mt-1 text-sm text-white/80">{formError}</p>
+                      <p className="font-semibold text-gray-900">⚠ Error</p>
+                      <p className="mt-1 text-sm text-gray-700">{formError}</p>
                     </div>
                   )}
 
                   {turnstileError && (
                     <div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4">
-                      <p className="font-semibold text-white">⚠ Verification Required</p>
-                      <p className="mt-1 text-sm text-white/80">{turnstileError}</p>
+                      <p className="font-semibold text-gray-900">⚠ Verification Required</p>
+                      <p className="mt-1 text-sm text-gray-700">{turnstileError}</p>
                     </div>
                   )}
 
@@ -315,11 +306,11 @@ function Contact() {
                         required
                         value={formData.name}
                         onChange={handleInputChange}
-                        className={`w-full border ${formErrors.name ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        className={`w-full rounded-lg border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="100"
                       />
                       {formErrors.name && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.name}</p>
+                        <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
                       )}
                     </div>
 
@@ -331,11 +322,11 @@ function Contact() {
                         required
                         value={formData.email}
                         onChange={handleInputChange}
-                        className={`w-full border ${formErrors.email ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        className={`w-full rounded-lg border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="254"
                       />
                       {formErrors.email && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.email}</p>
+                        <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
                       )}
                     </div>
 
@@ -346,11 +337,11 @@ function Contact() {
                         placeholder="Phone (optional)"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className={`w-full border ${formErrors.phone ? 'border-red-500' : 'border-white/30'} rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        className={`w-full rounded-lg border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="20"
                       />
                       {formErrors.phone && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.phone}</p>
+                        <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>
                       )}
                     </div>
 
@@ -361,13 +352,13 @@ function Contact() {
                         required
                         value={formData.message}
                         onChange={handleInputChange}
-                        className={`w-full border ${formErrors.message ? 'border-red-500' : 'border-white/30'} h-32 resize-none rounded-lg bg-white/10 p-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50`}
+                        className={`w-full resize-none rounded-lg border ${formErrors.message ? 'border-red-500' : 'border-gray-300'} h-32 bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="5000"
                       />
                       {formErrors.message && (
-                        <p className="mt-1 text-sm text-red-300">{formErrors.message}</p>
+                        <p className="mt-1 text-sm text-red-600">{formErrors.message}</p>
                       )}
-                      <p className="mt-1 text-xs text-white/60">
+                      <p className="mt-1 text-xs text-gray-500">
                         {formData.message.length}/5000 characters
                       </p>
                     </div>
@@ -381,7 +372,7 @@ function Contact() {
                     <button
                       type="submit"
                       disabled={formSubmitting || rateLimitError}
-                      className={`rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 ${
+                      className={`rounded-lg bg-black py-3 font-semibold text-white transition hover:bg-neutral-900 ${
                         formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
                       }`}
                     >
@@ -389,7 +380,7 @@ function Contact() {
                     </button>
 
                     {remainingSubmissions < 3 && !rateLimitError && (
-                      <p className="text-center text-xs text-white/60">
+                      <p className="text-center text-xs text-gray-500">
                         {remainingSubmissions > 0
                           ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
                           : 'Maximum submissions reached for this hour'}
