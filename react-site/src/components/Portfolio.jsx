@@ -22,7 +22,7 @@ function Portfolio({ data: portfolioDataProp }) {
   return (
     <section
       id="portfolio"
-      className="bg-black pb-0 pt-24 text-white"
+      className="bg-black pb-0 pt-12 text-white"
       style={{ position: 'relative', zIndex: 10 }}
     >
       {/* Portfolio Title */}
