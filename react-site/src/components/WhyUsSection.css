@@ -1,7 +1,7 @@
 /* === Card Container === */
 .draw-in-card {
   position: relative;
-  border-radius: 0.75rem;
+  border-radius: 0.125rem;
   padding: 1.5rem;
   background: transparent;
   transition: background-color 0.4s ease;
