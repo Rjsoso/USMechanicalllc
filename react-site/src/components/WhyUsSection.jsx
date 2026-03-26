@@ -205,7 +205,7 @@ function WhyUsSection() {
   }, [data])
 
   return (
-    <section className="relative bg-black py-20 md:py-28">
+    <section className="relative bg-transparent py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <FadeInNative>
           <div className="mb-14 text-center md:mb-20">
