@@ -5,39 +5,6 @@ import ErrorBoundary from './components/ErrorBoundary'
 import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
 
-function RouteLoadingFallback() {
-  return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
-        color: '#ffffff',
-      }}
-      aria-live="polite"
-      aria-busy="true"
-    >
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            width: 46,
-            height: 46,
-            border: '3px solid rgba(255,255,255,0.12)',
-            borderTopColor: '#ffffff',
-            borderRadius: '50%',
-            margin: '0 auto 16px',
-            animation: 'routeSpinner 0.9s linear infinite',
-          }}
-        />
-        <p style={{ margin: 0, fontSize: 15, fontWeight: 600, opacity: 0.9 }}>Loading…</p>
-      </div>
-      <style>{`@keyframes routeSpinner { to { transform: rotate(360deg); } }`}</style>
-    </div>
-  )
-}
-
 function ScrollToTop() {
   const location = useLocation()
   useEffect(() => {
@@ -86,7 +53,7 @@ function App() {
         {/* Add Schema.org structured data for SEO */}
         <StructuredData />
 
-        <Suspense fallback={<RouteLoadingFallback />}>
+        <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

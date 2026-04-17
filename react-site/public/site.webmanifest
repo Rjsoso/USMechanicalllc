@@ -4,14 +4,14 @@
   "description": "Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists.",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "theme_color": "#000000",

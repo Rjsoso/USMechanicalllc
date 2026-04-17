@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
-import PageShell from '../components/PageShell'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -76,9 +77,10 @@ export default function Privacy() {
         description="Privacy policy for U.S. Mechanical LLC. Learn how we collect, use, and protect your information."
         url={`${getSiteUrl()}/privacy`}
       />
-      <PageShell
-        Main={motion.main}
+      <Header />
+      <motion.main
         className="min-h-screen bg-white text-black"
+        style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -114,7 +116,8 @@ export default function Privacy() {
             <PrivacyFallbackContent />
           )}
         </div>
-      </PageShell>
+      </motion.main>
+      <Footer />
     </>
   )
 }

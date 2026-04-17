@@ -158,14 +158,14 @@ function DrawInCard({ index, icon, title, description }) {
       {dims.w > 0 && (
         <svg className="draw-in-card__border" aria-hidden="true">
           <rect
-            x="1"
-            y="1"
-            width={dims.w - 2}
-            height={dims.h - 2}
+            x="0.5"
+            y="0.5"
+            width={dims.w - 1}
+            height={dims.h - 1}
             rx="2"
             ry="2"
             fill="none"
-            strokeWidth="2"
+            strokeWidth="1"
             pathLength="1"
             strokeDasharray="1"
           />

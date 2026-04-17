@@ -1,113 +1,40 @@
 import { Resend } from 'resend'
 
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000 // 10 minutes
-const RATE_LIMIT_MAX = 10
-const ipBuckets = new Map()
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed', code: 'method_not_allowed' })
+    return res.status(405).json({ error: 'Method not allowed' })
   }
 
   const { name, email, phone, message, 'cf-turnstile-response': token } = req.body
 
-  const ip =
-    (req.headers['x-forwarded-for']?.split(',')?.[0] || req.socket?.remoteAddress || '').trim() ||
-    'unknown'
-  const now = Date.now()
-  const bucket = ipBuckets.get(ip) || []
-  const recent = bucket.filter(ts => now - ts < RATE_LIMIT_WINDOW_MS)
-  if (recent.length >= RATE_LIMIT_MAX) {
-    ipBuckets.set(ip, recent)
-    return res.status(429).json({
-      error: 'Too many requests. Please try again later.',
-      code: 'rate_limited',
-    })
-  }
-  recent.push(now)
-  ipBuckets.set(ip, recent)
-
   const secretKey = process.env.TURNSTILE_SECRET_KEY
   if (!secretKey) {
-    return res
-      .status(500)
-      .json({ error: 'Server configuration error: missing secret key', code: 'server_misconfigured' })
+    return res.status(500).json({ error: 'Server configuration error: missing secret key' })
   }
 
   if (!token) {
-    return res.status(400).json({
-      error: 'Verification token missing. Please complete the verification.',
-      code: 'turnstile_missing',
-    })
+    return res.status(400).json({ error: 'Verification token missing. Please complete the verification.' })
   }
 
-  const normalizedName = normalizeText(name, 100)
-  const normalizedEmail = normalizeEmail(email)
-  const normalizedPhone = normalizeText(phone, 20)
-  const normalizedMessage = normalizeText(message, 5000)
-
-  const validationError = validatePayload({
-    name: normalizedName,
-    email: normalizedEmail,
-    phone: normalizedPhone,
-    message: normalizedMessage,
-  })
-  if (validationError) {
-    return res.status(400).json({
-      error: validationError.message,
-      code: validationError.code,
-    })
-  }
-
-  // Validate Turnstile token server-side (Cloudflare recommends form-encoded)
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 5000)
-    const body = new URLSearchParams({
+  // Validate Turnstile token server-side
+  const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
       secret: secretKey,
       response: token,
-    })
-    if (ip && ip !== 'unknown') {
-      body.set('remoteip', ip)
-    }
+    }),
+  })
 
-    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body,
-      signal: controller.signal,
-    })
-    clearTimeout(timeoutId)
+  const verifyData = await verifyRes.json()
 
-    if (!verifyRes.ok) {
-      return res.status(502).json({
-        error: 'Verification service unavailable. Please try again.',
-        code: 'turnstile_unavailable',
-      })
-    }
-
-    const verifyData = await verifyRes.json()
-    if (!verifyData.success) {
-      return res.status(400).json({
-        error: 'Verification failed. Please refresh and try again.',
-        code: 'turnstile_failed',
-      })
-    }
-  } catch (err) {
-    const isAbort = err && typeof err === 'object' && err.name === 'AbortError'
-    return res.status(502).json({
-      error: isAbort
-        ? 'Verification timed out. Please try again.'
-        : 'Verification service unavailable. Please try again.',
-      code: isAbort ? 'turnstile_timeout' : 'turnstile_unavailable',
-    })
+  if (!verifyData.success) {
+    return res.status(400).json({ error: 'Verification failed. Please refresh and try again.' })
   }
 
   const resendKey = process.env.RESEND_API_KEY
   if (!resendKey) {
-    return res
-      .status(500)
-      .json({ error: 'Server configuration error: email not configured', code: 'server_misconfigured' })
+    return res.status(500).json({ error: 'Server configuration error: email not configured' })
   }
 
   const toEmail = process.env.CONTACT_FORM_TO_EMAIL || 'info@usmechanicalllc.com'
@@ -133,19 +60,19 @@ export default async function handler(req, res) {
       <table style="width: 100%; border-collapse: collapse;">
         <tr>
           <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 600; width: 100px;">Name</td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${escapeHtml(normalizedName)}</td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${escapeHtml(name)}</td>
         </tr>
         <tr>
           <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 600;">Email</td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><a href="mailto:${escapeHtml(normalizedEmail)}" style="color: #2563eb;">${escapeHtml(normalizedEmail)}</a></td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><a href="mailto:${escapeHtml(email)}" style="color: #2563eb;">${escapeHtml(email)}</a></td>
         </tr>
         <tr>
           <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 600;">Phone</td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${escapeHtml(normalizedPhone || '—')}</td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${escapeHtml(phone || '—')}</td>
         </tr>
         <tr>
           <td style="padding: 10px 0; vertical-align: top; font-weight: 600;">Message</td>
-          <td style="padding: 10px 0; white-space: pre-wrap;">${escapeHtml(normalizedMessage)}</td>
+          <td style="padding: 10px 0; white-space: pre-wrap;">${escapeHtml(message)}</td>
         </tr>
       </table>
       <p style="margin: 20px 0 0; font-size: 13px; color: #64748b;">Reply to this email to respond directly to the sender.</p>
@@ -158,54 +85,17 @@ export default async function handler(req, res) {
   const { data, error } = await resend.emails.send({
     from: fromEmail,
     to: [toEmail],
-    replyTo: normalizedEmail,
+    replyTo: email,
     subject: `Contact form: ${(name || 'Someone').slice(0, 50)}`,
     html,
   })
 
   if (error) {
     console.error('Resend error:', error)
-    return res.status(500).json({ error: 'Failed to send message. Please try again later.', code: 'send_failed' })
+    return res.status(500).json({ error: 'Failed to send message. Please try again later.' })
   }
 
   return res.status(200).json({ success: true })
-}
-
-function normalizeText(value, maxLen) {
-  if (value == null) return ''
-  const s = String(value).replace(/\s+/g, ' ').trim()
-  if (!maxLen) return s
-  return s.slice(0, maxLen)
-}
-
-function normalizeEmail(value) {
-  if (value == null) return ''
-  return String(value).trim().toLowerCase().slice(0, 254)
-}
-
-function validatePayload({ name, email, phone, message }) {
-  if (!name) return { code: 'invalid_name', message: 'Name is required.' }
-  if (name.length < 2) return { code: 'invalid_name', message: 'Please enter your full name.' }
-  if (!email) return { code: 'invalid_email', message: 'Email is required.' }
-  if (!looksLikeEmail(email)) return { code: 'invalid_email', message: 'Please enter a valid email address.' }
-  if (phone && phone.length > 20) return { code: 'invalid_phone', message: 'Phone number is too long.' }
-  if (!message) return { code: 'invalid_message', message: 'Message is required.' }
-  if (message.length < 10)
-    return { code: 'invalid_message', message: 'Message must be at least 10 characters.' }
-  if (message.length > 5000)
-    return { code: 'invalid_message', message: 'Message is too long.' }
-  return null
-}
-
-function looksLikeEmail(email) {
-  // Simple sanity check; avoids heavy regex and handles most real-world emails.
-  if (!email || typeof email !== 'string') return false
-  if (email.length > 254) return false
-  const at = email.indexOf('@')
-  if (at <= 0 || at !== email.lastIndexOf('@')) return false
-  const domain = email.slice(at + 1)
-  if (!domain || domain.startsWith('.') || domain.endsWith('.')) return false
-  return domain.includes('.')
 }
 
 function escapeHtml(text) {

@@ -4,7 +4,8 @@ import { motion } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
-import PageShell from '../components/PageShell'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
@@ -66,9 +67,14 @@ export default function ProjectDetail() {
   if (!projectData && error) {
     return (
       <>
-        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
+        <Header />
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <p>Loading project...</p>
-        </PageShell>
+        </div>
+        <Footer />
       </>
     )
   }
@@ -76,7 +82,11 @@ export default function ProjectDetail() {
   if (error || !projectData) {
     return (
       <>
-        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
+        <Header />
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Project Not Found</h1>
             <p className="mb-8 text-black">
@@ -89,7 +99,8 @@ export default function ProjectDetail() {
               Go Back Home
             </button>
           </div>
-        </PageShell>
+        </div>
+        <Footer />
       </>
     )
   }
@@ -105,9 +116,10 @@ export default function ProjectDetail() {
         keywords={`${projectData.title}, US Mechanical portfolio, mechanical project, ${projectData.category?.title || 'construction'}`}
         url={`${getSiteUrl()}/projects/${projectData._id}`}
       />
-      <PageShell
-        Main={motion.main}
-        className="min-h-screen bg-white text-black"
+      <Header />
+      <motion.main 
+        className="min-h-screen bg-white text-black" 
+        style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -343,7 +355,8 @@ export default function ProjectDetail() {
           </motion.div>
 
         </div>
-      </PageShell>
+      </motion.main>
+      <Footer />
     </>
   )
 }

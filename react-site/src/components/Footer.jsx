@@ -83,7 +83,7 @@ function Footer() {
     : FALLBACK_DATA.footerBadge
 
   // Use favicon for footer logo
-  const logoUrl = '/favicon.svg'
+  const logoUrl = '/favicon.png'
 
   // Handle navigation link clicks
   const handleNavClick = (sectionId) => {

@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
-import PageShell from '../components/PageShell'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -35,7 +36,11 @@ export default function DeliveryMethodsPage() {
   if (error) {
     return (
       <>
-        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
+        <Header />
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Something went wrong</h1>
             <p className="mb-8 text-gray-600">{error}</p>
@@ -46,7 +51,8 @@ export default function DeliveryMethodsPage() {
               Go Back Home
             </button>
           </div>
-        </PageShell>
+        </div>
+        <Footer />
       </>
     )
   }
@@ -61,9 +67,10 @@ export default function DeliveryMethodsPage() {
         description="Explore our delivery methods — from design-build and design-bid-build to integrated project delivery. US Mechanical has the right approach for every project."
         url={`${getSiteUrl()}/delivery-methods`}
       />
-      <PageShell
-        Main={motion.main}
+      <Header />
+      <motion.main
         className="min-h-screen bg-white text-black"
+        style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -180,7 +187,8 @@ export default function DeliveryMethodsPage() {
             </div>
           )}
         </div>
-      </PageShell>
+      </motion.main>
+      <Footer />
     </>
   )
 }

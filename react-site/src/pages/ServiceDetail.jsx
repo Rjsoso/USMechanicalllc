@@ -6,7 +6,8 @@ import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
-import PageShell from '../components/PageShell'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
@@ -96,7 +97,11 @@ export default function ServiceDetail() {
   if (error || !serviceData) {
     return (
       <>
-        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
+        <Header />
+        <div
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Service Not Found</h1>
             <p className="mb-8 text-black">
@@ -109,7 +114,8 @@ export default function ServiceDetail() {
               Go Back Home
             </button>
           </div>
-        </PageShell>
+        </div>
+        <Footer />
       </>
     )
   }
@@ -125,9 +131,10 @@ export default function ServiceDetail() {
         keywords={`${serviceData.title}, mechanical services, HVAC, plumbing, ${serviceData.title} Utah, ${serviceData.title} Nevada`}
         url={`${getSiteUrl()}/services/${serviceData.slug.current}`}
       />
-      <PageShell
-        Main={motion.main}
-        className="min-h-screen bg-white text-black"
+      <Header />
+      <motion.main 
+        className="min-h-screen bg-white text-black" 
+        style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -274,7 +281,8 @@ export default function ServiceDetail() {
           ) : null}
 
         </div>
-      </PageShell>
+      </motion.main>
+      <Footer />
     </>
   )
 }
