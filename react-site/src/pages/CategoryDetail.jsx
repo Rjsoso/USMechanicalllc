@@ -6,6 +6,7 @@ import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
 import PageShell from '../components/PageShell'
+import PageLoading from '../components/PageLoading'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
@@ -66,7 +67,13 @@ export default function CategoryDetail() {
     return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
   }, [categoryData?.projects])
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <PageShell>
+        <PageLoading label="Loading portfolio…" />
+      </PageShell>
+    )
+  }
 
   if (error || !categoryData) {
     return (
