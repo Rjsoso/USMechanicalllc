@@ -7,7 +7,6 @@ import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
 import PageShell from '../components/PageShell'
-import PageLoading from '../components/PageLoading'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
@@ -92,13 +91,7 @@ export default function ServiceDetail() {
       .filter(Boolean)
   }, [serviceData])
 
-  if (loading) {
-    return (
-      <PageShell>
-        <PageLoading label="Loading service…" />
-      </PageShell>
-    )
-  }
+  if (loading) return null
 
   if (error || !serviceData) {
     return (

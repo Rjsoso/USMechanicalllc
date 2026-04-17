@@ -38,7 +38,6 @@ function affiliateDescriptionSegments(description) {
 function ContactMapSection() {
   const [activeOfficeTab, setActiveOfficeTab] = useState(0)
   const [mapsEnabled, setMapsEnabled] = useState(false)
-  const [mapLoaded, setMapLoaded] = useState(false)
   const sectionRef = useRef(null)
   const { data: contactData, loading } = useSanityLive(CONTACT_MAP_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
@@ -50,21 +49,8 @@ function ContactMapSection() {
     offices && offices.length > 0 ? offices[activeOfficeTab] : null
 
   useEffect(() => {
-    setMapLoaded(false)
-  }, [activeOfficeTab])
-
-  useEffect(() => {
     const el = sectionRef.current
     if (!el || mapsEnabled) return
-
-    // If we jumped directly to this section (hash navigation), enable immediately.
-    const rect = el.getBoundingClientRect()
-    const alreadyVisible = rect.bottom > 0 && rect.top < window.innerHeight
-    if (alreadyVisible) {
-      setMapsEnabled(true)
-      return
-    }
-
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -158,11 +144,10 @@ function ContactMapSection() {
                     height="100%"
                     style={{ border: 0, display: 'block' }}
                     allowFullScreen
-                    loading="eager"
+                    loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     sandbox="allow-scripts allow-same-origin allow-popups"
                     className="h-full w-full"
-                    onLoad={() => setMapLoaded(true)}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-black">
@@ -196,29 +181,6 @@ function ContactMapSection() {
                 )
               ) : null}
             </div>
-
-            {mapsEnabled && !mapLoaded && (
-              <div
-                className="absolute inset-0 z-[2] flex items-center justify-center bg-black/30 backdrop-blur-[1px]"
-                aria-hidden
-              >
-                <div className="text-center text-white/80">
-                  <div
-                    style={{
-                      width: 46,
-                      height: 46,
-                      border: '3px solid rgba(255,255,255,0.18)',
-                      borderTopColor: '#ffffff',
-                      borderRadius: '50%',
-                      margin: '0 auto 14px',
-                      animation: 'mapSpinner 0.9s linear infinite',
-                    }}
-                  />
-                  <p className="text-sm font-semibold">Loading map…</p>
-                  <style>{`@keyframes mapSpinner { to { transform: rotate(360deg); } }`}</style>
-                </div>
-              </div>
-            )}
 
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
