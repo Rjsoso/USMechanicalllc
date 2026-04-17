@@ -6,8 +6,7 @@ import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageShell from '../components/PageShell'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
@@ -97,11 +96,7 @@ export default function ServiceDetail() {
   if (error || !serviceData) {
     return (
       <>
-        <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
+        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Service Not Found</h1>
             <p className="mb-8 text-black">
@@ -114,8 +109,7 @@ export default function ServiceDetail() {
               Go Back Home
             </button>
           </div>
-        </div>
-        <Footer />
+        </PageShell>
       </>
     )
   }
@@ -131,10 +125,9 @@ export default function ServiceDetail() {
         keywords={`${serviceData.title}, mechanical services, HVAC, plumbing, ${serviceData.title} Utah, ${serviceData.title} Nevada`}
         url={`${getSiteUrl()}/services/${serviceData.slug.current}`}
       />
-      <Header />
-      <motion.main 
-        className="min-h-screen bg-white text-black" 
-        style={{ paddingTop: '180px' }}
+      <PageShell
+        Main={motion.main}
+        className="min-h-screen bg-white text-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -281,8 +274,7 @@ export default function ServiceDetail() {
           ) : null}
 
         </div>
-      </motion.main>
-      <Footer />
+      </PageShell>
     </>
   )
 }

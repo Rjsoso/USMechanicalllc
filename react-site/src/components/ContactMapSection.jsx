@@ -1,4 +1,4 @@
-import { useState, memo, Fragment } from 'react'
+import { useState, memo, Fragment, useEffect, useRef } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { urlFor } from '../utils/sanity'
 
@@ -37,6 +37,8 @@ function affiliateDescriptionSegments(description) {
  */
 function ContactMapSection() {
   const [activeOfficeTab, setActiveOfficeTab] = useState(0)
+  const [mapsEnabled, setMapsEnabled] = useState(false)
+  const sectionRef = useRef(null)
   const { data: contactData, loading } = useSanityLive(CONTACT_MAP_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
   })
@@ -45,6 +47,22 @@ function ContactMapSection() {
   const affiliates = contactData?.affiliates
   const activeOffice =
     offices && offices.length > 0 ? offices[activeOfficeTab] : null
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el || mapsEnabled) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMapsEnabled(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '200px 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [mapsEnabled])
 
   if (loading || !contactData) {
     return (
@@ -63,8 +81,9 @@ function ContactMapSection() {
   return (
     <section
       id="contact"
-        className="scroll-mt-[5.5rem] bg-black"
-        aria-label="Contact locations"
+      ref={sectionRef}
+      className="scroll-mt-[5.5rem] bg-black"
+      aria-label="Contact locations"
     >
       <div className="w-full">
         {offices && offices.length > 0 ? (
@@ -115,32 +134,53 @@ function ContactMapSection() {
               </div>
             </div>
 
-            {offices.map((office, index) =>
-              office.address ? (
-                <div
-                  key={index}
-                  className={`absolute inset-0 ${
-                    activeOfficeTab === index
-                      ? 'z-[1] opacity-100'
-                      : 'pointer-events-none invisible z-0 opacity-0'
-                  }`}
-                  aria-hidden={activeOfficeTab !== index}
-                >
+            <div className="absolute inset-0 z-[1]">
+              {activeOffice?.address ? (
+                mapsEnabled ? (
                   <iframe
-                    title={`${office.locationName} location`}
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
+                    title={`${activeOffice.locationName} location`}
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(activeOffice.address)}&z=15&output=embed`}
                     width="100%"
                     height="100%"
                     style={{ border: 0, display: 'block' }}
                     allowFullScreen
-                    loading="eager"
+                    loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     sandbox="allow-scripts allow-same-origin allow-popups"
                     className="h-full w-full"
                   />
-                </div>
-              ) : null
-            )}
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-black">
+                    <div className="mx-auto max-w-xl px-6 text-center">
+                      <p className="text-sm font-semibold uppercase tracking-wider text-white/50">
+                        Map preview
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-white">
+                        {officeTabButtonLabel(activeOffice.locationName)}
+                      </p>
+                      <p className="mt-2 text-sm text-white/70">{activeOffice.address}</p>
+                      <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                        <button
+                          type="button"
+                          onClick={() => setMapsEnabled(true)}
+                          className="rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-black hover:bg-white/90"
+                        >
+                          Load interactive map
+                        </button>
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeOffice.address)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold text-blue-300 hover:text-blue-200"
+                        >
+                          Open in Google Maps
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )
+              ) : null}
+            </div>
 
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"

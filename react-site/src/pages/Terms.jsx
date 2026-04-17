@@ -2,8 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import SEO from '../components/SEO'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageShell from '../components/PageShell'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -83,10 +82,9 @@ export default function Terms() {
         description="Terms of service for use of the U.S. Mechanical LLC website."
         url={`${getSiteUrl()}/terms`}
       />
-      <Header />
-      <motion.main
+      <PageShell
+        Main={motion.main}
         className="min-h-screen bg-white text-black"
-        style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -122,8 +120,7 @@ export default function Terms() {
             <TermsFallbackContent />
           )}
         </div>
-      </motion.main>
-      <Footer />
+      </PageShell>
     </>
   )
 }

@@ -5,8 +5,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import SEO from '../components/SEO'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageShell from '../components/PageShell'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
@@ -72,11 +71,7 @@ export default function CategoryDetail() {
   if (error || !categoryData) {
     return (
       <>
-        <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
+        <PageShell Main="div" className="flex min-h-screen items-center justify-center bg-white text-black">
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold">Category Not Found</h1>
             <p className="mb-8 text-black">
@@ -89,8 +84,7 @@ export default function CategoryDetail() {
               Go Back Home
             </button>
           </div>
-        </div>
-        <Footer />
+        </PageShell>
       </>
     )
   }
@@ -106,10 +100,9 @@ export default function CategoryDetail() {
         keywords={`${categoryData.title}, US Mechanical portfolio, mechanical projects, ${categoryData.title} projects`}
         url={`${getSiteUrl()}/portfolio/${categoryData._id}`}
       />
-      <Header />
-      <motion.main 
-        className="min-h-screen bg-white text-black" 
-        style={{ paddingTop: '180px' }}
+      <PageShell
+        Main={motion.main}
+        className="min-h-screen bg-white text-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -323,8 +316,7 @@ export default function CategoryDetail() {
             </div>
           )}
         </div>
-      </motion.main>
-      <Footer />
+      </PageShell>
     </>
   )
 }

@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef, memo } from 'react'
 import { useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import PageShell from '../components/PageShell'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { validateContactForm, sanitizeFormData, detectSpam } from '../utils/validation'
 import {
@@ -41,6 +40,14 @@ function Contact() {
   const [rateLimitError, setRateLimitError] = useState(null)
   const [turnstileError, setTurnstileError] = useState(null)
   const turnstileWidgetIdRef = useRef(null)
+  const formSummaryRef = useRef(null)
+
+  const fieldRefs = useRef({
+    name: null,
+    email: null,
+    phone: null,
+    message: null,
+  })
 
   // If we navigated here from a CTA, scroll straight to the form.
   useEffect(() => {
@@ -151,6 +158,17 @@ function Contact() {
     const validation = validateContactForm(sanitizedData)
     if (!validation.valid) {
       setFormErrors(validation.errors)
+      setTimeout(() => {
+        const firstField = ['name', 'email', 'phone', 'message'].find(k => validation.errors?.[k])
+        const el = firstField ? fieldRefs.current[firstField] : null
+        if (el && typeof el.focus === 'function') {
+          el.focus()
+          return
+        }
+        if (formSummaryRef.current) {
+          formSummaryRef.current.focus()
+        }
+      }, 0)
       return
     }
 
@@ -208,7 +226,26 @@ function Contact() {
           setFormSuccess(false)
         }, 5000)
       } else {
-        throw new Error('Failed to submit form')
+        let payload = null
+        try {
+          payload = await response.json()
+        } catch (_) {
+          payload = null
+        }
+
+        const code = payload?.code
+        const messageFromApi = payload?.error
+
+        if (code === 'rate_limited') {
+          setRateLimitError(messageFromApi || 'Too many requests. Please try again later.')
+          return
+        }
+        if (code?.startsWith('turnstile_')) {
+          setTurnstileError(messageFromApi || 'Verification failed. Please refresh and try again.')
+          return
+        }
+
+        throw new Error(messageFromApi || 'Failed to submit form')
       }
     } catch (err) {
       clearTimeout(timeoutId)
@@ -235,11 +272,10 @@ function Contact() {
         keywords="contact US Mechanical, get quote, HVAC services, plumbing services, mechanical contractor contact"
         url={`${getSiteUrl()}/contact`}
       />
-      <Header />
-      <main className="min-h-screen bg-white">
+      <PageShell className="min-h-screen bg-white" includeFooter={true}>
         {!contactLoading && (error || !contactData) && (
           <section
-            className="relative w-full px-6 py-20 pt-[180px]"
+            className="relative w-full px-6 py-20"
           >
             <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">
               <div className="max-w-2xl px-6 text-center">
@@ -264,7 +300,7 @@ function Contact() {
         {contactData && (
           <section
             id="contact-form"
-            className="relative w-full px-6 pb-16 pt-[180px]"
+            className="relative w-full px-6 pb-16"
           >
             <div className="relative z-10 mx-auto max-w-6xl">
               <h1 className="section-title mb-6 text-center text-5xl text-gray-900 md:text-6xl">
@@ -310,67 +346,134 @@ function Contact() {
                   )}
 
                   <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                    {Object.keys(formErrors).length > 0 && (
+                      <div
+                        ref={formSummaryRef}
+                        tabIndex={-1}
+                        role="alert"
+                        aria-live="assertive"
+                        className="rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-sm text-gray-900"
+                      >
+                        <p className="font-semibold">Please fix the highlighted fields.</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-5 text-gray-700">
+                          {Object.entries(formErrors)
+                            .filter(([, msg]) => Boolean(msg))
+                            .map(([key, msg]) => (
+                              <li key={key}>{msg}</li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
                     <div>
+                      <label htmlFor="contact-name" className="sr-only">
+                        Name
+                      </label>
                       <input
                         type="text"
                         name="name"
+                        id="contact-name"
                         placeholder="Name *"
                         required
                         value={formData.name}
                         onChange={handleInputChange}
+                        ref={el => {
+                          fieldRefs.current.name = el
+                        }}
+                        aria-invalid={Boolean(formErrors.name)}
+                        aria-describedby={formErrors.name ? 'contact-name-error' : undefined}
                         className={`w-full rounded-lg border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="100"
                       />
                       {formErrors.name && (
-                        <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
+                        <p id="contact-name-error" className="mt-1 text-sm text-red-600">
+                          {formErrors.name}
+                        </p>
                       )}
                     </div>
 
                     <div>
+                      <label htmlFor="contact-email" className="sr-only">
+                        Email
+                      </label>
                       <input
                         type="email"
                         name="email"
+                        id="contact-email"
                         placeholder="Email *"
                         required
                         value={formData.email}
                         onChange={handleInputChange}
+                        ref={el => {
+                          fieldRefs.current.email = el
+                        }}
+                        aria-invalid={Boolean(formErrors.email)}
+                        aria-describedby={formErrors.email ? 'contact-email-error' : undefined}
                         className={`w-full rounded-lg border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="254"
                       />
                       {formErrors.email && (
-                        <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
+                        <p id="contact-email-error" className="mt-1 text-sm text-red-600">
+                          {formErrors.email}
+                        </p>
                       )}
                     </div>
 
                     <div>
+                      <label htmlFor="contact-phone" className="sr-only">
+                        Phone (optional)
+                      </label>
                       <input
                         type="tel"
                         name="phone"
+                        id="contact-phone"
                         placeholder="Phone (optional)"
                         value={formData.phone}
                         onChange={handleInputChange}
+                        ref={el => {
+                          fieldRefs.current.phone = el
+                        }}
+                        aria-invalid={Boolean(formErrors.phone)}
+                        aria-describedby={formErrors.phone ? 'contact-phone-error' : undefined}
                         className={`w-full rounded-lg border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="20"
                       />
                       {formErrors.phone && (
-                        <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>
+                        <p id="contact-phone-error" className="mt-1 text-sm text-red-600">
+                          {formErrors.phone}
+                        </p>
                       )}
                     </div>
 
                     <div>
+                      <label htmlFor="contact-message" className="sr-only">
+                        Message
+                      </label>
                       <textarea
                         name="message"
+                        id="contact-message"
                         placeholder="Message * (minimum 10 characters)"
                         required
                         value={formData.message}
                         onChange={handleInputChange}
+                        ref={el => {
+                          fieldRefs.current.message = el
+                        }}
+                        aria-invalid={Boolean(formErrors.message)}
+                        aria-describedby={[
+                          formErrors.message ? 'contact-message-error' : null,
+                          'contact-message-help',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
                         className={`w-full resize-none rounded-lg border ${formErrors.message ? 'border-red-500' : 'border-gray-300'} h-32 bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
                         maxLength="5000"
                       />
                       {formErrors.message && (
-                        <p className="mt-1 text-sm text-red-600">{formErrors.message}</p>
+                        <p id="contact-message-error" className="mt-1 text-sm text-red-600">
+                          {formErrors.message}
+                        </p>
                       )}
-                      <p className="mt-1 text-xs text-gray-500">
+                      <p id="contact-message-help" className="mt-1 text-xs text-gray-500">
                         {formData.message.length}/5000 characters
                       </p>
                     </div>
@@ -384,6 +487,7 @@ function Contact() {
                     <button
                       type="submit"
                       disabled={formSubmitting || rateLimitError}
+                      aria-disabled={formSubmitting || Boolean(rateLimitError)}
                       className={`rounded-lg bg-black py-3 font-semibold text-white transition hover:bg-neutral-900 ${
                         formSubmitting || rateLimitError ? 'cursor-not-allowed opacity-50' : ''
                       }`}
@@ -404,8 +508,7 @@ function Contact() {
             </div>
           </section>
         )}
-      </main>
-      <Footer />
+      </PageShell>
     </>
   )
 }

@@ -60,7 +60,6 @@ function HeroSection() {
 
   return (
     <section
-      id="hero"
       className="hero-section relative flex min-h-screen w-full items-center justify-center text-center"
       style={{
         marginTop: 0,

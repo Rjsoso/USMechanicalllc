@@ -27,10 +27,10 @@ const StructuredData = () => {
       email: 'info@usmechanicalllc.com',
       foundingDate: '1963',
       priceRange: '$$',
-      image: `${baseUrl}/logo.png`,
+      image: `${baseUrl}/logo.svg`,
       logo: {
         '@type': 'ImageObject',
-        url: `${baseUrl}/logo.png`,
+        url: `${baseUrl}/logo.svg`,
         width: '192',
         height: '192',
       },
@@ -136,7 +136,7 @@ const StructuredData = () => {
       '@type': 'Organization',
       name: 'U.S. Mechanical LLC',
       url: baseUrl,
-      logo: `${baseUrl}/logo.png`,
+      logo: `${baseUrl}/logo.svg`,
       foundingDate: '1963',
       contactPoint: {
         '@type': 'ContactPoint',
@@ -160,16 +160,8 @@ const StructuredData = () => {
         name: 'U.S. Mechanical LLC',
         logo: {
           '@type': 'ImageObject',
-          url: `${baseUrl}/logo.png`,
+          url: `${baseUrl}/logo.svg`,
         },
-      },
-        potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: `${baseUrl}/search?q={search_term_string}`,
-        },
-        'query-input': 'required name=search_term_string',
       },
     }
 
