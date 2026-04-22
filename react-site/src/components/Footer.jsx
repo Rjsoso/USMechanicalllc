@@ -1,3 +1,4 @@
+/* global process */
 import { useEffect, useState, memo } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Clock, Linkedin } from 'lucide-react'

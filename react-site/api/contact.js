@@ -62,6 +62,20 @@ function getClientIp(req) {
   return req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown'
 }
 
+/**
+ * Structured log helper. Emits `[contact] {json}` to stderr so Vercel's log
+ * explorer can search/filter. Intentionally never includes PII: no name,
+ * email body, phone, or message content — only metadata + lengths/flags.
+ */
+function logEvent(event, details = {}) {
+  const entry = {
+    event,
+    at: new Date().toISOString(),
+    ...details,
+  }
+  console.error('[contact]', JSON.stringify(entry))
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -70,7 +84,10 @@ export default async function handler(req, res) {
 
   const body = req.body && typeof req.body === 'object' ? req.body : {}
 
+  const clientIpEarly = getClientIp(req)
+
   if (typeof body.website === 'string' && body.website.trim() !== '') {
+    logEvent('honeypot_hit', { ip: clientIpEarly })
     return res.status(200).json({ success: true })
   }
 
@@ -81,30 +98,44 @@ export default async function handler(req, res) {
   const token = body['cf-turnstile-response']
 
   if (!name || name.length < 2 || name.length > NAME_MAX) {
+    logEvent('validation_failed', { ip: clientIpEarly, field: 'name', nameLen: name.length })
     return res.status(400).json({ error: 'Please enter a valid name (2–100 characters).' })
   }
   if (!email || email.length > EMAIL_MAX || !EMAIL_REGEX.test(email)) {
+    logEvent('validation_failed', { ip: clientIpEarly, field: 'email', emailLen: email.length })
     return res.status(400).json({ error: 'Please enter a valid email address.' })
   }
   if (phone) {
     if (phone.length > PHONE_MAX) {
+      logEvent('validation_failed', { ip: clientIpEarly, field: 'phone', reason: 'too_long' })
       return res.status(400).json({ error: 'Phone number is too long.' })
     }
     const cleaned = phone.replace(/[\s\-()+.]/g, '')
     if (!/^\d{10,15}$/.test(cleaned)) {
+      logEvent('validation_failed', { ip: clientIpEarly, field: 'phone', reason: 'bad_format' })
       return res.status(400).json({ error: 'Please enter a valid phone number.' })
     }
   }
   if (!message || message.length < MESSAGE_MIN || message.length > MESSAGE_MAX) {
+    logEvent('validation_failed', {
+      ip: clientIpEarly,
+      field: 'message',
+      messageLen: message.length,
+    })
     return res.status(400).json({ error: 'Message must be between 10 and 5000 characters.' })
   }
   if (isSpam({ name, email, message })) {
+    logEvent('spam_flagged', {
+      ip: clientIpEarly,
+      messageLen: message.length,
+      emailDomain: email.split('@')[1] || 'unknown',
+    })
     return res.status(400).json({
       error: 'Your message was flagged as potential spam. Please remove any suspicious content and try again.',
     })
   }
 
-  const clientIp = getClientIp(req)
+  const clientIp = clientIpEarly
 
   if (ratelimiter) {
     try {
@@ -112,21 +143,24 @@ export default async function handler(req, res) {
       if (!success) {
         const retryAfterSec = Math.max(1, Math.ceil((reset - Date.now()) / 1000))
         res.setHeader('Retry-After', String(retryAfterSec))
+        logEvent('rate_limited', { ip: clientIp, retryAfterSec })
         return res.status(429).json({
           error: 'Too many submissions from this network. Please try again later.',
         })
       }
       res.setHeader('X-RateLimit-Remaining', String(remaining))
     } catch (err) {
-      console.error('Rate limit check failed (fail-open):', err)
+      logEvent('ratelimit_error_fail_open', { ip: clientIp, message: err?.message })
     }
   }
 
   const secretKey = process.env.TURNSTILE_SECRET_KEY
   if (!secretKey) {
+    logEvent('config_missing', { which: 'TURNSTILE_SECRET_KEY' })
     return res.status(500).json({ error: 'Server configuration error: missing secret key' })
   }
   if (!token) {
+    logEvent('turnstile_token_missing', { ip: clientIp })
     return res.status(400).json({ error: 'Verification token missing. Please complete the verification.' })
   }
 
@@ -143,19 +177,23 @@ export default async function handler(req, res) {
     })
     verifyData = await verifyRes.json()
   } catch (err) {
-    console.error('Turnstile verify network error:', err)
+    logEvent('turnstile_network_error', { ip: clientIp, message: err?.message })
     return res.status(503).json({
       error: 'Verification service is unavailable. Please try again in a moment.',
     })
   }
 
   if (!verifyData || !verifyData.success) {
-    console.error('Turnstile verify failed:', verifyData && verifyData['error-codes'])
+    logEvent('turnstile_failed', {
+      ip: clientIp,
+      errorCodes: (verifyData && verifyData['error-codes']) || [],
+    })
     return res.status(400).json({ error: 'Verification failed. Please refresh and try again.' })
   }
 
   const resendKey = process.env.RESEND_API_KEY
   if (!resendKey) {
+    logEvent('config_missing', { which: 'RESEND_API_KEY' })
     return res.status(500).json({ error: 'Server configuration error: email not configured' })
   }
 
@@ -213,10 +251,21 @@ export default async function handler(req, res) {
   })
 
   if (error) {
-    console.error('Resend error:', error)
+    logEvent('resend_error', {
+      ip: clientIp,
+      name: error?.name || 'unknown',
+      message: error?.message || String(error),
+    })
     return res.status(500).json({ error: 'Failed to send message. Please try again later.' })
   }
 
+  logEvent('success', {
+    ip: clientIp,
+    nameLen: name.length,
+    messageLen: message.length,
+    hasPhone: Boolean(phone),
+    emailDomain: email.split('@')[1] || 'unknown',
+  })
   return res.status(200).json({ success: true })
 }
 

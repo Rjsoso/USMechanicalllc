@@ -1,7 +1,7 @@
+/* global process */
 import { useMemo, useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { urlFor } from '../utils/sanity'
 import { navigateToSection } from '../utils/scrollToSection'
 import { useSanityLive } from '../hooks/useSanityLive'
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { client, liveClient } from '../utils/sanity'
 
 /**
@@ -23,11 +23,19 @@ const LIVE_REFETCH_DEBOUNCE_MS = 300
 export function useSanityLive(query, params = {}, options = {}) {
   const { initialData, listenFilter } = options
   const hasInitialData = initialData != null
+
+  // Stable key so the effect only re-runs when params actually change.
+  const paramsKey = useMemo(() => JSON.stringify(params), [params])
+
   const [data, setData] = useState(initialData ?? null)
   const [loading, setLoading] = useState(!hasInitialData)
   const [error, setError] = useState(null)
+
   const subscriptionRef = useRef(null)
   const debounceRef = useRef(null)
+  // Pin the "is this the first mount of this query/params combo" decision so
+  // that downstream re-renders of initialData don't flip our logic.
+  const initialFetchSkippedRef = useRef(hasInitialData)
 
   useEffect(() => {
     let cancelled = false
@@ -42,9 +50,7 @@ export function useSanityLive(query, params = {}, options = {}) {
           }
         })
         .catch((err) => {
-          if (!cancelled) {
-            setError(err)
-          }
+          if (!cancelled) setError(err)
         })
         .finally(() => {
           if (!cancelled) setLoading(false)
@@ -58,12 +64,13 @@ export function useSanityLive(query, params = {}, options = {}) {
       }, LIVE_REFETCH_DEBOUNCE_MS)
     }
 
-    // Initial load: skip fetch only when we have usable initial data (not null/undefined)
-    if (hasInitialData) {
-      setData(initialData)
-      setLoading(false)
+    // Only skip the initial CDN fetch on the very first effect run where the
+    // caller handed us initialData. If query/params/listenFilter change
+    // afterwards, always refetch — stale initialData would be wrong.
+    if (initialFetchSkippedRef.current) {
+      initialFetchSkippedRef.current = false
     } else {
-      setLoading(true)
+      // We always want a fresh copy on mount / on dep change.
       client
         .fetch(query, params)
         .then((result) => {
@@ -103,7 +110,10 @@ export function useSanityLive(query, params = {}, options = {}) {
         subscriptionRef.current = null
       }
     }
-  }, [query, JSON.stringify(params), listenFilter])
+    // `params` is represented by the stable `paramsKey`; the ref-backed
+    // initial-fetch decision intentionally doesn't trigger re-runs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, paramsKey, listenFilter])
 
   return { data, loading, error }
 }

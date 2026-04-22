@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node generate-sitemap.mjs",
+    "prebuild": "node scripts/check-routes.mjs && node generate-sitemap.mjs",
+    "check:routes": "node scripts/check-routes.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --max-warnings 0",

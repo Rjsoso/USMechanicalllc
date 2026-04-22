@@ -12,7 +12,7 @@
  */
 
 import { createClient } from '@sanity/client';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync, statSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -211,7 +211,31 @@ ${projects?.map(project => `  <url>
     console.log('   3. Re-submit to Google Search Console (if URLs changed)\n');
 
   } catch (error) {
-    console.error('❌ Error generating sitemap:', error);
+    // Fail-soft: if a previously-generated sitemap.xml is still on disk, keep
+    // it and warn. This prevents a transient Sanity outage from breaking a
+    // production deploy. If no sitemap exists at all, we fail hard so the
+    // problem is obvious.
+    const sitemapPath = join(__dirname, 'public', 'sitemap.xml');
+    const hasExistingSitemap = existsSync(sitemapPath);
+
+    console.error('❌ Error generating sitemap:', error?.message || error);
+
+    if (process.env.SKIP_SITEMAP === '1') {
+      console.warn('⚠  SKIP_SITEMAP=1 set — skipping sitemap generation, continuing build.');
+      return;
+    }
+
+    if (hasExistingSitemap) {
+      const stat = statSync(sitemapPath);
+      const ageDays = Math.round((Date.now() - stat.mtimeMs) / (1000 * 60 * 60 * 24));
+      console.warn(
+        `⚠  Keeping existing sitemap.xml (${ageDays} day${ageDays === 1 ? '' : 's'} old). ` +
+          'Re-run `npm run generate-sitemap` once Sanity is reachable.'
+      );
+      return;
+    }
+
+    console.error('No existing sitemap.xml to fall back on. Failing build.');
     process.exit(1);
   }
 }

@@ -6,6 +6,16 @@ import { join } from 'path'
 
 const siteUrl = process.env.VITE_SITE_URL || 'https://www.usmechanicalllc.com'
 
+// Expose the npm version as __APP_VERSION__ for client-side error reports so
+// Vercel logs can correlate a crash with a specific deploy.
+let appVersion = 'dev'
+try {
+  const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
+  appVersion = pkg.version || 'dev'
+} catch {
+  // package.json unreadable — keep the fallback.
+}
+
 function siteUrlPlugin() {
   let outDir = 'dist'
   return {
@@ -38,6 +48,9 @@ function siteUrlPlugin() {
 
 export default defineConfig({
   plugins: [react(), siteUrlPlugin()],
+  define: {
+    __APP_VERSION__: JSON.stringify(appVersion),
+  },
   server: {
     port: 3000
   },
