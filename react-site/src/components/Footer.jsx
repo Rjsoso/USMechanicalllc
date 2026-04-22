@@ -4,7 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
-import { openConsentBanner } from './ConsentBanner'
+import { openConsentBanner } from '../utils/openConsentBanner'
 
 // Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
 const FALLBACK_DATA = {
@@ -61,10 +61,6 @@ function Footer() {
   }, [])
 
   // Use Sanity data if available, otherwise use fallback
-  const mainOffice = contactData?.offices?.[0]
-  const displayAddress = mainOffice?.address || FALLBACK_DATA.address
-  const displayPhone = mainOffice?.phone || FALLBACK_DATA.phone
-  const displayEmail = contactData?.email || FALLBACK_DATA.email
   const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
   
   // For optional fields: only use fallback if Sanity failed to load, not if field is intentionally empty

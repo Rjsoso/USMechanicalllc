@@ -1,20 +1,18 @@
-import { useEffect, useState, useMemo, memo } from 'react'
+import { useState, useMemo, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { client, urlFor } from '../utils/sanity'
+import { urlFor } from '../utils/sanity'
 
 function Portfolio({ data: portfolioDataProp }) {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState(portfolioDataProp?.categories || [])
-  const [sectionData, setSectionData] = useState(portfolioDataProp?.section || null)
   const [loadedImages, setLoadedImages] = useState(new Set())
 
-  // Update state when prop changes
-  useEffect(() => {
-    if (portfolioDataProp) {
-      setCategories(portfolioDataProp.categories || [])
-      setSectionData(portfolioDataProp.section || null)
-    }
-  }, [portfolioDataProp])
+  // Derive from props directly — no intermediate state needed.
+  const categoriesRaw = portfolioDataProp?.categories
+  const categories = useMemo(
+    () => (Array.isArray(categoriesRaw) ? categoriesRaw : []),
+    [categoriesRaw]
+  )
+  const sectionData = portfolioDataProp?.section || null
 
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])

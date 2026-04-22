@@ -1,14 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 
 export default function ProjectModal({ project, onClose }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  if (!project) return null
-
-  const images = project.images || []
+  // Memoise images so its identity is stable for downstream hooks.
+  const images = useMemo(() => project?.images || [], [project])
   const hasMultipleImages = images.length > 1
+
+  // Preload adjacent images for smooth transitions. Declared before the
+  // early-return so React Hook order stays consistent across renders.
+  useEffect(() => {
+    if (hasMultipleImages) {
+      const nextIndex = (currentImageIndex + 1) % images.length
+      const prevIndex = (currentImageIndex - 1 + images.length) % images.length
+      const toPreload = [nextIndex, prevIndex]
+      toPreload.forEach((index) => {
+        if (images[index]?.asset) {
+          const img = new Image()
+          img.src = urlFor(images[index]).width(1200).quality(90).auto('format').url()
+        }
+      })
+    }
+  }, [currentImageIndex, hasMultipleImages, images])
+
+  if (!project) return null
 
   const nextImage = () => {
     setCurrentImageIndex(prev => (prev + 1) % images.length)
@@ -17,21 +34,6 @@ export default function ProjectModal({ project, onClose }) {
   const prevImage = () => {
     setCurrentImageIndex(prev => (prev - 1 + images.length) % images.length)
   }
-
-  // Preload adjacent images for smooth transitions
-  useEffect(() => {
-    if (hasMultipleImages) {
-      const nextIndex = (currentImageIndex + 1) % images.length
-      const prevIndex = (currentImageIndex - 1 + images.length) % images.length
-      
-      [nextIndex, prevIndex].forEach(index => {
-        if (images[index]?.asset) {
-          const img = new Image()
-          img.src = urlFor(images[index]).width(1200).quality(90).auto('format').url()
-        }
-      })
-    }
-  }, [currentImageIndex, hasMultipleImages, images])
 
   return (
     <AnimatePresence>

@@ -1,37 +1,29 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { getConsent, setConsent, onConsentChange } from '../utils/consent'
+import { OPEN_CONSENT_EVENT } from '../utils/openConsentBanner'
 import './ConsentBanner.css'
 
-const OPEN_EVENT = 'usm:open-consent-banner'
-
-/** Fire this event from anywhere to reopen the banner (e.g. Privacy page). */
-export function openConsentBanner() {
-  if (typeof window === 'undefined') return
-  try {
-    window.dispatchEvent(new CustomEvent(OPEN_EVENT))
-  } catch {
-    // ignore
-  }
-}
-
 export default function ConsentBanner() {
-  const [visible, setVisible] = useState(false)
+  // Initialise `visible` synchronously from storage so we don't trigger an
+  // extra render (react-hooks/set-state-in-effect). On the server this
+  // falls through to `false`.
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return getConsent().analytics === null
+  })
 
   useEffect(() => {
-    const { analytics } = getConsent()
-    if (analytics === null) setVisible(true)
-
     const unsub = onConsentChange((state) => {
       if (state?.analytics === null) setVisible(true)
     })
 
     const handleOpen = () => setVisible(true)
-    window.addEventListener(OPEN_EVENT, handleOpen)
+    window.addEventListener(OPEN_CONSENT_EVENT, handleOpen)
 
     return () => {
       unsub()
-      window.removeEventListener(OPEN_EVENT, handleOpen)
+      window.removeEventListener(OPEN_CONSENT_EVENT, handleOpen)
     }
   }, [])
 

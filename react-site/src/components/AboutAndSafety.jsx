@@ -29,7 +29,7 @@ const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
 function AboutAndSafety({ data: aboutDataProp }) {
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -64,15 +64,25 @@ The result of this commitment to safety is an Experience Modification Rate (EMR)
 All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
   }
 
-  const displayData = liveData ? { ...defaultData, ...liveData } : defaultData
+  // Memoise the merged data so downstream memoised selectors (carouselItems,
+  // safetyLogoItems) see stable references and the React Compiler can
+  // preserve their manual memoization.
+  const displayData = useMemo(
+    () => (liveData ? { ...defaultData, ...liveData } : defaultData),
+    // defaultData is defined inline above and captures no state; it's safe to
+    // treat as stable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [liveData]
+  )
 
   // Map aboutPhotos to carousel items format
+  const aboutPhotos = displayData.aboutPhotos
   const carouselItems = useMemo(() => {
-    if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
+    if (!aboutPhotos || !Array.isArray(aboutPhotos) || aboutPhotos.length === 0) {
       return []
     }
 
-    return displayData.aboutPhotos
+    return aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -86,7 +96,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         }
       })
       .filter(Boolean)
-  }, [displayData?.aboutPhotos])
+  }, [aboutPhotos])
 
   useEffect(() => {
     if (carouselItems.length > 0 && carouselItems[0].src) {
@@ -101,12 +111,13 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
   }, [carouselItems])
 
   // Transform safetyLogos to LogoLoop format
+  const safetyLogos = displayData.safetyLogos
   const safetyLogoItems = useMemo(() => {
-    if (!displayData?.safetyLogos || !Array.isArray(displayData.safetyLogos) || displayData.safetyLogos.length === 0) {
+    if (!safetyLogos || !Array.isArray(safetyLogos) || safetyLogos.length === 0) {
       return []
     }
 
-    return displayData.safetyLogos
+    return safetyLogos
       .map((item, index) => {
         if (!item) return null
 
@@ -125,13 +136,10 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
           }
         }
 
-        // Handle icon-based items (for future use with react-icons)
-        // For now, skip icon items if no image is provided
-        // This can be extended later to support icon components
         return null
       })
       .filter(Boolean)
-  }, [displayData, displayData?.safetyLogos])
+  }, [safetyLogos])
 
   // Responsive logo sizing for safety section
   const getSafetyLogoHeight = () => {

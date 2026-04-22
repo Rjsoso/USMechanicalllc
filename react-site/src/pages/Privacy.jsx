@@ -6,7 +6,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
-import { openConsentBanner } from '../components/ConsentBanner'
+import { openConsentBanner } from '../utils/openConsentBanner'
 import { resetConsent } from '../utils/consent'
 
 const PRIVACY_QUERY = `*[_id == "legalPrivacy" && !(_id in path("drafts.**"))][0]{

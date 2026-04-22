@@ -25,7 +25,7 @@ With over 60 years of project experience, we have built an undeniable reputation
 
 function AboutSection({ data: aboutDataProp }) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -47,14 +47,18 @@ function AboutSection({ data: aboutDataProp }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const displayData = liveData ? { ...defaultData, ...liveData } : defaultData
+  const displayData = useMemo(
+    () => (liveData ? { ...defaultData, ...liveData } : defaultData),
+    [liveData]
+  )
 
+  const aboutPhotos = displayData.aboutPhotos
   const carouselItems = useMemo(() => {
-    if (!displayData?.aboutPhotos || !Array.isArray(displayData.aboutPhotos) || displayData.aboutPhotos.length === 0) {
+    if (!aboutPhotos || !Array.isArray(aboutPhotos) || aboutPhotos.length === 0) {
       return []
     }
 
-    return displayData.aboutPhotos
+    return aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -68,7 +72,7 @@ function AboutSection({ data: aboutDataProp }) {
         }
       })
       .filter(Boolean)
-  }, [displayData?.aboutPhotos])
+  }, [aboutPhotos])
 
   useEffect(() => {
     if (carouselItems.length > 0 && carouselItems[0].src) {

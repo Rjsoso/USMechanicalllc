@@ -78,7 +78,7 @@ const SanityImage = ({
       height={intrinsicHeight || undefined}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      fetchpriority={priority ? 'high' : undefined}
+      fetchPriority={priority ? 'high' : undefined}
       className={className}
       style={style}
     />

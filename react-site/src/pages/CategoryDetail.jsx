@@ -80,10 +80,11 @@ export default function CategoryDetail() {
     }
   }, [categoryData])
 
+  const projectsList = projects.data
   const sortedProjects = useMemo(() => {
-    if (!categoryData?.projects) return []
-    return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
-  }, [categoryData?.projects])
+    if (!Array.isArray(projectsList)) return []
+    return [...projectsList].sort((a, b) => (a.order || 0) - (b.order || 0))
+  }, [projectsList])
 
   if (loading) {
     return (

@@ -47,14 +47,18 @@ function SafetySection({ data: safetyDataProp }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const displayData = liveData ? { ...defaultData, ...liveData } : defaultData
+  const displayData = useMemo(
+    () => (liveData ? { ...defaultData, ...liveData } : defaultData),
+    [liveData]
+  )
 
+  const safetyLogos = displayData.safetyLogos
   const safetyLogoItems = useMemo(() => {
-    if (!displayData?.safetyLogos || !Array.isArray(displayData.safetyLogos) || displayData.safetyLogos.length === 0) {
+    if (!safetyLogos || !Array.isArray(safetyLogos) || safetyLogos.length === 0) {
       return []
     }
 
-    return displayData.safetyLogos
+    return safetyLogos
       .map((item, index) => {
         if (!item) return null
 
@@ -75,7 +79,7 @@ function SafetySection({ data: safetyDataProp }) {
         return null
       })
       .filter(Boolean)
-  }, [displayData, displayData?.safetyLogos])
+  }, [safetyLogos])
 
   const getSafetyLogoHeight = () => {
     if (windowWidth < 768) return 50

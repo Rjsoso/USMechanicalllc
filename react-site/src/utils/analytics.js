@@ -19,8 +19,7 @@ function initGtag() {
   if (initialized) return
   initialized = true
   window.dataLayer = window.dataLayer || []
-  // eslint-disable-next-line prefer-rest-params
-  function gtag() { window.dataLayer.push(arguments) }
+  function gtag(...args) { window.dataLayer.push(args) }
   window.gtag = window.gtag || gtag
   window.gtag('js', new Date())
   window.gtag('config', MEASUREMENT_ID, {

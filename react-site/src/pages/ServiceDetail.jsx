@@ -1,5 +1,5 @@
-import { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { urlFor } from '../utils/sanity'
@@ -28,8 +28,6 @@ const SERVICES_INFO_QUERY = `*[_type == "ourServices"][0]{
 export default function ServiceDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const location = useLocation()
-  const [error, setError] = useState(null)
 
   const { data, loading } = useSanityLive(SERVICES_INFO_QUERY, {}, {
     listenFilter: `*[_type == "ourServices"]`,
@@ -41,13 +39,10 @@ export default function ServiceDetail() {
     return data.servicesInfo.find(s => s.slug?.current === slug) ?? null
   }, [data, slug])
 
-  useEffect(() => {
-    if (data && slug) {
-      if (!data.servicesInfo) setError('Service not found')
-      else if (!serviceData) setError('Service not found')
-      else setError(null)
-    }
-  }, [data, slug, serviceData])
+  // Derive "not found" state from inputs rather than managing it in state.
+  // Treats "still loading" as not-an-error, and only flags missing data
+  // once the Sanity fetch has resolved.
+  const error = !loading && slug && data && !serviceData ? 'Service not found' : null
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {

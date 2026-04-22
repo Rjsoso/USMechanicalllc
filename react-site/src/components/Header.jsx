@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { client, urlFor } from '../utils/sanity'
-import { navigateToSection } from '../utils/scrollToSection'
 import DrawerMenu from './DrawerMenu'
 import DesktopNav from './DesktopNav'
 import './Header.css'

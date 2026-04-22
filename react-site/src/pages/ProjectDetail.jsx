@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
@@ -26,7 +26,6 @@ const PROJECT_QUERY = `*[_type == "portfolioProject" && _id == $projectId][0]{
 export default function ProjectDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const { data: projectData, loading, error: fetchError } = useSanityLive(
     PROJECT_QUERY,

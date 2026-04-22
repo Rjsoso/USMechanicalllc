@@ -25,9 +25,13 @@ export default function PortfolioPage() {
   const categoriesRes = useSanityLive(CATEGORIES_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
   const sectionRes = useSanityLive(SECTION_QUERY, {}, { listenFilter: `*[_id == "portfolioSection"]` })
 
-  const categories = categoriesRes.data ?? []
+  const categoriesData = categoriesRes.data
+  const categories = useMemo(
+    () => (Array.isArray(categoriesData) ? categoriesData : []),
+    [categoriesData]
+  )
   const sectionData = sectionRes.data
-  const displayCategories = useMemo(() => categories, [categories])
+  const displayCategories = categories
 
   return (
     <>

@@ -21,10 +21,24 @@ const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{
   safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href }
 }`
 
+// Module-level constants are referentially stable across renders, which lets
+// the React Compiler preserve manual memoization and keeps the
+// `data` useMemo dependency array honest.
+const DEFAULT_ABOUT_DATA = {
+  aboutTitle: 'ABOUT',
+  aboutText: `U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. U.S. Mechanical secures projects in the Intermountain and Southwest regions via open bid, design build, CMAR, and the cost-plus method. We employ experienced and competent project managers, superintendents, foreman,  journeyman, and apprentices in the professional fields of plumbing, sheet metal, pipefitting, and welding. We are confident that our employees at U.S. Mechanical are the key to our success, and we are proud to offer our teams experience and abilities to meet the needs of your projects.
+U.S. Mechanical currently has offices in Pleasant Grove, Utah and Las Vegas, Nevada.  We also offer our expertise at Snyder Mechanical located in Elko, Nevada, where we predominately serve the mining industry in the northern Nevada area. U.S. Mechanical is fully licensed, bonded, and insured in the states of Nevada, Utah, Arizona, California, and Wyoming.
+With over 60 years of project experience, we have built an undeniable reputation, enabling us to build an enviable list of clientele and business associates. In turn, U.S. Mechanical's current bonding capacity for a single project is $35,000,000, while its aggregate limit exceeds $150,000,000.`,
+  safetyTitle: 'Safety & Risk Management',
+  safetyText: `U.S. Mechanical conducts the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program manager that is OSHA and MSHA accredited, provide site specific safety programs, fall and operational programs and personal PPE incentives.  These measures ensure not only properly trained employees, but the required focus of safety from all our team members on our projects. 
+The result of this commitment to safety is an Experience Modification Rate (EMR) lower than the national average. This accomplishment has enabled U.S. Mechanical to qualify for self-insured insurance programs that lower the overall risk management costs associated with the general construction industry. These financial savings coupled with our continued commitment to safety provide our client-base added value on every project.
+All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
+}
+
 function About() {
   const [isLoopsHovered, setIsLoopsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [, setIsAnimating] = useState(false)
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1920
   )
@@ -41,28 +55,21 @@ function About() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const defaultData = {
-    aboutTitle: 'ABOUT',
-    aboutText: `U.S. Mechanical's foundation was laid in 1963 with the organization of Bylund Plumbing and Heating. Since that time, the Bylund family has continuously been in the mechanical contracting industry. U.S. Mechanical secures projects in the Intermountain and Southwest regions via open bid, design build, CMAR, and the cost-plus method. We employ experienced and competent project managers, superintendents, foreman,  journeyman, and apprentices in the professional fields of plumbing, sheet metal, pipefitting, and welding. We are confident that our employees at U.S. Mechanical are the key to our success, and we are proud to offer our teams experience and abilities to meet the needs of your projects.
-U.S. Mechanical currently has offices in Pleasant Grove, Utah and Las Vegas, Nevada.  We also offer our expertise at Snyder Mechanical located in Elko, Nevada, where we predominately serve the mining industry in the northern Nevada area. U.S. Mechanical is fully licensed, bonded, and insured in the states of Nevada, Utah, Arizona, California, and Wyoming.
-With over 60 years of project experience, we have built an undeniable reputation, enabling us to build an enviable list of clientele and business associates. In turn, U.S. Mechanical's current bonding capacity for a single project is $35,000,000, while its aggregate limit exceeds $150,000,000.`,
-    safetyTitle: 'Safety & Risk Management',
-    safetyText: `U.S. Mechanical conducts the design, installation, and completion of all projects with safety as our top priority. We employ a company-wide safety program manager that is OSHA and MSHA accredited, provide site specific safety programs, fall and operational programs and personal PPE incentives.  These measures ensure not only properly trained employees, but the required focus of safety from all our team members on our projects. 
-The result of this commitment to safety is an Experience Modification Rate (EMR) lower than the national average. This accomplishment has enabled U.S. Mechanical to qualify for self-insured insurance programs that lower the overall risk management costs associated with the general construction industry. These financial savings coupled with our continued commitment to safety provide our client-base added value on every project.
-All of us at U.S. Mechanical rank safety with the highest degree of importance, and completing projects with zero safety issues will always be our commitment.`,
-  }
-
   const { data: liveData } = useSanityLive(ABOUT_QUERY, {}, {
     listenFilter: `*[_type == "aboutAndSafety"]`,
   })
-  const data = liveData ? { ...defaultData, ...liveData } : defaultData
+  const data = useMemo(
+    () => (liveData ? { ...DEFAULT_ABOUT_DATA, ...liveData } : DEFAULT_ABOUT_DATA),
+    [liveData]
+  )
 
+  const aboutPhotos = data.aboutPhotos
   const carouselItems = useMemo(() => {
-    if (!data?.aboutPhotos || !Array.isArray(data.aboutPhotos) || data.aboutPhotos.length === 0) {
+    if (!aboutPhotos || !Array.isArray(aboutPhotos) || aboutPhotos.length === 0) {
       return []
     }
 
-    return data.aboutPhotos
+    return aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl = photo.asset.url
@@ -76,7 +83,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         }
       })
       .filter(Boolean)
-  }, [data?.aboutPhotos])
+  }, [aboutPhotos])
 
   useEffect(() => {
     if (carouselItems.length > 0 && carouselItems[0].src) {
@@ -90,12 +97,13 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     }
   }, [carouselItems])
 
+  const safetyLogos = data.safetyLogos
   const safetyLogoItems = useMemo(() => {
-    if (!data?.safetyLogos || !Array.isArray(data.safetyLogos) || data.safetyLogos.length === 0) {
+    if (!safetyLogos || !Array.isArray(safetyLogos) || safetyLogos.length === 0) {
       return []
     }
 
-    return data.safetyLogos
+    return safetyLogos
       .map((item, index) => {
         if (!item) return null
 
@@ -116,7 +124,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         return null
       })
       .filter(Boolean)
-  }, [data, data?.safetyLogos])
+  }, [safetyLogos])
 
   const getSafetyLogoHeight = () => {
     if (windowWidth < 768) return 50
@@ -135,7 +143,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
   }
 
   // Set default data if none loaded yet
-  const displayData = data || defaultData
+  const displayData = data || DEFAULT_ABOUT_DATA
 
   return (
     <>
