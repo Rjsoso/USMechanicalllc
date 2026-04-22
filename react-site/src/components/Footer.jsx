@@ -214,7 +214,7 @@ function Footer() {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center gap-2">
-                <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" loading="lazy" decoding="async" />
+                <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" width={96} height={24} loading="lazy" decoding="async" />
                 <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">

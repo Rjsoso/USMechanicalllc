@@ -92,13 +92,14 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
         // Default src stays at 800 for older browsers; srcSet covers the
         // modern range so mobile doesn't pull a 1200w image for a 360px slot.
         const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
-        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000, 1280])
+        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000])
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
           srcSet,
-          // Carousel renders ~100vw on mobile, ~60vw on tablets, max 1100px on desktop.
-          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 1100px',
+          // Carousel renders ~100vw on mobile, ~60vw on tablets, and ~900px
+          // on desktop (inside the 75% split container). Max srcSet is 1000w.
+          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 900px',
           alt: photo.alt || `About US Mechanical ${index + 1}`,
           caption: photo.caption || null,
         }

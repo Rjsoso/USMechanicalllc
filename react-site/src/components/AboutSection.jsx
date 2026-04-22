@@ -66,12 +66,12 @@ function AboutSection({ data: aboutDataProp }) {
           (photo.asset && urlFor(photo)?.url()?.split('?')[0]) ||
           ''
         const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
-        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000, 1280])
+        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000])
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
           srcSet,
-          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 1100px',
+          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 900px',
           alt: photo.alt || `About US Mechanical ${index + 1}`,
           caption: photo.caption || null,
         }

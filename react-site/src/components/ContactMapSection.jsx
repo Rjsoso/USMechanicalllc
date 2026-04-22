@@ -192,6 +192,8 @@ function ContactMapSection() {
                         .url()}
                       alt={affiliate.name ? `${affiliate.name} logo` : ''}
                       className="h-7 w-auto shrink-0 object-contain md:h-8"
+                      width={120}
+                      height={32}
                       loading="lazy"
                       decoding="async"
                     />
