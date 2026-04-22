@@ -1,10 +1,23 @@
 /* Why Us: stacked bars (mobile) / full-bleed vertical columns (lg+) */
 
+/* Slightly lighter rail behind true-black columns + hairline frame (lg+) */
+.why-us-columns {
+  border-radius: 0;
+}
+
+@media (min-width: 1024px) {
+  .why-us-columns {
+    background-color: #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+}
+
 .why-us-bar {
   --why-us-radius: 0.5rem;
   border-radius: var(--why-us-radius);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   background: #000;
   box-shadow: none;
   transition:
@@ -14,7 +27,7 @@
 
 .why-us-bar--open {
   background: #000;
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
   box-shadow: none;
 }
 
@@ -23,7 +36,7 @@
     min-height: 100%;
     border-radius: 0;
     border: none;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: none;
   }
 
@@ -33,7 +46,7 @@
 
   .why-us-bar--open {
     background: #000;
-    border-right-color: rgba(255, 255, 255, 0.14);
+    border-right-color: rgba(255, 255, 255, 0.24);
   }
 }
 
