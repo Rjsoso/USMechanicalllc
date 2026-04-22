@@ -15,7 +15,8 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css}\"",
     "sanity:clean": "rm -rf .sanity node_modules && npm install && npm run dev",
     "generate-sitemap": "node generate-sitemap.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:smoke": "playwright test smoke --project=chromium"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",

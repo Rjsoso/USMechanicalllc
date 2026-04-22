@@ -1,0 +1,23 @@
+# Security Policy for U.S. Mechanical LLC
+#
+# If you believe you have found a security vulnerability on
+# https://www.usmechanicalllc.com, please report it to the address below.
+# We will acknowledge receipt within 5 business days.
+#
+# Please include:
+#   - A clear description of the issue and its impact.
+#   - Steps to reproduce (URLs, request/response samples, screenshots).
+#   - Your preferred way for us to follow up.
+#
+# We ask that you:
+#   - Give us a reasonable amount of time to investigate and remediate
+#     before any public disclosure.
+#   - Avoid privacy violations, data destruction, and service disruption
+#     while testing.
+#   - Only interact with accounts you own or have explicit permission to
+#     access.
+
+Contact: mailto:info@usmechanicalllc.com
+Expires: 2027-04-22T00:00:00Z
+Preferred-Languages: en
+Canonical: https://www.usmechanicalllc.com/.well-known/security.txt

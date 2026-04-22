@@ -103,6 +103,8 @@ Every non-success branch emits a `[contact] {json}` log line (no PII) so you can
 
 `src/components/ErrorBoundary.jsx` wraps the whole app. In development it prints the error to console; in production it fire-and-forgets a minimal payload (name, message, stack, component stack, URL, user agent, app version) to `/api/client-errors`, which logs `[client-error] {json}` to Vercel. Payloads are rate-limited per IP and never include user input beyond the browser-provided fields.
 
+See [`../docs/MONITORING.md`](../docs/MONITORING.md) for Vercel log filter strings and a weekly health-check routine.
+
 ---
 
 ## Privacy & analytics consent
