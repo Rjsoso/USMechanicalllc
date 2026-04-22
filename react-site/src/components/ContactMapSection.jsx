@@ -8,8 +8,11 @@ const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   affiliates[]{ name, description, logo { asset-> { _id, url } } }
 }`
 
-/** Fixed header clearance — match Contact page / scroll offsets */
-const HEADER_OFFSET_PX = 180
+/**
+ * Map block height: use dynamic viewport height minus ~nav band (5.5rem matches scroll-mt).
+ * `100dvh` uses the visible viewport on mobile; `max(..., 36rem)` keeps a tall map on short screens.
+ */
+const MAP_BLOCK_HEIGHT = 'max(36rem, calc(100dvh - 5.5rem))'
 
 /** Tab labels with state; falls back to Sanity `locationName` */
 const OFFICE_TAB_LABEL = {
@@ -54,7 +57,10 @@ function ContactMapSection() {
         className="scroll-mt-[5.5rem] bg-black"
         aria-label="Contact"
       >
-        <div className="flex min-h-[200px] items-center justify-center px-6 py-16">
+        <div
+          className="flex items-center justify-center px-6 py-16"
+          style={{ minHeight: MAP_BLOCK_HEIGHT }}
+        >
           <SmallSpinner label="Loading map…" variant="dark" />
         </div>
       </section>
@@ -71,7 +77,7 @@ function ContactMapSection() {
         {offices && offices.length > 0 ? (
           <div
             className="relative w-full min-h-[320px] overflow-hidden"
-            style={{ height: `calc(100svh - ${HEADER_OFFSET_PX}px)` }}
+            style={{ height: MAP_BLOCK_HEIGHT, minHeight: MAP_BLOCK_HEIGHT }}
           >
             <div className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6">
               {activeOffice && (
@@ -143,8 +149,8 @@ function ContactMapSection() {
           </div>
         ) : (
           <div
-            className="relative min-h-[40vh] w-full overflow-hidden"
-            style={{ minHeight: 320 }}
+            className="relative w-full overflow-hidden"
+            style={{ minHeight: MAP_BLOCK_HEIGHT, height: MAP_BLOCK_HEIGHT }}
           >
             <div className="flex items-center justify-center px-6 py-16 text-white/70">
               No office locations available.
