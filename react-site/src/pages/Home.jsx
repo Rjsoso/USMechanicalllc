@@ -12,7 +12,6 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import ContactMapSection from '../components/ContactMapSection'
 import WhyUsSection from '../components/WhyUsSection'
-import ClientLogosBar from '../components/ClientLogosBar'
 import { scrollToSection } from '../utils/scrollToSection'
 import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
@@ -261,7 +260,6 @@ export default function Home() {
           <AboutSection data={aboutData} />
           <SafetySection data={aboutData} />
           <CompanyStats data={statsData} />
-          <ClientLogosBar />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />

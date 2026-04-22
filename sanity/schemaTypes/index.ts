@@ -17,9 +17,6 @@ import portfolioSection from './portfolioSection'
 import logoLoop from './logoLoop'
 import careers from './careers'
 import whyUs from './whyUs'
-import clientLogo from './clientLogo'
-import keyPerson from './keyPerson'
-import companyCredentials from './companyCredentials'
 
 export const schema = {
   types: [
@@ -42,9 +39,6 @@ export const schema = {
     logoLoop,
     careers,
     whyUs,
-    clientLogo,
-    keyPerson,
-    companyCredentials,
   ],
 }
 

@@ -141,14 +141,6 @@ async function generateSitemap() {
     <priority>0.7</priority>
   </url>
 
-  <!-- Qualifications & Credentials Page (bid-ready info) -->
-  <url>
-    <loc>${DOMAIN}/qualifications</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
   <!-- Privacy Page -->
   <url>
     <loc>${DOMAIN}/privacy</loc>

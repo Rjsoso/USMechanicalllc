@@ -114,40 +114,9 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
             .documentId('contact')
         ),
 
-      // 10. Qualifications & Credentials (bid-ready info)
+      // 10. Legal (Privacy & Terms)
       S.listItem()
-        .title('10. Qualifications & Credentials ⭐')
-        .child(
-          S.list()
-            .title('Qualifications Page')
-            .items([
-              S.listItem()
-                .title('Company Credentials (licensing, bonding, EMR, insurance)')
-                .child(
-                  S.editor()
-                    .id('companyCredentials')
-                    .schemaType('companyCredentials')
-                    .documentId('companyCredentials')
-                ),
-              S.divider(),
-              S.listItem()
-                .title('Key Personnel')
-                .child(
-                  S.documentTypeList('keyPerson')
-                    .title('Key Personnel')
-                ),
-              S.listItem()
-                .title('Client / Project Logos')
-                .child(
-                  S.documentTypeList('clientLogo')
-                    .title('Client / Project Logos')
-                ),
-            ])
-        ),
-
-      // 11. Legal (Privacy & Terms)
-      S.listItem()
-        .title('11. Legal (Privacy & Terms)')
+        .title('10. Legal (Privacy & Terms)')
         .child(
           S.list()
             .title('Legal Pages')

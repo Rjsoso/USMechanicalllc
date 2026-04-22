@@ -86,61 +86,6 @@ export default defineType({
       type: 'string',
       description: 'Optional: More specific type of project (e.g., "New Construction", "Renovation", "HVAC Upgrade")',
     },
-
-    // --- Bid-relevant facts (shown on the project detail page) ---
-    {
-      name: 'projectValue',
-      title: 'Project Value',
-      type: 'string',
-      description:
-        'Optional. Dollar value of the mechanical scope (e.g., "$12.4M"). Displayed as a project-facts stat.',
-    },
-    {
-      name: 'squareFootage',
-      title: 'Square Footage',
-      type: 'string',
-      description:
-        'Optional. Size of the facility serviced (e.g., "325,000 sq ft", "180k sf").',
-    },
-    {
-      name: 'duration',
-      title: 'Duration',
-      type: 'string',
-      description:
-        'Optional. How long the work took (e.g., "18 months", "Jan 2022 – Apr 2023").',
-    },
-    {
-      name: 'deliveryMethod',
-      title: 'Delivery Method',
-      type: 'string',
-      description:
-        'Optional. How the project was procured (e.g., "Design-Build", "CM/GC", "Lump-Sum Bid", "IPD").',
-      options: {
-        list: [
-          { title: 'Design-Build', value: 'Design-Build' },
-          { title: 'CM/GC (Construction Manager / General Contractor)', value: 'CM/GC' },
-          { title: 'Lump-Sum Bid', value: 'Lump-Sum Bid' },
-          { title: 'Design-Bid-Build', value: 'Design-Bid-Build' },
-          { title: 'IPD (Integrated Project Delivery)', value: 'IPD' },
-          { title: 'Negotiated', value: 'Negotiated' },
-          { title: 'Cost-Plus', value: 'Cost-Plus' },
-          { title: 'Other', value: 'Other' },
-        ],
-      },
-    },
-    {
-      name: 'generalContractor',
-      title: 'General Contractor',
-      type: 'string',
-      description: 'Optional. Name of the GC (e.g., "Jacobsen Construction").',
-    },
-    {
-      name: 'owner',
-      title: 'Owner',
-      type: 'string',
-      description:
-        'Optional. The ultimate owner / developer the facility was built for.',
-    },
   ],
   preview: {
     select: {
