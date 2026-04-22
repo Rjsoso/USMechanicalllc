@@ -205,6 +205,13 @@ const StructuredData = () => {
           name: 'Contact',
           item: `${baseUrl}/contact`,
         })
+      } else if (path === '/qualifications') {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Qualifications & Credentials',
+          item: `${baseUrl}/qualifications`,
+        })
       } else if (path.startsWith('/services/')) {
         breadcrumbs.push({
           '@type': 'ListItem',
@@ -286,12 +293,18 @@ const StructuredData = () => {
         {
           '@type': 'SiteNavigationElement',
           position: 5,
+          name: 'Qualifications & Credentials',
+          url: `${baseUrl}/qualifications`,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 6,
           name: 'Careers',
           url: `${baseUrl}/careers`,
         },
         {
           '@type': 'SiteNavigationElement',
-          position: 6,
+          position: 7,
           name: 'Contact',
           url: `${baseUrl}/contact`,
         },
@@ -354,6 +367,14 @@ const StructuredData = () => {
           name: 'Contact Us - Get a Quote',
           description:
             'Contact US Mechanical for plumbing, HVAC, and mechanical contracting services. Get a free quote today.',
+        }
+      } else if (path === '/qualifications') {
+        return {
+          ...baseSchema,
+          '@type': 'WebPage',
+          name: 'Qualifications & Credentials',
+          description:
+            'Pre-qualification data for U.S. Mechanical: state licensing, bonding capacity, EMR, insurance coverage, key personnel, and how to request a bid.',
         }
       }
 

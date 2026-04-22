@@ -138,6 +138,14 @@ function Footer() {
                   Careers
                 </button>
               </li>
+              <li>
+                <Link
+                  to="/qualifications"
+                  className="transition-colors hover:text-white"
+                >
+                  Qualifications & Credentials
+                </Link>
+              </li>
             </ul>
           </div>
 

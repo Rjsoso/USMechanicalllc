@@ -11,6 +11,49 @@ import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import { useSanityLive } from '../hooks/useSanityLive'
 
+/**
+ * Lightweight "label + value" row for the project-details sidebar. Used for
+ * the bid-relevant extensions added in Phase 2A (value, size, duration,
+ * delivery method, GC, owner). Keeps the JSX readable without refactoring
+ * the earlier icon-rich rows.
+ */
+function ProjectFact({ label, value, icon }) {
+  const iconPaths = {
+    dollar:
+      'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    ruler:
+      'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z',
+    clock: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+    handshake:
+      'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+    hardhat:
+      'M12 4v4m-6 4v-1a2 2 0 012-2h8a2 2 0 012 2v1m-12 0h12m-12 0l-1 4h14l-1-4',
+    building:
+      'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+  }
+  const d = iconPaths[icon] || iconPaths.building
+
+  return (
+    <div className="border-b border-gray-200 pb-4">
+      <div className="flex items-start">
+        <svg
+          className="mr-3 mt-1 h-6 w-6 flex-shrink-0 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={d} />
+        </svg>
+        <div>
+          <p className="text-sm font-medium uppercase tracking-wide text-gray-600">{label}</p>
+          <p className="mt-1 text-lg font-semibold text-black">{value}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const PROJECT_QUERY = `*[_type == "portfolioProject" && _id == $projectId][0]{
   _id,
   title,
@@ -20,6 +63,12 @@ const PROJECT_QUERY = `*[_type == "portfolioProject" && _id == $projectId][0]{
   year,
   client,
   projectType,
+  projectValue,
+  squareFootage,
+  duration,
+  deliveryMethod,
+  generalContractor,
+  owner,
   category-> { _id, title }
 }`
 
@@ -369,6 +418,26 @@ export default function ProjectDetail() {
                         </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* --- Bid-relevant facts (Phase 2A additions) --- */}
+                  {projectData.projectValue && (
+                    <ProjectFact label="Project Value" value={projectData.projectValue} icon="dollar" />
+                  )}
+                  {projectData.squareFootage && (
+                    <ProjectFact label="Size" value={projectData.squareFootage} icon="ruler" />
+                  )}
+                  {projectData.duration && (
+                    <ProjectFact label="Duration" value={projectData.duration} icon="clock" />
+                  )}
+                  {projectData.deliveryMethod && (
+                    <ProjectFact label="Delivery Method" value={projectData.deliveryMethod} icon="handshake" />
+                  )}
+                  {projectData.generalContractor && (
+                    <ProjectFact label="General Contractor" value={projectData.generalContractor} icon="hardhat" />
+                  )}
+                  {projectData.owner && (
+                    <ProjectFact label="Owner" value={projectData.owner} icon="building" />
                   )}
                 </div>
               </FadeInWhenVisible>

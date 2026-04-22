@@ -17,6 +17,7 @@ const PAGES: { path: string; name: string }[] = [
   { path: '/portfolio', name: 'portfolio' },
   { path: '/contact', name: 'contact' },
   { path: '/careers', name: 'careers' },
+  { path: '/qualifications', name: 'qualifications' },
 ]
 
 const isChromium = (browserName: string) => browserName === 'chromium'

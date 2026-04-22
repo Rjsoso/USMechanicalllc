@@ -44,6 +44,7 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 const CompanyBackground = lazy(() => import('./pages/CompanyBackground'))
 const SafetyRiskManagement = lazy(() => import('./pages/SafetyRiskManagement'))
 const Recognition = lazy(() => import('./pages/Recognition'))
+const Qualifications = lazy(() => import('./pages/Qualifications'))
 
 function App() {
   // Disable browser scroll restoration globally
@@ -96,6 +97,7 @@ function App() {
             <Route path="/portfolio/:categoryId" element={<CategoryDetail />} />
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/delivery-methods" element={<DeliveryMethodsPage />} />
+            <Route path="/qualifications" element={<Qualifications />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />

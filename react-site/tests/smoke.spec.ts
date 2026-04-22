@@ -76,6 +76,25 @@ test.describe('navigation', () => {
   })
 })
 
+test.describe('qualifications page', () => {
+  test('loads and exposes credentials content', async ({ page, browserName }) => {
+    test.skip(!isChromium(browserName), 'chromium-only smoke test')
+
+    const response = await page.goto('/qualifications')
+    expect(response?.ok(), `/qualifications returned ${response?.status()}`).toBeTruthy()
+
+    await expect(page).toHaveTitle(/qualifications/i)
+    // The H1 renders immediately from the page (not dependent on Sanity).
+    await expect(
+      page.getByRole('heading', { level: 1, name: /qualifications/i })
+    ).toBeVisible()
+    // Primary CTA back to the contact form should always be present.
+    await expect(
+      page.getByRole('link', { name: /start a project inquiry/i })
+    ).toBeVisible()
+  })
+})
+
 test.describe('contact page', () => {
   test('renders the form with required fields', async ({ page, browserName }) => {
     test.skip(!isChromium(browserName), 'chromium-only smoke test')
