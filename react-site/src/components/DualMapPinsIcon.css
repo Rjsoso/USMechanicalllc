@@ -1,0 +1,30 @@
+/* Two overlapping filled map pins (Google / Apple–style teardrop) */
+
+.dual-map-pins {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 0.875rem;
+  vertical-align: middle;
+}
+
+.dual-map-pins__svg {
+  position: absolute;
+  bottom: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  color: #ea4335;
+}
+
+.dual-map-pins__svg--rear {
+  left: 0;
+  z-index: 0;
+  transform: scale(0.9);
+  opacity: 0.88;
+}
+
+.dual-map-pins__svg--front {
+  left: 0.35rem;
+  z-index: 1;
+}

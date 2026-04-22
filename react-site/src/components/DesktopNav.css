@@ -116,10 +116,12 @@
   gap: 0.35rem;
 }
 
-.desktop-nav-locations-icon {
-  width: 14px;
+/* Dual map pins (see DualMapPinsIcon.css); slightly wider than single icon */
+.desktop-nav-locations-icon.dual-map-pins {
+  width: 20px;
   height: 14px;
   flex-shrink: 0;
+  vertical-align: -2px;
 }
 
 .desktop-nav-chevron {
