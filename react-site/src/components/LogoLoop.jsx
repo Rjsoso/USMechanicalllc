@@ -289,13 +289,18 @@ export const LogoLoop = memo(
             src={item?.src || ''}
             srcSet={item?.srcSet}
             sizes={item?.sizes}
-            // Explicit dimensions prevent CLS: CSS sizes the rendered logo
-            // (height: var(--logoloop-logoHeight); width: auto), but the
-            // browser needs attr width/height to reserve aspect-ratio space
-            // before the image loads. Default to a 3:1 landscape ratio
-            // (typical for corporate logos); callers can override per-item.
-            width={item?.width ?? logoHeight * 3}
-            height={item?.height ?? logoHeight}
+            // IMPORTANT: do NOT set a default width/height here. LogoLoop is
+            // a measured, RAF-driven infinite-scroll marquee (see
+            // updateDimensions + useImageLoader). Forcing a guessed aspect
+            // ratio makes every logo render at the wrong size until its real
+            // image loads, at which point CSS `width: auto` recomputes using
+            // the real intrinsic ratio — that retriggers seqWidth measurement
+            // and copyCount recalc while the animation is mid-flight, causing
+            // visible jumps. Let callers pass width/height explicitly when
+            // they genuinely know the logo's aspect ratio; otherwise leave
+            // it unset and accept the one-time pop-in.
+            width={item?.width}
+            height={item?.height}
             alt={item?.alt || item?.title || 'Partner logo'}
             title={item?.title}
             loading="lazy"
