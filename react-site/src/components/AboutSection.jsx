@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react'
-import { urlFor } from '../utils/sanity'
+import { urlFor, buildSanitySrcSet } from '../utils/sanity'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { debounce } from '../utils/debounce'
 import FadeInNative from './FadeInNative'
@@ -61,12 +61,17 @@ function AboutSection({ data: aboutDataProp }) {
     return aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
-        const imageUrl = photo.asset.url
-          ? `${photo.asset.url}?w=1200&q=75&auto=format`
-          : (photo.asset && urlFor(photo)?.width(1200).quality(75).auto('format').url()) || ''
+        const baseUrl =
+          photo.asset.url ||
+          (photo.asset && urlFor(photo)?.url()?.split('?')[0]) ||
+          ''
+        const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
+        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000, 1280])
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
+          srcSet,
+          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 1100px',
           alt: photo.alt || `About US Mechanical ${index + 1}`,
           caption: photo.caption || null,
         }

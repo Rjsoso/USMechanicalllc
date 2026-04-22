@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, memo } from 'react'
-import { urlFor } from '../utils/sanity'
+import { urlFor, buildSanitySrcSet } from '../utils/sanity'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { PortableText } from '@portabletext/react'
 import { debounce } from '../utils/debounce'
@@ -85,12 +85,20 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
     return aboutPhotos
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
-        const imageUrl = photo.asset.url
-          ? `${photo.asset.url}?w=1200&q=75&auto=format`
-          : (photo.asset && urlFor(photo)?.width(1200).quality(75).auto('format').url()) || ''
+        const baseUrl =
+          photo.asset.url ||
+          (photo.asset && urlFor(photo)?.url()?.split('?')[0]) ||
+          ''
+        // Default src stays at 800 for older browsers; srcSet covers the
+        // modern range so mobile doesn't pull a 1200w image for a 360px slot.
+        const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
+        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000, 1280])
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
+          srcSet,
+          // Carousel renders ~100vw on mobile, ~60vw on tablets, max 1100px on desktop.
+          sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 1100px',
           alt: photo.alt || `About US Mechanical ${index + 1}`,
           caption: photo.caption || null,
         }

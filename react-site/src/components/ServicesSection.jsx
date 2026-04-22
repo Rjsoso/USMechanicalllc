@@ -7,7 +7,9 @@ import FadeInNative from './FadeInNative'
 
 function getBoxBackgroundStyle(box) {
   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
-    const imageUrl = `${box.backgroundImage.asset.url}?w=1200&q=80&auto=format`
+    // Service tiles render at ~400–600px CSS width even on wide monitors, so
+    // 800w is still sharp on 2× displays without the ~20 KiB waste of w=1200.
+    const imageUrl = `${box.backgroundImage.asset.url}?w=800&q=80&auto=format`
     return {
       backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url(${imageUrl})`,
       backgroundSize: 'cover',

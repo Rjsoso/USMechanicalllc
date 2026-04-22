@@ -241,7 +241,10 @@ function Footer() {
                 <span className="text-gray-400">{displayLicense}</span>
               )}
               {displayFooterBadge && (
-                <span className="font-medium text-primary-red">{displayFooterBadge}</span>
+                // Use red-400 (#F87171) on the black footer to clear WCAG AA
+                // contrast for small text (~7:1). The brand-red token
+                // (#DC2626) only hits 4.19:1 on #000, which fails AA.
+                <span className="font-medium text-red-400">{displayFooterBadge}</span>
               )}
               {displayFooterBadge && displayServiceArea && (
                 <span className="text-gray-400">•</span>

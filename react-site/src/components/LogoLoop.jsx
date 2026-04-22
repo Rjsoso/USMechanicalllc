@@ -289,8 +289,13 @@ export const LogoLoop = memo(
             src={item?.src || ''}
             srcSet={item?.srcSet}
             sizes={item?.sizes}
-            width={item?.width}
-            height={item?.height}
+            // Explicit dimensions prevent CLS: CSS sizes the rendered logo
+            // (height: var(--logoloop-logoHeight); width: auto), but the
+            // browser needs attr width/height to reserve aspect-ratio space
+            // before the image loads. Default to a 3:1 landscape ratio
+            // (typical for corporate logos); callers can override per-item.
+            width={item?.width ?? logoHeight * 3}
+            height={item?.height ?? logoHeight}
             alt={item?.alt || item?.title || 'Partner logo'}
             title={item?.title}
             loading="lazy"

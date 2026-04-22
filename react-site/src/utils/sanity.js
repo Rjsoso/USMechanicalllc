@@ -27,6 +27,27 @@ export const liveClient = createClient({
 const builder = imageUrlBuilder(client)
 export const urlFor = source => builder.image(source)
 
+/**
+ * Build a responsive srcSet string for a Sanity CDN image URL.
+ * Sanity's CDN accepts ?w=N to resize on the fly, so we can safely append
+ * widths without hitting the underlying bucket more than once per size.
+ *
+ * @param {string} baseUrl - Sanity asset URL (without query params).
+ * @param {number[]} widths - Widths in px to include (e.g. [400, 640, 800, 1200]).
+ * @param {object} [opts]
+ * @param {number} [opts.quality=75] - JPEG quality.
+ * @param {string} [opts.format='format'] - Sanity auto format hint.
+ * @returns {string} Comma-separated srcSet string.
+ */
+export function buildSanitySrcSet(baseUrl, widths, { quality = 75, format = 'format' } = {}) {
+  if (!baseUrl) return ''
+  // Strip any existing query to avoid duplicate params.
+  const clean = baseUrl.split('?')[0]
+  return widths
+    .map((w) => `${clean}?w=${w}&q=${quality}&auto=${format} ${w}w`)
+    .join(', ')
+}
+
 // Helper function to fetch content from Sanity
 export async function fetchContent(query, params = {}) {
   try {
