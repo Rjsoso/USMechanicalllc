@@ -120,10 +120,10 @@ function useFineHoverPointer() {
   return matches
 }
 
-function ChevronDown() {
+function ChevronDown({ className = '' }) {
   return (
     <svg
-      className="why-us-bar__chevron h-5 w-5 shrink-0 text-white/50"
+      className={`why-us-bar__chevron h-5 w-5 shrink-0 text-white/50 ${className}`}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -153,40 +153,44 @@ function WhyUsExpandBar({
 
   return (
     <div
-      className={`why-us-bar ${expanded ? 'why-us-bar--open' : ''}`}
+      className={`why-us-bar ${expanded ? 'why-us-bar--open' : ''} lg:flex lg:min-h-0 lg:min-w-0 lg:flex-1 lg:flex-col`}
       onMouseEnter={onBarEnter}
       onMouseLeave={onBarLeave}
     >
       <button
         type="button"
         id={triggerId}
-        className="why-us-bar__summary"
+        className="why-us-bar__summary flex min-h-[3.25rem] w-full flex-row items-center gap-3 px-3 py-3 text-left lg:min-h-0 lg:flex-1 lg:flex-col lg:items-center lg:justify-between lg:gap-3 lg:px-2 lg:py-5 lg:text-center"
         aria-expanded={expanded}
         aria-controls={panelId}
         onClick={onToggle}
       >
-        <span className="why-us-bar__icon text-red-500 [&>svg]:block">{icon}</span>
-        <span className="why-us-bar__summary-text min-w-0 flex-1 text-left">
+        <span className="why-us-bar__icon shrink-0 text-red-500 [&>svg]:block">{icon}</span>
+        <span className="why-us-bar__summary-text min-w-0 flex-1 text-left lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center lg:text-center">
           {eyebrow ? (
-            <span className="why-us-bar__eyebrow block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45 md:text-[11px]">
+            <span className="why-us-bar__eyebrow block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45 lg:leading-tight md:text-[11px]">
               {eyebrow}
             </span>
           ) : null}
-          <span className="block truncate text-base font-bold tracking-tight text-white md:text-lg">
+          <span className="block truncate text-base font-bold tracking-tight text-white lg:line-clamp-4 lg:text-sm lg:leading-snug lg:tracking-tight md:text-lg">
             {title}
           </span>
         </span>
-        <ChevronDown />
+        <span className="shrink-0 lg:mt-auto">
+          <ChevronDown className="lg:mx-auto" />
+        </span>
       </button>
       <div
         id={panelId}
         role="region"
         aria-labelledby={triggerId}
-        className="why-us-bar__panel"
+        className="why-us-bar__panel lg:px-2"
       >
         <div className="why-us-bar__grid">
           <div className="why-us-bar__panel-inner" aria-hidden={!expanded}>
-            <p className="text-base leading-relaxed text-white/65">{description}</p>
+            <p className="text-base leading-relaxed text-white/65 lg:text-center lg:text-xs lg:leading-relaxed">
+              {description}
+            </p>
           </div>
         </div>
       </div>
@@ -241,8 +245,8 @@ function WhyUsSection() {
       </div>
 
       <div className="bg-transparent py-12 md:py-16">
-        <div className="mx-auto max-w-4xl px-6">
-          <div className="flex flex-col gap-2 md:gap-2.5">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex flex-col gap-2 md:gap-2.5 lg:min-h-[22rem] lg:flex-row lg:items-stretch lg:gap-2">
             {displayData.items.map((item, index) => (
               <WhyUsExpandBar
                 key={item.title || index}
