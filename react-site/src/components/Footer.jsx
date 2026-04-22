@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
+import { openConsentBanner } from './ConsentBanner'
 
 // Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
 const FALLBACK_DATA = {
@@ -228,6 +229,15 @@ function Footer() {
                 <Link to="/terms" className="transition-colors hover:text-white">
                   Terms of Service
                 </Link>
+                <span aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={openConsentBanner}
+                  className="transition-colors hover:text-white"
+                  aria-label="Open cookie preferences to change your choice"
+                >
+                  Cookie preferences
+                </button>
               </div>
             </div>
             <div className="flex flex-col items-center gap-2 text-sm md:flex-row md:gap-4">
