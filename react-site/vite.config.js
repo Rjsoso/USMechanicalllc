@@ -1,6 +1,7 @@
+/* global process */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { readFileSync, writeFileSync } from 'fs'
+import { copyFileSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
 const siteUrl = process.env.VITE_SITE_URL || 'https://www.usmechanicalllc.com'
@@ -20,8 +21,16 @@ function siteUrlPlugin() {
         const robotsPath = join(outDir, 'robots.txt')
         const content = readFileSync(robotsPath, 'utf8')
         writeFileSync(robotsPath, content.replace(/__SITE_URL__/g, siteUrl), 'utf8')
-      } catch (_) {
+      } catch {
         // robots.txt may not exist in dist yet in some build orders
+      }
+
+      // Create 404.html as a copy of index.html so Vercel serves the SPA
+      // shell with HTTP 404 for any unmatched route.
+      try {
+        copyFileSync(join(outDir, 'index.html'), join(outDir, '404.html'))
+      } catch (err) {
+        console.warn('[site-url-replace] could not create 404.html:', err?.message)
       }
     },
   }

@@ -5,10 +5,20 @@
   "framework": "vite",
   "installCommand": "npm install",
   "rewrites": [
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/about/company-background", "destination": "/index.html" },
+    { "source": "/about/safety-and-risk-management", "destination": "/index.html" },
+    { "source": "/about/recognition", "destination": "/index.html" },
+    { "source": "/careers", "destination": "/index.html" },
+    { "source": "/portfolio", "destination": "/index.html" },
+    { "source": "/portfolio/:categoryId", "destination": "/index.html" },
+    { "source": "/services/:slug", "destination": "/index.html" },
+    { "source": "/projects/:id", "destination": "/index.html" },
+    { "source": "/contact", "destination": "/index.html" },
+    { "source": "/delivery-methods", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" }
   ],
   "redirects": [
     { "source": "/contact.php", "destination": "/contact", "permanent": true },

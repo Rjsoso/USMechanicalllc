@@ -20,6 +20,8 @@
     "@portabletext/react": "^5.0.0",
     "@sanity/client": "^6.29.1",
     "@sanity/image-url": "^1.2.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.37.0",
     "framer-motion": "^10.18.0",
     "lucide-react": "^0.553.0",
     "react": "^18.2.0",

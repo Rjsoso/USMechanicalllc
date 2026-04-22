@@ -1,12 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
+import { getSiteUrlSlash } from '../utils/siteUrl'
 
 export default function NotFound() {
   const navigate = useNavigate()
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-900 text-white">
+      <SEO
+        title="Page Not Found | US Mechanical"
+        description="The page you're looking for doesn't exist. Return to the US Mechanical homepage."
+        url={getSiteUrlSlash()}
+        noindex
+        prerenderStatusCode={404}
+      />
       <Header />
 
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-32 text-center">

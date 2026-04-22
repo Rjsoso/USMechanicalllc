@@ -25,12 +25,12 @@ const SEO = ({
   url = getSiteUrlSlash(),
   type = 'website',
   author = 'U.S. Mechanical LLC',
+  noindex = false,
+  prerenderStatusCode = null,
 }) => {
   useEffect(() => {
-    // Update document title
     document.title = title
 
-    // Function to update or create meta tag
     const updateMetaTag = (attr, attrValue, content) => {
       let element = document.querySelector(`meta[${attr}="${attrValue}"]`)
       if (element) {
@@ -43,25 +43,26 @@ const SEO = ({
       }
     }
 
-    // Update standard meta tags
     updateMetaTag('name', 'description', description)
     updateMetaTag('name', 'keywords', keywords)
     updateMetaTag('name', 'author', author)
+    updateMetaTag(
+      'name',
+      'robots',
+      noindex ? 'noindex, follow' : 'index, follow'
+    )
 
-    // Update Open Graph tags
     updateMetaTag('property', 'og:title', title)
     updateMetaTag('property', 'og:description', description)
     updateMetaTag('property', 'og:image', ogImage)
     updateMetaTag('property', 'og:url', url)
     updateMetaTag('property', 'og:type', type)
 
-    // Update Twitter Card tags
     updateMetaTag('name', 'twitter:title', title)
     updateMetaTag('name', 'twitter:description', description)
     updateMetaTag('name', 'twitter:image', ogImage)
     updateMetaTag('name', 'twitter:url', url)
 
-    // Update canonical link
     let canonical = document.querySelector('link[rel="canonical"]')
     if (canonical) {
       canonical.setAttribute('href', url)
@@ -71,9 +72,27 @@ const SEO = ({
       canonical.setAttribute('href', url)
       document.head.appendChild(canonical)
     }
-  }, [title, description, keywords, ogImage, url, type, author])
 
-  return null // This component doesn't render anything visible
+    // Hint to crawlers that support it (e.g. Googlebot's dynamic renderer)
+    // that this SPA response should be treated as the given HTTP status.
+    const existingStatus = document.querySelector(
+      'meta[name="prerender-status-code"]'
+    )
+    if (prerenderStatusCode) {
+      if (existingStatus) {
+        existingStatus.setAttribute('content', String(prerenderStatusCode))
+      } else {
+        const el = document.createElement('meta')
+        el.setAttribute('name', 'prerender-status-code')
+        el.setAttribute('content', String(prerenderStatusCode))
+        document.head.appendChild(el)
+      }
+    } else if (existingStatus) {
+      existingStatus.remove()
+    }
+  }, [title, description, keywords, ogImage, url, type, author, noindex, prerenderStatusCode])
+
+  return null
 }
 
 SEO.propTypes = {
@@ -84,6 +103,8 @@ SEO.propTypes = {
   url: PropTypes.string,
   type: PropTypes.string,
   author: PropTypes.string,
+  noindex: PropTypes.bool,
+  prerenderStatusCode: PropTypes.number,
 }
 
 export default SEO

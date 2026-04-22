@@ -141,6 +141,12 @@ react-site/
 
 The `vercel.json` is already configured for optimal deployment.
 
+> **Deployment config lives only in `react-site/vercel.json`.** The Vercel
+> project is linked with `rootDirectory: react-site` (see
+> `.vercel/project.json`), so any `vercel.json` outside this directory is
+> ignored. All security headers (CSP, HSTS, X-Frame-Options, etc.),
+> redirects, and SPA rewrites must be maintained here.
+
 ## 🎯 Features Breakdown
 
 ### Animations

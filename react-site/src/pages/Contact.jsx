@@ -33,6 +33,7 @@ function Contact() {
     email: '',
     phone: '',
     message: '',
+    website: '',
   })
   const [formErrors, setFormErrors] = useState({})
   const [formSubmitting, setFormSubmitting] = useState(false)
@@ -198,6 +199,7 @@ function Contact() {
           email: '',
           phone: '',
           message: '',
+          website: '',
         })
 
         if (typeof window.turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
@@ -373,6 +375,32 @@ function Contact() {
                       <p className="mt-1 text-xs text-gray-500">
                         {formData.message.length}/5000 characters
                       </p>
+                    </div>
+
+                    {/* Honeypot field — hidden from real users, bots will fill it in. */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        left: '-10000px',
+                        top: 'auto',
+                        width: '1px',
+                        height: '1px',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <label htmlFor="website-field">
+                        Website (leave blank)
+                        <input
+                          id="website-field"
+                          type="text"
+                          name="website"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={formData.website}
+                          onChange={handleInputChange}
+                        />
+                      </label>
                     </div>
 
                     <div

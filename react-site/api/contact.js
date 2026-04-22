@@ -1,34 +1,156 @@
+/* global process */
 import { Resend } from 'resend'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+
+const NAME_MAX = 100
+const EMAIL_MAX = 254
+const PHONE_MAX = 20
+const MESSAGE_MAX = 5000
+const MESSAGE_MIN = 10
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
+const SPAM_KEYWORDS = [
+  'viagra', 'cialis', 'casino', 'lottery', 'prize', 'winner',
+  'click here', 'buy now', 'limited time', 'act now',
+  'cryptocurrency', 'bitcoin', 'investment opportunity',
+  'work from home', 'make money fast', 'free money',
+]
+const SUSPICIOUS_EMAIL_FRAGMENTS = ['.ru', '.cn', 'tempmail', 'throwaway', 'guerrillamail']
+
+let ratelimiter = null
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  ratelimiter = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(3, '1 h'),
+    analytics: true,
+    prefix: 'ratelimit:contact',
+  })
+}
+
+function stripHtml(value) {
+  if (value == null) return ''
+  return String(value).replace(/<[^>]*>/g, '').trim()
+}
+
+function isSpam({ name, email, message }) {
+  const haystack = `${name} ${message}`.toLowerCase()
+  if (SPAM_KEYWORDS.some(k => haystack.includes(k))) return true
+
+  const linkCount = (message.match(/https?:\/\//gi) || []).length
+  if (linkCount > 2) return true
+
+  const lowerEmail = email.toLowerCase()
+  if (SUSPICIOUS_EMAIL_FRAGMENTS.some(d => lowerEmail.includes(d))) return true
+
+  const words = message.split(/\s+/).filter(Boolean)
+  if (words.length > 20) {
+    const unique = new Set(words)
+    if (unique.size / words.length < 0.3) return true
+  }
+  return false
+}
+
+function getClientIp(req) {
+  const xff = req.headers['x-forwarded-for']
+  if (xff) {
+    const first = Array.isArray(xff) ? xff[0] : String(xff).split(',')[0]
+    return first.trim()
+  }
+  return req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown'
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { name, email, phone, message, 'cf-turnstile-response': token } = req.body
+  const body = req.body && typeof req.body === 'object' ? req.body : {}
+
+  if (typeof body.website === 'string' && body.website.trim() !== '') {
+    return res.status(200).json({ success: true })
+  }
+
+  const name = stripHtml(body.name)
+  const email = stripHtml(body.email)
+  const phone = stripHtml(body.phone)
+  const message = stripHtml(body.message)
+  const token = body['cf-turnstile-response']
+
+  if (!name || name.length < 2 || name.length > NAME_MAX) {
+    return res.status(400).json({ error: 'Please enter a valid name (2–100 characters).' })
+  }
+  if (!email || email.length > EMAIL_MAX || !EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' })
+  }
+  if (phone) {
+    if (phone.length > PHONE_MAX) {
+      return res.status(400).json({ error: 'Phone number is too long.' })
+    }
+    const cleaned = phone.replace(/[\s\-()+.]/g, '')
+    if (!/^\d{10,15}$/.test(cleaned)) {
+      return res.status(400).json({ error: 'Please enter a valid phone number.' })
+    }
+  }
+  if (!message || message.length < MESSAGE_MIN || message.length > MESSAGE_MAX) {
+    return res.status(400).json({ error: 'Message must be between 10 and 5000 characters.' })
+  }
+  if (isSpam({ name, email, message })) {
+    return res.status(400).json({
+      error: 'Your message was flagged as potential spam. Please remove any suspicious content and try again.',
+    })
+  }
+
+  const clientIp = getClientIp(req)
+
+  if (ratelimiter) {
+    try {
+      const { success, reset, remaining } = await ratelimiter.limit(clientIp)
+      if (!success) {
+        const retryAfterSec = Math.max(1, Math.ceil((reset - Date.now()) / 1000))
+        res.setHeader('Retry-After', String(retryAfterSec))
+        return res.status(429).json({
+          error: 'Too many submissions from this network. Please try again later.',
+        })
+      }
+      res.setHeader('X-RateLimit-Remaining', String(remaining))
+    } catch (err) {
+      console.error('Rate limit check failed (fail-open):', err)
+    }
+  }
 
   const secretKey = process.env.TURNSTILE_SECRET_KEY
   if (!secretKey) {
     return res.status(500).json({ error: 'Server configuration error: missing secret key' })
   }
-
   if (!token) {
     return res.status(400).json({ error: 'Verification token missing. Please complete the verification.' })
   }
 
-  // Validate Turnstile token server-side
-  const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      secret: secretKey,
-      response: token,
-    }),
-  })
+  let verifyData
+  try {
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: secretKey,
+        response: token,
+        remoteip: clientIp,
+      }),
+    })
+    verifyData = await verifyRes.json()
+  } catch (err) {
+    console.error('Turnstile verify network error:', err)
+    return res.status(503).json({
+      error: 'Verification service is unavailable. Please try again in a moment.',
+    })
+  }
 
-  const verifyData = await verifyRes.json()
-
-  if (!verifyData.success) {
+  if (!verifyData || !verifyData.success) {
+    console.error('Turnstile verify failed:', verifyData && verifyData['error-codes'])
     return res.status(400).json({ error: 'Verification failed. Please refresh and try again.' })
   }
 
@@ -82,7 +204,7 @@ export default async function handler(req, res) {
 </html>
 `.trim()
 
-  const { data, error } = await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: fromEmail,
     to: [toEmail],
     replyTo: email,
