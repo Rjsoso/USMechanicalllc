@@ -89,6 +89,8 @@ export default function CareersPage() {
       <Header />
 
       <main
+        id="main-content"
+        tabIndex={-1}
         className="relative pb-24 pt-32 text-black"
         style={{
           backgroundColor: '#f5f5f5',

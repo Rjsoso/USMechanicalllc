@@ -67,6 +67,14 @@ function App() {
           v7_relativeSplatPath: true,
         }}
       >
+        {/*
+          Skip link for keyboard + screen reader users. Hidden visually until
+          focused, then jumps past the header into the page content.
+        */}
+        <a href="#main-content" className="skip-to-main">
+          Skip to main content
+        </a>
+
         {/* Reset scroll position on route change */}
         <ScrollToTop />
 

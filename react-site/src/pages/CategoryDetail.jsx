@@ -61,7 +61,25 @@ export default function CategoryDetail() {
     }
   }, [categoriesList, categoryId])
 
-  // Sort projects by order
+  // Build a 1200x630 social preview image from the category image (fallback to
+  // the first image of the first project)
+  const ogImageUrl = useMemo(() => {
+    const pickImage = () => {
+      if (categoryData?.image?.asset) return categoryData.image
+      const firstProj = Array.isArray(categoryData?.projects)
+        ? categoryData.projects.find((p) => Array.isArray(p?.images) && p.images[0]?.asset)
+        : null
+      return firstProj?.images?.[0] ?? null
+    }
+    const src = pickImage()
+    if (!src) return undefined
+    try {
+      return urlFor(src).width(1200).height(630).fit('crop').auto('format').url()
+    } catch {
+      return undefined
+    }
+  }, [categoryData])
+
   const sortedProjects = useMemo(() => {
     if (!categoryData?.projects) return []
     return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -118,10 +136,13 @@ export default function CategoryDetail() {
         }
         keywords={`${categoryData.title}, US Mechanical portfolio, mechanical projects, ${categoryData.title} projects`}
         url={`${getSiteUrl()}/portfolio/${categoryData._id}`}
+        {...(ogImageUrl ? { ogImage: ogImageUrl } : {})}
       />
       <Header />
-      <motion.main 
-        className="min-h-screen bg-white text-black" 
+      <motion.main
+        id="main-content"
+        tabIndex={-1}
+        className="min-h-screen bg-white text-black"
         style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

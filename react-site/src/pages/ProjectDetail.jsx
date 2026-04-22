@@ -37,7 +37,17 @@ export default function ProjectDetail() {
   const error = fetchError ? 'Failed to load project' : (!projectData && !loading && id ? 'Project not found' : null)
 
 
-  // Map images to carousel items format
+  // Build a 1200x630 social preview image from the first project image
+  const ogImageUrl = useMemo(() => {
+    const first = projectData?.images?.find((p) => p && p.asset)
+    if (!first) return undefined
+    try {
+      return urlFor(first).width(1200).height(630).fit('crop').auto('format').url()
+    } catch {
+      return undefined
+    }
+  }, [projectData])
+
   const carouselItems = useMemo(() => {
     if (
       !projectData?.images ||
@@ -50,12 +60,20 @@ export default function ProjectDetail() {
     return projectData.images
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
-        const imageUrl = photo.asset.url
-          ? `${photo.asset.url}?w=800&q=85&auto=format`
-          : (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
+        const imageUrl =
+          (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
+        const srcSet = [400, 600, 800, 1200, 1600]
+          .map((w) => {
+            const url = urlFor(photo).width(w).quality(85).auto('format').url()
+            return url ? `${url} ${w}w` : null
+          })
+          .filter(Boolean)
+          .join(', ')
         return {
           id: `project-photo-${index}`,
           src: imageUrl,
+          srcSet,
+          sizes: '(max-width: 768px) 100vw, 50vw',
           alt: photo.alt || `${projectData.title} ${index + 1}`,
           caption: photo.caption || null,
         }
@@ -115,10 +133,14 @@ export default function ProjectDetail() {
         }
         keywords={`${projectData.title}, US Mechanical portfolio, mechanical project, ${projectData.category?.title || 'construction'}`}
         url={`${getSiteUrl()}/projects/${projectData._id}`}
+        type="article"
+        {...(ogImageUrl ? { ogImage: ogImageUrl } : {})}
       />
       <Header />
-      <motion.main 
-        className="min-h-screen bg-white text-black" 
+      <motion.main
+        id="main-content"
+        tabIndex={-1}
+        className="min-h-screen bg-white text-black"
         style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

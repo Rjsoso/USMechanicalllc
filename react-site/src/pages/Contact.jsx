@@ -280,7 +280,7 @@ function Contact() {
         url={`${getSiteUrl()}/contact`}
       />
       <Header />
-      <main className="min-h-screen bg-white">
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-white">
         {!contactLoading && (error || !contactData) && (
           <section className="relative w-full px-6 py-20 pt-[180px]">
             <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">

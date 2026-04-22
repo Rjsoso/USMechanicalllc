@@ -53,7 +53,14 @@ function Portfolio({ data: portfolioDataProp }) {
                 {/* Background Image */}
                 {category.image?.asset && (
                   <img
-                    src={urlFor(category.image).width(800).quality(90).auto('format').url()}
+                    src={urlFor(category.image).width(800).quality(85).auto('format').url()}
+                    srcSet={[400, 600, 800, 1200, 1600]
+                      .map(
+                        (w) =>
+                          `${urlFor(category.image).width(w).quality(85).auto('format').url()} ${w}w`
+                      )
+                      .join(', ')}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     alt={category.title}
                     className="absolute inset-0 h-full w-full object-cover transition-opacity duration-200"
                     loading="lazy"

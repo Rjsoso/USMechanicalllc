@@ -240,6 +240,8 @@ export default function Home() {
       <Header />
 
       <main
+        id="main-content"
+        tabIndex={-1}
         className="main-with-fixed-bg"
         style={{
           '--bg-url': heroBackgroundUrl ? `url(${heroBackgroundUrl})` : 'none',

@@ -34,6 +34,8 @@ const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round,
         {shouldLoad ? (
           <img
             src={item?.src || ''}
+            srcSet={item?.srcSet || undefined}
+            sizes={item?.sizes || undefined}
             alt={item?.alt || `Carousel image ${index + 1}`}
             className="carousel-item-image"
             loading={index <= 1 ? 'eager' : 'lazy'}

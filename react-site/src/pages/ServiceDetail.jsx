@@ -67,7 +67,17 @@ export default function ServiceDetail() {
     }
   }, [servicesList, slug])
 
-  // Map images to carousel items format (exact same as AboutAndSafety)
+  // Build a 1200x630 social preview image from the first service image
+  const ogImageUrl = useMemo(() => {
+    const first = serviceData?.images?.find((p) => p && p.asset)
+    if (!first) return undefined
+    try {
+      return urlFor(first).width(1200).height(630).fit('crop').auto('format').url()
+    } catch {
+      return undefined
+    }
+  }, [serviceData])
+
   const carouselItems = useMemo(() => {
     if (
       !serviceData?.images ||
@@ -80,12 +90,20 @@ export default function ServiceDetail() {
     return serviceData.images
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
-        const imageUrl = photo.asset.url
-          ? `${photo.asset.url}?w=800&q=85&auto=format`
-          : (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
+        const imageUrl =
+          (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
+        const srcSet = [400, 600, 800, 1200, 1600]
+          .map((w) => {
+            const url = urlFor(photo).width(w).quality(85).auto('format').url()
+            return url ? `${url} ${w}w` : null
+          })
+          .filter(Boolean)
+          .join(', ')
         return {
           id: `service-photo-${index}`,
           src: imageUrl,
+          srcSet,
+          sizes: '(max-width: 768px) 100vw, 50vw',
           alt: photo.alt || `${serviceData.title} ${index + 1}`,
           caption: photo.caption || null,
         }
@@ -144,10 +162,13 @@ export default function ServiceDetail() {
         }
         keywords={`${serviceData.title}, mechanical services, HVAC, plumbing, ${serviceData.title} Utah, ${serviceData.title} Nevada`}
         url={`${getSiteUrl()}/services/${serviceData.slug.current}`}
+        {...(ogImageUrl ? { ogImage: ogImageUrl } : {})}
       />
       <Header />
-      <motion.main 
-        className="min-h-screen bg-white text-black" 
+      <motion.main
+        id="main-content"
+        tabIndex={-1}
+        className="min-h-screen bg-white text-black"
         style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

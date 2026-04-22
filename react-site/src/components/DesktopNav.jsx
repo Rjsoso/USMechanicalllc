@@ -60,17 +60,21 @@ const DesktopNav = () => {
     <nav className="desktop-nav" role="navigation" aria-label="Main navigation">
       <div className="desktop-nav-container">
         <ul className="desktop-nav-list">
-          {navLinks.map((link) => (
-            <li key={link.sectionId || link.path} className="desktop-nav-item">
-              <button
-                className="desktop-nav-link"
-                onClick={() => handleNavClick(link)}
-                aria-label={`Navigate to ${link.label}`}
-              >
-                {link.label}
-              </button>
-            </li>
-          ))}
+          {navLinks.map((link) => {
+            const isCurrent = link.path && location.pathname === link.path
+            return (
+              <li key={link.sectionId || link.path} className="desktop-nav-item">
+                <button
+                  className="desktop-nav-link"
+                  onClick={() => handleNavClick(link)}
+                  aria-label={`Navigate to ${link.label}`}
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {link.label}
+                </button>
+              </li>
+            )
+          })}
 
           {/* Locations dropdown — right side */}
           <li

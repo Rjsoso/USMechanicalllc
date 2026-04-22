@@ -69,6 +69,8 @@ export default function DeliveryMethodsPage() {
       />
       <Header />
       <motion.main
+        id="main-content"
+        tabIndex={-1}
         className="min-h-screen bg-white text-black"
         style={{ paddingTop: '180px' }}
         initial={{ opacity: 0 }}

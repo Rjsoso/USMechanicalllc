@@ -205,6 +205,45 @@ const StructuredData = () => {
           name: 'Contact',
           item: `${baseUrl}/contact`,
         })
+      } else if (path.startsWith('/services/')) {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Services',
+          item: `${baseUrl}/#services`,
+        })
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Service',
+          item: `${baseUrl}${path}`,
+        })
+      } else if (path.startsWith('/projects/')) {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Portfolio',
+          item: `${baseUrl}/portfolio`,
+        })
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Project',
+          item: `${baseUrl}${path}`,
+        })
+      } else if (path.startsWith('/portfolio/')) {
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Portfolio',
+          item: `${baseUrl}/portfolio`,
+        })
+        breadcrumbs.push({
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Category',
+          item: `${baseUrl}${path}`,
+        })
       }
 
       return {

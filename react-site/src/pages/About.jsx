@@ -148,6 +148,8 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
       <Header />
 
       <motion.main
+        id="main-content"
+        tabIndex={-1}
         className="bg-black pt-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -215,17 +215,25 @@ const DrawerMenu = () => {
                 >
                   <h3 className="drawer-section-label">{section.label}</h3>
                   <div className="drawer-section-links">
-                    {section.links?.map((link, i) => (
-                      <button
-                        key={`${link.label}-${i}`}
-                        className="drawer-link"
-                        onClick={() => handleLinkClick(link.href)}
-                        onMouseEnter={link.href === '#contact' || link.href === '#careers' ? preloadContact : undefined}
-                        aria-label={link.ariaLabel || link.label}
-                      >
-                        {link.label}
-                      </button>
-                    ))}
+                    {section.links?.map((link, i) => {
+                      const isCurrent =
+                        typeof link.href === 'string' &&
+                        link.href.startsWith('/') &&
+                        !link.href.includes('#') &&
+                        location.pathname === link.href
+                      return (
+                        <button
+                          key={`${link.label}-${i}`}
+                          className="drawer-link"
+                          onClick={() => handleLinkClick(link.href)}
+                          onMouseEnter={link.href === '#contact' || link.href === '#careers' ? preloadContact : undefined}
+                          aria-label={link.ariaLabel || link.label}
+                          aria-current={isCurrent ? 'page' : undefined}
+                        >
+                          {link.label}
+                        </button>
+                      )
+                    })}
                   </div>
                 </motion.div>
               ))}

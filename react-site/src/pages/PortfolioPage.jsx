@@ -39,7 +39,7 @@ export default function PortfolioPage() {
       />
       <Header />
 
-      <main className="bg-black pt-32 pb-0 text-white">
+      <main id="main-content" tabIndex={-1} className="bg-black pt-32 pb-0 text-white">
         <div className="mx-auto mb-12 max-w-7xl px-6">
           <motion.h1
             className="section-title text-center text-5xl text-white md:text-6xl"
