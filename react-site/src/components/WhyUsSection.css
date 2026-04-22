@@ -8,13 +8,13 @@
 @media (min-width: 1024px) {
   .why-us-columns {
     background-color: #0a0a0a;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   }
 }
 
 .why-us-bar {
   --why-us-radius: 0.5rem;
+  position: relative;
   border-radius: var(--why-us-radius);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -50,7 +50,39 @@
   }
 }
 
+/* Bottom-up light wash on hover (fine pointer only); sits under content */
+@media (hover: hover) and (pointer: fine) {
+  .why-us-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.38s ease;
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.06) 22%,
+      rgba(255, 255, 255, 0.02) 42%,
+      transparent 62%
+    );
+  }
+
+  .why-us-bar:hover::after,
+  .why-us-bar:focus-within::after {
+    opacity: 1;
+  }
+
+  .why-us-bar:hover,
+  .why-us-bar:focus-within {
+    box-shadow: inset 0 -28px 48px -12px rgba(255, 255, 255, 0.07);
+  }
+}
+
 .why-us-bar__summary {
+  position: relative;
+  z-index: 1;
   cursor: pointer;
   border: none;
   background: transparent;
@@ -71,6 +103,8 @@
 }
 
 .why-us-bar__panel {
+  position: relative;
+  z-index: 1;
   padding-left: 0.875rem;
   padding-right: 0.875rem;
 }
@@ -132,5 +166,17 @@
 
   .why-us-bar__chevron {
     transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .why-us-bar::after {
+      transition: none;
+      opacity: 0 !important;
+    }
+
+    .why-us-bar:hover,
+    .why-us-bar:focus-within {
+      box-shadow: none;
+    }
   }
 }
