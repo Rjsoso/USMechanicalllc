@@ -11,6 +11,7 @@ import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import SmallSpinner from '../components/SmallSpinner'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 const SERVICES_INFO_QUERY = `*[_type == "ourServices"][0]{
@@ -92,7 +93,20 @@ export default function ServiceDetail() {
       .filter(Boolean)
   }, [serviceData])
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
+          <SmallSpinner label="Loading service…" variant="light" />
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   if (error || !serviceData) {
     return (

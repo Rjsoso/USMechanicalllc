@@ -4,6 +4,19 @@ import StructuredData from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
 import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
+import SmallSpinner from './components/SmallSpinner'
+
+function RouteSuspenseFallback() {
+  return (
+    <div
+      className="flex min-h-[50vh] items-center justify-center bg-[#1a1a1a]"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <SmallSpinner label="Loading page…" variant="dark" />
+    </div>
+  )
+}
 
 function ScrollToTop() {
   const location = useLocation()
@@ -53,7 +66,7 @@ function App() {
         {/* Add Schema.org structured data for SEO */}
         <StructuredData />
 
-        <Suspense fallback={null}>
+        <Suspense fallback={<RouteSuspenseFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

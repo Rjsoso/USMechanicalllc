@@ -1,6 +1,7 @@
 import { useState, memo, Fragment } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { urlFor } from '../utils/sanity'
+import SmallSpinner from './SmallSpinner'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   offices[]{ locationName, address, phone, fax },
@@ -33,7 +34,7 @@ function affiliateDescriptionSegments(description) {
 
 /**
  * Full-viewport map, gradient, and location card for the home page `#contact` section.
- * All office maps stay mounted so tab switches are instant (no iframe reload).
+ * Only the active office iframe is mounted (tab switch remounts iframe for that office).
  */
 function ContactMapSection() {
   const [activeOfficeTab, setActiveOfficeTab] = useState(0)
@@ -53,8 +54,8 @@ function ContactMapSection() {
         className="scroll-mt-[5.5rem] bg-black"
         aria-label="Contact"
       >
-        <div className="flex min-h-[200px] items-center justify-center px-6 py-16 text-white/60">
-          Loading map…
+        <div className="flex min-h-[200px] items-center justify-center px-6 py-16">
+          <SmallSpinner label="Loading map…" variant="dark" />
         </div>
       </section>
     )
@@ -115,32 +116,24 @@ function ContactMapSection() {
               </div>
             </div>
 
-            {offices.map((office, index) =>
-              office.address ? (
-                <div
-                  key={index}
-                  className={`absolute inset-0 ${
-                    activeOfficeTab === index
-                      ? 'z-[1] opacity-100'
-                      : 'pointer-events-none invisible z-0 opacity-0'
-                  }`}
-                  aria-hidden={activeOfficeTab !== index}
-                >
-                  <iframe
-                    title={`${office.locationName} location`}
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(office.address)}&z=15&output=embed`}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, display: 'block' }}
-                    allowFullScreen
-                    loading="eager"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    sandbox="allow-scripts allow-same-origin allow-popups"
-                    className="h-full w-full"
-                  />
-                </div>
-              ) : null
-            )}
+            {/* Only mount the active office map iframe (saves network/CPU vs hidden iframes). */}
+            {activeOffice?.address ? (
+              <div className="absolute inset-0 z-[1]">
+                <iframe
+                  key={`${activeOfficeTab}-${activeOffice.address}`}
+                  title={`${activeOffice.locationName} location`}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(activeOffice.address)}&z=15&output=embed`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, display: 'block' }}
+                  allowFullScreen
+                  loading="eager"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  sandbox="allow-scripts allow-same-origin allow-popups"
+                  className="h-full w-full"
+                />
+              </div>
+            ) : null}
 
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"

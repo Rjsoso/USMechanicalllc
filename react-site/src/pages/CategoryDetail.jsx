@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { urlFor } from '../utils/sanity'
@@ -8,6 +8,7 @@ import SEO from '../components/SEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import SmallSpinner from '../components/SmallSpinner'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
 
@@ -33,7 +34,6 @@ const CATEGORIES_LIST_QUERY = `*[_type == "portfolioCategory"] | order(order asc
 export default function CategoryDetail() {
   const { categoryId } = useParams()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const params = { categoryId: categoryId ?? '' }
   const category = useSanityLive(CATEGORY_QUERY, params, { listenFilter: `*[_type == "portfolioCategory"]` })
@@ -67,7 +67,20 @@ export default function CategoryDetail() {
     return [...categoryData.projects].sort((a, b) => (a.order || 0) - (b.order || 0))
   }, [categoryData?.projects])
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main
+          className="flex min-h-screen items-center justify-center bg-white text-black"
+          style={{ paddingTop: '180px' }}
+        >
+          <SmallSpinner label="Loading portfolio…" variant="light" />
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   if (error || !categoryData) {
     return (
