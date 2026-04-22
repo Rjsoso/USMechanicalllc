@@ -65,7 +65,9 @@ npm run format            # Prettier
 npm run format:check
 npm run generate-sitemap  # regenerate public/sitemap.xml from Sanity
 npm run check:routes      # verify App.jsx routes are all in vercel.json
-npm run test:e2e          # Playwright
+npm run test:e2e          # Playwright — all suites (chromium + firefox + webkit)
+npm run test:smoke        # Playwright — smoke tests only (chromium)
+npm run test:a11y         # Playwright — axe-core accessibility audit (chromium)
 ```
 
 ---

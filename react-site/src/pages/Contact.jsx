@@ -12,6 +12,7 @@ import {
   getRemainingSubmissions,
 } from '../utils/rateLimit'
 import { getSiteUrl } from '../utils/siteUrl'
+import { trackEvent } from '../utils/analytics'
 
 const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   ...,
@@ -228,6 +229,11 @@ function Contact() {
         recordSubmission()
         setFormSuccess(true)
         setFormData({ name: '', email: '', phone: '', message: '', website: '' })
+
+        // GA4 conversion event — fires only when the user has granted analytics
+        // consent. No PII, just a lead counter with a form identifier so we can
+        // tell contact leads apart from any future forms (e.g. careers).
+        trackEvent('generate_lead', { form_id: 'contact' })
 
         if (typeof window.turnstile !== 'undefined' && turnstileWidgetIdRef.current !== null) {
           try { window.turnstile.reset(turnstileWidgetIdRef.current) } catch { /* ignore */ }

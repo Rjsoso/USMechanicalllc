@@ -105,6 +105,53 @@ These are intentionally stripped or never captured:
 Anything you see in the logs is safe to share in a bug report or support
 ticket.
 
+## Performance audit (Lighthouse)
+
+Run a full Lighthouse audit against production any time you want to check
+Core Web Vitals, SEO, accessibility, and best-practices scores:
+
+```
+cd react-site
+npm run audit:lighthouse
+```
+
+This downloads the Lighthouse CLI on the fly (via `npx --yes`), runs a
+headless audit against `https://www.usmechanicalllc.com`, and writes the
+results to `react-site/lighthouse-reports/`:
+
+- `report.report.html` — open in any browser; this is the readable audit.
+- `report.report.json` — raw data if you want to diff across runs.
+
+The folder is gitignored so reports stay local.
+
+### What scores to expect
+
+After the quick-win round of fixes, targets for the home page are roughly:
+
+| Category        | Target | Why it matters                       |
+| --------------- | ------ | ------------------------------------ |
+| Performance     | ≥ 90   | Google ranks faster sites higher     |
+| Accessibility   | ≥ 95   | Required for some commercial clients |
+| Best Practices  | ≥ 95   | Catches CSP / HTTPS / deprecated API |
+| SEO             | = 100  | Indexing and rich-result eligibility |
+
+If any score drops, open the HTML report and work top-down — Lighthouse
+ranks issues by impact.
+
+### Automated accessibility baseline
+
+An `axe-core` suite runs as part of the Playwright tests and fails on
+*serious* or *critical* WCAG 2.1 AA violations on all public pages:
+
+```
+npm run test:a11y
+```
+
+This is the protection against accidentally shipping an inaccessible
+regression (e.g. a button without a label).
+
+---
+
 ## Quick health check (once a week)
 
 1. Sort Vercel Logs by most recent.

@@ -42,3 +42,6 @@ coverage
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Lighthouse audits
+lighthouse-reports/

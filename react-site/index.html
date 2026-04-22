@@ -99,8 +99,15 @@
     <link rel="dns-prefetch" href="https://cdn.sanity.io">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts - consolidated into single request with only needed weights -->
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Rubik:wght@900&family=Corinthia:wght@700&display=swap" rel="stylesheet">
+    <!--
+      Fonts are loaded non-render-blocking: browsers fetch them at lowest
+      priority using the "media=print" trick, then swap to "all" once the
+      stylesheet is ready. display=swap in the URL prevents invisible text
+      while the font downloads. <noscript> keeps the site usable without JS.
+    -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Rubik:wght@900&family=Corinthia:wght@700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Rubik:wght@900&family=Corinthia:wght@700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Rubik:wght@900&family=Corinthia:wght@700&display=swap" /></noscript>
     
     <!-- Critical CSS to prevent flash of white background on load -->
     <style>

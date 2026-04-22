@@ -49,3 +49,21 @@ export function bootstrapAnalytics() {
     if (state?.analytics === true) loadAnalyticsIfConsented()
   })
 }
+
+/**
+ * Fire a GA4 event, gated on user consent. Safe no-op when analytics is
+ * declined or when gtag hasn't loaded yet (e.g. ad blocker).
+ *
+ * @param {string} name - GA4 event name (e.g. 'generate_lead').
+ * @param {Record<string, unknown>} [params] - Optional event parameters.
+ */
+export function trackEvent(name, params = {}) {
+  if (typeof window === 'undefined') return
+  if (getConsent().analytics !== true) return
+  if (typeof window.gtag !== 'function') return
+  try {
+    window.gtag('event', name, params)
+  } catch {
+    // analytics must never throw into user code
+  }
+}
