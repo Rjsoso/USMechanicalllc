@@ -1,162 +1,122 @@
-/* Card radius — keep in sync with SVG rect rx in WhyUsSection.jsx (1rem ≈ 16px) */
-.draw-in-card {
-  --draw-card-radius: 1rem;
-  position: relative;
-  border-radius: var(--draw-card-radius);
-  padding: 1.125rem 1.375rem;
-  background: transparent;
+/* Stacked hover / click-expand bars (Why Us) */
+
+.why-us-bar {
+  --why-us-radius: 0.5rem;
+  border-radius: var(--why-us-radius);
   overflow: hidden;
-  border: 1px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
   transition:
-    background-color 0.45s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    transform 0.28s ease,
-    backdrop-filter 0.45s ease;
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.why-us-bar--open {
+  background: rgba(0, 0, 0, 0.58);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+}
+
+.why-us-bar__summary {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  min-height: 3.25rem;
+  text-align: left;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
 }
 
 @media (min-width: 768px) {
-  .draw-in-card {
-    padding: 1.25rem 1.5rem 1.35rem;
+  .why-us-bar__summary {
+    gap: 1rem;
+    padding: 0.875rem 1.125rem;
+    min-height: 3.5rem;
   }
 }
 
-.draw-in-card--visible {
-  background: rgba(0, 0, 0, 0.52);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+.why-us-bar__summary:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.65);
+  outline-offset: 2px;
 }
 
-.draw-in-card--settled {
-  border-color: rgba(255, 255, 255, 0.09);
-}
-
-.draw-in-card--settled:hover {
-  background: rgba(0, 0, 0, 0.62);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
-  transform: translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .draw-in-card--settled:hover {
-    transform: none;
-  }
-}
-
-/* === SVG Border Overlay === */
-.draw-in-card__border {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  filter: drop-shadow(0 0 0px transparent);
-  transition: filter 0.6s ease;
-}
-
-.draw-in-card--visible .draw-in-card__border {
-  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.35));
-}
-
-.draw-in-card--settled .draw-in-card__border {
-  filter: none;
-  transition: filter 0.6s ease;
-}
-
-.draw-in-card__border rect {
-  stroke: rgba(239, 68, 68, 0.45);
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.draw-in-card--visible:not(.draw-in-card--settled) .draw-in-card__border rect {
-  will-change: stroke-dashoffset;
-}
-
-.draw-in-card--visible .draw-in-card__border rect {
-  stroke-dashoffset: 0;
-}
-
-.draw-in-card--settled .draw-in-card__border rect {
-  stroke: rgba(255, 255, 255, 0.1);
-  transition: stroke 0.6s ease;
-}
-
-.draw-in-card--settled:hover .draw-in-card__border rect {
-  stroke: rgba(255, 255, 255, 0.16);
-  transition: stroke 0.3s ease;
-}
-
-/* === Icon plate === */
-.draw-in-card__icon {
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.draw-in-card--visible .draw-in-card__icon {
-  opacity: 1;
-  transform: scale(1);
-  transition-delay: 0.4s;
-}
-
-.draw-in-card__icon-plate {
-  display: inline-flex;
+.why-us-bar__icon {
+  display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border-radius: 0.75rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+}
+
+.why-us-bar__panel {
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .why-us-bar__panel {
+    padding-left: 1.125rem;
+    padding-right: 1.125rem;
+  }
+}
+
+.why-us-bar__grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.why-us-bar--open .why-us-bar__grid {
+  grid-template-rows: 1fr;
+}
+
+.why-us-bar__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+  opacity: 0;
+  transition:
+    opacity 0.28s ease 0.04s,
+    padding-bottom 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.why-us-bar--open .why-us-bar__panel-inner {
+  opacity: 1;
+  padding-bottom: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .why-us-bar--open .why-us-bar__panel-inner {
+    padding-bottom: 1.125rem;
+  }
+}
+
+.why-us-bar__chevron {
+  transition: transform 0.32s ease;
+}
+
+.why-us-bar--open .why-us-bar__chevron {
+  transform: rotate(180deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .draw-in-card__icon {
-    transition: opacity 0.35s ease;
+  .why-us-bar__grid {
+    transition: none;
   }
-  .draw-in-card--visible .draw-in-card__icon {
-    transform: scale(1);
+
+  .why-us-bar__panel-inner {
+    transition: none;
   }
-}
 
-/* === Eyebrow === */
-.draw-in-card__eyebrow {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
-}
-
-.draw-in-card--visible .draw-in-card__eyebrow {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.58s;
-}
-
-/* === Title === */
-.draw-in-card__title {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.draw-in-card--visible .draw-in-card__title {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.72s;
-}
-
-/* === Description === */
-.draw-in-card__description {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.draw-in-card--visible .draw-in-card__description {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.88s;
+  .why-us-bar__chevron {
+    transition: none;
+  }
 }
