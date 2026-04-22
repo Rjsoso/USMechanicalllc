@@ -188,7 +188,7 @@ function WhyUsExpandBar({
       >
         <div className="why-us-bar__grid">
           <div className="why-us-bar__panel-inner" aria-hidden={!expanded}>
-            <p className="text-base leading-relaxed text-white/65 lg:text-center lg:text-xs lg:leading-relaxed">
+            <p className="text-lg leading-relaxed text-white/70 lg:text-center lg:text-sm lg:leading-relaxed">
               {description}
             </p>
           </div>
