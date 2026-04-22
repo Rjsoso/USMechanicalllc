@@ -14,7 +14,7 @@
   bottom: 0;
   width: 0.875rem;
   height: 0.875rem;
-  color: #ea4335;
+  color: currentColor;
 }
 
 .dual-map-pins__svg--rear {

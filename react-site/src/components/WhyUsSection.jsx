@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
+import DualMapPinsIcon from './DualMapPinsIcon'
 import './WhyUsSection.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
@@ -51,14 +52,7 @@ const ICON_MAP = {
       <path d="M15 5l4 4" />
     </svg>
   ),
-  building: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
-      <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-      <path d="M9 11c0 4-5 8-5 8h10s-5-4-5-8z" />
-      <path d="M17 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
-      <path d="M17 8c0 3-3.5 5.5-3.5 5.5h7S17 11 17 8z" />
-    </svg>
-  ),
+  building: <DualMapPinsIcon className="why-us-presence-pins" />,
 }
 
 const EYEBROW_BY_ICON = {

@@ -156,22 +156,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-.drawer-section-label__map-pins.dual-map-pins {
-  width: 1.75rem;
-  height: 1.125rem;
-  margin-right: 0.4rem;
-  vertical-align: -0.15em;
-}
-
-.drawer-section-label__map-pins .dual-map-pins__svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.drawer-section-label__map-pins .dual-map-pins__svg--front {
-  left: 0.45rem;
-}
-
 /* Section Links */
 .drawer-section-links {
   display: flex;

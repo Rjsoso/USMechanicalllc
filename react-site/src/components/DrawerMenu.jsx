@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiPhone } from 'react-icons/fi'
+import { FiMapPin, FiPhone } from 'react-icons/fi'
 import { navigateToSection, scrollToSection } from '../utils/scrollToSection'
-import DualMapPinsIcon from './DualMapPinsIcon'
 import { useSanityLive } from '../hooks/useSanityLive'
 import './DrawerMenu.css'
 
@@ -237,7 +236,7 @@ const DrawerMenu = () => {
                 transition={{ delay: sections.length * 0.05 + 0.05, duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h3 className="drawer-section-label">
-                  <DualMapPinsIcon className="drawer-section-label__map-pins" />
+                  <FiMapPin style={{ display: 'inline', width: 14, height: 14, marginRight: 6, verticalAlign: '-2px' }} />
                   LOCATIONS
                 </h3>
                 <div className="drawer-section-links">

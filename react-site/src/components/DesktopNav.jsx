@@ -1,8 +1,7 @@
 import { memo, useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { FiChevronDown, FiPhone } from 'react-icons/fi'
+import { FiMapPin, FiChevronDown, FiPhone } from 'react-icons/fi'
 import { navigateToSection } from '../utils/scrollToSection'
-import DualMapPinsIcon from './DualMapPinsIcon'
 import './DesktopNav.css'
 
 const offices = [
@@ -87,7 +86,7 @@ const DesktopNav = () => {
               aria-haspopup="true"
               aria-label="Office locations"
             >
-              <DualMapPinsIcon className="desktop-nav-locations-icon" />
+              <FiMapPin className="desktop-nav-locations-icon" />
               Locations
               <FiChevronDown className={`desktop-nav-chevron ${locationsOpen ? 'open' : ''}`} />
             </button>
