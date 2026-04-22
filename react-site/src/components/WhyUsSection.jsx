@@ -67,6 +67,19 @@ const ICON_MAP = {
   ),
 }
 
+/** Short labels for default icon keys — omitted for unknown Sanity icons */
+const EYEBROW_BY_ICON = {
+  clock: 'Since 1963',
+  map: 'Coverage',
+  dollar: 'Capacity',
+  shield: 'Safety',
+  tool: 'Delivery',
+  building: 'Presence',
+}
+
+/** Match WhyUsSection.css --draw-card-radius (1rem); inset 1px on rect */
+const CARD_BORDER_RX = 14
+
 const DEFAULT_ITEMS = [
   {
     icon: 'clock',
@@ -100,7 +113,7 @@ const DEFAULT_ITEMS = [
   },
 ]
 
-function DrawInCard({ index, icon, title, description }) {
+function DrawInCard({ index, icon, title, description, eyebrow }) {
   const cardRef = useRef(null)
   const [dims, setDims] = useState({ w: 0, h: 0 })
   const [isVisible, setIsVisible] = useState(false)
@@ -162,8 +175,8 @@ function DrawInCard({ index, icon, title, description }) {
             y="1"
             width={dims.w - 2}
             height={dims.h - 2}
-            rx="2"
-            ry="2"
+            rx={CARD_BORDER_RX}
+            ry={CARD_BORDER_RX}
             fill="none"
             strokeWidth="2"
             pathLength="1"
@@ -171,15 +184,24 @@ function DrawInCard({ index, icon, title, description }) {
           />
         </svg>
       )}
-      <div className="draw-in-card__icon mb-4 inline-flex h-10 w-10 items-center justify-center text-red-500">
-        {icon}
+      <div className="relative z-[2]">
+        <div className="draw-in-card__icon mb-5">
+          <div className="draw-in-card__icon-plate h-11 w-11 text-red-500 [&>svg]:h-8 [&>svg]:w-8">
+            {icon}
+          </div>
+        </div>
+        {eyebrow ? (
+          <p className="draw-in-card__eyebrow mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
+            {eyebrow}
+          </p>
+        ) : null}
+        <h3 className="draw-in-card__title mb-3 text-xl font-bold tracking-tight text-white md:text-2xl">
+          {title}
+        </h3>
+        <p className="draw-in-card__description max-w-prose text-base leading-relaxed text-white/65">
+          {description}
+        </p>
       </div>
-      <h3 className="draw-in-card__title mb-2 text-lg font-bold text-white">
-        {title}
-      </h3>
-      <p className="draw-in-card__description text-sm leading-relaxed text-white/60">
-        {description}
-      </p>
     </div>
   )
 }
@@ -224,8 +246,8 @@ function WhyUsSection() {
       </div>
 
       <div className="bg-transparent py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
             {displayData.items.map((item, index) => (
               <DrawInCard
                 key={item.title || index}
@@ -233,6 +255,7 @@ function WhyUsSection() {
                 icon={ICON_MAP[item.icon] || ICON_MAP.tool}
                 title={item.title}
                 description={item.description}
+                eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
               />
             ))}
           </div>

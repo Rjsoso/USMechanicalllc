@@ -1,24 +1,48 @@
-/* === Card Container === */
+/* Card radius — keep in sync with SVG rect rx in WhyUsSection.jsx (1rem ≈ 16px) */
 .draw-in-card {
+  --draw-card-radius: 1rem;
   position: relative;
-  border-radius: 0.125rem;
+  border-radius: var(--draw-card-radius);
   padding: 1.5rem;
   background: transparent;
-  transition: background-color 0.4s ease;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.45s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.28s ease,
+    backdrop-filter 0.45s ease;
 }
 
 @media (min-width: 768px) {
   .draw-in-card {
-    padding: 2rem;
+    padding: 2rem 2rem 2.125rem;
   }
 }
 
 .draw-in-card--visible {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.draw-in-card--settled {
+  border-color: rgba(255, 255, 255, 0.09);
 }
 
 .draw-in-card--settled:hover {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.62);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw-in-card--settled:hover {
+    transform: none;
+  }
 }
 
 /* === SVG Border Overlay === */
@@ -34,7 +58,7 @@
 }
 
 .draw-in-card--visible .draw-in-card__border {
-  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4));
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.35));
 }
 
 .draw-in-card--settled .draw-in-card__border {
@@ -42,9 +66,8 @@
   transition: filter 0.6s ease;
 }
 
-/* SVG rect stroke */
 .draw-in-card__border rect {
-  stroke: rgba(239, 68, 68, 0.5);
+  stroke: rgba(239, 68, 68, 0.45);
   stroke-dashoffset: 1;
   transition: stroke-dashoffset 1.2s cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -58,16 +81,16 @@
 }
 
 .draw-in-card--settled .draw-in-card__border rect {
-  stroke: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.1);
   transition: stroke 0.6s ease;
 }
 
 .draw-in-card--settled:hover .draw-in-card__border rect {
-  stroke: rgba(255, 255, 255, 0.15);
+  stroke: rgba(255, 255, 255, 0.16);
   transition: stroke 0.3s ease;
 }
 
-/* === Content Reveal === */
+/* === Icon plate === */
 .draw-in-card__icon {
   opacity: 0;
   transform: scale(0);
@@ -80,6 +103,49 @@
   transition-delay: 0.4s;
 }
 
+.draw-in-card__icon-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
+}
+
+.draw-in-card--settled:hover .draw-in-card__icon-plate {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw-in-card__icon {
+    transition: opacity 0.35s ease;
+  }
+  .draw-in-card--visible .draw-in-card__icon {
+    transform: scale(1);
+  }
+}
+
+/* === Eyebrow === */
+.draw-in-card__eyebrow {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.draw-in-card--visible .draw-in-card__eyebrow {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.58s;
+}
+
+/* === Title === */
 .draw-in-card__title {
   opacity: 0;
   transform: translateY(12px);
@@ -89,9 +155,10 @@
 .draw-in-card--visible .draw-in-card__title {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.7s;
+  transition-delay: 0.72s;
 }
 
+/* === Description === */
 .draw-in-card__description {
   opacity: 0;
   transform: translateY(12px);
@@ -101,5 +168,5 @@
 .draw-in-card--visible .draw-in-card__description {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.9s;
+  transition-delay: 0.88s;
 }
