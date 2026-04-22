@@ -184,23 +184,25 @@ function DrawInCard({ index, icon, title, description, eyebrow }) {
           />
         </svg>
       )}
-      <div className="relative z-[2]">
-        <div className="draw-in-card__icon mb-5">
+      <div className="relative z-[2] flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="draw-in-card__icon shrink-0">
           <div className="draw-in-card__icon-plate h-11 w-11 text-red-500 [&>svg]:h-8 [&>svg]:w-8">
             {icon}
           </div>
         </div>
-        {eyebrow ? (
-          <p className="draw-in-card__eyebrow mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
-            {eyebrow}
+        <div className="min-w-0 flex-1">
+          {eyebrow ? (
+            <p className="draw-in-card__eyebrow mb-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45 sm:mb-2">
+              {eyebrow}
+            </p>
+          ) : null}
+          <h3 className="draw-in-card__title mb-2 text-xl font-bold tracking-tight text-white sm:mb-2.5 md:text-2xl">
+            {title}
+          </h3>
+          <p className="draw-in-card__description max-w-prose text-base leading-relaxed text-white/65">
+            {description}
           </p>
-        ) : null}
-        <h3 className="draw-in-card__title mb-3 text-xl font-bold tracking-tight text-white md:text-2xl">
-          {title}
-        </h3>
-        <p className="draw-in-card__description max-w-prose text-base leading-relaxed text-white/65">
-          {description}
-        </p>
+        </div>
       </div>
     </div>
   )
@@ -228,7 +230,7 @@ function WhyUsSection() {
 
   return (
     <section className="relative">
-      <div className="bg-black pb-14 pt-20 md:pb-20 md:pt-28">
+      <div className="bg-black pb-12 pt-16 md:pb-16 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
@@ -245,9 +247,9 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="bg-transparent py-20 md:py-28">
+      <div className="bg-transparent py-12 md:py-16">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
+          <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
             {displayData.items.map((item, index) => (
               <DrawInCard
                 key={item.title || index}
