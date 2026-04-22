@@ -5,6 +5,8 @@ import ErrorBoundary from './components/ErrorBoundary'
 import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
 import SmallSpinner from './components/SmallSpinner'
+import ConsentBanner from './components/ConsentBanner'
+import { bootstrapAnalytics } from './utils/analytics'
 
 function RouteSuspenseFallback() {
   return (
@@ -51,6 +53,11 @@ function App() {
     }
   }, [])
 
+  // Load GA4 only after explicit consent; re-check on every change.
+  useEffect(() => {
+    bootstrapAnalytics()
+  }, [])
+
   return (
     <ErrorBoundary>
       <CustomCursor />
@@ -86,6 +93,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+
+        <ConsentBanner />
       </Router>
     </ErrorBoundary>
   )

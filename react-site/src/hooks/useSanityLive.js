@@ -2,6 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { client, liveClient } from '../utils/sanity'
 
 /**
+ * Live mutations from Sanity Studio can fire many events in quick succession
+ * (e.g. while an editor is typing). Coalesce them into a single refetch per
+ * window so we don't hammer the API.
+ */
+const LIVE_REFETCH_DEBOUNCE_MS = 300
+
+/**
  * Real-time Sanity data hook. Fetches once (or uses initialData), then subscribes
  * to document changes and re-fetches when mutations occur so the UI stays in sync
  * with Sanity Studio without page refresh.
@@ -20,6 +27,7 @@ export function useSanityLive(query, params = {}, options = {}) {
   const [loading, setLoading] = useState(!hasInitialData)
   const [error, setError] = useState(null)
   const subscriptionRef = useRef(null)
+  const debounceRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -41,6 +49,13 @@ export function useSanityLive(query, params = {}, options = {}) {
         .finally(() => {
           if (!cancelled) setLoading(false)
         })
+    }
+
+    const scheduleRefetch = () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+      debounceRef.current = setTimeout(() => {
+        if (!cancelled) fetchData()
+      }, LIVE_REFETCH_DEBOUNCE_MS)
     }
 
     // Initial load: skip fetch only when we have usable initial data (not null/undefined)
@@ -65,17 +80,22 @@ export function useSanityLive(query, params = {}, options = {}) {
         })
     }
 
-    // Subscribe to mutations; on any matching change, re-fetch (bypasses CDN)
+    // Subscribe to mutations; on any matching change, re-fetch (bypasses CDN).
+    // Debounce to coalesce bursts of events into a single request.
     const listenQuery = listenFilter ?? query
     const observable = liveClient.listen(listenQuery, params)
     if (observable && typeof observable.subscribe === 'function') {
       subscriptionRef.current = observable.subscribe(() => {
-        if (!cancelled) fetchData()
+        if (!cancelled) scheduleRefetch()
       })
     }
 
     return () => {
       cancelled = true
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+        debounceRef.current = null
+      }
       if (subscriptionRef.current) {
         if (typeof subscriptionRef.current.unsubscribe === 'function') {
           subscriptionRef.current.unsubscribe()

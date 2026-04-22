@@ -6,6 +6,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
+import { openConsentBanner } from '../components/ConsentBanner'
+import { resetConsent } from '../utils/consent'
 
 const PRIVACY_QUERY = `*[_id == "legalPrivacy" && !(_id in path("drafts.**"))][0]{
   title,
@@ -30,10 +32,22 @@ function PrivacyFallbackContent() {
         </p>
       </section>
       <section>
-        <h2 className="mb-3 text-xl font-semibold text-black">Cookies and Tracking</h2>
+        <h2 className="mb-3 text-xl font-semibold text-black">Cookies, Tracking & Your Choices</h2>
         <p className="leading-relaxed">
-          Our website may use cookies and similar technologies to support functionality and, if applicable, analytics. You can control cookies through your browser settings. Disabling certain cookies may affect how the site works.
+          We use essential cookies to operate this site. With your permission, we also use Google Analytics 4 to understand aggregate site usage so we can improve it. Google Analytics is only loaded after you click <strong>Accept</strong> on our cookie banner. If you click <strong>Decline</strong>, no analytics scripts are loaded and no analytics cookies are set. You can change your choice at any time using the button below, or by clearing this site&apos;s data in your browser.
         </p>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => {
+              resetConsent()
+              openConsentBanner()
+            }}
+            className="rounded-md border border-black/20 bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-black hover:text-white"
+          >
+            Manage cookie preferences
+          </button>
+        </div>
       </section>
       <section>
         <h2 className="mb-3 text-xl font-semibold text-black">Data Retention and Security</h2>

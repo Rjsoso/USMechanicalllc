@@ -25,7 +25,8 @@
     <meta property="og:url" content="__SITE_URL__/" />
     <meta property="og:title" content="US Mechanical | Plumbing & HVAC Experts | Since 1963" />
     <meta property="og:description" content="Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists." />
-    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image" content="__SITE_URL__/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="US Mechanical — Plumbing & HVAC Experts since 1963" />
@@ -37,7 +38,7 @@
     <meta name="twitter:url" content="__SITE_URL__/" />
     <meta name="twitter:title" content="US Mechanical | Plumbing & HVAC Experts | Since 1963" />
     <meta name="twitter:description" content="Trusted mechanical contracting since 1963, serving Utah, Nevada, and beyond. Plumbing, HVAC, and design-build specialists." />
-    <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.jpg" />
     <meta name="twitter:image:alt" content="US Mechanical — Plumbing & HVAC Experts since 1963" />
     
     <!-- Business Contact Information -->
@@ -130,14 +131,14 @@
     <!-- Load Turnstile early for contact form verification -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVFS45ZXQR"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-RVFS45ZXQR');
-    </script>
+    <!--
+      Google Analytics 4 is loaded dynamically AFTER the visitor grants consent
+      via the in-app cookie banner. See src/utils/analytics.js. Do not add a
+      gtag.js <script> tag here — it would bypass consent.
+    -->
+    <!-- Preconnect to GA so the deferred load is quick when it happens -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   </head>
   <body>
     <!-- Force scroll to top immediately on page load -->

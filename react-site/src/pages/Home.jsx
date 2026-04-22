@@ -79,7 +79,22 @@ export default function Home() {
   const servicesData = services.data
   const statsData = stats.data
   const aboutData = about.data
-  const allDataLoaded = !hero.loading && !about.loading
+
+  // Preload the hero background as soon as its URL is known so the browser can
+  // start fetching in parallel with component JS/CSS. The CSS background-image
+  // wouldn't otherwise kick off the network request until paint.
+  useEffect(() => {
+    if (!heroBackgroundUrl) return
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'image'
+    link.href = heroBackgroundUrl
+    link.fetchPriority = 'high'
+    document.head.appendChild(link)
+    return () => {
+      if (link.parentNode) link.parentNode.removeChild(link)
+    }
+  }, [heroBackgroundUrl])
 
   // Detect if this is a page reload (not navigation)
   const isPageReload = useRef(
@@ -224,18 +239,6 @@ export default function Home() {
       />
       <Header />
 
-      {!allDataLoaded && (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)' }}>
-          <div style={{ textAlign: 'center', color: '#ffffff' }}>
-            <div style={{ width: '50px', height: '50px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#ffffff', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }} />
-            <p style={{ fontSize: '16px', fontWeight: 500, opacity: 0.9 }}>Loading…</p>
-          </div>
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        </div>
-      )}
-
-      {allDataLoaded && (
-      <>
       <main
         className="main-with-fixed-bg"
         style={{
@@ -244,6 +247,10 @@ export default function Home() {
           minHeight: '100vh',
         }}
       >
+        {/* Each section renders its own content (with graceful defaults) as
+            data arrives — no full-page blocking spinner. The hero always renders
+            immediately using its fallback copy; the background image fades in
+            once Sanity resolves it. */}
         <section id="hero" style={{ position: 'relative', top: 0, left: 0, width: '100%' }}>
           <HeroSection />
         </section>
@@ -272,8 +279,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-      </>
-      )}
     </>
   )
 }
