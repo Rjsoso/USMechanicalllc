@@ -1,30 +1,40 @@
-/* Why Us: stacked bars (mobile) / vertical columns side-by-side (lg+) */
+/* Why Us: stacked bars (mobile) / full-bleed vertical columns (lg+) */
 
 .why-us-bar {
   --why-us-radius: 0.5rem;
   border-radius: var(--why-us-radius);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+  box-shadow: none;
   transition:
-    background-color 0.28s ease,
     border-color 0.28s ease,
     box-shadow 0.28s ease;
+}
+
+.why-us-bar--open {
+  background: #000;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
 }
 
 @media (min-width: 1024px) {
   .why-us-bar {
     min-height: 100%;
+    border-radius: 0;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
   }
-}
 
-.why-us-bar--open {
-  background: rgba(0, 0, 0, 0.58);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+  .why-us-bar:last-child {
+    border-right: none;
+  }
+
+  .why-us-bar--open {
+    background: #000;
+    border-right-color: rgba(255, 255, 255, 0.14);
+  }
 }
 
 .why-us-bar__summary {
