@@ -247,6 +247,9 @@ function WhyUsSection() {
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/45 md:text-xs">
+                Why contractors pick us
+              </p>
               <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
                 {displayData.sectionTitle}
               </h2>
