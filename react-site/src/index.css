@@ -429,7 +429,7 @@ section#contact > div[class*='absolute'] {
   display: block !important;
 }
 
-/* Hero Text Effect - Gray text with black semi-transparent stroke */
+/* Hero Text Effect - White fill with black semi-transparent stroke */
 .hero-3d-text {
   text-transform: uppercase;
   margin-bottom: 0.5em;
@@ -438,7 +438,7 @@ section#contact > div[class*='absolute'] {
   font-weight: 900;
   position: relative;
   display: inline-block;
-  color: #808080; /* Gray text */
+  color: #ffffff;
   text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
@@ -475,7 +475,7 @@ section#contact > div[class*='absolute'] {
   display: inline-block;
   font-family: 'Corinthia', cursive;
   text-transform: capitalize;
-  color: #808080; /* Gray text */
+  color: #ffffff;
   text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.8),
     2px 2px 0px rgba(0, 0, 0, 0.7),
