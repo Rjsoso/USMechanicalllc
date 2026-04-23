@@ -220,8 +220,8 @@ function WhyUsSection() {
     openIndex === i || (fineHover && hoveredIndex === i)
 
   return (
-    <section className="why-us-section relative overflow-x-hidden">
-      <div className="relative z-10 pb-12 pt-16 md:pb-16 md:pt-22">
+    <section className="relative overflow-x-hidden">
+      <div className="bg-black pb-12 pt-16 md:pb-16 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
@@ -238,7 +238,7 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="relative z-10 bg-transparent py-8 md:py-10 lg:py-0">
+      <div className="bg-transparent py-8 md:py-10 lg:py-0">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:relative lg:left-1/2 lg:mx-0 lg:w-screen lg:max-w-none lg:-translate-x-1/2 lg:px-0">
           <div className="why-us-columns flex flex-col gap-2 md:gap-2.5 lg:min-h-[min(58vh,640px)] lg:flex-row lg:items-stretch lg:gap-0">
             {displayData.items.map((item, index) => (
