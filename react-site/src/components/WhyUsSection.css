@@ -19,9 +19,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: #000;
   box-shadow: none;
-  transition:
-    border-color 0.28s ease,
-    box-shadow 0.28s ease;
+  transition: border-color 0.28s ease;
 }
 
 .why-us-bar--open {
@@ -47,13 +45,8 @@
     bottom: 0;
     width: 2px;
     pointer-events: none;
-    z-index: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.26) 0%,
-      rgba(255, 255, 255, 0.14) 55%,
-      rgba(255, 255, 255, 0.1) 100%
-    );
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.18);
   }
 
   .why-us-bar:last-child {
@@ -66,38 +59,6 @@
 
   .why-us-bar:last-child::before {
     display: none;
-  }
-}
-
-/* Bottom-up light wash on hover (fine pointer only); sits under content */
-@media (hover: hover) and (pointer: fine) {
-  .why-us-bar::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.38s ease;
-    background: linear-gradient(
-      to top,
-      rgba(239, 68, 68, 0.12) 0%,
-      rgba(255, 255, 255, 0.08) 26%,
-      rgba(255, 255, 255, 0.03) 46%,
-      transparent 62%
-    );
-  }
-
-  .why-us-bar:hover::after,
-  .why-us-bar:focus-within::after {
-    opacity: 1;
-  }
-
-  .why-us-bar:hover,
-  .why-us-bar:focus-within {
-    box-shadow:
-      inset 0 -34px 56px -14px rgba(239, 68, 68, 0.09),
-      inset 0 -28px 48px -12px rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -194,17 +155,5 @@
 
   .why-us-bar__chevron {
     transition: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .why-us-bar::after {
-      transition: none;
-      opacity: 0 !important;
-    }
-
-    .why-us-bar:hover,
-    .why-us-bar:focus-within {
-      box-shadow: none;
-    }
   }
 }
