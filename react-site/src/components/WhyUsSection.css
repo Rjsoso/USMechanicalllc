@@ -102,6 +102,13 @@
   justify-content: center;
 }
 
+/* Flaticon PNGs are black on transparent; cards are black — tint to match SVG icons (red-500) */
+.why-us-bar__icon img {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(4063%) hue-rotate(339deg)
+    brightness(96%) contrast(94%);
+}
+
 .why-us-bar__panel {
   position: relative;
   z-index: 1;
