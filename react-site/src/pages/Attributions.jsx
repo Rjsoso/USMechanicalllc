@@ -99,14 +99,14 @@ export default function Attributions() {
                   .
                 </li>
                 <li>
-                  <span className="font-medium text-gray-800">Parcel / delivery</span> — Parcel icons by{' '}
+                  <span className="font-medium text-gray-800">Delivery / design-build</span> — Fast delivery icons by{' '}
                   <a
                     className="text-primary-red underline hover:no-underline"
-                    href="https://www.flaticon.com/free-icons/parcel"
+                    href="https://www.flaticon.com/free-icons/fast-delivery"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    Atif Arshad
+                    Uniconlabs
                   </a>
                   , available on{' '}
                   <a

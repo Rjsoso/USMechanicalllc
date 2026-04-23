@@ -57,7 +57,7 @@ const ICON_MAP = {
   ),
   tool: (
     <img
-      src="/images/why-us-parcel.png"
+      src="/images/why-us-fast-delivery.png"
       alt=""
       className="h-8 w-8 object-contain md:h-9 md:w-9"
       decoding="async"
