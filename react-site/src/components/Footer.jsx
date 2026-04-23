@@ -226,6 +226,10 @@ function Footer() {
                   Terms of Service
                 </Link>
                 <span aria-hidden="true">·</span>
+                <Link to="/attributions" className="transition-colors hover:text-white">
+                  Attributions
+                </Link>
+                <span aria-hidden="true">·</span>
                 <button
                   type="button"
                   onClick={openConsentBanner}

@@ -40,6 +40,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const DeliveryMethodsPage = lazy(() => import('./pages/DeliveryMethodsPage'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 const Terms = lazy(() => import('./pages/Terms'))
+const Attributions = lazy(() => import('./pages/Attributions'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const CompanyBackground = lazy(() => import('./pages/CompanyBackground'))
 const SafetyRiskManagement = lazy(() => import('./pages/SafetyRiskManagement'))
@@ -98,6 +99,7 @@ function App() {
             <Route path="/delivery-methods" element={<DeliveryMethodsPage />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/attributions" element={<Attributions />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

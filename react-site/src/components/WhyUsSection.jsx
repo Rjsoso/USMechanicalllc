@@ -42,43 +42,26 @@ const ICON_MAP = {
     </svg>
   ),
   tool: (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className="h-7 w-7 md:h-8 md:w-8"
-      aria-hidden="true"
-    >
-      <g
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <line x1="1.5" y1="6.2" x2="5.8" y2="6.2" />
-        <line x1="1.5" y1="9.2" x2="4.5" y2="9.2" />
-        <line x1="1.5" y1="12.2" x2="5.2" y2="12.2" />
-        <g transform="translate(14.2 10.2) rotate(11)">
-          <rect x="-5.1" y="-4" width="10.2" height="8" rx="1.1" />
-          <path d="M -2.6 -2.8 Q 0 -4.1 2.6 -2.8" />
-          <line x1="0.3" y1="2" x2="3.6" y2="2" />
-        </g>
-      </g>
-    </svg>
+    <img
+      src="/images/why-us-parcel.png"
+      alt=""
+      className="h-7 w-7 object-contain md:h-8 md:w-8"
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      aria-hidden={true}
+    />
   ),
   building: (
-    <svg
-      viewBox="0 0 24 28"
-      fill="currentColor"
-      className="h-7 w-7 md:h-8 md:w-8"
-      aria-hidden="true"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12 1.5C6.20101 1.5 1.5 6.20101 1.5 12C1.5 15.79 3.68 19.19 6.75 21.66C8.64 23.18 10.37 24.79 11.1 25.84C11.54 26.47 12.46 26.47 12.9 25.84C13.63 24.79 15.36 23.18 17.25 21.66C20.32 19.19 22.5 15.79 22.5 12C22.5 6.20101 17.799 1.5 12 1.5ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25Z"
-      />
-      <ellipse cx="12" cy="26.25" rx="5.25" ry="1.1" />
-    </svg>
+    <img
+      src="/images/why-us-map-location.png"
+      alt=""
+      className="h-7 w-7 object-contain md:h-8 md:w-8"
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      aria-hidden={true}
+    />
   ),
 }
 
@@ -186,7 +169,7 @@ function WhyUsExpandBar({
         aria-controls={panelId}
         onClick={onToggle}
       >
-        <span className="why-us-bar__icon shrink-0 text-red-500 [&>svg]:block">{icon}</span>
+        <span className="why-us-bar__icon shrink-0 text-red-500 [&>img]:block [&>svg]:block">{icon}</span>
         <span className="why-us-bar__summary-text min-w-0 flex-1 text-left lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center lg:text-center">
           {eyebrow ? (
             <span className="why-us-bar__eyebrow block text-xs font-semibold uppercase tracking-[0.2em] text-white/45 lg:leading-tight md:text-[13px]">

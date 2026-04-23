@@ -157,6 +157,14 @@ async function generateSitemap() {
     <priority>0.5</priority>
   </url>
 
+  <!-- Attributions Page -->
+  <url>
+    <loc>${DOMAIN}/attributions</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
   <!-- Service Pages -->
 ${services?.map(service => {
   if (!service.slug) return '';
@@ -196,10 +204,10 @@ ${projects?.map(project => `  <url>
     console.log(`📁 Saved to: ${sitemapPath}\n`);
     
     console.log('📋 URLs included:');
-    const totalUrls = 11 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
+    const totalUrls = 12 + (services?.length || 0) + (categories?.length || 0) + (projects?.length || 0);
     console.log(`   - Total: ${totalUrls} URLs`);
     console.log(
-      `   - Core pages: 11 (home, contact, about, about subpages, careers, portfolio, delivery-methods, privacy, terms)`
+      `   - Core pages: 12 (home, contact, about, about subpages, careers, portfolio, delivery-methods, privacy, terms, attributions)`
     );
     console.log(`   - Services: ${services?.length || 0}`);
     console.log(`   - Categories: ${categories?.length || 0}`);
