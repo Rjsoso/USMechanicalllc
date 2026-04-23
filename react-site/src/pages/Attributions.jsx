@@ -36,6 +36,27 @@ export default function Attributions() {
               <h2 className="mb-3 text-xl font-semibold text-black">Why US Mechanical section (homepage)</h2>
               <ul className="list-disc space-y-3 pl-5 leading-relaxed">
                 <li>
+                  <span className="font-medium text-gray-800">Experience / family (60+ years)</span> — Family icons by{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/free-icons/family"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Freepik
+                  </a>
+                  , available on{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Flaticon
+                  </a>
+                  .
+                </li>
+                <li>
                   <span className="font-medium text-gray-800">Map location</span> — Map location icons by{' '}
                   <a
                     className="text-primary-red underline hover:no-underline"
@@ -44,6 +65,27 @@ export default function Attributions() {
                     target="_blank"
                   >
                     Manuel Viveros
+                  </a>
+                  , available on{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Flaticon
+                  </a>
+                  .
+                </li>
+                <li>
+                  <span className="font-medium text-gray-800">Coverage (service area)</span> — Coverage icons by{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/free-icons/coverage"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Aranagraphics
                   </a>
                   , available on{' '}
                   <a
