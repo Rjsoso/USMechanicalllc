@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, memo } from 'react'
+import { StaggerContainer, StaggerItem } from './animations/StaggerContainer'
 import { useSanityLive } from '../hooks/useSanityLive'
 
 // Animate only when visible in viewport - only once per page visit.
@@ -137,21 +138,23 @@ const CompanyStats = ({ data: statsDataProp }) => {
             {statsData.title}
           </h2>
         )}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <StaggerContainer className="grid grid-cols-1 gap-8 md:grid-cols-3" once>
           {statsData.stats?.map((item, idx) => (
-            <div key={idx} className="flex flex-col items-center">
-              <div className="mb-2 text-5xl font-extrabold text-[#dc2626]">
-                <AnimatedNumber
-                  value={item.value}
-                  startValue={item.enableCustomStart ? item.animateFromValue : 0}
-                  duration={item.animationDuration || 5500}
-                  inView={inView}
-                />
+            <StaggerItem key={idx}>
+              <div className="flex flex-col items-center">
+                <div className="mb-2 text-5xl font-extrabold text-[#dc2626]">
+                  <AnimatedNumber
+                    value={item.value}
+                    startValue={item.enableCustomStart ? item.animateFromValue : 0}
+                    duration={item.animationDuration || 5500}
+                    inView={inView}
+                  />
+                </div>
+                <p className="text-lg font-medium text-white">{item.label}</p>
               </div>
-              <p className="text-lg font-medium text-white">{item.label}</p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   )

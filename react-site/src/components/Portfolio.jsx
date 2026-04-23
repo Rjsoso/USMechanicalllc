@@ -1,5 +1,6 @@
 import { useState, useMemo, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { StaggerContainer, StaggerItem } from './animations/StaggerContainer'
 import { urlFor } from '../utils/sanity'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -37,12 +38,12 @@ function Portfolio({ data: portfolioDataProp }) {
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white">
-        <div
+        <StaggerContainer
           className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
         >
           {displayCategories.map((category) => (
-            <div key={category._id}>
+            <StaggerItem key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
                 className="group relative cursor-pointer overflow-hidden bg-gray-200"
@@ -97,9 +98,9 @@ function Portfolio({ data: portfolioDataProp }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
 
       {categories.length === 0 && (

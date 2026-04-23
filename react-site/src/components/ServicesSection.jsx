@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
+import { StaggerContainer, StaggerItem } from './animations/StaggerContainer'
 
 function getBoxBackgroundStyle(box) {
   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
@@ -137,11 +138,11 @@ const ServicesSection = ({ data: servicesDataProp }) => {
 
         {/* Desktop: list left, preview right */}
         <div className="hidden lg:grid lg:grid-cols-[5fr_6fr] lg:gap-0">
-          <div className="flex flex-col">
+          <StaggerContainer className="flex flex-col">
             {cards.map((card) => {
               const isActive = card.id === (hoveredId ?? cards[0].id)
               return (
-                <FadeInNative key={card.id}>
+                <StaggerItem key={card.id}>
                   <motion.button
                     type="button"
                     onMouseEnter={() => setHoveredId(card.id)}
@@ -173,10 +174,10 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                       </motion.span>
                     )}
                   </motion.button>
-                </FadeInNative>
+                </StaggerItem>
               )
             })}
-          </div>
+          </StaggerContainer>
 
           {/* Preview panel */}
           <div
@@ -261,12 +262,12 @@ const ServicesSection = ({ data: servicesDataProp }) => {
         </div>
 
         {/* Mobile: thumbnail cards */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
+        <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
           {cards.map((card) =>
             card.type === 'delivery-methods' ? (
-              <FadeInNative key={card.id}>
+              <StaggerItem key={card.id} className="sm:col-span-2">
                 <div
-                  className="relative overflow-hidden rounded-lg text-left sm:col-span-2"
+                  className="relative overflow-hidden rounded-lg text-left"
                   style={{ backgroundColor: '#1a1a1a' }}
                 >
                   <div className="p-5">
@@ -283,9 +284,9 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     </div>
                   </div>
                 </div>
-              </FadeInNative>
+              </StaggerItem>
             ) : (
-              <FadeInNative key={card.id}>
+              <StaggerItem key={card.id}>
                 <button
                   type="button"
                   onClick={() => handleNavigate(card)}
@@ -303,10 +304,10 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     </span>
                   </div>
                 </button>
-              </FadeInNative>
+              </StaggerItem>
             )
           )}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   )
