@@ -120,14 +120,14 @@ export default function Attributions() {
                   .
                 </li>
                 <li>
-                  <span className="font-medium text-gray-800">Safety / guarantee (shield)</span> — Guarantee icons by{' '}
+                  <span className="font-medium text-gray-800">Safety (shield)</span> — Safe icons by{' '}
                   <a
                     className="text-primary-red underline hover:no-underline"
-                    href="https://www.flaticon.com/free-icons/guarantee"
+                    href="https://www.flaticon.com/free-icons/safe"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    yaicon
+                    Arkinasi
                   </a>
                   , available on{' '}
                   <a

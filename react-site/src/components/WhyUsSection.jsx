@@ -27,7 +27,7 @@ const ICON_MAP = {
   ),
   shield: (
     <img
-      src="/images/why-us-safety-guarantee.png"
+      src="/images/why-us-safety-safe.png"
       alt=""
       className="h-8 w-8 object-contain md:h-9 md:w-9"
       decoding="async"
