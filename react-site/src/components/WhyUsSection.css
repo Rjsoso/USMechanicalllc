@@ -155,38 +155,6 @@
   transform: rotate(180deg);
 }
 
-/* Presence column: dual map pins (two offices), aligned with other icon sizes */
-.why-us-bar__icon .why-us-presence-pins.dual-map-pins {
-  display: block;
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-.why-us-bar__icon .why-us-presence-pins .dual-map-pins__svg {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-.why-us-bar__icon .why-us-presence-pins .dual-map-pins__svg--front {
-  left: 0.42rem;
-}
-
-@media (min-width: 768px) {
-  .why-us-bar__icon .why-us-presence-pins.dual-map-pins {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .why-us-bar__icon .why-us-presence-pins .dual-map-pins__svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .why-us-bar__icon .why-us-presence-pins .dual-map-pins__svg--front {
-    left: 0.5rem;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .why-us-bar__grid {
     transition: none;

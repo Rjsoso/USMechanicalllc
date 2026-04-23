@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
-import DualMapPinsIcon from './DualMapPinsIcon'
 import './WhyUsSection.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
@@ -17,42 +16,70 @@ const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
 
 const ICON_MAP = {
   clock: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
+      <path fillRule="evenodd" clipRule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" />
     </svg>
   ),
   shield: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      <polyline points="9 12 11 14 15 10" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
+      <path fillRule="evenodd" clipRule="evenodd" d="M12.516 2.17a.75.75 0 0 0-1.032 0 11.209 11.209 0 0 1-7.877 3.08.75.75 0 0 0-.722.515A12.74 12.74 0 0 0 2.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.75.75 0 0 0 .374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 0 0-.722-.516l-.143.001a11.21 11.21 0 0 1-7.774-3.08Zm3.28 7.41a.75.75 0 0 0-1.06-1.06l-3.97 3.97-1.47-1.47a.75.75 0 0 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l4.5-4.5Z" />
     </svg>
   ),
   map: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
+      <path d="M8 14L5 22l7-3 7 3-3-8z" />
       <circle cx="12" cy="9" r="6" />
-      <polyline points="9 9 11 11 15 7" />
-      <polyline points="8 15 6 22 12 19 18 22 16 15" />
     </svg>
   ),
   dollar: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
-      <path d="M2 20h20" />
-      <path d="M2 10l10-6 10 6" />
-      <line x1="2" y1="10" x2="22" y2="10" />
-      <line x1="6" y1="10" x2="6" y2="20" />
-      <line x1="10" y1="10" x2="10" y2="20" />
-      <line x1="14" y1="10" x2="14" y2="20" />
-      <line x1="18" y1="10" x2="18" y2="20" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
+      <path d="M2 10L12 4l10 6z" />
+      <rect x="2" y="19" width="20" height="2" />
+      <rect x="5" y="11" width="2" height="8" />
+      <rect x="9" y="11" width="2" height="8" />
+      <rect x="13" y="11" width="2" height="8" />
+      <rect x="17" y="11" width="2" height="8" />
     </svg>
   ),
   tool: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 md:h-8 md:w-8">
-      <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
-      <path d="M15 5l4 4" />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-7 w-7 md:h-8 md:w-8"
+      aria-hidden="true"
+    >
+      <g
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <line x1="1.5" y1="6.2" x2="5.8" y2="6.2" />
+        <line x1="1.5" y1="9.2" x2="4.5" y2="9.2" />
+        <line x1="1.5" y1="12.2" x2="5.2" y2="12.2" />
+        <g transform="translate(14.2 10.2) rotate(11)">
+          <rect x="-5.1" y="-4" width="10.2" height="8" rx="1.1" />
+          <path d="M -2.6 -2.8 Q 0 -4.1 2.6 -2.8" />
+          <line x1="0.3" y1="2" x2="3.6" y2="2" />
+        </g>
+      </g>
     </svg>
   ),
-  building: <DualMapPinsIcon className="why-us-presence-pins" />,
+  building: (
+    <svg
+      viewBox="0 0 24 28"
+      fill="currentColor"
+      className="h-7 w-7 md:h-8 md:w-8"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 1.5C6.20101 1.5 1.5 6.20101 1.5 12C1.5 15.79 3.68 19.19 6.75 21.66C8.64 23.18 10.37 24.79 11.1 25.84C11.54 26.47 12.46 26.47 12.9 25.84C13.63 24.79 15.36 23.18 17.25 21.66C20.32 19.19 22.5 15.79 22.5 12C22.5 6.20101 17.799 1.5 12 1.5ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25Z"
+      />
+      <ellipse cx="12" cy="26.25" rx="5.25" ry="1.1" />
+    </svg>
+  ),
 }
 
 const EYEBROW_BY_ICON = {
