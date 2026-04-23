@@ -125,7 +125,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
       <div className="mx-auto max-w-7xl px-6">
         <FadeInNative>
           <div className="mb-12">
-            <h2 className="section-title text-3xl text-white md:text-4xl">
+            <h2 className="section-title text-5xl text-white md:text-6xl">
               {servicesData.sectionTitle || 'Services'}
             </h2>
             {servicesData.descriptionText && (
