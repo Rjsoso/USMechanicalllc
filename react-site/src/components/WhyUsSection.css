@@ -7,7 +7,7 @@
 
 @media (min-width: 1024px) {
   .why-us-columns {
-    background-color: #0a0a0a;
+    background-color: #ffffff;
   }
 }
 
@@ -16,15 +16,15 @@
   position: relative;
   border-radius: var(--why-us-radius);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: #000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
   box-shadow: none;
   transition: border-color 0.28s ease;
 }
 
 .why-us-bar--open {
-  background: #000;
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.14);
   box-shadow: none;
 }
 
@@ -46,7 +46,7 @@
     width: 2px;
     pointer-events: none;
     z-index: 2;
-    background-color: rgba(255, 255, 255, 0.18);
+    background-color: rgba(0, 0, 0, 0.12);
   }
 
   .why-us-bar:last-child {
@@ -54,7 +54,7 @@
   }
 
   .why-us-bar--open {
-    background: #000;
+    background: #ffffff;
   }
 
   .why-us-bar:last-child::before {
@@ -84,7 +84,7 @@
   justify-content: center;
 }
 
-/* Flaticon PNGs are black on transparent; cards are black — tint to match SVG icons (red-500) */
+/* Flaticon PNGs: tint to red-500 on light cards (same filter as on dark) */
 .why-us-bar__icon img {
   opacity: 1;
   filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(4063%) hue-rotate(339deg)

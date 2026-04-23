@@ -263,13 +263,13 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />
-          <div className="bg-black px-6 py-16 text-center md:py-20">
-            <p className="mb-4 text-lg font-medium text-white/70 md:text-xl">
+          <div className="bg-white px-6 py-16 text-center md:py-20">
+            <p className="mb-4 text-lg font-medium text-neutral-600 md:text-xl">
               Ready to discuss your next project?
             </p>
             <button
               onClick={() => navigate('/contact')}
-              className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-3 text-base font-semibold text-black transition-colors duration-200 hover:bg-white/90"
+              className="inline-flex items-center gap-2 rounded-md bg-red-600 px-8 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-red-700"
             >
               Contact Us
               <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">

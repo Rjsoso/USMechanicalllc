@@ -139,7 +139,7 @@ function useFineHoverPointer() {
 function ChevronDown({ className = '' }) {
   return (
     <svg
-      className={`why-us-bar__chevron h-5 w-5 shrink-0 text-white/50 ${className}`}
+      className={`why-us-bar__chevron h-5 w-5 shrink-0 text-neutral-400 ${className}`}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -184,11 +184,11 @@ function WhyUsExpandBar({
         <span className="why-us-bar__icon shrink-0 text-red-500 [&>img]:block [&>svg]:block">{icon}</span>
         <span className="why-us-bar__summary-text min-w-0 flex-1 text-left lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center lg:text-center">
           {eyebrow ? (
-            <span className="why-us-bar__eyebrow block text-xs font-semibold uppercase tracking-[0.2em] text-white/45 lg:leading-tight md:text-[13px]">
+            <span className="why-us-bar__eyebrow block text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 lg:leading-tight md:text-[13px]">
               {eyebrow}
             </span>
           ) : null}
-          <span className="block truncate text-xl font-bold tracking-tight text-white lg:line-clamp-4 lg:text-lg lg:leading-snug lg:tracking-tight md:text-2xl">
+          <span className="block truncate text-xl font-bold tracking-tight text-neutral-900 lg:line-clamp-4 lg:text-lg lg:leading-snug lg:tracking-tight md:text-2xl">
             {title}
           </span>
         </span>
@@ -204,7 +204,7 @@ function WhyUsExpandBar({
       >
         <div className="why-us-bar__grid">
           <div className="why-us-bar__panel-inner" aria-hidden={!expanded}>
-            <p className="text-lg leading-relaxed text-white/70 lg:text-center lg:text-sm lg:leading-relaxed">
+            <p className="text-lg leading-relaxed text-neutral-600 lg:text-center lg:text-sm lg:leading-relaxed">
               {description}
             </p>
           </div>
@@ -243,18 +243,18 @@ function WhyUsSection() {
 
   return (
     <section className="relative overflow-x-hidden">
-      <div className="bg-black pb-12 pt-16 md:pb-16 md:pt-22">
+      <div className="bg-white pb-12 pt-16 md:pb-16 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/45 md:text-xs">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-neutral-500 md:text-xs">
                 Why contractors pick us
               </p>
-              <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
+              <h2 className="section-title mb-4 text-4xl text-neutral-900 md:text-5xl lg:text-6xl">
                 {displayData.sectionTitle}
               </h2>
               {displayData.sectionSubtitle && (
-                <p className="mx-auto max-w-2xl text-lg text-white/70">
+                <p className="mx-auto max-w-2xl text-lg text-neutral-600">
                   {displayData.sectionSubtitle}
                 </p>
               )}
@@ -263,7 +263,7 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="bg-transparent py-8 md:py-10 lg:py-0">
+      <div className="bg-white py-8 md:py-10 lg:py-0">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:relative lg:left-1/2 lg:mx-0 lg:w-screen lg:max-w-none lg:-translate-x-1/2 lg:px-0">
           <div className="why-us-columns flex flex-col gap-2 md:gap-2.5 lg:min-h-[min(58vh,640px)] lg:flex-row lg:items-stretch lg:gap-0">
             {displayData.items.map((item, index) => (
