@@ -77,6 +77,48 @@ export default function Attributions() {
                   </a>
                   .
                 </li>
+                <li>
+                  <span className="font-medium text-gray-800">Safety / guarantee (shield)</span> — Guarantee icons by{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/free-icons/guarantee"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    yaicon
+                  </a>
+                  , available on{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Flaticon
+                  </a>
+                  .
+                </li>
+                <li>
+                  <span className="font-medium text-gray-800">Capacity / bonding (economic)</span> — Economic icons by{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/free-icons/economic"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Anggara
+                  </a>
+                  , available on{' '}
+                  <a
+                    className="text-primary-red underline hover:no-underline"
+                    href="https://www.flaticon.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Flaticon
+                  </a>
+                  .
+                </li>
               </ul>
             </section>
 

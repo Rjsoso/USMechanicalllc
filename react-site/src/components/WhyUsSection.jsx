@@ -21,9 +21,14 @@ const ICON_MAP = {
     </svg>
   ),
   shield: (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
-      <path fillRule="evenodd" clipRule="evenodd" d="M12.516 2.17a.75.75 0 0 0-1.032 0 11.209 11.209 0 0 1-7.877 3.08.75.75 0 0 0-.722.515A12.74 12.74 0 0 0 2.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.75.75 0 0 0 .374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 0 0-.722-.516l-.143.001a11.21 11.21 0 0 1-7.774-3.08Zm3.28 7.41a.75.75 0 0 0-1.06-1.06l-3.97 3.97-1.47-1.47a.75.75 0 0 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l4.5-4.5Z" />
-    </svg>
+    <img
+      src="/images/why-us-safety-guarantee.png"
+      alt=""
+      className="h-7 w-7 object-contain md:h-8 md:w-8"
+      decoding="async"
+      draggable={false}
+      aria-hidden={true}
+    />
   ),
   map: (
     <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
@@ -32,14 +37,14 @@ const ICON_MAP = {
     </svg>
   ),
   dollar: (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 md:h-8 md:w-8">
-      <path d="M2 10L12 4l10 6z" />
-      <rect x="2" y="19" width="20" height="2" />
-      <rect x="5" y="11" width="2" height="8" />
-      <rect x="9" y="11" width="2" height="8" />
-      <rect x="13" y="11" width="2" height="8" />
-      <rect x="17" y="11" width="2" height="8" />
-    </svg>
+    <img
+      src="/images/why-us-capacity-economic.png"
+      alt=""
+      className="h-7 w-7 object-contain md:h-8 md:w-8"
+      decoding="async"
+      draggable={false}
+      aria-hidden={true}
+    />
   ),
   tool: (
     <img
