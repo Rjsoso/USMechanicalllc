@@ -1,5 +1,41 @@
 /* Why Us: stacked bars (mobile) / full-bleed vertical columns (lg+) */
 
+/* Blueprint-tinted section background. A dark overlay knocks the image back
+   so it reads as texture and the existing black/transparent cards remain legible. */
+.why-us-section {
+  position: relative;
+  isolation: isolate;
+  background-color: #000;
+}
+
+.why-us-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/whyus-blueprint.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.28;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.why-us-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.35) 45%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Slightly lighter rail behind true-black columns + hairline frame (lg+) */
 .why-us-columns {
   border-radius: 0;
