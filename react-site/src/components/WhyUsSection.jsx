@@ -162,11 +162,11 @@ function WhyUsExpandBar({
         <span className="why-us-bar__icon shrink-0 text-red-500 [&>svg]:block">{icon}</span>
         <span className="why-us-bar__summary-text min-w-0 flex-1 text-left lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center lg:text-center">
           {eyebrow ? (
-            <span className="why-us-bar__eyebrow block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45 lg:leading-tight md:text-[11px]">
+            <span className="why-us-bar__eyebrow block text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45 lg:leading-tight md:text-xs">
               {eyebrow}
             </span>
           ) : null}
-          <span className="block truncate text-base font-bold tracking-tight text-white lg:line-clamp-4 lg:text-sm lg:leading-snug lg:tracking-tight md:text-lg">
+          <span className="block truncate text-lg font-bold tracking-tight text-white lg:line-clamp-4 lg:text-base lg:leading-snug lg:tracking-tight md:text-xl">
             {title}
           </span>
         </span>
