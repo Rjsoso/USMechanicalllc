@@ -138,7 +138,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
             {statsData.title}
           </h2>
         )}
-        <StaggerContainer className="grid grid-cols-1 gap-8 md:grid-cols-3" once>
+        <StaggerContainer className="grid grid-cols-1 gap-8 md:grid-cols-3" intensity="strong" once>
           {statsData.stats?.map((item, idx) => (
             <StaggerItem key={idx}>
               <div className="flex flex-col items-center">

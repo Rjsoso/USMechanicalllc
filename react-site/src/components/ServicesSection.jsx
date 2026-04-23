@@ -138,7 +138,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
 
         {/* Desktop: list left, preview right */}
         <div className="hidden lg:grid lg:grid-cols-[5fr_6fr] lg:gap-0">
-          <StaggerContainer className="flex flex-col">
+          <StaggerContainer className="flex flex-col" intensity="strong">
             {cards.map((card) => {
               const isActive = card.id === (hoveredId ?? cards[0].id)
               return (
@@ -262,7 +262,7 @@ const ServicesSection = ({ data: servicesDataProp }) => {
         </div>
 
         {/* Mobile: thumbnail cards */}
-        <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
+        <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden" intensity="strong">
           {cards.map((card) =>
             card.type === 'delivery-methods' ? (
               <StaggerItem key={card.id} className="sm:col-span-2">
