@@ -140,7 +140,7 @@ function useFineHoverPointer() {
 function ChevronDown({ className = '' }) {
   return (
     <svg
-      className={`why-us-bar__chevron h-5 w-5 shrink-0 text-white/50 ${className}`}
+      className={`why-us-bar__chevron h-5 w-5 shrink-0 ${className || 'text-white/50'}`}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -216,25 +216,21 @@ function WhyUsExpandBar({
   )
 }
 
-function useGridColumnTemplate(
-  count,
-  activeIdx
-) {
-  return useMemo(() => {
-    if (activeIdx === null) {
-      return `repeat(${count}, minmax(0, 1fr))`
-    }
-    return Array.from(
-      { length: count },
-      (_, i) => (i === activeIdx ? '2fr' : '1fr')
-    ).join(' ')
-  }, [count, activeIdx])
-}
-
 /**
- * `lg+`: six abutting columns in one row. Active column = **2fr**, others 1fr
- * (roughly "two spaces"). Copy appears inside the widened cell — no full-panel overlay.
- * Fine hover + click (coarse) to toggle.
+ * Desktop "Why" strip — six abutting flex columns:
+ *
+ * - **Width:** The row is `display: flex` (see `.why-us-skinny-cols`). Each column
+ *   is `flex: 1 1 0` with a shared `flex-grow` transition. The active column gets
+ *   `flex-grow: 2` (class `why-us-skinny-col--active`) so it takes 2/7 of the
+ *   width and the other five 1/7 each — same ratios as the old 2fr / 1fr grid,
+ *   but `flex-grow` eases more reliably in browsers than `grid-template-columns`.
+ * - **Input:** `useFineHoverPointer` → on fine pointers, hover sets `hoveredIndex`
+ *   on `mouseenter` per column; the rail `mouseleave` clears it after 80ms so
+ *   quick moves across gutter/gaps do not flash. On coarse (touch) pointers,
+ *   only `openIndex` from `click` toggles; hover state is ignored.
+ * - **Copy:** Description sits in a centered overlay (`.why-us-skinny-col__copy`) with
+ *   `pointer-events: none` so the hit target stays the button. It fades / scales
+ *   in CSS — no in-flow block, so the flex width animation is not fighting layout.
  */
 function WhyUsDesktopLeftRail({
   items,
@@ -245,7 +241,6 @@ function WhyUsDesktopLeftRail({
   setOpenIndex,
 }) {
   const activeIdx = fineHover ? hoveredIndex : openIndex
-  const gridTemplateColumns = useGridColumnTemplate(items.length, activeIdx)
   const leaveHoverTimerRef = useRef(null)
 
   const clearLeaveHoverTimer = () => {
@@ -266,14 +261,11 @@ function WhyUsDesktopLeftRail({
           leaveHoverTimerRef.current = setTimeout(() => {
             setHoveredIndex(null)
             leaveHoverTimerRef.current = null
-          }, 50)
+          }, 80)
         }
       }}
     >
-      <div
-        className="why-us-skinny-cols h-full min-h-0 w-full"
-        style={{ gridTemplateColumns }}
-      >
+      <div className="why-us-skinny-cols h-full min-h-0 w-full min-w-0">
         {items.map((item, index) => {
           const icon = ICON_MAP[item.icon] || ICON_MAP.tool
           const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
@@ -281,11 +273,11 @@ function WhyUsDesktopLeftRail({
           return (
             <div
               key={item.title || String(index)}
-              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0 [isolation:isolate]"
+              className={`why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0 [isolation:isolate] ${hot ? 'why-us-skinny-col--active' : ''} `}
             >
               <button
                 type="button"
-                className={`why-us-skinny-col__hit relative z-0 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center transition-[background-color,box-shadow] sm:px-1.5 sm:py-4 ${
+                className={`why-us-skinny-col__hit relative z-0 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center sm:px-1.5 sm:py-4 ${
                   hot
                     ? 'bg-zinc-900 ring-1 ring-inset ring-red-500/50'
                     : 'bg-black/25 hover:bg-white/[0.06]'
@@ -317,20 +309,22 @@ function WhyUsDesktopLeftRail({
                     {item.title}
                   </span>
                 </div>
-                <span className="mt-1.5">
+                <span className="mt-1.5 [contain:layout]">
                   <ChevronDown
-                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] sm:h-4 sm:w-4 ${
-                      hot ? 'rotate-180 text-red-400/80' : 'rotate-0'
-                    }`}
+                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 sm:h-4 sm:w-4 ${
+                      hot ? 'why-us-skinny-col__chev why-us-skinny-col__chev--open' : 'why-us-skinny-col__chev'
+                    } `}
                   />
                 </span>
               </button>
               <div
-                className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-1 pb-9 pt-2 sm:px-2 sm:pb-10"
+                className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-1 pb-9 pt-2 sm:px-2.5 sm:pb-10"
                 aria-hidden={!hot}
               >
                 <div
-                  className={`why-us-skinny-col__copy max-h-[58%] w-full max-w-full overflow-y-auto rounded-md border border-white/10 bg-zinc-950/95 px-1.5 py-1.5 text-left shadow-lg shadow-black/30 sm:px-2 sm:py-2 ${hot ? 'why-us-skinny-col__copy--open' : ''} `}
+                  className={`why-us-skinny-col__copy max-h-[60%] w-full max-w-full overflow-y-auto rounded-md border border-white/12 bg-zinc-950/96 px-1.5 py-1.5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.45)] sm:px-2 sm:py-2.5 ${
+                    hot ? 'why-us-skinny-col__copy--open' : ''
+                  } `}
                 >
                   <p className="text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
                     {item.description}
