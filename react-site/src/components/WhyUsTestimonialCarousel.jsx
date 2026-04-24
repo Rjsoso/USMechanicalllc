@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-zinc-950/80 p-5 text-white shadow-[0_12px_40px_rgba(0,0,0,0.4)] sm:p-6 lg:min-h-0"
+      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 text-zinc-900 shadow-[0_12px_40px_rgba(0,0,0,0.08)] sm:p-6 lg:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -85,8 +85,8 @@ function WhyUsTestimonialCarousel() {
       }}
     >
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/45">What partners say</p>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">What partners say</p>
+        <p className="mt-2 text-sm text-zinc-500">
           Sample quotes for layout review — replace in CMS when ready.
         </p>
       </div>
@@ -94,23 +94,23 @@ function WhyUsTestimonialCarousel() {
         className="mx-0 my-3 flex-1 lg:my-2.5"
         key={current.id}
       >
-        <p className="text-lg font-medium leading-relaxed text-white/90 md:text-xl">
+        <p className="text-lg font-medium leading-relaxed text-zinc-900 md:text-xl">
           &ldquo;{current.quote}&rdquo;
         </p>
-        <footer className="mt-4 text-sm text-white/60 lg:mt-3.5">
-          <span className="font-semibold text-white/85">{current.name}</span>
-          {current.role ? <span className="text-white/50">, {current.role}</span> : null}
+        <footer className="mt-4 text-sm text-zinc-600 lg:mt-3.5">
+          <span className="font-semibold text-zinc-800">{current.name}</span>
+          {current.role ? <span className="text-zinc-500">, {current.role}</span> : null}
           <br />
-          <span className="text-white/45">{current.company}</span>
+          <span className="text-zinc-500">{current.company}</span>
         </footer>
       </blockquote>
-      <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-t border-zinc-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
               key={t.id}
               type="button"
-              className={`h-1.5 rounded-full transition-all ${i === index ? 'w-6 bg-red-500' : 'w-1.5 bg-white/20 hover:bg-white/40'}`}
+              className={`h-1.5 rounded-full transition-all ${i === index ? 'w-6 bg-red-500' : 'w-1.5 bg-zinc-300 hover:bg-zinc-400'}`}
               aria-label={`Testimonial ${i + 1} of ${items.length}`}
               onClick={() => setIndex(i)}
             />
@@ -119,7 +119,7 @@ function WhyUsTestimonialCarousel() {
         <div className="flex justify-center gap-1 sm:justify-end">
           <button
             type="button"
-            className="rounded-md border border-white/15 p-2 text-white/80 hover:bg-white/5 hover:text-white"
+            className="rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
             aria-label="Previous quote"
             onClick={() => go('prev')}
           >
@@ -129,7 +129,7 @@ function WhyUsTestimonialCarousel() {
           </button>
           <button
             type="button"
-            className="rounded-md border border-white/15 p-2 text-white/80 hover:bg-white/5 hover:text-white"
+            className="rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
             aria-label="Next quote"
             onClick={() => go('next')}
           >
