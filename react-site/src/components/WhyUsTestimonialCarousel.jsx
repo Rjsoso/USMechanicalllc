@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-zinc-900/70 p-5 text-zinc-100 shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-sm sm:p-6 lg:min-h-0"
+      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}

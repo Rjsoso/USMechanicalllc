@@ -128,7 +128,7 @@ function SafetySection({ data: safetyDataProp }) {
                 {displayData.safetyTitle}
               </h3>
             </FadeInNative>
-            <FadeInNative delay={0.05}>
+            <FadeInNative delay={0.08}>
               <div className="text-lg leading-relaxed text-gray-700">
                 {Array.isArray(displayData.safetyText) ? (
                   <PortableText value={displayData.safetyText} />
@@ -140,7 +140,8 @@ function SafetySection({ data: safetyDataProp }) {
           </div>
 
           {safetyLogoItems.length > 0 && (
-            <div
+            <FadeInNative
+              delay={0.14}
               className={
                 isMobile
                   ? '-mx-6 w-full'
@@ -216,7 +217,7 @@ function SafetySection({ data: safetyDataProp }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </FadeInNative>
           )}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
+import FadeInWhenVisible from './FadeInWhenVisible'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
 import './WhyUsSection.css'
 
@@ -224,25 +225,28 @@ function WhyUsDesktopValueGrid({ items }) {
         const icon = ICON_MAP[item.icon] || ICON_MAP.tool
         const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
         return (
-          <article
+          <FadeInWhenVisible
             key={item.title || String(index)}
-            className="why-us-value-card flex h-full min-h-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-none transition-[border-color,background-color] duration-200 sm:p-5"
+            delay={index * 0.07}
+            className="h-full min-h-0 min-w-0"
           >
-            <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-red-500 [&>img]:h-8 [&>img]:w-8">
-              {icon}
-            </div>
-            {eyebrow ? (
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
-                {eyebrow}
+            <article className="why-us-value-card flex h-full min-h-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-none transition-[border-color,background-color] duration-200 sm:p-5">
+              <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-red-500 [&>img]:h-8 [&>img]:w-8">
+                {icon}
+              </div>
+              {eyebrow ? (
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
+                  {eyebrow}
+                </p>
+              ) : null}
+              <h3 className="mt-1.5 text-base font-bold leading-snug tracking-tight text-white sm:text-[17px]">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/70 line-clamp-4 sm:line-clamp-5">
+                {item.description}
               </p>
-            ) : null}
-            <h3 className="mt-1.5 text-base font-bold leading-snug tracking-tight text-white sm:text-[17px]">
-              {item.title}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/70 line-clamp-4 sm:line-clamp-5">
-              {item.description}
-            </p>
-          </article>
+            </article>
+          </FadeInWhenVisible>
         )
       })}
     </div>
@@ -302,29 +306,30 @@ function WhyUsSection() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:hidden">
           <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5">
             {displayData.items.map((item, index) => (
-              <WhyUsExpandBar
-                key={item.title || index}
-                index={index}
-                icon={ICON_MAP[item.icon] || ICON_MAP.tool}
-                title={item.title}
-                description={item.description}
-                eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
-                expanded={isExpanded(index)}
-                onBarEnter={() => {
-                  if (fineHover) setHoveredIndex(index)
-                }}
-                onBarLeave={() => {
-                  if (fineHover) setHoveredIndex(null)
-                }}
-                onToggle={() => {
-                  setOpenIndex((prev) => (prev === index ? null : index))
-                }}
-              />
+              <FadeInWhenVisible key={item.title || index} delay={index * 0.07} className="w-full">
+                <WhyUsExpandBar
+                  index={index}
+                  icon={ICON_MAP[item.icon] || ICON_MAP.tool}
+                  title={item.title}
+                  description={item.description}
+                  eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
+                  expanded={isExpanded(index)}
+                  onBarEnter={() => {
+                    if (fineHover) setHoveredIndex(index)
+                  }}
+                  onBarLeave={() => {
+                    if (fineHover) setHoveredIndex(null)
+                  }}
+                  onToggle={() => {
+                    setOpenIndex((prev) => (prev === index ? null : index))
+                  }}
+                />
+              </FadeInWhenVisible>
             ))}
           </div>
-          <div className="mt-8">
+          <FadeInWhenVisible delay={0.45} className="mt-8 w-full">
             <WhyUsTestimonialCarousel />
-          </div>
+          </FadeInWhenVisible>
         </div>
 
         <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 bg-zinc-950/20 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
@@ -333,9 +338,12 @@ function WhyUsSection() {
               <div className="min-w-0 lg:col-span-7">
                 <WhyUsDesktopValueGrid items={displayData.items} />
               </div>
-              <div className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5">
+              <FadeInWhenVisible
+                delay={0.35}
+                className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5"
+              >
                 <WhyUsTestimonialCarousel />
-              </div>
+              </FadeInWhenVisible>
             </div>
           </div>
         </div>

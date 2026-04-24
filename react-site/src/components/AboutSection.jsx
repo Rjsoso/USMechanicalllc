@@ -122,19 +122,21 @@ function AboutSection({ data: aboutDataProp }) {
                   }
             }
           >
-            <Carousel
-              items={carouselItems}
-              baseWidth={isMobile ? windowWidth - 32 : 1100}
-              containerClassName={
-                isMobile ? 'h-[300px]' : 'h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]'
-              }
-              arrowsInside={true}
-              autoplay={isMobile ? false : !isExpanded}
-              autoplayDelay={4000}
-              pauseOnHover={true}
-              loop={true}
-              round={false}
-            />
+            <FadeInNative delay={0} className="h-full w-full min-w-0">
+              <Carousel
+                items={carouselItems}
+                baseWidth={isMobile ? windowWidth - 32 : 1100}
+                containerClassName={
+                  isMobile ? 'h-[300px]' : 'h-[380px] md:h-[450px] lg:h-[580px] xl:h-[680px]'
+                }
+                arrowsInside={true}
+                autoplay={isMobile ? false : !isExpanded}
+                autoplayDelay={4000}
+                pauseOnHover={true}
+                loop={true}
+                round={false}
+              />
+            </FadeInNative>
           </div>
 
           <div
@@ -155,7 +157,7 @@ function AboutSection({ data: aboutDataProp }) {
             }
           >
             <div className="w-full px-6 pb-8 pt-8 lg:px-8">
-              <FadeInNative delay={0}>
+              <FadeInNative delay={0.08}>
                 <h2
                   className="section-title mb-4 text-3xl text-white md:text-4xl lg:text-5xl"
                   style={
@@ -173,7 +175,7 @@ function AboutSection({ data: aboutDataProp }) {
                 </h2>
               </FadeInNative>
 
-              <FadeInNative delay={0.05}>
+              <FadeInNative delay={0.14}>
                 <div>
                   <div
                     className="relative"
