@@ -1,109 +1,76 @@
-import { useRef, memo, useMemo, useState } from 'react'
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
+import { useRef, memo, useMemo, useLayoutEffect, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import WhyUsValueCard from './WhyUsValueCard'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
 
-/** Crossfade at segment boundaries (portion of one segment 0..1) */
-const EDGE = 0.14
+const GAP_PX = 12
 
 /**
- * "Slot": only one card is on-screen; opacity peaks in the middle of its segment,
- * with crossfade to the next — saves vertical space vs stacking all six in flow.
+ * Page-scroll drives a vertical "reel" of value cards: two rows visible, content
+ * translateY is scrubbed 0..-(n-1) steps. Top/bottom fades match LogoLoop (see WhyUsSection.css).
  */
-function useSlotCardTransform(scrollYProgress, index, segmentCount) {
-  const last = segmentCount - 1
-
-  const opacity = useTransform(scrollYProgress, (v) => {
-    const t = v * segmentCount
-    if (t < index) return 0
-    if (index < last && t >= index + 1) return 0
-    const u = t - index
-    if (u < EDGE) {
-      if (index === 0) return 1
-      return u / EDGE
-    }
-    if (u > 1 - EDGE) {
-      if (index === last) return 1
-      return (1 - u) / EDGE
-    }
-    return 1
-  })
-
-  const y = useTransform(scrollYProgress, (v) => {
-    const t = v * segmentCount
-    if (t < index) return 0
-    if (index < last && t >= index + 1) return 0
-    const u = t - index
-    if (u < EDGE && index > 0) return 14 * (1 - u / EDGE)
-    return 0
-  })
-
-  return { opacity, y }
-}
-
-function SlotCard({ item, index, segmentCount, scrollYProgress, isActive }) {
-  const { opacity, y } = useSlotCardTransform(scrollYProgress, index, segmentCount)
-  return (
-    <motion.div
-      className="absolute inset-0 flex min-w-0 items-stretch justify-center"
-      style={{
-        opacity,
-        y,
-        zIndex: index + 1,
-        pointerEvents: isActive ? 'auto' : 'none',
-      }}
-    >
-      <div className="w-full min-w-0 self-center">
-        <WhyUsValueCard item={item} />
-      </div>
-    </motion.div>
-  )
-}
-
 function WhyUsDesktopScrollStage({ items }) {
-  const trackRef = useRef(null)
+  const scrollTrackRef = useRef(null)
+  const firstRowRef = useRef(null)
+  const [stepPx, setStepPx] = useState(0)
+
   const { scrollYProgress } = useScroll({
-    target: trackRef,
+    target: scrollTrackRef,
     offset: ['start start', 'end end'],
   })
-  const segmentCount = items.length
-  const [activeSlot, setActiveSlot] = useState(0)
 
-  const trackMinHeight = useMemo(
-    () => (segmentCount > 0 ? `${segmentCount * 100}svh` : '100svh'),
-    [segmentCount],
-  )
+  const n = items.length
+  const stepCount = n > 1 ? n - 1 : 0
 
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    if (segmentCount < 1) return
-    const t = v * segmentCount
-    const idx = Math.min(segmentCount - 1, Math.max(0, Math.floor(t + 1e-9)))
-    setActiveSlot((prev) => (prev !== idx ? idx : prev))
+  const trackMinHeight = useMemo(() => {
+    if (n < 1) return '100svh'
+    const segments = stepCount > 0 ? stepCount : 1
+    return `${segments * 100}svh`
+  }, [n, stepCount])
+
+  const y = useTransform(scrollYProgress, (p) => {
+    if (stepCount < 1 || stepPx < 1) return 0
+    return -p * stepCount * stepPx
   })
+
+  useLayoutEffect(() => {
+    const el = firstRowRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      const h = el.getBoundingClientRect().height
+      setStepPx(h > 0 ? h + GAP_PX : 0)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [n])
 
   return (
     <div
-      ref={trackRef}
+      ref={scrollTrackRef}
       className="relative w-full"
       style={{ minHeight: trackMinHeight }}
     >
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
-          <div className="why-us-scroll-stage__grid mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-6 pb-1 lg:grid-cols-12 lg:gap-8 xl:gap-10">
+          <div className="why-us-scroll-stage__grid mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:gap-10 xl:gap-12">
             <div className="flex min-w-0 flex-col justify-start self-stretch lg:col-span-5">
-              <WhyUsTestimonialCarousel compact />
+              <WhyUsTestimonialCarousel />
             </div>
-            <div className="why-us-scroll-stage__slot-viewport relative w-full min-w-0 overflow-hidden rounded-xl lg:col-span-7 lg:min-h-[min(15rem,28svh)] lg:h-[min(19rem,34svh)]">
-              {items.map((item, index) => (
-                <SlotCard
-                  key={item.title || String(index)}
-                  item={item}
-                  index={index}
-                  segmentCount={segmentCount}
-                  scrollYProgress={scrollYProgress}
-                  isActive={activeSlot === index}
-                />
-              ))}
+            <div className="why-us-scroll-stage__reel-viewport relative w-full min-w-0 overflow-hidden rounded-xl lg:col-span-7 lg:min-h-[min(24rem,44svh)] lg:h-[min(30rem,52svh)]">
+              <motion.div
+                className="relative z-0 flex flex-col gap-3 will-change-transform"
+                style={{ y }}
+              >
+                {items.map((item, index) => (
+                  <div
+                    key={item.title || String(index)}
+                    ref={index === 0 ? firstRowRef : undefined}
+                    className="min-w-0 shrink-0"
+                  >
+                    <WhyUsValueCard item={item} />
+                  </div>
+                ))}
+              </motion.div>
             </div>
           </div>
         </div>

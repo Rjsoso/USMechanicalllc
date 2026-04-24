@@ -23,26 +23,43 @@
     padding-bottom: 0.75rem;
   }
 
-  /* Fade value cards at top/bottom of the “reel” (mask does not block pointer events on children in most browsers) */
-  .why-us-scroll-stage__slot-viewport {
-    -webkit-mask-image: linear-gradient(
+  /*
+   * Same edge treatment as .logoloop--vertical.logoloop--fade (LogoLoop.css):
+   * solid bands at top/bottom fade to transparent so the reel “soft exits”
+   * the viewport while the stack moves with page scroll.
+   */
+  .why-us-scroll-stage__reel-viewport {
+    --why-us-fade: rgba(0, 0, 0, 0.9);
+  }
+
+  .why-us-scroll-stage__reel-viewport::before,
+  .why-us-scroll-stage__reel-viewport::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    width: 100%;
+    height: clamp(32px, 9%, 120px);
+    pointer-events: none;
+  }
+
+  .why-us-scroll-stage__reel-viewport::before {
+    top: 0;
+    background: linear-gradient(
       to bottom,
-      transparent 0%,
-      #000 10%,
-      #000 90%,
-      transparent 100%
+      var(--why-us-fade) 0%,
+      rgba(0, 0, 0, 0) 100%
     );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 10%,
-      #000 90%,
-      transparent 100%
+  }
+
+  .why-us-scroll-stage__reel-viewport::after {
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--why-us-fade) 0%,
+      rgba(0, 0, 0, 0) 100%
     );
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
   }
 
   .why-us-scroll-stage__inner {

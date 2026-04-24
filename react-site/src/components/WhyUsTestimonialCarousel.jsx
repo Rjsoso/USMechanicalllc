@@ -38,7 +38,7 @@ const MOCK_TESTIMONIALS = [
 
 const INTERVAL_MS = 7000
 
-function WhyUsTestimonialCarousel({ compact = false }) {
+function WhyUsTestimonialCarousel() {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const reduced = useRef(false)
@@ -76,11 +76,7 @@ function WhyUsTestimonialCarousel({ compact = false }) {
 
   return (
     <div
-      className={
-        compact
-          ? 'why-us-testimonials why-us-testimonials--compact flex h-full max-h-[min(19rem,33svh)] w-full min-w-0 min-h-0 flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-black p-4 text-zinc-100 sm:max-h-[min(20rem,34svh)] sm:p-4 lg:min-h-0'
-          : 'why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0'
-      }
+      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -97,32 +93,20 @@ function WhyUsTestimonialCarousel({ compact = false }) {
         </p>
       </div>
       <blockquote
-        className={compact ? 'mx-0 my-2 min-h-0 flex-1' : 'mx-0 my-3 flex-1 lg:my-2.5'}
+        className="mx-0 my-3 flex-1 lg:my-2.5"
         key={current.id}
       >
-        <p
-          className={
-            compact
-              ? 'line-clamp-4 text-sm font-medium leading-snug text-white sm:line-clamp-5 sm:text-base'
-              : 'text-lg font-medium leading-relaxed text-white md:text-xl'
-          }
-        >
+        <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
           &ldquo;{current.quote}&rdquo;
         </p>
-        <footer className={compact ? 'mt-2 text-xs text-zinc-400' : 'mt-4 text-sm text-zinc-400 lg:mt-3.5'}>
+        <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
           <span className="font-semibold text-zinc-200">{current.name}</span>
           {current.role ? <span className="text-zinc-500">, {current.role}</span> : null}
           <br />
           <span className="text-zinc-500">{current.company}</span>
         </footer>
       </blockquote>
-      <div
-        className={
-          compact
-            ? 'mt-1 flex flex-col gap-2 border-t border-white/10 pt-2 sm:flex-row sm:items-center sm:justify-between'
-            : 'flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between'
-        }
-      >
+      <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
