@@ -63,7 +63,7 @@ function WhyUsDesktopScrollStage({ items }) {
               <WhyUsTestimonialCarousel />
             </div>
             <div className="min-h-0 min-w-0 lg:col-span-7">
-              <div className="why-us-scroll-stage__reel-viewport relative w-full min-h-0 overflow-hidden rounded-xl lg:h-[min(30rem,52svh)] lg:min-h-[18rem]">
+              <div className="why-us-scroll-stage__reel-viewport relative w-full min-h-0 overflow-hidden rounded-xl lg:h-[min(32rem,52svh)] lg:min-h-[19rem]">
                 <motion.div
                   className="relative z-0 flex flex-col gap-3 will-change-transform"
                   style={{ y }}
