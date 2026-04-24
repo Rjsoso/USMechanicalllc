@@ -89,13 +89,11 @@ function WhyUsDesktopScrollStage({ items }) {
     >
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
-          <div className="why-us-scroll-stage__grid mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-2 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-            <div className="flex min-w-0 flex-col justify-start self-stretch pt-1 lg:col-span-5">
-              <WhyUsTestimonialCarousel />
+          <div className="why-us-scroll-stage__grid mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-6 pb-1 lg:grid-cols-12 lg:gap-8 xl:gap-10">
+            <div className="flex min-w-0 flex-col justify-start self-stretch lg:col-span-5">
+              <WhyUsTestimonialCarousel compact />
             </div>
-            <div
-              className="relative w-full min-w-0 overflow-hidden rounded-xl lg:col-span-7 lg:min-h-[min(20rem,36svh)] lg:h-[min(24rem,44svh)]"
-            >
+            <div className="why-us-scroll-stage__slot-viewport relative w-full min-w-0 overflow-hidden rounded-xl lg:col-span-7 lg:min-h-[min(15rem,28svh)] lg:h-[min(19rem,34svh)]">
               {items.map((item, index) => (
                 <SlotCard
                   key={item.title || String(index)}
