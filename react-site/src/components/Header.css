@@ -160,6 +160,16 @@
     height: 82px;
   }
 
+  /* No heavy drop-shadow on light header — stacked filters read as a black halo */
+  .plaque-perspective .logo-3d-card {
+    filter: none !important;
+  }
+
+  .plaque-perspective .stamped-logo,
+  .plaque-perspective:hover .stamped-logo {
+    filter: none !important;
+  }
+
   /* Less aggressive than desktop 0.55 so the mark stays legible on small screens */
   .plaque-perspective.header-scrolled {
     transform: scale(0.9);
