@@ -3,7 +3,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-family-excellence.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}
@@ -13,7 +13,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-safety-safe.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}
@@ -23,7 +23,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-coverage.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}
@@ -33,7 +33,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-capacity-economic.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}
@@ -43,7 +43,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-fast-delivery.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}
@@ -53,7 +53,7 @@ export const ICON_MAP = {
     <img
       src="/images/why-us-map-location.png"
       alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 object-contain brightness-0 invert md:h-9 md:w-9"
       decoding="async"
       draggable={false}
       aria-hidden={true}

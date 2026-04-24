@@ -10,7 +10,7 @@ function WhyUsValueCard({ item }) {
   const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
   return (
     <article className="why-us-value-card flex h-full min-h-0 w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black/45 p-4 shadow-none backdrop-blur-sm transition-[background-color,box-shadow] duration-200 sm:p-5">
-      <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/5 bg-black/40 text-red-500 sm:h-11 sm:w-11 [&>img]:h-8 [&>img]:w-8 sm:[&>img]:h-9 sm:[&>img]:w-9">
+      <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/5 bg-black/40 sm:h-11 sm:w-11 [&>img]:h-8 [&>img]:w-8 sm:[&>img]:h-9 sm:[&>img]:w-9">
         {icon}
       </div>
       {eyebrow ? (

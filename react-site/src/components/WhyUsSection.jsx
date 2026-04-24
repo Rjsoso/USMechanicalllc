@@ -116,7 +116,7 @@ function WhyUsExpandBar({
         aria-controls={panelId}
         onClick={onToggle}
       >
-        <span className="why-us-bar__icon shrink-0 text-red-500 [&>img]:block [&>svg]:block">{icon}</span>
+        <span className="why-us-bar__icon shrink-0 [&>img]:block [&>svg]:block">{icon}</span>
         <span className="why-us-bar__summary-text min-w-0 flex-1 text-left">
           {eyebrow ? (
             <span className="why-us-bar__eyebrow block text-xs font-semibold uppercase tracking-[0.2em] text-white/45 md:text-[13px]">
