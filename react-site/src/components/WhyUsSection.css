@@ -1,14 +1,7 @@
-/* Why Us: stacked bars (mobile) / full-bleed vertical columns (lg+) */
+/* Why Us: stacked cards below `lg`, two-column (left rail + testimonials) on `lg+` */
 
-/* Slightly lighter rail behind true-black columns + hairline frame (lg+) */
-.why-us-columns {
+.why-us-columns--stacked {
   border-radius: 0;
-}
-
-@media (min-width: 1024px) {
-  .why-us-columns {
-    background-color: #0a0a0a;
-  }
 }
 
 .why-us-bar {
@@ -26,40 +19,6 @@
   background: #000;
   border-color: rgba(255, 255, 255, 0.2);
   box-shadow: none;
-}
-
-@media (min-width: 1024px) {
-  .why-us-bar {
-    min-height: 100%;
-    border-radius: 0;
-    border: none;
-    border-right: none;
-    box-shadow: none;
-  }
-
-  .why-us-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 2px;
-    pointer-events: none;
-    z-index: 2;
-    background-color: rgba(255, 255, 255, 0.18);
-  }
-
-  .why-us-bar:last-child {
-    border-right: none;
-  }
-
-  .why-us-bar--open {
-    background: #000;
-  }
-
-  .why-us-bar:last-child::before {
-    display: none;
-  }
 }
 
 .why-us-bar__summary {
@@ -84,7 +43,6 @@
   justify-content: center;
 }
 
-/* Flaticon PNGs are black on transparent; cards are black — tint to match SVG icons (red-500) */
 .why-us-bar__icon img {
   opacity: 1;
   filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(4063%) hue-rotate(339deg)
@@ -96,13 +54,6 @@
   z-index: 1;
   padding-left: 0.875rem;
   padding-right: 0.875rem;
-}
-
-@media (min-width: 1024px) {
-  .why-us-bar__panel {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
 }
 
 .why-us-bar__grid {
@@ -130,18 +81,22 @@
   padding-bottom: 0.875rem;
 }
 
-@media (min-width: 1024px) {
-  .why-us-bar--open .why-us-bar__panel-inner {
-    padding-bottom: 0.75rem;
-  }
-}
-
 .why-us-bar__chevron {
   transition: transform 0.32s ease;
 }
 
 .why-us-bar--open .why-us-bar__chevron {
   transform: rotate(180deg);
+}
+
+/* Desktop left rail: row hit targets (styling is mostly Tailwind) */
+.why-us-left-rail__row:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.65);
+  outline-offset: 2px;
+}
+
+.why-us-left-rail__panel {
+  -webkit-font-smoothing: antialiased;
 }
 
 @media (prefers-reduced-motion: reduce) {
