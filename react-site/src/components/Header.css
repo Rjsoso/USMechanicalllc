@@ -153,6 +153,9 @@
 @media (max-width: 767px) {
   .plaque-perspective {
     z-index: 50;
+    /* Snappier entrance than desktop 0.8s */
+    animation-duration: 0.45s;
+    animation-delay: 0.08s;
   }
 
   .logo-3d-card {

@@ -101,7 +101,14 @@ header {
 
 /* Additional HTML properties (background already set above) */
 html {
-  scroll-padding-top: 180px; /* Account for fixed header */
+  scroll-padding-top: 180px; /* Account for fixed header (desktop) */
+}
+
+@media (max-width: 767px) {
+  html {
+    /* Logo + hamburger: smaller offset than full desktop nav */
+    scroll-padding-top: 96px;
+  }
 }
 
 /* scroll-behavior: smooth removed — it was applying to all programmatic
@@ -903,14 +910,10 @@ body {
     min-height: 44px;
   }
 
-  /* Better tap feedback with visual response */
-  button:active,
+  /* Subtle press feedback — avoid scale() on all buttons (layout jank on mobile) */
+  button:active:not(.drawer-hamburger),
   a[role='button']:active {
-    opacity: 0.7;
-    transform: scale(0.98);
-    transition:
-      opacity 0.1s ease,
-      transform 0.1s ease;
+    opacity: 0.88;
   }
 
   /* Remove 300ms tap delay on all interactive elements */
@@ -973,6 +976,7 @@ body {
   body {
     font-size: 16px; /* Prevent iOS zoom on input focus */
     line-height: 1.6;
+    text-rendering: optimizeLegibility;
   }
 
   /* Increase spacing for breathing room on mobile */
@@ -1287,45 +1291,33 @@ body {
 }
 
 /* ============================================
-   MOBILE PERFORMANCE OPTIMIZATIONS
+   MOBILE PERFORMANCE (avoid global transition/animation overrides — they
+   made motion feel "janky" and broke Framer / layered transitions)
    ============================================ */
 
-/* Enhanced reduced motion for mobile devices */
-@media (max-width: 767px) and (prefers-reduced-motion: reduce), (max-width: 767px) {
-  /* Disable complex 3D transforms on mobile for better performance */
+/* Flatten heavy 3D on small screens; keep Framer/section timings intact */
+@media (max-width: 767px) {
   .hero-button-3d,
   .logo-3d-card,
   .dock-panel {
     transform: none !important;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2)) !important;
-    transition: opacity 0.2s ease !important;
   }
 
-  /* Simplify all transitions for better battery life */
-  *:not(.logoloop__track) {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
+  .hero-button-3d,
+  .dock-panel {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.18)) !important;
+    transition: opacity 0.3s ease !important;
   }
 
-  /* Reduce motion on framer-motion elements */
-  [data-framer-motion] {
-    animation-duration: 0.15s !important;
-  }
-}
-
-/* Additional mobile-specific performance hints */
-@media (max-width: 767px) {
-  /* Remove will-change from all elements to reduce jitter, except LogoLoop */
-  *:not(.logoloop__track) {
-    will-change: auto !important;
+  /* Logo card: no extra filter here — Header.css handles drop-shadow / none on .plaque-perspective */
+  .logo-3d-card {
+    filter: none !important;
   }
 
   .logoloop__track {
     will-change: transform !important;
   }
 
-  /* Override will-change removal for Careers/Contact animations to prevent white flashing */
-  /* These sections need GPU acceleration on mobile due to simultaneous opacity+transform */
   #careers [data-framer-motion],
   #contact [data-framer-motion] {
     will-change: opacity, transform !important;
@@ -1335,30 +1327,6 @@ body {
     -webkit-transform: translateZ(0) !important;
   }
 
-  /* Removed: broad will-change/translateZ(0) on section children — promoted too many GPU layers */
-
-  /* Removed: *:hover/*:focus/*:active will-change — caused too many GPU layers */
-
-  /* Simplify transforms - use translate instead of translate3d */
-  [style*='translate3d']:not(.logoloop__track):not(.logoloop *) {
-    transform: none !important;
-  }
-
-  /* Reduce transition complexity */
-  * {
-    transition-timing-function: ease !important;
-  }
-
-  /* Disable complex text animations on static sections only */
-  /* Hero, Portfolio, Careers, and Contact need GPU acceleration for smooth text fades */
-  .section-title:not(#hero *, #portfolio *, #careers *, #contact *) {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
-    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.4) !important;
-    will-change: auto !important;
-    transform: none !important;
-  }
-
-  /* Hero text needs full GPU acceleration for smooth opacity transitions */
   #hero .hero-3d-text {
     will-change: opacity, transform !important;
     backface-visibility: hidden !important;
