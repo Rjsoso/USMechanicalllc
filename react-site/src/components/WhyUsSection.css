@@ -89,10 +89,39 @@
   transform: rotate(180deg);
 }
 
-/* Desktop left rail: row hit targets (styling is mostly Tailwind) */
-.why-us-left-rail__row:focus-visible {
+/* `lg+`: six skinny abutting columns with hairline separators */
+.why-us-skinny-cols {
+  position: relative;
+  background: #0a0a0a;
+}
+
+.why-us-skinny-col {
+  position: relative;
+  z-index: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.why-us-skinny-col:focus {
+  outline: none;
+}
+
+.why-us-skinny-col:focus-visible {
+  z-index: 1;
   outline: 2px solid rgba(239, 68, 68, 0.65);
   outline-offset: 2px;
+}
+
+.why-us-skinny-col:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  bottom: 0.4rem;
+  width: 1px;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .why-us-left-rail__panel {

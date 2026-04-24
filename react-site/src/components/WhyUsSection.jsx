@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, memo } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
@@ -217,9 +218,10 @@ function WhyUsExpandBar({
 }
 
 /**
- * `lg+`: six rows on the left; on hover (fine pointer) or click, full description
- * appears in an overlay above the rail. Overlay uses pointer-events:none so
- * the testimonial column is never covered.
+ * `lg+`: six skinny **columns** in one row (icon, eyebrow, title, chevron);
+ * on hover (fine) or click, a **fully opaque** overlay covers this cluster only.
+ * `pointer-events: none` on the overlay so columns stay hoverable underneath.
+ * Copy cross-fades when the active item changes.
  */
 function WhyUsDesktopLeftRail({
   items,
@@ -229,12 +231,15 @@ function WhyUsDesktopLeftRail({
   openIndex,
   setOpenIndex,
 }) {
+  const reduceMotion = useReducedMotion()
   const showOverlay = fineHover ? hoveredIndex !== null : openIndex !== null
   const activeIdx = fineHover ? hoveredIndex : openIndex
   const activeItem =
     activeIdx !== null && items[activeIdx] ? items[activeIdx] : null
   const activeIcon = activeItem ? ICON_MAP[activeItem.icon] || ICON_MAP.tool : null
   const activeEyebrow = activeItem?.icon ? EYEBROW_BY_ICON[activeItem.icon] : null
+
+  const tCross = reduceMotion ? 0.01 : 0.3
 
   return (
     <div
@@ -243,8 +248,8 @@ function WhyUsDesktopLeftRail({
         if (fineHover) setHoveredIndex(null)
       }}
     >
-      <div className="relative min-h-inherit overflow-hidden rounded-lg border border-white/10 bg-[#0a0a0a] p-2">
-        <div className="relative z-10 space-y-1.5">
+      <div className="relative min-h-inherit overflow-hidden rounded-lg border border-white/10 bg-[#0a0a0a]">
+        <div className="why-us-skinny-cols relative z-10 flex min-h-[min(58vh,640px)] flex-row items-stretch">
           {items.map((item, index) => {
             const icon = ICON_MAP[item.icon] || ICON_MAP.tool
             const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
@@ -253,11 +258,9 @@ function WhyUsDesktopLeftRail({
               <button
                 key={item.title || String(index)}
                 type="button"
-                className={`why-us-left-rail__row flex w-full min-h-[3.5rem] items-center gap-3 rounded-md border px-3 py-2.5 text-left transition-colors ${
-                  hot
-                    ? 'border-red-500/50 bg-white/[0.05]'
-                    : 'border-white/10 bg-black/30 hover:border-white/20'
-                }`}
+                className={`why-us-skinny-col group flex min-h-0 min-w-0 flex-1 flex-col items-center justify-between gap-2 border-0 bg-black/20 px-1.5 py-4 text-center transition-[background-color,box-shadow] sm:px-2 ${
+                  hot ? 'ring-1 ring-inset ring-red-500/50 bg-white/[0.04]' : 'hover:bg-white/[0.04]'
+                } `}
                 onMouseEnter={() => {
                   if (fineHover) setHoveredIndex(index)
                 }}
@@ -265,54 +268,72 @@ function WhyUsDesktopLeftRail({
                   setOpenIndex((prev) => (prev === index ? null : index))
                 }}
               >
-                <span className="why-us-bar__icon shrink-0 text-red-500 [&>img]:block">
+                <span className="why-us-bar__icon text-red-500 [&>img]:h-7 [&>img]:w-7 md:[&>img]:h-8 md:[&>img]:w-8">
                   {icon}
                 </span>
-                <span className="min-w-0 flex-1">
+                <div className="mt-1 flex min-w-0 flex-1 flex-col items-center justify-start gap-0.5">
                   {eyebrow ? (
-                    <span className="mb-0.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
+                    <span className="max-w-full break-words text-[9px] font-semibold uppercase leading-tight tracking-[0.12em] text-white/40 sm:text-[10px] sm:tracking-[0.18em]">
                       {eyebrow}
                     </span>
                   ) : null}
-                  <span className="line-clamp-2 text-left text-sm font-bold text-white sm:text-base">
+                  <span className="line-clamp-4 max-w-full text-balance break-words text-sm font-bold leading-tight text-white sm:text-base">
                     {item.title}
                   </span>
+                </div>
+                <span className="mt-auto">
+                  <ChevronDown
+                    className={hot ? 'text-red-400/80' : ''}
+                  />
                 </span>
-                <ChevronDown
-                  className={hot ? 'text-red-400/80' : ''}
-                />
               </button>
             )
           })}
         </div>
-        {showOverlay && activeItem && (
+        {showOverlay && activeItem && activeIdx !== null && (
           <div
-            className="absolute inset-0 z-20 flex items-center justify-center p-3 sm:p-4 pointer-events-none"
-            aria-hidden={!showOverlay}
+            className="absolute inset-0 z-20 flex min-h-0 flex-col pointer-events-none"
+            role="presentation"
           >
             <div
-              className="why-us-left-rail__panel max-h-full w-full max-w-prose overflow-y-auto rounded-md bg-black/94 p-4 sm:p-5 ring-1 ring-white/15"
+              className="absolute inset-0 bg-zinc-950"
+              style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)' }}
+              aria-hidden
+            />
+            <div
+              className="relative z-10 flex min-h-0 w-full max-w-full flex-1 items-center justify-center overflow-y-auto p-3 sm:p-4"
               role="status"
               aria-live="polite"
             >
-              <div className="flex items-start gap-3">
-                <span className="why-us-bar__icon mt-0.5 shrink-0 text-red-500">
-                  {activeIcon}
-                </span>
-                <div className="min-w-0 text-left">
-                  {activeEyebrow ? (
-                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-red-400/80">
-                      {activeEyebrow}
-                    </p>
-                  ) : null}
-                  <h3 className="section-title text-lg text-white sm:text-xl">
-                    {activeItem.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base">
-                    {activeItem.description}
-                  </p>
-                </div>
-              </div>
+              <AnimatePresence initial={false} mode="wait">
+                <motion.div
+                  key={activeIdx}
+                  className="why-us-left-rail__panel mx-auto w-full max-w-prose"
+                  initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: reduceMotion ? 0 : -6 }}
+                  transition={{ duration: tCross, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <span className="why-us-bar__icon mt-0.5 shrink-0 text-red-500 [&>img]:h-8 [&>img]:w-8">
+                      {activeIcon}
+                    </span>
+                    <div className="min-w-0 text-left">
+                      {activeEyebrow ? (
+                        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-400/80 sm:tracking-[0.25em]">
+                          {activeEyebrow}
+                        </p>
+                      ) : null}
+                      <h3 className="section-title text-base text-white sm:text-lg">
+                        {activeItem.title}
+                      </h3>
+                      <p className="mt-2 text-xs leading-relaxed text-white/90 sm:mt-3 sm:text-sm">
+                        {activeItem.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         )}
