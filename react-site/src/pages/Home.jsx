@@ -76,24 +76,19 @@ export default function Home() {
     return null
   }, [portfolioCat.data, portfolioSec.data])
 
-  /** In-repo full-bleed image so the first paint is never the old slate/blue “loading” color */
-  const heroBackgroundCssUrl = useMemo(() => {
-    if (heroBackgroundUrl) return `url("${heroBackgroundUrl.replace(/"/g, '%22')}")`
-    return `url("/og-image.jpg")`
-  }, [heroBackgroundUrl])
-
   const servicesData = services.data
   const statsData = stats.data
   const aboutData = about.data
 
-  // Preload hero (CMS) or static fallback so the first paint is not a flat color
-  // waiting for the background-image request.
+  // Preload the hero background as soon as its URL is known so the browser can
+  // start fetching in parallel with component JS/CSS. The CSS background-image
+  // wouldn't otherwise kick off the network request until paint.
   useEffect(() => {
-    const href = heroBackgroundUrl || '/og-image.jpg'
+    if (!heroBackgroundUrl) return
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
-    link.href = href
+    link.href = heroBackgroundUrl
     link.fetchPriority = 'high'
     document.head.appendChild(link)
     return () => {
@@ -249,7 +244,7 @@ export default function Home() {
         tabIndex={-1}
         className="main-with-fixed-bg"
         style={{
-          '--bg-url': heroBackgroundCssUrl,
+          '--bg-url': heroBackgroundUrl ? `url(${heroBackgroundUrl})` : 'none',
           position: 'relative',
           minHeight: '100vh',
         }}
