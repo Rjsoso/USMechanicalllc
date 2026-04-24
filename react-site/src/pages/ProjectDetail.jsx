@@ -235,7 +235,7 @@ export default function ProjectDetail() {
                   <Carousel
                     items={carouselItems}
                     baseWidth={700}
-                    containerClassName="h-[500px]"
+                    containerClassName="h-[min(52svh,480px)] min-h-[200px] w-full sm:min-h-[360px] md:min-h-[500px] md:h-[500px]"
                     autoplay={true}
                     autoplayDelay={4000}
                     pauseOnHover={true}

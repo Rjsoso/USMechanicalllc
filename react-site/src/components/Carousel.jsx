@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, memo } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, memo } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
@@ -7,6 +7,7 @@ import './Carousel.css'
 const DRAG_BUFFER = 0
 const VELOCITY_THRESHOLD = 500
 const GAP = 16
+const MIN_SLIDE_WIDTH = 200
 const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
 const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition, shouldLoad }) {
@@ -67,8 +68,29 @@ export default function Carousel({
   loop = false,
   round = false,
 }) {
-  const itemWidth = baseWidth
+  const containerRef = useRef(null)
+  const [measuredW, setMeasuredW] = useState(0)
+
+  const itemWidth = useMemo(() => {
+    if (measuredW < 1) return baseWidth
+    return Math.max(MIN_SLIDE_WIDTH, Math.min(baseWidth, Math.floor(measuredW)))
+  }, [measuredW, baseWidth])
+
   const trackItemOffset = itemWidth + GAP
+
+  useLayoutEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const measure = () => {
+      const w = el.clientWidth
+      if (w > 0) setMeasuredW(w)
+    }
+    measure()
+    const ro = new ResizeObserver(() => measure())
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [items.length, baseWidth, round, containerClassName])
+
   const itemsForRender = useMemo(() => {
     if (!loop) return items
     if (items.length === 0) return []
@@ -83,26 +105,25 @@ export default function Carousel({
   const [isJumping, setIsJumping] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  const containerRef = useRef(null)
   const hasInitialized = useRef(false)
 
-  // Handle position initialization and reset when items or mode change
+  // Init / reset when items or loop change only — not when slide width (resize) changes
   useEffect(() => {
     const startingPosition = loop ? 1 : 0
 
     if (!hasInitialized.current) {
-      // First initialization
       hasInitialized.current = true
       x.set(-startingPosition * trackItemOffset)
       return
     }
 
-    // Reset position and x when items change - use requestAnimationFrame to avoid setState during render
     requestAnimationFrame(() => {
       setPosition(startingPosition)
       x.set(-startingPosition * trackItemOffset)
     })
-  }, [items.length, loop, trackItemOffset, x])
+    /* `trackItemOffset` intentionally omitted: resize must not reset slide; including it
+     * made every width change jump back to the first clone in loop mode. */
+  }, [items.length, loop, x])
 
   // Adjust position if it exceeds new array bounds (non-loop mode)
   useEffect(() => {
@@ -308,17 +329,30 @@ export default function Carousel({
       <div
         ref={containerRef}
         className={`carousel-container ${round ? 'round' : ''} ${containerClassName}`}
-        style={{
-          width: `${baseWidth}px`,
-          ...(round && { height: `${baseWidth}px`, borderRadius: '50%' }),
-        }}
+        style={
+          round
+            ? {
+                width: itemWidth,
+                height: itemWidth,
+                borderRadius: '50%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                maxWidth: '100%',
+              }
+            : {
+                width: '100%',
+                maxWidth: baseWidth,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }
+        }
       >
         <motion.div
           className="carousel-track"
           drag={isAnimating ? false : 'x'}
           {...dragProps}
           style={{
-            width: itemWidth,
+            display: 'flex',
             gap: `${GAP}px`,
             perspective: 1000,
             perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
