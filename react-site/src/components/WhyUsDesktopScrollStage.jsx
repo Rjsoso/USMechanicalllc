@@ -56,21 +56,23 @@ function WhyUsDesktopScrollStage({ items }) {
       className="relative w-full"
       style={{ minHeight: trackMinHeight }}
     >
-      <div className="sticky top-0 z-10 flex w-full min-h-svh items-center py-6 lg:py-8">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-8 px-6 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-          <div className="flex min-h-[min(22rem,50svh)] w-full min-w-0 flex-col justify-center self-stretch lg:col-span-5">
-            <WhyUsTestimonialCarousel />
-          </div>
-          <div className="flex min-h-0 min-w-0 flex-col justify-start gap-3 lg:col-span-7">
-            {items.map((item, index) => (
-              <ScrollRevealCard
-                key={item.title || String(index)}
-                item={item}
-                index={index}
-                segmentCount={segmentCount}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
+      <div className="why-us-scroll-stage__pin sticky top-0 w-full">
+        <div className="why-us-scroll-stage__inner w-full px-6">
+          <div className="why-us-scroll-stage__grid mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+            <div className="why-us-scroll-stage__col-quote flex min-h-0 min-w-0 flex-col justify-start self-stretch lg:col-span-5">
+              <WhyUsTestimonialCarousel />
+            </div>
+            <div className="why-us-scroll-stage__col-cards flex min-h-0 min-w-0 flex-col gap-3 lg:col-span-7">
+              {items.map((item, index) => (
+                <ScrollRevealCard
+                  key={item.title || String(index)}
+                  item={item}
+                  index={index}
+                  segmentCount={segmentCount}
+                  scrollYProgress={scrollYProgress}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

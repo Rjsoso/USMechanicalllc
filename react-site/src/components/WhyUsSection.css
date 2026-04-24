@@ -1,5 +1,85 @@
 /* Why Us: mobile accordion below `lg`; `lg+` uses grid cards + testimonial in WhyUsSection.jsx */
 
+/*
+ * Desktop: reserve space for fixed UI (60px .desktop-nav + overlapping .plaque-perspective logo).
+ * Logo block heights match `Header.css` .logo-3d-card at each breakpoint; top offset matches top-4 (1rem).
+ */
+@media (min-width: 1024px) {
+  .why-us-scroll-stage__pin {
+    box-sizing: border-box;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    height: 100svh;
+    min-height: 0;
+    /* 161px: md+ logo; clears nav (60px) and left overlap */
+    padding-top: calc(1rem + 161px + 0.75rem);
+    padding-bottom: 1.25rem;
+  }
+
+  .why-us-scroll-stage__inner {
+    min-height: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .why-us-scroll-stage__grid {
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+
+  .why-us-scroll-stage__col-quote {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .why-us-scroll-stage__col-cards {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .why-us-desktop-hero-offset {
+    padding-top: calc(1rem + 161px + 0.75rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  .why-us-scroll-stage__pin {
+    padding-top: calc(1rem + 149px + 0.75rem);
+  }
+
+  .why-us-desktop-hero-offset {
+    padding-top: calc(1rem + 149px + 0.75rem);
+  }
+}
+
+@media (min-width: 1920px) {
+  .why-us-scroll-stage__pin {
+    padding-top: calc(1rem + 136px + 0.75rem);
+  }
+
+  .why-us-desktop-hero-offset {
+    padding-top: calc(1rem + 136px + 0.75rem);
+  }
+}
+
+@media (min-width: 2560px) {
+  .why-us-scroll-stage__pin {
+    padding-top: calc(1rem + 124px + 0.75rem);
+  }
+
+  .why-us-desktop-hero-offset {
+    padding-top: calc(1rem + 124px + 0.75rem);
+  }
+}
+
 .why-us-columns--stacked {
   border-radius: 0;
 }
