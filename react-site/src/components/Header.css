@@ -149,17 +149,33 @@
   }
 }
 
-/* Mobile optimizations - hide logo on mobile (CardNav has logo) */
+/* Mobile: compact fixed logo (top-left; hamburger is top-right) — was display:none */
 @media (max-width: 767px) {
   .plaque-perspective {
-    display: none !important;
+    z-index: 50;
+  }
+
+  .logo-3d-card {
+    width: 132px;
+    height: 82px;
+  }
+
+  /* Less aggressive than desktop 0.55 so the mark stays legible on small screens */
+  .plaque-perspective.header-scrolled {
+    transform: scale(0.9);
   }
 }
 
-/* Extra small phones */
-@media (max-width: 375px) {
+@media (max-width: 400px) {
   .logo-3d-card {
-    width: 120px !important;
-    height: 74px !important;
+    width: 118px;
+    height: 73px;
+  }
+}
+
+@media (max-width: 360px) {
+  .logo-3d-card {
+    width: 108px;
+    height: 67px;
   }
 }
