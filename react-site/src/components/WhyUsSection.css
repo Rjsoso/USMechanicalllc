@@ -89,7 +89,7 @@
   transform: rotate(180deg);
 }
 
-/* Desktop: six abutting grid columns, animated track */
+/* Desktop: six abutting grid columns; track eases (copy is absolute, so no layout fight) */
 .why-us-skinny-cols {
   display: grid;
   min-height: 0;
@@ -125,9 +125,20 @@
   outline-offset: 2px;
 }
 
-.why-us-skinny-col__detail {
-  min-height: 0;
-  flex-shrink: 0;
+.why-us-skinny-col__copy {
+  transform: translate3d(0, 100%, 0);
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.26s ease 0.02s;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.why-us-skinny-col__copy--open {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
 }
 
 .why-us-skinny-col:not(:last-child)::after {
@@ -149,6 +160,11 @@
 @media (prefers-reduced-motion: reduce) {
   .why-us-skinny-cols {
     transition: none;
+  }
+
+  .why-us-skinny-col__copy {
+    transition: none;
+    will-change: auto;
   }
 
   .why-us-bar__grid {

@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect, memo } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
@@ -266,11 +265,11 @@ function WhyUsDesktopLeftRail({
           return (
             <div
               key={item.title || String(index)}
-              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col border-0 p-0"
+              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0"
             >
               <button
                 type="button"
-                className={`why-us-skinny-col__hit flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center transition-[background-color,box-shadow] sm:px-1.5 sm:py-4 ${
+                className={`why-us-skinny-col__hit relative z-0 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center transition-[background-color,box-shadow] sm:px-1.5 sm:py-4 ${
                   hot
                     ? 'bg-zinc-900 ring-1 ring-inset ring-red-500/50'
                     : 'bg-black/25 hover:bg-white/[0.06]'
@@ -301,30 +300,19 @@ function WhyUsDesktopLeftRail({
                 </div>
                 <span className="mt-1.5">
                   <ChevronDown
-                    className={hot ? 'text-red-400/80' : 'rotate-0'}
+                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 transition-transform duration-300 ease-out sm:h-4 sm:w-4 ${
+                      hot ? 'rotate-180 text-red-400/80' : 'rotate-0'
+                    }`}
                   />
                 </span>
               </button>
               <div
-                className="why-us-skinny-col__detail min-h-0 min-w-0 border-t border-white/5 bg-black/50"
-                data-open={hot ? 'true' : 'false'}
+                className={`why-us-skinny-col__copy ${hot ? 'why-us-skinny-col__copy--open' : ''} pointer-events-none absolute inset-x-0 bottom-0 z-10 max-h-[50%] overflow-y-auto border-t border-white/10 bg-zinc-950/98 px-1.5 py-1.5 text-left sm:px-2 sm:py-2`}
+                aria-hidden={!hot}
               >
-                <AnimatePresence initial={false}>
-                  {hot && (
-                    <motion.div
-                      className="px-1.5 pb-2 text-left sm:px-2"
-                      key="open"
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 4 }}
-                      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <p className="pt-1.5 text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
-                        {item.description}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <p className="text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
+                  {item.description}
+                </p>
               </div>
             </div>
           )
