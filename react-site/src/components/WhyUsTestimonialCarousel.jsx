@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0"
+      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0 lg:h-auto"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -93,7 +93,7 @@ function WhyUsTestimonialCarousel() {
         </p>
       </div>
       <blockquote
-        className="mx-0 my-3 flex-1 lg:my-2.5"
+        className="mx-0 my-3 flex-1 lg:my-2.5 lg:flex-none"
         key={current.id}
       >
         <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
