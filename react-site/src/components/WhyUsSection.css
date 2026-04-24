@@ -19,7 +19,7 @@
     min-height: 100svh;
     min-width: 0;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
-    padding-top: calc(1rem + 161px + 0.75rem);
+    padding-top: calc(1rem + 161px + 1.25rem);
     padding-bottom: 1.25rem;
   }
 
@@ -36,37 +36,37 @@
   }
 
   .why-us-desktop-hero-offset {
-    padding-top: calc(1rem + 161px + 0.75rem);
+    padding-top: calc(1rem + 161px + 1.25rem);
   }
 }
 
 @media (min-width: 1440px) {
   .why-us-scroll-stage__pin {
-    padding-top: calc(1rem + 149px + 0.75rem);
+    padding-top: calc(1rem + 149px + 1.25rem);
   }
 
   .why-us-desktop-hero-offset {
-    padding-top: calc(1rem + 149px + 0.75rem);
+    padding-top: calc(1rem + 149px + 1.25rem);
   }
 }
 
 @media (min-width: 1920px) {
   .why-us-scroll-stage__pin {
-    padding-top: calc(1rem + 136px + 0.75rem);
+    padding-top: calc(1rem + 136px + 1.25rem);
   }
 
   .why-us-desktop-hero-offset {
-    padding-top: calc(1rem + 136px + 0.75rem);
+    padding-top: calc(1rem + 136px + 1.25rem);
   }
 }
 
 @media (min-width: 2560px) {
   .why-us-scroll-stage__pin {
-    padding-top: calc(1rem + 124px + 0.75rem);
+    padding-top: calc(1rem + 124px + 1.25rem);
   }
 
   .why-us-desktop-hero-offset {
-    padding-top: calc(1rem + 124px + 0.75rem);
+    padding-top: calc(1rem + 124px + 1.25rem);
   }
 }
 
