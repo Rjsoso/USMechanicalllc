@@ -24,42 +24,28 @@
   }
 
   /*
-   * Same edge treatment as .logoloop--vertical.logoloop--fade (LogoLoop.css):
-   * solid bands at top/bottom fade to transparent so the reel “soft exits”
-   * the viewport while the stack moves with page scroll.
+   * Fade the reel’s edges to opacity 0 (mask), not a black overlay — the fixed
+   * hero/background then shows through so cards “disappear into” the scene.
    */
   .why-us-scroll-stage__reel-viewport {
-    --why-us-fade: rgba(0, 0, 0, 0.9);
-  }
-
-  .why-us-scroll-stage__reel-viewport::before,
-  .why-us-scroll-stage__reel-viewport::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    width: 100%;
-    height: clamp(32px, 9%, 120px);
-    pointer-events: none;
-  }
-
-  .why-us-scroll-stage__reel-viewport::before {
-    top: 0;
-    background: linear-gradient(
+    -webkit-mask-image: linear-gradient(
       to bottom,
-      var(--why-us-fade) 0%,
-      rgba(0, 0, 0, 0) 100%
+      transparent 0%,
+      #000 11%,
+      #000 89%,
+      transparent 100%
     );
-  }
-
-  .why-us-scroll-stage__reel-viewport::after {
-    bottom: 0;
-    background: linear-gradient(
-      to top,
-      var(--why-us-fade) 0%,
-      rgba(0, 0, 0, 0) 100%
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 11%,
+      #000 89%,
+      transparent 100%
     );
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
 
   .why-us-scroll-stage__inner {
