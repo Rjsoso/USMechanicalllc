@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, memo } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
@@ -217,11 +217,25 @@ function WhyUsExpandBar({
   )
 }
 
+function useGridColumnTemplate(
+  count,
+  activeIdx
+) {
+  return useMemo(() => {
+    if (activeIdx === null) {
+      return `repeat(${count}, minmax(0, 1fr))`
+    }
+    return Array.from(
+      { length: count },
+      (_, i) => (i === activeIdx ? '2fr' : '1fr')
+    ).join(' ')
+  }, [count, activeIdx])
+}
+
 /**
- * `lg+`: six skinny **columns** in one row (icon, eyebrow, title, chevron);
- * on hover (fine) or click, a **fully opaque** overlay covers this cluster only.
- * `pointer-events: none` on the overlay so columns stay hoverable underneath.
- * Copy cross-fades when the active item changes.
+ * `lg+`: six abutting columns in one row. Active column = **2fr**, others 1fr
+ * (roughly "two spaces"). Copy appears inside the widened cell — no full-panel overlay.
+ * Fine hover + click (coarse) to toggle.
  */
 function WhyUsDesktopLeftRail({
   items,
@@ -231,35 +245,35 @@ function WhyUsDesktopLeftRail({
   openIndex,
   setOpenIndex,
 }) {
-  const reduceMotion = useReducedMotion()
-  const showOverlay = fineHover ? hoveredIndex !== null : openIndex !== null
   const activeIdx = fineHover ? hoveredIndex : openIndex
-  const activeItem =
-    activeIdx !== null && items[activeIdx] ? items[activeIdx] : null
-  const activeIcon = activeItem ? ICON_MAP[activeItem.icon] || ICON_MAP.tool : null
-  const activeEyebrow = activeItem?.icon ? EYEBROW_BY_ICON[activeItem.icon] : null
-
-  const tCross = reduceMotion ? 0.01 : 0.3
+  const gridTemplateColumns = useGridColumnTemplate(items.length, activeIdx)
 
   return (
     <div
-      className="why-us-left-rail h-full min-h-[min(58vh,640px)] w-full"
+      className="why-us-left-rail flex h-full min-h-0 w-full min-w-0 flex-1 flex-col"
       onMouseLeave={() => {
         if (fineHover) setHoveredIndex(null)
       }}
     >
-      <div className="relative min-h-inherit overflow-hidden rounded-lg border border-white/10 bg-[#0a0a0a]">
-        <div className="why-us-skinny-cols relative z-10 flex min-h-[min(58vh,640px)] flex-row items-stretch">
-          {items.map((item, index) => {
-            const icon = ICON_MAP[item.icon] || ICON_MAP.tool
-            const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
-            const hot = fineHover ? hoveredIndex === index : openIndex === index
-            return (
+      <div
+        className="why-us-skinny-cols h-full min-h-0 w-full"
+        style={{ gridTemplateColumns }}
+      >
+        {items.map((item, index) => {
+          const icon = ICON_MAP[item.icon] || ICON_MAP.tool
+          const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
+          const hot = activeIdx === index
+          return (
+            <div
+              key={item.title || String(index)}
+              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col border-0 p-0"
+            >
               <button
-                key={item.title || String(index)}
                 type="button"
-                className={`why-us-skinny-col group flex min-h-0 min-w-0 flex-1 flex-col items-center justify-between gap-2 border-0 bg-black/20 px-1.5 py-4 text-center transition-[background-color,box-shadow] sm:px-2 ${
-                  hot ? 'ring-1 ring-inset ring-red-500/50 bg-white/[0.04]' : 'hover:bg-white/[0.04]'
+                className={`why-us-skinny-col__hit flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center transition-[background-color,box-shadow] sm:px-1.5 sm:py-4 ${
+                  hot
+                    ? 'bg-zinc-900 ring-1 ring-inset ring-red-500/50'
+                    : 'bg-black/25 hover:bg-white/[0.06]'
                 } `}
                 onMouseEnter={() => {
                   if (fineHover) setHoveredIndex(index)
@@ -267,76 +281,54 @@ function WhyUsDesktopLeftRail({
                 onClick={() => {
                   setOpenIndex((prev) => (prev === index ? null : index))
                 }}
+                aria-pressed={hot}
               >
-                <span className="why-us-bar__icon text-red-500 [&>img]:h-7 [&>img]:w-7 md:[&>img]:h-8 md:[&>img]:w-8">
+                <span className="why-us-bar__icon text-red-500 [&>img]:h-6 [&>img]:w-6 xl:[&>img]:h-7 xl:[&>img]:w-7 2xl:[&>img]:h-8 2xl:[&>img]:w-8">
                   {icon}
                 </span>
-                <div className="mt-1 flex min-w-0 flex-1 flex-col items-center justify-start gap-0.5">
+                <div className="mt-0.5 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-start gap-0.5">
                   {eyebrow ? (
-                    <span className="max-w-full break-words text-[9px] font-semibold uppercase leading-tight tracking-[0.12em] text-white/40 sm:text-[10px] sm:tracking-[0.18em]">
+                    <span className="w-full break-words px-px text-[7px] font-semibold uppercase leading-tight tracking-[0.1em] text-white/40 sm:text-[8px] xl:text-[9px] xl:tracking-[0.14em] 2xl:text-[10px] 2xl:tracking-[0.16em]">
                       {eyebrow}
                     </span>
                   ) : null}
-                  <span className="line-clamp-4 max-w-full text-balance break-words text-sm font-bold leading-tight text-white sm:text-base">
+                  <span
+                    className="line-clamp-5 w-full max-w-full break-words px-px text-[10px] font-bold leading-tight text-white sm:text-xs xl:text-sm 2xl:text-base"
+                    title={item.title}
+                  >
                     {item.title}
                   </span>
                 </div>
-                <span className="mt-auto">
+                <span className="mt-1.5">
                   <ChevronDown
-                    className={hot ? 'text-red-400/80' : ''}
+                    className={hot ? 'text-red-400/80' : 'rotate-0'}
                   />
                 </span>
               </button>
-            )
-          })}
-        </div>
-        {showOverlay && activeItem && activeIdx !== null && (
-          <div
-            className="absolute inset-0 z-20 flex min-h-0 flex-col pointer-events-none"
-            role="presentation"
-          >
-            <div
-              className="absolute inset-0 bg-zinc-950"
-              style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)' }}
-              aria-hidden
-            />
-            <div
-              className="relative z-10 flex min-h-0 w-full max-w-full flex-1 items-center justify-center overflow-y-auto p-3 sm:p-4"
-              role="status"
-              aria-live="polite"
-            >
-              <AnimatePresence initial={false} mode="wait">
-                <motion.div
-                  key={activeIdx}
-                  className="why-us-left-rail__panel mx-auto w-full max-w-prose"
-                  initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: reduceMotion ? 0 : -6 }}
-                  transition={{ duration: tCross, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <span className="why-us-bar__icon mt-0.5 shrink-0 text-red-500 [&>img]:h-8 [&>img]:w-8">
-                      {activeIcon}
-                    </span>
-                    <div className="min-w-0 text-left">
-                      {activeEyebrow ? (
-                        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-400/80 sm:tracking-[0.25em]">
-                          {activeEyebrow}
-                        </p>
-                      ) : null}
-                      <h3 className="section-title text-base text-white sm:text-lg">
-                        {activeItem.title}
-                      </h3>
-                      <p className="mt-2 text-xs leading-relaxed text-white/90 sm:mt-3 sm:text-sm">
-                        {activeItem.description}
+              <div
+                className="why-us-skinny-col__detail min-h-0 min-w-0 border-t border-white/5 bg-black/50"
+                data-open={hot ? 'true' : 'false'}
+              >
+                <AnimatePresence initial={false}>
+                  {hot && (
+                    <motion.div
+                      className="px-1.5 pb-2 text-left sm:px-2"
+                      key="open"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 4 }}
+                      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <p className="pt-1.5 text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
+                        {item.description}
                       </p>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })}
       </div>
     </div>
   )
@@ -370,7 +362,7 @@ function WhyUsSection() {
     openIndex === i || (fineHover && hoveredIndex === i)
 
   return (
-    <section className="relative overflow-x-hidden">
+    <section className="relative overflow-x-clip">
       <div className="bg-black pb-12 pt-16 md:pb-16 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
@@ -391,44 +383,56 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="bg-transparent py-8 md:py-10">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <div className="flex min-h-0 flex-col gap-8 lg:min-h-[min(58vh,640px)] lg:grid lg:grid-cols-12 lg:items-stretch lg:gap-8">
-            <div className="col-span-12 min-h-0 w-full lg:col-span-5">
-              <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5 lg:hidden">
-                {displayData.items.map((item, index) => (
-                  <WhyUsExpandBar
-                    key={item.title || index}
-                    index={index}
-                    icon={ICON_MAP[item.icon] || ICON_MAP.tool}
-                    title={item.title}
-                    description={item.description}
-                    eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
-                    expanded={isExpanded(index)}
-                    onBarEnter={() => {
-                      if (fineHover) setHoveredIndex(index)
-                    }}
-                    onBarLeave={() => {
-                      if (fineHover) setHoveredIndex(null)
-                    }}
-                    onToggle={() => {
-                      setOpenIndex((prev) => (prev === index ? null : index))
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="hidden lg:block">
-                <WhyUsDesktopLeftRail
-                  items={displayData.items}
-                  fineHover={fineHover}
-                  hoveredIndex={hoveredIndex}
-                  setHoveredIndex={setHoveredIndex}
-                  openIndex={openIndex}
-                  setOpenIndex={setOpenIndex}
-                />
-              </div>
+      <div className="bg-transparent py-8 md:py-10 lg:py-0">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:hidden">
+          <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5">
+            {displayData.items.map((item, index) => (
+              <WhyUsExpandBar
+                key={item.title || index}
+                index={index}
+                icon={ICON_MAP[item.icon] || ICON_MAP.tool}
+                title={item.title}
+                description={item.description}
+                eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
+                expanded={isExpanded(index)}
+                onBarEnter={() => {
+                  if (fineHover) setHoveredIndex(index)
+                }}
+                onBarLeave={() => {
+                  if (fineHover) setHoveredIndex(null)
+                }}
+                onToggle={() => {
+                  setOpenIndex((prev) => (prev === index ? null : index))
+                }}
+              />
+            ))}
+          </div>
+          <div className="mt-8">
+            <WhyUsTestimonialCarousel />
+          </div>
+        </div>
+
+        <div className="mt-0 hidden w-full overflow-x-clip lg:mt-0 lg:block">
+          {/*
+            Full-bleed row: left 50% flush to viewport; title block above stays in max-w-7xl.
+            w-full parent (section) + left-1/2 + w-screen - translate-x-1/2 aligns 100vw strip to viewport.
+          */}
+          <div
+            className="relative left-1/2 grid min-h-[min(70vh,56rem)] w-screen max-w-[100vw] -translate-x-1/2 border-y border-white/5 bg-zinc-950/30 grid-cols-1 lg:grid-cols-2"
+          >
+            <div className="flex min-h-[min(70vh,56rem)] min-w-0 self-stretch bg-[#0a0a0a]">
+              <WhyUsDesktopLeftRail
+                items={displayData.items}
+                fineHover={fineHover}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                openIndex={openIndex}
+                setOpenIndex={setOpenIndex}
+              />
             </div>
-            <div className="col-span-12 flex min-h-0 flex-col gap-0 lg:col-span-7">
+            <div
+              className="flex min-h-0 min-w-0 flex-col justify-center self-stretch border-t border-l-0 border-white/10 bg-zinc-950/50 p-5 sm:p-6 lg:border-l lg:border-t-0 pl-4 sm:pl-6 2xl:pl-10 [padding-right:max(1.25rem,calc((100vw-80rem)/2+1.5rem))]"
+            >
               <WhyUsTestimonialCarousel />
             </div>
           </div>
