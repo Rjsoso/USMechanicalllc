@@ -59,10 +59,10 @@ function WhyUsDesktopScrollStage({ items }) {
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
           <div className="why-us-scroll-stage__grid mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-            <div className="why-us-scroll-stage__col-quote flex min-h-0 min-w-0 flex-col justify-start self-stretch lg:col-span-5">
+            <div className="flex min-w-0 flex-col justify-start self-stretch lg:col-span-5">
               <WhyUsTestimonialCarousel />
             </div>
-            <div className="why-us-scroll-stage__col-cards flex min-h-0 min-w-0 flex-col gap-3 lg:col-span-7">
+            <div className="flex min-w-0 flex-col gap-3 lg:col-span-7">
               {items.map((item, index) => (
                 <ScrollRevealCard
                   key={item.title || String(index)}

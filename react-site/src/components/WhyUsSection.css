@@ -5,44 +5,34 @@
  * Logo block heights match `Header.css` .logo-3d-card at each breakpoint; top offset matches top-4 (1rem).
  */
 @media (min-width: 1024px) {
+  /*
+   * min-height (not height) so the section can grow with content. Fixed height + overflow:auto
+   * on children created nested scrollports that captured the wheel, blocked scroll-chaining, and
+   * prevented document scroll — so useScroll() never advanced (screen "stuck"). Page scroll
+   * must be the only scroller to drive the pinned reveal.
+   */
   .why-us-scroll-stage__pin {
     box-sizing: border-box;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    height: 100svh;
-    min-height: 0;
+    min-height: 100svh;
+    min-width: 0;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
     padding-top: calc(1rem + 161px + 0.75rem);
     padding-bottom: 1.25rem;
   }
 
   .why-us-scroll-stage__inner {
-    min-height: 0;
+    min-width: 0;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
   }
 
   .why-us-scroll-stage__grid {
-    min-height: 0;
+    min-width: 0;
     flex: 1 1 auto;
-  }
-
-  .why-us-scroll-stage__col-quote {
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .why-us-scroll-stage__col-cards {
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
   }
 
   .why-us-desktop-hero-offset {
