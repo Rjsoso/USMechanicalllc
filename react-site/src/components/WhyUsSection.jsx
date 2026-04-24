@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, memo } from 'react'
+import { useMemo, useState, useEffect, useRef, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
@@ -246,12 +246,28 @@ function WhyUsDesktopLeftRail({
 }) {
   const activeIdx = fineHover ? hoveredIndex : openIndex
   const gridTemplateColumns = useGridColumnTemplate(items.length, activeIdx)
+  const leaveHoverTimerRef = useRef(null)
+
+  const clearLeaveHoverTimer = () => {
+    if (leaveHoverTimerRef.current != null) {
+      clearTimeout(leaveHoverTimerRef.current)
+      leaveHoverTimerRef.current = null
+    }
+  }
+
+  useEffect(() => () => clearLeaveHoverTimer(), [])
 
   return (
     <div
       className="why-us-left-rail flex h-full min-h-0 w-full min-w-0 flex-1 flex-col"
       onMouseLeave={() => {
-        if (fineHover) setHoveredIndex(null)
+        if (fineHover) {
+          clearLeaveHoverTimer()
+          leaveHoverTimerRef.current = setTimeout(() => {
+            setHoveredIndex(null)
+            leaveHoverTimerRef.current = null
+          }, 50)
+        }
       }}
     >
       <div
@@ -265,7 +281,7 @@ function WhyUsDesktopLeftRail({
           return (
             <div
               key={item.title || String(index)}
-              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0"
+              className="why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0 [isolation:isolate]"
             >
               <button
                 type="button"
@@ -275,7 +291,10 @@ function WhyUsDesktopLeftRail({
                     : 'bg-black/25 hover:bg-white/[0.06]'
                 } `}
                 onMouseEnter={() => {
-                  if (fineHover) setHoveredIndex(index)
+                  if (fineHover) {
+                    clearLeaveHoverTimer()
+                    setHoveredIndex(index)
+                  }
                 }}
                 onClick={() => {
                   setOpenIndex((prev) => (prev === index ? null : index))
@@ -300,19 +319,23 @@ function WhyUsDesktopLeftRail({
                 </div>
                 <span className="mt-1.5">
                   <ChevronDown
-                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 transition-transform duration-300 ease-out sm:h-4 sm:w-4 ${
+                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] sm:h-4 sm:w-4 ${
                       hot ? 'rotate-180 text-red-400/80' : 'rotate-0'
                     }`}
                   />
                 </span>
               </button>
               <div
-                className={`why-us-skinny-col__copy ${hot ? 'why-us-skinny-col__copy--open' : ''} pointer-events-none absolute inset-x-0 bottom-0 z-10 max-h-[50%] overflow-y-auto border-t border-white/10 bg-zinc-950/98 px-1.5 py-1.5 text-left sm:px-2 sm:py-2`}
+                className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-1 pb-9 pt-2 sm:px-2 sm:pb-10"
                 aria-hidden={!hot}
               >
-                <p className="text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
-                  {item.description}
-                </p>
+                <div
+                  className={`why-us-skinny-col__copy max-h-[58%] w-full max-w-full overflow-y-auto rounded-md border border-white/10 bg-zinc-950/95 px-1.5 py-1.5 text-left shadow-lg shadow-black/30 sm:px-2 sm:py-2 ${hot ? 'why-us-skinny-col__copy--open' : ''} `}
+                >
+                  <p className="text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
+                    {item.description}
+                  </p>
+                </div>
               </div>
             </div>
           )
@@ -406,9 +429,9 @@ function WhyUsSection() {
             w-full parent (section) + left-1/2 + w-screen - translate-x-1/2 aligns 100vw strip to viewport.
           */}
           <div
-            className="relative left-1/2 grid min-h-[min(70vh,56rem)] w-screen max-w-[100vw] -translate-x-1/2 border-y border-white/5 bg-zinc-950/30 grid-cols-1 lg:grid-cols-2"
+            className="relative left-1/2 grid min-h-[min(48vh,32rem)] w-screen max-w-[100vw] -translate-x-1/2 border-y border-white/5 bg-zinc-950/30 grid-cols-1 [contain:layout] lg:grid-cols-2"
           >
-            <div className="flex min-h-[min(70vh,56rem)] min-w-0 self-stretch bg-[#0a0a0a]">
+            <div className="flex min-h-[min(48vh,32rem)] min-w-0 self-stretch bg-[#0a0a0a]">
               <WhyUsDesktopLeftRail
                 items={displayData.items}
                 fineHover={fineHover}

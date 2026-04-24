@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex h-full min-h-[min(50vh,32rem)] flex-col justify-between rounded-xl border border-white/10 bg-zinc-950/80 p-6 text-white shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
+      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-zinc-950/80 p-5 text-white shadow-[0_12px_40px_rgba(0,0,0,0.4)] sm:p-6 lg:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -91,13 +91,13 @@ function WhyUsTestimonialCarousel() {
         </p>
       </div>
       <blockquote
-        className="mx-0 my-4 flex-1"
+        className="mx-0 my-3 flex-1 lg:my-2.5"
         key={current.id}
       >
         <p className="text-lg font-medium leading-relaxed text-white/90 md:text-xl">
           &ldquo;{current.quote}&rdquo;
         </p>
-        <footer className="mt-6 text-sm text-white/60">
+        <footer className="mt-4 text-sm text-white/60 lg:mt-3.5">
           <span className="font-semibold text-white/85">{current.name}</span>
           {current.role ? <span className="text-white/50">, {current.role}</span> : null}
           <br />
