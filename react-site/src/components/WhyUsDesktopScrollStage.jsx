@@ -6,8 +6,9 @@ import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
 const GAP_PX = 12
 
 /**
- * Page-scroll drives a vertical "reel" of value cards: two rows visible, content
- * translateY is scrubbed 0..-(n-1) steps. Top/bottom fades match LogoLoop (see WhyUsSection.css).
+ * Page-scroll drives a two-up vertical reel. Each step shifts the stack by one card+gap
+ * until the last pair (n-2, n-1) is visible — (n-2) steps, not (n-1), so the final section
+ * is not forced to the top of the window before the track ends and the stage unpins.
  */
 function WhyUsDesktopScrollStage({ items }) {
   const scrollTrackRef = useRef(null)
@@ -20,7 +21,7 @@ function WhyUsDesktopScrollStage({ items }) {
   })
 
   const n = items.length
-  const stepCount = n > 1 ? n - 1 : 0
+  const stepCount = Math.max(0, n - 2)
 
   const trackMinHeight = useMemo(() => {
     if (n < 1) return '100svh'
