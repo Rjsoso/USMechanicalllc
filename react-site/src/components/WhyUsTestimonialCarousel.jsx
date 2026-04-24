@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-zinc-200/90 bg-white p-5 text-zinc-900 shadow-[0_12px_40px_rgba(0,0,0,0.08)] sm:p-6 lg:min-h-0"
+      className="why-us-testimonials flex h-full min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-zinc-900/70 p-5 text-zinc-100 shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset] backdrop-blur-sm sm:p-6 lg:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -85,8 +85,10 @@ function WhyUsTestimonialCarousel() {
       }}
     >
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">What partners say</p>
-        <p className="mt-2 text-sm text-zinc-500">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
+          What partners say
+        </p>
+        <p className="mt-1.5 text-xs leading-snug text-zinc-500/90">
           Sample quotes for layout review — replace in CMS when ready.
         </p>
       </div>
@@ -94,32 +96,32 @@ function WhyUsTestimonialCarousel() {
         className="mx-0 my-3 flex-1 lg:my-2.5"
         key={current.id}
       >
-        <p className="text-lg font-medium leading-relaxed text-zinc-900 md:text-xl">
+        <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
           &ldquo;{current.quote}&rdquo;
         </p>
-        <footer className="mt-4 text-sm text-zinc-600 lg:mt-3.5">
-          <span className="font-semibold text-zinc-800">{current.name}</span>
+        <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
+          <span className="font-semibold text-zinc-200">{current.name}</span>
           {current.role ? <span className="text-zinc-500">, {current.role}</span> : null}
           <br />
           <span className="text-zinc-500">{current.company}</span>
         </footer>
       </blockquote>
-      <div className="flex flex-col gap-4 border-t border-zinc-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
               key={t.id}
               type="button"
-              className={`h-1.5 rounded-full transition-all ${i === index ? 'w-6 bg-red-500' : 'w-1.5 bg-zinc-300 hover:bg-zinc-400'}`}
+              className={`h-1.5 rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500/80 ${i === index ? 'w-6 bg-red-500' : 'w-1.5 bg-zinc-600 hover:bg-zinc-500'}`}
               aria-label={`Testimonial ${i + 1} of ${items.length}`}
               onClick={() => setIndex(i)}
             />
           ))}
         </div>
-        <div className="flex justify-center gap-1 sm:justify-end">
+        <div className="flex justify-center gap-1.5 sm:justify-end">
           <button
             type="button"
-            className="rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+            className="rounded-md border border-white/15 bg-black/20 p-2 text-zinc-300 transition-colors hover:border-white/25 hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500/80"
             aria-label="Previous quote"
             onClick={() => go('prev')}
           >
@@ -129,7 +131,7 @@ function WhyUsTestimonialCarousel() {
           </button>
           <button
             type="button"
-            className="rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+            className="rounded-md border border-white/15 bg-black/20 p-2 text-zinc-300 transition-colors hover:border-white/25 hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500/80"
             aria-label="Next quote"
             onClick={() => go('next')}
           >

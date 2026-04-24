@@ -263,7 +263,7 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection />
-          <div className="bg-black px-6 py-16 text-center md:py-20">
+          <div className="border-t border-white/5 bg-black px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
             <p className="mb-4 text-lg font-medium text-white/70 md:text-xl">
               Ready to discuss your next project?
             </p>

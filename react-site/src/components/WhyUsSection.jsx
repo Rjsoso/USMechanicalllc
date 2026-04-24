@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useRef, memo } from 'react'
+import { useMemo, useState, useEffect, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
@@ -216,125 +216,35 @@ function WhyUsExpandBar({
   )
 }
 
-/**
- * Desktop "Why" strip — six abutting flex columns:
- *
- * - **Width:** The row is `display: flex` (see `.why-us-skinny-cols`). Each column
- *   is `flex: 1 1 0` with a shared `flex-grow` transition. The active column gets
- *   `flex-grow: 2` (class `why-us-skinny-col--active`) so it takes 2/7 of the
- *   width and the other five 1/7 each — same ratios as the old 2fr / 1fr grid,
- *   but `flex-grow` eases more reliably in browsers than `grid-template-columns`.
- * - **Input:** `useFineHoverPointer` → on fine pointers, hover sets `hoveredIndex`
- *   on `mouseenter` per column; the rail `mouseleave` clears it after 80ms so
- *   quick moves across gutter/gaps do not flash. On coarse (touch) pointers,
- *   only `openIndex` from `click` toggles; hover state is ignored.
- * - **Copy:** Description sits in a centered overlay (`.why-us-skinny-col__copy`) with
- *   `pointer-events: none` so the hit target stays the button. It fades / scales
- *   in CSS — no in-flow block, so the flex width animation is not fighting layout.
- */
-function WhyUsDesktopLeftRail({
-  items,
-  fineHover,
-  hoveredIndex,
-  setHoveredIndex,
-  openIndex,
-  setOpenIndex,
-}) {
-  const activeIdx = fineHover ? hoveredIndex : openIndex
-  const leaveHoverTimerRef = useRef(null)
-
-  const clearLeaveHoverTimer = () => {
-    if (leaveHoverTimerRef.current != null) {
-      clearTimeout(leaveHoverTimerRef.current)
-      leaveHoverTimerRef.current = null
-    }
-  }
-
-  useEffect(() => () => clearLeaveHoverTimer(), [])
-
+/** Desktop: 2×3 grid of scannable value cards + testimonial in max-w-7xl (no full-bleed rail). */
+function WhyUsDesktopValueGrid({ items }) {
   return (
-    <div
-      className="why-us-left-rail flex h-full min-h-0 w-full min-w-0 flex-1 flex-col"
-      onMouseLeave={() => {
-        if (fineHover) {
-          clearLeaveHoverTimer()
-          leaveHoverTimerRef.current = setTimeout(() => {
-            setHoveredIndex(null)
-            leaveHoverTimerRef.current = null
-          }, 80)
-        }
-      }}
-    >
-      <div className="why-us-skinny-cols h-full min-h-0 w-full min-w-0">
-        {items.map((item, index) => {
-          const icon = ICON_MAP[item.icon] || ICON_MAP.tool
-          const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
-          const hot = activeIdx === index
-          return (
-            <div
-              key={item.title || String(index)}
-              className={`why-us-skinny-col relative flex min-h-0 min-w-0 flex-col overflow-hidden border-0 p-0 [isolation:isolate] ${hot ? 'why-us-skinny-col--active' : ''} `}
-            >
-              <button
-                type="button"
-                className={`why-us-skinny-col__hit relative z-0 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-between gap-1 px-1.5 py-3 text-center sm:px-1.5 sm:py-4 ${
-                  hot
-                    ? 'bg-zinc-900 ring-1 ring-inset ring-red-500/50'
-                    : 'bg-black/25 hover:bg-white/[0.06]'
-                } `}
-                onMouseEnter={() => {
-                  if (fineHover) {
-                    clearLeaveHoverTimer()
-                    setHoveredIndex(index)
-                  }
-                }}
-                onClick={() => {
-                  setOpenIndex((prev) => (prev === index ? null : index))
-                }}
-                aria-pressed={hot}
-              >
-                <span className="why-us-bar__icon text-red-500 [&>img]:h-6 [&>img]:w-6 xl:[&>img]:h-7 xl:[&>img]:w-7 2xl:[&>img]:h-8 2xl:[&>img]:w-8">
-                  {icon}
-                </span>
-                <div className="mt-0.5 flex min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-start gap-0.5">
-                  {eyebrow ? (
-                    <span className="w-full break-words px-px text-[7px] font-semibold uppercase leading-tight tracking-[0.1em] text-white/40 sm:text-[8px] xl:text-[9px] xl:tracking-[0.14em] 2xl:text-[10px] 2xl:tracking-[0.16em]">
-                      {eyebrow}
-                    </span>
-                  ) : null}
-                  <span
-                    className="line-clamp-5 w-full max-w-full break-words px-px text-[10px] font-bold leading-tight text-white sm:text-xs xl:text-sm 2xl:text-base"
-                    title={item.title}
-                  >
-                    {item.title}
-                  </span>
-                </div>
-                <span className="mt-1.5 [contain:layout]">
-                  <ChevronDown
-                    className={`h-3.5 w-3.5 flex-shrink-0 text-white/45 sm:h-4 sm:w-4 ${
-                      hot ? 'why-us-skinny-col__chev why-us-skinny-col__chev--open' : 'why-us-skinny-col__chev'
-                    } `}
-                  />
-                </span>
-              </button>
-              <div
-                className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-1 pb-9 pt-2 sm:px-2.5 sm:pb-10"
-                aria-hidden={!hot}
-              >
-                <div
-                  className={`why-us-skinny-col__copy max-h-[60%] w-full max-w-full overflow-y-auto rounded-md border border-white/12 bg-zinc-950/96 px-1.5 py-1.5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.45)] sm:px-2 sm:py-2.5 ${
-                    hot ? 'why-us-skinny-col__copy--open' : ''
-                  } `}
-                >
-                  <p className="text-[10px] leading-snug text-white/90 sm:text-xs xl:leading-relaxed 2xl:text-sm">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
+    <div className="why-us-desktop-grid grid grid-cols-2 gap-4 xl:gap-5">
+      {items.map((item, index) => {
+        const icon = ICON_MAP[item.icon] || ICON_MAP.tool
+        const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
+        return (
+          <article
+            key={item.title || String(index)}
+            className="why-us-value-card flex h-full min-h-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-none transition-[border-color,background-color] duration-200 sm:p-5"
+          >
+            <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-red-500 [&>img]:h-8 [&>img]:w-8">
+              {icon}
             </div>
-          )
-        })}
-      </div>
+            {eyebrow ? (
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
+                {eyebrow}
+              </p>
+            ) : null}
+            <h3 className="mt-1.5 text-base font-bold leading-snug tracking-tight text-white sm:text-[17px]">
+              {item.title}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/70 line-clamp-4 sm:line-clamp-5">
+              {item.description}
+            </p>
+          </article>
+        )
+      })}
     </div>
   )
 }
@@ -368,18 +278,18 @@ function WhyUsSection() {
 
   return (
     <section className="relative overflow-x-clip">
-      <div className="bg-black pb-12 pt-16 md:pb-16 md:pt-22">
+      <div className="bg-black pb-10 pt-16 md:pb-14 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/45 md:text-xs">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45 md:mb-4 md:text-xs">
                 Why contractors pick us
               </p>
-              <h2 className="section-title mb-4 text-4xl text-white md:text-5xl lg:text-6xl">
+              <h2 className="section-title mx-auto mb-5 max-w-3xl text-4xl text-white md:mb-6 md:text-5xl lg:text-6xl">
                 {displayData.sectionTitle}
               </h2>
               {displayData.sectionSubtitle && (
-                <p className="mx-auto max-w-2xl text-lg text-white/70">
+                <p className="mx-auto max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
                   {displayData.sectionSubtitle}
                 </p>
               )}
@@ -417,28 +327,15 @@ function WhyUsSection() {
           </div>
         </div>
 
-        <div className="mt-0 hidden w-full overflow-x-clip lg:mt-0 lg:block">
-          {/*
-            Full-bleed row: left 50% flush to viewport; title block above stays in max-w-7xl.
-            w-full parent (section) + left-1/2 + w-screen - translate-x-1/2 aligns 100vw strip to viewport.
-          */}
-          <div
-            className="relative left-1/2 grid min-h-[min(48vh,32rem)] w-screen max-w-[100vw] -translate-x-1/2 border-y border-white/5 bg-zinc-950/30 grid-cols-1 [contain:layout] lg:grid-cols-2"
-          >
-            <div className="flex min-h-[min(48vh,32rem)] min-w-0 self-stretch bg-[#0a0a0a]">
-              <WhyUsDesktopLeftRail
-                items={displayData.items}
-                fineHover={fineHover}
-                hoveredIndex={hoveredIndex}
-                setHoveredIndex={setHoveredIndex}
-                openIndex={openIndex}
-                setOpenIndex={setOpenIndex}
-              />
-            </div>
-            <div
-              className="flex min-h-0 min-w-0 flex-col justify-center self-stretch border-t border-l-0 border-white/10 bg-zinc-950/50 p-5 sm:p-6 lg:border-l lg:border-t-0 pl-4 sm:pl-6 2xl:pl-10 [padding-right:max(1.25rem,calc((100vw-80rem)/2+1.5rem))]"
-            >
-              <WhyUsTestimonialCarousel />
+        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 bg-zinc-950/20 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
+          <div className="mx-auto w-full max-w-7xl px-6">
+            <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+              <div className="min-w-0 lg:col-span-7">
+                <WhyUsDesktopValueGrid items={displayData.items} />
+              </div>
+              <div className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5">
+                <WhyUsTestimonialCarousel />
+              </div>
             </div>
           </div>
         </div>

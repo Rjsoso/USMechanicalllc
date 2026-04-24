@@ -1,23 +1,25 @@
-/* Why Us: stacked cards below `lg`, full-bleed split (six columns + testimonials) on `lg+` */
+/* Why Us: mobile accordion below `lg`; `lg+` uses grid cards + testimonial in WhyUsSection.jsx */
 
 .why-us-columns--stacked {
   border-radius: 0;
 }
 
 .why-us-bar {
-  --why-us-radius: 0.5rem;
+  --why-us-radius: 0.75rem;
   position: relative;
   border-radius: var(--why-us-radius);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   box-shadow: none;
-  transition: border-color 0.28s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .why-us-bar--open {
-  background: #000;
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
   box-shadow: none;
 }
 
@@ -45,8 +47,8 @@
 
 .why-us-bar__icon img {
   opacity: 1;
-  filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(4063%) hue-rotate(339deg)
-    brightness(96%) contrast(94%);
+  filter: brightness(0) saturate(100%) invert(47%) sepia(85%) saturate(4063%) hue-rotate(339deg) brightness(96%)
+    contrast(94%);
 }
 
 .why-us-bar__panel {
@@ -89,110 +91,15 @@
   transform: rotate(180deg);
 }
 
-/* Desktop: six abutting columns — `flex-grow` eases more smoothly than `grid-template-columns` */
-.why-us-skinny-cols {
-  --why-us-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --why-us-snap: 0.32s;
-  display: flex;
-  min-height: 0;
-  height: 100%;
-  width: 100%;
-  align-items: stretch;
-  contain: layout;
-}
-
-.why-us-skinny-col {
-  position: relative;
-  z-index: 0;
-  display: flex;
-  flex: 1 1 0%;
-  min-width: 0;
-  min-height: 0;
-  flex-direction: column;
-  height: 100%;
-  align-items: stretch;
-  transform: translateZ(0);
-  transition: flex-grow var(--why-us-snap) var(--why-us-ease);
-}
-
-.why-us-skinny-col--active {
-  z-index: 2;
-  flex-grow: 2;
-}
-
-.why-us-skinny-col__hit {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    background-color var(--why-us-snap) var(--why-us-ease),
-    box-shadow var(--why-us-snap) var(--why-us-ease);
-}
-
-.why-us-skinny-col__hit:focus {
-  outline: none;
-}
-
-.why-us-skinny-col__hit:focus-visible {
-  z-index: 1;
-  outline: 2px solid rgba(239, 68, 68, 0.65);
-  outline-offset: 2px;
-}
-
-.why-us-skinny-col__chev {
-  color: rgba(255, 255, 255, 0.45);
-  transition:
-    transform var(--why-us-snap) var(--why-us-ease),
-    color var(--why-us-snap) var(--why-us-ease);
-}
-
-.why-us-skinny-col__chev--open {
-  transform: rotate(180deg);
-  color: rgba(248, 113, 113, 0.8);
-}
-
-.why-us-skinny-col__copy {
-  transform: translate3d(0, 4px, 0) scale(0.99);
-  opacity: 0;
-  transition:
-    transform var(--why-us-snap) var(--why-us-ease),
-    opacity var(--why-us-snap) var(--why-us-ease);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.why-us-skinny-col__copy--open {
-  transform: translate3d(0, 0, 0) scale(1);
-  opacity: 1;
-}
-
-.why-us-skinny-col:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 0.35rem;
-  right: 0;
-  bottom: 0.35rem;
-  width: 1px;
-  z-index: 0;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.why-us-left-rail__panel {
-  -webkit-font-smoothing: antialiased;
+/* Desktop value cards: align with mobile accordion (border / surface) */
+@media (hover: hover) and (pointer: fine) {
+  .why-us-value-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.07);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .why-us-skinny-col {
-    transition: none;
-  }
-
-  .why-us-skinny-col__chev,
-  .why-us-skinny-col__chev--open,
-  .why-us-skinny-col__copy,
-  .why-us-skinny-col__copy--open {
-    transition: none;
-  }
-
   .why-us-bar__grid {
     transition: none;
   }
