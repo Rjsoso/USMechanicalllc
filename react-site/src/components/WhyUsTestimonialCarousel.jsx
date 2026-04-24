@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col justify-between rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0 lg:h-auto"
+      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-[min(30rem,48svh)] lg:rounded-2xl lg:px-7 lg:pb-0 lg:pt-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -84,29 +84,32 @@ function WhyUsTestimonialCarousel() {
         if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false)
       }}
     >
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
-          What partners say
-        </p>
-        <p className="mt-1.5 text-xs leading-snug text-zinc-500/90">
-          Sample quotes for layout review — replace in CMS when ready.
-        </p>
+      {/*
+        flex-1 + justify-center: equal visual space above the eyebrow and below the
+        quote block (above the divider), matching a taller card like the design ref.
+      */}
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:gap-5">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
+            What partners say
+          </p>
+          <p className="mt-1.5 text-xs leading-snug text-zinc-500/90">
+            Sample quotes for layout review — replace in CMS when ready.
+          </p>
+        </div>
+        <blockquote className="mx-0 my-0" key={current.id}>
+          <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
+            &ldquo;{current.quote}&rdquo;
+          </p>
+          <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
+            <span className="font-semibold text-zinc-200">{current.name}</span>
+            {current.role ? <span className="text-zinc-500">, {current.role}</span> : null}
+            <br />
+            <span className="text-zinc-500">{current.company}</span>
+          </footer>
+        </blockquote>
       </div>
-      <blockquote
-        className="mx-0 my-3 flex-1 lg:my-2.5 lg:flex-none"
-        key={current.id}
-      >
-        <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
-          &ldquo;{current.quote}&rdquo;
-        </p>
-        <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
-          <span className="font-semibold text-zinc-200">{current.name}</span>
-          {current.role ? <span className="text-zinc-500">, {current.role}</span> : null}
-          <br />
-          <span className="text-zinc-500">{current.company}</span>
-        </footer>
-      </blockquote>
-      <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-0 lg:pb-8">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
