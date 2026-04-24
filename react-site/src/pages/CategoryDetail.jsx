@@ -226,7 +226,7 @@ export default function CategoryDetail() {
               transition={{ duration: 0.25 }}
             >
               {sortedProjects.map((project, index) => (
-                <FadeInWhenVisible key={project._id} delay={index * 0.1}>
+                <FadeInWhenVisible key={project._id} delay={index * 0.14}>
                   <div
                     onClick={() => navigate(`/projects/${project._id}`)}
                     className="group cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl"

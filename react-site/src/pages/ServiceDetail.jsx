@@ -286,10 +286,10 @@ export default function ServiceDetail() {
                 <div
                   className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}
                 >
-                  <FadeInWhenVisible delay={0.1}>
+                  <FadeInWhenVisible delay={0.16}>
                     <h2 className="mb-6 text-3xl font-bold text-black">Key Features</h2>
                   </FadeInWhenVisible>
-                  <FadeInWhenVisible delay={0.2}>
+                  <FadeInWhenVisible delay={0.32}>
                     <div className="space-y-4">
                       {serviceData.features.map((feature, index) => (
                         <div key={index} className="rounded-xl border border-gray-300 bg-white p-6">

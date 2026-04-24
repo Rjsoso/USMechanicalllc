@@ -227,7 +227,7 @@ function WhyUsDesktopValueGrid({ items }) {
         return (
           <FadeInWhenVisible
             key={item.title || String(index)}
-            delay={index * 0.07}
+            delay={index * 0.12}
             className="h-full min-h-0 min-w-0"
           >
             <article className="why-us-value-card flex h-full min-h-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-none transition-[border-color,background-color] duration-200 sm:p-5">
@@ -306,7 +306,7 @@ function WhyUsSection() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:hidden">
           <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5">
             {displayData.items.map((item, index) => (
-              <FadeInWhenVisible key={item.title || index} delay={index * 0.07} className="w-full">
+              <FadeInWhenVisible key={item.title || index} delay={index * 0.12} className="w-full">
                 <WhyUsExpandBar
                   index={index}
                   icon={ICON_MAP[item.icon] || ICON_MAP.tool}
@@ -327,7 +327,7 @@ function WhyUsSection() {
               </FadeInWhenVisible>
             ))}
           </div>
-          <FadeInWhenVisible delay={0.45} className="mt-8 w-full">
+          <FadeInWhenVisible delay={0.58} className="mt-8 w-full">
             <WhyUsTestimonialCarousel />
           </FadeInWhenVisible>
         </div>
@@ -339,7 +339,7 @@ function WhyUsSection() {
                 <WhyUsDesktopValueGrid items={displayData.items} />
               </div>
               <FadeInWhenVisible
-                delay={0.35}
+                delay={0.5}
                 className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5"
               >
                 <WhyUsTestimonialCarousel />

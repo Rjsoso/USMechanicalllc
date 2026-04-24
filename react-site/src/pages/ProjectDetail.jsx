@@ -248,10 +248,10 @@ export default function ProjectDetail() {
 
             {/* Project Details on Right */}
             <div className={`${carouselItems.length > 0 ? 'lg:w-1/3' : 'w-full'}`}>
-              <FadeInWhenVisible delay={0.1}>
+              <FadeInWhenVisible delay={0.16}>
                 <h2 className="mb-6 text-3xl font-bold text-black">Project Details</h2>
               </FadeInWhenVisible>
-              <FadeInWhenVisible delay={0.2}>
+              <FadeInWhenVisible delay={0.32}>
                 <div className="space-y-6">
                   {projectData.year && (
                     <div className="border-b border-gray-200 pb-4">
