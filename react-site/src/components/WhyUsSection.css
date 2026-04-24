@@ -186,6 +186,14 @@
   transform: rotate(180deg);
 }
 
+/* Value cards: subtle lift on hover (frosted panel) */
+@media (hover: hover) and (pointer: fine) {
+  .why-us-value-card:hover {
+    background-color: rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .why-us-bar__grid {
     transition: none;

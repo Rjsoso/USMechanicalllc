@@ -53,25 +53,27 @@ function WhyUsDesktopScrollStage({ items }) {
     >
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
-          <div className="why-us-scroll-stage__grid mx-auto grid w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-            <div className="flex min-w-0 flex-col justify-start self-stretch lg:col-span-5">
+          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:items-stretch lg:gap-10 xl:gap-12">
+            <div className="flex min-h-0 min-w-0 flex-col self-stretch lg:col-span-5">
               <WhyUsTestimonialCarousel />
             </div>
-            <div className="why-us-scroll-stage__reel-viewport relative w-full min-w-0 overflow-hidden rounded-xl lg:col-span-7 lg:min-h-[min(24rem,44svh)] lg:h-[min(30rem,52svh)]">
-              <motion.div
-                className="relative z-0 flex flex-col gap-3 will-change-transform"
-                style={{ y }}
-              >
-                {items.map((item, index) => (
-                  <div
-                    key={item.title || String(index)}
-                    ref={index === 0 ? firstRowRef : undefined}
-                    className="min-w-0 shrink-0"
-                  >
-                    <WhyUsValueCard item={item} />
-                  </div>
-                ))}
-              </motion.div>
+            <div className="flex min-h-0 min-w-0 flex-col self-stretch lg:col-span-7 lg:min-h-0 lg:h-full">
+              <div className="why-us-scroll-stage__reel-viewport relative h-full min-h-0 w-full flex-1 overflow-hidden rounded-xl">
+                <motion.div
+                  className="relative z-0 flex flex-col gap-3 will-change-transform"
+                  style={{ y }}
+                >
+                  {items.map((item, index) => (
+                    <div
+                      key={item.title || String(index)}
+                      ref={index === 0 ? firstRowRef : undefined}
+                      className="min-w-0 shrink-0"
+                    >
+                      <WhyUsValueCard item={item} />
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
           </div>
         </div>
