@@ -1,8 +1,12 @@
 import { useMemo, useState, useEffect, memo } from 'react'
+import { useReducedMotion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
 import FadeInNative from './FadeInNative'
 import FadeInWhenVisible from './FadeInWhenVisible'
 import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
+import WhyUsDesktopScrollStage from './WhyUsDesktopScrollStage'
+import { EYEBROW_BY_ICON, ICON_MAP } from './whyUsConstants'
+import WhyUsValueCard from './WhyUsValueCard'
 import './WhyUsSection.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
@@ -15,78 +19,6 @@ const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
     icon
   }
 }`
-
-const ICON_MAP = {
-  clock: (
-    <img
-      src="/images/why-us-family-excellence.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-  shield: (
-    <img
-      src="/images/why-us-safety-safe.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-  map: (
-    <img
-      src="/images/why-us-coverage.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-  dollar: (
-    <img
-      src="/images/why-us-capacity-economic.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-  tool: (
-    <img
-      src="/images/why-us-fast-delivery.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-  building: (
-    <img
-      src="/images/why-us-map-location.png"
-      alt=""
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
-      decoding="async"
-      draggable={false}
-      aria-hidden={true}
-    />
-  ),
-}
-
-const EYEBROW_BY_ICON = {
-  clock: 'Since 1963',
-  map: 'Coverage',
-  dollar: 'Capacity',
-  shield: 'Safety',
-  tool: 'Delivery',
-  building: 'Presence',
-}
 
 const DEFAULT_ITEMS = [
   {
@@ -217,44 +149,26 @@ function WhyUsExpandBar({
   )
 }
 
-/** Desktop: 2×3 grid of scannable value cards + testimonial in max-w-7xl (no full-bleed rail). */
+/** Desktop reduced motion: 2×3 grid on the right, testimonial on the left. */
 function WhyUsDesktopValueGrid({ items }) {
   return (
     <div className="why-us-desktop-grid grid grid-cols-2 gap-4 xl:gap-5">
-      {items.map((item, index) => {
-        const icon = ICON_MAP[item.icon] || ICON_MAP.tool
-        const eyebrow = item.icon ? EYEBROW_BY_ICON[item.icon] : null
-        return (
-          <FadeInWhenVisible
-            key={item.title || String(index)}
-            delay={index * 0.12}
-            className="h-full min-h-0 min-w-0"
-          >
-            <article className="why-us-value-card flex h-full min-h-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-none transition-[border-color,background-color] duration-200 sm:p-5">
-              <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-red-500 [&>img]:h-8 [&>img]:w-8">
-                {icon}
-              </div>
-              {eyebrow ? (
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
-                  {eyebrow}
-                </p>
-              ) : null}
-              <h3 className="mt-1.5 text-base font-bold leading-snug tracking-tight text-white sm:text-[17px]">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/70 line-clamp-4 sm:line-clamp-5">
-                {item.description}
-              </p>
-            </article>
-          </FadeInWhenVisible>
-        )
-      })}
+      {items.map((item, index) => (
+        <FadeInWhenVisible
+          key={item.title || String(index)}
+          delay={index * 0.12}
+          className="h-full min-h-0 min-w-0"
+        >
+          <WhyUsValueCard item={item} />
+        </FadeInWhenVisible>
+      ))}
     </div>
   )
 }
 
 function WhyUsSection() {
   const fineHover = useFineHoverPointer()
+  const reduceMotion = useReducedMotion()
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [openIndex, setOpenIndex] = useState(null)
 
@@ -332,20 +246,24 @@ function WhyUsSection() {
           </FadeInWhenVisible>
         </div>
 
-        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 bg-zinc-950/20 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-              <div className="min-w-0 lg:col-span-7">
-                <WhyUsDesktopValueGrid items={displayData.items} />
+        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
+          {reduceMotion ? (
+            <div className="mx-auto w-full max-w-7xl px-6">
+              <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+                <FadeInWhenVisible
+                  delay={0.12}
+                  className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5"
+                >
+                  <WhyUsTestimonialCarousel />
+                </FadeInWhenVisible>
+                <div className="min-w-0 lg:col-span-7">
+                  <WhyUsDesktopValueGrid items={displayData.items} />
+                </div>
               </div>
-              <FadeInWhenVisible
-                delay={0.5}
-                className="flex min-h-[min(20rem,50vh)] min-w-0 flex-col justify-center lg:col-span-5"
-              >
-                <WhyUsTestimonialCarousel />
-              </FadeInWhenVisible>
             </div>
-          </div>
+          ) : (
+            <WhyUsDesktopScrollStage items={displayData.items} />
+          )}
         </div>
       </div>
     </section>
