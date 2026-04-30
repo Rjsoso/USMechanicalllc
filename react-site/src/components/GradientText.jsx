@@ -4,8 +4,8 @@ export default function GradientText({ children }) {
     <span
       style={{
         display: 'inline',
-        fontFamily: 'Rubik, sans-serif',
-        fontWeight: 900,
+        fontFamily: 'var(--font-display)',
+        fontWeight: 600,
         animation: 'gradientTextCycle 4s ease-in-out infinite',
       }}
     >

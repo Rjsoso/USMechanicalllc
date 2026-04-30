@@ -34,8 +34,10 @@ export default {
         muted: '#6b7076',
       },
       fontFamily: {
-        sans: ['Fjalla One', 'sans-serif'],
-        display: ['Rubik', 'sans-serif'], // For titles
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        serif: ['Instrument Serif', 'Georgia', 'serif'],
+        /* legacy alias — map to editorial display */
+        display: ['Instrument Serif', 'Georgia', 'serif'],
       },
       screens: {
         'xl': '1440px',

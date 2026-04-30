@@ -151,7 +151,7 @@ function HeroSection() {
                   const sectionId = raw.replace(/^#/, '')
                   handleButtonClick(sectionId)
                 }}
-                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-white transition-colors duration-300 cursor-pointer"
               >
                 {heroData.buttonText}
               </button>
@@ -168,7 +168,7 @@ function HeroSection() {
                     handleButtonClick(sectionId)
                   }
                 }}
-                className="hero-button-3d inline-block bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-300 cursor-pointer"
+                className="hero-button-3d inline-block bg-black px-8 py-4 text-white transition-colors duration-300 cursor-pointer"
               >
                 {heroData.secondButtonText}
               </button>

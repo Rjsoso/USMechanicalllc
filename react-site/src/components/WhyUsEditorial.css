@@ -19,23 +19,25 @@
 
 #reviews-section.why-us-editorial {
   position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-inline: clamp(20px, 5vw, 48px);
-  padding-block: clamp(56px, 8vw, 96px);
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding-inline: clamp(16px, 4vw, 64px);
+  padding-block: clamp(24px, 3.5vw, 48px);
+  box-sizing: border-box;
 }
 
 .why-us-editorial .reviews-inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, min(460px, 34vw));
   align-items: start;
   border-top: 1px solid var(--why-rule);
   border-bottom: 1px solid var(--why-rule);
 }
 
 .why-us-editorial .reviews-left {
-  padding: clamp(40px, 8vw, 80px) clamp(24px, 5vw, 64px) clamp(40px, 8vw, 80px)
-    clamp(24px, 5vw, 48px);
+  padding: clamp(24px, 4vw, 48px) clamp(20px, 4vw, 56px) clamp(28px, 5vw, 52px)
+    clamp(16px, 3vw, 40px);
   border-right: 1px solid var(--why-rule);
 }
 
@@ -43,7 +45,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: clamp(36px, 6vw, 64px);
+  margin-bottom: clamp(24px, 4vw, 44px);
 }
 
 .why-us-editorial .section-label span {
@@ -63,8 +65,8 @@
 }
 
 .why-us-editorial .review-entry {
-  padding-bottom: 56px;
-  margin-bottom: 56px;
+  padding-bottom: 40px;
+  margin-bottom: 40px;
   border-bottom: 1px solid var(--why-rule);
 }
 
@@ -139,7 +141,7 @@
   font-weight: 300;
   color: var(--why-ink-mid);
   line-height: 1.75;
-  max-width: 560px;
+  max-width: min(620px, 100%);
 }
 
 .why-us-editorial .review-service {
@@ -158,11 +160,11 @@
 .why-us-editorial .reviews-right {
   position: sticky;
   top: 0;
-  height: min(100vh, 980px);
-  min-height: 520px;
+  height: min(88vh, 760px);
+  min-height: 420px;
   background: var(--why-bg-panel);
   color: var(--why-fg-panel);
-  padding: clamp(40px, 6vw, 64px) clamp(24px, 4vw, 48px);
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 52px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -180,7 +182,7 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(247, 246, 243, 0.4);
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   display: flex;
   align-items: center;
   gap: 12px;
