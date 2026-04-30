@@ -196,17 +196,9 @@ video {
   position: relative !important;
 }
 
-/* Make hero background extend to very top of viewport - fixed to cover header gap */
-#hero > div:first-child,
-#hero > div:nth-child(2) {
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 100vh !important;
-  width: 100% !important;
-  position: fixed !important;
-  z-index: -2 !important;
-}
+/* Hero background is provided by main.main-with-fixed-bg:: — avoid forcing
+   arbitrary child divs to fixed full-viewport layers (that broke flex centering
+   when .hero-content-panel became the first div under #hero). */
 
 /* Force transparent background (hero image will show through) */
 html,

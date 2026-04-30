@@ -253,9 +253,9 @@ export default function Home() {
             data arrives — no full-page blocking spinner. The hero always renders
             immediately using its fallback copy; the background image fades in
             once Sanity resolves it. */}
-        <section id="hero" style={{ position: 'relative', top: 0, left: 0, width: '100%' }}>
+        <div style={{ position: 'relative', top: 0, left: 0, width: '100%' }}>
           <HeroSection />
-        </section>
+        </div>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
           <SafetySection data={aboutData} />

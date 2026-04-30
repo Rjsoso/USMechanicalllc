@@ -70,7 +70,10 @@ function HeroSection() {
       className="hero-section relative flex min-h-screen w-full items-center justify-center text-center"
       style={{
         marginTop: 0,
-        paddingTop: 0,
+        paddingTop: 'clamp(4.75rem, 11vh, 7.5rem)',
+        paddingBottom: 'clamp(2rem, 6vh, 4rem)',
+        minHeight: '100vh',
+        boxSizing: 'border-box',
         position: 'relative',
         top: 0,
         background: 'transparent',
