@@ -77,7 +77,7 @@ function HeroSection() {
       }}
     >
       <div
-        className="hero-content-panel relative z-10 mx-auto max-w-5xl px-6 text-center"
+        className="relative z-10 mx-auto max-w-5xl px-6 text-center"
         style={{ marginTop: '140px' }}
       >
         <motion.h1
@@ -102,17 +102,13 @@ function HeroSection() {
             const match = headline.match(/(.*?)\s*(since)\s+(1963)(.*)/i)
 
             if (match) {
-              const lead = match[1].trim()
               return (
                 <>
-                  <span className="hero-headline-lead">{lead}</span>{' '}
-                  <span className="hero-headline-tail">
-                    <span className="hero-since">{match[2]}</span>{' '}
-                    <span className="hero-1963" style={{ color: yearColor }}>
-                      {match[3]}
-                    </span>
-                    {match[4]}
+                  {match[1]} <span className="hero-since">{match[2]}</span>
+                  <span className="hero-1963" style={{ color: yearColor }}>
+                    {match[3]}
                   </span>
+                  {match[4]}
                 </>
               )
             }
