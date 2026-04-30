@@ -67,11 +67,11 @@ function HeroSection() {
   return (
     <section
       id="hero"
-      className="hero-section relative flex min-h-screen w-full items-center justify-center text-center"
+      className="hero-section relative flex min-h-screen w-full flex-col text-center"
       style={{
         marginTop: 0,
-        paddingTop: 'clamp(4.75rem, 11vh, 7.5rem)',
-        paddingBottom: 'clamp(2rem, 6vh, 4rem)',
+        paddingTop: 'max(1rem, env(safe-area-inset-top))',
+        paddingBottom: 'clamp(1.5rem, 4vh, 2.5rem)',
         minHeight: '100vh',
         boxSizing: 'border-box',
         position: 'relative',
@@ -79,9 +79,10 @@ function HeroSection() {
         background: 'transparent',
       }}
     >
-      <div className="hero-content-panel relative z-10 mx-auto w-full max-w-5xl px-6 text-center">
+      {/* Center only the main title in the viewport; subtext + CTAs follow below */}
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6 pt-14 md:pt-16">
         <motion.h1
-          className="hero-3d-text"
+          className="hero-3d-text max-w-5xl"
           data-text={heroData.headline}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,9 +108,11 @@ function HeroSection() {
                 <>
                   <span className="hero-headline-lead">{lead}</span>{' '}
                   <span className="hero-headline-tail">
-                    <span className="hero-since">{match[2]}</span>{' '}
-                    <span className="hero-1963" style={{ color: yearColor }}>
-                      {match[3]}
+                    <span className="hero-since-year">
+                      <span className="hero-since">{match[2]}</span>{' '}
+                      <span className="hero-1963" style={{ color: yearColor }}>
+                        {match[3]}
+                      </span>
                     </span>
                     {match[4]}
                   </span>
@@ -120,7 +123,9 @@ function HeroSection() {
             return headline
           })()}
         </motion.h1>
+      </div>
 
+      <div className="hero-content-panel relative z-10 mx-auto w-full max-w-5xl shrink-0 px-6 text-center">
         {heroData.subtext && heroData.subtext.trim() !== '' && (
           <motion.p
             className="hero-subtext mx-auto max-w-2xl text-lg text-white md:text-xl"

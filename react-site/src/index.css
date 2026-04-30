@@ -442,17 +442,15 @@ section#contact > div[class*='absolute'] {
   display: inline;
 }
 
-/* Second beat (“since 1963”) — stacked on small viewports for clearer hierarchy */
+/* Second beat (“since 1963”) — keeps script + year on one line */
 .hero-headline-tail {
-  display: block;
-  margin-top: 0.28em;
+  display: inline;
+  white-space: normal;
 }
 
-@media (min-width: 768px) {
-  .hero-headline-tail {
-    display: inline;
-    margin-top: 0;
-  }
+.hero-since-year {
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .hero-subtext {
