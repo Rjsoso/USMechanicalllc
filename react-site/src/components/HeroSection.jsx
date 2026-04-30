@@ -76,10 +76,7 @@ function HeroSection() {
         background: 'transparent',
       }}
     >
-      <div
-        className="hero-content-panel relative z-10 mx-auto max-w-5xl px-6 text-center"
-        style={{ marginTop: '140px' }}
-      >
+      <div className="hero-content-panel relative z-10 mx-auto w-full max-w-5xl px-6 text-center">
         <motion.h1
           className="hero-3d-text"
           data-text={heroData.headline}

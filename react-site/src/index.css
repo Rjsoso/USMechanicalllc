@@ -441,32 +441,9 @@ section#contact > div[class*='absolute'] {
   display: block !important;
 }
 
-/* Hero copy block — subtle vignette so type separates from busy photography */
+/* Hero copy block — holds stacked headline + subtext + CTAs (no background scrim) */
 .hero-content-panel {
   position: relative;
-  padding-top: 0.5rem;
-  padding-bottom: 0.25rem;
-}
-
-.hero-content-panel::before {
-  content: '';
-  position: absolute;
-  inset: -0.5rem -1rem;
-  border-radius: 14px;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 92% 88% at 50% 42%,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0.18) 58%,
-    transparent 82%
-  );
-}
-
-@media (min-width: 768px) {
-  .hero-content-panel::before {
-    inset: -0.75rem -1.25rem;
-  }
 }
 
 .hero-headline-lead {
@@ -1230,7 +1207,6 @@ body {
   }
 
   /* Hero section content safe area */
-  /* Adjusted to not conflict with inline marginTop - only handle safe area inset */
   #hero .relative.z-10 {
     padding-top: max(0px, env(safe-area-inset-top));
   }
