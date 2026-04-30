@@ -6,19 +6,17 @@
  */
 @media (min-width: 1024px) {
   /*
-   * min-height (not height) so the section can grow with content. Fixed height + overflow:auto
-   * on children created nested scrollports that captured the wheel, blocked scroll-chaining, and
-   * prevented document scroll — so useScroll() never advanced (screen "stuck"). Page scroll
-   * must be the only scroller to drive the pinned reveal.
+   * Capped paired-column height: a min-height-only pin lets tall content inflate the sticky
+   * stage to nearly the full viewport. max-height keeps the locked band short; testimonial
+   * copy scrolls inside its panel where needed. Inner must not flex-grow into leftover svh.
    */
   .why-us-scroll-stage__pin {
     box-sizing: border-box;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    /* Shorter locked viewport band; paired columns stretch to fill this area */
-    min-height: min(50svh, 28rem);
     min-width: 0;
+    align-items: stretch;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
     padding-top: calc(1rem + 161px + 1rem);
     padding-bottom: 0.5rem;
@@ -51,14 +49,21 @@
 
   .why-us-scroll-stage__inner {
     min-width: 0;
-    flex: 1 1 auto;
+    /* Do not soak remaining viewport height — capped band only */
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    max-height: min(38svh, 22rem);
+    overflow: hidden;
   }
 
   .why-us-scroll-stage__grid {
     min-width: 0;
     flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    align-self: stretch;
   }
 
   .why-us-desktop-hero-offset {

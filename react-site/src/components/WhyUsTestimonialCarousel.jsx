@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-2xl lg:px-7 lg:pb-0 lg:pt-8"
+      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-xl lg:px-6 lg:pb-0 lg:pt-5"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -88,7 +88,7 @@ function WhyUsTestimonialCarousel() {
         flex-1 + justify-center: equal visual space above the eyebrow and below the
         quote block (above the divider), matching a taller card like the design ref.
       */}
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:flex-1 lg:justify-center lg:gap-5 lg:overflow-y-auto lg:overscroll-contain">
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:flex-1 lg:justify-start lg:gap-3 lg:overflow-y-auto lg:overscroll-contain">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
             What partners say
@@ -98,7 +98,7 @@ function WhyUsTestimonialCarousel() {
           </p>
         </div>
         <blockquote className="mx-0 my-0" key={current.id}>
-          <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
+          <p className="text-lg font-medium leading-relaxed text-white md:text-xl lg:text-lg lg:leading-snug">
             &ldquo;{current.quote}&rdquo;
           </p>
           <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
@@ -109,7 +109,7 @@ function WhyUsTestimonialCarousel() {
           </footer>
         </blockquote>
       </div>
-      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:flex-shrink-0 lg:gap-3 lg:border-t lg:pb-8 lg:pt-5">
+      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:flex-shrink-0 lg:gap-2.5 lg:border-t lg:pb-4 lg:pt-3">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
