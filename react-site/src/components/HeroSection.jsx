@@ -82,7 +82,7 @@ function HeroSection() {
       {/* Center only the main title in the viewport; subtext + CTAs follow below */}
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6 pt-14 md:pt-16">
         <motion.h1
-          className="hero-3d-text mt-[50px] max-w-5xl"
+          className="hero-3d-text max-w-5xl"
           data-text={heroData.headline}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,17 +104,28 @@ function HeroSection() {
 
             if (match) {
               const lead = match[1].trim()
+              const leadWords = lead.split(/\s+/).filter(Boolean)
+              const leadFirst = leadWords[0] ?? lead
+              const leadRest = leadWords.slice(1).join(' ')
+
               return (
                 <>
-                  <span className="hero-headline-lead">{lead}</span>{' '}
-                  <span className="hero-headline-tail">
-                    <span className="hero-since-year">
-                      <span className="hero-since">{match[2]}</span>{' '}
-                      <span className="hero-1963" style={{ color: yearColor }}>
-                        {match[3]}
+                  <span className="hero-headline-lead">{leadFirst}</span>
+                  <span className="hero-headline-bulk mt-[50px] block">
+                    {leadRest ? (
+                      <>
+                        <span className="inline">{leadRest}</span>{' '}
+                      </>
+                    ) : null}
+                    <span className="hero-headline-tail inline">
+                      <span className="hero-since-year">
+                        <span className="hero-since">{match[2]}</span>{' '}
+                        <span className="hero-1963" style={{ color: yearColor }}>
+                          {match[3]}
+                        </span>
                       </span>
+                      {match[4]}
                     </span>
-                    {match[4]}
                   </span>
                 </>
               )
@@ -125,7 +136,7 @@ function HeroSection() {
         </motion.h1>
       </div>
 
-      <div className="hero-content-panel relative z-10 mx-auto w-full max-w-5xl shrink-0 px-6 text-center">
+      <div className="hero-content-panel relative z-10 mx-auto -mt-[25px] w-full max-w-5xl shrink-0 px-6 text-center">
         {heroData.subtext && heroData.subtext.trim() !== '' && (
           <motion.p
             className="hero-subtext mx-auto max-w-2xl text-lg text-white md:text-xl"
