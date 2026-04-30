@@ -17,14 +17,35 @@
     flex-direction: column;
     min-width: 0;
     align-items: stretch;
+    /* Block full-viewport fixed hero from showing through padding / edges */
+    background-color: #000;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
     padding-top: calc(1rem + 161px + 1rem);
     padding-bottom: 0.5rem;
   }
 
   /*
-   * Fade the reel’s edges to opacity 0 (mask), not a black overlay — the fixed
-   * hero/background then shows through so cards “disappear into” the scene.
+   * Localized hero image (inherits --bg-url from main) only inside the capped inner band.
+   * Matches .main-with-fixed-bg gradient treatment so the reel mask still reads correctly.
+   */
+  .why-us-scroll-stage__photo-band {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background-color: #1e293b;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)),
+      var(--bg-url, linear-gradient(135deg, #1e293b 0%, #334155 100%));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /*
+   * Fade the reel’s edges to opacity 0 (mask) — the local photo-band shows through here
+   * (no longer the full-viewport fixed layer).
    */
   .why-us-scroll-stage__reel-viewport {
     -webkit-mask-image: linear-gradient(
@@ -48,6 +69,8 @@
   }
 
   .why-us-scroll-stage__inner {
+    position: relative;
+    isolation: isolate;
     min-width: 0;
     /* Do not soak remaining viewport height — capped band only */
     flex: 0 1 auto;
@@ -56,6 +79,7 @@
     min-height: 0;
     max-height: min(38svh, 22rem);
     overflow: hidden;
+    border-radius: 1rem;
   }
 
   .why-us-scroll-stage__grid {

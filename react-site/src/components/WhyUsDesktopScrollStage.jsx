@@ -48,16 +48,21 @@ function WhyUsDesktopScrollStage({ items }) {
   return (
     <div
       ref={scrollTrackRef}
-      className="relative w-full"
+      className="why-us-scroll-stage__track relative w-full lg:bg-black"
       style={{ minHeight: trackMinHeight }}
     >
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
           {/*
+            Local photo behind the pair only (main::before is full-viewport).
+            pin + track use solid bg so the hero image does not flood the whole screen.
+          */}
+          <div className="why-us-scroll-stage__photo-band" aria-hidden />
+          {/*
             lg: two equal columns so the testimonial “box” matches the reel viewport footprint.
             Inner max-height caps the shared row; both panels stretch within that band.
           */}
-          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-2 lg:gap-6 xl:gap-8">
+          <div className="why-us-scroll-stage__grid relative z-[1] mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-2 lg:gap-6 xl:gap-8">
             <div className="flex min-h-0 min-w-0 flex-col lg:h-full lg:min-h-0">
               <WhyUsTestimonialCarousel />
             </div>
