@@ -82,7 +82,7 @@ function HeroSection() {
       {/* Center only the main title in the viewport; subtext + CTAs follow below */}
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6 pt-14 md:pt-16">
         <motion.h1
-          className="hero-3d-text max-w-5xl"
+          className="hero-3d-text mt-[25px] max-w-5xl"
           data-text={heroData.headline}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
