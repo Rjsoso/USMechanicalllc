@@ -196,7 +196,7 @@ function WhyUsSection() {
 
   return (
     <section className="relative overflow-x-clip">
-      <div className="bg-black pb-8 pt-12 md:pb-10 md:pt-14">
+      <div className="bg-black pb-10 pt-16 md:pb-14 md:pt-22">
         <div className="mx-auto max-w-7xl px-6">
           <FadeInNative>
             <div className="text-center">
@@ -216,7 +216,7 @@ function WhyUsSection() {
         </div>
       </div>
 
-      <div className="bg-transparent py-8 md:py-8 lg:py-0">
+      <div className="bg-transparent py-8 md:py-10 lg:py-0">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:hidden">
           <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5">
             {displayData.items.map((item, index) => (
@@ -246,21 +246,18 @@ function WhyUsSection() {
           </FadeInWhenVisible>
         </div>
 
-        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 bg-black py-4 lg:mt-0 lg:block lg:py-5 xl:py-6">
+        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
           {reduceMotion ? (
-            <div className="why-us-desktop-hero-offset mx-auto w-full max-w-7xl px-4 sm:px-5">
-              <div className="relative overflow-hidden rounded-xl">
-                <div className="why-us-scroll-stage__photo-band rounded-xl" aria-hidden />
-                <div className="relative z-[1] grid grid-cols-1 items-stretch gap-4 px-3 py-3 sm:gap-5 sm:p-4 lg:grid-cols-2 lg:gap-4 lg:p-5">
-                  <FadeInWhenVisible
-                    delay={0.12}
-                    className="flex min-h-0 min-w-0 flex-col lg:h-full"
-                  >
-                    <WhyUsTestimonialCarousel embeddedDesktop />
-                  </FadeInWhenVisible>
-                  <div className="flex min-h-0 min-w-0 flex-col lg:h-full">
-                    <WhyUsDesktopValueGrid items={displayData.items} />
-                  </div>
+            <div className="why-us-desktop-hero-offset mx-auto w-full max-w-7xl px-6">
+              <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+                <FadeInWhenVisible
+                  delay={0.12}
+                  className="flex min-h-0 min-w-0 flex-col justify-center lg:col-span-5"
+                >
+                  <WhyUsTestimonialCarousel />
+                </FadeInWhenVisible>
+                <div className="min-w-0 lg:col-span-7">
+                  <WhyUsDesktopValueGrid items={displayData.items} />
                 </div>
               </div>
             </div>

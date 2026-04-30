@@ -26,7 +26,7 @@ function WhyUsDesktopScrollStage({ items }) {
   const trackMinHeight = useMemo(() => {
     if (n < 1) return '100svh'
     const segments = stepCount > 0 ? stepCount : 1
-    return `${segments * 52}svh`
+    return `${segments * 100}svh`
   }, [n, stepCount])
 
   const y = useTransform(scrollYProgress, (p) => {
@@ -48,26 +48,22 @@ function WhyUsDesktopScrollStage({ items }) {
   return (
     <div
       ref={scrollTrackRef}
-      className="why-us-scroll-stage__track relative w-full lg:bg-black"
+      className="relative w-full"
       style={{ minHeight: trackMinHeight }}
     >
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
-        <div className="why-us-scroll-stage__inner w-full max-w-7xl mx-auto">
+        <div className="why-us-scroll-stage__inner w-full px-6">
           {/*
-            Local photo behind the pair only (main::before is full-viewport).
-            pin + track use solid bg so the hero image does not flood the whole screen.
+            items-start: the value-card stack in the reel is very tall; if the row
+            stretched to that height, the left column (h-full testimonial) grew with
+            empty black space. Reel height is explicit again, not 100% of a giant row.
           */}
-          <div className="why-us-scroll-stage__photo-band" aria-hidden />
-          {/*
-            lg: two equal columns so the testimonial “box” matches the reel viewport footprint.
-            Inner max-height caps the shared row; both panels stretch within that band.
-          */}
-          <div className="why-us-scroll-stage__grid relative z-[1] grid min-h-0 w-full flex-1 grid-cols-1 items-stretch gap-6 px-3 py-2 pb-2 lg:grid-cols-2 lg:gap-4 lg:px-4 xl:gap-5">
-            <div className="flex min-h-0 min-w-0 flex-col lg:h-full lg:min-h-0">
-              <WhyUsTestimonialCarousel embeddedDesktop />
+          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">
+            <div className="flex min-h-0 min-w-0 flex-col lg:col-span-5">
+              <WhyUsTestimonialCarousel />
             </div>
-            <div className="flex min-h-0 min-w-0 flex-col lg:h-full lg:min-h-0">
-              <div className="why-us-scroll-stage__reel-viewport relative min-h-0 w-full flex-1 overflow-hidden rounded-xl">
+            <div className="min-h-0 min-w-0 lg:col-span-7">
+              <div className="why-us-scroll-stage__reel-viewport relative w-full min-h-0 overflow-hidden rounded-xl lg:h-[min(35rem,56svh)] lg:min-h-[20.5rem]">
                 <motion.div
                   className="relative z-0 flex flex-col gap-3 will-change-transform"
                   style={{ y }}

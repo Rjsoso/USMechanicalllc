@@ -38,7 +38,7 @@ const MOCK_TESTIMONIALS = [
 
 const INTERVAL_MS = 7000
 
-function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
+function WhyUsTestimonialCarousel() {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const reduced = useRef(false)
@@ -76,11 +76,7 @@ function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
 
   return (
     <div
-      className={
-        embeddedDesktop
-          ? 'why-us-testimonials why-us-testimonials--embed-desktop flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-none lg:border-0 lg:bg-gradient-to-r lg:from-black/50 lg:via-black/35 lg:to-transparent lg:p-0 lg:px-0 lg:pb-2 lg:pt-3 lg:shadow-none lg:backdrop-blur-sm'
-          : 'why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-xl lg:px-6 lg:pb-0 lg:pt-5'
-      }
+      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-[min(40rem,56svh)] lg:rounded-2xl lg:px-7 lg:pb-0 lg:pt-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -92,7 +88,7 @@ function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
         flex-1 + justify-center: equal visual space above the eyebrow and below the
         quote block (above the divider), matching a taller card like the design ref.
       */}
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:flex-1 lg:justify-start lg:gap-3 lg:overflow-y-auto lg:overscroll-contain">
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:gap-5">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
             What partners say
@@ -102,7 +98,7 @@ function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
           </p>
         </div>
         <blockquote className="mx-0 my-0" key={current.id}>
-          <p className="text-lg font-medium leading-relaxed text-white md:text-xl lg:text-lg lg:leading-snug">
+          <p className="text-lg font-medium leading-relaxed text-white md:text-xl">
             &ldquo;{current.quote}&rdquo;
           </p>
           <footer className="mt-4 text-sm text-zinc-400 lg:mt-3.5">
@@ -113,9 +109,7 @@ function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
           </footer>
         </blockquote>
       </div>
-      <div
-        className={`mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:flex-shrink-0 lg:gap-2.5 lg:border-t ${embeddedDesktop ? 'lg:border-white/15 lg:pb-2 lg:pt-2' : 'lg:pb-4 lg:pt-3'}`}
-      >
+      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-0 lg:pb-8">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
