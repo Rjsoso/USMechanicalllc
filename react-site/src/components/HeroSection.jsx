@@ -79,10 +79,10 @@ function HeroSection() {
         background: 'transparent',
       }}
     >
-      {/* Center only the main title in the viewport; subtext + CTAs follow below */}
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6 pt-14 md:pt-16">
+      {/* One centered column: title + subtext + CTAs stay visually grouped */}
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 pt-14 pb-6 md:gap-4 md:pt-16">
         <motion.h1
-          className="hero-3d-text max-w-5xl"
+          className="hero-3d-text mb-0 max-w-5xl"
           data-text={heroData.headline}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ function HeroSection() {
               return (
                 <>
                   <span className="hero-headline-lead">{leadFirst}</span>
-                  <span className="hero-headline-bulk mt-[50px] block">
+                  <span className="hero-headline-bulk mt-8 block md:mt-10">
                     {leadRest ? (
                       <>
                         <span className="inline">{leadRest}</span>{' '}
@@ -134,17 +134,16 @@ function HeroSection() {
             return headline
           })()}
         </motion.h1>
-      </div>
 
-      <div className="hero-content-panel relative z-10 mx-auto -mt-[25px] w-full max-w-5xl shrink-0 px-6 text-center">
-        {heroData.subtext && heroData.subtext.trim() !== '' && (
-          <motion.p
-            className="hero-subtext mx-auto max-w-2xl text-lg text-white md:text-xl"
-            style={{ marginBottom: '0px' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="hero-content-panel relative z-10 mx-auto flex w-full max-w-5xl shrink-0 flex-col gap-5 text-center">
+          {heroData.subtext && heroData.subtext.trim() !== '' && (
+            <motion.p
+              className="hero-subtext !mt-0 mx-auto max-w-2xl text-lg text-white md:text-xl"
+              style={{ marginBottom: '0px' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
             {heroData.subtext}
           </motion.p>
         )}
@@ -153,7 +152,7 @@ function HeroSection() {
         {((heroData.buttonText && heroData.buttonText.trim() !== '') ||
           (heroData.secondButtonText && heroData.secondButtonText.trim() !== '')) && (
           <motion.div
-            className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center"
+            className="flex flex-col gap-4 sm:flex-row sm:justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -202,6 +201,7 @@ function HeroSection() {
             )}
           </motion.div>
         )}
+        </div>
       </div>
     </section>
   )
