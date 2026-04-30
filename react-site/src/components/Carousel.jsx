@@ -86,9 +86,24 @@ export default function Carousel({
       if (w > 0) setMeasuredW(w)
     }
     measure()
-    const ro = new ResizeObserver(() => measure())
+
+    // Debounce ResizeObserver: parent CSS width transitions fire many updates in
+    // quick succession, which retargets Framer Motion `x` every frame and makes the
+    // track jump. Collapse to one measurement after layout settles (e.g. Read More).
+    let debounceId = null
+    const RESIZE_DEBOUNCE_MS = 120
+    const ro = new ResizeObserver(() => {
+      if (debounceId !== null) clearTimeout(debounceId)
+      debounceId = setTimeout(() => {
+        debounceId = null
+        measure()
+      }, RESIZE_DEBOUNCE_MS)
+    })
     ro.observe(el)
-    return () => ro.disconnect()
+    return () => {
+      ro.disconnect()
+      if (debounceId !== null) clearTimeout(debounceId)
+    }
   }, [items.length, baseWidth, round, containerClassName])
 
   const itemsForRender = useMemo(() => {
