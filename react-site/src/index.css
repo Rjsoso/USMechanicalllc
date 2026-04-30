@@ -494,78 +494,80 @@ section#contact > div[class*='absolute'] {
     0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-/* Hero headline — Instrument Serif editorial (matches Why US editorial section) */
+/* Hero Text Effect - White fill with black semi-transparent stroke */
 .hero-3d-text {
-  text-transform: none;
-  margin-bottom: 0.35em;
-  font-family: var(--font-display);
-  font-size: clamp(2.85rem, 7.25vw, 5.5rem);
-  font-weight: 400;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(3rem, 5vw + 1rem, 6rem);
+  font-weight: 900;
   line-height: 1.08;
-  letter-spacing: -0.025em;
   position: relative;
   display: inline-block;
   color: #ffffff;
   text-shadow:
-    0 2px 48px rgba(0, 0, 0, 0.58),
-    0 3px 28px rgba(0, 0, 0, 0.38),
-    0 1px 2px rgba(0, 0, 0, 0.4);
-  -webkit-text-stroke: 0;
-  paint-order: normal;
+    1px 1px 0px rgba(0, 0, 0, 0.8),
+    2px 2px 0px rgba(0, 0, 0, 0.7),
+    3px 3px 0px rgba(0, 0, 0, 0.6),
+    4px 4px 0px rgba(0, 0, 0, 0.5),
+    5px 5px 0px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 0, 0, 0.4);
+  -webkit-text-stroke: 4px rgba(0, 0, 0, 0.6);
+  paint-order: stroke fill;
 }
 
 @media (min-width: 768px) {
   .hero-3d-text {
-    font-size: clamp(3.45rem, 5.75vw + 0.35rem, 6rem);
+    font-size: clamp(4rem, 4vw + 2rem, 7rem);
   }
 }
 
 @media (min-width: 1440px) {
   .hero-3d-text {
-    font-size: clamp(3.95rem, 4.25vw + 0.75rem, 6.5rem);
+    font-size: clamp(5rem, 3.5vw + 2rem, 6.5rem);
   }
 }
 
 @media (min-width: 2560px) {
   .hero-3d-text {
-    font-size: clamp(3.75rem, 3.35vw + 0.85rem, 6.1rem);
+    font-size: clamp(5rem, 2.5vw + 2rem, 6rem);
   }
 }
 
-/* “Since …” italic word — same serif family */
+/* Smaller "Since" styling - Corinthia script */
 .hero-since {
   font-size: 1em;
-  margin-right: 0.35em;
+  margin-right: 0.4em;
   display: inline-block;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  text-transform: none;
-  color: rgba(255, 255, 255, 0.92);
+  font-family: 'Corinthia', cursive;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: capitalize;
+  color: #ffffff;
   text-shadow:
-    0 2px 24px rgba(0, 0, 0, 0.4),
-    0 1px 1px rgba(0, 0, 0, 0.35);
-  -webkit-text-stroke: 0;
-  paint-order: normal;
+    1px 1px 0px rgba(0, 0, 0, 0.8),
+    2px 2px 0px rgba(0, 0, 0, 0.7),
+    3px 3px 0px rgba(0, 0, 0, 0.6),
+    4px 4px 0px rgba(0, 0, 0, 0.5),
+    5px 5px 0px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 0, 0, 0.4);
+  -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.6);
+  paint-order: stroke fill;
 }
 
-/* Year accent — serif, strong but not heavyweight Rubik stack */
+/* 1963 — Rubik black stroke; color from inline style in HeroSection */
 .hero-1963 {
-  font-family: var(--font-display);
-  font-size: 1.14em;
-  font-weight: 650;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 900;
   text-shadow:
-    0 2px 36px rgba(0, 0, 0, 0.52),
-    0 2px 14px rgba(0, 0, 0, 0.35),
-    0 1px 1px rgba(0, 0, 0, 0.42);
-  -webkit-text-stroke: 0;
-  paint-order: normal;
-}
-
-@media (min-width: 768px) {
-  .hero-1963 {
-    font-size: 1.2em;
-  }
+    1px 1px 0px rgba(0, 0, 0, 0.8),
+    2px 2px 0px rgba(0, 0, 0, 0.7),
+    3px 3px 0px rgba(0, 0, 0, 0.6),
+    4px 4px 0px rgba(0, 0, 0, 0.5),
+    5px 5px 0px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 0, 0, 0.4);
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.6);
+  paint-order: stroke fill;
 }
 
 /* Section titles — editorial serif sitewide */
@@ -700,7 +702,7 @@ footer {
   } */
 
   .hero-3d-text {
-    font-size: clamp(2.35rem, 5.5vw, 4.25rem) !important;
+    font-size: clamp(2rem, 5vw, 3.5rem) !important;
   }
 
   .hero-since {
@@ -1027,8 +1029,8 @@ body {
 @media (max-width: 767px) {
   /* Hero text adjustments for mobile */
   .hero-3d-text {
-    font-size: clamp(2rem, 8vw, 3.25rem) !important;
-    -webkit-text-stroke: 0 !important;
+    font-size: clamp(2.5rem, 8vw, 4rem) !important;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.6) !important;
   }
 
   /* Section titles optimized for mobile screens */
@@ -1092,8 +1094,7 @@ body {
 /* Extra small phones (iPhone SE, etc.) */
 @media (max-width: 375px) {
   .hero-3d-text {
-    font-size: clamp(2.1rem, 9.5vw, 3.15rem) !important;
-    -webkit-text-stroke: 0 !important;
+    font-size: clamp(2rem, 9vw, 3rem) !important;
   }
 
   .section-title {
