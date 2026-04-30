@@ -4,7 +4,7 @@ export default defineType({
   name: 'whyUs',
   title: 'Why US Mechanical',
   type: 'document',
-  description: 'Value proposition cards displayed on the home page between Portfolio and About sections.',
+  description: 'Home “Why US” section: value items render as editorial-style review entries beside a sticky dark panel.',
   fields: [
     {
       name: 'sectionTitle',

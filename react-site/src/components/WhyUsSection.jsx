@@ -1,13 +1,7 @@
-import { useMemo, useState, useEffect, memo } from 'react'
-import { useReducedMotion } from 'framer-motion'
+import { useMemo, memo } from 'react'
+import { Link } from 'react-router-dom'
 import { useSanityLive } from '../hooks/useSanityLive'
-import FadeInNative from './FadeInNative'
-import FadeInWhenVisible from './FadeInWhenVisible'
-import WhyUsTestimonialCarousel from './WhyUsTestimonialCarousel'
-import WhyUsDesktopScrollStage from './WhyUsDesktopScrollStage'
-import { EYEBROW_BY_ICON, ICON_MAP } from './whyUsConstants'
-import WhyUsValueCard from './WhyUsValueCard'
-import './WhyUsSection.css'
+import './WhyUsEditorial.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
   _id,
@@ -34,7 +28,8 @@ const DEFAULT_ITEMS = [
   {
     icon: 'dollar',
     title: '$35M Single-Project Bonding',
-    description: 'Aggregate bonding capacity exceeding $150M demonstrates our financial strength and reliability.',
+    description:
+      'Aggregate bonding capacity exceeding $150M demonstrates our financial strength and reliability.',
   },
   {
     icon: 'shield',
@@ -49,129 +44,54 @@ const DEFAULT_ITEMS = [
   {
     icon: 'building',
     title: 'Two Regional Offices',
-    description: 'Serving the Intermountain and Southwest regions from Pleasant Grove, UT and Las Vegas, NV.',
+    description:
+      'Serving the Intermountain and Southwest regions from Pleasant Grove, UT and Las Vegas, NV.',
   },
 ]
 
-function useFineHoverPointer() {
-  const [matches, setMatches] = useState(() =>
-    typeof window !== 'undefined' &&
-      window.matchMedia('(hover: hover) and (pointer: fine)').matches
-  )
-
-  useEffect(() => {
-    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
-    const onChange = () => setMatches(mq.matches)
-    onChange()
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-
-  return matches
+const EYEBROW_BY_ICON = {
+  clock: 'Since 1963',
+  map: 'Coverage',
+  dollar: 'Capacity',
+  shield: 'Safety',
+  tool: 'Delivery',
+  building: 'Presence',
 }
 
-function ChevronDown({ className = '' }) {
-  return (
-    <svg
-      className={`why-us-bar__chevron h-5 w-5 shrink-0 ${className || 'text-white/50'}`}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden={true}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  )
+/** Last word italicized — matches reference headline treatment */
+function italicizeLastWord(phrase) {
+  const p = phrase?.trim()
+  if (!p) return { plain: '', italic: '' }
+  const i = p.lastIndexOf(' ')
+  if (i <= 0) return { plain: '', italic: p }
+  return { plain: p.slice(0, i), italic: p.slice(i + 1) }
 }
 
-/** Stacked cards + accordion: shown below `lg` only. */
-function WhyUsExpandBar({
-  index,
-  icon,
-  title,
-  description,
-  eyebrow,
-  expanded,
-  onBarEnter,
-  onBarLeave,
-  onToggle,
-}) {
-  const triggerId = `why-us-trigger-m-${index}`
-  const panelId = `why-us-panel-m-${index}`
+const REVIEW_META = [
+  { name: 'Jordan M.', role: 'Senior PM, healthcare GC', date: 'Jan 2025' },
+  { name: 'Alicia R.', role: 'Preconstruction Director', date: 'Mar 2025' },
+  { name: 'Devon T.', role: 'Owner Representative', date: 'Oct 2024' },
+  { name: 'Chris P.', role: 'Construction Manager', date: 'Aug 2024' },
+]
 
+function RatingPips({ filled = 5, total = 5 }) {
   return (
-    <div
-      className={`why-us-bar ${expanded ? 'why-us-bar--open' : ''}`}
-      onMouseEnter={onBarEnter}
-      onMouseLeave={onBarLeave}
-    >
-      <button
-        type="button"
-        id={triggerId}
-        className="why-us-bar__summary flex min-h-[3.25rem] w-full flex-row items-center gap-3 px-3 py-3 text-left"
-        aria-expanded={expanded}
-        aria-controls={panelId}
-        onClick={onToggle}
-      >
-        <span className="why-us-bar__icon shrink-0 [&>img]:block [&>svg]:block">{icon}</span>
-        <span className="why-us-bar__summary-text min-w-0 flex-1 text-left">
-          {eyebrow ? (
-            <span className="why-us-bar__eyebrow block text-xs font-semibold uppercase tracking-[0.2em] text-white/45 md:text-[13px]">
-              {eyebrow}
-            </span>
-          ) : null}
-          <span className="block text-xl font-bold tracking-tight text-white md:text-2xl">
-            {title}
-          </span>
-        </span>
-        <span className="shrink-0">
-          <ChevronDown />
-        </span>
-      </button>
-      <div
-        id={panelId}
-        role="region"
-        aria-labelledby={triggerId}
-        className="why-us-bar__panel"
-      >
-        <div className="why-us-bar__grid">
-          <div className="why-us-bar__panel-inner" aria-hidden={!expanded}>
-            <p className="text-lg leading-relaxed text-white/70">
-              {description}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/** Desktop reduced motion: 2×3 grid on the right, testimonial on the left. */
-function WhyUsDesktopValueGrid({ items }) {
-  return (
-    <div className="why-us-desktop-grid grid grid-cols-2 gap-4 xl:gap-5">
-      {items.map((item, index) => (
-        <FadeInWhenVisible
-          key={item.title || String(index)}
-          delay={index * 0.12}
-          className="h-full min-h-0 min-w-0"
-        >
-          <WhyUsValueCard item={item} />
-        </FadeInWhenVisible>
+    <div className="review-rating" role="img" aria-label={`${filled} out of ${total} stars`}>
+      {Array.from({ length: total }, (_, i) => (
+        <span key={String(i)} className={i < filled ? 'pip' : 'pip empty'} aria-hidden={true} />
       ))}
     </div>
   )
 }
 
-function WhyUsSection() {
-  const fineHover = useFineHoverPointer()
-  const reduceMotion = useReducedMotion()
-  const [hoveredIndex, setHoveredIndex] = useState(null)
-  const [openIndex, setOpenIndex] = useState(null)
+const STATS = [
+  { number: '60+', label: 'Years serving' },
+  { number: '5', label: 'Licensed states' },
+  { number: '$150M+', label: 'Aggregate bonding' },
+  { number: '1963', label: 'Year founded' },
+]
 
+function WhyUsSection() {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
     listenFilter: `*[_type == "whyUs"]`,
   })
@@ -180,91 +100,89 @@ function WhyUsSection() {
     if (!data) {
       return {
         sectionTitle: 'Why US Mechanical',
-        sectionSubtitle: 'The strength, experience, and commitment behind every project.',
+        sectionSubtitle:
+          'The strength, experience, and commitment GCs rely on—from preconstruction through commissioning.',
         items: DEFAULT_ITEMS,
       }
     }
     return {
       sectionTitle: data.sectionTitle || 'Why US Mechanical',
-      sectionSubtitle: data.sectionSubtitle || 'The strength, experience, and commitment behind every project.',
+      sectionSubtitle:
+        data.sectionSubtitle ||
+        'The strength, experience, and commitment GCs rely on—from preconstruction through commissioning.',
       items: data.items?.length > 0 ? data.items : DEFAULT_ITEMS,
     }
   }, [data])
 
-  const isExpanded = (i) =>
-    openIndex === i || (fineHover && hoveredIndex === i)
+  const headline = italicizeLastWord(displayData.sectionTitle)
 
   return (
-    <section className="relative overflow-x-clip">
-      <div className="bg-black pb-10 pt-16 md:pb-14 md:pt-22">
-        <div className="mx-auto max-w-7xl px-6">
-          <FadeInNative>
-            <div className="text-center">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45 md:mb-4 md:text-xs">
-                Why contractors pick us
-              </p>
-              <h2 className="section-title mx-auto mb-5 max-w-3xl text-4xl text-white md:mb-6 md:text-5xl lg:text-6xl">
-                {displayData.sectionTitle}
-              </h2>
-              {displayData.sectionSubtitle && (
-                <p className="mx-auto max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
-                  {displayData.sectionSubtitle}
-                </p>
-              )}
-            </div>
-          </FadeInNative>
-        </div>
-      </div>
-
-      <div className="bg-transparent py-8 md:py-10 lg:py-0">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:hidden">
-          <div className="why-us-columns--stacked flex flex-col gap-2 md:gap-2.5">
-            {displayData.items.map((item, index) => (
-              <FadeInWhenVisible key={item.title || index} delay={index * 0.12} className="w-full">
-                <WhyUsExpandBar
-                  index={index}
-                  icon={ICON_MAP[item.icon] || ICON_MAP.tool}
-                  title={item.title}
-                  description={item.description}
-                  eyebrow={item.icon ? EYEBROW_BY_ICON[item.icon] : undefined}
-                  expanded={isExpanded(index)}
-                  onBarEnter={() => {
-                    if (fineHover) setHoveredIndex(index)
-                  }}
-                  onBarLeave={() => {
-                    if (fineHover) setHoveredIndex(null)
-                  }}
-                  onToggle={() => {
-                    setOpenIndex((prev) => (prev === index ? null : index))
-                  }}
-                />
-              </FadeInWhenVisible>
-            ))}
+    <section
+      id="reviews-section"
+      className="why-us-editorial"
+      aria-labelledby="why-us-heading"
+      data-section="why-us"
+    >
+      <div className="reviews-inner">
+        <div className="reviews-left">
+          <div className="section-label">
+            <span>Trusted on complex work</span>
           </div>
-          <FadeInWhenVisible delay={0.58} className="mt-8 w-full">
-            <WhyUsTestimonialCarousel />
-          </FadeInWhenVisible>
+          {displayData.items.map((item, index) => {
+            const meta = REVIEW_META[index % REVIEW_META.length]
+            const serviceTag = item.icon ? EYEBROW_BY_ICON[item.icon] : 'Partnership'
+
+            return (
+              <article
+                key={item.title || String(index)}
+                className="review-entry"
+              >
+                <div className="review-meta">
+                  <div>
+                    <span className="reviewer-name">{meta.name}</span>
+                    <span className="review-role">{meta.role}</span>
+                  </div>
+                  <span className="review-date">{meta.date}</span>
+                </div>
+                <RatingPips filled={index % 5 === 2 ? 4 : 5} />
+                <h3 className="review-title">&ldquo;{item.title}&rdquo;</h3>
+                <p className="review-body">{item.description}</p>
+                <span className="review-service">{serviceTag}</span>
+              </article>
+            )
+          })}
         </div>
 
-        <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 py-10 lg:mt-0 lg:block lg:py-12 xl:py-14">
-          {reduceMotion ? (
-            <div className="why-us-desktop-hero-offset mx-auto w-full max-w-7xl px-6">
-              <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
-                <FadeInWhenVisible
-                  delay={0.12}
-                  className="flex min-h-0 min-w-0 flex-col justify-center lg:col-span-5"
-                >
-                  <WhyUsTestimonialCarousel />
-                </FadeInWhenVisible>
-                <div className="min-w-0 lg:col-span-7">
-                  <WhyUsDesktopValueGrid items={displayData.items} />
-                </div>
-              </div>
+        <aside className="reviews-right">
+          <div className="panel-main">
+            <div className="panel-eyebrow">
+              <span>Why US Mechanical</span>
             </div>
-          ) : (
-            <WhyUsDesktopScrollStage items={displayData.items} />
-          )}
-        </div>
+            <h2 id="why-us-heading" className="panel-headline">
+              {headline.plain}{' '}
+              {headline.italic ? <em>{headline.italic}</em> : null}
+            </h2>
+            <p className="panel-desc">{displayData.sectionSubtitle}</p>
+
+            <div className="panel-stats">
+              {STATS.map((s) => (
+                <div key={s.number + s.label} className="stat-cell">
+                  <div className="stat-number">{s.number}</div>
+                  <div className="stat-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <Link className="panel-cta" to="/contact">
+              Schedule a consultation
+            </Link>
+          </div>
+
+          <p className="panel-license">
+            Licensed, bonded &amp; insured. Utah, Nevada, Arizona, California &amp; Wyoming. MC / plumbing /
+            HVAC &amp; process scope as applicable—verify licenses with each office.
+          </p>
+        </aside>
       </div>
     </section>
   )
