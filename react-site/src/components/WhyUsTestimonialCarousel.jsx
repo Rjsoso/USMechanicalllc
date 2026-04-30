@@ -76,7 +76,7 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-[min(40rem,56svh)] lg:rounded-2xl lg:px-7 lg:pb-0 lg:pt-8"
+      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:min-h-0 lg:h-full lg:overflow-hidden lg:rounded-xl lg:p-6"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -88,7 +88,7 @@ function WhyUsTestimonialCarousel() {
         flex-1 + justify-center: equal visual space above the eyebrow and below the
         quote block (above the divider), matching a taller card like the design ref.
       */}
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:gap-5">
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 sm:gap-4 lg:min-h-0 lg:flex-1 lg:justify-start lg:gap-3 lg:overflow-y-auto lg:overscroll-contain">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
             What partners say
@@ -109,7 +109,7 @@ function WhyUsTestimonialCarousel() {
           </footer>
         </blockquote>
       </div>
-      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-0 lg:pb-8">
+      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:gap-3 lg:border-t lg:pb-3 lg:pt-4">
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button

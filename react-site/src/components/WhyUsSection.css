@@ -16,7 +16,7 @@
     z-index: 10;
     display: flex;
     flex-direction: column;
-    min-height: 88svh;
+    min-height: min(72svh, 38rem);
     min-width: 0;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
     padding-top: calc(1rem + 161px + 1.25rem);
@@ -46,6 +46,12 @@
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+  }
+
+  /* Shared height for testimonial pillar + reel on desktop — compact, paired row */
+  .why-us-scroll-stage__desktop-pair-height {
+    height: min(22rem, 38svh);
+    min-height: 16rem;
   }
 
   .why-us-scroll-stage__inner {
