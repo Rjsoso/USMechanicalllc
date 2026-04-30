@@ -16,11 +16,12 @@
     z-index: 10;
     display: flex;
     flex-direction: column;
-    min-height: min(72svh, 38rem);
+    /* Shorter locked viewport band; paired columns stretch to fill this area */
+    min-height: min(50svh, 28rem);
     min-width: 0;
     /* 161px: md+ logo; clears nav (60px) and left overlap */
-    padding-top: calc(1rem + 161px + 1.25rem);
-    padding-bottom: 0.75rem;
+    padding-top: calc(1rem + 161px + 1rem);
+    padding-bottom: 0.5rem;
   }
 
   /*
@@ -46,12 +47,6 @@
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-  }
-
-  /* Shared height for testimonial pillar + reel on desktop — compact, paired row */
-  .why-us-scroll-stage__desktop-pair-height {
-    height: min(22rem, 38svh);
-    min-height: 16rem;
   }
 
   .why-us-scroll-stage__inner {

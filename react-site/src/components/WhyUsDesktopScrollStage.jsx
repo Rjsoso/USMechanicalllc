@@ -54,15 +54,15 @@ function WhyUsDesktopScrollStage({ items }) {
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
           {/*
-            items-stretch on lg+: reel viewport has fixed height so the row height is
-            defined by the reel; the testimonial column fills that height (full pillar).
+            Pin min-height defines the sticky band height; inner + grid flex to fill it.
+            lg+: both columns stretch edge-to-edge in that band (no capped “short boxes”).
           */}
-          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:gap-6 xl:gap-8">
-            <div className="why-us-scroll-stage__desktop-pair-height flex min-h-0 min-w-0 flex-col lg:col-span-5">
+          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:gap-6 xl:gap-8">
+            <div className="flex min-h-0 min-w-0 flex-col lg:col-span-5 lg:h-full lg:min-h-0">
               <WhyUsTestimonialCarousel />
             </div>
-            <div className="why-us-scroll-stage__desktop-pair-height flex min-h-0 min-w-0 flex-col lg:col-span-7">
-              <div className="why-us-scroll-stage__reel-viewport relative h-full min-h-0 w-full overflow-hidden rounded-xl">
+            <div className="flex min-h-0 min-w-0 flex-col lg:col-span-7 lg:h-full lg:min-h-0">
+              <div className="why-us-scroll-stage__reel-viewport relative min-h-0 w-full flex-1 overflow-hidden rounded-xl">
                 <motion.div
                   className="relative z-0 flex flex-col gap-3 will-change-transform"
                   style={{ y }}
