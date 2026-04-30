@@ -9,7 +9,8 @@ import { useSanityLive } from '../hooks/useSanityLive'
 const defaultHeroData = {
   // Keep defaults aligned with the published CMS values to avoid “mismatch” confusion
   headline: 'Trusted Mechanical Contractors Since 1963',
-  subtext: '',
+  subtext:
+    'Commercial plumbing, HVAC, and design-build across Utah, Nevada, and beyond.',
   buttonText: 'REQUEST A QUOTE',
   buttonLink: '#contact',
   secondButtonText: 'APPLY TO WORK WITH US',
@@ -42,8 +43,13 @@ function HeroSection() {
   const { data: rawHero } = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
   const heroData = useMemo(() => {
     if (!rawHero) return defaultHeroData
+    const sub =
+      rawHero.subtext && String(rawHero.subtext).trim() !== ''
+        ? rawHero.subtext
+        : defaultHeroData.subtext
     return {
       ...rawHero,
+      subtext: sub,
       buttonText: rawHero.buttonText || '',
       buttonLink: rawHero.buttonLink || defaultHeroData.buttonLink,
       secondButtonText: rawHero.secondButtonText || '',
@@ -71,7 +77,7 @@ function HeroSection() {
       }}
     >
       <div
-        className="relative z-10 mx-auto max-w-4xl px-6 text-center"
+        className="hero-content-panel relative z-10 mx-auto max-w-5xl px-6 text-center"
         style={{ marginTop: '140px' }}
       >
         <motion.h1
@@ -96,13 +102,17 @@ function HeroSection() {
             const match = headline.match(/(.*?)\s*(since)\s+(1963)(.*)/i)
 
             if (match) {
+              const lead = match[1].trim()
               return (
                 <>
-                  {match[1]} <span className="hero-since">{match[2]}</span>
-                  <span className="hero-1963" style={{ color: yearColor }}>
-                    {match[3]}
+                  <span className="hero-headline-lead">{lead}</span>{' '}
+                  <span className="hero-headline-tail">
+                    <span className="hero-since">{match[2]}</span>{' '}
+                    <span className="hero-1963" style={{ color: yearColor }}>
+                      {match[3]}
+                    </span>
+                    {match[4]}
                   </span>
-                  {match[4]}
                 </>
               )
             }
@@ -111,22 +121,23 @@ function HeroSection() {
           })()}
         </motion.h1>
 
-        <motion.p
-          className="mx-auto max-w-2xl text-lg text-white md:text-xl"
-          style={{ marginBottom: '0px' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {heroData.subtext}
-        </motion.p>
+        {heroData.subtext && heroData.subtext.trim() !== '' && (
+          <motion.p
+            className="hero-subtext mx-auto max-w-2xl text-lg text-white md:text-xl"
+            style={{ marginBottom: '0px' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {heroData.subtext}
+          </motion.p>
+        )}
 
         {/* CTA Buttons - show if either buttonText or secondButtonText is provided */}
         {((heroData.buttonText && heroData.buttonText.trim() !== '') ||
           (heroData.secondButtonText && heroData.secondButtonText.trim() !== '')) && (
           <motion.div
-            className="mt-2 flex flex-col gap-4 sm:flex-row sm:justify-center"
-            style={{ marginTop: '-20px' }}
+            className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}

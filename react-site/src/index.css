@@ -441,12 +441,65 @@ section#contact > div[class*='absolute'] {
   display: block !important;
 }
 
+/* Hero copy block — subtle vignette so type separates from busy photography */
+.hero-content-panel {
+  position: relative;
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.hero-content-panel::before {
+  content: '';
+  position: absolute;
+  inset: -0.5rem -1rem;
+  border-radius: 14px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 92% 88% at 50% 42%,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.18) 58%,
+    transparent 82%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-content-panel::before {
+    inset: -0.75rem -1.25rem;
+  }
+}
+
+.hero-headline-lead {
+  display: inline;
+}
+
+/* Second beat (“since 1963”) — stacked on small viewports for clearer hierarchy */
+.hero-headline-tail {
+  display: block;
+  margin-top: 0.28em;
+}
+
+@media (min-width: 768px) {
+  .hero-headline-tail {
+    display: inline;
+    margin-top: 0;
+  }
+}
+
+.hero-subtext {
+  margin-top: 1.35rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow:
+    0 2px 24px rgba(0, 0, 0, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
 /* Hero headline — Instrument Serif editorial (matches Why US editorial section) */
 .hero-3d-text {
   text-transform: none;
   margin-bottom: 0.35em;
   font-family: var(--font-display);
-  font-size: clamp(2.35rem, 5.5vw, 4.1rem);
+  font-size: clamp(2.85rem, 7.25vw, 5.5rem);
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: -0.025em;
@@ -454,27 +507,28 @@ section#contact > div[class*='absolute'] {
   display: inline-block;
   color: #ffffff;
   text-shadow:
-    0 2px 32px rgba(0, 0, 0, 0.45),
-    0 1px 2px rgba(0, 0, 0, 0.35);
+    0 2px 48px rgba(0, 0, 0, 0.58),
+    0 3px 28px rgba(0, 0, 0, 0.38),
+    0 1px 2px rgba(0, 0, 0, 0.4);
   -webkit-text-stroke: 0;
   paint-order: normal;
 }
 
 @media (min-width: 768px) {
   .hero-3d-text {
-    font-size: clamp(2.85rem, 4.5vw, 4.6rem);
+    font-size: clamp(3.45rem, 5.75vw + 0.35rem, 6rem);
   }
 }
 
 @media (min-width: 1440px) {
   .hero-3d-text {
-    font-size: clamp(3.25rem, 3.5vw + 1rem, 4.85rem);
+    font-size: clamp(3.95rem, 4.25vw + 0.75rem, 6.5rem);
   }
 }
 
 @media (min-width: 2560px) {
   .hero-3d-text {
-    font-size: clamp(3.25rem, 2.75vw + 1rem, 4.65rem);
+    font-size: clamp(3.75rem, 3.35vw + 0.85rem, 6.1rem);
   }
 }
 
@@ -498,12 +552,20 @@ section#contact > div[class*='absolute'] {
 /* Year accent — serif, strong but not heavyweight Rubik stack */
 .hero-1963 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-size: 1.14em;
+  font-weight: 650;
   text-shadow:
-    0 2px 28px rgba(0, 0, 0, 0.45),
-    0 1px 1px rgba(0, 0, 0, 0.4);
+    0 2px 36px rgba(0, 0, 0, 0.52),
+    0 2px 14px rgba(0, 0, 0, 0.35),
+    0 1px 1px rgba(0, 0, 0, 0.42);
   -webkit-text-stroke: 0;
   paint-order: normal;
+}
+
+@media (min-width: 768px) {
+  .hero-1963 {
+    font-size: 1.2em;
+  }
 }
 
 /* Section titles — editorial serif sitewide */
@@ -638,7 +700,7 @@ footer {
   } */
 
   .hero-3d-text {
-    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+    font-size: clamp(2.35rem, 5.5vw, 4.25rem) !important;
   }
 
   .hero-since {
@@ -1030,7 +1092,7 @@ body {
 /* Extra small phones (iPhone SE, etc.) */
 @media (max-width: 375px) {
   .hero-3d-text {
-    font-size: clamp(1.85rem, 9vw, 2.85rem) !important;
+    font-size: clamp(2.1rem, 9.5vw, 3.15rem) !important;
     -webkit-text-stroke: 0 !important;
   }
 

@@ -35,6 +35,35 @@
   height: 60px;
 }
 
+/*
+ * Reserve horizontal space for the fixed logo plaque (Header.jsx / Header.css)
+ * so centered nav links do not sit under z-50 logo. Values track .logo-3d-card
+ * width + left-4 (1rem).
+ */
+@media (min-width: 768px) {
+  .desktop-nav-container {
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 260px + 1.5rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  .desktop-nav-container {
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 240px + 1.5rem);
+  }
+}
+
+@media (min-width: 1920px) {
+  .desktop-nav-container {
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 220px + 1.5rem);
+  }
+}
+
+@media (min-width: 2560px) {
+  .desktop-nav-container {
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 200px + 1.5rem);
+  }
+}
+
 .desktop-nav-list {
   display: flex;
   gap: 2rem;
