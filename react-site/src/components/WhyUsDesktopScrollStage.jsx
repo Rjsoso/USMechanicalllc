@@ -54,14 +54,14 @@ function WhyUsDesktopScrollStage({ items }) {
       <div className="why-us-scroll-stage__pin sticky top-0 w-full">
         <div className="why-us-scroll-stage__inner w-full px-6">
           {/*
-            Pin min-height defines the sticky band height; inner + grid flex to fill it.
-            lg+: both columns stretch edge-to-edge in that band (no capped “short boxes”).
+            lg: two equal columns so the testimonial “box” matches the reel viewport footprint.
+            Inner max-height caps the shared row; both panels stretch within that band.
           */}
-          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-12 lg:gap-6 xl:gap-8">
-            <div className="flex min-h-0 min-w-0 flex-col lg:col-span-5 lg:h-full lg:min-h-0">
+          <div className="why-us-scroll-stage__grid mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 items-stretch gap-8 pb-1 lg:grid-cols-2 lg:gap-6 xl:gap-8">
+            <div className="flex min-h-0 min-w-0 flex-col lg:h-full lg:min-h-0">
               <WhyUsTestimonialCarousel />
             </div>
-            <div className="flex min-h-0 min-w-0 flex-col lg:col-span-7 lg:h-full lg:min-h-0">
+            <div className="flex min-h-0 min-w-0 flex-col lg:h-full lg:min-h-0">
               <div className="why-us-scroll-stage__reel-viewport relative min-h-0 w-full flex-1 overflow-hidden rounded-xl">
                 <motion.div
                   className="relative z-0 flex flex-col gap-3 will-change-transform"

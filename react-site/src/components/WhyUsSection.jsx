@@ -249,14 +249,14 @@ function WhyUsSection() {
         <div className="mt-0 hidden w-full overflow-x-clip border-t border-white/5 py-8 lg:mt-0 lg:block lg:py-9 xl:py-10">
           {reduceMotion ? (
             <div className="why-us-desktop-hero-offset mx-auto w-full max-w-7xl px-6">
-              <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-6 xl:gap-8">
+              <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-6 xl:gap-8">
                 <FadeInWhenVisible
                   delay={0.12}
-                  className="flex min-h-0 min-w-0 flex-col justify-center lg:col-span-5"
+                  className="flex min-h-0 min-w-0 flex-col lg:h-full"
                 >
                   <WhyUsTestimonialCarousel />
                 </FadeInWhenVisible>
-                <div className="min-w-0 lg:col-span-7">
+                <div className="flex min-h-0 min-w-0 flex-col lg:h-full">
                   <WhyUsDesktopValueGrid items={displayData.items} />
                 </div>
               </div>
