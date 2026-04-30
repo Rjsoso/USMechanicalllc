@@ -38,7 +38,7 @@ const MOCK_TESTIMONIALS = [
 
 const INTERVAL_MS = 7000
 
-function WhyUsTestimonialCarousel() {
+function WhyUsTestimonialCarousel({ embeddedDesktop = false }) {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const reduced = useRef(false)
@@ -76,7 +76,11 @@ function WhyUsTestimonialCarousel() {
 
   return (
     <div
-      className="why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-xl lg:px-6 lg:pb-0 lg:pt-5"
+      className={
+        embeddedDesktop
+          ? 'why-us-testimonials why-us-testimonials--embed-desktop flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-none lg:border-0 lg:bg-gradient-to-r lg:from-black/50 lg:via-black/35 lg:to-transparent lg:p-0 lg:px-0 lg:pb-2 lg:pt-3 lg:shadow-none lg:backdrop-blur-sm'
+          : 'why-us-testimonials flex min-h-[min(40vh,24rem)] w-full min-w-0 flex-col rounded-xl border border-white/10 bg-black p-5 text-zinc-100 sm:p-6 lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:rounded-xl lg:px-6 lg:pb-0 lg:pt-5'
+      }
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -109,7 +113,9 @@ function WhyUsTestimonialCarousel() {
           </footer>
         </blockquote>
       </div>
-      <div className="mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:flex-shrink-0 lg:gap-2.5 lg:border-t lg:pb-4 lg:pt-3">
+      <div
+        className={`mt-3 flex shrink-0 flex-col gap-4 border-t border-white/10 pt-4 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-5 lg:mt-auto lg:flex-shrink-0 lg:gap-2.5 lg:border-t ${embeddedDesktop ? 'lg:border-white/15 lg:pb-2 lg:pt-2' : 'lg:pb-4 lg:pt-3'}`}
+      >
         <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
           {items.map((t, i) => (
             <button
