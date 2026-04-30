@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, memo } from 'react'
-import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import './Carousel.css'
@@ -86,24 +86,9 @@ export default function Carousel({
       if (w > 0) setMeasuredW(w)
     }
     measure()
-
-    // Debounce ResizeObserver: parent CSS width transitions fire many updates in
-    // quick succession, which retargets Framer Motion `x` every frame and makes the
-    // track jump. Collapse to one measurement after layout settles (e.g. Read More).
-    let debounceId = null
-    const RESIZE_DEBOUNCE_MS = 120
-    const ro = new ResizeObserver(() => {
-      if (debounceId !== null) clearTimeout(debounceId)
-      debounceId = setTimeout(() => {
-        debounceId = null
-        measure()
-      }, RESIZE_DEBOUNCE_MS)
-    })
+    const ro = new ResizeObserver(() => measure())
     ro.observe(el)
-    return () => {
-      ro.disconnect()
-      if (debounceId !== null) clearTimeout(debounceId)
-    }
+    return () => ro.disconnect()
   }, [items.length, baseWidth, round, containerClassName])
 
   const itemsForRender = useMemo(() => {
@@ -177,10 +162,6 @@ export default function Carousel({
 
   const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS
 
-  const handleAnimationStart = () => {
-    setIsAnimating(true)
-  }
-
   const handleAnimationComplete = () => {
     if (!loop || itemsForRender.length <= 1) {
       setIsAnimating(false)
@@ -214,6 +195,57 @@ export default function Carousel({
 
     setIsAnimating(false)
   }
+
+  const handleAnimationCompleteRef = useRef(handleAnimationComplete)
+  handleAnimationCompleteRef.current = handleAnimationComplete
+
+  const prevPositionRef = useRef(position)
+  const prevOffsetRef = useRef(trackItemOffset)
+  const layoutDriveReadyRef = useRef(false)
+  const slideAnimRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const targetX = -(position * trackItemOffset)
+
+    if (!layoutDriveReadyRef.current) {
+      layoutDriveReadyRef.current = true
+      prevPositionRef.current = position
+      prevOffsetRef.current = trackItemOffset
+      x.set(targetX)
+      return
+    }
+
+    const prevP = prevPositionRef.current
+    const prevO = prevOffsetRef.current
+    const posChanged = prevP !== position
+    const offChanged = prevO !== trackItemOffset
+
+    prevPositionRef.current = position
+    prevOffsetRef.current = trackItemOffset
+
+    if (!posChanged && !offChanged) return
+
+    if (slideAnimRef.current) {
+      slideAnimRef.current.stop()
+      slideAnimRef.current = null
+    }
+
+    const resizeOnly = !posChanged && offChanged
+
+    if (resizeOnly || isJumping) {
+      x.set(targetX)
+      return
+    }
+
+    setIsAnimating(true)
+    slideAnimRef.current = animate(x, targetX, {
+      ...SPRING_OPTIONS,
+      onComplete: () => {
+        slideAnimRef.current = null
+        handleAnimationCompleteRef.current()
+      },
+    })
+  }, [position, trackItemOffset, x, isJumping])
 
   const handleDragEnd = (_, info) => {
     const { offset, velocity } = info
@@ -374,10 +406,6 @@ export default function Carousel({
             x,
           }}
           onDragEnd={handleDragEnd}
-          animate={{ x: -(position * trackItemOffset) }}
-          transition={effectiveTransition}
-          onAnimationStart={handleAnimationStart}
-          onAnimationComplete={handleAnimationComplete}
         >
           {itemsForRender.map((item, index) => (
             <CarouselItem
