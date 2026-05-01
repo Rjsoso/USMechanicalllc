@@ -25,6 +25,8 @@
   padding-inline: clamp(16px, 4vw, 64px);
   padding-block: clamp(24px, 3.5vw, 48px);
   box-sizing: border-box;
+  /* Global `section { contain: layout }` can prevent sticky from aligning to the viewport. */
+  contain: none;
 }
 
 .why-us-editorial .reviews-inner {
@@ -159,26 +161,19 @@
 
 .why-us-editorial .reviews-right {
   --why-panel-h: max(min(88vh, 760px), 420px);
-  /*
-    Extra offset when sticky is “locked” (pinned): negative = move the panel up.
-    Tuned vs. centered slack; capped by max(..., site-header-offset) so it won’t tuck under the nav.
-  */
-  --why-panel-top-pull: -45px;
   position: sticky;
   /*
-    Vertically center the sticky panel below the fixed nav.
-    Use min(100vh, 100dvh) so we don't reserve space for the hidden mobile URL bar
-    (100vh alone can be taller than the visible viewport and pushes this panel down).
+    Pinned (sticky) vertical centering: --why-sticky-top-pinned is set from JS using the real
+    .desktop-nav bottom and measured panel height (scroll-padding/header offset is ~180px for
+    anchor jumps and is wrong for this layout).
+
+    Fallback approximates the same math before hydration / without JS.
   */
-  top: max(
-    var(--site-header-offset),
+  top: var(
+    --why-sticky-top-pinned,
     calc(
       var(--site-header-offset) +
-      max(
-        0px,
-        (min(100vh, 100dvh) - var(--site-header-offset) - var(--why-panel-h)) / 2
-      ) +
-      var(--why-panel-top-pull)
+      max(0px, (min(100vh, 100dvh) - var(--site-header-offset) - var(--why-panel-h)) / 2)
     )
   );
   height: var(--why-panel-h);

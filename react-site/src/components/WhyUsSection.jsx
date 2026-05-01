@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react'
+import { useMemo, memo, useCallback, useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useSanityLive } from '../hooks/useSanityLive'
 import './WhyUsEditorial.css'
@@ -116,8 +116,72 @@ function WhyUsSection() {
 
   const headline = italicizeLastWord(displayData.sectionTitle)
 
+  const sectionRef = useRef(null)
+  const panelRef = useRef(null)
+
+  const syncPinnedStickyTop = useCallback(() => {
+    const section = sectionRef.current
+    const panel = panelRef.current
+    if (!section || !panel) return
+
+    if (!window.matchMedia('(min-width: 901px)').matches) {
+      section.style.removeProperty('--why-sticky-top-pinned')
+      return
+    }
+
+    const nav = document.querySelector('.desktop-nav')
+    if (!nav || nav.offsetParent === null) {
+      section.style.removeProperty('--why-sticky-top-pinned')
+      return
+    }
+
+    const navBottom = nav.getBoundingClientRect().bottom
+    const vh = window.innerHeight
+    const panelH = panel.getBoundingClientRect().height
+    const slack = vh - navBottom - panelH
+    const topPx = slack > 0 ? navBottom + slack / 2 : navBottom
+
+    section.style.setProperty('--why-sticky-top-pinned', `${Math.round(topPx * 1000) / 1000}px`)
+  }, [])
+
+  useLayoutEffect(() => {
+    let raf = 0
+    const schedule = () => {
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        syncPinnedStickyTop()
+      })
+    }
+
+    schedule()
+
+    const ro = new ResizeObserver(schedule)
+    const panel = panelRef.current
+    if (panel) ro.observe(panel)
+
+    const nav = document.querySelector('.desktop-nav')
+    if (nav) ro.observe(nav)
+
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+
+    const mq = window.matchMedia('(min-width: 901px)')
+    mq.addEventListener('change', schedule)
+
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      mq.removeEventListener('change', schedule)
+      if (raf) cancelAnimationFrame(raf)
+      sectionRef.current?.style.removeProperty('--why-sticky-top-pinned')
+    }
+  }, [syncPinnedStickyTop])
+
   return (
     <section
+      ref={sectionRef}
       id="reviews-section"
       className="why-us-editorial"
       aria-labelledby="why-us-heading"
@@ -153,7 +217,7 @@ function WhyUsSection() {
           })}
         </div>
 
-        <aside className="reviews-right">
+        <aside ref={panelRef} className="reviews-right">
           <div className="panel-main">
             <div className="panel-eyebrow">
               <span>Why US Mechanical</span>
