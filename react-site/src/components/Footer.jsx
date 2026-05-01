@@ -5,6 +5,7 @@ import { Clock, Linkedin } from 'lucide-react'
 import { client } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 import { openConsentBanner } from '../utils/openConsentBanner'
+import './Footer.css'
 
 // Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
 const FALLBACK_DATA = {
@@ -15,10 +16,10 @@ const FALLBACK_DATA = {
   footerCompanyDescription: 'Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction primarily throughout Utah & Nevada',
   businessHours: {
     days: 'Monday - Friday',
-    hours: '8:00 AM - 5:00 PM'
+    hours: '8:00 AM - 5:00 PM',
   },
   serviceArea: 'Serving Northern Utah',
-  footerBadge: 'Fully Licensed & Insured'
+  footerBadge: 'Fully Licensed & Insured',
 }
 
 function Footer() {
@@ -27,7 +28,6 @@ function Footer() {
   const location = useLocation()
 
   useEffect(() => {
-    // Fetch contact data - exclude drafts to ensure consistency
     client
       .fetch(
         `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
@@ -47,43 +47,33 @@ function Footer() {
         }
       }`
       )
-      .then(res => {
+      .then((res) => {
         setContactData(res)
-        if (!res) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
-          }
+        if (!res && process.env.NODE_ENV === 'development') {
+          console.warn('Footer: No contact data found in Sanity CMS. Using fallback data.')
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Footer: Failed to fetch contact data from Sanity:', err)
       })
   }, [])
 
-  // Use Sanity data if available, otherwise use fallback
   const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
-  
-  // For optional fields: only use fallback if Sanity failed to load, not if field is intentionally empty
-  const displayCompanyDescription = contactData 
+
+  const displayCompanyDescription = contactData
     ? (contactData.footerCompanyDescription ?? '')
     : FALLBACK_DATA.footerCompanyDescription
-  const displayBusinessHoursDays = contactData 
+  const displayBusinessHoursDays = contactData
     ? (contactData.businessHours?.days ?? '')
     : FALLBACK_DATA.businessHours.days
-  const displayBusinessHoursTime = contactData 
+  const displayBusinessHoursTime = contactData
     ? (contactData.businessHours?.hours ?? '')
     : FALLBACK_DATA.businessHours.hours
-  const displayServiceArea = contactData 
-    ? (contactData.serviceArea ?? '')
-    : FALLBACK_DATA.serviceArea
-  const displayFooterBadge = contactData 
-    ? (contactData.footerBadge ?? '')
-    : FALLBACK_DATA.footerBadge
+  const displayServiceArea = contactData ? (contactData.serviceArea ?? '') : FALLBACK_DATA.serviceArea
+  const displayFooterBadge = contactData ? (contactData.footerBadge ?? '') : FALLBACK_DATA.footerBadge
 
-  // Use favicon for footer logo
   const logoUrl = '/favicon.png'
 
-  // Handle navigation link clicks
   const handleNavClick = (sectionId) => {
     if (location.pathname !== '/') {
       navigate('/')
@@ -96,164 +86,124 @@ function Footer() {
   }
 
   return (
-    <footer className="bg-black text-gray-300">
-      {/* Main Footer Content */}
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* Column 1: Company Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">U.S. Mechanical LLC</h3>
-            {displayCompanyDescription && (
-              <p className="text-sm leading-relaxed">
-                {displayCompanyDescription}
-              </p>
-            )}
-          </div>
+    <footer className="site-footer-editorial">
+      <div className="site-footer-editorial__inner">
+        <div className="site-footer-editorial__main">
+          <div className="site-footer-editorial__grid">
+            <div className="site-footer-editorial__col site-footer-editorial__col--brand">
+              <h3 className="site-footer-editorial__brand-name">U.S. Mechanical LLC</h3>
+              {displayCompanyDescription && (
+                <p className="site-footer-editorial__brand-copy">{displayCompanyDescription}</p>
+              )}
+            </div>
 
-          {/* Column 2: About Us Navigation */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">About Us</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <button 
-                  onClick={() => handleNavClick('about')}
-                  className="transition-colors hover:text-white"
-                >
-                  About
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleNavClick('safety')}
-                  className="transition-colors hover:text-white"
-                >
-                  Safety & Risk Management
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleNavClick('careers')}
-                  className="transition-colors hover:text-white"
-                >
-                  Careers
-                </button>
-              </li>
-            </ul>
-          </div>
+            <div className="site-footer-editorial__col">
+              <h3 className="site-footer-editorial__col-heading">About Us</h3>
+              <ul className="site-footer-editorial__nav-list">
+                <li>
+                  <button type="button" onClick={() => handleNavClick('about')} className="site-footer-editorial__nav-btn">
+                    About
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => handleNavClick('safety')} className="site-footer-editorial__nav-btn">
+                    Safety & Risk Management
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => handleNavClick('careers')} className="site-footer-editorial__nav-btn">
+                    Careers
+                  </button>
+                </li>
+              </ul>
+            </div>
 
-          {/* Column 3: Services Navigation */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Services</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <button 
-                  onClick={() => handleNavClick('services')}
-                  className="transition-colors hover:text-white"
-                >
-                  Services
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleNavClick('portfolio')}
-                  className="transition-colors hover:text-white"
-                >
-                  Portfolio
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => handleNavClick('contact')}
-                  className="transition-colors hover:text-white"
-                >
-                  Contact Us
-                </button>
-              </li>
-            </ul>
-          </div>
+            <div className="site-footer-editorial__col">
+              <h3 className="site-footer-editorial__col-heading">Services</h3>
+              <ul className="site-footer-editorial__nav-list">
+                <li>
+                  <button type="button" onClick={() => handleNavClick('services')} className="site-footer-editorial__nav-btn">
+                    Services
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => handleNavClick('portfolio')} className="site-footer-editorial__nav-btn">
+                    Portfolio
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => handleNavClick('contact')} className="site-footer-editorial__nav-btn">
+                    Contact Us
+                  </button>
+                </li>
+              </ul>
+            </div>
 
-          {/* Column 4: Business Hours & Social Media */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Business Hours</h3>
-            {(displayBusinessHoursDays || displayBusinessHoursTime) && (
-              <div className="flex items-start gap-2 text-sm">
-                <Clock className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <div>
-                  {displayBusinessHoursDays && (
-                    <p className="font-medium text-white">{displayBusinessHoursDays}</p>
-                  )}
-                  {displayBusinessHoursTime && (
-                    <p>{displayBusinessHoursTime}</p>
-                  )}
+            <div className="site-footer-editorial__col">
+              <h3 className="site-footer-editorial__col-heading">Business Hours</h3>
+              {(displayBusinessHoursDays || displayBusinessHoursTime) && (
+                <div className="site-footer-editorial__hours">
+                  <Clock className="site-footer-editorial__hours-icon h-4 w-4" aria-hidden />
+                  <div>
+                    {displayBusinessHoursDays && (
+                      <p className="site-footer-editorial__hours-days">{displayBusinessHoursDays}</p>
+                    )}
+                    {displayBusinessHoursTime && (
+                      <p className="site-footer-editorial__hours-time">{displayBusinessHoursTime}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {/* Social Media */}
-            <div className="pt-2">
-              <h4 className="text-sm font-semibold text-white mb-2">Follow Us</h4>
-              <div className="flex gap-3">
-                <a 
-                  href="https://www.linkedin.com/company/usmechanicalllc/?viewAsMember=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-gray-300 transition-all hover:bg-[#0A66C2] hover:text-white"
-                  aria-label="Follow us on LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a>
-              </div>
+              )}
+              <p className="site-footer-editorial__social-heading">Follow Us</p>
+              <a
+                href="https://www.linkedin.com/company/usmechanicalllc/?viewAsMember=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="site-footer-editorial__social-link"
+                aria-label="Follow us on LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800 bg-black">
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex items-center gap-2">
+        <div className="site-footer-editorial__bar">
+          <div className="site-footer-editorial__bar-row">
+            <div className="site-footer-editorial__bar-left">
+              <div className="site-footer-editorial__bar-brand">
                 <img src={logoUrl} alt="US Mechanical" className="h-6 w-auto object-contain" width={96} height={24} loading="lazy" decoding="async" />
-                <p className="text-sm">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
+                <p className="site-footer-editorial__bar-copy">© {new Date().getFullYear()} U.S. Mechanical LLC</p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Link to="/privacy" className="transition-colors hover:text-white">
-                  Privacy Policy
-                </Link>
+              <div className="site-footer-editorial__bar-links">
+                <Link to="/privacy">Privacy Policy</Link>
                 <span aria-hidden="true">·</span>
-                <Link to="/terms" className="transition-colors hover:text-white">
-                  Terms of Service
-                </Link>
+                <Link to="/terms">Terms of Service</Link>
                 <span aria-hidden="true">·</span>
-                <Link to="/attributions" className="transition-colors hover:text-white">
-                  Attributions
-                </Link>
+                <Link to="/attributions">Attributions</Link>
                 <span aria-hidden="true">·</span>
-                <button
-                  type="button"
-                  onClick={openConsentBanner}
-                  className="transition-colors hover:text-white"
-                  aria-label="Open cookie preferences to change your choice"
-                >
+                <button type="button" onClick={openConsentBanner} aria-label="Open cookie preferences to change your choice">
                   Cookie preferences
                 </button>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2 text-sm md:flex-row md:gap-4">
-              {displayLicense && (
-                <span className="text-gray-400">{displayLicense}</span>
-              )}
+            <div className="site-footer-editorial__bar-meta">
+              {displayLicense && <span className="site-footer-editorial__bar-license">{displayLicense}</span>}
               {displayFooterBadge && (
-                // Solid accent red (matches Why Us / icon red-500). Lighter red-400
-                // reads softer on black; red-500 is the “full” brand red on this site.
-                <span className="font-medium text-red-500">{displayFooterBadge}</span>
-              )}
-              {displayFooterBadge && displayServiceArea && (
-                <span className="text-gray-400">•</span>
+                <>
+                  {displayLicense ? <span className="site-footer-editorial__bar-dot" aria-hidden>·</span> : null}
+                  <span className="site-footer-editorial__bar-badge">{displayFooterBadge}</span>
+                </>
               )}
               {displayServiceArea && (
-                <span className="text-gray-400">{displayServiceArea}</span>
+                <>
+                  {(displayLicense || displayFooterBadge) ? (
+                    <span className="site-footer-editorial__bar-dot" aria-hidden>
+                      ·
+                    </span>
+                  ) : null}
+                  <span className="site-footer-editorial__bar-area">{displayServiceArea}</span>
+                </>
               )}
             </div>
           </div>
