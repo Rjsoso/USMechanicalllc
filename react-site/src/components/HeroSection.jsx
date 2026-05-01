@@ -80,7 +80,7 @@ function HeroSection() {
       }}
     >
       {/* One centered column: title + subtext + CTAs stay visually grouped */}
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 pt-14 pb-6 md:gap-4 md:pt-16">
+      <div className="mt-[25px] flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 pt-14 pb-6 md:gap-4 md:pt-16">
         <motion.h1
           className="hero-3d-text mb-0 max-w-5xl"
           data-text={heroData.headline}
