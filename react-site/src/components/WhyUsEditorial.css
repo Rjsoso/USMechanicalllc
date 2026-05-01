@@ -160,10 +160,10 @@
 .why-us-editorial .reviews-right {
   --why-panel-h: max(min(88vh, 760px), 420px);
   /*
-    Pull the sticky pin upward so the black panel clears the bottom of the screen.
-    For position:sticky, a *smaller* `top` value moves the box up when pinned.
+    Extra offset when sticky is “locked” (pinned): negative = move the panel up.
+    Tuned vs. centered slack; capped by max(..., site-header-offset) so it won’t tuck under the nav.
   */
-  --why-panel-top-pull: -20px;
+  --why-panel-top-pull: -45px;
   position: sticky;
   /*
     Vertically center the sticky panel below the fixed nav.
