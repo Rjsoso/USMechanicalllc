@@ -446,18 +446,28 @@ section#contact > div[class*='absolute'] {
   position: relative;
 }
 
-.hero-headline-bulk {
-  margin-bottom: 0;
+/* Hero headline — stacked lines so vertical rhythm is even (no huge margin after word 1) */
+.hero-headline-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.22em, 1.5vw, 0.48em);
+  text-align: center;
 }
 
-.hero-headline-lead {
-  display: inline;
+.hero-headline-line {
+  display: block;
+  line-height: 1.06;
 }
 
-/* Second beat (“since 1963”) — keeps script + year on one line */
-.hero-headline-tail {
+/* Script + year row — cancel inherited uppercase from .hero-3d-text */
+.hero-headline-line--since {
+  text-transform: none;
+  line-height: 1.15;
+}
+
+.hero-headline-rest {
   display: inline;
-  white-space: normal;
 }
 
 .hero-since-year {

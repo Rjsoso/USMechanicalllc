@@ -106,28 +106,26 @@ function HeroSection() {
               const lead = match[1].trim()
               const leadWords = lead.split(/\s+/).filter(Boolean)
               const leadFirst = leadWords[0] ?? lead
-              const leadRest = leadWords.slice(1).join(' ')
+              const restWords = leadWords.slice(1)
 
               return (
-                <>
-                  <span className="hero-headline-lead">{leadFirst}</span>
-                  <span className="hero-headline-bulk mt-8 block md:mt-10">
-                    {leadRest ? (
-                      <>
-                        <span className="inline">{leadRest}</span>{' '}
-                      </>
-                    ) : null}
-                    <span className="hero-headline-tail inline">
-                      <span className="hero-since-year">
-                        <span className="hero-since">{match[2]}</span>{' '}
-                        <span className="hero-1963" style={{ color: yearColor }}>
-                          {match[3]}
-                        </span>
-                      </span>
-                      {match[4]}
+                <span className="hero-headline-stack">
+                  <span className="hero-headline-line">{leadFirst}</span>
+                  {restWords.map((w, i) => (
+                    <span key={`${w}-${i}`} className="hero-headline-line">
+                      {w}
                     </span>
+                  ))}
+                  <span className="hero-headline-line hero-headline-line--since">
+                    <span className="hero-since-year">
+                      <span className="hero-since">{match[2]}</span>{' '}
+                      <span className="hero-1963" style={{ color: yearColor }}>
+                        {match[3]}
+                      </span>
+                    </span>
+                    {match[4] ? <span className="hero-headline-rest">{match[4]}</span> : null}
                   </span>
-                </>
+                </span>
               )
             }
 
