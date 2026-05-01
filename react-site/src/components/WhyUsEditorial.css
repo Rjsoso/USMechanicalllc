@@ -158,9 +158,16 @@
 }
 
 .why-us-editorial .reviews-right {
+  --why-panel-h: max(min(88vh, 760px), 420px);
   position: sticky;
-  top: 0;
-  height: min(88vh, 760px);
+  /*
+    Vertically center the sticky panel in the viewport below the fixed nav:
+    gap under nav ≈ gap above bottom of screen (when the panel is shorter than that space).
+  */
+  top: calc(
+    var(--site-header-offset) + max(0px, (100vh - var(--site-header-offset) - var(--why-panel-h)) / 2)
+  );
+  height: var(--why-panel-h);
   min-height: 420px;
   background: var(--why-bg-panel);
   color: var(--why-fg-panel);

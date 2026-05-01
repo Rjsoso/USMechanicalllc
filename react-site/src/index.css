@@ -117,6 +117,14 @@ html {
 :root {
   --font-ui: 'DM Sans', system-ui, sans-serif;
   --font-display: 'Instrument Serif', Georgia, serif;
+  /* Match html scroll-padding-top — used for sticky panels clearing fixed header */
+  --site-header-offset: 180px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --site-header-offset: 96px;
+  }
 }
 
 /* Additional body properties (background and font smoothing already set above) */
