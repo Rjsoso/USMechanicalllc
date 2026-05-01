@@ -1,18 +1,18 @@
-/* Homepage Services — editorial language aligned with Why Us Mechanical */
+/* Homepage Services — dark canvas, editorial typography */
 
 .services-editorial {
-  --sv-ink: #111111;
-  --sv-ink-mid: #555555;
-  --sv-ink-light: #999999;
-  --sv-rule: #d8d5d0;
-  --sv-bg: #f7f6f3;
+  --sv-ink: #ffffff;
+  --sv-ink-mid: rgba(255, 255, 255, 0.72);
+  --sv-ink-light: rgba(255, 255, 255, 0.42);
+  --sv-rule: rgba(255, 255, 255, 0.14);
+  --sv-bg: #000000;
   --sv-panel: #111111;
   --sv-panel-fg: #f7f6f3;
   --sv-font-serif: 'Instrument Serif', Georgia, serif;
   --sv-font-sans: 'DM Sans', system-ui, sans-serif;
   font-family: var(--sv-font-sans);
   background: var(--sv-bg);
-  color: var(--sv-ink);
+  color: var(--sv-ink-mid);
   font-size: 16px;
   line-height: 1.6;
   contain: none;
