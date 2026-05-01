@@ -139,7 +139,8 @@ function WhyUsSection() {
     }
 
     const nav = document.querySelector('.desktop-nav')
-    if (!nav || nav.offsetParent === null) {
+    // Fixed-position elements have offsetParent === null; never use that to test visibility.
+    if (!nav || getComputedStyle(nav).display === 'none') {
       setPinnedTop(null)
       section.style.removeProperty('--why-sticky-top-pinned')
       section.style.removeProperty('--why-panel-fit-cap')
