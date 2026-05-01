@@ -1,6 +1,12 @@
 import { useEffect, useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
-import { urlFor, buildSanitySrcSet } from '../utils/sanity'
+import {
+  urlFor,
+  buildSanitySrcSet,
+  ABOUT_CAROUSEL_FALLBACK_W,
+  ABOUT_CAROUSEL_QUALITY,
+  ABOUT_CAROUSEL_SRC_WIDTHS,
+} from '../utils/sanity'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { PortableText } from '@portabletext/react'
 import Header from '../components/Header'
@@ -76,8 +82,12 @@ function About() {
           photo.asset.url ||
           (photo.asset && urlFor(photo)?.url()?.split('?')[0]) ||
           ''
-        const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
-        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000])
+        const imageUrl = baseUrl
+          ? `${baseUrl}?w=${ABOUT_CAROUSEL_FALLBACK_W}&q=${ABOUT_CAROUSEL_QUALITY}&auto=format`
+          : ''
+        const srcSet = buildSanitySrcSet(baseUrl, ABOUT_CAROUSEL_SRC_WIDTHS, {
+          quality: ABOUT_CAROUSEL_QUALITY,
+        })
         return {
           id: `about-photo-${index}`,
           src: imageUrl,

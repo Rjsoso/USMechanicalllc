@@ -1,5 +1,11 @@
 import { useEffect, useState, useMemo, memo } from 'react'
-import { urlFor, buildSanitySrcSet } from '../utils/sanity'
+import {
+  urlFor,
+  buildSanitySrcSet,
+  ABOUT_CAROUSEL_FALLBACK_W,
+  ABOUT_CAROUSEL_QUALITY,
+  ABOUT_CAROUSEL_SRC_WIDTHS,
+} from '../utils/sanity'
 import { useSanityLive } from '../hooks/useSanityLive'
 import { PortableText } from '@portabletext/react'
 import { debounce } from '../utils/debounce'
@@ -89,16 +95,17 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
           photo.asset.url ||
           (photo.asset && urlFor(photo)?.url()?.split('?')[0]) ||
           ''
-        // Default src stays at 800 for older browsers; srcSet covers the
-        // modern range so mobile doesn't pull a 1200w image for a 360px slot.
-        const imageUrl = baseUrl ? `${baseUrl}?w=800&q=75&auto=format` : ''
-        const srcSet = buildSanitySrcSet(baseUrl, [400, 640, 800, 1000])
+        const imageUrl = baseUrl
+          ? `${baseUrl}?w=${ABOUT_CAROUSEL_FALLBACK_W}&q=${ABOUT_CAROUSEL_QUALITY}&auto=format`
+          : ''
+        const srcSet = buildSanitySrcSet(baseUrl, ABOUT_CAROUSEL_SRC_WIDTHS, {
+          quality: ABOUT_CAROUSEL_QUALITY,
+        })
         return {
           id: `about-photo-${index}`,
           src: imageUrl,
           srcSet,
-          // Carousel renders ~100vw on mobile, ~60vw on tablets, and ~900px
-          // on desktop (inside the 75% split container). Max srcSet is 1000w.
+          // Carousel ~100vw mobile / ~60vw tablet / ~900px desktop — srcSet up to 1920w for 2× DPI.
           sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 900px',
           alt: photo.alt || `About US Mechanical ${index + 1}`,
           caption: photo.caption || null,
