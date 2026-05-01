@@ -159,19 +159,26 @@
 
 .why-us-editorial .reviews-right {
   --why-panel-h: max(min(88vh, 760px), 420px);
-  /* Shift sticky pin slightly upward (~20px) so the panel clears the bottom of the viewport. */
-  --why-panel-sticky-nudge: 20px;
+  /*
+    Pull the sticky pin upward so the black panel clears the bottom of the screen.
+    For position:sticky, a *smaller* `top` value moves the box up when pinned.
+  */
+  --why-panel-top-pull: -20px;
   position: sticky;
   /*
-    Vertically center the sticky panel in the viewport below the fixed nav:
-    gap under nav ≈ gap above bottom of screen (when the panel is shorter than that space).
+    Vertically center the sticky panel below the fixed nav.
+    Use min(100vh, 100dvh) so we don't reserve space for the hidden mobile URL bar
+    (100vh alone can be taller than the visible viewport and pushes this panel down).
   */
   top: max(
     var(--site-header-offset),
     calc(
       var(--site-header-offset) +
-      max(0px, (100vh - var(--site-header-offset) - var(--why-panel-h)) / 2) -
-      var(--why-panel-sticky-nudge)
+      max(
+        0px,
+        (min(100vh, 100dvh) - var(--site-header-offset) - var(--why-panel-h)) / 2
+      ) +
+      var(--why-panel-top-pull)
     )
   );
   height: var(--why-panel-h);
