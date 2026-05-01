@@ -9,11 +9,12 @@ export const viewportPreset = {
 }
 
 /**
- * Scroll-in sections: a bit more of the block must be visible, with a small bottom
- * inset so the motion starts slightly later in the scroll (easier to notice).
+ * Scroll-in sections: trigger a bit earlier than center-view so motion reads responsive,
+ * with a modest bottom inset so content doesn’t animate before it’s meaningfully on-screen.
  */
 export const viewportScrollPreset = {
   once: true,
-  amount: 0.22,
-  margin: '0px 0px -7% 0px',
+  amount: 0.18,
+  /* Slightly earlier trigger + less bottom inset = snappier scroll-in without waiting */
+  margin: '0px 0px -4% 0px',
 }

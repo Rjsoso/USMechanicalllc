@@ -13,11 +13,25 @@ function Header() {
   const location = useLocation()
 
   useEffect(() => {
+    let raf = 0
+    let lastScrolled = window.scrollY > 80
     const onScroll = () => {
-      setScrolled(window.scrollY > 80)
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const next = window.scrollY > 80
+        if (next !== lastScrolled) {
+          lastScrolled = next
+          setScrolled(next)
+        }
+      })
     }
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   // Fetch logo from Sanity headerSection

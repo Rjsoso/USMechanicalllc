@@ -5,21 +5,21 @@ const StaggerIntensityContext = createContext('default')
 
 const ITEM_VARIANTS = {
   default: {
-    hidden: { opacity: 0, y: 36, scale: 0.96 },
+    hidden: { opacity: 0, y: 22, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.58, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] },
     },
   },
   strong: {
-    hidden: { opacity: 0, y: 56, scale: 0.9 },
+    hidden: { opacity: 0, y: 32, scale: 0.96 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.52, ease: [0.16, 1, 0.3, 1] },
     },
   },
 }
@@ -34,7 +34,7 @@ export const StaggerContainer = memo(function StaggerContainer({
   once = true,
 }) {
   const staggerDelay =
-    staggerDelayProp ?? (intensity === 'strong' ? 0.16 : 0.11)
+    staggerDelayProp ?? (intensity === 'strong' ? 0.09 : 0.07)
 
   const variants = useMemo(
     () => ({

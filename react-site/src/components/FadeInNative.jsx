@@ -23,9 +23,8 @@ function FadeInNative({ children, delay = 0, className = '' }) {
         }
       },
       {
-        /* Start a bit later: element must enter further into the frame (less “blink and done”). */
         threshold: 0.1,
-        rootMargin: '0px 0px -6% 0px',
+        rootMargin: '0px 0px -4% 0px',
       }
     )
 

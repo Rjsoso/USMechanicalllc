@@ -84,12 +84,12 @@ function HeroSection() {
         <motion.h1
           className="hero-3d-text mb-0 max-w-5xl"
           data-text={heroData.headline}
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 24 }}
           transition={{
-            duration: 0.8,
+            duration: 0.52,
             ease: [0.25, 0.1, 0.25, 1],
-            delay: 0.3,
+            delay: 0.12,
           }}
           style={{ willChange: 'transform, opacity' }}
         >
@@ -142,7 +142,7 @@ function HeroSection() {
               style={{ marginBottom: '0px' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.36, delay: 0.06 }}
             >
             {heroData.subtext}
           </motion.p>
@@ -153,9 +153,9 @@ function HeroSection() {
           (heroData.secondButtonText && heroData.secondButtonText.trim() !== '')) && (
           <motion.div
             className="flex flex-col gap-4 sm:flex-row sm:justify-center"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.42, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
           >
             {heroData.buttonText && heroData.buttonText.trim() !== '' && (
               <button
