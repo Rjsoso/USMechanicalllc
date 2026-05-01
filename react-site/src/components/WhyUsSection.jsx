@@ -67,23 +67,6 @@ function italicizeLastWord(phrase) {
   return { plain: p.slice(0, i), italic: p.slice(i + 1) }
 }
 
-const REVIEW_META = [
-  { name: 'Jordan M.', role: 'Senior PM, healthcare GC', date: 'Jan 2025' },
-  { name: 'Alicia R.', role: 'Preconstruction Director', date: 'Mar 2025' },
-  { name: 'Devon T.', role: 'Owner Representative', date: 'Oct 2024' },
-  { name: 'Chris P.', role: 'Construction Manager', date: 'Aug 2024' },
-]
-
-function RatingPips({ filled = 5, total = 5 }) {
-  return (
-    <div className="review-rating" role="img" aria-label={`${filled} out of ${total} stars`}>
-      {Array.from({ length: total }, (_, i) => (
-        <span key={String(i)} className={i < filled ? 'pip' : 'pip empty'} aria-hidden={true} />
-      ))}
-    </div>
-  )
-}
-
 const STATS = [
   { number: '60+', label: 'Years serving' },
   { number: '5', label: 'Licensed states' },
@@ -232,28 +215,19 @@ function WhyUsSection() {
       <div className="reviews-inner">
         <div className="reviews-left">
           <div className="section-label">
-            <span>Trusted on complex work</span>
+            <span>What defines us</span>
           </div>
           {displayData.items.map((item, index) => {
-            const meta = REVIEW_META[index % REVIEW_META.length]
-            const serviceTag = item.icon ? EYEBROW_BY_ICON[item.icon] : 'Partnership'
+            const themeTag = item.icon ? EYEBROW_BY_ICON[item.icon] : 'Partnership'
 
             return (
               <article
                 key={item.title || String(index)}
-                className="review-entry"
+                className="review-entry why-us-point"
               >
-                <div className="review-meta">
-                  <div>
-                    <span className="reviewer-name">{meta.name}</span>
-                    <span className="review-role">{meta.role}</span>
-                  </div>
-                  <span className="review-date">{meta.date}</span>
-                </div>
-                <RatingPips filled={index % 5 === 2 ? 4 : 5} />
-                <h3 className="review-title">&ldquo;{item.title}&rdquo;</h3>
+                <span className="why-us-point__theme">{themeTag}</span>
+                <h3 className="review-title">{item.title}</h3>
                 <p className="review-body">{item.description}</p>
-                <span className="review-service">{serviceTag}</span>
               </article>
             )
           })}
