@@ -88,14 +88,6 @@
     <priority>0.5</priority>
   </url>
 
-  <!-- Attributions Page -->
-  <url>
-    <loc>https://www.usmechanicalllc.com/attributions</loc>
-    <lastmod>2026-04-24</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
   <!-- Service Pages -->
   <url>
     <loc>https://www.usmechanicalllc.com/services/plumbing%20services</loc>

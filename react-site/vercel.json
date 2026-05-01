@@ -18,8 +18,7 @@
     { "source": "/contact", "destination": "/index.html" },
     { "source": "/delivery-methods", "destination": "/index.html" },
     { "source": "/privacy", "destination": "/index.html" },
-    { "source": "/terms", "destination": "/index.html" },
-    { "source": "/attributions", "destination": "/index.html" }
+    { "source": "/terms", "destination": "/index.html" }
   ],
   "redirects": [
     { "source": "/contact.php", "destination": "/contact", "permanent": true },
@@ -40,7 +39,8 @@
     { "source": "/delivery-methods/", "destination": "/delivery-methods", "permanent": true },
     { "source": "/privacy/", "destination": "/privacy", "permanent": true },
     { "source": "/terms/", "destination": "/terms", "permanent": true },
-    { "source": "/attributions/", "destination": "/attributions", "permanent": true }
+    { "source": "/attributions", "destination": "/", "permanent": true },
+    { "source": "/attributions/", "destination": "/", "permanent": true }
   ],
   "headers": [
     {

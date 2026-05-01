@@ -180,8 +180,6 @@ function Footer() {
                 <span aria-hidden="true">·</span>
                 <Link to="/terms">Terms of Service</Link>
                 <span aria-hidden="true">·</span>
-                <Link to="/attributions">Attributions</Link>
-                <span aria-hidden="true">·</span>
                 <button type="button" onClick={openConsentBanner} aria-label="Open cookie preferences to change your choice">
                   Cookie preferences
                 </button>
