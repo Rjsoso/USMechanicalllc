@@ -14,6 +14,11 @@ const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
  */
 const MAP_BLOCK_HEIGHT = 'max(36rem, calc(100dvh - 5.5rem))'
 
+/** Matches `.site-footer-editorial` `--fe-bg` (Footer.css) so the map fade meets the footer flush. */
+const EDITORIAL_CHARCOAL = '#111111'
+
+const MAP_BOTTOM_FADE_GRADIENT = `linear-gradient(to bottom, transparent 0%, rgba(17,17,17,0.4) 30%, rgba(17,17,17,0.75) 60%, ${EDITORIAL_CHARCOAL} 100%)`
+
 /** Tab labels with state; falls back to Sanity `locationName` */
 const OFFICE_TAB_LABEL = {
   'pleasant grove': 'Pleasant Grove, Utah',
@@ -54,7 +59,8 @@ function ContactMapSection() {
     return (
       <section
         id="contact"
-        className="scroll-mt-[5.5rem] bg-black"
+        className="scroll-mt-[5.5rem]"
+        style={{ backgroundColor: EDITORIAL_CHARCOAL }}
         aria-label="Contact"
       >
         <div
@@ -70,8 +76,9 @@ function ContactMapSection() {
   return (
     <section
       id="contact"
-        className="scroll-mt-[5.5rem] bg-black"
-        aria-label="Contact locations"
+      className="scroll-mt-[5.5rem]"
+      style={{ backgroundColor: EDITORIAL_CHARCOAL }}
+      aria-label="Contact locations"
     >
       <div className="w-full">
         {offices && offices.length > 0 ? (
@@ -143,7 +150,7 @@ function ContactMapSection() {
 
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
-              style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.75) 60%, black 100%)' }}
+              style={{ background: MAP_BOTTOM_FADE_GRADIENT }}
               aria-hidden
             />
           </div>
@@ -157,7 +164,7 @@ function ContactMapSection() {
             </div>
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
-              style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.75) 60%, black 100%)' }}
+              style={{ background: MAP_BOTTOM_FADE_GRADIENT }}
               aria-hidden
             />
           </div>
@@ -165,7 +172,10 @@ function ContactMapSection() {
       </div>
 
       {activeOffice && affiliates && affiliates.length > 0 && (
-        <div className="bg-black px-4 py-5 md:px-8 md:py-6">
+        <div
+          className="px-4 py-5 md:px-8 md:py-6"
+          style={{ backgroundColor: EDITORIAL_CHARCOAL }}
+        >
           <div className="mx-auto flex max-w-6xl flex-col gap-5">
             {affiliates.map((affiliate, i) => {
               const segments = affiliateDescriptionSegments(affiliate.description)
