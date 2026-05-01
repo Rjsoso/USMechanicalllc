@@ -167,12 +167,13 @@
   padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 52px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 40px);
   overflow: hidden;
 }
 
 .why-us-editorial .panel-main {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
 }
 
@@ -270,76 +271,13 @@
 }
 
 .why-us-editorial .panel-license {
-  margin-top: 32px;
+  margin-top: 0;
+  flex-shrink: 0;
   font-size: 11px;
   letter-spacing: 0.06em;
   color: rgba(247, 246, 243, 0.35);
   line-height: 1.55;
   max-width: 280px;
-}
-
-/* Desktop: panel starts centered above testimonials; docks to sticky sidebar after scrolling into the section. */
-@media (min-width: 901px) {
-  .why-us-editorial.why-us-panel-hero .reviews-inner {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    justify-items: stretch;
-  }
-
-  .why-us-editorial.why-us-panel-hero .reviews-left {
-    grid-column: 1;
-    grid-row: 2;
-    border-right: none;
-    padding-top: clamp(32px, 5vw, 56px);
-  }
-
-  .why-us-editorial.why-us-panel-hero .reviews-right {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: center;
-    position: relative;
-    top: auto;
-    width: min(min(460px, 34vw), calc(100vw - 2 * clamp(16px, 4vw, 64px)));
-    max-width: min(520px, 100%);
-    height: auto;
-    min-height: min(88vh, 760px);
-    box-sizing: border-box;
-    align-items: center;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-desc,
-  .why-us-editorial.why-us-panel-hero .panel-license {
-    max-width: 340px;
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-eyebrow {
-    justify-content: center;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-eyebrow::before {
-    display: none;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-headline {
-    text-align: center;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-stats {
-    margin-inline: auto;
-    max-width: 380px;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .why-us-editorial.why-us-panel-hero .panel-cta {
-    align-self: center;
-  }
 }
 
 @media (max-width: 900px) {
@@ -361,5 +299,11 @@
     top: auto;
     border-left: none;
     border-top: 1px solid rgba(247, 246, 243, 0.12);
+    justify-content: flex-start;
+    gap: 32px;
+  }
+
+  .why-us-editorial .panel-license {
+    margin-top: 0;
   }
 }
