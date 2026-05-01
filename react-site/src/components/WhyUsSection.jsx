@@ -91,6 +91,9 @@ const STATS = [
   { number: '1963', label: 'Year founded' },
 ]
 
+/** Optical / layout tweak when sticky is pinned (smaller `top` = panel moves up). */
+const PINNED_PANEL_NUDGE_UP_PX = 30
+
 function WhyUsSection() {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
     listenFilter: `*[_type == "whyUs"]`,
@@ -136,10 +139,12 @@ function WhyUsSection() {
     }
 
     const navBottom = nav.getBoundingClientRect().bottom
-    const vh = window.innerHeight
-    const panelH = panel.getBoundingClientRect().height
+    const vh = window.visualViewport?.height ?? window.innerHeight
+    const panelH = panel.offsetHeight
     const slack = vh - navBottom - panelH
-    const topPx = slack > 0 ? navBottom + slack / 2 : navBottom
+    let topPx = slack > 0 ? navBottom + slack / 2 : navBottom
+    topPx -= PINNED_PANEL_NUDGE_UP_PX
+    topPx = Math.max(navBottom, topPx)
 
     section.style.setProperty('--why-sticky-top-pinned', `${Math.round(topPx * 1000) / 1000}px`)
   }, [])
@@ -165,6 +170,11 @@ function WhyUsSection() {
 
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
+    const vv = window.visualViewport
+    if (vv) {
+      vv.addEventListener('resize', schedule)
+      vv.addEventListener('scroll', schedule)
+    }
 
     const mq = window.matchMedia('(min-width: 901px)')
     mq.addEventListener('change', schedule)
@@ -173,6 +183,10 @@ function WhyUsSection() {
       ro.disconnect()
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
+      if (vv) {
+        vv.removeEventListener('resize', schedule)
+        vv.removeEventListener('scroll', schedule)
+      }
       mq.removeEventListener('change', schedule)
       if (raf) cancelAnimationFrame(raf)
       sectionRef.current?.style.removeProperty('--why-sticky-top-pinned')
