@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react'
+import { useMemo, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSanityLive } from '../hooks/useSanityLive'
 import './WhyUsEditorial.css'
@@ -91,6 +91,9 @@ const STATS = [
   { number: '1963', label: 'Year founded' },
 ]
 
+/** Pixels the section top must move above the viewport before the panel docks to the sidebar. */
+const DOCK_SCROLL_PX = 80
+
 function WhyUsSection() {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
     listenFilter: `*[_type == "whyUs"]`,
@@ -116,10 +119,55 @@ function WhyUsSection() {
 
   const headline = italicizeLastWord(displayData.sectionTitle)
 
+  const sectionRef = useRef(null)
+  const [panelHeroLayout, setPanelHeroLayout] = useState(true)
+
+  const syncPanelLayout = useCallback(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const desktop = window.matchMedia('(min-width: 901px)').matches
+    if (!desktop) {
+      setPanelHeroLayout(false)
+      return
+    }
+
+    const rect = section.getBoundingClientRect()
+    const scrolledPastSectionTop = -rect.top
+    setPanelHeroLayout(scrolledPastSectionTop < DOCK_SCROLL_PX)
+  }, [])
+
+  useEffect(() => {
+    syncPanelLayout()
+
+    let raf = 0
+    const onScrollOrResize = () => {
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        syncPanelLayout()
+      })
+    }
+
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize)
+
+    const mq = window.matchMedia('(min-width: 901px)')
+    mq.addEventListener('change', syncPanelLayout)
+
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
+      mq.removeEventListener('change', syncPanelLayout)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [syncPanelLayout])
+
   return (
     <section
+      ref={sectionRef}
       id="reviews-section"
-      className="why-us-editorial"
+      className={`why-us-editorial${panelHeroLayout ? ' why-us-panel-hero' : ''}`}
       aria-labelledby="why-us-heading"
       data-section="why-us"
     >
