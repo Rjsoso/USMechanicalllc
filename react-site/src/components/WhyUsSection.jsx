@@ -1,4 +1,4 @@
-import { useMemo, memo, useCallback, useLayoutEffect, useRef } from 'react'
+import { useMemo, memo, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSanityLive } from '../hooks/useSanityLive'
 import './WhyUsEditorial.css'
@@ -91,8 +91,11 @@ const STATS = [
   { number: '1963', label: 'Year founded' },
 ]
 
-/** Optical / layout tweak when sticky is pinned (smaller `top` = panel moves up). */
-const PINNED_PANEL_NUDGE_UP_PX = 30
+/**
+ * Minimum gap we keep between nav bottom + viewport bottom when fitting the panel.
+ * (Otherwise `88vh` panel height can exceed the real window height from JS APIs.)
+ */
+const STICKY_VIEWPORT_MARGIN_PX = 48
 
 function WhyUsSection() {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
@@ -121,6 +124,7 @@ function WhyUsSection() {
 
   const sectionRef = useRef(null)
   const panelRef = useRef(null)
+  const [pinnedTop, setPinnedTop] = useState(null)
 
   const syncPinnedStickyTop = useCallback(() => {
     const section = sectionRef.current
@@ -128,25 +132,55 @@ function WhyUsSection() {
     if (!section || !panel) return
 
     if (!window.matchMedia('(min-width: 901px)').matches) {
+      setPinnedTop(null)
       section.style.removeProperty('--why-sticky-top-pinned')
+      section.style.removeProperty('--why-panel-fit-cap')
       return
     }
 
     const nav = document.querySelector('.desktop-nav')
     if (!nav || nav.offsetParent === null) {
+      setPinnedTop(null)
       section.style.removeProperty('--why-sticky-top-pinned')
+      section.style.removeProperty('--why-panel-fit-cap')
       return
     }
 
-    const navBottom = nav.getBoundingClientRect().bottom
-    const vh = window.visualViewport?.height ?? window.innerHeight
-    const panelH = panel.offsetHeight
-    const slack = vh - navBottom - panelH
-    let topPx = slack > 0 ? navBottom + slack / 2 : navBottom
-    topPx -= PINNED_PANEL_NUDGE_UP_PX
-    topPx = Math.max(navBottom, topPx)
+    const innerH = window.innerHeight
 
-    section.style.setProperty('--why-sticky-top-pinned', `${Math.round(topPx * 1000) / 1000}px`)
+    const maxPanelH = Math.max(380, Math.floor(innerH - nav.getBoundingClientRect().bottom - STICKY_VIEWPORT_MARGIN_PX))
+    section.style.setProperty('--why-panel-fit-cap', `${maxPanelH}px`)
+
+    const applyCenteredTop = () => {
+      const nb = nav.getBoundingClientRect().bottom
+      const panelH = Math.ceil(panel.getBoundingClientRect().height)
+      const slack = innerH - nb - panelH
+      let topPx = slack > 0 ? nb + slack / 2 : nb
+      topPx = Math.max(nb, Math.round(topPx * 1000) / 1000)
+      const topStr = `${topPx}px`
+      setPinnedTop(topStr)
+      section.style.setProperty('--why-sticky-top-pinned', topStr)
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!sectionRef.current || !panelRef.current) return
+          const nb2 = nav.getBoundingClientRect().bottom
+          const br = panel.getBoundingClientRect()
+          const gapAbove = br.top - nb2
+          const gapBelow = innerH - br.bottom
+          if (gapBelow >= gapAbove - 8) return
+
+          const delta = (gapBelow - gapAbove) / 2
+          let adjTop = br.top + delta
+          adjTop = Math.max(nb2, adjTop)
+          const adjStr = `${Math.round(adjTop * 1000) / 1000}px`
+          setPinnedTop(adjStr)
+          section.style.setProperty('--why-sticky-top-pinned', adjStr)
+        })
+      })
+    }
+
+    requestAnimationFrame(applyCenteredTop)
   }, [])
 
   useLayoutEffect(() => {
@@ -170,11 +204,6 @@ function WhyUsSection() {
 
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
-    const vv = window.visualViewport
-    if (vv) {
-      vv.addEventListener('resize', schedule)
-      vv.addEventListener('scroll', schedule)
-    }
 
     const mq = window.matchMedia('(min-width: 901px)')
     mq.addEventListener('change', schedule)
@@ -183,13 +212,11 @@ function WhyUsSection() {
       ro.disconnect()
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
-      if (vv) {
-        vv.removeEventListener('resize', schedule)
-        vv.removeEventListener('scroll', schedule)
-      }
       mq.removeEventListener('change', schedule)
       if (raf) cancelAnimationFrame(raf)
+      setPinnedTop(null)
       sectionRef.current?.style.removeProperty('--why-sticky-top-pinned')
+      sectionRef.current?.style.removeProperty('--why-panel-fit-cap')
     }
   }, [syncPinnedStickyTop])
 
@@ -231,7 +258,7 @@ function WhyUsSection() {
           })}
         </div>
 
-        <aside ref={panelRef} className="reviews-right">
+        <aside ref={panelRef} className="reviews-right" style={pinnedTop ? { top: pinnedTop } : undefined}>
           <div className="panel-main">
             <div className="panel-eyebrow">
               <span>Why US Mechanical</span>

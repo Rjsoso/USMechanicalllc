@@ -176,7 +176,8 @@
       max(0px, (min(100vh, 100dvh) - var(--site-header-offset) - var(--why-panel-h)) / 2)
     )
   );
-  height: var(--why-panel-h);
+  /* Fit panel to real window height — JS sets --why-panel-fit-cap from innerHeight − nav. */
+  height: min(var(--why-panel-h), var(--why-panel-fit-cap, 5000px));
   min-height: 420px;
   background: var(--why-bg-panel);
   color: var(--why-fg-panel);
