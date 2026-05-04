@@ -26,8 +26,9 @@ const CarouselItem = memo(function CarouselItem({
     -index * trackItemOffset,
     -(index - 1) * trackItemOffset,
   ]
-  const outputRange = [90, 0, -90]
-  const rotateY = useTransform(x, range, outputRange, { clamp: false })
+  // 3D rotation + overflow:hidden clips letterboxed (object-contain) slides — keep slides flat when showing full photos.
+  const rotateOutput = imageFit === 'contain' ? [0, 0, 0] : [90, 0, -90]
+  const rotateY = useTransform(x, range, rotateOutput, { clamp: false })
 
   return (
     <motion.div
@@ -415,8 +416,12 @@ export default function Carousel({
           style={{
             display: 'flex',
             gap: `${GAP}px`,
-            perspective: 1000,
-            perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
+            ...(imageFit !== 'contain'
+              ? {
+                  perspective: 1000,
+                  perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
+                }
+              : {}),
             x,
           }}
           onDragEnd={handleDragEnd}

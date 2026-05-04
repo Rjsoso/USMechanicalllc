@@ -232,15 +232,16 @@ export default function CategoryDetail() {
                     className="group cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl"
                   >
                     {project.images && project.images.length > 0 && (
-                      <div className="relative flex h-56 w-full items-center justify-center overflow-hidden bg-gray-100">
+                      <div className="relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden bg-gray-100">
                         <img
                           src={urlFor(project.images[0])
-                            .width(600)
+                            .width(900)
+                            .fit('max')
                             .quality(85)
                             .auto('format')
                             .url()}
                           alt={project.images[0]?.alt || project.title}
-                          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                          className="max-h-full max-w-full object-contain transition-opacity duration-300 group-hover:opacity-95"
                           loading="lazy"
                           decoding="async"
                         />

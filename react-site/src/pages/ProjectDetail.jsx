@@ -60,10 +60,12 @@ export default function ProjectDetail() {
       .map((photo, index) => {
         if (!photo || !photo.asset) return null
         const imageUrl =
-          (photo.asset && urlFor(photo)?.width(800).quality(85).auto('format').url()) || ''
+          (photo.asset &&
+            urlFor(photo)?.width(800).fit('max').quality(85).auto('format').url()) ||
+          ''
         const srcSet = [400, 600, 800, 1200, 1600]
           .map((w) => {
-            const url = urlFor(photo).width(w).quality(85).auto('format').url()
+            const url = urlFor(photo).width(w).fit('max').quality(85).auto('format').url()
             return url ? `${url} ${w}w` : null
           })
           .filter(Boolean)
