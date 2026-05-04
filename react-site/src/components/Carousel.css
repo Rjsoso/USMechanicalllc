@@ -13,6 +13,8 @@
 .carousel-container {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
   border: none;
   border-radius: 24px;
   padding: 0;
@@ -28,7 +30,9 @@
 .carousel-track {
   display: flex;
   flex: 1 1 auto;
+  flex-wrap: nowrap;
   min-height: 0;
+  min-width: 0;
   width: 100%;
   align-items: stretch;
 }

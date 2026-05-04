@@ -108,8 +108,15 @@ export default function Carousel({
   const [measuredW, setMeasuredW] = useState(0)
 
   const itemWidth = useMemo(() => {
-    if (measuredW < 1) return baseWidth
-    return Math.max(MIN_SLIDE_WIDTH, Math.min(baseWidth, Math.floor(measuredW)))
+    if (measuredW >= 1) {
+      return Math.max(MIN_SLIDE_WIDTH, Math.min(baseWidth, Math.floor(measuredW)))
+    }
+    // Before ResizeObserver runs, clientWidth is unknown — using baseWidth (often 1100) makes each
+    // slide wider than the real column so translateX and slide indices disagree (overlapping slides).
+    const vw = typeof window === 'undefined' ? 1200 : window.innerWidth
+    const isNarrow = vw < 768
+    const guess = Math.floor(Math.min(baseWidth, vw * (isNarrow ? 0.94 : 0.72)))
+    return Math.max(MIN_SLIDE_WIDTH, guess)
   }, [measuredW, baseWidth])
 
   const trackItemOffset = itemWidth + GAP
