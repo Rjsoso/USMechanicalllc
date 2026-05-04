@@ -91,7 +91,8 @@
 
 .services-editorial__split {
   display: none;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, min(520px, 38vw));
+  /* Second column +60px vs min(520px, 38vw): moves the split left, keeps top/bottom/right aligned. */
+  grid-template-columns: minmax(0, 1fr) minmax(280px, min(580px, calc(38vw + 60px)));
   align-items: start;
   border-top: 1px solid var(--sv-rule);
   border-bottom: 1px solid var(--sv-rule);
