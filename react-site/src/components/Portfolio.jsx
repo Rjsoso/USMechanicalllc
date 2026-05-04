@@ -45,33 +45,33 @@ function Portfolio({ data: portfolioDataProp }) {
             <div key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
-                className="group relative cursor-pointer overflow-hidden bg-gray-200"
+                className="group relative cursor-pointer overflow-hidden bg-gray-100"
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               >
-                {/* Background Image */}
                 {category.image?.asset && (
-                  <img
-                    src={urlFor(category.image).width(800).quality(85).auto('format').url()}
-                    srcSet={[400, 600, 800, 1200, 1600]
-                      .map(
-                        (w) =>
-                          `${urlFor(category.image).width(w).quality(85).auto('format').url()} ${w}w`
-                      )
-                      .join(', ')}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    alt={category.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-200"
-                    loading="lazy"
-                    decoding="async"
-                    style={{ 
-                      opacity: loadedImages.has(category._id) ? 1 : 0,
-                      backgroundColor: '#e5e7eb'
-                    }}
-                    onLoad={(e) => {
-                      e.target.style.opacity = '1'
-                      setLoadedImages(prev => new Set(prev).add(category._id))
-                    }}
-                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <img
+                      src={urlFor(category.image).width(800).quality(85).auto('format').url()}
+                      srcSet={[400, 600, 800, 1200, 1600]
+                        .map(
+                          (w) =>
+                            `${urlFor(category.image).width(w).quality(85).auto('format').url()} ${w}w`
+                        )
+                        .join(', ')}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      alt={category.title}
+                      className="max-h-full max-w-full object-contain transition-opacity duration-200 transition-transform group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                      style={{
+                        opacity: loadedImages.has(category._id) ? 1 : 0,
+                      }}
+                      onLoad={(e) => {
+                        e.target.style.opacity = '1'
+                        setLoadedImages(prev => new Set(prev).add(category._id))
+                      }}
+                    />
+                  </div>
                 )}
 
                 {/* Hover Overlay with Text */}
