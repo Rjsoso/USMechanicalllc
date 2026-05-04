@@ -65,11 +65,23 @@
 
 .services-editorial__lead {
   margin: 0;
-  max-width: min(36rem, 100%);
-  font-size: clamp(18px, 1.65vw, 22px);
+  max-width: min(34rem, 100%);
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.75;
   color: var(--sv-ink-mid);
+}
+
+@media (min-width: 768px) {
+  .services-editorial__lead {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-editorial__lead {
+    font-size: 1.125rem;
+  }
 }
 
 .services-editorial__split {
