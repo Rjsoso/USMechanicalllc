@@ -70,29 +70,17 @@
 .services-editorial__lead {
   margin: 0;
   margin-inline-start: auto;
-  max-width: min(34rem, 100%);
-  font-size: 0.875rem;
+  max-width: min(36rem, 100%);
+  font-size: clamp(18px, 1.65vw, 22px);
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.65;
   color: var(--sv-ink-mid);
-}
-
-@media (min-width: 768px) {
-  .services-editorial__lead {
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .services-editorial__lead {
-    font-size: 1.125rem;
-  }
 }
 
 .services-editorial__split {
   display: none;
-  /* Second column +60px vs min(520px, 38vw): moves the split left, keeps top/bottom/right aligned. */
-  grid-template-columns: minmax(0, 1fr) minmax(280px, min(580px, calc(38vw + 60px)));
+  /* Preview column +120px vs original min(520px, 38vw); split moves left, top/bottom/right unchanged. */
+  grid-template-columns: minmax(0, 1fr) minmax(280px, min(640px, calc(38vw + 120px)));
   align-items: start;
   border-top: 1px solid var(--sv-rule);
   border-bottom: 1px solid var(--sv-rule);
