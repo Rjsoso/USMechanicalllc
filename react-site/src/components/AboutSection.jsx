@@ -104,17 +104,7 @@ function AboutSection({ data: aboutDataProp }) {
   return (
     <section id="about" className="relative z-0 overflow-hidden bg-black py-20 text-white">
       {carouselItems.length > 0 && (
-        <div
-          className="flex w-full flex-col items-stretch gap-0 md:flex-row"
-          style={
-            isMobile
-              ? {}
-              : {
-                  perspective: '1000px',
-                  isolation: 'isolate',
-                }
-          }
-        >
+        <div className="flex w-full flex-col items-stretch gap-0 md:flex-row">
           <div
             className={isMobile ? 'w-full' : 'overflow-hidden'}
             style={
@@ -126,7 +116,6 @@ function AboutSection({ data: aboutDataProp }) {
                     willChange: 'width',
                     backfaceVisibility: 'hidden',
                     WebkitFontSmoothing: 'antialiased',
-                    contain: 'layout style paint',
                   }
             }
           >

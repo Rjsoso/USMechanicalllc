@@ -111,12 +111,6 @@ export default function Carousel({
 
   const trackItemOffset = itemWidth + GAP
 
-  // Stable perspective origin at the visible container center — updating per `position` caused repaints/flicker on each slide change.
-  const perspectiveOriginX = useMemo(
-    () => (measuredW > 0 ? measuredW / 2 : itemWidth / 2),
-    [measuredW, itemWidth]
-  )
-
   useLayoutEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -469,7 +463,9 @@ export default function Carousel({
             ...(imageFit !== 'contain'
               ? {
                   perspective: 1000,
-                  perspectiveOrigin: `${perspectiveOriginX}px 50%`,
+                  // Pivot at the active slide’s center (track space)—required for correct 3D; a fixed center breaks sibling slide projection/overlap.
+                  perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
+                  transformStyle: 'preserve-3d',
                 }
               : {}),
             x,

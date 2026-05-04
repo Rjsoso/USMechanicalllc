@@ -179,17 +179,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
       <section id="about" className="relative z-0 overflow-hidden bg-black py-20 text-white">
         {/* ABOUT SECTION - Side-by-side carousel and text */}
         {carouselItems.length > 0 && (
-          <div
-            className="flex w-full flex-col items-stretch gap-0 md:flex-row"
-            style={
-              isMobile
-                ? {}
-                : {
-                    perspective: '1000px', // 3D acceleration context
-                    isolation: 'isolate', // Creates stacking context for GPU
-                  }
-            }
-          >
+          <div className="flex w-full flex-col items-stretch gap-0 md:flex-row">
             {/* Carousel container - slides left and shrinks when expanded */}
             <div
               className={isMobile ? 'w-full' : 'overflow-hidden'}
@@ -202,7 +192,6 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                       willChange: 'width',
                       backfaceVisibility: 'hidden',
                       WebkitFontSmoothing: 'antialiased',
-                      contain: 'layout style paint', // Isolate layout calculations
                     }
               }
             >
