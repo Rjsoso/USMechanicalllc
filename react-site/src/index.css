@@ -787,7 +787,10 @@ body {
    ============================================ */
 .fade-in-native {
   opacity: 0;
-  transform: translateY(14px);
+  /* translate3d + GPU hints reduce subpixel jitter vs translateY when children load mid-transition */
+  transform: translate3d(0, 14px, 0);
+  isolation: isolate;
+  backface-visibility: hidden;
   transition:
     opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -795,7 +798,7 @@ body {
 
 .fade-in-native--visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* Remove transition on reduced motion */

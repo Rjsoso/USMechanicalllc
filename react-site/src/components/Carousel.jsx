@@ -10,6 +10,37 @@ const GAP = 16
 const MIN_SLIDE_WIDTH = 200
 const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
+/** Isolated mount so `loaded` resets whenever `shouldLoad` toggles off/on. */
+const CarouselSlideImage = memo(function CarouselSlideImage({
+  item,
+  index,
+  imageFit,
+}) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  return (
+    <img
+      src={item?.src || ''}
+      srcSet={item?.srcSet || undefined}
+      sizes={item?.sizes || undefined}
+      alt={item?.alt || `Carousel image ${index + 1}`}
+      className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
+      loading={index <= 1 ? 'eager' : 'lazy'}
+      fetchPriority={index === 0 ? 'high' : 'auto'}
+      decoding={index === 0 ? 'sync' : 'async'}
+      style={{
+        opacity: imageLoaded ? 1 : 0,
+        transition: 'opacity 0.35s ease-out',
+      }}
+      onLoad={() => setImageLoaded(true)}
+      onError={e => {
+        e.target.style.opacity = '0.3'
+        e.target.alt = 'Image failed to load'
+      }}
+    />
+  )
+})
+
 const CarouselItem = memo(function CarouselItem({
   item,
   index,
@@ -44,20 +75,7 @@ const CarouselItem = memo(function CarouselItem({
     >
       <div className="carousel-item-image-container">
         {shouldLoad ? (
-          <img
-            src={item?.src || ''}
-            srcSet={item?.srcSet || undefined}
-            sizes={item?.sizes || undefined}
-            alt={item?.alt || `Carousel image ${index + 1}`}
-            className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
-            loading={index <= 1 ? 'eager' : 'lazy'}
-            fetchPriority={index === 0 ? 'high' : 'auto'}
-            decoding={index === 0 ? 'sync' : 'async'}
-            onError={e => {
-              e.target.style.opacity = '0.3'
-              e.target.alt = 'Image failed to load'
-            }}
-          />
+          <CarouselSlideImage item={item} index={index} imageFit={imageFit} />
         ) : (
           <div
             className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
@@ -92,6 +110,12 @@ export default function Carousel({
   }, [measuredW, baseWidth])
 
   const trackItemOffset = itemWidth + GAP
+
+  // Stable perspective origin at the visible container center — updating per `position` caused repaints/flicker on each slide change.
+  const perspectiveOriginX = useMemo(
+    () => (measuredW > 0 ? measuredW / 2 : itemWidth / 2),
+    [measuredW, itemWidth]
+  )
 
   useLayoutEffect(() => {
     const el = containerRef.current
@@ -138,6 +162,7 @@ export default function Carousel({
     })
     /* `trackItemOffset` intentionally omitted: resize must not reset slide; including it
      * made every width change jump back to the first clone in loop mode. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- trackItemOffset omitted so resize does not reset slide
   }, [items.length, loop, x])
 
   // Adjust position if it exceeds new array bounds (non-loop mode)
@@ -212,7 +237,9 @@ export default function Carousel({
   }
 
   const handleAnimationCompleteRef = useRef(handleAnimationComplete)
-  handleAnimationCompleteRef.current = handleAnimationComplete
+  useLayoutEffect(() => {
+    handleAnimationCompleteRef.current = handleAnimationComplete
+  })
 
   const prevPositionRef = useRef(position)
   const prevOffsetRef = useRef(trackItemOffset)
@@ -248,7 +275,30 @@ export default function Carousel({
     const resizeOnly = !posChanged && offChanged
 
     if (resizeOnly || isJumping) {
-      x.set(targetX)
+      if (slideAnimRef.current) {
+        slideAnimRef.current.stop()
+        slideAnimRef.current = null
+      }
+      if (isJumping) {
+        x.set(targetX)
+        return
+      }
+      // Resize-only: tween track position so slide width changes don't snap (visible "glitch").
+      const prefersReduced =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (prefersReduced) {
+        x.set(targetX)
+        return
+      }
+      slideAnimRef.current = animate(x, targetX, {
+        type: 'tween',
+        duration: 0.22,
+        ease: [0.22, 1, 0.36, 1],
+        onComplete: () => {
+          slideAnimRef.current = null
+        },
+      })
       return
     }
 
@@ -419,7 +469,7 @@ export default function Carousel({
             ...(imageFit !== 'contain'
               ? {
                   perspective: 1000,
-                  perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
+                  perspectiveOrigin: `${perspectiveOriginX}px 50%`,
                 }
               : {}),
             x,
