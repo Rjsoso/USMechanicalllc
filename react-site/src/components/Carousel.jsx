@@ -10,7 +10,17 @@ const GAP = 16
 const MIN_SLIDE_WIDTH = 200
 const SPRING_OPTIONS = { type: 'tween', duration: 0.4, ease: [0.16, 1, 0.3, 1] }
 
-const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition, shouldLoad }) {
+const CarouselItem = memo(function CarouselItem({
+  item,
+  index,
+  itemWidth,
+  round,
+  trackItemOffset,
+  x,
+  transition,
+  shouldLoad,
+  imageFit,
+}) {
   const range = [
     -(index + 1) * trackItemOffset,
     -index * trackItemOffset,
@@ -38,7 +48,7 @@ const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round,
             srcSet={item?.srcSet || undefined}
             sizes={item?.sizes || undefined}
             alt={item?.alt || `Carousel image ${index + 1}`}
-            className="carousel-item-image"
+            className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
             loading={index <= 1 ? 'eager' : 'lazy'}
             fetchPriority={index === 0 ? 'high' : 'auto'}
             decoding={index === 0 ? 'sync' : 'async'}
@@ -48,7 +58,10 @@ const CarouselItem = memo(function CarouselItem({ item, index, itemWidth, round,
             }}
           />
         ) : (
-          <div className="carousel-item-image" style={{ background: 'rgba(255,255,255,0.03)' }} />
+          <div
+            className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
+            style={{ background: 'rgba(255,255,255,0.03)' }}
+          />
         )}
         {shouldLoad && item.caption && <div className="carousel-item-caption">{item.caption}</div>}
       </div>
@@ -67,6 +80,7 @@ export default function Carousel({
   pauseOnHover = false,
   loop = false,
   round = false,
+  imageFit = 'cover',
 }) {
   const containerRef = useRef(null)
   const [measuredW, setMeasuredW] = useState(0)
@@ -418,6 +432,7 @@ export default function Carousel({
               x={x}
               transition={effectiveTransition}
               shouldLoad={Math.abs(index - position) <= 2}
+              imageFit={imageFit}
             />
           ))}
         </motion.div>

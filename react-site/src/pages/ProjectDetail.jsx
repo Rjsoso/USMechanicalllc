@@ -241,6 +241,7 @@ export default function ProjectDetail() {
                     pauseOnHover={true}
                     loop={true}
                     round={false}
+                    imageFit="contain"
                   />
                 </FadeInWhenVisible>
               </div>

@@ -73,6 +73,11 @@
   border-radius: 24px;
 }
 
+.carousel-item-image--contain {
+  object-fit: contain;
+  background-color: #f3f4f6;
+}
+
 .carousel-item-caption {
   position: absolute;
   bottom: 0;

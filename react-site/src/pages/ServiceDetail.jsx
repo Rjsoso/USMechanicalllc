@@ -270,12 +270,14 @@ export default function ServiceDetail() {
                     <Carousel
                       items={carouselItems}
                       baseWidth={550}
+                      containerClassName="h-[min(40svh,360px)] min-h-[260px] w-full md:h-[400px]"
                       compactNav={true}
                       autoplay={true}
                       autoplayDelay={4000}
                       pauseOnHover={true}
                       loop={true}
                       round={false}
+                      imageFit="contain"
                     />
                   </FadeInWhenVisible>
                 </div>
