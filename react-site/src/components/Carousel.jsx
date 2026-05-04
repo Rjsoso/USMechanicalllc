@@ -51,14 +51,15 @@ const CarouselItem = memo(function CarouselItem({
   transition,
   shouldLoad,
   imageFit,
+  flat,
 }) {
   const range = [
     -(index + 1) * trackItemOffset,
     -index * trackItemOffset,
     -(index - 1) * trackItemOffset,
   ]
-  // 3D rotation + overflow:hidden clips letterboxed (object-contain) slides — keep slides flat when showing full photos.
-  const rotateOutput = imageFit === 'contain' ? [0, 0, 0] : [90, 0, -90]
+  // 3D rotation only for cover + flat=false; contain/flat avoid rotateY (stable in split layouts).
+  const rotateOutput = flat || imageFit === 'contain' ? [0, 0, 0] : [90, 0, -90]
   const rotateY = useTransform(x, range, rotateOutput, { clamp: false })
 
   return (
@@ -100,6 +101,8 @@ export default function Carousel({
   loop = false,
   round = false,
   imageFit = 'cover',
+  /** 2D strip only: disables perspective + rotateY (fixes overlap in tight / animated-width layouts like About). */
+  flat = false,
 }) {
   const containerRef = useRef(null)
   const [measuredW, setMeasuredW] = useState(0)
@@ -110,6 +113,8 @@ export default function Carousel({
   }, [measuredW, baseWidth])
 
   const trackItemOffset = itemWidth + GAP
+
+  const use3DPerspective = !flat && imageFit !== 'contain'
 
   useLayoutEffect(() => {
     const el = containerRef.current
@@ -460,10 +465,10 @@ export default function Carousel({
           style={{
             display: 'flex',
             gap: `${GAP}px`,
-            ...(imageFit !== 'contain'
+            ...(use3DPerspective
               ? {
                   perspective: 1000,
-                  // Pivot at the active slide’s center (track space)—required for correct 3D; a fixed center breaks sibling slide projection/overlap.
+                  // Pivot at active slide center in track space (required for coverflow 3D).
                   perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
                   transformStyle: 'preserve-3d',
                 }
@@ -484,6 +489,7 @@ export default function Carousel({
               transition={effectiveTransition}
               shouldLoad={Math.abs(index - position) <= 2}
               imageFit={imageFit}
+              flat={flat}
             />
           ))}
         </motion.div>

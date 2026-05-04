@@ -207,6 +207,7 @@ function About() {
                   pauseOnHover={true}
                   loop={true}
                   round={false}
+                  flat
                 />
               </div>
 

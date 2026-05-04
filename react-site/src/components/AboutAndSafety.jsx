@@ -207,6 +207,7 @@ All of us at U.S. Mechanical rank safety with the highest degree of importance, 
                 pauseOnHover={true}
                 loop={true}
                 round={false}
+                flat
               />
             </div>
 

@@ -132,6 +132,7 @@ function AboutSection({ data: aboutDataProp }) {
                 pauseOnHover={true}
                 loop={true}
                 round={false}
+                flat
               />
             </FadeInNative>
           </div>
