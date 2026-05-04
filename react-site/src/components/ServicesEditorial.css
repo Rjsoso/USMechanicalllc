@@ -29,11 +29,15 @@
 
 .services-editorial__intro {
   margin-bottom: clamp(28px, 4vw, 44px);
+  margin-inline-start: auto;
+  max-width: min(36rem, 100%);
+  text-align: right;
 }
 
 .services-editorial__section-label {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
   margin-bottom: clamp(18px, 3vw, 28px);
 }
@@ -65,6 +69,7 @@
 
 .services-editorial__lead {
   margin: 0;
+  margin-inline-start: auto;
   max-width: min(34rem, 100%);
   font-size: 0.875rem;
   font-weight: 400;
