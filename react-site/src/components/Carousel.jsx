@@ -61,30 +61,51 @@ const CarouselItem = memo(function CarouselItem({
   // 3D rotation only for cover + flat=false; contain/flat avoid rotateY (stable in split layouts).
   const rotateOutput = flat || imageFit === 'contain' ? [0, 0, 0] : [90, 0, -90]
   const rotateY = useTransform(x, range, rotateOutput, { clamp: false })
+  const staticItem = flat || imageFit === 'contain'
+
+  const itemStyle = {
+    width: itemWidth,
+    height: round ? itemWidth : '100%',
+    ...(round && { borderRadius: '50%' }),
+  }
+
+  const inner = (
+    <div className="carousel-item-image-container">
+      {shouldLoad ? (
+        <CarouselSlideImage item={item} index={index} imageFit={imageFit} />
+      ) : (
+        <div
+          className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
+          style={{ background: 'rgba(255,255,255,0.03)' }}
+        />
+      )}
+      {shouldLoad && item.caption && <div className="carousel-item-caption">{item.caption}</div>}
+    </div>
+  )
+
+  if (staticItem) {
+    return (
+      <div
+        key={`${item?.id ?? index}-${index}`}
+        className={`carousel-item ${round ? 'round' : ''}`}
+        style={itemStyle}
+      >
+        {inner}
+      </div>
+    )
+  }
 
   return (
     <motion.div
       key={`${item?.id ?? index}-${index}`}
       className={`carousel-item ${round ? 'round' : ''}`}
       style={{
-        width: itemWidth,
-        height: round ? itemWidth : '100%',
+        ...itemStyle,
         rotateY: rotateY,
-        ...(round && { borderRadius: '50%' }),
       }}
       transition={transition}
     >
-      <div className="carousel-item-image-container">
-        {shouldLoad ? (
-          <CarouselSlideImage item={item} index={index} imageFit={imageFit} />
-        ) : (
-          <div
-            className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
-            style={{ background: 'rgba(255,255,255,0.03)' }}
-          />
-        )}
-        {shouldLoad && item.caption && <div className="carousel-item-caption">{item.caption}</div>}
-      </div>
+      {inner}
     </motion.div>
   )
 })
@@ -297,6 +318,11 @@ export default function Carousel({
         x.set(targetX)
         return
       }
+      // Flat 2D strip (About, etc.): tweening x while the parent width animates looks like sway/tilt.
+      if (flat) {
+        x.set(targetX)
+        return
+      }
       slideAnimRef.current = animate(x, targetX, {
         type: 'tween',
         duration: 0.22,
@@ -316,7 +342,7 @@ export default function Carousel({
         handleAnimationCompleteRef.current()
       },
     })
-  }, [position, trackItemOffset, x, isJumping])
+  }, [position, trackItemOffset, x, isJumping, flat])
 
   const handleDragEnd = (_, info) => {
     const { offset, velocity } = info
