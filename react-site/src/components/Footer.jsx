@@ -12,14 +12,11 @@ const FALLBACK_DATA = {
   address: '472 South 640 West\nPleasant Grove, UT 84062',
   phone: '(801) 785-6028',
   email: null,
-  licenseInfo: 'Licensed in UT, NV, CA, AZ, WY',
   footerCompanyDescription: 'Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction primarily throughout Utah & Nevada',
   businessHours: {
     days: 'Monday - Friday',
     hours: '8:00 AM - 5:00 PM',
   },
-  serviceArea: 'Serving Northern Utah',
-  footerBadge: 'Fully Licensed & Insured',
 }
 
 function Footer() {
@@ -32,14 +29,11 @@ function Footer() {
       .fetch(
         `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
         email,
-        licenseInfo,
         footerCompanyDescription,
         businessHours {
           days,
           hours
         },
-        serviceArea,
-        footerBadge,
         offices[] {
           locationName,
           address,
@@ -58,8 +52,6 @@ function Footer() {
       })
   }, [])
 
-  const displayLicense = contactData?.licenseInfo || FALLBACK_DATA.licenseInfo
-
   const displayCompanyDescription = contactData
     ? (contactData.footerCompanyDescription ?? '')
     : FALLBACK_DATA.footerCompanyDescription
@@ -69,9 +61,6 @@ function Footer() {
   const displayBusinessHoursTime = contactData
     ? (contactData.businessHours?.hours ?? '')
     : FALLBACK_DATA.businessHours.hours
-  const displayServiceArea = contactData ? (contactData.serviceArea ?? '') : FALLBACK_DATA.serviceArea
-  const displayFooterBadge = contactData ? (contactData.footerBadge ?? '') : FALLBACK_DATA.footerBadge
-
   const logoUrl = '/favicon.png'
 
   const handleNavClick = (sectionId) => {
@@ -184,25 +173,6 @@ function Footer() {
                   Cookie preferences
                 </button>
               </div>
-            </div>
-            <div className="site-footer-editorial__bar-meta">
-              {displayLicense && <span className="site-footer-editorial__bar-license">{displayLicense}</span>}
-              {displayFooterBadge && (
-                <>
-                  {displayLicense ? <span className="site-footer-editorial__bar-dot" aria-hidden>·</span> : null}
-                  <span className="site-footer-editorial__bar-badge">{displayFooterBadge}</span>
-                </>
-              )}
-              {displayServiceArea && (
-                <>
-                  {(displayLicense || displayFooterBadge) ? (
-                    <span className="site-footer-editorial__bar-dot" aria-hidden>
-                      ·
-                    </span>
-                  ) : null}
-                  <span className="site-footer-editorial__bar-area">{displayServiceArea}</span>
-                </>
-              )}
             </div>
           </div>
         </div>
