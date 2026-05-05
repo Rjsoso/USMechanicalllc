@@ -61,7 +61,7 @@ function Portfolio({ data: portfolioDataProp }) {
                           .join(', ')}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         alt={category.title}
-                        className="block max-h-full max-w-full object-contain transition-opacity duration-200 transition-transform group-hover:scale-105"
+                        className="block max-h-full max-w-full object-contain transition-opacity duration-200"
                         loading="lazy"
                         decoding="async"
                         style={{
