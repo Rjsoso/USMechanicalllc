@@ -1324,7 +1324,7 @@ body {
   }
 
   /* Force category cards to be visible with placeholder background */
-  #portfolio .group {
+  #portfolio .portfolio-category-card {
     opacity: 1 !important;
     visibility: visible !important;
     background-color: #e5e7eb !important;
