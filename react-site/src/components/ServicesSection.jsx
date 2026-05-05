@@ -11,7 +11,7 @@ function getBoxBackgroundStyle(box) {
   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
     const imageUrl = `${box.backgroundImage.asset.url}?w=800&q=80&auto=format`
     return {
-      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url(${imageUrl})`,
+      backgroundImage: `url(${imageUrl})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -195,7 +195,6 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.26 }}
                   >
-                    <div className="services-editorial__preview-gradient" aria-hidden />
                     <div className="services-editorial__preview-body">
                       <h3 className="services-editorial__preview-title">{activeCard.title}</h3>
                       {activeCard.description && (
@@ -244,7 +243,6 @@ const ServicesSection = ({ data: servicesDataProp }) => {
                   className="services-editorial__mobile-card services-editorial__mobile-card-btn"
                   style={{ ...card.backgroundStyle, minHeight: 140 }}
                 >
-                  <div className="services-editorial__preview-gradient" aria-hidden />
                   <div className="services-editorial__mobile-inner">
                     <h3 className="services-editorial__preview-title services-editorial__preview-title--mobile">
                       {card.title}
