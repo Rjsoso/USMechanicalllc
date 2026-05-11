@@ -18,8 +18,8 @@ function Portfolio({ data: portfolioDataProp }) {
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])
 
-  // Varied cell heights for an organic mosaic feel
-  const CELL_HEIGHTS = ['88%', '70%', '96%', '76%', '90%', '66%']
+  // Subtle height variation for a jigsaw-like mosaic feel
+  const CELL_HEIGHTS = ['80%', '72%', '82%', '70%', '78%', '74%']
 
   return (
     <section
