@@ -232,7 +232,13 @@ export default function ServiceDetail() {
           {/* Preview Description */}
           {serviceData.description && (
             <motion.p
-              className="mb-12 text-xl leading-relaxed text-black"
+              className="mb-12 text-black"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(1.1rem, 1.5vw, 1.3rem)',
+                fontWeight: 400,
+                lineHeight: 1.65,
+              }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={viewportPreset}
