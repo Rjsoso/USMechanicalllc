@@ -9,7 +9,9 @@ import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import { getSiteUrl } from '../utils/siteUrl'
 import FadeInWhenVisible from '../components/FadeInWhenVisible'
+import SmallSpinner from '../components/SmallSpinner'
 import { useSanityLive } from '../hooks/useSanityLive'
+import './ProjectDetailPage.css'
 
 const PROJECT_QUERY = `*[_type == "portfolioProject" && _id == $projectId][0]{
   _id,
@@ -30,13 +32,15 @@ export default function ProjectDetail() {
   const { data: projectData, loading, error: fetchError } = useSanityLive(
     PROJECT_QUERY,
     { projectId: id ?? '' },
-    { listenFilter: `*[_type == "portfolioProject"]` }
+    { listenFilter: `*[_type == "portfolioProject"]` },
   )
 
-  const error = fetchError ? 'Failed to load project' : (!projectData && !loading && id ? 'Project not found' : null)
+  const error = fetchError
+    ? 'Failed to load project'
+    : !projectData && !loading && id
+      ? 'Project not found'
+      : null
 
-
-  // Build a 1200x630 social preview image from the first project image
   const ogImageUrl = useMemo(() => {
     const first = projectData?.images?.find((p) => p && p.asset)
     if (!first) return undefined
@@ -82,17 +86,17 @@ export default function ProjectDetail() {
       .filter(Boolean)
   }, [projectData])
 
-  // Render immediately - no loading check
-  if (!projectData && error) {
+  if (loading && !projectData) {
     return (
       <>
         <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="project-detail-page project-detail-page--centered min-h-screen"
         >
-          <p>Loading project...</p>
-        </div>
+          <SmallSpinner label="Loading project…" variant="dark" />
+        </main>
         <Footer />
       </>
     )
@@ -101,24 +105,27 @@ export default function ProjectDetail() {
   if (error || !projectData) {
     return (
       <>
+        <SEO
+          title="Project | US Mechanical"
+          description="This project could not be loaded."
+          url={`${getSiteUrl()}/projects/${id || ''}`}
+        />
         <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
-          <div className="text-center">
-            <h1 className="mb-4 text-4xl font-bold">Project Not Found</h1>
-            <p className="mb-8 text-black">
-              The project you&apos;re looking for doesn&apos;t exist.
-            </p>
-            <button
-              onClick={() => navigate('/')}
-              className="rounded-lg bg-black px-6 py-3 font-semibold text-white transition-colors hover:bg-gray-800"
-            >
-              Go Back Home
-            </button>
+        <main id="main-content" tabIndex={-1} className="project-detail-page min-h-screen">
+          <div className="project-detail-page__shell">
+            <div className="project-detail-page__error-wrap">
+              <div className="project-detail-page__error-panel">
+                <h1 className="project-detail-page__error-title">Project unavailable</h1>
+                <p className="project-detail-page__error-text">
+                  {error || 'The project you are looking for does not exist or could not be loaded.'}
+                </p>
+                <button type="button" className="project-detail-page__error-btn" onClick={() => navigate('/')}>
+                  Go back home
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
         <Footer />
       </>
     )
@@ -141,20 +148,19 @@ export default function ProjectDetail() {
       <motion.main
         id="main-content"
         tabIndex={-1}
-        className="min-h-screen bg-white text-black"
-        style={{ paddingTop: '180px' }}
+        className="project-detail-page min-h-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          {/* Back Buttons */}
-          <div className="mb-8 flex flex-wrap items-center gap-4">
+        <div className="project-detail-page__shell">
+          <nav className="project-detail-page__nav" aria-label="Project navigation">
             <button
+              type="button"
               onClick={() => navigate('/', { state: { scrollTo: 'portfolio' } })}
-              className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
+              className="project-detail-page__text-link"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -162,15 +168,16 @@ export default function ProjectDetail() {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Back to Portfolio
+              Back to portfolio
             </button>
 
             {projectData.category && (
               <button
+                type="button"
                 onClick={() => navigate(`/portfolio/${projectData.category._id}`)}
-                className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
+                className="project-detail-page__text-link"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -178,29 +185,25 @@ export default function ProjectDetail() {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                Back to Projects
+                Back to category
               </button>
             )}
-          </div>
+          </nav>
 
-          {/* Project Category Badge */}
           {projectData.category && (
-            <motion.div
-              className="mb-4"
+            <motion.span
+              className="project-detail-page__tag"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={viewportPreset}
               transition={{ duration: 0.25 }}
             >
-              <span className="inline-block rounded-full bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800">
-                {projectData.category.title}
-              </span>
-            </motion.div>
+              {projectData.category.title}
+            </motion.span>
           )}
 
-          {/* Project Title */}
           <motion.h1
-            className="section-title mb-8 text-5xl text-black md:text-6xl"
+            className="project-detail-page__title section-title text-5xl md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportPreset}
@@ -209,10 +212,9 @@ export default function ProjectDetail() {
             {projectData.title}
           </motion.h1>
 
-          {/* Project Description */}
           {projectData.description && (
             <motion.p
-              className="mb-12 text-xl leading-relaxed text-black"
+              className="project-detail-page__lead"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={viewportPreset}
@@ -222,17 +224,15 @@ export default function ProjectDetail() {
             </motion.p>
           )}
 
-          {/* Images Carousel and Details Side by Side */}
           <motion.div
-            className="mb-12 flex flex-col items-start gap-8 lg:flex-row lg:gap-12"
+            className="project-detail-page__layout mb-12"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={viewportPreset}
             transition={{ duration: 0.25 }}
           >
-            {/* Carousel on left */}
             {carouselItems.length > 0 && (
-              <div className="w-full lg:w-2/3">
+              <div className="project-detail-page__gallery">
                 <FadeInWhenVisible>
                   <Carousel
                     items={carouselItems}
@@ -249,22 +249,22 @@ export default function ProjectDetail() {
               </div>
             )}
 
-            {/* Project Details on Right */}
-            <div className={`${carouselItems.length > 0 ? 'lg:w-1/3' : 'w-full'}`}>
+            <div
+              className={
+                carouselItems.length > 0
+                  ? 'project-detail-page__aside'
+                  : 'project-detail-page__aside project-detail-page__aside--full'
+              }
+            >
               <FadeInWhenVisible delay={0.16}>
-                <h2 className="mb-6 text-3xl font-bold text-black">Project Details</h2>
+                <h2 className="project-detail-page__aside-title">Project details</h2>
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.32}>
-                <div className="space-y-6">
+                <div className="project-detail-page__detail-rows">
                   {projectData.year && (
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-start">
-                        <svg
-                          className="mr-3 mt-1 h-6 w-6 flex-shrink-0 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                    <div className="project-detail-page__detail-row">
+                      <div className="project-detail-page__detail-inner">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -273,26 +273,17 @@ export default function ProjectDetail() {
                           />
                         </svg>
                         <div>
-                          <p className="text-sm font-medium uppercase tracking-wide text-gray-600">
-                            Year Completed
-                          </p>
-                          <p className="mt-1 text-lg font-semibold text-black">
-                            {projectData.year}
-                          </p>
+                          <p className="project-detail-page__detail-label">Year completed</p>
+                          <p className="project-detail-page__detail-value">{projectData.year}</p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {projectData.location && (
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-start">
-                        <svg
-                          className="mr-3 mt-1 h-6 w-6 flex-shrink-0 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                    <div className="project-detail-page__detail-row">
+                      <div className="project-detail-page__detail-inner">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -307,26 +298,17 @@ export default function ProjectDetail() {
                           />
                         </svg>
                         <div>
-                          <p className="text-sm font-medium uppercase tracking-wide text-gray-600">
-                            Location
-                          </p>
-                          <p className="mt-1 text-lg font-semibold text-black">
-                            {projectData.location}
-                          </p>
+                          <p className="project-detail-page__detail-label">Location</p>
+                          <p className="project-detail-page__detail-value">{projectData.location}</p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {projectData.client && (
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-start">
-                        <svg
-                          className="mr-3 mt-1 h-6 w-6 flex-shrink-0 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                    <div className="project-detail-page__detail-row">
+                      <div className="project-detail-page__detail-inner">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -335,26 +317,17 @@ export default function ProjectDetail() {
                           />
                         </svg>
                         <div>
-                          <p className="text-sm font-medium uppercase tracking-wide text-gray-600">
-                            Client
-                          </p>
-                          <p className="mt-1 text-lg font-semibold text-black">
-                            {projectData.client}
-                          </p>
+                          <p className="project-detail-page__detail-label">Client</p>
+                          <p className="project-detail-page__detail-value">{projectData.client}</p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {projectData.projectType && (
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-start">
-                        <svg
-                          className="mr-3 mt-1 h-6 w-6 flex-shrink-0 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                    <div className="project-detail-page__detail-row">
+                      <div className="project-detail-page__detail-inner">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -363,12 +336,8 @@ export default function ProjectDetail() {
                           />
                         </svg>
                         <div>
-                          <p className="text-sm font-medium uppercase tracking-wide text-gray-600">
-                            Project Type
-                          </p>
-                          <p className="mt-1 text-lg font-semibold text-black">
-                            {projectData.projectType}
-                          </p>
+                          <p className="project-detail-page__detail-label">Project type</p>
+                          <p className="project-detail-page__detail-value">{projectData.projectType}</p>
                         </div>
                       </div>
                     </div>
@@ -377,7 +346,6 @@ export default function ProjectDetail() {
               </FadeInWhenVisible>
             </div>
           </motion.div>
-
         </div>
       </motion.main>
       <Footer />

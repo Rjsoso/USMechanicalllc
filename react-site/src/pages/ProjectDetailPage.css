@@ -1,0 +1,280 @@
+/* Single project (/projects/:id) — dark editorial canvas (aligned with Contact) */
+
+.project-detail-page {
+  --pd-ink: #ffffff;
+  --pd-muted: rgba(255, 255, 255, 0.72);
+  --pd-soft: rgba(255, 255, 255, 0.42);
+  --pd-rule: rgba(255, 255, 255, 0.12);
+  --pd-panel: #111111;
+  --pd-serif: var(--font-display, 'Instrument Serif', Georgia, serif);
+  --pd-sans: var(--font-ui, 'DM Sans', system-ui, sans-serif);
+
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding-top: 180px;
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+  padding-inline: clamp(16px, 4vw, 64px);
+  background: #000000;
+  color: var(--pd-muted);
+  font-family: var(--pd-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 767px) {
+  .project-detail-page {
+    padding-top: 96px;
+  }
+}
+
+.project-detail-page *,
+.project-detail-page *::before,
+.project-detail-page *::after {
+  box-sizing: border-box;
+}
+
+.project-detail-page__shell {
+  margin-inline: auto;
+  max-width: 80rem;
+}
+
+.project-detail-page__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.project-detail-page__text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.2s ease;
+}
+
+.project-detail-page__text-link:hover {
+  color: var(--pd-ink);
+}
+
+.project-detail-page__tag {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.project-detail-page__title {
+  margin: 0 0 clamp(0.85rem, 2vw, 1.25rem);
+  color: var(--pd-ink);
+}
+
+.project-detail-page__lead {
+  margin: 0 0 clamp(2rem, 5vw, 3rem);
+  max-width: 48rem;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (min-width: 768px) {
+  .project-detail-page__lead {
+    font-size: 1.125rem;
+  }
+}
+
+.project-detail-page__layout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .project-detail-page__layout {
+    flex-direction: row;
+    gap: 3rem;
+  }
+}
+
+.project-detail-page__gallery {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .project-detail-page__gallery {
+    flex: 2;
+    max-width: 66.666%;
+  }
+}
+
+.project-detail-page__aside {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .project-detail-page__aside {
+    flex: 1;
+    max-width: 33.333%;
+  }
+
+  .project-detail-page__aside--full {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+.project-detail-page__aside-title {
+  margin: 0 0 1.25rem;
+  font-family: var(--pd-serif);
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--pd-ink);
+}
+
+.project-detail-page__detail-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-detail-page__detail-row {
+  border-bottom: 1px solid var(--pd-rule);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.project-detail-page__detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.project-detail-page__detail-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.project-detail-page__detail-inner svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.project-detail-page__detail-label {
+  margin: 0 0 0.25rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.project-detail-page__detail-value {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+/* Loading center */
+.project-detail-page--centered {
+  display: flex;
+  min-height: 60vh;
+  align-items: center;
+  justify-content: center;
+  padding-inline: clamp(16px, 4vw, 64px);
+}
+
+/* Error fallback (matches Contact editorial tone) */
+.project-detail-page__error-wrap {
+  display: flex;
+  min-height: 50vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 4rem;
+  text-align: center;
+}
+
+.project-detail-page__error-panel {
+  max-width: 28rem;
+  padding: clamp(2rem, 5vw, 2.75rem) clamp(1.5rem, 4vw, 2rem);
+  border: 1px solid var(--pd-rule);
+  border-radius: 2px;
+  background: var(--pd-panel);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+.project-detail-page__error-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--pd-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--pd-ink);
+}
+
+.project-detail-page__error-text {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--pd-muted);
+}
+
+.project-detail-page__error-btn {
+  border: none;
+  border-radius: 2px;
+  padding: 0.85rem 1.5rem;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #0a0a0a;
+  background: var(--pd-ink);
+  transition: background 0.2s ease;
+}
+
+.project-detail-page__error-btn:hover {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+/* Carousel chrome on dark (contain letterbox) — scoped so other pages unchanged */
+.project-detail-page .carousel-item-image--contain {
+  background-color: #0d0d0d !important;
+  border-radius: 2px !important;
+}
+
+.project-detail-page .carousel-container {
+  border-radius: 2px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.project-detail-page .carousel-item {
+  border-radius: 2px !important;
+}
+
+.project-detail-page .carousel-item-image {
+  border-radius: 2px !important;
+}
