@@ -241,7 +241,7 @@ export default function CategoryDetail() {
                         navigate(`/projects/${project._id}`)
                       }
                     }}
-                    className="portfolio-category-page__card group"
+                    className="portfolio-category-page__card"
                   >
                     {project.images && project.images.length > 0 && (
                       <div className="portfolio-category-page__card-media">
@@ -253,7 +253,7 @@ export default function CategoryDetail() {
                             .auto('format')
                             .url()}
                           alt={project.images[0]?.alt || project.title}
-                          className="max-h-full max-w-full object-contain transition-opacity duration-300 group-hover:opacity-95"
+                          className="portfolio-category-page__card-img"
                           loading="lazy"
                           decoding="async"
                         />
