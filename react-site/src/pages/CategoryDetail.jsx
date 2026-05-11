@@ -11,6 +11,7 @@ import FadeInWhenVisible from '../components/FadeInWhenVisible'
 import SmallSpinner from '../components/SmallSpinner'
 import { getSiteUrl } from '../utils/siteUrl'
 import { useSanityLive } from '../hooks/useSanityLive'
+import './CategoryDetailPage.css'
 
 const CATEGORY_QUERY = `*[_type == "portfolioCategory" && _id == $categoryId][0]{
   _id,
@@ -41,8 +42,16 @@ export default function CategoryDetail() {
   const categories = useSanityLive(CATEGORIES_LIST_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
 
   const loading = category.loading || projects.loading || categories.loading
-  const error = category.error ? 'Failed to load category' : (!category.loading && !category.data && categoryId ? 'Category not found' : null)
-  const categoriesList = useMemo(() => Array.isArray(categories.data) ? categories.data.slice(0, 6) : [], [categories.data])
+  const errorMsg = category.error
+    ? 'Failed to load category'
+    : !category.loading && !category.data && categoryId
+      ? 'Category not found'
+      : null
+
+  const categoriesList = useMemo(
+    () => (Array.isArray(categories.data) ? categories.data.slice(0, 6) : []),
+    [categories.data],
+  )
   const categoryData = useMemo(() => {
     if (!category.data) return null
     return { ...category.data, projects: projects.data || [] }
@@ -52,7 +61,7 @@ export default function CategoryDetail() {
     if (!Array.isArray(categoriesList) || categoriesList.length === 0) {
       return { prevCategory: null, nextCategory: null }
     }
-    const currentIndex = categoriesList.findIndex(c => c._id === categoryId)
+    const currentIndex = categoriesList.findIndex((c) => c._id === categoryId)
     if (currentIndex < 0) return { prevCategory: null, nextCategory: null }
     return {
       prevCategory: currentIndex > 0 ? categoriesList[currentIndex - 1] : null,
@@ -61,8 +70,6 @@ export default function CategoryDetail() {
     }
   }, [categoriesList, categoryId])
 
-  // Build a 1200x630 social preview image from the category image (fallback to
-  // the first image of the first project)
   const ogImageUrl = useMemo(() => {
     const pickImage = () => {
       if (categoryData?.image?.asset) return categoryData.image
@@ -91,37 +98,45 @@ export default function CategoryDetail() {
       <>
         <Header />
         <main
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
+          id="main-content"
+          tabIndex={-1}
+          className="portfolio-category-page portfolio-category-page--centered min-h-screen"
         >
-          <SmallSpinner label="Loading portfolio…" variant="light" />
+          <SmallSpinner label="Loading portfolio…" variant="dark" />
         </main>
         <Footer />
       </>
     )
   }
 
-  if (error || !categoryData) {
+  if (errorMsg || !categoryData) {
     return (
       <>
+        <SEO
+          title="Portfolio category | US Mechanical"
+          description="This portfolio category could not be loaded."
+          url={`${getSiteUrl()}/portfolio/${categoryId || ''}`}
+        />
         <Header />
-        <div
-          className="flex min-h-screen items-center justify-center bg-white text-black"
-          style={{ paddingTop: '180px' }}
-        >
-          <div className="text-center">
-            <h1 className="mb-4 text-4xl font-bold">Category Not Found</h1>
-            <p className="mb-8 text-black">
-              The category you&apos;re looking for doesn&apos;t exist.
-            </p>
-            <button
-              onClick={() => navigate('/')}
-              className="rounded-lg bg-black px-6 py-3 font-semibold text-white transition-colors hover:bg-gray-800"
-            >
-              Go Back Home
-            </button>
+        <main id="main-content" tabIndex={-1} className="portfolio-category-page min-h-screen">
+          <div className="portfolio-category-page__shell">
+            <div className="portfolio-category-page__error-wrap">
+              <div className="portfolio-category-page__error-panel">
+                <h1 className="portfolio-category-page__error-title">Category unavailable</h1>
+                <p className="portfolio-category-page__error-text">
+                  {errorMsg || 'The category you are looking for does not exist.'}
+                </p>
+                <button
+                  type="button"
+                  className="portfolio-category-page__error-btn"
+                  onClick={() => navigate('/')}
+                >
+                  Go back home
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
         <Footer />
       </>
     )
@@ -143,58 +158,49 @@ export default function CategoryDetail() {
       <motion.main
         id="main-content"
         tabIndex={-1}
-        className="min-h-screen bg-white text-black"
-        style={{ paddingTop: '180px' }}
+        className="portfolio-category-page min-h-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          {/* Back + Prev/Next */}
-          <div className="mb-8 flex flex-wrap items-center gap-3">
+        <div className="portfolio-category-page__shell">
+          <nav className="portfolio-category-page__nav" aria-label="Category navigation">
             <button
+              type="button"
               onClick={() => navigate('/', { state: { scrollTo: 'portfolio' } })}
-              className="flex items-center gap-2 text-black transition-colors hover:text-gray-700"
+              className="portfolio-category-page__text-link"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Back to Portfolio
+              Back to portfolio
             </button>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => prevCategory?._id && navigate(`/portfolio/${prevCategory._id}`)}
-                disabled={!prevCategory?._id}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                aria-label="Previous category"
-              >
-                <FiChevronLeft className="text-lg" />
-                Previous Category
-              </button>
+            <button
+              type="button"
+              onClick={() => prevCategory?._id && navigate(`/portfolio/${prevCategory._id}`)}
+              disabled={!prevCategory?._id}
+              className="portfolio-category-page__pill-btn"
+              aria-label="Previous category"
+            >
+              <FiChevronLeft className="text-lg" />
+              Previous
+            </button>
 
-              <button
-                type="button"
-                onClick={() => nextCategory?._id && navigate(`/portfolio/${nextCategory._id}`)}
-                disabled={!nextCategory?._id}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                aria-label="Next category"
-              >
-                Next Category
-                <FiChevronRight className="text-lg" />
-              </button>
-            </div>
-          </div>
+            <button
+              type="button"
+              onClick={() => nextCategory?._id && navigate(`/portfolio/${nextCategory._id}`)}
+              disabled={!nextCategory?._id}
+              className="portfolio-category-page__pill-btn"
+              aria-label="Next category"
+            >
+              Next
+              <FiChevronRight className="text-lg" />
+            </button>
+          </nav>
 
-          {/* Category Title */}
           <motion.h1
-            className="section-title mb-6 text-5xl text-black md:text-6xl"
+            className="portfolio-category-page__title section-title text-5xl md:text-6xl"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportPreset}
@@ -203,10 +209,9 @@ export default function CategoryDetail() {
             {categoryData.title}
           </motion.h1>
 
-          {/* Category Description */}
           {categoryData.description && (
             <motion.p
-              className="mb-12 max-w-3xl text-xl leading-relaxed text-gray-700"
+              className="portfolio-category-page__desc"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={viewportPreset}
@@ -216,10 +221,9 @@ export default function CategoryDetail() {
             </motion.p>
           )}
 
-          {/* Projects Grid */}
           {sortedProjects.length > 0 ? (
             <motion.div
-              className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+              className="portfolio-category-page__grid"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={viewportPreset}
@@ -228,11 +232,19 @@ export default function CategoryDetail() {
               {sortedProjects.map((project, index) => (
                 <FadeInWhenVisible key={project._id} delay={index * 0.14}>
                   <div
+                    role="button"
+                    tabIndex={0}
                     onClick={() => navigate(`/projects/${project._id}`)}
-                    className="group cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        navigate(`/projects/${project._id}`)
+                      }
+                    }}
+                    className="portfolio-category-page__card group"
                   >
                     {project.images && project.images.length > 0 && (
-                      <div className="relative flex aspect-[3/2] w-full items-center justify-center overflow-hidden bg-gray-100">
+                      <div className="portfolio-category-page__card-media">
                         <img
                           src={urlFor(project.images[0])
                             .width(900)
@@ -246,28 +258,21 @@ export default function CategoryDetail() {
                           decoding="async"
                         />
                         {project.images.length > 1 && (
-                          <div className="absolute right-3 top-3 rounded-full bg-black/80 px-3 py-1 text-sm font-medium text-white">
-                            +{project.images.length - 1} more
+                          <div className="portfolio-category-page__card-badge">
+                            +{project.images.length - 1} photos
                           </div>
                         )}
                       </div>
                     )}
-                    <div className="p-6">
-                      <h3 className="mb-3 text-2xl font-bold text-black">{project.title}</h3>
+                    <div className="portfolio-category-page__card-body">
+                      <h3 className="portfolio-category-page__card-title">{project.title}</h3>
                       {project.description && (
-                        <p className="mb-4 line-clamp-3 text-sm text-gray-600">
-                          {project.description}
-                        </p>
+                        <p className="portfolio-category-page__card-desc">{project.description}</p>
                       )}
-                      <div className="space-y-2 text-sm text-gray-500">
+                      <div className="portfolio-category-page__meta">
                         {project.year && (
-                          <div className="flex items-center">
-                            <svg
-                              className="mr-2 h-4 w-4 flex-shrink-0"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
+                          <div className="portfolio-category-page__meta-block">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -275,19 +280,15 @@ export default function CategoryDetail() {
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                               />
                             </svg>
-                            <span>
-                              <strong className="text-gray-700">Year:</strong> {project.year}
-                            </span>
+                            <div>
+                              <p className="portfolio-category-page__meta-label">Year</p>
+                              <p className="portfolio-category-page__meta-value">{project.year}</p>
+                            </div>
                           </div>
                         )}
                         {project.location && (
-                          <div className="flex items-center">
-                            <svg
-                              className="mr-2 h-4 w-4 flex-shrink-0"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
+                          <div className="portfolio-category-page__meta-block">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -301,20 +302,15 @@ export default function CategoryDetail() {
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                               />
                             </svg>
-                            <span>
-                              <strong className="text-gray-700">Location:</strong>{' '}
-                              {project.location}
-                            </span>
+                            <div>
+                              <p className="portfolio-category-page__meta-label">Location</p>
+                              <p className="portfolio-category-page__meta-value">{project.location}</p>
+                            </div>
                           </div>
                         )}
                         {project.client && (
-                          <div className="flex items-center">
-                            <svg
-                              className="mr-2 h-4 w-4 flex-shrink-0"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
+                          <div className="portfolio-category-page__meta-block">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -322,19 +318,15 @@ export default function CategoryDetail() {
                                 d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                               />
                             </svg>
-                            <span>
-                              <strong className="text-gray-700">Client:</strong> {project.client}
-                            </span>
+                            <div>
+                              <p className="portfolio-category-page__meta-label">Client</p>
+                              <p className="portfolio-category-page__meta-value">{project.client}</p>
+                            </div>
                           </div>
                         )}
                         {project.projectType && (
-                          <div className="flex items-center">
-                            <svg
-                              className="mr-2 h-4 w-4 flex-shrink-0"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
+                          <div className="portfolio-category-page__meta-block">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -342,9 +334,10 @@ export default function CategoryDetail() {
                                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                               />
                             </svg>
-                            <span>
-                              <strong className="text-gray-700">Type:</strong> {project.projectType}
-                            </span>
+                            <div>
+                              <p className="portfolio-category-page__meta-label">Type</p>
+                              <p className="portfolio-category-page__meta-value">{project.projectType}</p>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -354,9 +347,7 @@ export default function CategoryDetail() {
               ))}
             </motion.div>
           ) : (
-            <div className="py-12 text-center">
-              <p className="text-gray-500">No projects in this category yet.</p>
-            </div>
+            <p className="portfolio-category-page__empty">No projects in this category yet.</p>
           )}
         </div>
       </motion.main>
