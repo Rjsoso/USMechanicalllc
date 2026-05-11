@@ -255,7 +255,7 @@ function WhyUsSection() {
             </div>
 
             <Link className="panel-cta" to="/contact">
-              Schedule a consultation
+              Contact Us
             </Link>
           </div>
 
