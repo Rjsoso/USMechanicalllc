@@ -18,6 +18,9 @@ function Portfolio({ data: portfolioDataProp }) {
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])
 
+  // Varied cell heights for an organic mosaic feel
+  const CELL_HEIGHTS = ['88%', '70%', '96%', '76%', '90%', '66%']
+
   return (
     <section
       id="portfolio"
@@ -47,7 +50,7 @@ function Portfolio({ data: portfolioDataProp }) {
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
                 className="portfolio-category-card relative cursor-pointer overflow-hidden bg-gray-100"
-                style={{ paddingBottom: '74%' }}
+                style={{ paddingBottom: CELL_HEIGHTS[index % CELL_HEIGHTS.length] }}
               >
                 {category.image?.asset && (
                   <div

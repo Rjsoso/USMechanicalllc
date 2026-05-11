@@ -104,51 +104,51 @@
 
 /* Asymmetric inset per tile (fills inner media box with cover) */
 .portfolio-home__frame--0 {
-  padding: 8% 10% 8% 8%;
+  padding: 4% 5% 4% 4%;
 }
 
 .portfolio-home__frame--1 {
-  padding: 3% 3% 5% 4%;
+  padding: 2% 2% 3% 2%;
 }
 
 .portfolio-home__frame--2 {
-  padding: 12% 7% 6% 6%;
+  padding: 6% 4% 3% 3%;
 }
 
 .portfolio-home__frame--3 {
-  padding: 5% 13% 9% 4%;
+  padding: 3% 6% 4% 2%;
 }
 
 .portfolio-home__frame--4 {
-  padding: 7% 5% 12% 8%;
+  padding: 4% 3% 6% 4%;
 }
 
 .portfolio-home__frame--5 {
-  padding: 9% 6% 6% 11%;
+  padding: 5% 3% 3% 5%;
 }
 
 @media (max-width: 767px) {
   #portfolio .portfolio-home__frame--0 {
-    padding: 7% 8% 6% 7%;
+    padding: 3% 4% 3% 3%;
   }
 
   #portfolio .portfolio-home__frame--1 {
-    padding: 3% 3% 4% 4%;
+    padding: 2% 2% 2% 2%;
   }
 
   #portfolio .portfolio-home__frame--2 {
-    padding: 10% 6% 5% 5%;
+    padding: 5% 3% 2% 3%;
   }
 
   #portfolio .portfolio-home__frame--3 {
-    padding: 4% 10% 7% 3%;
+    padding: 2% 5% 3% 2%;
   }
 
   #portfolio .portfolio-home__frame--4 {
-    padding: 6% 4% 9% 6%;
+    padding: 3% 2% 4% 3%;
   }
 
   #portfolio .portfolio-home__frame--5 {
-    padding: 7% 5% 5% 9%;
+    padding: 4% 2% 2% 4%;
   }
 }
