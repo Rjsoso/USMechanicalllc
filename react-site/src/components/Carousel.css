@@ -16,10 +16,10 @@
   width: 100%;
   max-width: 100%;
   border: none;
-  border-radius: 24px;
+  border-radius: 0;
   padding: 0;
   background-color: transparent;
-  --outer-r: 24px;
+  --outer-r: 0;
   --p-distance: 0;
   /* Tailwind sets explicit height on project carousels; that height must reach slides.
      Otherwise slide height:100% follows image intrinsic height and overflow clips. */
@@ -45,7 +45,7 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 24px;
+  border-radius: 0;
   background-color: transparent;
   overflow: hidden;
   cursor: grab;
@@ -88,7 +88,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 24px;
+  border-radius: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -199,7 +199,7 @@
     padding: 8px;
     width: 100% !important;
     max-width: 100%;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   .carousel-track {
@@ -210,7 +210,7 @@
 
   .carousel-item {
     width: 100% !important;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   .carousel-nav-container {
@@ -257,7 +257,7 @@
 
   /* Image optimization for mobile */
   .carousel-item-image {
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   /* Better caption readability on mobile */
@@ -271,11 +271,11 @@
 @media (max-width: 375px) {
   .carousel-container {
     padding: 4px;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .carousel-item {
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .carousel-nav-button.inside {
