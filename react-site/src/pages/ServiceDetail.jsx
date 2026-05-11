@@ -291,20 +291,64 @@ export default function ServiceDetail() {
                   className={`${carouselItems.length > 0 ? 'md:w-1/2' : 'w-full'} order-1 md:order-2`}
                 >
                   <FadeInWhenVisible delay={0.16}>
-                    <h2 className="mb-6 text-3xl font-bold text-black">Key Features</h2>
+                    <div className="mb-8 flex items-center gap-3">
+                      <div className="h-px w-6 shrink-0 bg-black/30" />
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          letterSpacing: '0.15em',
+                          textTransform: 'uppercase',
+                          color: 'rgba(17,17,17,0.45)',
+                        }}
+                      >
+                        Key Features
+                      </span>
+                    </div>
                   </FadeInWhenVisible>
                   <FadeInWhenVisible delay={0.32}>
-                    <div className="space-y-4">
+                    <div style={{ borderTop: '1px solid rgba(17,17,17,0.1)' }}>
                       {serviceData.features.map((feature, index) => (
-                        <div key={index} className="rounded-xl border border-gray-300 bg-white p-6">
-                          {feature.title && (
-                            <h3 className="mb-2 text-xl font-semibold text-black">
-                              {feature.title}
-                            </h3>
-                          )}
-                          {feature.description && (
-                            <p className="leading-relaxed text-black">{feature.description}</p>
-                          )}
+                        <div
+                          key={index}
+                          className="flex gap-5 py-6"
+                          style={{ borderBottom: '1px solid rgba(17,17,17,0.1)' }}
+                        >
+                          <span
+                            className="shrink-0 pt-0.5"
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 500,
+                              letterSpacing: '0.12em',
+                              color: 'rgba(17,17,17,0.3)',
+                              minWidth: 28,
+                            }}
+                          >
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <div>
+                            {feature.title && (
+                              <h3
+                                className="section-title mb-2 leading-snug text-black"
+                                style={{ fontSize: 'clamp(17px, 2vw, 20px)' }}
+                              >
+                                {feature.title}
+                              </h3>
+                            )}
+                            {feature.description && (
+                              <p
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: 300,
+                                  color: '#555555',
+                                  lineHeight: 1.75,
+                                  margin: 0,
+                                }}
+                              >
+                                {feature.description}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
