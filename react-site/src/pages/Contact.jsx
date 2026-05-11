@@ -13,6 +13,7 @@ import {
 } from '../utils/rateLimit'
 import { getSiteUrl } from '../utils/siteUrl'
 import { trackEvent } from '../utils/analytics'
+import './ContactPage.css'
 
 const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   ...,
@@ -108,7 +109,7 @@ function Contact() {
 
         turnstileWidgetIdRef.current = turnstile.render('#turnstile-container', {
           sitekey: siteKey,
-          theme: 'light',
+          theme: 'dark',
           callback: (token) => {
             turnstileTokenRef.current = token
             setTurnstileError(null)
@@ -286,102 +287,88 @@ function Contact() {
         url={`${getSiteUrl()}/contact`}
       />
       <Header />
-      <main id="main-content" tabIndex={-1} className="min-h-screen bg-white">
+      <main id="main-content" tabIndex={-1} className="contact-page min-h-screen">
         {!contactLoading && (error || !contactData) && (
-          <section className="relative w-full px-6 py-20 pt-[180px]">
-            <div className="relative z-10 mx-auto max-w-6xl flex items-center justify-center py-12">
-              <div className="max-w-2xl px-6 text-center">
-                <h1 className="mb-4 text-2xl font-bold text-red-400">Contact Page Not Found</h1>
-                <p className="mb-4 text-gray-800">{error || 'No contact page data found.'}</p>
-                <p className="text-sm text-gray-600">
-                  Please create a &quot;Contact Page&quot; document in{' '}
-                  <a
-                    href="https://usmechanical.sanity.studio"
-                    className="text-gray-700 underline hover:text-gray-900"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Sanity Studio
-                  </a>
-                </p>
-              </div>
+          <section className="contact-page__fallback">
+            <div className="contact-page__fallback-inner">
+              <h1 className="contact-page__fallback-title">Contact page not found</h1>
+              <p className="contact-page__fallback-text">{error || 'No contact page data found.'}</p>
+              <p className="contact-page__fallback-text">
+                Please create a &quot;Contact Page&quot; document in{' '}
+                <a
+                  href="https://usmechanical.sanity.studio"
+                  className="contact-page__fallback-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Sanity Studio
+                </a>
+              </p>
             </div>
           </section>
         )}
 
         {contactData && (
-          <section
-            id="contact-form"
-            className="relative w-full px-6 pb-16 pt-[180px]"
-          >
-            <div className="relative z-10 mx-auto max-w-6xl">
-              <h1 className="section-title mb-6 text-center text-5xl text-gray-900 md:text-6xl">
-                {contactData.heroTitle || 'Contact Us'}
-              </h1>
+          <section id="contact-form" className="contact-page__section">
+            <div className="contact-page__inner">
+              <header className="contact-page__intro">
+                <div className="contact-page__eyebrow">
+                  <span>Get in touch</span>
+                </div>
+                <h1 className="contact-page__title section-title text-5xl md:text-6xl">
+                  {contactData.heroTitle || 'Contact Us'}
+                </h1>
+                {contactData.description && (
+                  <p className="contact-page__subtitle">{contactData.description}</p>
+                )}
+              </header>
 
-              <p className="mb-12 text-center text-lg text-gray-700">
-                {contactData.description}
-              </p>
-
-              <div className="mx-auto max-w-2xl">
-                <div className="min-w-0 rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-                  <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                    {contactData.formSettings?.headline || 'Send Us a Message'}
+              <div className="contact-page__form-column">
+                <div className="contact-page__panel">
+                  <h2 className="contact-page__panel-title">
+                    {contactData.formSettings?.headline || 'Send us a message'}
                   </h2>
 
                   {formSuccess && (
-                    <div
-                      role="status"
-                      aria-live="polite"
-                      className="mb-4 rounded-lg border border-green-500/50 bg-green-500/20 p-4"
-                    >
-                      <p className="font-semibold text-gray-900">✓ Message sent successfully!</p>
-                      <p className="mt-1 text-sm text-gray-700">We&apos;ll get back to you soon.</p>
+                    <div role="status" aria-live="polite" className="contact-page__banner contact-page__banner--success">
+                      <strong>Message sent</strong>
+                      <span>We&apos;ll get back to you soon.</span>
                     </div>
                   )}
 
                   {rateLimitError && (
-                    <div
-                      role="alert"
-                      className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4"
-                    >
-                      <p className="font-semibold text-gray-900">⚠ Rate limit exceeded</p>
-                      <p className="mt-1 text-sm text-gray-700">{rateLimitError}</p>
+                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                      <strong>Too many submissions</strong>
+                      <span>{rateLimitError}</span>
                     </div>
                   )}
 
                   {formError && (
-                    <div
-                      role="alert"
-                      className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4"
-                    >
-                      <p className="font-semibold text-gray-900">⚠ We couldn&apos;t send your message</p>
-                      <p className="mt-1 text-sm text-gray-700">{formError}</p>
+                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                      <strong>We couldn&apos;t send your message</strong>
+                      <span>{formError}</span>
                     </div>
                   )}
 
                   {turnstileError && (
-                    <div
-                      role="alert"
-                      className="mb-4 rounded-lg border border-red-500/50 bg-red-500/20 p-4"
-                    >
-                      <p className="font-semibold text-gray-900">⚠ Verification required</p>
-                      <p className="mt-1 text-sm text-gray-700">{turnstileError}</p>
+                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                      <strong>Verification required</strong>
+                      <span>{turnstileError}</span>
                     </div>
                   )}
 
                   <form
                     onSubmit={handleSubmit}
-                    className="flex flex-col space-y-4"
+                    className="contact-page__form"
                     noValidate
                     aria-busy={formSubmitting ? 'true' : 'false'}
                   >
-                    <div>
-                      <label
-                        htmlFor="contact-name"
-                        className="mb-1 block text-sm font-medium text-gray-700"
-                      >
-                        Name <span aria-hidden="true" className="text-red-600">*</span>
+                    <div className="min-w-0">
+                      <label htmlFor="contact-name" className="contact-page__field-label">
+                        Name{' '}
+                        <span aria-hidden="true" className="contact-page__req">
+                          *
+                        </span>
                         <span className="sr-only"> (required)</span>
                       </label>
                       <input
@@ -394,22 +381,22 @@ function Contact() {
                         onChange={handleInputChange}
                         aria-invalid={formErrors.name ? 'true' : 'false'}
                         aria-describedby={formErrors.name ? 'contact-name-error' : undefined}
-                        className={`w-full rounded-lg border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
+                        className={`contact-page__input ${formErrors.name ? 'contact-page__input--error' : ''}`}
                         maxLength={100}
                       />
                       {formErrors.name && (
-                        <p id="contact-name-error" className="mt-1 text-sm text-red-600">
+                        <p id="contact-name-error" className="contact-page__field-error">
                           {formErrors.name}
                         </p>
                       )}
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="contact-email"
-                        className="mb-1 block text-sm font-medium text-gray-700"
-                      >
-                        Email <span aria-hidden="true" className="text-red-600">*</span>
+                    <div className="min-w-0">
+                      <label htmlFor="contact-email" className="contact-page__field-label">
+                        Email{' '}
+                        <span aria-hidden="true" className="contact-page__req">
+                          *
+                        </span>
                         <span className="sr-only"> (required)</span>
                       </label>
                       <input
@@ -423,22 +410,20 @@ function Contact() {
                         onChange={handleInputChange}
                         aria-invalid={formErrors.email ? 'true' : 'false'}
                         aria-describedby={formErrors.email ? 'contact-email-error' : undefined}
-                        className={`w-full rounded-lg border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
+                        className={`contact-page__input ${formErrors.email ? 'contact-page__input--error' : ''}`}
                         maxLength={254}
                       />
                       {formErrors.email && (
-                        <p id="contact-email-error" className="mt-1 text-sm text-red-600">
+                        <p id="contact-email-error" className="contact-page__field-error">
                           {formErrors.email}
                         </p>
                       )}
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="contact-phone"
-                        className="mb-1 block text-sm font-medium text-gray-700"
-                      >
-                        Phone <span className="text-gray-500">(optional)</span>
+                    <div className="min-w-0">
+                      <label htmlFor="contact-phone" className="contact-page__field-label">
+                        Phone{' '}
+                        <span className="contact-page__optional">(optional)</span>
                       </label>
                       <input
                         id="contact-phone"
@@ -450,22 +435,22 @@ function Contact() {
                         onChange={handleInputChange}
                         aria-invalid={formErrors.phone ? 'true' : 'false'}
                         aria-describedby={formErrors.phone ? 'contact-phone-error' : undefined}
-                        className={`w-full rounded-lg border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
+                        className={`contact-page__input ${formErrors.phone ? 'contact-page__input--error' : ''}`}
                         maxLength={20}
                       />
                       {formErrors.phone && (
-                        <p id="contact-phone-error" className="mt-1 text-sm text-red-600">
+                        <p id="contact-phone-error" className="contact-page__field-error">
                           {formErrors.phone}
                         </p>
                       )}
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="contact-message"
-                        className="mb-1 block text-sm font-medium text-gray-700"
-                      >
-                        Message <span aria-hidden="true" className="text-red-600">*</span>
+                    <div className="min-w-0">
+                      <label htmlFor="contact-message" className="contact-page__field-label">
+                        Message{' '}
+                        <span aria-hidden="true" className="contact-page__req">
+                          *
+                        </span>
                         <span className="sr-only"> (required)</span>
                       </label>
                       <textarea
@@ -476,16 +461,16 @@ function Contact() {
                         onChange={handleInputChange}
                         aria-invalid={formErrors.message ? 'true' : 'false'}
                         aria-describedby={`contact-message-count${formErrors.message ? ' contact-message-error' : ''}`}
-                        className={`w-full resize-none rounded-lg border ${formErrors.message ? 'border-red-500' : 'border-gray-300'} h-32 bg-white p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/70`}
+                        className={`contact-page__textarea ${formErrors.message ? 'contact-page__textarea--error' : ''}`}
                         maxLength={5000}
                         minLength={10}
                       />
                       {formErrors.message && (
-                        <p id="contact-message-error" className="mt-1 text-sm text-red-600">
+                        <p id="contact-message-error" className="contact-page__field-error">
                           {formErrors.message}
                         </p>
                       )}
-                      <p id="contact-message-count" className="mt-1 text-xs text-gray-500">
+                      <p id="contact-message-count" className="contact-page__hint">
                         {formData.message.length}/5000 characters (minimum 10)
                       </p>
                     </div>
@@ -518,7 +503,7 @@ function Contact() {
 
                     <div
                       id="turnstile-container"
-                      className="min-h-[78px]"
+                      className="contact-page__turnstile-wrap"
                       aria-label="Human verification"
                     />
 
@@ -526,9 +511,7 @@ function Contact() {
                       type="submit"
                       disabled={isSubmitDisabled}
                       aria-disabled={isSubmitDisabled ? 'true' : 'false'}
-                      className={`rounded-lg bg-black py-3 font-semibold text-white transition hover:bg-neutral-900 ${
-                        isSubmitDisabled ? 'cursor-not-allowed opacity-50' : ''
-                      }`}
+                      className="contact-page__submit"
                     >
                       {formSubmitting
                         ? 'Sending…'
@@ -538,7 +521,7 @@ function Contact() {
                     </button>
 
                     {remainingSubmissions < 3 && !rateLimitError && (
-                      <p className="text-center text-xs text-gray-500">
+                      <p className="contact-page__rate-hint">
                         {remainingSubmissions > 0
                           ? `${remainingSubmissions} submission${remainingSubmissions !== 1 ? 's' : ''} remaining this hour`
                           : 'Maximum submissions reached for this hour'}
