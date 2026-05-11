@@ -55,10 +55,10 @@ function Header() {
   // Memoize logo URL for background image
   const logoUrl = useMemo(() => {
     if (!logo?.asset) return null
-    // The logo card renders at ~240–312 CSS px across breakpoints. 720w covers
+    // The logo card renders at ~218–280 CSS px across breakpoints. 640w covers
     // DPR 2 comfortably; q=85 is visually indistinguishable from 95 for a
     // stamped logo but cuts ~6 KB off every page view.
-    return urlFor(logo).width(720).quality(85).auto('format').fit('max').url()
+    return urlFor(logo).width(640).quality(85).auto('format').fit('max').url()
   }, [logo])
 
   const handleLogoClick = () => {

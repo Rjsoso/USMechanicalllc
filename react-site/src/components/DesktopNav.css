@@ -42,25 +42,25 @@
  */
 @media (min-width: 768px) {
   .desktop-nav-container {
-    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 312px + 1.5rem);
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 280px + 1.5rem);
   }
 }
 
 @media (min-width: 1440px) {
   .desktop-nav-container {
-    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 288px + 1.5rem);
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 260px + 1.5rem);
   }
 }
 
 @media (min-width: 1920px) {
   .desktop-nav-container {
-    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 264px + 1.5rem);
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 238px + 1.5rem);
   }
 }
 
 @media (min-width: 2560px) {
   .desktop-nav-container {
-    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 240px + 1.5rem);
+    padding-left: calc(max(1rem, env(safe-area-inset-left, 0px)) + 218px + 1.5rem);
   }
 }
 
@@ -71,6 +71,18 @@
   margin: 0;
   padding: 0;
   align-items: center;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav-list {
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .desktop-nav-list {
+    gap: 2.75rem;
+  }
 }
 
 .desktop-nav-item {
