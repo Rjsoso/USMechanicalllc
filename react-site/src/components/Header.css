@@ -25,8 +25,8 @@
 /* Logo Container — subtle tilt, no distortion */
 .logo-3d-card {
   position: relative;
-  width: 200px;
-  height: 124px;
+  width: 240px;
+  height: 149px;
   background: transparent;
   transform-style: preserve-3d;
   transform: rotateY(-4deg) rotateX(2deg);
@@ -78,8 +78,8 @@
 /* Desktop size */
 @media (min-width: 768px) {
   .logo-3d-card {
-    width: 260px;
-    height: 161px;
+    width: 312px;
+    height: 193px;
   }
 
   .plaque-perspective:hover .logo-3d-card {
@@ -108,32 +108,32 @@
 /* Large Desktop - slightly reduce logo to prevent dominance */
 @media (min-width: 1440px) {
   .logo-3d-card {
-    width: 240px;
-    height: 149px;
+    width: 288px;
+    height: 179px;
   }
 }
 
 /* Full HD+ - further reduce for balance on very large screens */
 @media (min-width: 1920px) {
   .logo-3d-card {
-    width: 220px;
-    height: 136px;
+    width: 264px;
+    height: 164px;
   }
 }
 
 /* 4K+ - constrain maximum size */
 @media (min-width: 2560px) {
   .logo-3d-card {
-    width: 200px;
-    height: 124px;
+    width: 240px;
+    height: 149px;
   }
 }
 
 /* Mobile landscape - reduce logo significantly */
 @media (max-height: 600px) and (orientation: landscape) {
   .logo-3d-card {
-    width: 140px !important;
-    height: 87px !important;
+    width: 168px !important;
+    height: 104px !important;
   }
 
   .plaque-perspective {
@@ -144,8 +144,8 @@
 
 @media (max-height: 500px) and (orientation: landscape) {
   .logo-3d-card {
-    width: 110px !important;
-    height: 68px !important;
+    width: 132px !important;
+    height: 82px !important;
   }
 }
 
@@ -159,8 +159,8 @@
   }
 
   .logo-3d-card {
-    width: 132px;
-    height: 82px;
+    width: 158px;
+    height: 98px;
   }
 
   /* No heavy drop-shadow on light header — stacked filters read as a black halo */
@@ -181,14 +181,14 @@
 
 @media (max-width: 400px) {
   .logo-3d-card {
-    width: 118px;
-    height: 73px;
+    width: 142px;
+    height: 88px;
   }
 }
 
 @media (max-width: 360px) {
   .logo-3d-card {
-    width: 108px;
-    height: 67px;
+    width: 130px;
+    height: 80px;
   }
 }
