@@ -19,7 +19,7 @@ function Portfolio({ data: portfolioDataProp }) {
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])
 
   // Each cell has a distinct explicit height for a true mosaic look
-  const CELL_HEIGHTS = [300, 380, 255, 345, 420, 275]
+  const CELL_HEIGHTS = [300, 380, 340, 345, 330, 275]
 
   return (
     <section
