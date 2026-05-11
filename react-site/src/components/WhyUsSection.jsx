@@ -168,6 +168,7 @@ function WhyUsSection() {
   }, [])
 
   useLayoutEffect(() => {
+    const sectionEl = sectionRef.current
     let raf = 0
     const schedule = () => {
       if (raf) return
@@ -199,8 +200,8 @@ function WhyUsSection() {
       mq.removeEventListener('change', schedule)
       if (raf) cancelAnimationFrame(raf)
       setPinnedTop(null)
-      sectionRef.current?.style.removeProperty('--why-sticky-top-pinned')
-      sectionRef.current?.style.removeProperty('--why-panel-fit-cap')
+      sectionEl?.style.removeProperty('--why-sticky-top-pinned')
+      sectionEl?.style.removeProperty('--why-panel-fit-cap')
     }
   }, [syncPinnedStickyTop])
 
