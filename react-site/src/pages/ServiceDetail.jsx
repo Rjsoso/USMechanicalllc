@@ -311,44 +311,30 @@ export default function ServiceDetail() {
                       {serviceData.features.map((feature, index) => (
                         <div
                           key={index}
-                          className="flex gap-5 py-6"
+                          className="py-6"
                           style={{ borderBottom: '1px solid rgba(17,17,17,0.1)' }}
                         >
-                          <span
-                            className="shrink-0 pt-0.5"
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 500,
-                              letterSpacing: '0.12em',
-                              color: 'rgba(17,17,17,0.3)',
-                              minWidth: 28,
-                            }}
-                          >
-                            {String(index + 1).padStart(2, '0')}
-                          </span>
-                          <div>
-                            {feature.title && (
-                              <h3
-                                className="section-title mb-2 leading-snug text-black"
-                                style={{ fontSize: 'clamp(17px, 2vw, 20px)' }}
-                              >
-                                {feature.title}
-                              </h3>
-                            )}
-                            {feature.description && (
-                              <p
-                                style={{
-                                  fontSize: 14,
-                                  fontWeight: 300,
-                                  color: '#555555',
-                                  lineHeight: 1.75,
-                                  margin: 0,
-                                }}
-                              >
-                                {feature.description}
-                              </p>
-                            )}
-                          </div>
+                          {feature.title && (
+                            <h3
+                              className="section-title mb-2 leading-snug text-black"
+                              style={{ fontSize: 'clamp(18px, 2vw, 22px)' }}
+                            >
+                              {feature.title}
+                            </h3>
+                          )}
+                          {feature.description && (
+                            <p
+                              style={{
+                                fontSize: 15,
+                                fontWeight: 300,
+                                color: '#111111',
+                                lineHeight: 1.75,
+                                margin: 0,
+                              }}
+                            >
+                              {feature.description}
+                            </p>
+                          )}
                         </div>
                       ))}
                     </div>
