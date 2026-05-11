@@ -40,9 +40,9 @@ function Portfolio({ data: portfolioDataProp }) {
       </div>
 
       {/* Edge-to-edge category grid with white background */}
-      <div className="bg-white">
+      <div className="bg-white p-2">
         <div
-          className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          className="grid w-full grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3"
           style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
         >
           {displayCategories.map((category, index) => (
