@@ -1,7 +1,8 @@
 /*
- * Homepage #portfolio grid: unchanged cell footprints; per-tile padding so each
- * photo reads at a different scale inside its box (object-contain).
+ * Homepage #portfolio grid: unchanged cell footprints; per-tile padding adjusts
+ * the photo crop region. Image + overlay share one box (cover) so hover scrims align.
  */
+
 .portfolio-home__frame {
   position: absolute;
   inset: 0;
@@ -23,7 +24,85 @@
   min-height: 0;
 }
 
-/* Asymmetric inset per tile (top / right / bottom / left) for visual rhythm */
+.portfolio-home__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.portfolio-home__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.portfolio-home__scrim {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: clamp(0.6rem, 4.5vmin, 1.55rem);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: linear-gradient(
+    190deg,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.58) 40%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-home__media:hover .portfolio-home__scrim {
+    opacity: 1;
+  }
+}
+
+.portfolio-home__scrim-title {
+  margin: 0;
+  max-width: 100%;
+  width: min(28ch, 100%);
+  font-weight: 700;
+  line-height: 1.22;
+  color: #fff;
+  overflow-wrap: break-word;
+  font-size: clamp(0.9rem, 0.68rem + 1.85vw, 1.875rem);
+}
+
+.portfolio-home__scrim-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  color: #fff;
+  font-size: clamp(0.8rem, 0.74rem + 0.42vw, 1.05rem);
+}
+
+.portfolio-home__scrim-icon {
+  margin-left: 0.375rem;
+  width: clamp(1.05rem, 0.92rem + 0.65vw, 1.375rem);
+  height: clamp(1.05rem, 0.92rem + 0.65vw, 1.375rem);
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-home__media:hover .portfolio-home__scrim-icon {
+    transform: translateX(6px);
+  }
+}
+
+/* Asymmetric inset per tile (fills inner media box with cover) */
 .portfolio-home__frame--0 {
   padding: 8% 10% 8% 8%;
 }

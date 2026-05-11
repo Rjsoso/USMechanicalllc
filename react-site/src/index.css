@@ -1245,32 +1245,32 @@ body {
     gap: 0 !important;
   }
 
-  /* Optimize image aspect ratio for mobile viewing */
+  /* Taller thumbnail than 16:9; matches homepage portfolio mosaic */
   #portfolio .relative {
-    padding-bottom: 56.25% !important; /* 16:9 ratio better for mobile */
+    padding-bottom: 70% !important;
   }
 
-  /* Larger, more readable text on category cards */
-  #portfolio h3 {
-    font-size: clamp(2rem, 6vw, 2.5rem) !important;
-    padding: 1rem;
+  /* Category card overlays (narrow class so section titles unaffected) */
+  #portfolio .portfolio-home__scrim-title {
+    font-size: clamp(1rem, 0.93rem + 2.2vw, 1.625rem);
+    padding: 0 !important;
   }
 
   /* Better hover/tap overlay on mobile */
-  #portfolio .group .absolute {
+  #portfolio .portfolio-home__scrim {
     opacity: 0;
     transition: opacity 0.2s ease;
   }
 
   /* Show overlay on tap/touch */
-  #portfolio .group:active .absolute,
-  #portfolio .group:focus .absolute {
+  #portfolio .group:active .portfolio-home__scrim,
+  #portfolio .group:focus-within .portfolio-home__scrim {
     opacity: 1;
   }
 
-  /* Larger "Learn more" text */
-  #portfolio .group .flex span {
-    font-size: 1.125rem;
+  /* "Learn more" line */
+  #portfolio .portfolio-home__scrim-cta span {
+    font-size: clamp(0.8125rem, 0.78rem + 0.9vw, 1rem);
   }
 
   /* Portfolio section title */
