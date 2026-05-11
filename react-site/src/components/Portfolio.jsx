@@ -18,8 +18,8 @@ function Portfolio({ data: portfolioDataProp }) {
   // Limit to 6 categories for the grid
   const displayCategories = useMemo(() => categories.slice(0, 6), [categories])
 
-  // Subtle height variation for a jigsaw-like mosaic feel
-  const CELL_HEIGHTS = ['80%', '72%', '82%', '70%', '78%', '74%']
+  // Clearly varied heights — enough to look like a mosaic, still professional
+  const CELL_HEIGHTS = ['92%', '62%', '100%', '66%', '86%', '70%']
 
   return (
     <section
@@ -40,10 +40,10 @@ function Portfolio({ data: portfolioDataProp }) {
       </div>
 
       {/* Edge-to-edge category grid with white background */}
-      <div className="bg-white p-2">
+      <div className="bg-white">
         <div
           className="grid w-full grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3"
-          style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
+          style={{ position: 'relative' }}
         >
           {displayCategories.map((category, index) => (
             <div key={category._id}>
