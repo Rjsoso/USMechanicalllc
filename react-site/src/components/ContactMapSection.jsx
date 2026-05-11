@@ -14,10 +14,8 @@ const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
  */
 const MAP_BLOCK_HEIGHT = 'max(36rem, calc(100dvh - 5.5rem))'
 
-/** Matches `.site-footer-editorial` `--fe-bg` (Footer.css) so the map fade meets the footer flush. */
+/** Matches `.site-footer-editorial` `--fe-bg` (Footer.css) for section + affiliate strip. */
 const EDITORIAL_CHARCOAL = '#111111'
-
-const MAP_BOTTOM_FADE_GRADIENT = `linear-gradient(to bottom, transparent 0%, rgba(17,17,17,0.4) 30%, rgba(17,17,17,0.75) 60%, ${EDITORIAL_CHARCOAL} 100%)`
 
 /** Tab labels with state; falls back to Sanity `locationName` */
 const OFFICE_TAB_LABEL = {
@@ -41,7 +39,7 @@ function affiliateDescriptionSegments(description) {
 }
 
 /**
- * Full-viewport map, gradient, and location card for the home page `#contact` section.
+ * Full-viewport map and location card for the home page `#contact` section.
  * Only the active office iframe is mounted (tab switch remounts iframe for that office).
  */
 function ContactMapSection() {
@@ -147,12 +145,6 @@ function ContactMapSection() {
                 />
               </div>
             ) : null}
-
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
-              style={{ background: MAP_BOTTOM_FADE_GRADIENT }}
-              aria-hidden
-            />
           </div>
         ) : (
           <div
@@ -162,11 +154,6 @@ function ContactMapSection() {
             <div className="flex items-center justify-center px-6 py-16 text-white/70">
               No office locations available.
             </div>
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 md:h-40"
-              style={{ background: MAP_BOTTOM_FADE_GRADIENT }}
-              aria-hidden
-            />
           </div>
         )}
       </div>
