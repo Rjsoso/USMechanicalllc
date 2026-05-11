@@ -1,6 +1,7 @@
 import { useState, useMemo, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
+import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
   const navigate = useNavigate()
@@ -41,7 +42,7 @@ function Portfolio({ data: portfolioDataProp }) {
           className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           style={{ boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)', position: 'relative' }}
         >
-          {displayCategories.map((category) => (
+          {displayCategories.map((category, index) => (
             <div key={category._id}>
               <div
                 onClick={() => navigate(`/portfolio/${category._id}`)}
@@ -49,8 +50,11 @@ function Portfolio({ data: portfolioDataProp }) {
                 style={{ paddingBottom: '66.67%' }} // 3:2 aspect ratio
               >
                 {category.image?.asset && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <div className="group relative inline-block max-h-full max-w-full align-middle">
+                  <div
+                    className={`portfolio-home__frame portfolio-home__frame--${Math.min(index, 5)}`}
+                  >
+                    <div className="portfolio-home__frame-inner">
+                      <div className="group relative inline-block max-h-full max-w-full align-middle">
                       <img
                         src={urlFor(category.image).width(800).quality(85).auto('format').url()}
                         srcSet={[400, 600, 800, 1200, 1600]
@@ -93,6 +97,7 @@ function Portfolio({ data: portfolioDataProp }) {
                             />
                           </svg>
                         </div>
+                      </div>
                       </div>
                     </div>
                   </div>
