@@ -9,9 +9,11 @@ import './ServicesEditorial.css'
 
 function getBoxBackgroundStyle(box) {
   if (box.backgroundType === 'image' && box.backgroundImage?.asset?.url) {
-    const imageUrl = `${box.backgroundImage.asset.url}?w=800&q=80&auto=format`
+    const baseUrl = box.backgroundImage.asset.url
+    const imageUrl1x = `${baseUrl}?w=800&q=80&auto=format&fit=max`
+    const imageUrl2x = `${baseUrl}?w=1600&q=75&auto=format&fit=max`
     return {
-      backgroundImage: `url(${imageUrl})`,
+      backgroundImage: `image-set(url("${imageUrl1x}") 1x, url("${imageUrl2x}") 2x)`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

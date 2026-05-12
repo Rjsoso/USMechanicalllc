@@ -56,8 +56,13 @@ export default function CareersPage() {
   const submissionFax = careersData?.submissionFax || '(801) 785-6029'
   const backgroundImage = careersData?.backgroundImage
 
-  const backgroundImageUrl = backgroundImage
-    ? urlFor(backgroundImage).width(1920).quality(90).url()
+  // 1x / 2x variants keep the careers hero crisp on retina without bloating
+  // bandwidth for standard-DPR clients.
+  const backgroundImage1x = backgroundImage
+    ? urlFor(backgroundImage).width(1920).quality(85).auto('format').fit('max').url()
+    : null
+  const backgroundImage2x = backgroundImage
+    ? urlFor(backgroundImage).width(2880).quality(80).auto('format').fit('max').url()
     : null
 
   // Render immediately - no loading check
@@ -94,8 +99,8 @@ export default function CareersPage() {
         style={{
           backgroundColor: '#f5f5f5',
           minHeight: '100vh',
-          ...(backgroundImageUrl && {
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
+          ...(backgroundImage1x && {
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), image-set(url("${backgroundImage1x}") 1x, url("${backgroundImage2x}") 2x)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }),

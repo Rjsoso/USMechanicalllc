@@ -1,6 +1,6 @@
 /* global process */
 import { useMemo, useState, memo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { navigateToSection } from '../utils/scrollToSection'
 import { useSanityLive } from '../hooks/useSanityLive'
@@ -39,6 +39,10 @@ function HeroSection() {
   const [yearColor] = useState(() => generateYearColor())
   const navigate = useNavigate()
   const location = useLocation()
+  const prefersReducedMotion = useReducedMotion()
+  // Track whether the headline entrance has finished so we can drop the
+  // compositor hint (`will-change`) once the layer is no longer animating.
+  const [headlineSettled, setHeadlineSettled] = useState(false)
 
   const { data: rawHero } = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
   const heroData = useMemo(() => {
@@ -84,14 +88,15 @@ function HeroSection() {
         <motion.h1
           className="hero-3d-text mb-0 max-w-5xl"
           data-text={heroData.headline}
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 24 }}
-          transition={{
-            duration: 0.52,
-            ease: [0.25, 0.1, 0.25, 1],
-            delay: 0.12,
-          }}
-          style={{ willChange: 'transform, opacity' }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: -12 }}
+          animate={prefersReducedMotion ? { opacity: 1, y: 24 } : { opacity: 1, y: 24 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: 0.52, ease: [0.25, 0.1, 0.25, 1], delay: 0.12 }
+          }
+          onAnimationComplete={() => setHeadlineSettled(true)}
+          style={{ willChange: headlineSettled || prefersReducedMotion ? 'auto' : 'transform, opacity' }}
         >
           {(() => {
             const headline = heroData.headline
@@ -138,9 +143,9 @@ function HeroSection() {
             <motion.p
               className="hero-subtext !mt-0 mx-auto max-w-2xl text-lg text-white md:text-xl"
               style={{ marginBottom: '0px' }}
-              initial={{ opacity: 0 }}
+              initial={prefersReducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.36, delay: 0.06 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.36, delay: 0.06 }}
             >
             {heroData.subtext}
           </motion.p>
@@ -151,9 +156,13 @@ function HeroSection() {
           (heroData.secondButtonText && heroData.secondButtonText.trim() !== '')) && (
           <motion.div
             className="flex flex-col gap-4 sm:flex-row sm:justify-center"
-            initial={{ opacity: 0, y: 14 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.42, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { duration: 0.42, delay: 0.22, ease: [0.22, 1, 0.36, 1] }
+            }
           >
             {heroData.buttonText && heroData.buttonText.trim() !== '' && (
               <button

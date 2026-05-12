@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, memo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 const StaggerIntensityContext = createContext('default')
 
@@ -24,6 +24,14 @@ const ITEM_VARIANTS = {
   },
 }
 
+// Skip transforms entirely under reduced motion; only fade so the layout
+// never shifts and there's no transform/opacity tween for screen readers /
+// vestibular-sensitive users to deal with.
+const REDUCED_ITEM_VARIANTS = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0 } },
+}
+
 export const StaggerContainer = memo(function StaggerContainer({
   children,
   className = '',
@@ -33,8 +41,10 @@ export const StaggerContainer = memo(function StaggerContainer({
   initialDelay = 0,
   once = true,
 }) {
-  const staggerDelay =
-    staggerDelayProp ?? (intensity === 'strong' ? 0.09 : 0.07)
+  const prefersReducedMotion = useReducedMotion()
+  const staggerDelay = prefersReducedMotion
+    ? 0
+    : staggerDelayProp ?? (intensity === 'strong' ? 0.09 : 0.07)
 
   const variants = useMemo(
     () => ({
@@ -42,11 +52,11 @@ export const StaggerContainer = memo(function StaggerContainer({
       visible: {
         transition: {
           staggerChildren: staggerDelay,
-          delayChildren: initialDelay,
+          delayChildren: prefersReducedMotion ? 0 : initialDelay,
         },
       },
     }),
-    [staggerDelay, initialDelay]
+    [staggerDelay, initialDelay, prefersReducedMotion]
   )
 
   return (
@@ -67,7 +77,10 @@ export const StaggerContainer = memo(function StaggerContainer({
 
 export const StaggerItem = memo(function StaggerItem({ children, className = '' }) {
   const intensity = useContext(StaggerIntensityContext)
-  const variants = ITEM_VARIANTS[intensity] ?? ITEM_VARIANTS.default
+  const prefersReducedMotion = useReducedMotion()
+  const variants = prefersReducedMotion
+    ? REDUCED_ITEM_VARIANTS
+    : ITEM_VARIANTS[intensity] ?? ITEM_VARIANTS.default
 
   return (
     <motion.div className={className} variants={variants}>

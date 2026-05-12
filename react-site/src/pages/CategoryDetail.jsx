@@ -243,27 +243,32 @@ export default function CategoryDetail() {
                     }}
                     className="portfolio-category-page__card"
                   >
-                    {project.images && project.images.length > 0 && (
-                      <div className="portfolio-category-page__card-media">
-                        <img
-                          src={urlFor(project.images[0])
-                            .width(900)
-                            .fit('max')
-                            .quality(85)
-                            .auto('format')
-                            .url()}
-                          alt={project.images[0]?.alt || project.title}
-                          className="portfolio-category-page__card-img"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        {project.images.length > 1 && (
-                          <div className="portfolio-category-page__card-badge">
-                            +{project.images.length - 1} photos
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    {project.images && project.images.length > 0 && (() => {
+                      const cardImage = urlFor(project.images[0])
+                        .fit('max')
+                        .auto('format')
+                      const widths = [500, 800, 1200, 1600]
+                      return (
+                        <div className="portfolio-category-page__card-media">
+                          <img
+                            src={cardImage.width(900).quality(85).url()}
+                            srcSet={widths
+                              .map((w) => `${cardImage.width(w).quality(85).url()} ${w}w`)
+                              .join(', ')}
+                            sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            alt={project.images[0]?.alt || project.title}
+                            className="portfolio-category-page__card-img"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          {project.images.length > 1 && (
+                            <div className="portfolio-category-page__card-badge">
+                              +{project.images.length - 1} photos
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })()}
                     <div className="portfolio-category-page__card-body">
                       <h3 className="portfolio-category-page__card-title">{project.title}</h3>
                       {project.description && (

@@ -127,6 +127,20 @@ html {
   }
 }
 
+/* Per-section safety net: even if a section ever lives inside its own scroll
+   container (so html-level scroll-padding-top wouldn't apply), the section
+   still lands below the fixed header on anchor jumps. */
+#hero,
+#about,
+#safety,
+#services,
+#portfolio,
+#contact,
+#careers,
+#why-us {
+  scroll-margin-top: var(--site-header-offset, 180px);
+}
+
 /* Additional body properties (background and font smoothing already set above) */
 body {
   font-family: var(--font-ui);
@@ -179,10 +193,10 @@ img[src] {
   text-rendering: optimizeLegibility;
 }
 
-/* Smooth scrolling momentum on iOS */
-* {
-  -webkit-overflow-scrolling: touch;
-}
+/* iOS momentum scrolling is now the default on iOS 15+; we keep the targeted
+   rules below on html/body and explicit scroll containers, but applying it to
+   every element via `*` triggered needless style invalidation on huge subtrees
+   with no real benefit. */
 
 /* Prevent layout shifts during animations */
 img,
@@ -751,11 +765,21 @@ footer {
 /* contain-intrinsic-size raised to 1500px — the old 500px was too small for
    tall sections (About, Services, Portfolio are 900–2000px). When the browser
    activates a section and discovers it is much taller than the hint it
-   immediately re-lays out the document, causing a visible scrollbar jump. */
+   immediately re-lays out the document, causing a visible scrollbar jump.
+   Per-section overrides below tighten the hint for known-tall (#portfolio)
+   and known-short (#safety) sections so the scroll position stays stable. */
 @supports (content-visibility: auto) {
   section:not(#hero):not(#contact):not(#reviews-section):not(#services) {
     content-visibility: auto;
     contain-intrinsic-size: auto 1500px;
+  }
+
+  section#portfolio {
+    contain-intrinsic-size: auto 2200px;
+  }
+
+  section#safety {
+    contain-intrinsic-size: auto 900px;
   }
 }
 

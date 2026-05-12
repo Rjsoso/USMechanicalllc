@@ -38,13 +38,19 @@ function LogoLoopSection() {
     return null
   }
 
-  const logos = logoData.map((item, index) => ({
-    src: urlFor(item.logo).width(800).url(),
-    alt: item.logo.alt || item.companyName,
-    title: item.companyName,
-    href: item.url || undefined,
-    key: `logo-${index}`,
-  }))
+  const logos = logoData.map((item, index) => {
+    const base = urlFor(item.logo).auto('format').fit('max').quality(85)
+    const widths = [200, 400, 800]
+    return {
+      src: base.width(400).url(),
+      srcSet: widths.map((w) => `${base.width(w).url()} ${w}w`).join(', '),
+      sizes: '(max-width: 768px) 120px, (max-width: 1440px) 200px, 240px',
+      alt: item.logo.alt || item.companyName,
+      title: item.companyName,
+      href: item.url || undefined,
+      key: `logo-${index}`,
+    }
+  })
 
   // Responsive logo sizing based on screen width
   const getLogoHeight = () => {

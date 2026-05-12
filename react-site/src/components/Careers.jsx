@@ -62,9 +62,13 @@ function Careers() {
   const submissionFax = careersData?.submissionFax || '(801) 785-6029'
   const backgroundImage = careersData?.backgroundImage
 
-  // Generate background image URL if available
-  const backgroundImageUrl = backgroundImage
-    ? urlFor(backgroundImage).width(1920).quality(90).url()
+  // 1x / 2x variants so retina displays render the careers banner cleanly
+  // without forcing low-DPR clients to pull the larger source.
+  const backgroundImage1x = backgroundImage
+    ? urlFor(backgroundImage).width(1920).quality(85).auto('format').fit('max').url()
+    : null
+  const backgroundImage2x = backgroundImage
+    ? urlFor(backgroundImage).width(2880).quality(80).auto('format').fit('max').url()
     : null
 
   return (
@@ -78,8 +82,8 @@ function Careers() {
         position: 'relative',
         zIndex: 4,
         minHeight: '879px',
-        ...(backgroundImageUrl && {
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${backgroundImageUrl})`,
+        ...(backgroundImage1x && {
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), image-set(url("${backgroundImage1x}") 1x, url("${backgroundImage2x}") 2x)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }),

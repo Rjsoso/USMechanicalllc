@@ -16,8 +16,7 @@ import { trackEvent } from '../utils/analytics'
 import './ContactPage.css'
 
 const CONTACT_QUERY = `*[_type == "contact" && _id == "contact"][0]{
-  ...,
-  backgroundImage { asset-> { _id, url } }
+  ...
 }`
 
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'

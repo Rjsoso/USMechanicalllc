@@ -1,5 +1,5 @@
 /* global process */
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
@@ -44,6 +44,17 @@ const PORTFOLIO_SECTION_QUERY = `*[_id == "portfolioSection"][0]{ sectionTitle, 
 const STATS_QUERY = `*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`
 const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`
 
+// Hero ladder picked against viewport CSS pixels × DPR so retina + ultrawide
+// screens get sharp pixels without overloading laptops/phones.
+const HERO_WIDTH_LADDER = [1280, 1920, 2560, 3200]
+
+function pickHeroWidth() {
+  if (typeof window === 'undefined') return 1920
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  const target = (window.innerWidth || 1280) * dpr
+  return HERO_WIDTH_LADDER.find((w) => w >= target) || HERO_WIDTH_LADDER[HERO_WIDTH_LADDER.length - 1]
+}
+
 export default function Home() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -56,18 +67,44 @@ export default function Home() {
   const stats = useSanityLive(STATS_QUERY, {}, { listenFilter: `*[_type == "companyStats"]` })
   const about = useSanityLive(ABOUT_QUERY, {}, { listenFilter: `*[_type == "aboutAndSafety"]` })
 
+  const [heroWidth, setHeroWidth] = useState(() => pickHeroWidth())
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    let rafId = 0
+    const onResize = () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        const next = pickHeroWidth()
+        setHeroWidth((prev) => (prev === next ? prev : next))
+      })
+    }
+    window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('orientationchange', onResize, { passive: true })
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
+    }
+  }, [])
+
   const heroBackgroundUrl = useMemo(() => {
     const heroData = hero.data
     if (!heroData) return null
     if (heroData?.backgroundImage?.asset?.url) {
-      return `${heroData.backgroundImage.asset.url}?w=1920&q=85&auto=format`
+      return `${heroData.backgroundImage.asset.url}?w=${heroWidth}&q=85&auto=format&fit=max`
     }
     if (heroData?.backgroundImage) {
-      const url = urlFor(heroData.backgroundImage)?.width(1920).quality(85).auto('format').url()
+      const url = urlFor(heroData.backgroundImage)
+        ?.width(heroWidth)
+        .quality(85)
+        .auto('format')
+        .fit('max')
+        .url()
       return url || null
     }
     return null
-  }, [hero.data])
+  }, [hero.data, heroWidth])
 
   const portfolioData = useMemo(() => {
     if (portfolioCat.data && portfolioSec.data) {

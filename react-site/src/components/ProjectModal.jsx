@@ -19,7 +19,7 @@ export default function ProjectModal({ project, onClose }) {
       toPreload.forEach((index) => {
         if (images[index]?.asset) {
           const img = new Image()
-          img.src = urlFor(images[index]).width(1200).quality(90).auto('format').url()
+          img.src = urlFor(images[index]).width(1400).quality(88).fit('max').auto('format').url()
         }
       })
     }
@@ -76,33 +76,40 @@ export default function ProjectModal({ project, onClose }) {
             <div className="relative mb-6">
               <div className="relative h-96 w-full overflow-hidden rounded-t-lg bg-gray-900 md:h-[500px]">
                 <AnimatePresence mode="wait">
-                  {images[currentImageIndex] && (
-                    <motion.img
-                      key={currentImageIndex}
-                      src={
-                        images[currentImageIndex]?.asset
-                          ? urlFor(images[currentImageIndex])
-                              .width(1200)
-                              .quality(90)
-                              .auto('format')
-                              .url()
-                          : ''
-                      }
-                      alt={
-                        images[currentImageIndex]?.alt ||
-                        project.title ||
-                        `Project image ${currentImageIndex + 1}`
-                      }
-                      className="h-full w-full object-contain"
-                      loading="eager"
-                      decoding="async"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ backgroundColor: '#111827' }}
-                    />
-                  )}
+                  {images[currentImageIndex] && (() => {
+                    const current = images[currentImageIndex]
+                    const builder = current?.asset
+                      ? urlFor(current).fit('max').auto('format')
+                      : null
+                    const widths = [1000, 1400, 1920, 2400]
+                    return (
+                      <motion.img
+                        key={currentImageIndex}
+                        src={builder ? builder.width(1400).quality(88).url() : ''}
+                        srcSet={
+                          builder
+                            ? widths
+                                .map((w) => `${builder.width(w).quality(85).url()} ${w}w`)
+                                .join(', ')
+                            : undefined
+                        }
+                        sizes="(max-width: 1024px) 100vw, 1200px"
+                        alt={
+                          current?.alt ||
+                          project.title ||
+                          `Project image ${currentImageIndex + 1}`
+                        }
+                        className="h-full w-full object-contain"
+                        loading="eager"
+                        decoding="async"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{ backgroundColor: '#111827' }}
+                      />
+                    )
+                  })()}
                 </AnimatePresence>
 
                 {/* Navigation Arrows */}

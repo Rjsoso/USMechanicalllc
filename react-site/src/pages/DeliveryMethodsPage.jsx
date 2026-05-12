@@ -122,8 +122,12 @@ export default function DeliveryMethodsPage() {
           ) : (
             <div className="space-y-10">
               {methods.map((method, index) => {
-                const bgUrl = method?.backgroundImage?.asset?.url
-                  ? `${method.backgroundImage.asset.url}?w=1400&q=80&auto=format`
+                const baseAssetUrl = method?.backgroundImage?.asset?.url
+                const bgUrl = baseAssetUrl
+                  ? `${baseAssetUrl}?w=1400&q=80&auto=format&fit=max`
+                  : null
+                const bgUrl2x = baseAssetUrl
+                  ? `${baseAssetUrl}?w=2400&q=75&auto=format&fit=max`
                   : null
                 const badgeClass =
                   badgeToneClasses[method?.badgeTone] || badgeToneClasses.slate
@@ -143,7 +147,7 @@ export default function DeliveryMethodsPage() {
                       style={
                         bgUrl
                           ? {
-                              backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65)), url(${bgUrl})`,
+                              backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65)), image-set(url("${bgUrl}") 1x, url("${bgUrl2x}") 2x)`,
                               backgroundSize: 'cover',
                               backgroundPosition: 'center',
                               minHeight: '180px',
