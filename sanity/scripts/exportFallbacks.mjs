@@ -120,7 +120,7 @@ async function exportFallbacks() {
 
 We pursue projects in the Intermountain and Southwest regions via hard bid, design build, CMAR, and cost plus. Our team includes journeyman and apprentice plumbers, sheet metal installers, pipefitters, welders, and administrative staff—all with unmatched experience.
 
-We maintain offices in Pleasant Grove, Utah, and Las Vegas, Nevada, as well as Snyder Mechanical in Elko, Nevada, which serves the mining industry. U.S. Mechanical is fully licensed, bonded, and insured in Nevada, Utah, Arizona, California, and Wyoming.`,
+We maintain offices in Pleasant Grove, Utah, and Las Vegas, Nevada, as well as Snyder Mechanical in Elko, Nevada, which serves the mining industry. U.S. Mechanical is fully licensed, bonded, and insured in Nevada, Utah, Arizona, and Wyoming.`,
         safetyTitle: aboutData?.safetyTitle || 'Safety & Risk Management',
         safetyText: aboutData?.safetyText || `U.S. Mechanical conducts all projects with safety as our top priority. We employ a company-wide safety program led by a full-time OSHA and MSHA accredited safety director. Our focus on safety ensures properly trained employees and a work environment that prioritizes everyone's well-being.
 
@@ -174,9 +174,8 @@ Our goal is always simple: complete every project with zero safety issues.`
         benefits: careersData?.benefits || [
           '$500 referral bonus',
           'Tuition reimbursement for apprentices',
-          'Paid time off starts accruing after 90 days',
+          'Paid time off',
           'Free employee medical, dental, vision, and life insurance',
-          'Up to 3.5% 401(k) match',
         ],
         indeedUrl: careersData?.indeedUrl || 'https://www.indeed.com/cmp/U.s.-Mechanical,-LLC/jobs',
         submissionEmail: careersData?.submissionEmail || 'admin@usmechanicalllc.com',

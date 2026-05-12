@@ -47,9 +47,8 @@ export default function CareersPage() {
   const benefits = careersData?.benefits || [
     '$500 referral bonus',
     'Tuition reimbursement for apprentices',
-    'Paid time off starts accruing after 90 days',
+    'Paid time off',
     'Free employee medical, dental, vision, and life insurance',
-    'Up to 3.5% 401(k) match',
   ]
   const indeedUrl = careersData?.indeedUrl || 'https://www.indeed.com/cmp/U.s.-Mechanical,-LLC/jobs'
   const pdfUrl = careersData?.applicationPdfUrl || '/application.pdf'

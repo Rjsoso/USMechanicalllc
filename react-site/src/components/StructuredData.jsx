@@ -57,10 +57,6 @@ const StructuredData = () => {
         },
         {
           '@type': 'State',
-          name: 'California',
-        },
-        {
-          '@type': 'State',
           name: 'Wyoming',
         },
       ],

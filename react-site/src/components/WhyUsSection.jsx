@@ -22,8 +22,8 @@ const DEFAULT_ITEMS = [
   },
   {
     icon: 'map',
-    title: 'Licensed in 5 States',
-    description: 'Fully licensed, bonded, and insured across Utah, Nevada, Arizona, California, and Wyoming.',
+    title: 'Licensed in 4 States',
+    description: 'Fully licensed, bonded, and insured across Utah, Nevada, Arizona, and Wyoming.',
   },
   {
     icon: 'dollar',
@@ -69,7 +69,7 @@ function italicizeLastWord(phrase) {
 
 const STATS = [
   { number: '60+', label: 'Years serving' },
-  { number: '5', label: 'Licensed states' },
+  { number: '4', label: 'Licensed states' },
   { number: '$150M+', label: 'Aggregate bonding' },
   { number: '1963', label: 'Year founded' },
 ]
@@ -260,7 +260,7 @@ function WhyUsSection() {
           </div>
 
           <p className="panel-license">
-            Licensed, bonded &amp; insured. Utah, Nevada, Arizona, California &amp; Wyoming. MC / plumbing /
+            Licensed, bonded &amp; insured. Utah, Nevada, Arizona &amp; Wyoming. MC / plumbing /
             HVAC &amp; process scope as applicable—verify licenses with each office.
           </p>
         </aside>
