@@ -5,8 +5,10 @@ import SmallSpinner from './SmallSpinner'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   offices[]{ locationName, address, phone, fax },
-  affiliates[]{ name, description, logo { asset-> { _id, url } } }
+  affiliates[]{ name, url, description, logo { asset-> { _id, url } } }
 }`
+
+const SNYDER_MECHANICAL_URL = 'https://www.snydermechanical.com/'
 
 /**
  * Map block height: use dynamic viewport height minus ~nav band (5.5rem matches scroll-mt).
@@ -36,6 +38,15 @@ function affiliateDescriptionSegments(description) {
   const byPipe = raw.split('|').map(s => s.trim()).filter(Boolean)
   if (byPipe.length > 1) return byPipe
   return raw.split(/\n+/).map(s => s.trim()).filter(Boolean)
+}
+
+function resolveAffiliateUrl(affiliate) {
+  const url = affiliate?.url?.trim()
+  if (url) return url
+  if (affiliate?.name?.trim().toLowerCase() === 'snyder mechanical') {
+    return SNYDER_MECHANICAL_URL
+  }
+  return null
 }
 
 /**
@@ -166,6 +177,26 @@ function ContactMapSection() {
           <div className="mx-auto flex max-w-6xl flex-col gap-5">
             {affiliates.map((affiliate, i) => {
               const segments = affiliateDescriptionSegments(affiliate.description)
+              const affiliateUrl = resolveAffiliateUrl(affiliate)
+              const logo =
+                affiliate.logo && urlFor(affiliate.logo) ? (
+                  <img
+                    src={urlFor(affiliate.logo)
+                      .width(200)
+                      .quality(80)
+                      .auto('format')
+                      .url()}
+                    alt={affiliate.name ? `${affiliate.name} logo` : ''}
+                    className="h-7 w-auto shrink-0 object-contain md:h-8"
+                    width={120}
+                    height={32}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : null
+              const nameLabel = affiliate.name ? (
+                <span className="shrink-0 font-semibold text-white">{affiliate.name}</span>
+              ) : null
               return (
                 <div
                   key={i}
@@ -180,23 +211,26 @@ function ContactMapSection() {
                   <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 md:text-xs">
                     Affiliate
                   </span>
-                  {affiliate.logo && urlFor(affiliate.logo) && (
-                    <img
-                      src={urlFor(affiliate.logo)
-                        .width(200)
-                        .quality(80)
-                        .auto('format')
-                        .url()}
-                      alt={affiliate.name ? `${affiliate.name} logo` : ''}
-                      className="h-7 w-auto shrink-0 object-contain md:h-8"
-                      width={120}
-                      height={32}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  )}
-                  {affiliate.name && (
-                    <span className="shrink-0 font-semibold text-white">{affiliate.name}</span>
+                  {affiliateUrl ? (
+                    <a
+                      href={affiliateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center gap-x-3 transition-colors hover:text-blue-300 md:gap-x-4"
+                      aria-label={
+                        affiliate.name
+                          ? `Visit ${affiliate.name} website (opens in new tab)`
+                          : 'Visit affiliate website (opens in new tab)'
+                      }
+                    >
+                      {logo}
+                      {nameLabel}
+                    </a>
+                  ) : (
+                    <>
+                      {logo}
+                      {nameLabel}
+                    </>
                   )}
                   {segments.map((seg, j) => (
                     <Fragment key={j}>
