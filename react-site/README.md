@@ -15,7 +15,7 @@ npm install
 npm run dev               # http://localhost:3000
 ```
 
-The Sanity Studio is a separate workspace at `../sanity/`; see `SANITY_SETUP.md` for working with content.
+The Sanity Studio is a separate workspace at `../sanity/` (project `3vpl3hho`, dataset `production`). Studio URL: https://us-mechanical.sanity.studio
 
 ---
 

@@ -1,10 +1,9 @@
 import { useState, useMemo, memo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
-  const navigate = useNavigate()
   const [loadedImages, setLoadedImages] = useState(new Set())
 
   // Derive from props directly — no intermediate state needed.
@@ -47,9 +46,9 @@ function Portfolio({ data: portfolioDataProp }) {
         >
           {displayCategories.map((category, index) => (
             <div key={category._id}>
-              <div
-                onClick={() => navigate(`/portfolio/${category._id}`)}
-                className="portfolio-category-card relative cursor-pointer overflow-hidden bg-gray-100"
+              <Link
+                to={`/portfolio/${category._id}`}
+                className="portfolio-category-card relative block cursor-pointer overflow-hidden bg-gray-100"
                 style={{ height: CELL_HEIGHTS[index % CELL_HEIGHTS.length] }}
               >
                 {category.image?.asset && (
@@ -103,7 +102,7 @@ function Portfolio({ data: portfolioDataProp }) {
                     </div>
                   </div>
                 )}
-              </div>
+              </Link>
             </div>
           ))}
         </div>

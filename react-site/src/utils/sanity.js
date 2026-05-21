@@ -52,22 +52,3 @@ export function buildSanitySrcSet(baseUrl, widths, { quality = 75, format = 'for
 export const ABOUT_CAROUSEL_SRC_WIDTHS = [480, 720, 960, 1280, 1600, 1920]
 export const ABOUT_CAROUSEL_FALLBACK_W = 1280
 export const ABOUT_CAROUSEL_QUALITY = 82
-
-// Helper function to fetch content from Sanity
-export async function fetchContent(query, params = {}) {
-  try {
-    const data = await client.fetch(query, params)
-    return data
-  } catch (error) {
-    console.error('Error fetching from Sanity:', error)
-    return null
-  }
-}
-
-// Queries for different sections
-export const queries = {
-  hero: `*[_type == "heroSection"][0]`,
-  about: `*[_type == "aboutAndSafety"][0]`,
-  safety: `*[_type == "aboutAndSafety"][0]`,
-  contact: `*[_type == "contact"][0]`,
-}

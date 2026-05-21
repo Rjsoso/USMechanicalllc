@@ -85,7 +85,7 @@ Each entry includes:
 
 Two separate Upstash rate limiters protect the backend:
 
-- `/api/contact`: 5 submissions per IP per hour
+- `/api/contact`: 3 submissions per IP per hour
 - `/api/client-errors`: 30 reports per IP per hour
 
 Both use Upstash Redis. The rate limit tables are visible in the

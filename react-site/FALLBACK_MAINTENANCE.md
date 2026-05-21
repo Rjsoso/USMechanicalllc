@@ -53,7 +53,7 @@ Using the generated `fallbacks.json` as reference, update the fallback constants
 |-----------|-----------|---------------|----------------|
 | Hero Section | `src/components/HeroSection.jsx` | `defaultHeroData` | Headlines, button text |
 | Footer | `src/components/Footer.jsx` | `FALLBACK_DATA` | Contact info, hours |
-| About/Safety | `src/components/AboutAndSafety.jsx` | `defaultData` | Company info, safety text |
+| About/Safety | `src/components/AboutSection.jsx`, `SafetySection.jsx` | inline fallbacks | Company info, safety text |
 | About Page | `src/pages/About.jsx` | `defaultData` | Same as above |
 | Navigation | `src/components/DrawerMenu.jsx` | `defaultSections` | Menu structure |
 | Careers | `src/components/Careers.jsx` | Multiple variables | Job postings |
@@ -85,7 +85,8 @@ react-site/
 │   ├── components/
 │   │   ├── HeroSection.jsx        (lines 7-17)
 │   │   ├── Footer.jsx             (lines 7-20)
-│   │   ├── AboutAndSafety.jsx     (lines 34-48)
+│   │   ├── AboutSection.jsx
+│   │   ├── SafetySection.jsx
 │   │   ├── DrawerMenu.jsx         (lines 16-39)
 │   │   ├── Careers.jsx            (lines 47-78)
 │   │   └── ErrorBoundary.jsx      (line 141)

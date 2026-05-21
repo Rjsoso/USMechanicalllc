@@ -13,7 +13,6 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css}\"",
-    "sanity:clean": "rm -rf .sanity node_modules && npm install && npm run dev",
     "generate-sitemap": "node generate-sitemap.mjs",
     "test:e2e": "playwright test",
     "test:smoke": "playwright test smoke --project=chromium",
@@ -38,7 +37,6 @@
     "@axe-core/playwright": "^4.11.2",
     "@eslint/js": "^9.39.1",
     "@playwright/test": "^1.55.0",
-    "@sanity/vision": "^4.13.0",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.2.1",
@@ -51,7 +49,6 @@
     "postcss": "^8.4.32",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "sanity": "^4.13.0",
     "tailwindcss": "^3.3.6",
     "vercel": "^48.10.0",
     "vite": "^5.0.8"

@@ -26,12 +26,6 @@
   outline: none;
 }
 
-/* GradientText color cycle — replaces JS setInterval for zero CPU overhead */
-@keyframes gradientTextCycle {
-  0%, 100% { color: #3404f6; }
-  50%       { color: #f40101; }
-}
-
 /* Logo Loop Keyframes - Must be outside Tailwind layers to prevent purging */
 @keyframes scrollLeft {
   from {

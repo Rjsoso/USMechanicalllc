@@ -178,7 +178,7 @@ export const LogoLoop = memo(
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES)
     const [localIsHovered, setLocalIsHovered] = useState(false)
 
-    // External hover state overrides local hover (used to sync dual loops in AboutAndSafety)
+    // External hover state overrides local hover (used to sync dual logo loops on About)
     const isHovered = externalHoverState !== undefined ? externalHoverState : localIsHovered
 
     const effectiveHoverSpeed = useMemo(() => {
