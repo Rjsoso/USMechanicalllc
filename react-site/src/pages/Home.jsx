@@ -48,6 +48,10 @@ const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ a
 // screens get sharp pixels without overloading laptops/phones.
 const HERO_WIDTH_LADDER = [1280, 1920, 2560, 3200]
 
+// Used when Sanity API is unreachable (e.g. missing CORS origin on production).
+const FALLBACK_HERO_BG_BASE =
+  'https://cdn.sanity.io/images/3vpl3hho/production/cab5ddd9e21487005205aa1f34010f132feec6b2-585x350.jpg'
+
 function pickHeroWidth() {
   if (typeof window === 'undefined') return 1920
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -90,7 +94,6 @@ export default function Home() {
 
   const heroBackgroundUrl = useMemo(() => {
     const heroData = hero.data
-    if (!heroData) return null
     if (heroData?.backgroundImage?.asset?.url) {
       return `${heroData.backgroundImage.asset.url}?w=${heroWidth}&q=85&auto=format&fit=max`
     }
@@ -101,9 +104,9 @@ export default function Home() {
         .auto('format')
         .fit('max')
         .url()
-      return url || null
+      if (url) return url
     }
-    return null
+    return `${FALLBACK_HERO_BG_BASE}?w=${heroWidth}&q=85&auto=format&fit=max`
   }, [hero.data, heroWidth])
 
   const portfolioData = useMemo(() => {
@@ -281,7 +284,7 @@ export default function Home() {
         tabIndex={-1}
         className="main-with-fixed-bg"
         style={{
-          '--bg-url': heroBackgroundUrl ? `url(${heroBackgroundUrl})` : 'none',
+          '--bg-url': `url(${heroBackgroundUrl})`,
           position: 'relative',
           minHeight: '100vh',
         }}

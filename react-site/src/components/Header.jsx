@@ -50,15 +50,21 @@ function Header() {
       .catch(error => {
         console.error('Error fetching header data:', error)
       })
+      .finally(() => {
+        setLogoLoading(false)
+      })
   }, [])
 
   // Memoize logo URL for background image
   const logoUrl = useMemo(() => {
-    if (!logo?.asset) return null
-    // The logo card renders at ~218–280 CSS px across breakpoints. 640w covers
-    // DPR 2 comfortably; q=85 is visually indistinguishable from 95 for a
-    // stamped logo but cuts ~6 KB off every page view.
-    return urlFor(logo).width(640).quality(85).auto('format').fit('max').url()
+    if (logo?.asset) {
+      // The logo card renders at ~218–280 CSS px across breakpoints. 640w covers
+      // DPR 2 comfortably; q=85 is visually indistinguishable from 95 for a
+      // stamped logo but cuts ~6 KB off every page view.
+      return urlFor(logo).width(640).quality(85).auto('format').fit('max').url()
+    }
+    // Static fallback when Sanity is unreachable (e.g. missing CORS origin).
+    return '/logo.png'
   }, [logo])
 
   const handleLogoClick = () => {
@@ -78,7 +84,7 @@ function Header() {
       <DesktopNav />
 
       {/* Logo with 3D shadow effect - Overlaps the nav bar */}
-      {logoUrl && (
+      {logoUrl ? (
         <div className={`plaque-perspective fixed left-4 top-4 z-50${scrolled ? ' header-scrolled' : ''}`}>
           <div
             className="logo-3d-card"
@@ -106,7 +112,7 @@ function Header() {
             />
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Drawer Menu - Mobile only */}
       <DrawerMenu />

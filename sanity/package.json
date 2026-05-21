@@ -11,7 +11,8 @@
     "print-hero-header": "sanity exec scripts/printHeroAndHeader.ts",
     "update-portfolio-link": "sanity exec scripts/updatePortfolioLink.mjs --with-user-token",
     "create-legal-docs": "sanity exec scripts/createLegalDocuments.ts --with-user-token",
-    "patch-production": "sanity exec scripts/patchProductionContent.mjs --with-user-token"
+    "patch-production": "sanity exec scripts/patchProductionContent.mjs --with-user-token",
+    "ensure-cors": "node scripts/ensureCorsOrigins.mjs"
   },
   "keywords": [],
   "author": "",
