@@ -127,10 +127,7 @@
 }
 
 .site-footer-editorial__sister-card {
-  padding: clamp(1rem, 2.5vw, 1.35rem);
-  border: 1px solid var(--fe-rule);
-  border-radius: 6px;
-  background: rgba(247, 246, 243, 0.04);
+  padding: 0;
 }
 
 .site-footer-editorial__sister-brand {

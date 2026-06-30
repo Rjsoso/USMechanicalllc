@@ -101,7 +101,7 @@ function Footer() {
                     ) : null
                     return (
                       <div key={i} className="site-footer-editorial__sister">
-                        <p className="site-footer-editorial__sister-heading">Sister Company</p>
+                        <p className="site-footer-editorial__sister-heading">Affiliate Company</p>
                         <div className="site-footer-editorial__sister-card">
                           <div className="site-footer-editorial__sister-brand">
                             {logoSrc && (
@@ -124,7 +124,7 @@ function Footer() {
                                 aria-label={
                                   affiliate.name
                                     ? `Visit ${affiliate.name} website (opens in new tab)`
-                                    : 'Visit sister company website (opens in new tab)'
+                                    : 'Visit affiliate company website (opens in new tab)'
                                 }
                               >
                                 {nameEl}
@@ -151,7 +151,7 @@ function Footer() {
                               aria-label={
                                 affiliate.name
                                   ? `Visit ${affiliate.name} website (opens in new tab)`
-                                  : 'Visit sister company website (opens in new tab)'
+                                  : 'Visit affiliate company website (opens in new tab)'
                               }
                             >
                               Visit site
