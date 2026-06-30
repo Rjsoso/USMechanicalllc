@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, memo } from 'react'
+import { flushSync } from 'react-dom'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
@@ -245,27 +246,26 @@ export default function Carousel({
     }
     const lastCloneIndex = itemsForRender.length - 1
 
-    if (position === lastCloneIndex) {
-      setIsJumping(true)
-      const target = 1
-      setPosition(target)
+    const jumpTo = target => {
+      // Synchronous state update prevents a visible flicker between clones.
+      flushSync(() => {
+        setIsJumping(true)
+        setPosition(target)
+      })
       x.set(-target * trackItemOffset)
       requestAnimationFrame(() => {
         setIsJumping(false)
         setIsAnimating(false)
       })
+    }
+
+    if (position === lastCloneIndex) {
+      jumpTo(1)
       return
     }
 
     if (position === 0) {
-      setIsJumping(true)
-      const target = items.length
-      setPosition(target)
-      x.set(-target * trackItemOffset)
-      requestAnimationFrame(() => {
-        setIsJumping(false)
-        setIsAnimating(false)
-      })
+      jumpTo(items.length)
       return
     }
 
