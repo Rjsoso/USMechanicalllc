@@ -67,8 +67,8 @@
 }
 
 .why-us-editorial .review-entry {
-  padding-bottom: 40px;
-  margin-bottom: 40px;
+  padding-bottom: 48px;
+  margin-bottom: 48px;
   border-bottom: 1px solid var(--why-rule);
 }
 
@@ -103,7 +103,7 @@
   font-weight: 300;
   color: var(--why-ink-mid);
   line-height: 1.75;
-  max-width: min(620px, 100%);
+  max-width: min(860px, 100%);
   margin: 0;
 }
 
