@@ -239,7 +239,7 @@ export default function ProjectDetail() {
                     baseWidth={700}
                     containerClassName="h-[min(52svh,480px)] min-h-[200px] w-full sm:min-h-[360px] md:min-h-[500px] md:h-[500px]"
                     autoplay={true}
-                    autoplayDelay={6000}
+                    autoplayDelay={9000}
                     pauseOnHover={true}
                     loop={true}
                     round={false}

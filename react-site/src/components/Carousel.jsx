@@ -117,7 +117,7 @@ export default function Carousel({
   arrowsInside = false,
   compactNav = false,
   autoplay = false,
-  autoplayDelay = 6000,
+  autoplayDelay = 9000,
   pauseOnHover = false,
   loop = false,
   round = false,
@@ -221,11 +221,20 @@ export default function Carousel({
     if (pauseOnHover && isHovered) return undefined
 
     const timer = setInterval(() => {
-      setPosition(prev => Math.min(prev + 1, itemsForRender.length - 1))
+      // Avoid fighting the jump-to-first/last snap or ongoing slide animation.
+      if (isJumping || isAnimating) return
+      setPosition(prev => {
+        const max = itemsForRender.length - 1
+        if (loop) {
+          const next = prev + 1
+          return next > max ? max : next
+        }
+        return Math.min(prev + 1, max)
+      })
     }, autoplayDelay)
 
     return () => clearInterval(timer)
-  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length])
+  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length, loop, isJumping, isAnimating])
 
   const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS
 

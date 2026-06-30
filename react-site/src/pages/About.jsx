@@ -203,7 +203,7 @@ function About() {
                   }
                   arrowsInside={true}
                   autoplay={isMobile ? false : !isExpanded}
-                  autoplayDelay={6000}
+                  autoplayDelay={9000}
                   pauseOnHover={true}
                   loop={true}
                   round={false}
