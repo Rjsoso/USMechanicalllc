@@ -507,14 +507,19 @@ export default function Carousel({
           style={{
             display: 'flex',
             gap: `${GAP}px`,
-            ...(use3DPerspective
+            ...(use3DPerspective && !isJumping
               ? {
                   perspective: 1000,
                   // Pivot at active slide center in track space (required for coverflow 3D).
                   perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
                   transformStyle: 'preserve-3d',
                 }
-              : {}),
+              : {
+                  // During loop jumps, keep the origin stable and avoid 3D to prevent flicker.
+                  perspective: use3DPerspective ? 1000 : undefined,
+                  perspectiveOrigin: `${itemWidth / 2}px 50%`,
+                  transformStyle: 'flat',
+                }),
             x,
           }}
           onDragEnd={handleDragEnd}
