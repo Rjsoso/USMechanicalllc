@@ -67,9 +67,13 @@
 }
 
 .why-us-editorial .review-entry {
-  padding-bottom: 180px;
-  margin-bottom: 180px;
-  border-bottom: 1px solid var(--why-rule);
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.why-us-editorial .review-entry + .review-entry {
+  margin-top: 220px;
 }
 
 .why-us-editorial .review-entry:last-child {
