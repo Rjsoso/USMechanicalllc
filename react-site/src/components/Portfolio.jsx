@@ -2,7 +2,7 @@ import { useState, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import FadeInNative from './FadeInNative'
-import SectionScrollSeam from './SectionScrollSeam'
+import CurtainScrollSeam from './CurtainScrollSeam'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -40,7 +40,7 @@ function Portfolio({ data: portfolioDataProp }) {
         )}
       </div>
 
-      <SectionScrollSeam className="h-16 w-full md:h-32" />
+      <CurtainScrollSeam className="h-16 w-full md:h-32" />
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white p-3">
