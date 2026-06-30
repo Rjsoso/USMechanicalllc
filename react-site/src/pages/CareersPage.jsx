@@ -161,7 +161,7 @@ export default function CareersPage() {
             </div>
           </div>
 
-          <div className="mb-6 flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             {indeedUrl && (
               <a
                 href={indeedUrl}
@@ -181,24 +181,20 @@ export default function CareersPage() {
                 Download Fillable PDF
               </a>
             )}
+            {badgeImage1x && (
+              <div className="flex items-center justify-center">
+                <img
+                  src={badgeImage1x}
+                  srcSet={
+                    badgeImage2x ? `${badgeImage1x} 1x, ${badgeImage2x} 2x` : undefined
+                  }
+                  alt={badgeAlt}
+                  className="h-24 w-auto rounded-md bg-white p-3 shadow-sm ring-1 ring-gray-200"
+                  loading="lazy"
+                />
+              </div>
+            )}
           </div>
-
-          {badgeImage1x && (
-            <div className="mt-10 flex flex-col items-center gap-3 text-center">
-              <p className="text-sm uppercase tracking-wide text-gray-700">
-                Training & Apprenticeships
-              </p>
-              <img
-                src={badgeImage1x}
-                srcSet={
-                  badgeImage2x ? `${badgeImage1x} 1x, ${badgeImage2x} 2x` : undefined
-                }
-                alt={badgeAlt}
-                className="h-24 w-auto rounded-md bg-white p-3 shadow-sm ring-1 ring-gray-200"
-                loading="lazy"
-              />
-            </div>
-          )}
 
           {(submissionEmail || submissionFax) && (
             <p className="text-center text-sm text-gray-600">
