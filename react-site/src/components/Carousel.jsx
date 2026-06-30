@@ -159,13 +159,14 @@ export default function Carousel({
   }, [items.length, baseWidth, round, containerClassName])
 
   const itemsForRender = useMemo(() => {
-    if (!loop) return items
     if (items.length === 0) return []
-    return [items[items.length - 1], ...items, items[0]]
+    if (!loop) return items
+    // Triple the list so the active viewport always sits in the middle copy.
+    return [...items, ...items, ...items]
   }, [items, loop])
 
   // Initialize position based on loop mode
-  const initialPosition = loop ? 1 : 0
+  const initialPosition = loop ? items.length : 0
   const [position, setPosition] = useState(initialPosition)
   const x = useMotionValue(0)
   const [isHovered, setIsHovered] = useState(false)
@@ -176,7 +177,7 @@ export default function Carousel({
 
   // Init / reset when items or loop change only — not when slide width (resize) changes
   useEffect(() => {
-    const startingPosition = loop ? 1 : 0
+    const startingPosition = loop ? items.length : 0
 
     if (!hasInitialized.current) {
       hasInitialized.current = true
@@ -217,58 +218,34 @@ export default function Carousel({
     }
   }, [pauseOnHover])
 
+  // When looping, keep the viewport centered in the middle copy to avoid visible snaps.
+  useLayoutEffect(() => {
+    if (!loop || items.length === 0) return
+    const span = items.length
+    if (position >= span * 2) {
+      flushSync(() => setPosition(prev => prev - span))
+      x.set(x.get() + span * trackItemOffset)
+    } else if (position < span) {
+      flushSync(() => setPosition(prev => prev + span))
+      x.set(x.get() - span * trackItemOffset)
+    }
+  }, [loop, items.length, position, trackItemOffset, x])
+
   useEffect(() => {
     if (!autoplay || itemsForRender.length <= 1) return undefined
     if (pauseOnHover && isHovered) return undefined
 
     const timer = setInterval(() => {
-      // Avoid fighting the jump-to-first/last snap or ongoing slide animation.
-      if (isJumping || isAnimating) return
-      setPosition(prev => {
-        const max = itemsForRender.length - 1
-        if (loop) {
-          const next = prev + 1
-          return next > max ? max : next
-        }
-        return Math.min(prev + 1, max)
-      })
+      if (isAnimating) return
+      setPosition(prev => (loop ? prev + 1 : Math.min(prev + 1, itemsForRender.length - 1)))
     }, autoplayDelay)
 
     return () => clearInterval(timer)
-  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length, loop, isJumping, isAnimating])
+  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length, loop, isAnimating])
 
   const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS
 
   const handleAnimationComplete = () => {
-    if (!loop || itemsForRender.length <= 1) {
-      setIsAnimating(false)
-      return
-    }
-    const lastCloneIndex = itemsForRender.length - 1
-
-    const jumpTo = target => {
-      // Synchronous state update prevents a visible flicker between clones.
-      flushSync(() => {
-        setIsJumping(true)
-        setPosition(target)
-      })
-      x.set(-target * trackItemOffset)
-      requestAnimationFrame(() => {
-        setIsJumping(false)
-        setIsAnimating(false)
-      })
-    }
-
-    if (position === lastCloneIndex) {
-      jumpTo(1)
-      return
-    }
-
-    if (position === 0) {
-      jumpTo(items.length)
-      return
-    }
-
     setIsAnimating(false)
   }
 
@@ -383,21 +360,21 @@ export default function Carousel({
   // Navigation arrow handlers
   const handlePrevious = () => {
     setPosition(prev => {
-      const next = prev - 1
-      if (loop) {
-        return next < 0 ? itemsForRender.length - 1 : next
+      if (!loop) {
+        const next = prev - 1
+        return Math.max(0, next)
       }
-      return Math.max(0, next)
+      return prev - 1
     })
   }
 
   const handleNext = () => {
     setPosition(prev => {
-      const next = prev + 1
-      if (loop) {
-        return next >= itemsForRender.length ? 0 : next
+      if (!loop) {
+        const next = prev + 1
+        return Math.min(itemsForRender.length - 1, next)
       }
-      return Math.min(itemsForRender.length - 1, next)
+      return prev + 1
     })
   }
 
