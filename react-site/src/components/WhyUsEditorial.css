@@ -68,18 +68,12 @@
 
 .why-us-editorial .review-entry {
   padding-bottom: 0;
-  margin-bottom: 0;
+  margin: 0;
   border-bottom: none;
 }
 
-.why-us-editorial .review-entry + .review-entry {
-  margin-top: 280px;
-}
-
-.why-us-editorial .review-entry:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
+.why-us-editorial .fade-in-native:not(:last-child) {
+  margin-bottom: 320px;
 }
 
 .why-us-editorial .why-us-point__theme {
