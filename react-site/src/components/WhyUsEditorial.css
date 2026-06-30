@@ -90,7 +90,7 @@
 
 .why-us-editorial .review-title {
   font-family: var(--why-font-serif);
-  font-size: clamp(18px, 2.2vw, 22px);
+  font-size: clamp(20px, 2.6vw, 26px);
   font-weight: 400;
   font-style: normal;
   color: var(--why-ink);
@@ -99,7 +99,7 @@
 }
 
 .why-us-editorial .review-body {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   color: var(--why-ink-mid);
   line-height: 1.75;
