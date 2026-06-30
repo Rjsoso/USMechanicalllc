@@ -67,8 +67,8 @@
 }
 
 .why-us-editorial .review-entry {
-  padding-bottom: 48px;
-  margin-bottom: 48px;
+  padding-bottom: 68px;
+  margin-bottom: 68px;
   border-bottom: 1px solid var(--why-rule);
 }
 
@@ -79,13 +79,7 @@
 }
 
 .why-us-editorial .why-us-point__theme {
-  display: block;
-  margin-bottom: 14px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--why-ink-light);
+  display: none;
 }
 
 .why-us-editorial .review-title {
