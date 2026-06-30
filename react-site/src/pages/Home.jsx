@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
-import SectionAccentDivider from '../components/SectionAccentDivider'
+import SectionScrollSeam from '../components/SectionScrollSeam'
 import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -303,7 +303,7 @@ export default function Home() {
         </div>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
-          <SectionAccentDivider />
+          <SectionScrollSeam />
           <SafetySection data={aboutData} />
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
