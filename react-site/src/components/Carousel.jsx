@@ -69,6 +69,7 @@ const CarouselItem = memo(function CarouselItem({
   // 3D rotation only for cover + flat=false; contain/flat avoid rotateY (stable in split layouts).
   const rotateOutput = flat || imageFit === 'contain' ? [0, 0, 0] : [90, 0, -90]
   const rotateY = useTransform(x, range, rotateOutput, { clamp: false })
+  const opacity = useTransform(x, range, [0.35, 1, 0.35], { clamp: false })
   const staticItem = flat || imageFit === 'contain'
 
   const itemStyle = {
@@ -97,23 +98,13 @@ const CarouselItem = memo(function CarouselItem({
     </div>
   )
 
-  if (staticItem) {
-    return (
-      <div
-        className={`carousel-item ${round ? 'round' : ''}`}
-        style={itemStyle}
-      >
-        {inner}
-      </div>
-    )
-  }
-
   return (
     <motion.div
       className={`carousel-item ${round ? 'round' : ''}`}
       style={{
         ...itemStyle,
-        rotateY: rotateY,
+        rotateY: staticItem ? 0 : rotateY,
+        opacity,
       }}
       transition={transition}
     >
