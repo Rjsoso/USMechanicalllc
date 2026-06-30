@@ -2,7 +2,7 @@ import { useState, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import FadeInNative from './FadeInNative'
-import FadeScrollSeam from './FadeScrollSeam'
+import RuleScrollSeam from './RuleScrollSeam'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -29,7 +29,7 @@ function Portfolio({ data: portfolioDataProp }) {
       style={{ position: 'relative', zIndex: 10 }}
     >
       {/* Portfolio Title */}
-      <div className="mx-auto mb-8 max-w-7xl px-6">
+      <div className="mx-auto mb-12 max-w-7xl px-6">
         <h2 className="section-title text-center text-5xl text-white md:text-6xl">
           {sectionData?.sectionTitle || 'Portfolio'}
         </h2>
@@ -40,7 +40,7 @@ function Portfolio({ data: portfolioDataProp }) {
         )}
       </div>
 
-      <FadeScrollSeam from="#000000" to="#ffffff" className="h-16 w-full md:h-32" />
+      <RuleScrollSeam className="mb-6" />
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white p-3">
