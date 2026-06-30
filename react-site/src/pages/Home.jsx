@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
 import SectionScrollSeam from '../components/SectionScrollSeam'
-import DiagonalScrollSeam from '../components/DiagonalScrollSeam'
+import FadeScrollSeam from '../components/FadeScrollSeam'
 import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -306,7 +306,7 @@ export default function Home() {
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
           <SafetySection data={aboutData} />
-          <DiagonalScrollSeam from="#ffffff" to="#000000" />
+          <FadeScrollSeam from="#ffffff" to="#000000" />
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
