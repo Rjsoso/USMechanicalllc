@@ -16,8 +16,10 @@ const CarouselSlideImage = memo(function CarouselSlideImage({
   item,
   index,
   imageFit,
+  initialLoaded = false,
+  markLoaded,
 }) {
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(initialLoaded)
 
   return (
     <img
@@ -33,7 +35,10 @@ const CarouselSlideImage = memo(function CarouselSlideImage({
         opacity: imageLoaded ? 1 : 0,
         transition: 'opacity 0.35s ease-out',
       }}
-      onLoad={() => setImageLoaded(true)}
+      onLoad={() => {
+        setImageLoaded(true)
+        markLoaded?.()
+      }}
       onError={e => {
         e.target.style.opacity = '0.3'
         e.target.alt = 'Image failed to load'
@@ -53,6 +58,8 @@ const CarouselItem = memo(function CarouselItem({
   shouldLoad,
   imageFit,
   flat,
+  initialLoaded,
+  markLoaded,
 }) {
   const range = [
     -(index + 1) * trackItemOffset,
@@ -73,7 +80,13 @@ const CarouselItem = memo(function CarouselItem({
   const inner = (
     <div className="carousel-item-image-container">
       {shouldLoad ? (
-        <CarouselSlideImage item={item} index={index} imageFit={imageFit} />
+        <CarouselSlideImage
+          item={item}
+          index={index}
+          imageFit={imageFit}
+          initialLoaded={initialLoaded}
+          markLoaded={markLoaded}
+        />
       ) : (
         <div
           className={`carousel-item-image ${imageFit === 'contain' ? 'carousel-item-image--contain' : ''}`}
@@ -87,7 +100,6 @@ const CarouselItem = memo(function CarouselItem({
   if (staticItem) {
     return (
       <div
-        key={`${item?.id ?? index}-${index}`}
         className={`carousel-item ${round ? 'round' : ''}`}
         style={itemStyle}
       >
@@ -98,7 +110,6 @@ const CarouselItem = memo(function CarouselItem({
 
   return (
     <motion.div
-      key={`${item?.id ?? index}-${index}`}
       className={`carousel-item ${round ? 'round' : ''}`}
       style={{
         ...itemStyle,
@@ -142,6 +153,7 @@ export default function Carousel({
   }, [measuredW, baseWidth])
 
   const trackItemOffset = itemWidth + GAP
+  const loadedImagesRef = useRef(new Set())
 
   const use3DPerspective = !flat && imageFit !== 'contain'
 
@@ -501,21 +513,38 @@ export default function Carousel({
           }}
           onDragEnd={handleDragEnd}
         >
-          {itemsForRender.map((item, index) => (
-            <CarouselItem
-              key={`${item?.id ?? index}-${index}`}
-              item={item}
-              index={index}
-              itemWidth={itemWidth}
-              round={round}
-              trackItemOffset={trackItemOffset}
-              x={x}
-              transition={effectiveTransition}
-              shouldLoad={Math.abs(index - position) <= 2}
-              imageFit={imageFit}
-              flat={flat}
-            />
-          ))}
+          {itemsForRender.map((item, index) => {
+            const span = items.length || 1
+            const baseIndex = index % span
+            const cloneId = Math.floor(index / span)
+            const logicalPosition = span
+              ? ((position % span) + span) % span
+              : position
+            const diff = span
+              ? Math.abs(baseIndex - logicalPosition)
+              : Math.abs(index - position)
+            const circularDistance = span ? Math.min(diff, span - diff) : diff
+            const shouldLoad = circularDistance <= 2
+            const itemKey = item?.id ?? item?.src ?? `item-${baseIndex}`
+
+            return (
+              <CarouselItem
+                key={`${itemKey}-c${cloneId}-i${baseIndex}`}
+                item={item}
+                index={index}
+                itemWidth={itemWidth}
+                round={round}
+                trackItemOffset={trackItemOffset}
+                x={x}
+                transition={effectiveTransition}
+                shouldLoad={shouldLoad}
+                imageFit={imageFit}
+                flat={flat}
+                markLoaded={() => loadedImagesRef.current.add(itemKey)}
+                initialLoaded={loadedImagesRef.current.has(itemKey)}
+              />
+            )
+          })}
         </motion.div>
 
         {/* Render arrows inside if requested */}
