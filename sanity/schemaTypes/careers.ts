@@ -123,6 +123,23 @@ export default defineType({
         hotspot: true,
       },
     },
+    {
+      name: 'badgeImage',
+      title: 'Badge / Partner Image',
+      type: 'image',
+      description: 'Optional badge or partner logo to feature in the careers section (e.g., PHCC Educational Foundation).',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe the badge for accessibility (e.g., "PHCC Educational Foundation").',
+        },
+      ],
+    },
   ],
   preview: {
     select: {

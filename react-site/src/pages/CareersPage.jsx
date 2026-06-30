@@ -16,7 +16,11 @@ const CAREERS_QUERY = `*[_type == "careers"][0]{
   "applicationPdfUrl": applicationPdf.asset->url,
   submissionEmail,
   submissionFax,
-  backgroundImage
+  backgroundImage,
+  badgeImage {
+    ...,
+    asset->
+  }
 }`
 
 export default function CareersPage() {
@@ -55,6 +59,8 @@ export default function CareersPage() {
   const submissionEmail = careersData?.submissionEmail || 'admin@usmechanicalllc.com'
   const submissionFax = careersData?.submissionFax || '(801) 785-6029'
   const backgroundImage = careersData?.backgroundImage
+  const badgeImage = careersData?.badgeImage
+  const badgeAlt = (badgeImage && badgeImage.alt) || 'PHCC Educational Foundation badge'
 
   // 1x / 2x variants keep the careers hero crisp on retina without bloating
   // bandwidth for standard-DPR clients.
@@ -63,6 +69,13 @@ export default function CareersPage() {
     : null
   const backgroundImage2x = backgroundImage
     ? urlFor(backgroundImage).width(2880).quality(80).auto('format').fit('max').url()
+    : null
+
+  const badgeImage1x = badgeImage
+    ? urlFor(badgeImage).width(400).quality(90).auto('format').fit('max').url()
+    : '/images/phcc-education-foundation.png'
+  const badgeImage2x = badgeImage
+    ? urlFor(badgeImage).width(800).quality(85).auto('format').fit('max').url()
     : null
 
   // Render immediately - no loading check
@@ -169,6 +182,23 @@ export default function CareersPage() {
               </a>
             )}
           </div>
+
+          {badgeImage1x && (
+            <div className="mt-10 flex flex-col items-center gap-3 text-center">
+              <p className="text-sm uppercase tracking-wide text-gray-700">
+                Training & Apprenticeships
+              </p>
+              <img
+                src={badgeImage1x}
+                srcSet={
+                  badgeImage2x ? `${badgeImage1x} 1x, ${badgeImage2x} 2x` : undefined
+                }
+                alt={badgeAlt}
+                className="h-24 w-auto rounded-md bg-white p-3 shadow-sm ring-1 ring-gray-200"
+                loading="lazy"
+              />
+            </div>
+          )}
 
           {(submissionEmail || submissionFax) && (
             <p className="text-center text-sm text-gray-600">
