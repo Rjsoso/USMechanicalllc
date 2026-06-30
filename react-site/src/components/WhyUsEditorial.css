@@ -73,7 +73,8 @@
 }
 
 .why-us-editorial .fade-in-native:not(:last-child) {
-  margin-bottom: 320px;
+  /* ~3–4 lines of breathing room between points; scales down on smaller viewports */
+  margin-bottom: clamp(48px, 5vw, 80px);
 }
 
 .why-us-editorial .why-us-point__theme {
