@@ -35,7 +35,7 @@ const HERO_QUERY = `*[_type == "heroSection" && _id == "heroSection"][0]{
   secondButtonLink
 }`
 
-function HeroSection() {
+function HeroSection({ data: heroDataProp }) {
   const [yearColor] = useState(() => generateYearColor())
   const navigate = useNavigate()
   const location = useLocation()
@@ -44,7 +44,10 @@ function HeroSection() {
   // compositor hint (`will-change`) once the layer is no longer animating.
   const [headlineSettled, setHeadlineSettled] = useState(false)
 
-  const { data: rawHero } = useSanityLive(HERO_QUERY, {}, { listenFilter: `*[_type == "heroSection"]` })
+  const { data: rawHero } = useSanityLive(HERO_QUERY, {}, {
+    initialData: heroDataProp,
+    listenFilter: `*[_type == "heroSection"]`,
+  })
   const heroData = useMemo(() => {
     if (!rawHero) return defaultHeroData
     const sub =

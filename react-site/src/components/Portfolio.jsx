@@ -1,6 +1,7 @@
 import { useState, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
+import FadeInNative from './FadeInNative'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -45,65 +46,67 @@ function Portfolio({ data: portfolioDataProp }) {
           style={{ position: 'relative' }}
         >
           {displayCategories.map((category, index) => (
-            <div key={category._id}>
-              <Link
-                to={`/portfolio/${category._id}`}
-                className="portfolio-category-card relative block cursor-pointer overflow-hidden bg-gray-100"
-                style={{ height: CELL_HEIGHTS[index % CELL_HEIGHTS.length] }}
-              >
-                {category.image?.asset && (
-                  <div
-                    className={`portfolio-home__frame portfolio-home__frame--${Math.min(index, 5)}`}
-                  >
-                    <div className="portfolio-home__frame-inner">
-                      <div className="group portfolio-home__media">
-                        <img
-                          src={urlFor(category.image).width(800).quality(85).auto('format').url()}
-                          srcSet={[400, 600, 800, 1200, 1600]
-                            .map(
-                              (w) =>
-                                `${urlFor(category.image).width(w).quality(85).auto('format').url()} ${w}w`
-                            )
-                            .join(', ')}
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          alt={category.title}
-                          className="portfolio-home__img block transition-opacity duration-200"
-                          loading="lazy"
-                          decoding="async"
-                          style={{
-                            opacity: loadedImages.has(category._id) ? 1 : 0,
-                          }}
-                          onLoad={(e) => {
-                            e.target.style.opacity = '1'
-                            setLoadedImages(prev => new Set(prev).add(category._id))
-                          }}
-                        />
-                        <div className="portfolio-home__scrim pointer-events-none">
-                          <h3 className="portfolio-home__scrim-title">{category.title}</h3>
-                          <div className="portfolio-home__scrim-cta">
-                            <span>Learn more</span>
-                            <svg
-                              className="portfolio-home__scrim-icon"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M13 7l5 5m0 0l-5 5m5-5H6"
-                              />
-                            </svg>
+            <FadeInNative key={category._id} delay={index * 0.05}>
+              <div>
+                <Link
+                  to={`/portfolio/${category._id}`}
+                  className="portfolio-category-card relative block cursor-pointer overflow-hidden bg-gray-100 transition-transform duration-200 ease-out hover:scale-[1.02]"
+                  style={{ height: CELL_HEIGHTS[index % CELL_HEIGHTS.length] }}
+                >
+                  {category.image?.asset && (
+                    <div
+                      className={`portfolio-home__frame portfolio-home__frame--${Math.min(index, 5)}`}
+                    >
+                      <div className="portfolio-home__frame-inner">
+                        <div className="group portfolio-home__media">
+                          <img
+                            src={urlFor(category.image).width(800).quality(85).auto('format').url()}
+                            srcSet={[400, 600, 800, 1200, 1600]
+                              .map(
+                                (w) =>
+                                  `${urlFor(category.image).width(w).quality(85).auto('format').url()} ${w}w`
+                              )
+                              .join(', ')}
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            alt={category.title}
+                            className="portfolio-home__img block transition-opacity duration-200"
+                            loading="lazy"
+                            decoding="async"
+                            style={{
+                              opacity: loadedImages.has(category._id) ? 1 : 0,
+                            }}
+                            onLoad={(e) => {
+                              e.target.style.opacity = '1'
+                              setLoadedImages(prev => new Set(prev).add(category._id))
+                            }}
+                          />
+                          <div className="portfolio-home__scrim pointer-events-none">
+                            <h3 className="portfolio-home__scrim-title">{category.title}</h3>
+                            <div className="portfolio-home__scrim-cta">
+                              <span>Learn more</span>
+                              <svg
+                                className="portfolio-home__scrim-icon"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                />
+                              </svg>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </Link>
-            </div>
+                  )}
+                </Link>
+              </div>
+            </FadeInNative>
           ))}
         </div>
       </div>

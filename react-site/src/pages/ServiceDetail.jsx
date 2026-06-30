@@ -281,7 +281,7 @@ export default function ServiceDetail() {
                       containerClassName="h-[min(40svh,360px)] min-h-[260px] w-full md:h-[400px]"
                       compactNav={true}
                       autoplay={true}
-                      autoplayDelay={4000}
+                      autoplayDelay={6000}
                       pauseOnHover={true}
                       loop={true}
                       round={false}

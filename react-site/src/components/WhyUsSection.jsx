@@ -1,6 +1,7 @@
 import { useMemo, memo, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSanityLive } from '../hooks/useSanityLive'
+import FadeInNative from './FadeInNative'
 import './WhyUsEditorial.css'
 
 const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{
@@ -80,8 +81,9 @@ const STATS = [
  */
 const STICKY_VIEWPORT_MARGIN_PX = 48
 
-function WhyUsSection() {
+function WhyUsSection({ data: whyUsDataProp }) {
   const { data } = useSanityLive(WHY_US_QUERY, {}, {
+    initialData: whyUsDataProp,
     listenFilter: `*[_type == "whyUs"]`,
   })
 
@@ -222,14 +224,15 @@ function WhyUsSection() {
             const themeTag = item.icon ? EYEBROW_BY_ICON[item.icon] : 'Partnership'
 
             return (
-              <article
-                key={item.title || String(index)}
-                className="review-entry why-us-point"
-              >
-                <span className="why-us-point__theme">{themeTag}</span>
-                <h3 className="review-title">{item.title}</h3>
-                <p className="review-body">{item.description}</p>
-              </article>
+              <FadeInNative key={item.title || String(index)} delay={index * 0.04}>
+                <article
+                  className="review-entry why-us-point"
+                >
+                  <span className="why-us-point__theme">{themeTag}</span>
+                  <h3 className="review-title">{item.title}</h3>
+                  <p className="review-body">{item.description}</p>
+                </article>
+              </FadeInNative>
             )
           })}
         </div>

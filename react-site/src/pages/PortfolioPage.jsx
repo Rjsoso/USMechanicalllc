@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { urlFor } from '../utils/sanity'
 import { viewportPreset } from '../utils/viewport'
 import Header from '../components/Header'
@@ -21,6 +21,7 @@ const SECTION_QUERY = `*[_id == "portfolioSection"][0]{ sectionTitle, sectionDes
 export default function PortfolioPage() {
   const navigate = useNavigate()
   const [loadedImages, setLoadedImages] = useState(new Set())
+  const reduceMotion = useReducedMotion()
 
   const categoriesRes = useSanityLive(CATEGORIES_QUERY, {}, { listenFilter: `*[_type == "portfolioCategory"]` })
   const sectionRes = useSanityLive(SECTION_QUERY, {}, { listenFilter: `*[_id == "portfolioSection"]` })
@@ -86,8 +87,9 @@ export default function PortfolioPage() {
                 key={category._id}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={reduceMotion ? undefined : { scale: 1.01 }}
                 viewport={viewportPreset}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
+                transition={{ duration: 0.3, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div
                   onClick={() => navigate(`/portfolio/${category._id}`)}

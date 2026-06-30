@@ -117,7 +117,7 @@ export default function Carousel({
   arrowsInside = false,
   compactNav = false,
   autoplay = false,
-  autoplayDelay = 3000,
+  autoplayDelay = 6000,
   pauseOnHover = false,
   loop = false,
   round = false,

@@ -12,6 +12,7 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import ContactMapSection from '../components/ContactMapSection'
 import WhyUsSection from '../components/WhyUsSection'
+import FadeInNative from '../components/FadeInNative'
 import { scrollToSection } from '../utils/scrollToSection'
 import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
@@ -43,6 +44,7 @@ const PORTFOLIO_CATEGORIES_QUERY = `*[_type == "portfolioCategory"] | order(orde
 const PORTFOLIO_SECTION_QUERY = `*[_id == "portfolioSection"][0]{ sectionTitle, sectionDescription }`
 const STATS_QUERY = `*[_type == "companyStats"][0]{ sectionTitle, stats[]{ label, value, highlighted } }`
 const ABOUT_QUERY = `*[_type == "aboutAndSafety"] | order(_updatedAt desc)[0]{ aboutTitle, aboutText, aboutPhotos[] { asset-> { _id, url, originalFilename }, alt, caption }, safetyTitle, safetyText, safetyLogos[] { image { asset-> { _id, url, originalFilename }, alt, caption }, icon, title, href } }`
+const WHY_US_QUERY = `*[_type == "whyUs" && _id == "whyUs"][0]{ _id, sectionTitle, sectionSubtitle, items[]{ title, description, icon } }`
 
 // Hero ladder picked against viewport CSS pixels × DPR so retina + ultrawide
 // screens get sharp pixels without overloading laptops/phones.
@@ -70,6 +72,7 @@ export default function Home() {
   const portfolioSec = useSanityLive(PORTFOLIO_SECTION_QUERY, {}, { listenFilter: `*[_id == "portfolioSection"]` })
   const stats = useSanityLive(STATS_QUERY, {}, { listenFilter: `*[_type == "companyStats"]` })
   const about = useSanityLive(ABOUT_QUERY, {}, { listenFilter: `*[_type == "aboutAndSafety"]` })
+  const whyUs = useSanityLive(WHY_US_QUERY, {}, { listenFilter: `*[_type == "whyUs"]` })
 
   const [heroWidth, setHeroWidth] = useState(() => pickHeroWidth())
 
@@ -119,6 +122,7 @@ export default function Home() {
   const servicesData = services.data
   const statsData = stats.data
   const aboutData = about.data
+  const whyUsData = whyUs.data
 
   // Preload the hero background as soon as its URL is known so the browser can
   // start fetching in parallel with component JS/CSS. The CSS background-image
@@ -294,7 +298,7 @@ export default function Home() {
             immediately using its fallback copy; the background image fades in
             once Sanity resolves it. */}
         <div style={{ position: 'relative', top: 0, left: 0, width: '100%' }}>
-          <HeroSection />
+          <HeroSection data={hero.data} />
         </div>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
@@ -302,22 +306,24 @@ export default function Home() {
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
-          <WhyUsSection />
-          <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
-            <p className="mx-auto mb-6 max-w-2xl font-serif text-2xl font-normal leading-snug text-[#111111] md:text-3xl">
-              Ready to discuss your next project?
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/contact')}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#111111] px-8 py-3.5 text-xs font-medium uppercase tracking-[0.12em] text-[#f7f6f3] transition-colors duration-200 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
-            >
-              Contact Us
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </button>
-          </div>
+          <WhyUsSection data={whyUsData} />
+          <FadeInNative>
+            <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
+              <p className="mx-auto mb-6 max-w-2xl font-serif text-2xl font-normal leading-snug text-[#111111] md:text-3xl">
+                Ready to discuss your next project?
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/contact')}
+                className="inline-flex items-center gap-2 rounded-lg bg-[#111111] px-8 py-3.5 text-xs font-medium uppercase tracking-[0.12em] text-[#f7f6f3] transition-colors duration-200 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
+              >
+                Contact Us
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </div>
+          </FadeInNative>
           <ContactMapSection />
         </div>
       </main>

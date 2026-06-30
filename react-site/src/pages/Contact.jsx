@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, memo } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
 import SEO from '../components/SEO'
 import Header from '../components/Header'
@@ -55,6 +56,7 @@ function loadTurnstile() {
 
 function Contact() {
   const location = useLocation()
+  const reduceMotion = useReducedMotion()
   const { data: contactData, loading: contactLoading, error: contactError } = useSanityLive(CONTACT_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
   })
@@ -329,31 +331,56 @@ function Contact() {
                   </h2>
 
                   {formSuccess && (
-                    <div role="status" aria-live="polite" className="contact-page__banner contact-page__banner--success">
+                    <motion.div
+                      role="status"
+                      aria-live="polite"
+                      className="contact-page__banner contact-page__banner--success"
+                      initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+                      animate={reduceMotion ? {} : { opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                       <strong>Message sent</strong>
                       <span>We&apos;ll get back to you soon.</span>
-                    </div>
+                    </motion.div>
                   )}
 
                   {rateLimitError && (
-                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                    <motion.div
+                      role="alert"
+                      className="contact-page__banner contact-page__banner--error"
+                      initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+                      animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                       <strong>Too many submissions</strong>
                       <span>{rateLimitError}</span>
-                    </div>
+                    </motion.div>
                   )}
 
                   {formError && (
-                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                    <motion.div
+                      role="alert"
+                      className="contact-page__banner contact-page__banner--error"
+                      initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+                      animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                       <strong>We couldn&apos;t send your message</strong>
                       <span>{formError}</span>
-                    </div>
+                    </motion.div>
                   )}
 
                   {turnstileError && (
-                    <div role="alert" className="contact-page__banner contact-page__banner--error">
+                    <motion.div
+                      role="alert"
+                      className="contact-page__banner contact-page__banner--error"
+                      initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+                      animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                       <strong>Verification required</strong>
                       <span>{turnstileError}</span>
-                    </div>
+                    </motion.div>
                   )}
 
                   <form

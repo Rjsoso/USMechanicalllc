@@ -7,8 +7,9 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
-    // Only activate on pointer-fine (mouse) devices
+    // Only activate on pointer-fine (mouse) devices and when motion is allowed
     if (window.matchMedia('(pointer: coarse)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let mouseX = -100
     let mouseY = -100

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-29T22:59:26.910Z",
+  "generatedAt": "2026-06-16T23:16:01.820Z",
   "note": "This file contains current Sanity content to be used as fallback data in React components",
   "hero": {
     "headline": "Trusted Mechanical Contractors Since 1963",
@@ -17,7 +17,7 @@
     "footerCompanyDescription": "Providing exceptional mechanical contracting services with a commitment to quality, safety, and customer satisfaction primarily throughout Utah & Nevada",
     "businessHours": {
       "days": "Monday - Friday",
-      "hours": "8:00 AM - 5:00 PM"
+      "hours": "7:00 AM - 5:00 PM"
     },
     "serviceArea": "Serving Northern Utah",
     "footerBadge": "Fully Licensed & Insured"
@@ -46,12 +46,12 @@
         ]
       },
       {
-        "label": "SERVICES",
+        "label": "SERVICES ",
         "links": [
           {
             "ariaLabel": null,
             "href": "#services",
-            "label": "Our Services"
+            "label": "Services"
           },
           {
             "ariaLabel": null,
