@@ -161,7 +161,7 @@ export default function CareersPage() {
             </div>
           </div>
 
-          <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
             {indeedUrl && (
               <a
                 href={indeedUrl}
@@ -182,14 +182,14 @@ export default function CareersPage() {
               </a>
             )}
             {badgeImage1x && (
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center sm:ml-4">
                 <img
                   src={badgeImage1x}
                   srcSet={
                     badgeImage2x ? `${badgeImage1x} 1x, ${badgeImage2x} 2x` : undefined
                   }
                   alt={badgeAlt}
-                  className="h-24 w-auto rounded-md bg-white p-3 shadow-sm ring-1 ring-gray-200"
+                  className="h-28 w-auto rounded-md bg-white p-4 shadow-sm ring-1 ring-gray-200"
                   loading="lazy"
                 />
               </div>
