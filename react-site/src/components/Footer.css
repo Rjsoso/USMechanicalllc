@@ -96,6 +96,114 @@
   max-width: 34ch;
 }
 
+.site-footer-editorial__sister-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: clamp(1.75rem, 3vw, 2.25rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--fe-rule);
+  max-width: 38ch;
+}
+
+.site-footer-editorial__sister-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 1rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fe-fg-soft);
+}
+
+.site-footer-editorial__sister-heading::before {
+  content: '';
+  flex-shrink: 0;
+  width: 20px;
+  height: 1px;
+  background: rgba(247, 246, 243, 0.28);
+}
+
+.site-footer-editorial__sister-card {
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+  border: 1px solid var(--fe-rule);
+  border-radius: 6px;
+  background: rgba(247, 246, 243, 0.04);
+}
+
+.site-footer-editorial__sister-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.site-footer-editorial__sister-logo {
+  flex-shrink: 0;
+  height: clamp(2.25rem, 4vw, 3rem);
+  width: auto;
+  object-fit: contain;
+}
+
+.site-footer-editorial__sister-name {
+  font-family: var(--font-display, 'Instrument Serif', Georgia, serif);
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--fe-fg);
+}
+
+.site-footer-editorial__sister-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-footer-editorial__sister-link:hover,
+.site-footer-editorial__sister-link:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.site-footer-editorial__sister-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.site-footer-editorial__sister-detail {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--fe-fg-mid);
+}
+
+.site-footer-editorial__sister-cta {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(247, 246, 243, 0.72);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.site-footer-editorial__sister-cta:hover,
+.site-footer-editorial__sister-cta:focus-visible {
+  color: var(--fe-fg);
+  border-bottom-color: rgba(247, 246, 243, 0.35);
+  outline: none;
+}
+
 .site-footer-editorial__nav-list {
   list-style: none;
   margin: 0;

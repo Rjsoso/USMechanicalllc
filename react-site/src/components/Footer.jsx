@@ -2,9 +2,10 @@
 import { useEffect, useState, memo } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Clock, Linkedin } from 'lucide-react'
-import { client } from '../utils/sanity'
+import { client, urlFor } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 import { openConsentBanner } from '../utils/openConsentBanner'
+import { affiliateDescriptionSegments, resolveAffiliateUrl } from '../utils/affiliates'
 import './Footer.css'
 
 // Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
@@ -27,7 +28,7 @@ function Footer() {
   useEffect(() => {
     client
       .fetch(
-        `*[_type == "contact" && !(_id in path("drafts.**"))][0]{
+        `*[_type == "contact" && _id == "contact"][0]{
         email,
         footerCompanyDescription,
         businessHours {
@@ -38,7 +39,8 @@ function Footer() {
           locationName,
           address,
           phone
-        }
+        },
+        affiliates[]{ name, url, description, logo { asset-> { _id, url } } }
       }`
       )
       .then((res) => {
@@ -61,6 +63,7 @@ function Footer() {
   const displayBusinessHoursTime = contactData
     ? (contactData.businessHours?.hours ?? '')
     : FALLBACK_DATA.businessHours.hours
+  const affiliates = contactData?.affiliates?.length ? contactData.affiliates : null
   const logoUrl = '/favicon.png'
 
   const handleNavClick = (sectionId) => {
@@ -83,6 +86,83 @@ function Footer() {
               <h3 className="site-footer-editorial__brand-name">U.S. Mechanical LLC</h3>
               {displayCompanyDescription && (
                 <p className="site-footer-editorial__brand-copy">{displayCompanyDescription}</p>
+              )}
+              {affiliates && affiliates.length > 0 && (
+                <div className="site-footer-editorial__sister-list">
+                  {affiliates.map((affiliate, i) => {
+                    const segments = affiliateDescriptionSegments(affiliate.description)
+                    const affiliateUrl = resolveAffiliateUrl(affiliate)
+                    const logoSrc =
+                      affiliate.logo && urlFor(affiliate.logo)
+                        ? urlFor(affiliate.logo).width(240).quality(80).auto('format').url()
+                        : null
+                    const nameEl = affiliate.name ? (
+                      <span className="site-footer-editorial__sister-name">{affiliate.name}</span>
+                    ) : null
+                    return (
+                      <div key={i} className="site-footer-editorial__sister">
+                        <p className="site-footer-editorial__sister-heading">Sister Company</p>
+                        <div className="site-footer-editorial__sister-card">
+                          <div className="site-footer-editorial__sister-brand">
+                            {logoSrc && (
+                              <img
+                                src={logoSrc}
+                                alt={affiliate.name ? `${affiliate.name} logo` : ''}
+                                className="site-footer-editorial__sister-logo"
+                                width={120}
+                                height={48}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            )}
+                            {affiliateUrl ? (
+                              <a
+                                href={affiliateUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="site-footer-editorial__sister-link"
+                                aria-label={
+                                  affiliate.name
+                                    ? `Visit ${affiliate.name} website (opens in new tab)`
+                                    : 'Visit sister company website (opens in new tab)'
+                                }
+                              >
+                                {nameEl}
+                              </a>
+                            ) : (
+                              nameEl
+                            )}
+                          </div>
+                          {segments.length > 0 && (
+                            <div className="site-footer-editorial__sister-details">
+                              {segments.map((seg, j) => (
+                                <p key={j} className="site-footer-editorial__sister-detail">
+                                  {seg}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                          {affiliateUrl && (
+                            <a
+                              href={affiliateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="site-footer-editorial__sister-cta"
+                              aria-label={
+                                affiliate.name
+                                  ? `Visit ${affiliate.name} website (opens in new tab)`
+                                  : 'Visit sister company website (opens in new tab)'
+                              }
+                            >
+                              Visit site
+                              <span aria-hidden="true"> →</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               )}
             </div>
 

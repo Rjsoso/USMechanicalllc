@@ -1,14 +1,10 @@
-import { useState, memo, Fragment } from 'react'
+import { useState, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
-import { urlFor } from '../utils/sanity'
 import SmallSpinner from './SmallSpinner'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
-  offices[]{ locationName, address, phone, fax },
-  affiliates[]{ name, url, description, logo { asset-> { _id, url } } }
+  offices[]{ locationName, address, phone, fax }
 }`
-
-const SNYDER_MECHANICAL_URL = 'https://www.snydermechanical.com/'
 
 /**
  * Map block height: use dynamic viewport height minus ~nav band (5.5rem matches scroll-mt).
@@ -16,7 +12,7 @@ const SNYDER_MECHANICAL_URL = 'https://www.snydermechanical.com/'
  */
 const MAP_BLOCK_HEIGHT = 'max(36rem, calc(100dvh - 5.5rem))'
 
-/** Matches `.site-footer-editorial` `--fe-bg` (Footer.css) for section + affiliate strip. */
+/** Matches `.site-footer-editorial` `--fe-bg` (Footer.css) for section background. */
 const EDITORIAL_CHARCOAL = '#111111'
 
 /** Tab labels with state; falls back to Sanity `locationName` */
@@ -31,24 +27,6 @@ function officeTabButtonLabel(locationName) {
   return OFFICE_TAB_LABEL[key] ?? locationName
 }
 
-/** Split tagline / addresses: use `|` in Sanity or separate lines */
-function affiliateDescriptionSegments(description) {
-  if (!description?.trim()) return []
-  const raw = description.trim()
-  const byPipe = raw.split('|').map(s => s.trim()).filter(Boolean)
-  if (byPipe.length > 1) return byPipe
-  return raw.split(/\n+/).map(s => s.trim()).filter(Boolean)
-}
-
-function resolveAffiliateUrl(affiliate) {
-  const url = affiliate?.url?.trim()
-  if (url) return url
-  if (affiliate?.name?.trim().toLowerCase() === 'snyder mechanical') {
-    return SNYDER_MECHANICAL_URL
-  }
-  return null
-}
-
 /**
  * Full-viewport map and location card for the home page `#contact` section.
  * Only the active office iframe is mounted (tab switch remounts iframe for that office).
@@ -60,7 +38,6 @@ function ContactMapSection() {
   })
 
   const offices = contactData?.offices
-  const affiliates = contactData?.affiliates
   const activeOffice =
     offices && offices.length > 0 ? offices[activeOfficeTab] : null
 
@@ -168,84 +145,6 @@ function ContactMapSection() {
           </div>
         )}
       </div>
-
-      {activeOffice && affiliates && affiliates.length > 0 && (
-        <div
-          className="px-4 py-5 md:px-8 md:py-6"
-          style={{ backgroundColor: EDITORIAL_CHARCOAL }}
-        >
-          <div className="mx-auto flex max-w-6xl flex-col gap-5">
-            {affiliates.map((affiliate, i) => {
-              const segments = affiliateDescriptionSegments(affiliate.description)
-              const affiliateUrl = resolveAffiliateUrl(affiliate)
-              const logo =
-                affiliate.logo && urlFor(affiliate.logo) ? (
-                  <img
-                    src={urlFor(affiliate.logo)
-                      .width(200)
-                      .quality(80)
-                      .auto('format')
-                      .url()}
-                    alt={affiliate.name ? `${affiliate.name} logo` : ''}
-                    className="h-7 w-auto shrink-0 object-contain md:h-8"
-                    width={120}
-                    height={32}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : null
-              const nameLabel = affiliate.name ? (
-                <span className="shrink-0 font-semibold text-white">{affiliate.name}</span>
-              ) : null
-              return (
-                <div
-                  key={i}
-                  className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-snug md:justify-center md:gap-x-4 md:text-[15px]"
-                >
-                  <span
-                    className="inline-flex h-5 w-4 shrink-0 items-center justify-start"
-                    aria-hidden
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                  </span>
-                  <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 md:text-xs">
-                    Affiliate
-                  </span>
-                  {affiliateUrl ? (
-                    <a
-                      href={affiliateUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex shrink-0 items-center gap-x-3 transition-colors hover:text-blue-300 md:gap-x-4"
-                      aria-label={
-                        affiliate.name
-                          ? `Visit ${affiliate.name} website (opens in new tab)`
-                          : 'Visit affiliate website (opens in new tab)'
-                      }
-                    >
-                      {logo}
-                      {nameLabel}
-                    </a>
-                  ) : (
-                    <>
-                      {logo}
-                      {nameLabel}
-                    </>
-                  )}
-                  {segments.map((seg, j) => (
-                    <Fragment key={j}>
-                      <span className="text-neutral-500 select-none" aria-hidden>
-                        ·
-                      </span>
-                      <span className="min-w-0 text-neutral-400">{seg}</span>
-                    </Fragment>
-                  ))}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
     </section>
   )
 }
