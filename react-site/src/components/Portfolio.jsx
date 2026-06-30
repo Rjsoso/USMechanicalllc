@@ -2,7 +2,6 @@ import { useState, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import FadeInNative from './FadeInNative'
-import RuleScrollSeam from './RuleScrollSeam'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -39,8 +38,6 @@ function Portfolio({ data: portfolioDataProp }) {
           </p>
         )}
       </div>
-
-      <RuleScrollSeam className="mb-6" />
 
       {/* Edge-to-edge category grid with white background */}
       <div className="bg-white p-3">

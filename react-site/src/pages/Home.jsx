@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
 import SectionScrollSeam from '../components/SectionScrollSeam'
-import RuleScrollSeam from '../components/RuleScrollSeam'
+import ParallaxLayer from '../components/ParallaxLayer'
 import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -306,10 +306,13 @@ export default function Home() {
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
           <SafetySection data={aboutData} />
-          <RuleScrollSeam />
-          <CompanyStats data={statsData} />
+          <ParallaxLayer>
+            <CompanyStats data={statsData} />
+          </ParallaxLayer>
           <ServicesSection data={servicesData} />
-          <Portfolio data={portfolioData} />
+          <ParallaxLayer>
+            <Portfolio data={portfolioData} />
+          </ParallaxLayer>
           <WhyUsSection data={whyUsData} />
           <FadeInNative>
             <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
