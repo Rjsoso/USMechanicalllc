@@ -305,6 +305,7 @@ export default function Home() {
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
           <SafetySection data={aboutData} />
+          <SectionScrollSeam from="#ffffff" to="#000000" />
           <CompanyStats data={statsData} />
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />

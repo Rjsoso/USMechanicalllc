@@ -1264,7 +1264,7 @@ body {
   }
 
   /* Taller thumbnail than 16:9; matches homepage portfolio mosaic */
-  #portfolio .relative {
+  #portfolio .portfolio-category-card.relative {
     padding-bottom: 70% !important;
   }
 
@@ -1322,7 +1322,7 @@ body {
     opacity: 1 !important;
   }
 
-  #portfolio .relative {
+  #portfolio .portfolio-category-card.relative {
     display: block !important;
     position: relative !important;
     opacity: 1 !important;
