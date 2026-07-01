@@ -157,6 +157,83 @@ section {
   contain: layout;
 }
 
+/* #safety becomes position: sticky for the pin/cover-card scroll effect —
+   containment prevents sticky from tracking the real viewport. */
+#safety {
+  contain: none;
+}
+
+/* Safety → Company Stats "stacking sticky cards" scroll effect.
+   Safety pins in place, then the black Company Stats panel rises and
+   becomes sticky at the SAME offset with a higher z-index, so it fully
+   covers Safety (rather than just meeting its bottom edge). Once its own
+   dwell ends, the panel releases and the real Services section continues
+   in normal, un-stuck scrolling. Desktop/tablet only (min-width: 1024px);
+   mobile keeps the ordinary stacked flow. */
+.safety-pin-wrapper,
+.stats-cover-wrapper {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .safety-pin-wrapper {
+    background: #ffffff;
+  }
+
+  /* "Dwell" distance — how long Safety stays frozen before the stats
+     panel arrives. A real spacer element, not padding-bottom — padding-
+     bottom on a sticky containing block breaks position:sticky tracking.
+     Fixed px (not vh) since it has to out-pace the stats card's own
+     margin-top pull-up below by enough to give Safety a clean pause
+     alone before the card starts rising over it — see that comment. */
+  .safety-pin-spacer {
+    display: block;
+    height: 740px;
+  }
+
+  #safety {
+    /* !important needed — SafetySection.jsx sets an inline position:relative
+       style, which beats any non-!important stylesheet rule regardless of
+       selector specificity. */
+    position: sticky !important;
+    top: var(--site-header-offset, 180px);
+    z-index: 20;
+  }
+
+  /* Pulls the stats card's document position up so it starts visually
+     overlapping Safety's box (and, given its higher z-index, painting
+     over it) well before the card itself finishes scrolling into its own
+     sticky position — without this, the card only ever meets Safety's
+     bottom edge (they stay adjacent, never overlapping). The gap between
+     this value and the spacer above (740 - 480 = 260px) is Safety's own
+     "alone" pause before the card starts rising into view over it. */
+  .stats-cover-wrapper {
+    margin-top: -480px;
+  }
+
+  .stats-cover-panel {
+    position: sticky;
+    top: var(--site-header-offset, 180px);
+    z-index: 21; /* above #safety's z-index: 20, so it fully covers it */
+    min-height: calc(100vh - var(--site-header-offset, 180px));
+    display: flex;
+    align-items: center;
+    background: #000000;
+    box-shadow: 0 -30px 60px -20px rgba(0, 0, 0, 0.5);
+  }
+
+  .stats-cover-panel > * {
+    width: 100%;
+  }
+
+  /* Dwell for the stats panel once it has fully covered Safety, before
+     releasing into Services' normal scrolling. */
+  .stats-cover-spacer {
+    display: block;
+    height: 20vh;
+  }
+}
+
 /* Prevent white flash during image loading */
 img {
   background-color: transparent;
@@ -750,7 +827,7 @@ footer {
 /* CSS Containment for better rendering performance on iOS */
 @supports (contain: layout style paint) {
   /* Exclude sticky editorial sections — containment breaks or strains sticky + scroll syncing */
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services) {
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
     contain: layout style paint;
   }
 }
@@ -761,19 +838,17 @@ footer {
    activates a section and discovers it is much taller than the hint it
    immediately re-lays out the document, causing a visible scrollbar jump.
    Per-section overrides below tighten the hint for known-tall (#portfolio)
-   and known-short (#safety) sections so the scroll position stays stable. */
+   sections so the scroll position stays stable. #safety is excluded
+   entirely — content-visibility: auto implies containment, which breaks
+   position:sticky tracking (needed for the Safety pin/cover effect). */
 @supports (content-visibility: auto) {
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services) {
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
     content-visibility: auto;
     contain-intrinsic-size: auto 1500px;
   }
 
   section#portfolio {
     contain-intrinsic-size: auto 2200px;
-  }
-
-  section#safety {
-    contain-intrinsic-size: auto 900px;
   }
 }
 

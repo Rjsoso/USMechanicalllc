@@ -304,10 +304,18 @@ export default function Home() {
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
-          <SafetySection data={aboutData} />
-          <ParallaxLayer>
-            <CompanyStats data={statsData} />
-          </ParallaxLayer>
+          <div className="safety-pin-wrapper">
+            <SafetySection data={aboutData} />
+            <div className="safety-pin-spacer" aria-hidden="true" />
+          </div>
+          <div className="stats-cover-wrapper">
+            <div className="stats-cover-panel">
+              <ParallaxLayer>
+                <CompanyStats data={statsData} />
+              </ParallaxLayer>
+            </div>
+            <div className="stats-cover-spacer" aria-hidden="true" />
+          </div>
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />
