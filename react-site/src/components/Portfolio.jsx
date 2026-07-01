@@ -2,6 +2,7 @@ import { useState, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import FadeInNative from './FadeInNative'
+import ParallaxLayer from './ParallaxLayer'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -40,7 +41,7 @@ function Portfolio({ data: portfolioDataProp }) {
       </div>
 
       {/* Edge-to-edge category grid with white background */}
-      <div className="bg-white p-3">
+      <ParallaxLayer className="bg-white p-3">
         <div
           className="grid w-full grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3"
           style={{ position: 'relative' }}
@@ -109,7 +110,7 @@ function Portfolio({ data: portfolioDataProp }) {
             </FadeInNative>
           ))}
         </div>
-      </div>
+      </ParallaxLayer>
 
       {categories.length === 0 && (
         <div className="px-6 py-20 text-center">

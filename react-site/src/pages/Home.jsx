@@ -310,9 +310,7 @@ export default function Home() {
             <CompanyStats data={statsData} />
           </ParallaxLayer>
           <ServicesSection data={servicesData} />
-          <ParallaxLayer>
-            <Portfolio data={portfolioData} />
-          </ParallaxLayer>
+          <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />
           <FadeInNative>
             <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
