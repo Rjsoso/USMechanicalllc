@@ -157,6 +157,49 @@ section {
   contain: layout;
 }
 
+/* #safety becomes position: sticky for the pin/cover-card scroll effect —
+   containment prevents sticky from tracking the real viewport. */
+#safety {
+  contain: none;
+}
+
+/* Safety → CompanyStats/Services "sticky card" scroll effect.
+   Safety pins in place while the black stats+services card scrolls up and
+   covers it, then Safety releases and normal scrolling resumes. Desktop/
+   tablet only — mobile keeps the ordinary stacked flow. */
+.safety-pin-wrapper {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .safety-pin-wrapper {
+    background: #ffffff;
+  }
+
+  /* "Dwell" distance — how long Safety stays frozen before being covered.
+     Must be a real spacer element, not padding-bottom on the wrapper —
+     padding-bottom on a sticky containing block breaks position:sticky
+     tracking (verified: a filler element works, padding does not). */
+  .safety-pin-spacer {
+    display: block;
+    height: 42vh;
+  }
+
+  #safety {
+    /* !important needed — SafetySection.jsx sets an inline position:relative style,
+       which beats any non-!important stylesheet rule regardless of selector specificity. */
+    position: sticky !important;
+    top: var(--site-header-offset, 180px);
+  }
+
+  .stats-services-card {
+    position: relative;
+    z-index: 21; /* above #safety's z-index: 20, so it paints over it */
+    background: #000000;
+    box-shadow: 0 -30px 60px -20px rgba(0, 0, 0, 0.4);
+  }
+}
+
 /* Prevent white flash during image loading */
 img {
   background-color: transparent;
@@ -750,7 +793,7 @@ footer {
 /* CSS Containment for better rendering performance on iOS */
 @supports (contain: layout style paint) {
   /* Exclude sticky editorial sections — containment breaks or strains sticky + scroll syncing */
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services) {
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
     contain: layout style paint;
   }
 }
@@ -763,17 +806,15 @@ footer {
    Per-section overrides below tighten the hint for known-tall (#portfolio)
    and known-short (#safety) sections so the scroll position stays stable. */
 @supports (content-visibility: auto) {
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services) {
+  /* #safety is excluded — content-visibility: auto implies containment, which
+     causes the same flaky sticky behavior documented above for #services/#reviews-section. */
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
     content-visibility: auto;
     contain-intrinsic-size: auto 1500px;
   }
 
   section#portfolio {
     contain-intrinsic-size: auto 2200px;
-  }
-
-  section#safety {
-    contain-intrinsic-size: auto 900px;
   }
 }
 

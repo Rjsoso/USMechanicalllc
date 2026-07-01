@@ -5,7 +5,6 @@ import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
 import SectionScrollSeam from '../components/SectionScrollSeam'
-import ParallaxLayer from '../components/ParallaxLayer'
 import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -304,11 +303,14 @@ export default function Home() {
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
-          <SafetySection data={aboutData} />
-          <ParallaxLayer>
+          <div className="safety-pin-wrapper">
+            <SafetySection data={aboutData} />
+            <div className="safety-pin-spacer" aria-hidden="true" />
+          </div>
+          <div className="stats-services-card">
             <CompanyStats data={statsData} />
-          </ParallaxLayer>
-          <ServicesSection data={servicesData} />
+            <ServicesSection data={servicesData} />
+          </div>
           <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />
           <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
