@@ -177,7 +177,7 @@ function SafetySection({ data: safetyDataProp }) {
                   >
                     <LogoLoop
                       logos={safetyLogoItems}
-                      speed={isMobile ? 140 : 90}
+                      speed={isMobile ? 100 : 60}
                       direction="left"
                       logoHeight={getSafetyLogoHeight()}
                       gap={getSafetyGap()}
@@ -202,7 +202,7 @@ function SafetySection({ data: safetyDataProp }) {
                   >
                     <LogoLoop
                       logos={safetyLogoItems}
-                      speed={isMobile ? 140 : 90}
+                      speed={isMobile ? 100 : 60}
                       direction="right"
                       logoHeight={getSafetyLogoHeight()}
                       gap={getSafetyGap()}
