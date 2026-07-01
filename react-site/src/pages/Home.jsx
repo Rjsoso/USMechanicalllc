@@ -14,7 +14,6 @@ import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import ContactMapSection from '../components/ContactMapSection'
 import WhyUsSection from '../components/WhyUsSection'
-import FadeInNative from '../components/FadeInNative'
 import { scrollToSection } from '../utils/scrollToSection'
 import { getSiteUrlSlash } from '../utils/siteUrl'
 import { urlFor } from '../utils/sanity'
@@ -312,23 +311,21 @@ export default function Home() {
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />
-          <FadeInNative>
-            <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
-              <p className="mx-auto mb-6 max-w-2xl font-serif text-2xl font-normal leading-snug text-[#111111] md:text-3xl">
-                Ready to discuss your next project?
-              </p>
-              <button
-                type="button"
-                onClick={() => navigate('/contact')}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#111111] px-8 py-3.5 text-xs font-medium uppercase tracking-[0.12em] text-[#f7f6f3] transition-colors duration-200 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
-              >
-                Contact Us
-                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </button>
-            </div>
-          </FadeInNative>
+          <div className="border-t border-[#d8d5d0] bg-[#f7f6f3] px-6 pb-16 pt-20 text-center md:pb-20 md:pt-24">
+            <p className="mx-auto mb-6 max-w-2xl font-serif text-2xl font-normal leading-snug text-[#111111] md:text-3xl">
+              Ready to discuss your next project?
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center gap-2 rounded-lg bg-[#111111] px-8 py-3.5 text-xs font-medium uppercase tracking-[0.12em] text-[#f7f6f3] transition-colors duration-200 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
+            >
+              Contact Us
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
           <ContactMapSection />
         </div>
       </main>
