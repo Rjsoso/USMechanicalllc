@@ -481,7 +481,7 @@ function About() {
                                 ]
                               : safetyLogoItems
                           }
-                          speed={isMobile ? 200 : 120}
+                          speed={isMobile ? 150 : 90}
                           direction="left"
                           logoHeight={getSafetyLogoHeight()}
                           gap={getSafetyGap()}
@@ -516,7 +516,7 @@ function About() {
                                 ]
                               : safetyLogoItems
                           }
-                          speed={isMobile ? 200 : 120}
+                          speed={isMobile ? 150 : 90}
                           direction="right"
                           logoHeight={getSafetyLogoHeight()}
                           gap={getSafetyGap()}
