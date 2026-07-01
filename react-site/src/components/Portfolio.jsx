@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { urlFor } from '../utils/sanity'
 import FadeInNative from './FadeInNative'
 import ParallaxLayer from './ParallaxLayer'
+import FocusReveal from './FocusReveal'
 import './PortfolioHome.css'
 
 function Portfolio({ data: portfolioDataProp }) {
@@ -29,7 +30,7 @@ function Portfolio({ data: portfolioDataProp }) {
       style={{ position: 'relative', zIndex: 10 }}
     >
       {/* Portfolio Title */}
-      <div className="mx-auto mb-12 max-w-7xl px-6">
+      <FocusReveal className="mx-auto mb-12 max-w-7xl px-6">
         <h2 className="section-title text-center text-5xl text-white md:text-6xl">
           {sectionData?.sectionTitle || 'Portfolio'}
         </h2>
@@ -38,7 +39,7 @@ function Portfolio({ data: portfolioDataProp }) {
             {sectionData.sectionDescription}
           </p>
         )}
-      </div>
+      </FocusReveal>
 
       {/* Edge-to-edge category grid with white background */}
       <ParallaxLayer className="bg-white p-3">
