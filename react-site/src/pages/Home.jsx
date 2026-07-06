@@ -294,10 +294,25 @@ export default function Home() {
     }
 
     updateSafetyHeight()
+    // { box: 'border-box' } is required — ResizeObserver defaults to
+    // watching the content-box only, so height changes that come from
+    // padding/border (or, in some browsers, from sub-pixel layout/paint
+    // settling after logos/fonts finish loading) can silently fail to
+    // trigger the callback, leaving --safety-actual-height stale even
+    // though getBoundingClientRect() (border-box) has already changed.
     const observer = new ResizeObserver(updateSafetyHeight)
-    observer.observe(safetyEl)
+    observer.observe(safetyEl, { box: 'border-box' })
 
-    return () => observer.disconnect()
+    // Belt-and-suspenders for the two other realistic causes of a late
+    // height change ResizeObserver could plausibly miss: web fonts
+    // swapping in (reflows text) and the logo images finishing load.
+    document.fonts?.ready?.then(updateSafetyHeight).catch(() => {})
+    window.addEventListener('load', updateSafetyHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('load', updateSafetyHeight)
+    }
   }, [])
 
   // Parallax scroll animation removed — sections now scroll naturally
