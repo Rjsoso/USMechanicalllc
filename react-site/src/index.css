@@ -180,15 +180,26 @@ section {
     background: #ffffff;
   }
 
-  /* "Dwell" distance — how long Safety stays frozen before the stats
-     panel arrives. A real spacer element, not padding-bottom — padding-
-     bottom on a sticky containing block breaks position:sticky tracking.
-     Fixed px (not vh) since it has to out-pace the stats card's own
-     margin-top pull-up below by enough to give Safety a clean pause
-     alone before the card starts rising over it — see that comment. */
+  /* Safety's real height is NOT a fixed number — measured on production it
+     ranges from ~910px at 1024px wide down to ~733px at 1280px+ (the cert
+     logo row and paragraph text reflow with width), and it also shifts
+     whenever the Sanity content changes. Home.jsx measures #safety with a
+     ResizeObserver and keeps --safety-actual-height in sync at all times;
+     every value below derives from it via calc() so the whole effect keeps
+     working correctly at any viewport width or content length instead of
+     silently breaking (which is what happened with hard-coded px guesses
+     tuned to a single width — Safety peeked out from under the cover, or
+     the cover panel got huge broken-looking padding, at other widths). The
+     750px fallback only matters for the first paint before JS runs. */
+
+  /* "Dwell" distance — how long Safety stays frozen before the stats panel
+     arrives. A real spacer element, not padding-bottom — padding-bottom on
+     a sticky containing block breaks position:sticky tracking. This must
+     equal (the margin-pull below) + (desired "alone" dwell, 250px here) so
+     Safety gets a clean pause by itself before the card starts rising. */
   .safety-pin-spacer {
     display: block;
-    height: 750px;
+    height: calc(var(--safety-actual-height, 750px) + 310px);
   }
 
   #safety {
@@ -201,24 +212,24 @@ section {
   }
 
   /* Pulls the stats card's document position up so it starts visually
-     overlapping Safety's box (and, given its higher z-index, painting
-     over it) well before the card itself finishes scrolling into its own
-     sticky position — without this, the card only ever meets Safety's
-     bottom edge (they stay adjacent, never overlapping). The gap between
-     this value and the spacer above (750 - 500 = 250px) is Safety's own
-     "alone" pause before the card starts rising into view over it.
-     This value MUST stay >= Safety's own height (~470px) with a little
-     buffer (500 here) — once Safety unsticks and starts scrolling away,
-     it moves at the same 1:1 rate as this not-yet-locked wrapper, so the
-     gap between their tops is constant and equals (safetyHeight - this
-     margin); if this margin is smaller than Safety's height that constant
-     gap is positive, i.e. Safety's own top edge peeks out above the cover
-     for a whole scroll range — that was the second bug on top of the
-     original height-collapse one. Background lives directly on this
-     wrapper (not just the panel below) so the covered area reads as solid
-     black even where the panel's own content is short. */
+     overlapping Safety's box (and, given its higher z-index, painting over
+     it) well before the card finishes scrolling into its own sticky
+     position — without this, the card only ever meets Safety's bottom
+     edge (they stay adjacent, never overlapping). This magnitude MUST stay
+     >= Safety's real height (hence "+ 60px" over --safety-actual-height,
+     not a guessed constant) — once Safety unsticks and starts scrolling
+     away, it moves at the same 1:1 rate as this not-yet-locked wrapper, so
+     the gap between their tops is constant and equals (safetyHeight - this
+     margin); if this margin is smaller than Safety's real height, that
+     constant gap is positive, i.e. Safety's own top edge peeks out above
+     the cover for a whole scroll range (this is what "the animation stops
+     partway up the screen" was — the margin was tuned to a shorter Safety
+     height measured in local testing than Safety's real, taller, height in
+     production). Background lives directly on this wrapper (not just the
+     panel below) so the covered area reads as solid black even where the
+     panel's own content is short. */
   .stats-cover-wrapper {
-    margin-top: -500px;
+    margin-top: calc(-1 * (var(--safety-actual-height, 750px) + 60px));
     background: #000000;
     /* Must exceed #safety's z-index: 20 — without this, Safety's explicit
        z-index wins the stacking comparison over this wrapper's implicit
@@ -233,12 +244,14 @@ section {
     position: sticky;
     top: var(--site-header-offset, 180px);
     z-index: 21; /* above #safety's z-index: 20, so it fully covers it */
-    /* Sized to comfortably fit Safety's own height (~470px), NOT the full
-       viewport — a full-viewport-tall box centering ~180px of short stats
-       content is what produced the badly broken/oversized spacing the
-       user reported. This modest, Safety-sized box centers the numbers
-       proportionately instead. */
-    min-height: 480px;
+    /* Deliberately modest and fixed (not tied to Safety's height) — this
+       is what actually surrounds the short stats content, so keeping it
+       close to the content's own size avoids the huge, broken-looking
+       padding a Safety-sized (700px+) box would create. Full coverage of
+       the much taller Safety section comes from the wrapper above (via
+       the margin-pull + z-index) and the dwell spacer below, not from
+       this panel being tall itself. */
+    min-height: 320px;
     display: flex;
     align-items: center;
     background: #000000;
@@ -250,10 +263,15 @@ section {
   }
 
   /* Dwell for the stats panel once it has fully covered Safety, before
-     releasing into Services' normal scrolling. */
+     releasing into Services' normal scrolling. Must satisfy: (this height)
+     + (panel's 320px min-height above) >= the margin-pull above, or
+     Safety's bottom edge peeks out from under the wrapper as it unsticks —
+     derived here as (--safety-actual-height + 60px margin - 320px panel +
+     40px buffer) = --safety-actual-height - 220px, so it automatically
+     scales with however tall Safety actually is. */
   .stats-cover-spacer {
     display: block;
-    height: 220px;
+    height: calc(var(--safety-actual-height, 750px) - 220px);
   }
 }
 

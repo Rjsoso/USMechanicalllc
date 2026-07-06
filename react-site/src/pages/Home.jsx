@@ -272,6 +272,34 @@ export default function Home() {
     }
   }, [navigate])
 
+  // Keep --safety-actual-height in sync with Safety's real rendered height.
+  // That height varies a lot by breakpoint (measured ~910px at 1024px wide
+  // down to ~733px at 1280px+, since the cert-logo row and paragraph reflow)
+  // and even by content edits in Sanity — a fixed px value in CSS can't
+  // track that. The Safety/Stats sticky "cover" effect in index.css reads
+  // this custom property via calc() so the stats card's rise-and-cover
+  // timing always matches Safety's actual height instead of a stale guess
+  // (a mismatch here is what let Safety peek out from under the cover, or
+  // produced huge cover-panel padding, at particular viewport widths).
+  useEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return undefined
+    const safetyEl = document.getElementById('safety')
+    if (!safetyEl) return undefined
+
+    const updateSafetyHeight = () => {
+      const height = safetyEl.getBoundingClientRect().height
+      if (height > 0) {
+        document.documentElement.style.setProperty('--safety-actual-height', `${height}px`)
+      }
+    }
+
+    updateSafetyHeight()
+    const observer = new ResizeObserver(updateSafetyHeight)
+    observer.observe(safetyEl)
+
+    return () => observer.disconnect()
+  }, [])
+
   // Parallax scroll animation removed — sections now scroll naturally
 
   return (
