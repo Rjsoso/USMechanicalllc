@@ -188,7 +188,7 @@ section {
      alone before the card starts rising over it — see that comment. */
   .safety-pin-spacer {
     display: block;
-    height: 740px;
+    height: 750px;
   }
 
   #safety {
@@ -205,17 +205,40 @@ section {
      over it) well before the card itself finishes scrolling into its own
      sticky position — without this, the card only ever meets Safety's
      bottom edge (they stay adjacent, never overlapping). The gap between
-     this value and the spacer above (740 - 480 = 260px) is Safety's own
-     "alone" pause before the card starts rising into view over it. */
+     this value and the spacer above (750 - 500 = 250px) is Safety's own
+     "alone" pause before the card starts rising into view over it.
+     This value MUST stay >= Safety's own height (~470px) with a little
+     buffer (500 here) — once Safety unsticks and starts scrolling away,
+     it moves at the same 1:1 rate as this not-yet-locked wrapper, so the
+     gap between their tops is constant and equals (safetyHeight - this
+     margin); if this margin is smaller than Safety's height that constant
+     gap is positive, i.e. Safety's own top edge peeks out above the cover
+     for a whole scroll range — that was the second bug on top of the
+     original height-collapse one. Background lives directly on this
+     wrapper (not just the panel below) so the covered area reads as solid
+     black even where the panel's own content is short. */
   .stats-cover-wrapper {
-    margin-top: -480px;
+    margin-top: -500px;
+    background: #000000;
+    /* Must exceed #safety's z-index: 20 — without this, Safety's explicit
+       z-index wins the stacking comparison over this wrapper's implicit
+       z-index: auto (0), even though this wrapper comes later in the DOM,
+       and Safety's own background paints over this wrapper's black
+       backdrop instead of the reverse (part of why Safety was visibly
+       peeking through mid-transition). */
+    z-index: 21;
   }
 
   .stats-cover-panel {
     position: sticky;
     top: var(--site-header-offset, 180px);
     z-index: 21; /* above #safety's z-index: 20, so it fully covers it */
-    min-height: calc(100vh - var(--site-header-offset, 180px));
+    /* Sized to comfortably fit Safety's own height (~470px), NOT the full
+       viewport — a full-viewport-tall box centering ~180px of short stats
+       content is what produced the badly broken/oversized spacing the
+       user reported. This modest, Safety-sized box centers the numbers
+       proportionately instead. */
+    min-height: 480px;
     display: flex;
     align-items: center;
     background: #000000;
@@ -230,7 +253,7 @@ section {
      releasing into Services' normal scrolling. */
   .stats-cover-spacer {
     display: block;
-    height: 20vh;
+    height: 220px;
   }
 }
 
@@ -826,8 +849,10 @@ footer {
 
 /* CSS Containment for better rendering performance on iOS */
 @supports (contain: layout style paint) {
-  /* Exclude sticky editorial sections — containment breaks or strains sticky + scroll syncing */
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
+  /* Exclude sticky editorial sections — containment breaks or strains sticky + scroll syncing.
+     #stats-counter (CompanyStats, inside .stats-cover-panel) is excluded for the same reason
+     as #safety: it lives inside the Safety/Stats stacking-cards sticky effect. */
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety):not(#stats-counter) {
     contain: layout style paint;
   }
 }
@@ -838,11 +863,14 @@ footer {
    activates a section and discovers it is much taller than the hint it
    immediately re-lays out the document, causing a visible scrollbar jump.
    Per-section overrides below tighten the hint for known-tall (#portfolio)
-   sections so the scroll position stays stable. #safety is excluded
-   entirely — content-visibility: auto implies containment, which breaks
-   position:sticky tracking (needed for the Safety pin/cover effect). */
+   sections so the scroll position stays stable. #safety and #stats-counter are
+   excluded entirely — content-visibility: auto implies containment, which
+   breaks position:sticky tracking, AND (for #stats-counter specifically) forces
+   the section to the 1500px contain-intrinsic-size placeholder height instead of
+   its real ~200px height while it sits inside the sticky cover panel, which is
+   what caused the badly broken spacing around the stats counter. */
 @supports (content-visibility: auto) {
-  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety) {
+  section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety):not(#stats-counter) {
     content-visibility: auto;
     contain-intrinsic-size: auto 1500px;
   }

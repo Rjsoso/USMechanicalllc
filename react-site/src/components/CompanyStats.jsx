@@ -129,6 +129,7 @@ const CompanyStats = ({ data: statsDataProp }) => {
 
   return (
     <section
+      id="stats-counter"
       ref={sectionRef}
       className="w-full bg-black py-16 xl:py-12 2xl:py-10"
     >
