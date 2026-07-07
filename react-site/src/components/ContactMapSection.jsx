@@ -1,6 +1,7 @@
 import { useState, memo } from 'react'
 import { useSanityLive } from '../hooks/useSanityLive'
 import SmallSpinner from './SmallSpinner'
+import FadeInNative from './FadeInNative'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   offices[]{ locationName, address, phone, fax }
@@ -72,7 +73,7 @@ function ContactMapSection() {
             className="relative w-full min-h-[320px] overflow-hidden"
             style={{ height: MAP_BLOCK_HEIGHT, minHeight: MAP_BLOCK_HEIGHT }}
           >
-            <div className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6">
+            <FadeInNative className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6">
               {activeOffice && (
                 <div className="max-w-[min(100%,20rem)] rounded-lg bg-black/50 px-3 py-2.5 text-right shadow-lg backdrop-blur-md md:max-w-sm md:px-4 md:py-3">
                   <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-white/50 md:text-xs">
@@ -113,7 +114,7 @@ function ContactMapSection() {
                   </button>
                 ))}
               </div>
-            </div>
+            </FadeInNative>
 
             {/* Only mount the active office map iframe (saves network/CPU vs hidden iframes). */}
             {activeOffice?.address ? (

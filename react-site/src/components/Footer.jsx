@@ -6,6 +6,7 @@ import { client, urlFor } from '../utils/sanity'
 import { scrollToSection } from '../utils/scrollToSection'
 import { openConsentBanner } from '../utils/openConsentBanner'
 import { affiliateDescriptionSegments, resolveAffiliateUrl } from '../utils/affiliates'
+import { StaggerContainer, StaggerItem } from './animations/StaggerContainer'
 import './Footer.css'
 
 // Fallback contact data in case Sanity fetch fails - Last updated: 2026-01-29
@@ -81,8 +82,8 @@ function Footer() {
     <footer className="site-footer-editorial">
       <div className="site-footer-editorial__inner">
         <div className="site-footer-editorial__main">
-          <div className="site-footer-editorial__grid">
-            <div className="site-footer-editorial__col site-footer-editorial__col--brand">
+          <StaggerContainer className="site-footer-editorial__grid" initialDelay={0.05}>
+            <StaggerItem className="site-footer-editorial__col site-footer-editorial__col--brand">
               <h3 className="site-footer-editorial__brand-name">U.S. Mechanical LLC</h3>
               {displayCompanyDescription && (
                 <p className="site-footer-editorial__brand-copy">{displayCompanyDescription}</p>
@@ -164,9 +165,9 @@ function Footer() {
                   })}
                 </div>
               )}
-            </div>
+            </StaggerItem>
 
-            <div className="site-footer-editorial__col">
+            <StaggerItem className="site-footer-editorial__col">
               <h3 className="site-footer-editorial__col-heading">About Us</h3>
               <ul className="site-footer-editorial__nav-list">
                 <li>
@@ -185,9 +186,9 @@ function Footer() {
                   </button>
                 </li>
               </ul>
-            </div>
+            </StaggerItem>
 
-            <div className="site-footer-editorial__col">
+            <StaggerItem className="site-footer-editorial__col">
               <h3 className="site-footer-editorial__col-heading">Services</h3>
               <ul className="site-footer-editorial__nav-list">
                 <li>
@@ -206,9 +207,9 @@ function Footer() {
                   </button>
                 </li>
               </ul>
-            </div>
+            </StaggerItem>
 
-            <div className="site-footer-editorial__col">
+            <StaggerItem className="site-footer-editorial__col">
               <h3 className="site-footer-editorial__col-heading">Business Hours</h3>
               {(displayBusinessHoursDays || displayBusinessHoursTime) && (
                 <div className="site-footer-editorial__hours">
@@ -233,8 +234,8 @@ function Footer() {
               >
                 <Linkedin className="h-5 w-5" />
               </a>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
 
         <div className="site-footer-editorial__bar">
