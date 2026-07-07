@@ -260,17 +260,22 @@ section {
 
   /* Dwell for the stats panel once it has fully covered Safety, before
      releasing into Services' normal scrolling. Must satisfy: (this height)
-     + (panel's real content height above, ~165-215px across breakpoints
-     via CompanyStats' own padding) >= the margin-pull above, or Safety's
-     bottom edge peeks out from under the wrapper as it unsticks — derived
-     here using a conservative 150px floor for the panel's height so it
-     stays safe at every breakpoint: (--safety-actual-height + 24px margin
-     - 150px assumed-min-panel + 20px buffer) = --safety-actual-height -
-     106px, so it automatically scales with however tall Safety actually
-     is instead of a guessed constant. */
+     + (panel's real content height, tracked live via --stats-panel-height
+     in Home.jsx) >= Safety's own height + the margin-pull's 24px buffer, or
+     the wrapper's black background stops tracking Safety before Safety's
+     sticky positioning has fully released it from the bottom of
+     .safety-pin-wrapper, letting Safety visibly peek through underneath
+     (confirmed by testing — this is a hard geometric requirement of the
+     sticky containing block, not just a cautious guess). Using the real
+     measured panel height here (instead of the previous fixed ~150px
+     conservative floor) tightens this to the true minimum needed, which is
+     what actually shrinks the dead space safely — the +12px is only a small
+     rounding/timing buffer, not a large guessed margin. */
   .stats-cover-spacer {
     display: block;
-    height: calc(var(--safety-actual-height, 750px) - 106px);
+    height: calc(
+      var(--safety-actual-height, 750px) - var(--stats-panel-height, 150px) + 36px
+    );
   }
 }
 
