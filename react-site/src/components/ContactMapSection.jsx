@@ -1,7 +1,7 @@
 import { useState, memo } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
 import SmallSpinner from './SmallSpinner'
-import FadeInNative from './FadeInNative'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
   offices[]{ locationName, address, phone, fax }
@@ -34,6 +34,7 @@ function officeTabButtonLabel(locationName) {
  */
 function ContactMapSection() {
   const [activeOfficeTab, setActiveOfficeTab] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
   const { data: contactData, loading } = useSanityLive(CONTACT_MAP_QUERY, {}, {
     listenFilter: `*[_type == "contact"]`,
   })
@@ -73,11 +74,7 @@ function ContactMapSection() {
             className="relative w-full min-h-[320px] overflow-hidden"
             style={{ height: MAP_BLOCK_HEIGHT, minHeight: MAP_BLOCK_HEIGHT }}
           >
-            <FadeInNative
-              intensity="strong"
-              delay={0.15}
-              className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6"
-            >
+            <div className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6">
               {activeOffice && (
                 <div className="max-w-[min(100%,20rem)] rounded-lg bg-black/50 px-3 py-2.5 text-right shadow-lg backdrop-blur-md md:max-w-sm md:px-4 md:py-3">
                   <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-white/50 md:text-xs">
@@ -108,21 +105,30 @@ function ContactMapSection() {
                     key={index}
                     type="button"
                     onClick={() => setActiveOfficeTab(index)}
-                    className={`max-w-[11rem] rounded-md px-2.5 py-2 text-left text-xs font-semibold leading-tight transition-all sm:max-w-none sm:px-3 sm:py-2.5 sm:text-sm md:px-4 ${
-                      activeOfficeTab === index
-                        ? 'bg-white/15 text-white shadow-sm'
-                        : 'text-white/70 hover:text-white'
+                    className={`relative max-w-[11rem] rounded-md px-2.5 py-2 text-left text-xs font-semibold leading-tight transition-colors sm:max-w-none sm:px-3 sm:py-2.5 sm:text-sm md:px-4 ${
+                      activeOfficeTab === index ? 'text-white' : 'text-white/70 hover:text-white'
                     }`}
                   >
-                    {officeTabButtonLabel(office.locationName)}
+                    {activeOfficeTab === index && (
+                      <motion.span
+                        layoutId="office-tab-highlight"
+                        className="absolute inset-0 rounded-md bg-white/15 shadow-sm"
+                        transition={
+                          prefersReducedMotion
+                            ? { duration: 0 }
+                            : { type: 'spring', stiffness: 380, damping: 32 }
+                        }
+                      />
+                    )}
+                    <span className="relative">{officeTabButtonLabel(office.locationName)}</span>
                   </button>
                 ))}
               </div>
-            </FadeInNative>
+            </div>
 
             {/* Only mount the active office map iframe (saves network/CPU vs hidden iframes). */}
             {activeOffice?.address ? (
-              <FadeInNative intensity="media" className="absolute inset-0 z-[1]">
+              <div className="absolute inset-0 z-[1]">
                 <iframe
                   key={`${activeOfficeTab}-${activeOffice.address}`}
                   title={`${activeOffice.locationName} location`}
@@ -136,7 +142,14 @@ function ContactMapSection() {
                   sandbox="allow-scripts allow-same-origin allow-popups"
                   className="h-full w-full"
                 />
-              </FadeInNative>
+                <div
+                  className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
+                  aria-hidden="true"
+                >
+                  <span className="map-location-ping" />
+                  <span className="map-location-dot" />
+                </div>
+              </div>
             ) : null}
           </div>
         ) : (

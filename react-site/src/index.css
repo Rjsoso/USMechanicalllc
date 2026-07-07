@@ -823,36 +823,60 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
-/* More noticeable variant for elements sitting against busy/high-contrast
-   backdrops (e.g. a map) where the default subtle fade can get lost. */
-.fade-in-native.fade-in-native--strong {
-  transform: translate3d(0, 34px, 0);
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Full-bleed media reveal: settles into place with a gentle zoom instead of
-   a vertical slide, which reads oddly on large edge-to-edge imagery/iframes. */
-.fade-in-native.fade-in-native--media {
-  transform: scale(1.06);
-  transition:
-    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.fade-in-native.fade-in-native--media.fade-in-native--visible {
-  transform: scale(1);
-}
-
 /* Remove transition on reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .fade-in-native,
-  .fade-in-native.fade-in-native--strong,
-  .fade-in-native.fade-in-native--media {
+  .fade-in-native {
     transition: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Contact map: a small "live location" radar ping sitting over the pinned
+   address, mirroring the Google Maps pin's red so it reads as part of the
+   map rather than a decoration on top of it. */
+.map-location-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: #ef4444;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 1px 4px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+}
+
+.map-location-ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.55);
+  transform: translate(-50%, -50%) scale(1);
+  animation: map-location-ping 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes map-location-ping {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.55;
+  }
+  75%,
+  100% {
+    transform: translate(-50%, -50%) scale(3.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-location-ping {
+    animation: none;
+    opacity: 0;
   }
 }
 

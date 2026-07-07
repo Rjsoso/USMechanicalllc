@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, memo } from 'react'
 
-function FadeInNative({ children, delay = 0, className = '', intensity = 'default' }) {
+function FadeInNative({ children, delay = 0, className = '' }) {
   const [isVisible, setIsVisible] = useState(false)
   const elementRef = useRef(null)
 
@@ -33,13 +33,10 @@ function FadeInNative({ children, delay = 0, className = '', intensity = 'defaul
     return () => observer.disconnect()
   }, [delay])
 
-  const intensityClass =
-    intensity === 'strong' ? 'fade-in-native--strong' : intensity === 'media' ? 'fade-in-native--media' : ''
-
   return (
     <div
       ref={elementRef}
-      className={`fade-in-native ${intensityClass} ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
+      className={`fade-in-native ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
     >
       {children}
     </div>
