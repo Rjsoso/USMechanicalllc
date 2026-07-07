@@ -94,13 +94,15 @@
 }
 
 .carousel-item-image--contain {
+  /* Fill the box like the default image (so contain scales the picture to
+     match the real rendered box), rather than sizing off the image's own
+     downloaded resolution — the old width/height:auto approach left visible
+     gaps whenever the fetched image was smaller than the box (e.g. a
+     lower-res srcset candidate on desktop). */
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   background-color: #f3f4f6;
-  /* Use max dimensions so object-fit letterboxing is correct inside flex parents */
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
 }
 
 .carousel-item-caption {
