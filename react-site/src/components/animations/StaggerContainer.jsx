@@ -40,7 +40,6 @@ export const StaggerContainer = memo(function StaggerContainer({
   staggerDelay: staggerDelayProp,
   initialDelay = 0,
   once = true,
-  viewportMargin = '100px 0px',
 }) {
   const prefersReducedMotion = useReducedMotion()
   const staggerDelay = prefersReducedMotion
@@ -67,7 +66,7 @@ export const StaggerContainer = memo(function StaggerContainer({
         style={style}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once, amount: 0.01, margin: viewportMargin }}
+        viewport={{ once, amount: 0.01, margin: '100px 0px' }}
         variants={variants}
       >
         {children}

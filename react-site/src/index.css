@@ -832,10 +832,24 @@ body {
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Full-bleed media reveal: settles into place with a gentle zoom instead of
+   a vertical slide, which reads oddly on large edge-to-edge imagery/iframes. */
+.fade-in-native.fade-in-native--media {
+  transform: scale(1.06);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in-native.fade-in-native--media.fade-in-native--visible {
+  transform: scale(1);
+}
+
 /* Remove transition on reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-in-native,
-  .fade-in-native.fade-in-native--strong {
+  .fade-in-native.fade-in-native--strong,
+  .fade-in-native.fade-in-native--media {
     transition: none;
     opacity: 1;
     transform: none;

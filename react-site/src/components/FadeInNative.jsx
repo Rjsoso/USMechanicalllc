@@ -33,10 +33,13 @@ function FadeInNative({ children, delay = 0, className = '', intensity = 'defaul
     return () => observer.disconnect()
   }, [delay])
 
+  const intensityClass =
+    intensity === 'strong' ? 'fade-in-native--strong' : intensity === 'media' ? 'fade-in-native--media' : ''
+
   return (
     <div
       ref={elementRef}
-      className={`fade-in-native ${intensity === 'strong' ? 'fade-in-native--strong' : ''} ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
+      className={`fade-in-native ${intensityClass} ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
     >
       {children}
     </div>

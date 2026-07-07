@@ -75,6 +75,7 @@ function ContactMapSection() {
           >
             <FadeInNative
               intensity="strong"
+              delay={0.15}
               className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6"
             >
               {activeOffice && (
@@ -121,7 +122,7 @@ function ContactMapSection() {
 
             {/* Only mount the active office map iframe (saves network/CPU vs hidden iframes). */}
             {activeOffice?.address ? (
-              <div className="absolute inset-0 z-[1]">
+              <FadeInNative intensity="media" className="absolute inset-0 z-[1]">
                 <iframe
                   key={`${activeOfficeTab}-${activeOffice.address}`}
                   title={`${activeOffice.locationName} location`}
@@ -135,7 +136,7 @@ function ContactMapSection() {
                   sandbox="allow-scripts allow-same-origin allow-popups"
                   className="h-full w-full"
                 />
-              </div>
+              </FadeInNative>
             ) : null}
           </div>
         ) : (
