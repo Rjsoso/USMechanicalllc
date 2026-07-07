@@ -143,11 +143,16 @@ function ContactMapSection() {
                   className="h-full w-full"
                 />
                 <div
-                  className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
+                  className="pointer-events-none absolute bottom-4 left-4 z-[2] flex items-center gap-2 rounded-full bg-black/50 py-1.5 pl-2 pr-3 shadow-lg backdrop-blur-md md:bottom-6 md:left-6"
                   aria-hidden="true"
                 >
-                  <span className="map-location-ping" />
-                  <span className="map-location-dot" />
+                  <span className="relative flex h-3 w-3 shrink-0 items-center justify-center">
+                    <span className="map-location-ping" />
+                    <span className="map-location-dot" />
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/80 md:text-xs">
+                    Live map
+                  </span>
                 </div>
               </div>
             ) : null}
