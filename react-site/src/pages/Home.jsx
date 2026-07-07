@@ -5,9 +5,11 @@ import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
 import SectionScrollSeam from '../components/SectionScrollSeam'
-import SafetyCoverStage from '../components/SafetyCoverStage'
+import ParallaxLayer from '../components/ParallaxLayer'
+import SafetySection from '../components/SafetySection'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import CompanyStats from '../components/CompanyStats'
 import ServicesSection from '../components/ServicesSection'
 import Portfolio from '../components/Portfolio'
 import ContactMapSection from '../components/ContactMapSection'
@@ -270,6 +272,49 @@ export default function Home() {
     }
   }, [navigate])
 
+  // Keep --safety-actual-height in sync with Safety's real rendered height.
+  // That height varies a lot by breakpoint (measured ~910px at 1024px wide
+  // down to ~733px at 1280px+, since the cert-logo row and paragraph reflow)
+  // and even by content edits in Sanity — a fixed px value in CSS can't
+  // track that. The Safety/Stats sticky "cover" effect in index.css reads
+  // this custom property via calc() so the stats card's rise-and-cover
+  // timing always matches Safety's actual height instead of a stale guess
+  // (a mismatch here is what let Safety peek out from under the cover, or
+  // produced huge cover-panel padding, at particular viewport widths).
+  useEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return undefined
+    const safetyEl = document.getElementById('safety')
+    if (!safetyEl) return undefined
+
+    const updateSafetyHeight = () => {
+      const height = safetyEl.getBoundingClientRect().height
+      if (height > 0) {
+        document.documentElement.style.setProperty('--safety-actual-height', `${height}px`)
+      }
+    }
+
+    updateSafetyHeight()
+    // { box: 'border-box' } is required — ResizeObserver defaults to
+    // watching the content-box only, so height changes that come from
+    // padding/border (or, in some browsers, from sub-pixel layout/paint
+    // settling after logos/fonts finish loading) can silently fail to
+    // trigger the callback, leaving --safety-actual-height stale even
+    // though getBoundingClientRect() (border-box) has already changed.
+    const observer = new ResizeObserver(updateSafetyHeight)
+    observer.observe(safetyEl, { box: 'border-box' })
+
+    // Belt-and-suspenders for the two other realistic causes of a late
+    // height change ResizeObserver could plausibly miss: web fonts
+    // swapping in (reflows text) and the logo images finishing load.
+    document.fonts?.ready?.then(updateSafetyHeight).catch(() => {})
+    window.addEventListener('load', updateSafetyHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('load', updateSafetyHeight)
+    }
+  }, [])
+
   // Parallax scroll animation removed — sections now scroll naturally
 
   return (
@@ -302,7 +347,18 @@ export default function Home() {
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
-          <SafetyCoverStage aboutData={aboutData} statsData={statsData} />
+          <div className="safety-pin-wrapper">
+            <SafetySection data={aboutData} />
+            <div className="safety-pin-spacer" aria-hidden="true" />
+          </div>
+          <div className="stats-cover-wrapper">
+            <div className="stats-cover-panel">
+              <ParallaxLayer>
+                <CompanyStats data={statsData} />
+              </ParallaxLayer>
+            </div>
+            <div className="stats-cover-spacer" aria-hidden="true" />
+          </div>
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />

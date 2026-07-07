@@ -157,75 +157,120 @@ section {
   contain: layout;
 }
 
-/* Safety → Company Stats scroll-jacked "cover" effect (desktop/tablet only,
-   see SafetyCoverStage.jsx). #safety no longer needs position: sticky or a
-   contain:none override for this — the stage pins via JS-toggled
-   position:fixed instead, so no CSS containment exception is required for
-   the pin itself. Kept contain:none anyway since #safety still sits inside
-   a fixed-position ancestor during the pin, and layout containment on it
-   would be harmless either way, but leaving it as none avoids any surprise
-   interaction with the height measurement in SafetyCoverStage.jsx. */
+/* #safety becomes position: sticky for the pin/cover-card scroll effect —
+   containment prevents sticky from tracking the real viewport. */
 #safety {
   contain: none;
 }
 
-.safety-cover-stage {
+/* Safety → Company Stats "stacking sticky cards" scroll effect.
+   Safety pins in place, then the black Company Stats panel rises and
+   becomes sticky at the SAME offset with a higher z-index, so it fully
+   covers Safety (rather than just meeting its bottom edge). Once its own
+   dwell ends, the panel releases and the real Services section continues
+   in normal, un-stuck scrolling. Desktop/tablet only (min-width: 1024px);
+   mobile keeps the ordinary stacked flow. */
+.safety-pin-wrapper,
+.stats-cover-wrapper {
   position: relative;
 }
 
 @media (min-width: 1024px) {
-  /* Reserves Safety's real rendered height in the document (kept in sync by
-     a ResizeObserver in SafetyCoverStage.jsx) so the stage behaves like an
-     ordinary section until JS pins it — no extra scroll distance is added
-     beyond Safety's own natural height, unlike the old sticky+spacer
-     approach where covering Safety with zero gap required holding for
-     roughly Safety's full height (733-910px) of dead scroll. */
-  .safety-cover-stage-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    isolation: isolate;
+  .safety-pin-wrapper {
+    background: #ffffff;
   }
 
-  .safety-cover-safety-box {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    /* Contains #safety's own inline z-index: 20 within this box so it can
-       never out-rank .safety-cover-panel's z-index below, regardless of
-       either value — belt-and-suspenders alongside that explicit ordering. */
-    isolation: isolate;
-    z-index: 0;
+  /* Safety's real height is NOT a fixed number — measured on production it
+     ranges from ~910px at 1024px wide down to ~733px at 1280px+ (the cert
+     logo row and paragraph text reflow with width), and it also shifts
+     whenever the Sanity content changes. Home.jsx measures #safety with a
+     ResizeObserver and keeps --safety-actual-height in sync at all times;
+     every value below derives from it via calc() so the whole effect keeps
+     working correctly at any viewport width or content length instead of
+     silently breaking (which is what happened with hard-coded px guesses
+     tuned to a single width — Safety peeked out from under the cover, or
+     the cover panel got huge broken-looking padding, at other widths). The
+     750px fallback only matters for the first paint before JS runs. */
+
+  /* "Dwell" distance — how long Safety stays frozen before the stats panel
+     arrives. A real spacer element, not padding-bottom — padding-bottom on
+     a sticky containing block breaks position:sticky tracking. This must
+     equal (the margin-pull below) + (desired "alone" dwell, 180px here) so
+     Safety gets a clean pause by itself before the card starts rising. */
+  .safety-pin-spacer {
+    display: block;
+    height: calc(var(--safety-actual-height, 750px) + 200px);
   }
 
-  /* Slides up from fully below (translateY(100%)) to fully covering
-     (translateY(0)) as SafetyCoverStage.jsx drives its transform directly —
-     not scroll-linked, so this stays a short, fixed-feeling reveal no
-     matter how tall Safety's box is. Sized via inset:0 to the same box as
-     safety-box above (both fill safety-cover-stage-inner), and opaque for
-     its *entire* box — not just where CompanyStats' own content sits — so
-     nothing of Safety peeks through the gap between the numbers and the
-     edges of the box while covering. */
-  .safety-cover-panel {
-    position: absolute;
-    inset: 0;
-    /* Must exceed #safety's own inline z-index: 20 (SafetySection.jsx) —
-       .safety-cover-safety-box (its wrapper) doesn't establish its own
-       stacking context, so #safety's z-index compares directly against
-       this panel's, and Safety would paint over the "covering" panel
-       instead of the reverse if this weren't higher. */
-    z-index: 25;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  #safety {
+    /* !important needed — SafetySection.jsx sets an inline position:relative
+       style, which beats any non-!important stylesheet rule regardless of
+       selector specificity. */
+    position: sticky !important;
+    top: var(--site-header-offset, 180px);
+    z-index: 20;
+  }
+
+  /* Pulls the stats card's document position up so it starts visually
+     overlapping Safety's box (and, given its higher z-index, painting over
+     it) well before the card finishes scrolling into its own sticky
+     position — without this, the card only ever meets Safety's bottom
+     edge (they stay adjacent, never overlapping). This magnitude MUST stay
+     >= Safety's real height (hence "+ 24px" over --safety-actual-height,
+     not a guessed constant) — once Safety unsticks and starts scrolling
+     away, it moves at the same 1:1 rate as this not-yet-locked wrapper, so
+     the gap between their tops is constant and equals (safetyHeight - this
+     margin); if this margin is smaller than Safety's real height, that
+     constant gap is positive, i.e. Safety's own top edge peeks out above
+     the cover for a whole scroll range (this is what "the animation stops
+     partway up the screen" was — the margin was tuned to a shorter Safety
+     height measured in local testing than Safety's real, taller, height in
+     production). Background lives directly on this wrapper (not just the
+     panel below) so the covered area reads as solid black even where the
+     panel's own content is short. */
+  .stats-cover-wrapper {
+    margin-top: calc(-1 * (var(--safety-actual-height, 750px) + 24px));
+    background: #000000;
+    /* Must exceed #safety's z-index: 20 — without this, Safety's explicit
+       z-index wins the stacking comparison over this wrapper's implicit
+       z-index: auto (0), even though this wrapper comes later in the DOM,
+       and Safety's own background paints over this wrapper's black
+       backdrop instead of the reverse (part of why Safety was visibly
+       peeking through mid-transition). */
+    z-index: 21;
+  }
+
+  .stats-cover-panel {
+    position: sticky;
+    top: var(--site-header-offset, 180px);
+    z-index: 21; /* above #safety's z-index: 20, so it fully covers it */
+    /* No min-height and no vertical centering — CompanyStats already has
+       its own vertical padding baked in (py-16 / xl:py-12 / 2xl:py-10), so
+       the panel just sizes to its content and docks the numbers right
+       under the header the moment it locks. Centering short content in a
+       tall, arbitrarily-sized box is exactly what produced the huge,
+       broken-looking padding above AND below the numbers that was
+       reported — content should sit at the top, not float in the middle
+       of empty space. Full coverage of the much taller Safety section
+       still comes from the wrapper above (via the margin-pull + z-index)
+       and the dwell spacer below, not from this panel being tall itself. */
     background: #000000;
     box-shadow: 0 -30px 60px -20px rgba(0, 0, 0, 0.5);
   }
 
-  .safety-cover-panel > section {
-    width: 100%;
+  /* Dwell for the stats panel once it has fully covered Safety, before
+     releasing into Services' normal scrolling. Must satisfy: (this height)
+     + (panel's real content height above, ~165-215px across breakpoints
+     via CompanyStats' own padding) >= the margin-pull above, or Safety's
+     bottom edge peeks out from under the wrapper as it unsticks — derived
+     here using a conservative 150px floor for the panel's height so it
+     stays safe at every breakpoint: (--safety-actual-height + 24px margin
+     - 150px assumed-min-panel + 20px buffer) = --safety-actual-height -
+     106px, so it automatically scales with however tall Safety actually
+     is instead of a guessed constant. */
+  .stats-cover-spacer {
+    display: block;
+    height: calc(var(--safety-actual-height, 750px) - 106px);
   }
 }
 
@@ -821,12 +866,9 @@ footer {
 
 /* CSS Containment for better rendering performance on iOS */
 @supports (contain: layout style paint) {
-  /* #safety and #stats-counter (CompanyStats) are excluded because
-     SafetyCoverStage.jsx measures #safety's real height via ResizeObserver
-     and pins both sections with position:fixed during the scroll-jacked
-     cover effect — containment here isn't needed for either any more (no
-     position:sticky involved), but it's still excluded to avoid any
-     interaction with the height measurement or the fixed-position pin. */
+  /* Exclude sticky editorial sections — containment breaks or strains sticky + scroll syncing.
+     #stats-counter (CompanyStats, inside .stats-cover-panel) is excluded for the same reason
+     as #safety: it lives inside the Safety/Stats stacking-cards sticky effect. */
   section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety):not(#stats-counter) {
     contain: layout style paint;
   }
@@ -839,11 +881,11 @@ footer {
    immediately re-lays out the document, causing a visible scrollbar jump.
    Per-section overrides below tighten the hint for known-tall (#portfolio)
    sections so the scroll position stays stable. #safety and #stats-counter are
-   excluded entirely — content-visibility: auto would report a placeholder
-   height (the 1500px contain-intrinsic-size) instead of their real rendered
-   height whenever they're off-screen, which SafetyCoverStage.jsx's
-   ResizeObserver (for #safety) and CompanyStats' own IntersectionObserver
-   (for #stats-counter's count-up animation) both depend on being accurate. */
+   excluded entirely — content-visibility: auto implies containment, which
+   breaks position:sticky tracking, AND (for #stats-counter specifically) forces
+   the section to the 1500px contain-intrinsic-size placeholder height instead of
+   its real ~200px height while it sits inside the sticky cover panel, which is
+   what caused the badly broken spacing around the stats counter. */
 @supports (content-visibility: auto) {
   section:not(#hero):not(#contact):not(#reviews-section):not(#services):not(#safety):not(#stats-counter) {
     content-visibility: auto;
