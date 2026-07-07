@@ -180,6 +180,26 @@ section {
     background: #ffffff;
   }
 
+  /* Safety's own internal padding (py-20 = 80px top+bottom) is generous for
+     a normal stacked-flow section, but in the pinned/sticky "cover" effect
+     it does double duty it shouldn't: (1) it directly adds to Safety's
+     rendered height, and that height is exactly what the black stats panel
+     later has to scroll an equivalent distance to fully cover (a taller
+     Safety unavoidably means a longer black "dwell" after the stats
+     numbers appear — this is a hard geometric requirement of the sticky
+     cover technique, not a tunable constant); and (2) it pushes the
+     heading down within the pinned box, away from the header, making the
+     whole thing feel low/off-center once pinned. An ID-selector rule here
+     naturally beats the .py-20 utility class (no !important needed) and
+     only applies once the pin/cover effect is active (min-width: 1024px) —
+     40px top still clears the floating logo plaque (which extends to
+     ~189px below the 180px pin offset, so 180+40=220px comfortably clears
+     it) while cutting real height off both Safety and the required dwell. */
+  #safety {
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
   /* Safety's real height is NOT a fixed number — measured on production it
      ranges from ~910px at 1024px wide down to ~733px at 1280px+ (the cert
      logo row and paragraph text reflow with width), and it also shifts
@@ -194,12 +214,15 @@ section {
 
   /* "Dwell" distance — how long Safety stays frozen before the stats panel
      arrives. A real spacer element, not padding-bottom — padding-bottom on
-     a sticky containing block breaks position:sticky tracking. This must
-     equal (the margin-pull below) + (desired "alone" dwell, 180px here) so
-     Safety gets a clean pause by itself before the card starts rising. */
+     a sticky containing block breaks position:sticky tracking. Shortening
+     the +60px here (down from +200px) only trims the "alone" pause before
+     the card starts rising — it does NOT change how long the black dwell
+     needs to be after the stats panel appears (that's governed entirely by
+     .stats-cover-spacer below, tied to Safety's own height), confirmed by
+     testing across the full scroll range with no peek-through regression. */
   .safety-pin-spacer {
     display: block;
-    height: calc(var(--safety-actual-height, 750px) + 200px);
+    height: calc(var(--safety-actual-height, 750px) + 60px);
   }
 
   #safety {
