@@ -1,9 +1,10 @@
 /* global process */
-import { useMemo, useState, memo } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useMemo, useRef, useState, memo } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { navigateToSection } from '../utils/scrollToSection'
 import { useSanityLive } from '../hooks/useSanityLive'
+import { useHeroBackgroundDepth } from '../hooks/useHeroBackgroundDepth'
 
 // Fallback hero data - Last updated: 2026-01-29
 const defaultHeroData = {
@@ -44,6 +45,21 @@ function HeroSection({ data: heroDataProp }) {
   // compositor hint (`will-change`) once the layer is no longer animating.
   const [headlineSettled, setHeadlineSettled] = useState(false)
 
+  // Scroll progress across the hero's own height: 0 while hero fills the
+  // viewport, 1 right as About finishes covering it. Drives both the fixed
+  // background depth cue and the hero content's "focus recede" below.
+  const sectionRef = useRef(null)
+  const { scrollYProgress: heroCoverProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  useHeroBackgroundDepth(sectionRef, heroCoverProgress, prefersReducedMotion)
+
+  const contentScale = useTransform(heroCoverProgress, [0, 1], [1, 0.96])
+  const contentOpacity = useTransform(heroCoverProgress, [0, 1], [1, 0.85])
+  const contentBlurPx = useTransform(heroCoverProgress, [0, 1], [0, 3])
+  const contentFilter = useTransform(contentBlurPx, (v) => `blur(${v}px)`)
+
   const { data: rawHero } = useSanityLive(HERO_QUERY, {}, {
     initialData: heroDataProp,
     listenFilter: `*[_type == "heroSection"]`,
@@ -74,6 +90,7 @@ function HeroSection({ data: heroDataProp }) {
   return (
     <section
       id="hero"
+      ref={sectionRef}
       className="hero-section relative flex min-h-screen w-full flex-col text-center"
       style={{
         marginTop: 0,
@@ -86,8 +103,22 @@ function HeroSection({ data: heroDataProp }) {
         background: 'transparent',
       }}
     >
-      {/* One centered column: title + subtext + CTAs stay visually grouped */}
-      <div className="mt-[25px] flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 pt-14 pb-6 md:gap-4 md:pt-16">
+      {/* One centered column: title + subtext + CTAs stay visually grouped.
+          Recedes slightly (scale/blur/dim) as About scrolls up to cover the
+          hero, like a camera pulling focus back onto the next layer. */}
+      <motion.div
+        className="mt-[25px] flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 pt-14 pb-6 md:gap-4 md:pt-16"
+        style={
+          prefersReducedMotion
+            ? undefined
+            : {
+                scale: contentScale,
+                opacity: contentOpacity,
+                filter: contentFilter,
+                willChange: 'transform, opacity, filter',
+              }
+        }
+      >
         <motion.h1
           className="hero-3d-text mb-0 max-w-5xl"
           data-text={heroData.headline}
@@ -212,7 +243,7 @@ function HeroSection({ data: heroDataProp }) {
           </motion.div>
         )}
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

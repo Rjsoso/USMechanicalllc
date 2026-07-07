@@ -302,7 +302,9 @@ export default function Home() {
           <HeroSection data={hero.data} />
         </div>
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
-          <AboutSection data={aboutData} />
+          <ParallaxLayer maxShadowOpacity={0.4}>
+            <AboutSection data={aboutData} />
+          </ParallaxLayer>
           <SectionScrollSeam />
           <SafetySection data={aboutData} />
           <ParallaxLayer>

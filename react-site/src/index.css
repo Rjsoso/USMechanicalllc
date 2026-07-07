@@ -229,7 +229,10 @@ body,
 /* Main element background is controlled via inline styles in Home.jsx for dynamic Sanity images */
 /* Do not add background rules here as they will override the dynamic background */
 
-/* Fixed background layer - optimized for scroll performance */
+/* Fixed background layer - optimized for scroll performance.
+   --hero-bg-scale / --hero-bg-brightness are updated imperatively (no React
+   re-renders) by useHeroBackgroundDepth as the hero scrolls out, giving a
+   subtle "camera pulling back" depth cue as About covers the hero. */
 .main-with-fixed-bg::before {
   content: '';
   position: fixed;
@@ -243,7 +246,8 @@ body,
   background-repeat: no-repeat;
   background-image: var(--bg-url, linear-gradient(135deg, #1e293b 0%, #334155 100%));
   z-index: -1;
-  transform: translateZ(0);
+  transform: scale(var(--hero-bg-scale, 1)) translateZ(0);
+  filter: brightness(var(--hero-bg-brightness, 1));
   backface-visibility: hidden;
   pointer-events: none;
 }
