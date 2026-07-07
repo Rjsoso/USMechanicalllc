@@ -81,28 +81,20 @@ function SafetySection({ data: safetyDataProp }) {
       .filter(Boolean)
   }, [safetyLogos])
 
-  // Desktop sizes trimmed down from the original 90-120px range — on
-  // desktop this ribbon sits inside the Safety→Stats sticky "cover" effect,
-  // where Safety's total rendered height directly sets how long the black
-  // stats panel has to scroll before it can fully cover Safety (a taller
-  // Safety unavoidably means a longer black dwell afterward). Two stacked
-  // rows of full-size logos were a large chunk of that height for
-  // relatively little added value over a more compact size. Mobile (which
-  // never enters the sticky effect) keeps its original size.
   const getSafetyLogoHeight = () => {
     if (windowWidth < 768) return 50
-    if (windowWidth >= 2560) return 64
-    if (windowWidth >= 1920) return 70
-    if (windowWidth >= 1440) return 78
-    return 85
+    if (windowWidth >= 2560) return 90
+    if (windowWidth >= 1920) return 100
+    if (windowWidth >= 1440) return 110
+    return 120
   }
 
   const getSafetyGap = () => {
     if (windowWidth < 768) return 30
-    if (windowWidth >= 2560) return 24
-    if (windowWidth >= 1920) return 26
-    if (windowWidth >= 1440) return 28
-    return 30
+    if (windowWidth >= 2560) return 28
+    if (windowWidth >= 1920) return 32
+    if (windowWidth >= 1440) return 36
+    return 40
   }
 
   return (
@@ -173,10 +165,10 @@ function SafetySection({ data: safetyDataProp }) {
                 onMouseEnter={() => setIsLoopsHovered(true)}
                 onMouseLeave={() => setIsLoopsHovered(false)}
               >
-                <div className={isMobile ? 'space-y-4' : 'space-y-3'}>
+                <div className={isMobile ? 'space-y-4' : 'space-y-8'}>
                   <div
                     style={{
-                      height: isMobile ? '100px' : '105px',
+                      height: isMobile ? '100px' : '160px',
                       position: 'relative',
                       width: isMobile ? '100vw' : '100%',
                       maxWidth: isMobile ? 'none' : '100%',
@@ -201,7 +193,7 @@ function SafetySection({ data: safetyDataProp }) {
 
                   <div
                     style={{
-                      height: isMobile ? '100px' : '105px',
+                      height: isMobile ? '100px' : '160px',
                       position: 'relative',
                       width: isMobile ? '100vw' : '100%',
                       maxWidth: isMobile ? 'none' : '100%',

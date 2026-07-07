@@ -272,86 +272,6 @@ export default function Home() {
     }
   }, [navigate])
 
-  // Keep --safety-actual-height in sync with Safety's real rendered height.
-  // That height varies a lot by breakpoint (measured ~910px at 1024px wide
-  // down to ~733px at 1280px+, since the cert-logo row and paragraph reflow)
-  // and even by content edits in Sanity — a fixed px value in CSS can't
-  // track that. The Safety/Stats sticky "cover" effect in index.css reads
-  // this custom property via calc() so the stats card's rise-and-cover
-  // timing always matches Safety's actual height instead of a stale guess
-  // (a mismatch here is what let Safety peek out from under the cover, or
-  // produced huge cover-panel padding, at particular viewport widths).
-  useEffect(() => {
-    if (typeof ResizeObserver === 'undefined') return undefined
-    const safetyEl = document.getElementById('safety')
-    if (!safetyEl) return undefined
-
-    const updateSafetyHeight = () => {
-      const height = safetyEl.getBoundingClientRect().height
-      if (height > 0) {
-        document.documentElement.style.setProperty('--safety-actual-height', `${height}px`)
-      }
-    }
-
-    updateSafetyHeight()
-    // { box: 'border-box' } is required — ResizeObserver defaults to
-    // watching the content-box only, so height changes that come from
-    // padding/border (or, in some browsers, from sub-pixel layout/paint
-    // settling after logos/fonts finish loading) can silently fail to
-    // trigger the callback, leaving --safety-actual-height stale even
-    // though getBoundingClientRect() (border-box) has already changed.
-    const observer = new ResizeObserver(updateSafetyHeight)
-    observer.observe(safetyEl, { box: 'border-box' })
-
-    // Belt-and-suspenders for the two other realistic causes of a late
-    // height change ResizeObserver could plausibly miss: web fonts
-    // swapping in (reflows text) and the logo images finishing load.
-    document.fonts?.ready?.then(updateSafetyHeight).catch(() => {})
-    window.addEventListener('load', updateSafetyHeight)
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('load', updateSafetyHeight)
-    }
-  }, [])
-
-  // Keep --stats-panel-height in sync with .stats-cover-panel's real
-  // rendered height (CompanyStats' own content, ~165-215px across
-  // breakpoints per its internal padding). index.css's .stats-cover-spacer
-  // uses this to compute the exact minimum dwell needed after the stats
-  // panel fully covers Safety before releasing into Services — the wrapper's
-  // black background has to keep tracking Safety all the way until Safety
-  // itself clears the viewport (Safety's sticky positioning keeps it
-  // effectively glued to the bottom of .safety-pin-wrapper as it releases,
-  // so this can't be shortened by, say, hiding Safety early — the coverage
-  // requirement is a hard geometric consequence of the sticky containing
-  // block, confirmed by testing). Using the *real* panel height here instead
-  // of a fixed conservative guess is what safely tightens the spacer as much
-  // as possible without reopening the "Safety peeks through" bug.
-  useEffect(() => {
-    if (typeof ResizeObserver === 'undefined') return undefined
-    const panelEl = document.querySelector('.stats-cover-panel')
-    if (!panelEl) return undefined
-
-    const updatePanelHeight = () => {
-      const height = panelEl.getBoundingClientRect().height
-      if (height > 0) {
-        document.documentElement.style.setProperty('--stats-panel-height', `${height}px`)
-      }
-    }
-
-    updatePanelHeight()
-    const observer = new ResizeObserver(updatePanelHeight)
-    observer.observe(panelEl, { box: 'border-box' })
-    document.fonts?.ready?.then(updatePanelHeight).catch(() => {})
-    window.addEventListener('load', updatePanelHeight)
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('load', updatePanelHeight)
-    }
-  }, [])
-
   // Parallax scroll animation removed — sections now scroll naturally
 
   return (
@@ -384,18 +304,10 @@ export default function Home() {
         <div style={{ marginTop: 0, position: 'relative', zIndex: 1 }}>
           <AboutSection data={aboutData} />
           <SectionScrollSeam />
-          <div className="safety-pin-wrapper">
-            <SafetySection data={aboutData} />
-            <div className="safety-pin-spacer" aria-hidden="true" />
-          </div>
-          <div className="stats-cover-wrapper">
-            <div className="stats-cover-panel">
-              <ParallaxLayer>
-                <CompanyStats data={statsData} />
-              </ParallaxLayer>
-            </div>
-            <div className="stats-cover-spacer" aria-hidden="true" />
-          </div>
+          <SafetySection data={aboutData} />
+          <ParallaxLayer>
+            <CompanyStats data={statsData} />
+          </ParallaxLayer>
           <ServicesSection data={servicesData} />
           <Portfolio data={portfolioData} />
           <WhyUsSection data={whyUsData} />
