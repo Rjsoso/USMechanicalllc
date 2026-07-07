@@ -24,8 +24,12 @@ function ParallaxLayer({ children, className = '', maxShadowOpacity = 0.28 }) {
   return (
     <div ref={ref} className={`relative ${className}`}>
       <motion.div
-        className="pointer-events-none absolute inset-x-0 top-0 h-14 -translate-y-full"
-        style={{ opacity, background: 'linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0))' }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 -translate-y-full"
+        style={{
+          opacity,
+          background:
+            'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.45) 100%)',
+        }}
         aria-hidden="true"
       />
       {children}
