@@ -823,9 +823,19 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
+/* More noticeable variant for elements sitting against busy/high-contrast
+   backdrops (e.g. a map) where the default subtle fade can get lost. */
+.fade-in-native.fade-in-native--strong {
+  transform: translate3d(0, 34px, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Remove transition on reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .fade-in-native {
+  .fade-in-native,
+  .fade-in-native.fade-in-native--strong {
     transition: none;
     opacity: 1;
     transform: none;

@@ -82,7 +82,12 @@ function Footer() {
     <footer className="site-footer-editorial">
       <div className="site-footer-editorial__inner">
         <div className="site-footer-editorial__main">
-          <StaggerContainer className="site-footer-editorial__grid" initialDelay={0.05}>
+          <StaggerContainer
+            className="site-footer-editorial__grid"
+            initialDelay={0.05}
+            intensity="strong"
+            viewportMargin="0px 0px -15% 0px"
+          >
             <StaggerItem className="site-footer-editorial__col site-footer-editorial__col--brand">
               <h3 className="site-footer-editorial__brand-name">U.S. Mechanical LLC</h3>
               {displayCompanyDescription && (
