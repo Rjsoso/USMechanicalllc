@@ -1,6 +1,7 @@
 import { useState, memo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useSanityLive } from '../hooks/useSanityLive'
+import { viewportScrollPreset } from '../utils/viewport'
 import SmallSpinner from './SmallSpinner'
 
 const CONTACT_MAP_QUERY = `*[_type == "contact" && _id == "contact"][0]{
@@ -70,9 +71,13 @@ function ContactMapSection() {
     >
       <div className="w-full">
         {offices && offices.length > 0 ? (
-          <div
+          <motion.div
             className="relative w-full min-h-[320px] overflow-hidden"
             style={{ height: MAP_BLOCK_HEIGHT, minHeight: MAP_BLOCK_HEIGHT }}
+            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={viewportScrollPreset}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="absolute left-0 right-0 top-0 z-20 flex flex-col items-end gap-2 px-4 pt-3 md:gap-3 md:px-6">
               {activeOffice && (
@@ -144,7 +149,7 @@ function ContactMapSection() {
                 />
               </div>
             ) : null}
-          </div>
+          </motion.div>
         ) : (
           <div
             className="relative w-full overflow-hidden"
