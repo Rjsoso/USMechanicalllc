@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, memo } from 'react'
 
-function FadeInNative({ children, delay = 0, className = '' }) {
+function FadeInNative({ children, delay = 0, className = '', variant = 'fade' }) {
   const [isVisible, setIsVisible] = useState(false)
   const elementRef = useRef(null)
 
@@ -33,10 +33,12 @@ function FadeInNative({ children, delay = 0, className = '' }) {
     return () => observer.disconnect()
   }, [delay])
 
+  const baseClass = variant === 'wipe' ? 'wipe-reveal-native' : 'fade-in-native'
+
   return (
     <div
       ref={elementRef}
-      className={`fade-in-native ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
+      className={`${baseClass} ${isVisible ? `${baseClass}--visible` : ''} ${className}`}
     >
       {children}
     </div>

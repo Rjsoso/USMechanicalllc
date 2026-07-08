@@ -832,6 +832,25 @@ body {
   }
 }
 
+/* Directional clip-path wipe reveal (used by Portfolio grid). The tile is
+   clipped from the right edge and un-clips left-to-right as it scrolls in. */
+.wipe-reveal-native {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: clip-path;
+}
+
+.wipe-reveal-native--visible {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wipe-reveal-native {
+    transition: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 /* ============================================
    MOBILE OPTIMIZATIONS
    ============================================ */
@@ -1350,6 +1369,12 @@ body {
     opacity: 1 !important;
     visibility: visible !important;
     background-color: #e5e7eb !important;
+  }
+
+  /* Same white-flash safety net for the clip-path wipe reveal: never let a
+     tile stay clipped/hidden on mobile if the reveal fails to trigger. */
+  #portfolio .grid > div {
+    clip-path: none !important;
   }
 }
 

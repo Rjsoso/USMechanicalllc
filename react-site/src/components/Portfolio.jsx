@@ -48,11 +48,11 @@ function Portfolio({ data: portfolioDataProp }) {
           style={{ position: 'relative' }}
         >
           {displayCategories.map((category, index) => (
-            <FadeInNative key={category._id} delay={index * 0.05}>
+            <FadeInNative key={category._id} delay={index * 0.05} variant="wipe">
               <div>
                 <Link
                   to={`/portfolio/${category._id}`}
-                  className="portfolio-category-card relative block cursor-pointer overflow-hidden bg-gray-100 transition-shadow duration-300 ease-out hover:shadow-2xl"
+                  className="portfolio-category-card relative block cursor-pointer overflow-hidden bg-gray-100 transition-transform duration-200 ease-out hover:scale-[1.02]"
                   style={{ height: CELL_HEIGHTS[index % CELL_HEIGHTS.length] }}
                 >
                   {category.image?.asset && (
@@ -71,7 +71,7 @@ function Portfolio({ data: portfolioDataProp }) {
                               .join(', ')}
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             alt={category.title}
-                            className="portfolio-home__img block"
+                            className="portfolio-home__img block transition-opacity duration-200"
                             loading="lazy"
                             decoding="async"
                             style={{
