@@ -1373,7 +1373,7 @@ body {
 
   /* Same white-flash safety net for the clip-path wipe reveal: never let a
      tile stay clipped/hidden on mobile if the reveal fails to trigger. */
-  #portfolio .grid > div {
+  #portfolio .wipe-reveal-native {
     clip-path: none !important;
   }
 }

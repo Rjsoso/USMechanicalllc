@@ -33,12 +33,24 @@ function FadeInNative({ children, delay = 0, className = '', variant = 'fade' })
     return () => observer.disconnect()
   }, [delay])
 
-  const baseClass = variant === 'wipe' ? 'wipe-reveal-native' : 'fade-in-native'
+  if (variant === 'wipe') {
+    // The clip-path lives on an inner wrapper, never on the observed element itself.
+    // A self-clipped target reports a permanent zero intersection ratio to
+    // IntersectionObserver (its visible render area is zero), which would
+    // deadlock the reveal — the observer would never see it as "visible."
+    return (
+      <div ref={elementRef} className={className}>
+        <div className={`wipe-reveal-native ${isVisible ? 'wipe-reveal-native--visible' : ''}`}>
+          {children}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div
       ref={elementRef}
-      className={`${baseClass} ${isVisible ? `${baseClass}--visible` : ''} ${className}`}
+      className={`fade-in-native ${isVisible ? 'fade-in-native--visible' : ''} ${className}`}
     >
       {children}
     </div>
