@@ -28,7 +28,7 @@ const DEFAULT_ITEMS = [
   },
   {
     icon: 'dollar',
-    title: '$35M Single-Project Bonding',
+    title: '$75M Single-Project Bonding',
     description:
       'Aggregate bonding capacity exceeding $150M demonstrates our financial strength and reliability.',
   },
