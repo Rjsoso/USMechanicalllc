@@ -14,6 +14,11 @@
   animation-delay: 0.1s;
 }
 
+/* Elevated once the page scrolls, reinforcing that the bar is floating above content. */
+.desktop-nav--scrolled {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
 @keyframes nav-slide-down {
   from {
     opacity: 0;

@@ -174,11 +174,24 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .portfolio-category-page__card:hover .portfolio-category-page__card-img {
   opacity: 0.95;
+  transform: scale(1.045);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-category-page__card-img {
+    transition: opacity 0.3s ease;
+  }
+
+  .portfolio-category-page__card:hover .portfolio-category-page__card-img {
+    transform: none;
+  }
 }
 
 .portfolio-category-page__card-badge {

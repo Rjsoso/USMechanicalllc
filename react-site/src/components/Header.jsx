@@ -81,7 +81,7 @@ function Header() {
   return (
     <>
       {/* Desktop Navigation Bar - Below logo, above content */}
-      <DesktopNav />
+      <DesktopNav scrolled={scrolled} />
 
       {/* Logo with 3D shadow effect - Overlaps the nav bar */}
       {logoUrl ? (

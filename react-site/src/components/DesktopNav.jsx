@@ -9,7 +9,7 @@ const offices = [
   { name: 'Las Vegas, NV', phone: '(702) 870-9609', address: '4344 E Alexander Rd, Las Vegas, NV 89115' },
 ]
 
-const DesktopNav = () => {
+const DesktopNav = ({ scrolled = false }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [locationsOpen, setLocationsOpen] = useState(false)
@@ -57,7 +57,11 @@ const DesktopNav = () => {
   }, [])
 
   return (
-    <nav className="desktop-nav" role="navigation" aria-label="Main navigation">
+    <nav
+      className={`desktop-nav${scrolled ? ' desktop-nav--scrolled' : ''}`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="desktop-nav-container">
         <ul className="desktop-nav-list">
           {navLinks.map((link) => {
