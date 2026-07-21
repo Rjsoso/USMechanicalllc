@@ -65,14 +65,15 @@ export default defineType({
       name: 'year',
       title: 'Year Completed',
       type: 'string',
-      description: 'Year the project was completed (e.g., "2023", "2022-2023")',
+      description: 'Year the project was completed (e.g., "2023", "2022-2023"). Projects are automatically sorted oldest to newest by this field on the website.',
     },
     {
       name: 'order',
-      title: 'Display Order',
+      title: 'Display Order (no longer used)',
       type: 'number',
-      description: 'Controls the order this project appears within its category. Lower numbers appear first. Leave blank or use 0 for default order.',
+      description: 'No longer used — projects are now sorted automatically by Year Completed (oldest first). Safe to leave blank.',
       validation: (Rule) => Rule.min(0).integer(),
+      hidden: true,
     },
     {
       name: 'client',
@@ -92,21 +93,27 @@ export default defineType({
       title: 'title',
       media: 'images.0',
       category: 'category.title',
-      order: 'order',
+      year: 'year',
     },
-    prepare({ title, media, category, order }) {
+    prepare({ title, media, category, year }) {
+      const yearLabel = year ? `Year: ${year}` : 'No year set'
       return {
         title: title || 'Untitled Project',
-        subtitle: category ? `${category} • Order: ${order || 0}` : `Order: ${order || 0}`,
+        subtitle: category ? `${category} • ${yearLabel}` : yearLabel,
         media,
       }
     },
   },
   orderings: [
     {
-      title: 'Order',
-      name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }],
+      title: 'Year Completed (oldest first)',
+      name: 'yearAsc',
+      by: [{ field: 'year', direction: 'asc' }],
+    },
+    {
+      title: 'Year Completed (newest first)',
+      name: 'yearDesc',
+      by: [{ field: 'year', direction: 'desc' }],
     },
   ],
 })
