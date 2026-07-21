@@ -19,7 +19,7 @@ const CATEGORY_QUERY = `*[_type == "portfolioCategory" && _id == $categoryId][0]
   description,
   image { asset-> { _id, url }, alt }
 }`
-const PROJECTS_QUERY = `*[_type == "portfolioProject" && category._ref == $categoryId] | order(year asc) {
+const PROJECTS_QUERY = `*[_type == "portfolioProject" && category._ref == $categoryId] | order(year desc) {
   _id,
   title,
   description,
@@ -90,14 +90,14 @@ export default function CategoryDetail() {
   const projectsList = projects.data
   const sortedProjects = useMemo(() => {
     if (!Array.isArray(projectsList)) return []
-    // Oldest → newest by "Year Completed". Parses the first 4-digit year so
+    // Newest → oldest by "Year Completed". Parses the first 4-digit year so
     // ranges like "2022-2023" sort by their start year; projects with no
     // year sort last. New projects slot in automatically by their year.
     const startYear = (project) => {
       const match = String(project?.year ?? '').match(/\d{4}/)
-      return match ? Number(match[0]) : Number.POSITIVE_INFINITY
+      return match ? Number(match[0]) : Number.NEGATIVE_INFINITY
     }
-    return [...projectsList].sort((a, b) => startYear(a) - startYear(b))
+    return [...projectsList].sort((a, b) => startYear(b) - startYear(a))
   }, [projectsList])
 
   if (loading) {

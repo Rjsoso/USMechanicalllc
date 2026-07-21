@@ -80,7 +80,7 @@ export default function deskStructure(S: StructureBuilder): ReturnType<Structure
                 .child(
                   S.documentTypeList('portfolioProject')
                     .title('Portfolio Projects')
-                    .defaultOrdering([{ field: 'year', direction: 'asc' }])
+                    .defaultOrdering([{ field: 'year', direction: 'desc' }])
                 ),
             ])
         ),
