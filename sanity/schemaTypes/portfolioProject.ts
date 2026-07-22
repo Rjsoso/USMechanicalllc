@@ -65,13 +65,15 @@ export default defineType({
       name: 'year',
       title: 'Year Completed',
       type: 'string',
-      description: 'Year the project was completed (e.g., "2023", "2022-2023"). Projects are automatically sorted newest to oldest by this field on the website.',
+      description:
+        'Year completed (e.g. "2023", "2022-2023"), or type "Under Construction" for in-progress jobs. Under Construction projects always appear first on the website; completed projects sort newest to oldest.',
     },
     {
       name: 'order',
       title: 'Display Order (no longer used)',
       type: 'number',
-      description: 'No longer used — projects are now sorted automatically by Year Completed (newest first). Safe to leave blank.',
+      description:
+        'No longer used — projects sort automatically: Under Construction first, then by Year Completed (newest first). Safe to leave blank.',
       validation: (Rule) => Rule.min(0).integer(),
       hidden: true,
     },
@@ -96,7 +98,11 @@ export default defineType({
       year: 'year',
     },
     prepare({ title, media, category, year }) {
-      const yearLabel = year ? `Year: ${year}` : 'No year set'
+      const yearLabel = year
+        ? /under\s*construction/i.test(String(year))
+          ? 'Under Construction (pinned first)'
+          : `Year: ${year}`
+        : 'No year set'
       return {
         title: title || 'Untitled Project',
         subtitle: category ? `${category} • ${yearLabel}` : yearLabel,

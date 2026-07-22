@@ -90,14 +90,22 @@ export default function CategoryDetail() {
   const projectsList = projects.data
   const sortedProjects = useMemo(() => {
     if (!Array.isArray(projectsList)) return []
-    // Newest → oldest by "Year Completed". Parses the first 4-digit year so
-    // ranges like "2022-2023" sort by their start year; projects with no
-    // year sort last. New projects slot in automatically by their year.
+    // Sort: "Under Construction" first (newest in-progress jobs), then
+    // completed projects newest → oldest by year. Ranges like "2022-2023"
+    // use their start year. Empty years sort last. Publishing a project
+    // with year text containing "under construction" auto-pins it to front.
+    const isUnderConstruction = (project) =>
+      /under\s*construction/i.test(String(project?.year ?? ''))
     const startYear = (project) => {
       const match = String(project?.year ?? '').match(/\d{4}/)
       return match ? Number(match[0]) : Number.NEGATIVE_INFINITY
     }
-    return [...projectsList].sort((a, b) => startYear(b) - startYear(a))
+    return [...projectsList].sort((a, b) => {
+      const aUC = isUnderConstruction(a)
+      const bUC = isUnderConstruction(b)
+      if (aUC !== bUC) return aUC ? -1 : 1
+      return startYear(b) - startYear(a)
+    })
   }, [projectsList])
 
   if (loading) {
